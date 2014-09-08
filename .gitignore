@@ -1,0 +1,32 @@
+.DS_Store
+
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/libraries/
+**/.idea/dictionaries/
+**/.idea/runConfigurations/
+**/.idea/scopes/
+
+# android makefiles
+GypAndroid.mk
+support/*.target.mk
+*.target.mk
+GypAndroid.mk
+
+# gyp
+deps/gyp
+
+# android build artifacts
+libs/
+obj/
+
+# ios build artifacts
+build/
+build_ios/
+
+# xcode stuff
+project.xcworkspace
+*.xccheckout
+
+# djinni output directories
+djinni-output-temp/

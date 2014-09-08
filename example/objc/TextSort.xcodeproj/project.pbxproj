@@ -1,0 +1,429 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		65834DE119AC599E0061AD3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65834DE019AC599E0061AD3F /* Foundation.framework */; };
+		65834DE319AC599E0061AD3F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65834DE219AC599E0061AD3F /* CoreGraphics.framework */; };
+		65834DE519AC599E0061AD3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65834DE419AC599E0061AD3F /* UIKit.framework */; };
+		65834DEB19AC599E0061AD3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 65834DE919AC599E0061AD3F /* InfoPlist.strings */; };
+		65834DF419AC599E0061AD3F /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65834DF219AC599E0061AD3F /* Main_iPhone.storyboard */; };
+		65834DFC19AC599E0061AD3F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65834DFB19AC599E0061AD3F /* Images.xcassets */; };
+		65D7FDFA19AD0CDF0038F82F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF319AD0CDF0038F82F /* main.m */; };
+		65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */; };
+		65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */; };
+		65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF919AD0CDF0038F82F /* TXSViewController.mm */; };
+		A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12C19BCB94300BFC38D /* DJIError.mm */; };
+		A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */; };
+		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
+		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		65834DDD19AC599E0061AD3F /* TextSort.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSort.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		65834DE019AC599E0061AD3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		65834DE219AC599E0061AD3F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		65834DE419AC599E0061AD3F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		65834DE819AC599E0061AD3F /* TextSort-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSort-Info.plist"; sourceTree = "<group>"; };
+		65834DEA19AC599E0061AD3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		65834DEE19AC599E0061AD3F /* TextSort-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSort-Prefix.pch"; sourceTree = "<group>"; };
+		65834DF319AC599E0061AD3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		65834DFB19AC599E0061AD3F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSItemList+Private.h"; sourceTree = "<group>"; };
+		65834E1E19AC5C9B0061AD3F /* TXSItemList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSItemList.h; sourceTree = "<group>"; };
+		65834E1F19AC5C9B0061AD3F /* TXSItemList.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSItemList.mm; sourceTree = "<group>"; };
+		65834E2019AC5C9B0061AD3F /* TXSSortItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortItems.h; sourceTree = "<group>"; };
+		65834E2119AC5C9B0061AD3F /* TXSSortItemsCppProxy+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItemsCppProxy+Private.h"; sourceTree = "<group>"; };
+		65834E2219AC5C9B0061AD3F /* TXSSortItemsCppProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortItemsCppProxy.h; sourceTree = "<group>"; };
+		65834E2319AC5C9B0061AD3F /* TXSSortItemsCppProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortItemsCppProxy.mm; sourceTree = "<group>"; };
+		65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSTextboxListener.h; sourceTree = "<group>"; };
+		65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSTextboxListenerObjcProxy+Private.h"; sourceTree = "<group>"; };
+		65834E2619AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSTextboxListenerObjcProxy.mm; sourceTree = "<group>"; };
+		65834E2E19AC5CB90061AD3F /* item_list.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = item_list.hpp; sourceTree = "<group>"; };
+		65834E2F19AC5CB90061AD3F /* sort_items.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sort_items.hpp; sourceTree = "<group>"; };
+		65834E3019AC5CB90061AD3F /* textbox_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = textbox_listener.hpp; sourceTree = "<group>"; };
+		65834E3A19AC5D9F0061AD3F /* sort_items_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sort_items_impl.cpp; sourceTree = "<group>"; };
+		65834E3B19AC5D9F0061AD3F /* sort_items_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sort_items_impl.hpp; sourceTree = "<group>"; };
+		65D7FDF319AD0CDF0038F82F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		65D7FDF419AD0CDF0038F82F /* TXSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSAppDelegate.h; sourceTree = "<group>"; };
+		65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSAppDelegate.m; sourceTree = "<group>"; };
+		65D7FDF619AD0CDF0038F82F /* TXSTextboxListenerImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSTextboxListenerImpl.h; sourceTree = "<group>"; };
+		65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSTextboxListenerImpl.m; sourceTree = "<group>"; };
+		65D7FDF819AD0CDF0038F82F /* TXSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSViewController.h; sourceTree = "<group>"; };
+		65D7FDF919AD0CDF0038F82F /* TXSViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSViewController.mm; sourceTree = "<group>"; };
+		A29DB12A19BCB94300BFC38D /* DJICppWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJICppWrapperCache+Private.h"; sourceTree = "<group>"; };
+		A29DB12B19BCB94300BFC38D /* DJIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIError.h; sourceTree = "<group>"; };
+		A29DB12C19BCB94300BFC38D /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIError.mm; sourceTree = "<group>"; };
+		A29DB12D19BCB94300BFC38D /* DJIObjcWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIObjcWrapperCache+Private.h"; sourceTree = "<group>"; };
+		A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIWeakPtrWrapper.mm; sourceTree = "<group>"; };
+		A29DB12F19BCB94300BFC38D /* DJIWeakPtrWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIWeakPtrWrapper+Private.h"; sourceTree = "<group>"; };
+		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
+		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		65834DDA19AC599E0061AD3F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */,
+				B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */,
+				65834DE319AC599E0061AD3F /* CoreGraphics.framework in Frameworks */,
+				65834DE519AC599E0061AD3F /* UIKit.framework in Frameworks */,
+				65834DE119AC599E0061AD3F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		65834DD419AC599E0061AD3F = {
+			isa = PBXGroup;
+			children = (
+				65D7FDF219AD0C730038F82F /* handwritten-objc */,
+				65834E3919AC5D710061AD3F /* handwritten-cpp */,
+				65834E3219AC5CDA0061AD3F /* objc-support-lib */,
+				65834E2B19AC5CB90061AD3F /* generated-cpp */,
+				65834E1919AC5C9B0061AD3F /* generated-objc */,
+				65834DE619AC599E0061AD3F /* TextSort */,
+				65834DDF19AC599E0061AD3F /* Frameworks */,
+				65834DDE19AC599E0061AD3F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		65834DDE19AC599E0061AD3F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				65834DDD19AC599E0061AD3F /* TextSort.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65834DDF19AC599E0061AD3F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B003051819B70561008E1F67 /* libdjinni_objc.a */,
+				B097B6BB19B1C07E0047653A /* libtextsort_objc.a */,
+				65834DE019AC599E0061AD3F /* Foundation.framework */,
+				65834DE219AC599E0061AD3F /* CoreGraphics.framework */,
+				65834DE419AC599E0061AD3F /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		65834DE619AC599E0061AD3F /* TextSort */ = {
+			isa = PBXGroup;
+			children = (
+				65834DF219AC599E0061AD3F /* Main_iPhone.storyboard */,
+				65834DFB19AC599E0061AD3F /* Images.xcassets */,
+				65834DE719AC599E0061AD3F /* Supporting Files */,
+			);
+			path = TextSort;
+			sourceTree = "<group>";
+		};
+		65834DE719AC599E0061AD3F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				65834DE819AC599E0061AD3F /* TextSort-Info.plist */,
+				65834DE919AC599E0061AD3F /* InfoPlist.strings */,
+				65834DEE19AC599E0061AD3F /* TextSort-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		65834E1919AC5C9B0061AD3F /* generated-objc */ = {
+			isa = PBXGroup;
+			children = (
+				65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */,
+				65834E1E19AC5C9B0061AD3F /* TXSItemList.h */,
+				65834E1F19AC5C9B0061AD3F /* TXSItemList.mm */,
+				65834E2019AC5C9B0061AD3F /* TXSSortItems.h */,
+				65834E2119AC5C9B0061AD3F /* TXSSortItemsCppProxy+Private.h */,
+				65834E2219AC5C9B0061AD3F /* TXSSortItemsCppProxy.h */,
+				65834E2319AC5C9B0061AD3F /* TXSSortItemsCppProxy.mm */,
+				65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */,
+				65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */,
+				65834E2619AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy.mm */,
+			);
+			name = "generated-objc";
+			path = "../generated-src/objc";
+			sourceTree = "<group>";
+		};
+		65834E2B19AC5CB90061AD3F /* generated-cpp */ = {
+			isa = PBXGroup;
+			children = (
+				65834E2E19AC5CB90061AD3F /* item_list.hpp */,
+				65834E2F19AC5CB90061AD3F /* sort_items.hpp */,
+				65834E3019AC5CB90061AD3F /* textbox_listener.hpp */,
+			);
+			name = "generated-cpp";
+			path = "../generated-src/cpp";
+			sourceTree = "<group>";
+		};
+		65834E3219AC5CDA0061AD3F /* objc-support-lib */ = {
+			isa = PBXGroup;
+			children = (
+				A29DB12A19BCB94300BFC38D /* DJICppWrapperCache+Private.h */,
+				A29DB12B19BCB94300BFC38D /* DJIError.h */,
+				A29DB12C19BCB94300BFC38D /* DJIError.mm */,
+				A29DB12D19BCB94300BFC38D /* DJIObjcWrapperCache+Private.h */,
+				A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */,
+				A29DB12F19BCB94300BFC38D /* DJIWeakPtrWrapper+Private.h */,
+			);
+			name = "objc-support-lib";
+			path = "../../support-lib/objc";
+			sourceTree = "<group>";
+		};
+		65834E3919AC5D710061AD3F /* handwritten-cpp */ = {
+			isa = PBXGroup;
+			children = (
+				65834E3A19AC5D9F0061AD3F /* sort_items_impl.cpp */,
+				65834E3B19AC5D9F0061AD3F /* sort_items_impl.hpp */,
+			);
+			name = "handwritten-cpp";
+			path = "../handwritten-src/cpp";
+			sourceTree = "<group>";
+		};
+		65D7FDF219AD0C730038F82F /* handwritten-objc */ = {
+			isa = PBXGroup;
+			children = (
+				65D7FDF319AD0CDF0038F82F /* main.m */,
+				65D7FDF419AD0CDF0038F82F /* TXSAppDelegate.h */,
+				65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */,
+				65D7FDF619AD0CDF0038F82F /* TXSTextboxListenerImpl.h */,
+				65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */,
+				65D7FDF819AD0CDF0038F82F /* TXSViewController.h */,
+				65D7FDF919AD0CDF0038F82F /* TXSViewController.mm */,
+			);
+			name = "handwritten-objc";
+			path = "../handwritten-src/objc";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		65834DDC19AC599E0061AD3F /* TextSort */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 65834E1219AC599E0061AD3F /* Build configuration list for PBXNativeTarget "TextSort" */;
+			buildPhases = (
+				65834DD919AC599E0061AD3F /* Sources */,
+				65834DDA19AC599E0061AD3F /* Frameworks */,
+				65834DDB19AC599E0061AD3F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TextSort;
+			productName = TextSort;
+			productReference = 65834DDD19AC599E0061AD3F /* TextSort.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		65834DD519AC599E0061AD3F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = TXS;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Dropbox, Inc.";
+			};
+			buildConfigurationList = 65834DD819AC599E0061AD3F /* Build configuration list for PBXProject "TextSort" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 65834DD419AC599E0061AD3F;
+			productRefGroup = 65834DDE19AC599E0061AD3F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				65834DDC19AC599E0061AD3F /* TextSort */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		65834DDB19AC599E0061AD3F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65834DFC19AC599E0061AD3F /* Images.xcassets in Resources */,
+				65834DF419AC599E0061AD3F /* Main_iPhone.storyboard in Resources */,
+				65834DEB19AC599E0061AD3F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		65834DD919AC599E0061AD3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
+				A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */,
+				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
+				65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */,
+				A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */,
+				65D7FDFA19AD0CDF0038F82F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		65834DE919AC599E0061AD3F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				65834DEA19AC599E0061AD3F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		65834DF219AC599E0061AD3F /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				65834DF319AC599E0061AD3F /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		65834E1019AC599E0061AD3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		65834E1119AC599E0061AD3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		65834E1319AC599E0061AD3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
+				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		65834E1419AC599E0061AD3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
+				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		65834DD819AC599E0061AD3F /* Build configuration list for PBXProject "TextSort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65834E1019AC599E0061AD3F /* Debug */,
+				65834E1119AC599E0061AD3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		65834E1219AC599E0061AD3F /* Build configuration list for PBXNativeTarget "TextSort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				65834E1319AC599E0061AD3F /* Debug */,
+				65834E1419AC599E0061AD3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 65834DD519AC599E0061AD3F /* Project object */;
+}

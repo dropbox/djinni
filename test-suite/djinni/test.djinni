@@ -1,0 +1,22 @@
+test_helpers = interface +c {
+    static get_set_record(): set_record;
+    static check_set_record(rec: set_record): bool;
+
+    static get_primitive_list(): primitive_list;
+    static check_primitive_list(pl: primitive_list): bool;
+
+    static get_nested_collection(): nested_collection;
+    static check_nested_collection(nc: nested_collection): bool;
+
+    static get_map(): map<string, i64>;
+    static check_map(m: map<string, i64>): bool;
+    static get_empty_map(): map<string, i64>;
+    static check_empty_map(m: map<string, i64>): bool;
+    static get_map_list_record(): map_list_record;
+    static check_map_list_record(m: map_list_record): bool;
+
+    static check_client_interface_ascii(i: client_interface);
+    static check_client_interface_nonascii(i: client_interface);
+
+    static return_none(): optional<i32>;
+}

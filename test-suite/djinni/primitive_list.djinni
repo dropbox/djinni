@@ -1,0 +1,3 @@
+primitive_list = record {
+    list: list<i64>;
+}

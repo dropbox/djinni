@@ -1,0 +1,15 @@
+// This is not intended to be an air-tight security policy against an adversarial
+// program.  SBT is our friend.  We're just trying to catch cases where we misconfigure
+// SBT and it ends up trying to use a non-SSL host.
+
+grant {
+    permission java.net.SocketPermission "*:443", "connect,resolve";
+
+    permission java.io.FilePermission "<<ALL FILES>>", "read,write,execute,delete";
+    permission java.util.PropertyPermission "*", "read,write";
+    permission java.lang.RuntimePermission "*";
+    permission java.lang.reflect.ReflectPermission "*";
+    permission java.security.SecurityPermission "*";
+    permission java.net.NetPermission "*";
+    permission javax.net.ssl.SSLPermission "*";
+};

@@ -1,0 +1,8 @@
+client_returned_record = record {
+    content: string;
+}
+
+client_interface = interface +j +o {
+    # Returns record of given string
+    get_record(utf8string: string): client_returned_record;
+}

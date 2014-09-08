@@ -1,0 +1,3 @@
+nested_collection = record {
+    set_list : list<set<string>>;
+}

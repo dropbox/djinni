@@ -1,0 +1,23 @@
+#! /bin/bash
+set -e
+
+# Locate the script file.  Cross symlinks if necessary.
+loc="$0"
+while [ -h "$loc" ]; do
+    ls=`ls -ld "$loc"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        loc="$link"  # Absolute link
+    else
+        loc="`dirname "$loc"`/$link"  # Relative link
+    fi
+done
+base_dir=$(cd `dirname "$loc"` && pwd)
+
+java \
+    -Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M \
+    -Djava.security.manager -Djava.security.policy="$base_dir/sbt.security.policy" \
+    -jar "$base_dir/sbt-launch.jar" \
+    -Dsbt.override.build.repos=true \
+    -Dsbt.repository.config="$base_dir/sbt.resolvers.properties" \
+    "$@"

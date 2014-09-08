@@ -1,0 +1,18 @@
+#pragma once
+
+#include "sort_items.hpp"
+
+namespace textsort {
+
+class SortItemsImpl : public SortItems {
+
+public:
+    SortItemsImpl (const std::shared_ptr<TextboxListener> & listener);
+    virtual void sort (const ItemList & items) override;
+
+private:
+    std::shared_ptr<TextboxListener> m_listener;
+
+};
+
+}

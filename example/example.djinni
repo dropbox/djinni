@@ -1,0 +1,12 @@
+item_list = record {
+	items: list<string>;
+}
+
+sort_items = interface +c {
+	sort(items: item_list);
+	static create_with_listener(listener: textbox_listener): sort_items;
+}
+
+textbox_listener = interface +j +o {
+	update(items: item_list);
+}

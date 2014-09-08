@@ -1,0 +1,7 @@
+map_record = record {
+    map: map<string, i64>;
+}
+
+map_list_record = record {
+    map_list: list<map<string, i64>>;
+}
