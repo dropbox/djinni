@@ -232,6 +232,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
       writeObjcFile(headerName(cppExtName), origin, mutable.TreeSet[String](), w => {
         w.wl("#import " + q(headerName(ident)))
+        w.wl("#import <Foundation/Foundation.h>")
         w.wl
         w.wl(s"@interface $cppExtSelf : NSObject <$self>")
         w.wl("@end")
