@@ -27,6 +27,7 @@ build_ios/
 # xcode stuff
 project.xcworkspace
 *.xccheckout
+DerivedData
 
 # djinni output directories
 djinni-output-temp/
