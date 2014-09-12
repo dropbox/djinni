@@ -84,8 +84,10 @@ Djinni files can also include each other. Adding the line:
     @import "relative/path/to/filename.djinni"
 
 at the beginning of a file will simply include another file. Child file paths are
-relative to the location of the file that contains the @import. All types will be
-processed together, so declaring the same type twice will cause an error.
+relative to the location of the file that contains the @import. Two different djinni files
+cannot define the same type. `@import` behaves like `#include` with `#pragma once` in C++, or
+like ObjC's `#import`: if a file is included multiple times through different paths, then it
+will only be processed once.
 
 ### Generate Code
 When the Djinni file(s) are ready, from the command line or a bash script you can run:
