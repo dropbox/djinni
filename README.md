@@ -6,6 +6,9 @@ designed to connect C++ with either Java or Objective-C.
 We at Dropbox use Djinni to interface cross-platform C++ library code with platform-specific
 Java and Objective-C on Android and iOS.
 
+We announced Djinni at CppCon 2014. See the slides here: https://bit.ly/djinnitalk
+Video coming soon!
+
 ## Main Features
 - Generates parallel C++, Java and Objective-C type definitions from a single interface
   description file.
