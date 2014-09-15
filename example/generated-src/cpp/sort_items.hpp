@@ -4,10 +4,11 @@
 #pragma once
 
 #include "item_list.hpp"
-#include "textbox_listener.hpp"
 #include <memory>
 
 namespace textsort {
+
+class TextboxListener;
 
 class SortItems {
 public:

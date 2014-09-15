@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "client_interface.hpp"
 #include "map_list_record.hpp"
 #include "nested_collection.hpp"
 #include "primitive_list.hpp"
@@ -13,6 +12,8 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+
+class ClientInterface;
 
 class TestHelpers {
 public:

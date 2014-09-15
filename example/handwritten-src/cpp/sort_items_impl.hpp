@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sort_items.hpp"
+#include "textbox_listener.hpp"
 
 namespace textsort {
 

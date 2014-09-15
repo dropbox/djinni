@@ -1,4 +1,6 @@
 #include "test_helpers.hpp"
+#include "client_returned_record.hpp"
+#include "client_interface.hpp"
 #include <exception>
 
 SetRecord TestHelpers::get_set_record() {

@@ -58,7 +58,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     val selfQ = withNs(spec.cppNamespace, self)
     val jniClassName = spec.jniClassIdentStyle(ident)
 
-    writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), w => {
+    writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), Nil, w => {
       w.w(s"class $jniClassName final : djinni::JniEnum").bracedSemi {
         w.wlOutdent("public:")
         w.wl(s"using CppType = $selfQ;")
@@ -349,7 +349,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   def writeJniFiles(origin: String, allInHeader: Boolean, ident: Ident, refs: JNIRefs, writeProto: IndentWriter => Unit, writeBody: IndentWriter => Unit) {
     if (allInHeader) {
       // Template class.  Write both parts to .hpp.
-      writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), w => {
+      writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), Nil, w => {
         writeProto(w)
         w.wl
         writeBody(w)
@@ -357,7 +357,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     }
     else {
       // Write prototype to .hpp and body to .cpp
-      writeJniHppFile(ident, origin, refs.jniHpp, writeProto)
+      writeJniHppFile(ident, origin, refs.jniHpp, Nil, writeProto)
       writeJniCppFile(ident, origin, refs.jniCpp, writeBody)
     }
   }

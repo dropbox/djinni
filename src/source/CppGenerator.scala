@@ -31,6 +31,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
   class CppRefs(name: String) {
     var hpp = mutable.TreeSet[String]()
+    var hppFwds = mutable.TreeSet[String]()
     var cpp = mutable.TreeSet[String]()
 
     def find(ty: TypeRef) { find(ty.resolved) }
@@ -61,14 +62,17 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             hpp.add("#include <unordered_map>")
         }
       case d: MDef =>
-        if (d.name != name) {
-          hpp.add("#include " + q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
-        }
         d.defType match {
-          case DEnum =>
-          case DRecord =>
+          case DEnum
+             | DRecord =>
+            if (d.name != name) {
+              hpp.add("#include " + q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
+            }
           case DInterface =>
             hpp.add("#include <memory>")
+            if (d.name != name) {
+              hppFwds.add(s"class ${idCpp.ty(d.name)};")
+            }
         }
       case p: MParam =>
     }
@@ -79,7 +83,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     val self = idCpp.enumType(ident)
 
-    writeHppFile(ident, origin, refs.hpp, w => {
+    writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       w.w(s"enum class $self : int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
@@ -206,7 +210,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    writeHppFile(cppName, origin, refs.hpp, writeCppPrototype)
+    writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
     if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
       writeCppFile(cppName, origin, refs.cpp, w => {
@@ -274,7 +278,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     val self = idCpp.ty(ident)
 
-    writeHppFile(ident, origin, refs.hpp, w => {
+    writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
       writeCppTypeParams(w, typeParams)
       w.w(s"class $self").bracedSemi {
