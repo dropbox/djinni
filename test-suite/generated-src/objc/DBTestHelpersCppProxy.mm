@@ -175,7 +175,7 @@
 
 + (NSNumber *)returnNone {
     try {
-        std::optional<int32_t> cppRet = TestHelpers::return_none();
+        std::experimental::optional<int32_t> cppRet = TestHelpers::return_none();
         NSNumber *objcRet;
         if (cppRet) {
             objcRet = [NSNumber numberWithInt:(*(cppRet))];

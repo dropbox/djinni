@@ -534,7 +534,7 @@
 		65868B6E1989FE4200D60EEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -551,7 +551,7 @@
 		65868B6F1989FE4200D60EEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				OTHER_CPLUSPLUSFLAGS = (

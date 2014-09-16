@@ -85,6 +85,6 @@ void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientIn
     }
 }
 
-std::optional<int32_t> TestHelpers::return_none() {
+std::experimental::optional<int32_t> TestHelpers::return_none() {
     return {};
 }

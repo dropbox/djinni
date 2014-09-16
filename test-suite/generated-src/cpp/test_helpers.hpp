@@ -8,8 +8,8 @@
 #include "primitive_list.hpp"
 #include "set_record.hpp"
 #include <cstdint>
+#include <experimental/optional>
 #include <memory>
-#include <optional>
 #include <string>
 #include <unordered_map>
 
@@ -47,5 +47,5 @@ public:
 
     static void check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i);
 
-    static std::optional<int32_t> return_none();
+    static std::experimental::optional<int32_t> return_none();
 };

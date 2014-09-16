@@ -57,6 +57,8 @@ $base_dir/../src/run-assume-built \
     \
     --cpp-out "$temp_out/cpp" \
     --ident-cpp-enum-type foo_bar \
+    --cpp-optional-template "std::experimental::optional" \
+    --cpp-optional-header "<experimental/optional>" \
     \
     --jni-out "$temp_out/jni" \
     --ident-jni-class NativeFooBar \

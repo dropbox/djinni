@@ -199,9 +199,9 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::optional<int32_t> cr = TestHelpers::return_none();
+        std::experimental::optional<int32_t> cr = TestHelpers::return_none();
 
-        return ::djinni::HOptional<std::optional, ::djinni::HI32>::toJava(jniEnv, cr);
+        return ::djinni::HOptional<std::experimental::optional, ::djinni::HI32>::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
 }
 
