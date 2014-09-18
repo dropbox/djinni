@@ -202,7 +202,7 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  *
  * This is used for automatically wrapping a Java object that exposes some interface
  * with a C++ object that calls back into the JVM, such as a listener. Calling
- * JniWrapperCache<T>::get(jobj, ...) the first time will construct a T and return a
+ * JavaProxyCache<T>::get(jobj, ...) the first time will construct a T and return a
  * shared_ptr to it, and also save a weak_ptr to the new object internally. The constructed
  * T contains a strong GlobalRef to jobj. As long as something in C++ maintains a strong
  * reference to the wrapper, future calls to get(jobj) will return the *same* wrapper object.
@@ -212,11 +212,11 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  *   _____________        |       |                        |              |           |
  *  |             |       |       |   JniImplFooListener   | <=========== |    Foo    |
  *  | FooListener | <============ |  : public FooListener, |  shared_ptr  |___________|
- *  |_____________|   GlobalRef   |  JniWrapperCacheEntry  |
+ *  |_____________|   GlobalRef   |    JavaProxyCacheEntry |
  *                        |       |________________________|
  *                        |                 ^             ______________________
  *                        |                 \            |                      |
- *                        |                  - - - - - - |   JniWrapperCache    |
+ *                        |                  - - - - - - |    JavaProxyCache    |
  *                        |                   weak_ptr   | <JniImplFooListener> |
  *                        |                              |______________________|
  *
@@ -238,32 +238,32 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  * a shared_ptr to the object (JniImplFooListener, in the diagram above), as well as the
  * jobject *global* ref contained inside.
  */
-std::shared_ptr<void> jniWrapperCacheLookup(jobject obj, std::pair<std::shared_ptr<void>,
+std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_ptr<void>,
                                                                   jobject>(*factory)(jobject));
 
-class JniWrapperCacheEntry {
+class JavaProxyCacheEntry {
 public:
     jobject getGlobalRef() {
         return m_globalRef.get();
     }
 
 protected:
-    JniWrapperCacheEntry(jobject localRef, JNIEnv * env); // env used only for construction
-    JniWrapperCacheEntry(jobject localRef);
+    JavaProxyCacheEntry(jobject localRef, JNIEnv * env); // env used only for construction
+    JavaProxyCacheEntry(jobject localRef);
 
-    virtual ~JniWrapperCacheEntry() noexcept;
+    virtual ~JavaProxyCacheEntry() noexcept;
 
-    JniWrapperCacheEntry(const JniWrapperCacheEntry & other) = delete;
-    JniWrapperCacheEntry & operator=(const JniWrapperCacheEntry & other) = delete;
+    JavaProxyCacheEntry(const JavaProxyCacheEntry & other) = delete;
+    JavaProxyCacheEntry & operator=(const JavaProxyCacheEntry & other) = delete;
 
 private:
     const GlobalRef<jobject> m_globalRef;
 };
 
 template <class T>
-class JniWrapperCache {
+class JavaProxyCache {
 public:
-    using Entry = JniWrapperCacheEntry;
+    using Entry = JavaProxyCacheEntry;
 
     static std::pair<std::shared_ptr<void>, jobject> factory(jobject obj) {
         std::shared_ptr<T> ret = std::make_shared<T>(obj);
@@ -275,10 +275,10 @@ public:
      * construct a new one with obj, save it, and return it.
      */
     static std::shared_ptr<T> get(jobject obj) {
-        static_assert(std::is_base_of<JniWrapperCacheEntry, T>::value,
-            "JniWrapperCache can only be used with T if T derives from Entry<T>");
+        static_assert(std::is_base_of<JavaProxyCacheEntry, T>::value,
+            "JavaProxyCache can only be used with T if T derives from Entry<T>");
 
-        return std::static_pointer_cast<T>(jniWrapperCacheLookup(obj, &factory));
+        return std::static_pointer_cast<T>(javaProxyCacheLookup(obj, &factory));
     }
 };
 
@@ -324,7 +324,7 @@ public:
         if (j == 0) {
             return nullptr;
         }
-        return JniWrapperCache<typename Self::JavaProxy>::get(j);
+        return JavaProxyCache<typename Self::JavaProxy>::get(j);
     }
 };
 

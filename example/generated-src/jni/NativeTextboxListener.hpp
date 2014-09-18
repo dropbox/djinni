@@ -18,15 +18,15 @@ public:
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };
     const jmethodID method_update { djinni::jniGetMethodID(clazz.get(), "update", "(Lcom/dropbox/textsort/ItemList;)V") };
 
-    class JavaProxy final : djinni::JniWrapperCacheEntry, public ::textsort::TextboxListener {
+    class JavaProxy final : djinni::JavaProxyCacheEntry, public ::textsort::TextboxListener {
     public:
         JavaProxy(jobject obj);
         virtual void update(const ::textsort::ItemList & items) override;
 
     private:
-        using djinni::JniWrapperCacheEntry::getGlobalRef;
+        using djinni::JavaProxyCacheEntry::getGlobalRef;
         friend class djinni::JniInterfaceJavaExt<::textsort::TextboxListener, NativeTextboxListener>;
-        friend class djinni::JniWrapperCache<JavaProxy>;
+        friend class djinni::JavaProxyCache<JavaProxy>;
     };
 
 private:

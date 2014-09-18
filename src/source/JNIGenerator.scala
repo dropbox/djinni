@@ -210,7 +210,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         }
         if (i.ext.java) {
           w.wl
-          w.w(s"class JavaProxy final : djinni::JniWrapperCacheEntry, public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
+          w.w(s"class JavaProxy final : djinni::JavaProxyCacheEntry, public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wlOutdent(s"public:")
             w.wl(s"JavaProxy(jobject obj);")
             for (m <- i.methods) {
@@ -220,9 +220,9 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             }
             w.wl
             w.wlOutdent(s"private:")
-            w.wl(s"using djinni::JniWrapperCacheEntry::getGlobalRef;")
+            w.wl(s"using djinni::JavaProxyCacheEntry::getGlobalRef;")
             w.wl(s"friend class djinni::JniInterfaceJavaExt<$selfQ, $jniClassName>;")
-            w.wl(s"friend class djinni::JniWrapperCache<JavaProxy>;")
+            w.wl(s"friend class djinni::JavaProxyCache<JavaProxy>;")
           }
         }
         w.wl
@@ -239,7 +239,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       if (i.ext.java) {
         writeJniTypeParams(w, typeParams)
-        w.wl(s"$jniClassName::JavaProxy::JavaProxy(jobject obj) : JniWrapperCacheEntry(obj) {}")
+        w.wl(s"$jniClassName::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}")
 
         for (m <- i.methods) {
           w.wl

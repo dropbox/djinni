@@ -9,7 +9,7 @@ namespace djinni_generated {
 
 NativeClientInterface::NativeClientInterface() : djinni::JniInterfaceJavaExt<ClientInterface, NativeClientInterface>() {}
 
-NativeClientInterface::JavaProxy::JavaProxy(jobject obj) : JniWrapperCacheEntry(obj) {}
+NativeClientInterface::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 
 ClientReturnedRecord NativeClientInterface::JavaProxy::JavaProxy::get_record(const std::string & c_utf8string) {
     JNIEnv * const jniEnv = djinni::jniGetThreadEnv();

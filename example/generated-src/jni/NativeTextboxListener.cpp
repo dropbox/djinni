@@ -8,7 +8,7 @@ namespace djinni_generated {
 
 NativeTextboxListener::NativeTextboxListener() : djinni::JniInterfaceJavaExt<::textsort::TextboxListener, NativeTextboxListener>() {}
 
-NativeTextboxListener::JavaProxy::JavaProxy(jobject obj) : JniWrapperCacheEntry(obj) {}
+NativeTextboxListener::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 
 void NativeTextboxListener::JavaProxy::JavaProxy::update(const ::textsort::ItemList & c_items) {
     JNIEnv * const jniEnv = djinni::jniGetThreadEnv();

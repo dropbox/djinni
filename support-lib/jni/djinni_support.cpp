@@ -417,33 +417,33 @@ void jniSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
     }
 }
 
-struct JniWrapperCacheState {
+struct JavaProxyCacheState {
     std::mutex mtx;
     std::unordered_map<jobject, std::weak_ptr<void>, JavaIdentityHash, JavaIdentityEquals> m;
     int counter = 0;
 
-    static JniWrapperCacheState & get() {
-        static JniWrapperCacheState st;
+    static JavaProxyCacheState & get() {
+        static JavaProxyCacheState st;
         return st;
     }
 };
 
-JniWrapperCacheEntry::JniWrapperCacheEntry(jobject localRef, JNIEnv * env)
+JavaProxyCacheEntry::JavaProxyCacheEntry(jobject localRef, JNIEnv * env)
     : m_globalRef(env, localRef) {
     DJINNI_ASSERT(m_globalRef, env);
 }
 
-JniWrapperCacheEntry::JniWrapperCacheEntry(jobject localRef)
-    : JniWrapperCacheEntry(localRef, jniGetThreadEnv()) {}
+JavaProxyCacheEntry::JavaProxyCacheEntry(jobject localRef)
+    : JavaProxyCacheEntry(localRef, jniGetThreadEnv()) {}
 
-JniWrapperCacheEntry::~JniWrapperCacheEntry() noexcept {
-    JniWrapperCacheState & st = JniWrapperCacheState::get();
+JavaProxyCacheEntry::~JavaProxyCacheEntry() noexcept {
+    JavaProxyCacheState & st = JavaProxyCacheState::get();
     const std::lock_guard<std::mutex> lock(st.mtx);
     st.m.erase(m_globalRef.get());
 }
 
-std::shared_ptr<void> jniWrapperCacheLookup(jobject obj, std::pair<std::shared_ptr<void>, jobject>(*factory)(jobject)) {
-    JniWrapperCacheState & st = JniWrapperCacheState::get();
+std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_ptr<void>, jobject>(*factory)(jobject)) {
+    JavaProxyCacheState & st = JavaProxyCacheState::get();
     const std::lock_guard<std::mutex> lock(st.mtx);
 
     const auto it = st.m.find(obj);

@@ -18,15 +18,15 @@ public:
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
     const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
 
-    class JavaProxy final : djinni::JniWrapperCacheEntry, public ClientInterface {
+    class JavaProxy final : djinni::JavaProxyCacheEntry, public ClientInterface {
     public:
         JavaProxy(jobject obj);
         virtual ClientReturnedRecord get_record(const std::string & utf8string) override;
 
     private:
-        using djinni::JniWrapperCacheEntry::getGlobalRef;
+        using djinni::JavaProxyCacheEntry::getGlobalRef;
         friend class djinni::JniInterfaceJavaExt<ClientInterface, NativeClientInterface>;
-        friend class djinni::JniWrapperCache<JavaProxy>;
+        friend class djinni::JavaProxyCache<JavaProxy>;
     };
 
 private:
