@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 jobject NativeMapRecord::toJava(JNIEnv* jniEnv, MapRecord c) {
     djinni::LocalRef<jobject> j_map(jniEnv, ::djinni::HMap<::djinni::HString, ::djinni::HI64>::toJava(jniEnv, c.map));
-    const NativeMapRecord & data = djinni::JniClass<NativeMapRecord>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeMapRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_map.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
@@ -18,7 +18,7 @@ jobject NativeMapRecord::toJava(JNIEnv* jniEnv, MapRecord c) {
 
 MapRecord NativeMapRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const NativeMapRecord & data = djinni::JniClass<NativeMapRecord>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeMapRecord>::get();
     return MapRecord(
         ::djinni::HMap<::djinni::HString, ::djinni::HI64>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mMap)).get()));
 }

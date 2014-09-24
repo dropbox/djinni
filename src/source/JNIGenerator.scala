@@ -79,6 +79,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     val refs = new JNIRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty))
     val jniClassName = spec.jniClassIdentStyle(ident)
+    val fqJniClassName = withNs(Some(spec.jniNamespace), jniClassName)
 
     val self = idCpp.ty(ident)
     val selfQ = withNs(spec.cppNamespace, self) + cppTypeArgs(params)  // Qualified "self"
@@ -105,7 +106,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wlOutdent("private:")
         w.wl(s"$jniClassName() {}")
-        w.wl(s"friend class djinni::JniClass<$jniClassName>;")
+        w.wl(s"friend class djinni::JniClass<$fqJniClassName>;")
       }
     }
 
@@ -123,7 +124,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           val jniLocalRead = storeLocal(w, jniLocal, f.ty, s"$jniHelperClass::toJava(jniEnv, c.$cppFieldName)")
           jniArgs.append(jniLocalRead)
         }
-        w.wl(s"const $jniClassName & data = djinni::JniClass<$jniClassName>::get();")
+        w.wl(s"const auto & data = djinni::JniClass<$fqJniClassName>::get();")
         val argList = jniArgs.map(", " + _).mkString("")
         w.wl(s"jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor$argList);")
         w.wl(s"djinni::jniExceptionCheck(jniEnv);")
@@ -135,7 +136,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.w(s"$selfQ $jniClassName::fromJava(JNIEnv* jniEnv, jobject j)").braced {
           //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
           w.wl(s"assert(j != nullptr);")
-          w.wl(s"const $jniClassName & data = djinni::JniClass<$jniClassName>::get();")
+          w.wl(s"const auto & data = djinni::JniClass<$fqJniClassName>::get();")
           w.wl(s"return $selfQ(").nested {
             val skipFirst = SkipFirst()
             for (f <- r.fields) {
@@ -179,6 +180,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     val selfQ = withNs(spec.cppNamespace, self) + cppTypeArgs(typeParams)  // Qualified "self"
 
     val jniClassName = spec.jniClassIdentStyle(ident)
+    val fqJniClassName = withNs(Some(spec.jniNamespace), jniClassName)
     val classLookup = toJavaClassLookup(ident, spec.javaPackage)
     val (baseClassName, baseClassArgs) = (i.ext.java, i.ext.cpp) match {
       case (true,  true) =>  throw new AssertionError("an interface cannot be both +c and +j")
@@ -196,9 +198,9 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"using JniType = jobject;")
         w.wl
         if (!i.ext.java) {
-          w.wl(s"static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<$selfQ> c) { return djinni::JniClass<$jniClassName>::get()._toJava(jniEnv, c); }")
+          w.wl(s"static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<$selfQ> c) { return djinni::JniClass<$fqJniClassName>::get()._toJava(jniEnv, c); }")
         }
-        w.wl(s"static std::shared_ptr<$selfQ> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<$jniClassName>::get()._fromJava(jniEnv, j); }")
+        w.wl(s"static std::shared_ptr<$selfQ> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<$fqJniClassName>::get()._fromJava(jniEnv, j); }")
         w.wl
         if (i.ext.java) {
           w.wl(s"const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass(${q(classLookup)}) };")
@@ -221,14 +223,14 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl
             w.wlOutdent(s"private:")
             w.wl(s"using djinni::JavaProxyCacheEntry::getGlobalRef;")
-            w.wl(s"friend class djinni::JniInterfaceJavaExt<$selfQ, $jniClassName>;")
+            w.wl(s"friend class djinni::JniInterfaceJavaExt<$selfQ, $fqJniClassName>;")
             w.wl(s"friend class djinni::JavaProxyCache<JavaProxy>;")
           }
         }
         w.wl
         w.wlOutdent("private:")
         w.wl(s"$jniClassName();")
-        w.wl(s"friend class djinni::JniClass<$jniClassName>;")
+        w.wl(s"friend class djinni::JniClass<$fqJniClassName>;")
       }
     }
 
@@ -257,7 +259,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               val jniLocalRead = storeLocal(w, jniLocal, p.ty, s"$jniHelperClass::toJava(jniEnv, $cppParamName)")
               jniArgs.append(jniLocalRead)
             }
-            w.wl(s"const $jniClassName & data = djinni::JniClass<$jniClassName>::get();")
+            w.wl(s"const auto & data = djinni::JniClass<$fqJniClassName>::get();")
             val argList = jniArgs.map(", "+_).mkString("")
             val javaMethodName = idJava.method(m.ident)
             m.ret match {

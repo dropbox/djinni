@@ -22,7 +22,7 @@ public:
 
 private:
     NativeSetRecord() {}
-    friend class djinni::JniClass<NativeSetRecord>;
+    friend class djinni::JniClass<::djinni_generated::NativeSetRecord>;
 };
 
 }  // namespace djinni_generated

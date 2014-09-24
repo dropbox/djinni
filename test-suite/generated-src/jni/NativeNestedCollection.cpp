@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 jobject NativeNestedCollection::toJava(JNIEnv* jniEnv, NestedCollection c) {
     djinni::LocalRef<jobject> j_set_list(jniEnv, ::djinni::HList<::djinni::HSet<::djinni::HString>>::toJava(jniEnv, c.set_list));
-    const NativeNestedCollection & data = djinni::JniClass<NativeNestedCollection>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeNestedCollection>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_set_list.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
@@ -18,7 +18,7 @@ jobject NativeNestedCollection::toJava(JNIEnv* jniEnv, NestedCollection c) {
 
 NestedCollection NativeNestedCollection::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const NativeNestedCollection & data = djinni::JniClass<NativeNestedCollection>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeNestedCollection>::get();
     return NestedCollection(
         ::djinni::HList<::djinni::HSet<::djinni::HString>>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mSetList)).get()));
 }

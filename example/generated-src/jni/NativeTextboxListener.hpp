@@ -13,7 +13,7 @@ public:
     using CppType = std::shared_ptr<::textsort::TextboxListener>;
     using JniType = jobject;
 
-    static std::shared_ptr<::textsort::TextboxListener> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<NativeTextboxListener>::get()._fromJava(jniEnv, j); }
+    static std::shared_ptr<::textsort::TextboxListener> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeTextboxListener>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };
     const jmethodID method_update { djinni::jniGetMethodID(clazz.get(), "update", "(Lcom/dropbox/textsort/ItemList;)V") };
@@ -25,13 +25,13 @@ public:
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterfaceJavaExt<::textsort::TextboxListener, NativeTextboxListener>;
+        friend class djinni::JniInterfaceJavaExt<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
         friend class djinni::JavaProxyCache<JavaProxy>;
     };
 
 private:
     NativeTextboxListener();
-    friend class djinni::JniClass<NativeTextboxListener>;
+    friend class djinni::JniClass<::djinni_generated::NativeTextboxListener>;
 };
 
 }  // namespace djinni_generated

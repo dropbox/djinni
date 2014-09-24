@@ -9,7 +9,7 @@ namespace djinni_generated {
 
 jobject NativePrimitiveList::toJava(JNIEnv* jniEnv, PrimitiveList c) {
     djinni::LocalRef<jobject> j_list(jniEnv, ::djinni::HList<::djinni::HI64>::toJava(jniEnv, c.list));
-    const NativePrimitiveList & data = djinni::JniClass<NativePrimitiveList>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativePrimitiveList>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_list.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
@@ -17,7 +17,7 @@ jobject NativePrimitiveList::toJava(JNIEnv* jniEnv, PrimitiveList c) {
 
 PrimitiveList NativePrimitiveList::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const NativePrimitiveList & data = djinni::JniClass<NativePrimitiveList>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativePrimitiveList>::get();
     return PrimitiveList(
         ::djinni::HList<::djinni::HI64>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mList)).get()));
 }

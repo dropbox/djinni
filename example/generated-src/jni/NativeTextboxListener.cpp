@@ -14,7 +14,7 @@ void NativeTextboxListener::JavaProxy::JavaProxy::update(const ::textsort::ItemL
     JNIEnv * const jniEnv = djinni::jniGetThreadEnv();
     djinni::JniLocalScope jscope(jniEnv, 10);
     djinni::LocalRef<jobject> j_items(jniEnv, NativeItemList::toJava(jniEnv, c_items));
-    const NativeTextboxListener & data = djinni::JniClass<NativeTextboxListener>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeTextboxListener>::get();
     jniEnv->CallVoidMethod(getGlobalRef(), data.method_update, j_items.get());
     djinni::jniExceptionCheck(jniEnv);
 };

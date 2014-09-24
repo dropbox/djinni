@@ -13,13 +13,13 @@ public:
     using CppType = std::shared_ptr<::textsort::SortItems>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::textsort::SortItems> c) { return djinni::JniClass<NativeSortItems>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<::textsort::SortItems> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<NativeSortItems>::get()._fromJava(jniEnv, j); }
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::textsort::SortItems> c) { return djinni::JniClass<::djinni_generated::NativeSortItems>::get()._toJava(jniEnv, c); }
+    static std::shared_ptr<::textsort::SortItems> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeSortItems>::get()._fromJava(jniEnv, j); }
 
 
 private:
     NativeSortItems();
-    friend class djinni::JniClass<NativeSortItems>;
+    friend class djinni::JniClass<::djinni_generated::NativeSortItems>;
 };
 
 }  // namespace djinni_generated

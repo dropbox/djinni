@@ -22,7 +22,7 @@ public:
 
 private:
     NativeClientReturnedRecord() {}
-    friend class djinni::JniClass<NativeClientReturnedRecord>;
+    friend class djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>;
 };
 
 }  // namespace djinni_generated

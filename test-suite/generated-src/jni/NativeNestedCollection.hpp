@@ -22,7 +22,7 @@ public:
 
 private:
     NativeNestedCollection() {}
-    friend class djinni::JniClass<NativeNestedCollection>;
+    friend class djinni::JniClass<::djinni_generated::NativeNestedCollection>;
 };
 
 }  // namespace djinni_generated

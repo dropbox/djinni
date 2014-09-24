@@ -23,7 +23,7 @@ public:
 
 private:
     NativeRecordWithDerivings() {}
-    friend class djinni::JniClass<NativeRecordWithDerivings>;
+    friend class djinni::JniClass<::djinni_generated::NativeRecordWithDerivings>;
 };
 
 }  // namespace djinni_generated

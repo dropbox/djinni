@@ -13,7 +13,7 @@ public:
     using CppType = std::shared_ptr<ClientInterface>;
     using JniType = jobject;
 
-    static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<NativeClientInterface>::get()._fromJava(jniEnv, j); }
+    static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
     const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
@@ -25,13 +25,13 @@ public:
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterfaceJavaExt<ClientInterface, NativeClientInterface>;
+        friend class djinni::JniInterfaceJavaExt<ClientInterface, ::djinni_generated::NativeClientInterface>;
         friend class djinni::JavaProxyCache<JavaProxy>;
     };
 
 private:
     NativeClientInterface();
-    friend class djinni::JniClass<NativeClientInterface>;
+    friend class djinni::JniClass<::djinni_generated::NativeClientInterface>;
 };
 
 }  // namespace djinni_generated

@@ -13,13 +13,13 @@ public:
     using CppType = std::shared_ptr<CppException>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<CppException> c) { return djinni::JniClass<NativeCppException>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<CppException> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<NativeCppException>::get()._fromJava(jniEnv, j); }
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<CppException> c) { return djinni::JniClass<::djinni_generated::NativeCppException>::get()._toJava(jniEnv, c); }
+    static std::shared_ptr<CppException> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeCppException>::get()._fromJava(jniEnv, j); }
 
 
 private:
     NativeCppException();
-    friend class djinni::JniClass<NativeCppException>;
+    friend class djinni::JniClass<::djinni_generated::NativeCppException>;
 };
 
 }  // namespace djinni_generated

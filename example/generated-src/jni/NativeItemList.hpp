@@ -22,7 +22,7 @@ public:
 
 private:
     NativeItemList() {}
-    friend class djinni::JniClass<NativeItemList>;
+    friend class djinni::JniClass<::djinni_generated::NativeItemList>;
 };
 
 }  // namespace djinni_generated

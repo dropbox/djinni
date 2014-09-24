@@ -8,7 +8,7 @@ namespace djinni_generated {
 
 jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ClientReturnedRecord c) {
     djinni::LocalRef<jstring> j_content(jniEnv, ::djinni::HString::toJava(jniEnv, c.content));
-    const NativeClientReturnedRecord & data = djinni::JniClass<NativeClientReturnedRecord>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_content.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
@@ -16,7 +16,7 @@ jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ClientReturnedRecord 
 
 ClientReturnedRecord NativeClientReturnedRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const NativeClientReturnedRecord & data = djinni::JniClass<NativeClientReturnedRecord>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
     return ClientReturnedRecord(
         ::djinni::HString::fromJava(jniEnv, djinni::LocalRef<jstring>(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mContent))).get()));
 }

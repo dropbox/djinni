@@ -22,7 +22,7 @@ public:
 
 private:
     NativeMapListRecord() {}
-    friend class djinni::JniClass<NativeMapListRecord>;
+    friend class djinni::JniClass<::djinni_generated::NativeMapListRecord>;
 };
 
 }  // namespace djinni_generated

@@ -9,7 +9,7 @@ namespace djinni_generated {
 
 jobject NativeItemList::toJava(JNIEnv* jniEnv, ::textsort::ItemList c) {
     djinni::LocalRef<jobject> j_items(jniEnv, ::djinni::HList<::djinni::HString>::toJava(jniEnv, c.items));
-    const NativeItemList & data = djinni::JniClass<NativeItemList>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeItemList>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_items.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
@@ -17,7 +17,7 @@ jobject NativeItemList::toJava(JNIEnv* jniEnv, ::textsort::ItemList c) {
 
 ::textsort::ItemList NativeItemList::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const NativeItemList & data = djinni::JniClass<NativeItemList>::get();
+    const auto & data = djinni::JniClass<::djinni_generated::NativeItemList>::get();
     return ::textsort::ItemList(
         ::djinni::HList<::djinni::HString>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mItems)).get()));
 }
