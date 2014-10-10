@@ -99,6 +99,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
 
     writeObjcFile(enumTranslatorName(ident), origin, refs.body, w => {
+      w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
+      w.wl
       w.wl(s"@implementation " + self + "Translator")
       w.wl
       w.wl(s"+ ($self)cpp${name}ToObjc${name}:($cppSelf)${argName}")
@@ -251,6 +253,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       })
 
       writeObjcFile(bodyName(cppExtName), origin, refs.body, w => {
+        w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
+        w.wl
         w.wl(s"@implementation $cppExtSelf")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef")
@@ -443,6 +447,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     writeObjcFile(bodyName(objcName), origin, refs.body, w => {
       if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
+      w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
       w.wl
       w.wl(s"@implementation $self")
       w.wl

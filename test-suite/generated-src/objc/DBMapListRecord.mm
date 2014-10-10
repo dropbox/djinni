@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 #include <utility>
 
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
 @implementation DBMapListRecord
 
