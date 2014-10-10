@@ -9,6 +9,7 @@
 #include "HOptional.hpp"
 #include "HString.hpp"
 #include "NativeClientInterface.hpp"
+#include "NativeColor.hpp"
 #include "NativeMapListRecord.hpp"
 #include "NativeNestedCollection.hpp"
 #include "NativePrimitiveList.hpp"
@@ -191,6 +192,17 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
         jniEnv->DeleteLocalRef(j_i);
 
         TestHelpers::check_client_interface_nonascii(c_i);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        std::unordered_map<color, std::string> c_m = ::djinni::HMap<NativeColor, ::djinni::HString>::fromJava(jniEnv, j_m);
+        jniEnv->DeleteLocalRef(j_m);
+
+        TestHelpers::check_enum_map(c_m);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

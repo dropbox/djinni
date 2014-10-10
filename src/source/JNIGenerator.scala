@@ -29,7 +29,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   val jniBaseLibFileIdentStyle = jniBaseLibClassIdentStyle
 
   val writeJniCppFile = writeCppFileGeneric(spec.jniOutFolder.get, Some(spec.jniNamespace), spec.jniFileIdentStyle, spec.jniIncludePrefix) _
-  val writeJniHppFile = writeHppFileGeneric(spec.jniHeaderOutFolder.get, Some(spec.jniNamespace), spec.jniFileIdentStyle) _
+  def writeJniHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
+    writeHppFileGeneric(spec.jniHeaderOutFolder.get, Some(spec.jniNamespace), spec.jniFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
   class JNIRefs(name: String) {
     var jniHpp = mutable.TreeSet[String]()

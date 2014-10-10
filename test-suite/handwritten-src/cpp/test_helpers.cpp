@@ -88,3 +88,19 @@ void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientIn
 std::experimental::optional<int32_t> TestHelpers::return_none() {
     return {};
 }
+
+void TestHelpers::check_enum_map(const std::unordered_map<color, std::string> & m) {
+    std::unordered_map<color, std::string> expected = {
+        { color::RED,    "red"    },
+        { color::ORANGE, "orange" },
+        { color::YELLOW, "yellow" },
+        { color::GREEN,  "green"  },
+        { color::BLUE,   "blue"   },
+        { color::INDIGO, "indigo" },
+        { color::VIOLET, "violet" },
+    };
+
+    if (m != expected) {
+        throw std::invalid_argument("map mismatch");
+    }
+}

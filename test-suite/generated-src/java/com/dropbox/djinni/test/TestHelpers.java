@@ -35,6 +35,8 @@ public abstract class TestHelpers {
 
     public static native void checkClientInterfaceNonascii(ClientInterface i);
 
+    public static native void checkEnumMap(HashMap<Color, String> m);
+
     public static native Integer returnNone();
 
     public static final class NativeProxy extends TestHelpers

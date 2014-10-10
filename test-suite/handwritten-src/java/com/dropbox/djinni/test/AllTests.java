@@ -14,6 +14,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(RecordWithDerivingsTest.class);
         mySuite.addTestSuite(CppExceptionTest.class);
         mySuite.addTestSuite(ClientInterfaceTest.class);
+        mySuite.addTestSuite(EnumTest.class);
         return mySuite;
     }
 

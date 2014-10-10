@@ -4,6 +4,7 @@
 #import "TXSSortItemsCppProxy+Private.h"
 #import "DJIError.h"
 #import "TXSItemList+Private.h"
+#import "TXSSortItems.h"
 #import "TXSSortItemsCppProxy+Private.h"
 #import "TXSTextboxListenerObjcProxy+Private.h"
 #include <exception>

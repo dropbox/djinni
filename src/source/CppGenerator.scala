@@ -27,7 +27,8 @@ import scala.collection.mutable
 class CppGenerator(spec: Spec) extends Generator(spec) {
 
   val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
-  val writeHppFile = writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle) _
+  def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
+    writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
   class CppRefs(name: String) {
     var hpp = mutable.TreeSet[String]()
@@ -83,12 +84,33 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     val self = idCpp.enumType(ident)
 
+    if (spec.cppEnumHashWorkaround) {
+      refs.hpp.add("#include <functional>") // needed for std::hash
+    }
+
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       w.w(s"enum class $self : int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idCpp.enum(o.ident.name) + ",")
         }
+      }
+    },
+    w => {
+      // std::hash specialization has to go *outside* of the wrapNs
+      if (spec.cppEnumHashWorkaround) {
+        val fqSelf = withNs(spec.cppNamespace, self)
+        w.wl
+        wrapNamespace(w, Some("std"),
+          (w: IndentWriter) => {
+            w.wl("template <>")
+            w.w(s"struct hash<$fqSelf>").bracedSemi {
+              w.w(s"size_t operator()($fqSelf type) const").braced {
+                w.wl("return std::hash<int>()(static_cast<int>(type));")
+              }
+            }
+          }
+        )
       }
     })
   }

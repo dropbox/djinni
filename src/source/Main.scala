@@ -30,6 +30,7 @@ object Main {
     var cppFileIdentStyle: IdentConverter = IdentStyle.underLower
     var cppOptionalTemplate: String = "std::optional"
     var cppOptionalHeader: String = "<optional>"
+    var cppEnumHashWorkaround : Boolean = true
     var javaOutFolder: Option[File] = None
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
@@ -100,6 +101,8 @@ object Main {
         .text("The template to use for optional values (default: \"std::optional\")")
       opt[String]("cpp-optional-header").valueName("<header>").foreach(x => cppOptionalHeader = x)
         .text("The header to use for optional values (default: \"<optional>\")")
+      opt[Boolean]("cpp-enum-hash-workaround").valueName("<true/false>").foreach(x => cppEnumHashWorkaround = x)
+        .text("Work around LWG-2148 by generating std::hash specializations for C++ enums (default: true)")
       note("")
       opt[File]("jni-out").valueName("<out-folder>").foreach(x => jniOutFolder = Some(x))
         .text("The folder for the JNI C++ output files (Generator disabled if unspecified).")
@@ -205,6 +208,7 @@ object Main {
       cppFileIdentStyle,
       cppOptionalTemplate,
       cppOptionalHeader,
+      cppEnumHashWorkaround,
       jniOutFolder,
       jniHeaderOutFolder,
       jniIncludePrefix,

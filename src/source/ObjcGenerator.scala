@@ -110,7 +110,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl(s"+ ($cppSelf)objc${name}ToCpp${name}:($self)${argName}")
       w.braced {
-        w.wl(s"return static_cast<$cppSelf>($argName);")
+        w.wl(s"return static_cast<enum $cppSelf>($argName);")
       }
       w.wl
       w.wl("@end")
@@ -214,6 +214,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl("@end")
     })
+
+    refs.body.add("#import " + q(headerName(ident)))
 
     if (i.consts.nonEmpty) {
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {

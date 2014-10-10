@@ -3,10 +3,13 @@
 
 #import "DBTestHelpersCppProxy+Private.h"
 #import "DBClientInterfaceObjcProxy+Private.h"
+#import "DBColor.h"
+#import "DBColorTranslator+Private.h"
 #import "DBMapListRecord+Private.h"
 #import "DBNestedCollection+Private.h"
 #import "DBPrimitiveList+Private.h"
 #import "DBSetRecord+Private.h"
+#import "DBTestHelpers.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>
@@ -172,6 +175,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         std::shared_ptr<ClientInterface> cppI = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(i);
         TestHelpers::check_client_interface_nonascii(std::move(cppI));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (void)checkEnumMap:(NSMutableDictionary *)m {
+    try {
+        std::unordered_map<color, std::string> cppM;
+        for (id objcKey_0 in m) {
+            color cppKey_0 = [DBColorTranslator objcColorToCppColor:(DBColor)[objcKey_0 intValue]];
+            std::string cppValue_0([[m objectForKey:objcKey_0] UTF8String], [[m objectForKey:objcKey_0] lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+            cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
+        }
+        TestHelpers::check_enum_map(std::move(cppM));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

@@ -5,4 +5,5 @@
 @import "primitive_list.djinni"
 @import "exception.djinni"
 @import "client_interface.djinni"
+@import "enum.djinni"
 @import "test.djinni"
