@@ -18,6 +18,9 @@
         {
             "target_name": "djinni_objc",
             "type": "static_library",
+            "xcode_settings": {
+              "CLANG_ENABLE_OBJC_ARC": "YES",
+            },
             "sources": [
               "objc/DJIWeakPtrWrapper.mm",
               "objc/DJIError.mm",

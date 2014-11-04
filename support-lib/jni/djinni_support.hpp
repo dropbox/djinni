@@ -366,10 +366,6 @@ private:
     static bool _pushLocalFrame(JNIEnv* const env, jint capacity);
     static void _popLocalFrame(JNIEnv* const env, jobject returnRef);
 
-#ifdef DBX_JNI_LOCAL_FRAME_DEBUG
-    static int s_frameCount;
-#endif
-
     JNIEnv* const m_env;
     const bool m_success;
 };

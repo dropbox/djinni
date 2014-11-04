@@ -207,29 +207,11 @@ JniLocalScope::~JniLocalScope() {
 }
 
 bool JniLocalScope::_pushLocalFrame(JNIEnv* const env, jint capacity) {
-#ifdef DBX_JNI_LOCAL_FRAME_DEBUG
-    JNI_DEBUG_LOGF(VERBOSE, "Pushing local frame count to %d, capacity=%d", s_frameCount+1, capacity);
-#endif
-
     const jint push_res = env->PushLocalFrame(capacity);
-
-#ifdef DBX_JNI_LOCAL_FRAME_DEBUG
-    if (0 == push_res) {
-        ++s_frameCount;
-    } else {
-        JNI_DEBUG_LOGF(ERROR, "%d <- PushLocalFrame(%d)", push_res, capacity);
-        env->ExceptionDescribe();
-    }
-#endif
-
     return 0 == push_res;
 }
 
 void JniLocalScope::_popLocalFrame(JNIEnv* const env, jobject returnRef) {
-#ifdef DBX_JNI_LOCAL_FRAME_DEBUG
-    --s_frameCount;
-    JNI_DEBUG_LOGF(VERBOSE, "Popping local frame count to %d.", s_frameCount);
-#endif
     env->PopLocalFrame(returnRef);
 }
 

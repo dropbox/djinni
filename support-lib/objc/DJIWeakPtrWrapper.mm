@@ -15,6 +15,7 @@
 //
 
 #import "DJIWeakPtrWrapper+Private.h"
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
 @implementation DBWeakPtrWrapper
 
