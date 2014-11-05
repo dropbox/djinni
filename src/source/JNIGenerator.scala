@@ -323,9 +323,6 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               val localVar = "c_" + idCpp.local(p.ident)
               val paramName = "j_" + idJava.local(p.ident)
               w.wl(s"$cppType $localVar = $jniHelperClass::fromJava(jniEnv, $paramName);")
-              if (isJavaHeapObject(p.ty)) {
-                w.wl(s"jniEnv->DeleteLocalRef($paramName);")
-              }
             }
             val callArgs = m.params.map(p => "c_" + idCpp.local(p.ident)).mkString(", ")
             val methodName = idCpp.method(m.ident)

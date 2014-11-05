@@ -26,7 +26,6 @@ CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024NativeProxy_nat
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const std::shared_ptr<::textsort::SortItems> & ref = *reinterpret_cast<const std::shared_ptr<::textsort::SortItems>*>(nativeRef);
         ::textsort::ItemList c_items = NativeItemList::fromJava(jniEnv, j_items);
-        jniEnv->DeleteLocalRef(j_items);
 
         ref->sort(c_items);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
@@ -37,7 +36,6 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_createWithListene
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::shared_ptr<::textsort::TextboxListener> c_listener = NativeTextboxListener::fromJava(jniEnv, j_listener);
-        jniEnv->DeleteLocalRef(j_listener);
 
         std::shared_ptr<::textsort::SortItems> cr = ::textsort::SortItems::create_with_listener(c_listener);
 

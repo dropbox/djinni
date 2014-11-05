@@ -45,7 +45,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkSetRec
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         SetRecord c_rec = NativeSetRecord::fromJava(jniEnv, j_rec);
-        jniEnv->DeleteLocalRef(j_rec);
 
         bool cr = TestHelpers::check_set_record(c_rec);
 
@@ -69,7 +68,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkPrimit
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         PrimitiveList c_pl = NativePrimitiveList::fromJava(jniEnv, j_pl);
-        jniEnv->DeleteLocalRef(j_pl);
 
         bool cr = TestHelpers::check_primitive_list(c_pl);
 
@@ -93,7 +91,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkNested
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         NestedCollection c_nc = NativeNestedCollection::fromJava(jniEnv, j_nc);
-        jniEnv->DeleteLocalRef(j_nc);
 
         bool cr = TestHelpers::check_nested_collection(c_nc);
 
@@ -117,7 +114,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMap(JN
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::unordered_map<std::string, int64_t> c_m = ::djinni::HMap<::djinni::HString, ::djinni::HI64>::fromJava(jniEnv, j_m);
-        jniEnv->DeleteLocalRef(j_m);
 
         bool cr = TestHelpers::check_map(c_m);
 
@@ -141,7 +137,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEmptyM
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::unordered_map<std::string, int64_t> c_m = ::djinni::HMap<::djinni::HString, ::djinni::HI64>::fromJava(jniEnv, j_m);
-        jniEnv->DeleteLocalRef(j_m);
 
         bool cr = TestHelpers::check_empty_map(c_m);
 
@@ -165,7 +160,6 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMapLis
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         MapListRecord c_m = NativeMapListRecord::fromJava(jniEnv, j_m);
-        jniEnv->DeleteLocalRef(j_m);
 
         bool cr = TestHelpers::check_map_list_record(c_m);
 
@@ -178,7 +172,6 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::shared_ptr<ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
-        jniEnv->DeleteLocalRef(j_i);
 
         TestHelpers::check_client_interface_ascii(c_i);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
@@ -189,7 +182,6 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::shared_ptr<ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
-        jniEnv->DeleteLocalRef(j_i);
 
         TestHelpers::check_client_interface_nonascii(c_i);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
@@ -200,7 +192,6 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JN
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::unordered_map<color, std::string> c_m = ::djinni::HMap<NativeColor, ::djinni::HString>::fromJava(jniEnv, j_m);
-        jniEnv->DeleteLocalRef(j_m);
 
         TestHelpers::check_enum_map(c_m);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
