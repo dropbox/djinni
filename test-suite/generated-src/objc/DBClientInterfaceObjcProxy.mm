@@ -27,11 +27,13 @@ namespace djinni_generated
 
     ClientReturnedRecord ClientInterfaceObjcProxy::get_record (const std::string & utf8string)
     {
-        NSString *cpp_utf8string = [[NSString alloc] initWithBytes:utf8string.data()
-                length:utf8string.length()
-                encoding:NSUTF8StringEncoding];
-        DBClientReturnedRecord *objcRet = [objcRef getRecord:cpp_utf8string];
-        ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
-        return cppRet;
+        @autoreleasepool {
+            NSString *cpp_utf8string = [[NSString alloc] initWithBytes:utf8string.data()
+                    length:utf8string.length()
+                    encoding:NSUTF8StringEncoding];
+            DBClientReturnedRecord *objcRet = [objcRef getRecord:cpp_utf8string];
+            ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
+            return cppRet;
+        }
     }
 }

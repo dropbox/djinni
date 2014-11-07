@@ -27,7 +27,9 @@ namespace djinni_generated
 
     void TextboxListenerObjcProxy::update (const ::textsort::ItemList & items)
     {
-        TXSItemList *cpp_items = [[TXSItemList alloc] initWithCppItemList:items];
-        [objcRef update:cpp_items];
+        @autoreleasepool {
+            TXSItemList *cpp_items = [[TXSItemList alloc] initWithCppItemList:items];
+            [objcRef update:cpp_items];
+        }
     }
 }

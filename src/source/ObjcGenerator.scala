@@ -351,20 +351,22 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             val ret = m.ret.fold("void")(toCppType(_))
             val params = m.params.map(p => "const " + toCppType(p.ty, spec.cppNamespace) + " & " + idCpp.local(p.ident))
             w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
-              m.params.foreach(p =>
-                translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
-              m.ret.fold()(r => w.w(toObjcTypeDef(r) + "objcRet = "))
-              w.w("[objcRef " + idObjc.method(m.ident))
-              val skipFirst = SkipFirst()
-              for (p <- m.params) {
-                skipFirst { w.w(" " + idObjc.local(p.ident)) }
-                w.w(":" + idCpp.local("cpp_" + p.ident.name))
+              w.w("@autoreleasepool").braced {
+                m.params.foreach(p =>
+                  translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
+                m.ret.fold()(r => w.w(toObjcTypeDef(r) + "objcRet = "))
+                w.w("[objcRef " + idObjc.method(m.ident))
+                val skipFirst = SkipFirst()
+                for (p <- m.params) {
+                  skipFirst { w.w(" " + idObjc.local(p.ident)) }
+                  w.w(":" + idCpp.local("cpp_" + p.ident.name))
+                }
+                w.wl("];")
+                m.ret.fold()(r => {
+                  translateObjcTypeToCpp("cppRet", "objcRet", r, w)
+                  w.wl("return cppRet;")
+                })
               }
-              w.wl("];")
-              m.ret.fold()(r => {
-                translateObjcTypeToCpp("cppRet", "objcRet", r, w)
-                w.wl("return cppRet;")
-              })
             }
           }
         }
