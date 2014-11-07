@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "assorted_integers.hpp"
 #include "color.hpp"
 #include "map_list_record.hpp"
 #include "nested_collection.hpp"
@@ -51,4 +52,7 @@ public:
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
 
     static std::experimental::optional<int32_t> return_none();
+
+    /** Ensures that we generate integer translation code */
+    static AssortedIntegers assorted_integers_id(const AssortedIntegers & i);
 };

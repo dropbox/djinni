@@ -4,6 +4,7 @@
 #import "DBClientInterface.h"
 #import "DBColor.h"
 #import <Foundation/Foundation.h>
+@class DBAssortedIntegers;
 @class DBMapListRecord;
 @class DBNestedCollection;
 @class DBPrimitiveList;
@@ -43,5 +44,8 @@
 + (void)checkEnumMap:(NSMutableDictionary *)m;
 
 + (NSNumber *)returnNone;
+
+/** Ensures that we generate integer translation code */
++ (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i;
 
 @end

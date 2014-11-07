@@ -104,3 +104,7 @@ void TestHelpers::check_enum_map(const std::unordered_map<color, std::string> & 
         throw std::invalid_argument("map mismatch");
     }
 }
+
+AssortedIntegers TestHelpers::assorted_integers_id(const AssortedIntegers & i) {
+    return i;
+}

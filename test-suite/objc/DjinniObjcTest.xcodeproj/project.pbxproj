@@ -36,6 +36,8 @@
 		65BAE70D19A6C7100035F775 /* DBRecordWithNestedDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65BAE6FF19A6C7100035F775 /* DBRecordWithNestedDerivings.mm */; };
 		65BAE70E19A6C7100035F775 /* DBSetRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65BAE70219A6C7100035F775 /* DBSetRecord.mm */; };
 		A2059B6219DF7DDE006A2896 /* DBColorTranslator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2059B6019DF7DDE006A2896 /* DBColorTranslator.mm */; };
+		A227B6A91A0D79F10003BBAC /* assorted_integers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A227B6A71A0D79F10003BBAC /* assorted_integers.cpp */; };
+		A227B6AD1A0D7A290003BBAC /* DBAssortedIntegers.mm in Sources */ = {isa = PBXBuildFile; fileRef = A227B6AB1A0D7A290003BBAC /* DBAssortedIntegers.mm */; };
 		A278D45019BA33CB006FD937 /* DBTestHelpersCppProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A278D44E19BA33CB006FD937 /* DBTestHelpersCppProxy.mm */; };
 		A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A278D45219BA3601006FD937 /* test_helpers.cpp */; };
 		A2CB54B419BA6E6000A9E600 /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2CB54B319BA6E6000A9E600 /* DJIError.mm */; };
@@ -135,6 +137,11 @@
 		A2059B5F19DF7DDE006A2896 /* DBColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBColor.h; sourceTree = "<group>"; };
 		A2059B6019DF7DDE006A2896 /* DBColorTranslator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBColorTranslator.mm; sourceTree = "<group>"; };
 		A2059B6119DF7DDE006A2896 /* DBColorTranslator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBColorTranslator+Private.h"; sourceTree = "<group>"; };
+		A227B6A71A0D79F10003BBAC /* assorted_integers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assorted_integers.cpp; sourceTree = "<group>"; };
+		A227B6A81A0D79F10003BBAC /* assorted_integers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = assorted_integers.hpp; sourceTree = "<group>"; };
+		A227B6AA1A0D7A290003BBAC /* DBAssortedIntegers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBAssortedIntegers.h; sourceTree = "<group>"; };
+		A227B6AB1A0D7A290003BBAC /* DBAssortedIntegers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBAssortedIntegers.mm; sourceTree = "<group>"; };
+		A227B6AC1A0D7A290003BBAC /* DBAssortedIntegers+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBAssortedIntegers+Private.h"; sourceTree = "<group>"; };
 		A278D44C19BA33CB006FD937 /* DBTestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBTestHelpers.h; sourceTree = "<group>"; };
 		A278D44D19BA33CB006FD937 /* DBTestHelpersCppProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBTestHelpersCppProxy.h; sourceTree = "<group>"; };
 		A278D44E19BA33CB006FD937 /* DBTestHelpersCppProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBTestHelpersCppProxy.mm; sourceTree = "<group>"; };
@@ -256,6 +263,8 @@
 		65BAE6D619A6C7100035F775 /* generated-cpp */ = {
 			isa = PBXGroup;
 			children = (
+				A227B6A71A0D79F10003BBAC /* assorted_integers.cpp */,
+				A227B6A81A0D79F10003BBAC /* assorted_integers.hpp */,
 				A2059B5E19DF7DBA006A2896 /* color.hpp */,
 				A278D45119BA3428006FD937 /* test_helpers.hpp */,
 				65BAE6D719A6C7100035F775 /* client_interface.hpp */,
@@ -278,6 +287,9 @@
 		65BAE6E319A6C7100035F775 /* generated-objc */ = {
 			isa = PBXGroup;
 			children = (
+				A227B6AA1A0D7A290003BBAC /* DBAssortedIntegers.h */,
+				A227B6AB1A0D7A290003BBAC /* DBAssortedIntegers.mm */,
+				A227B6AC1A0D7A290003BBAC /* DBAssortedIntegers+Private.h */,
 				A2059B5F19DF7DDE006A2896 /* DBColor.h */,
 				A2059B6019DF7DDE006A2896 /* DBColorTranslator.mm */,
 				A2059B6119DF7DDE006A2896 /* DBColorTranslator+Private.h */,
@@ -420,7 +432,9 @@
 				65BAE70419A6C7100035F775 /* record_with_nested_derivings.cpp in Sources */,
 				A2CB54B419BA6E6000A9E600 /* DJIError.mm in Sources */,
 				A278D45019BA33CB006FD937 /* DBTestHelpersCppProxy.mm in Sources */,
+				A227B6AD1A0D7A290003BBAC /* DBAssortedIntegers.mm in Sources */,
 				65BAE70519A6C7100035F775 /* DBClientInterfaceObjcProxy.mm in Sources */,
+				A227B6A91A0D79F10003BBAC /* assorted_integers.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -76,6 +76,22 @@ private:
 
 template <>
 inline
+jbyte jniUnboxMethodCall<jbyte>(JNIEnv* jniEnv, jmethodID method, jobject thiz) {
+    jbyte ret = jniEnv->CallByteMethod(thiz, method);
+    jniExceptionCheck(jniEnv);
+    return ret;
+}
+
+template <>
+inline
+jshort jniUnboxMethodCall<jshort>(JNIEnv* jniEnv, jmethodID method, jobject thiz) {
+    jshort ret = jniEnv->CallShortMethod(thiz, method);
+    jniExceptionCheck(jniEnv);
+    return ret;
+}
+
+template <>
+inline
 jint jniUnboxMethodCall<jint>(JNIEnv* jniEnv, jmethodID method, jobject thiz) {
     jint ret = jniEnv->CallIntMethod(thiz, method);
     jniExceptionCheck(jniEnv);

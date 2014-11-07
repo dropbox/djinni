@@ -540,7 +540,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                     case df: MDef if df.defType == DEnum =>
                       w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
                     case _ =>
-                      w.w(s"((self.${idObjc.field(f.ident)} == nil && typedOther.${idObjc.field(f.ident)}] == nil) || ")
+                      w.w(s"((self.${idObjc.field(f.ident)} == nil && typedOther.${idObjc.field(f.ident)} == nil) || ")
                       w.w(s"(self.${idObjc.field(f.ident)} != nil && [self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]))")
                   }
                 case MString => w.w(s"[self.${idObjc.field(f.ident)} isEqualToString:typedOther.${idObjc.field(f.ident)}]")
@@ -796,7 +796,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           arg.base match {
             case MOptional => throw new AssertionError("nested optional?")
             case m =>
-              w.wl(s"$cppType $cppIdent = nullopt;")
+              w.wl(s"$cppType $cppIdent;")
               m match {
                 case d: MDef if d.defType == DEnum =>
                   val enumVal = if (needRef) objcIdent else s"static_cast<${idObjc.ty(d.name)}>([$objcIdent intValue])"

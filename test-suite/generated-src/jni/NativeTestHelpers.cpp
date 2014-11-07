@@ -8,6 +8,7 @@
 #include "HMap.hpp"
 #include "HOptional.hpp"
 #include "HString.hpp"
+#include "NativeAssortedIntegers.hpp"
 #include "NativeClientInterface.hpp"
 #include "NativeColor.hpp"
 #include "NativeMapListRecord.hpp"
@@ -205,6 +206,18 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
         std::experimental::optional<int32_t> cr = TestHelpers::return_none();
 
         return ::djinni::HOptional<std::experimental::optional, ::djinni::HI32>::toJava(jniEnv, cr);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
+}
+
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedIntegersId(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        AssortedIntegers c_i = NativeAssortedIntegers::fromJava(jniEnv, j_i);
+
+        AssortedIntegers cr = TestHelpers::assorted_integers_id(c_i);
+
+        return NativeAssortedIntegers::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
 }
 

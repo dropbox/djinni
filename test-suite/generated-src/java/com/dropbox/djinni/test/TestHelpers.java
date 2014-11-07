@@ -39,6 +39,9 @@ public abstract class TestHelpers {
 
     public static native Integer returnNone();
 
+    /** Ensures that we generate integer translation code */
+    public static native AssortedIntegers assortedIntegersId(AssortedIntegers i);
+
     public static final class NativeProxy extends TestHelpers
     {
         private final long nativeRef;

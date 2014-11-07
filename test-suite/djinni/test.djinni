@@ -21,4 +21,7 @@ test_helpers = interface +c {
     static check_enum_map(m: map<color, string>);
 
     static return_none(): optional<i32>;
+
+    # Ensures that we generate integer translation code
+    static assorted_integers_id(i: assorted_integers): assorted_integers;
 }
