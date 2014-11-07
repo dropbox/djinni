@@ -399,6 +399,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     if (r.ext.objc) {
       refs.body.add("#import " + q("../" + headerName(ident)))
       refs.privHeader.add("#import " + q("../" + headerName(ident)))
+      refs.header.add(s"@class ${idObjc.ty(ident.name)};")
     }
 
     def checkMutable(tm: MExpr): Boolean = tm.base match {
@@ -416,6 +417,19 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
       w.wl
       w.wl(s"@interface $self : NSObject")
+
+      // Deep copy construtor
+      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:(${idObjc.ty(ident)} *)${idObjc.field(ident)};")
+      if (!r.fields.isEmpty) {
+        val head = r.fields.head
+        val skipFirst = SkipFirst()
+        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${toObjcFullType(head.ty)})${idObjc.local(head.ident)}")
+        for (f <- r.fields) skipFirst {
+          w.w(s" ${idObjc.field(f.ident)}:(${toObjcFullType(f.ty)})${idObjc.field(f.ident)}")
+        }
+        w.wl(";")
+      }
+
       for (f <- r.fields) {
         w.wl
         writeDoc(w, f.doc)
@@ -433,16 +447,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@interface $self ()")
       w.wl
       // Deep copy constructor
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:(${idObjc.ty(ident)} *)${idObjc.field(ident)};")
-      if (!r.fields.isEmpty) {
-        val head = r.fields.head
-        val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${toObjcFullType(head.ty)})${idObjc.local(head.ident)}")
-        for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident)}:(${toObjcFullType(f.ty)})${idObjc.field(f.ident)}")
-        }
-        w.wl(";")
-      }
       w.wl(s"- (id)${idObjc.method("init_with_cpp_" + ident.name)}:(const $cppSelf &)${idObjc.local(ident)};")
       w.wl(s"- ($cppSelf)${idObjc.method("cpp_" + ident.name)};")
       w.wl
@@ -455,7 +459,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl(s"@implementation $self")
       w.wl
-      // Deep copy construtor
       w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:(${idObjc.ty(ident)} *)${idObjc.local(ident)}")
       w.braced {
         w.w("if (self = [super init])").braced {

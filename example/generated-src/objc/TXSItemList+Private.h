@@ -7,8 +7,6 @@
 
 @interface TXSItemList ()
 
-- (id)initWithItemList:(TXSItemList *)itemList;
-- (id)initWithItems:(NSMutableArray *)items;
 - (id)initWithCppItemList:(const ::textsort::ItemList &)itemList;
 - (::textsort::ItemList)cppItemList;
 

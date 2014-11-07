@@ -7,8 +7,6 @@
 
 @interface DBNestedCollection ()
 
-- (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection;
-- (id)initWithSetList:(NSMutableArray *)setList;
 - (id)initWithCppNestedCollection:(const NestedCollection &)nestedCollection;
 - (NestedCollection)cppNestedCollection;
 

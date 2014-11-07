@@ -7,8 +7,6 @@
 
 @interface DBSetRecord ()
 
-- (id)initWithSetRecord:(DBSetRecord *)setRecord;
-- (id)initWithSet:(NSMutableSet *)set;
 - (id)initWithCppSetRecord:(const SetRecord &)setRecord;
 - (SetRecord)cppSetRecord;
 

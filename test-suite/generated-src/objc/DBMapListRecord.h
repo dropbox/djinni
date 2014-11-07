@@ -5,6 +5,8 @@
 
 
 @interface DBMapListRecord : NSObject
+- (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord;
+- (id)initWithMapList:(NSMutableArray *)mapList;
 
 @property (nonatomic, readonly) NSMutableArray *mapList;
 

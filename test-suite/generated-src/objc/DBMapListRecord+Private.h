@@ -7,8 +7,6 @@
 
 @interface DBMapListRecord ()
 
-- (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord;
-- (id)initWithMapList:(NSMutableArray *)mapList;
 - (id)initWithCppMapListRecord:(const MapListRecord &)mapListRecord;
 - (MapListRecord)cppMapListRecord;
 

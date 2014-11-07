@@ -7,8 +7,6 @@
 
 @interface DBClientReturnedRecord ()
 
-- (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord;
-- (id)initWithContent:(NSString *)content;
 - (id)initWithCppClientReturnedRecord:(const ClientReturnedRecord &)clientReturnedRecord;
 - (ClientReturnedRecord)cppClientReturnedRecord;
 

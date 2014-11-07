@@ -7,8 +7,6 @@
 
 @interface DBMapRecord ()
 
-- (id)initWithMapRecord:(DBMapRecord *)mapRecord;
-- (id)initWithMap:(NSMutableDictionary *)map;
 - (id)initWithCppMapRecord:(const MapRecord &)mapRecord;
 - (MapRecord)cppMapRecord;
 

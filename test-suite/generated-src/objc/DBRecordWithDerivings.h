@@ -5,6 +5,8 @@
 
 
 @interface DBRecordWithDerivings : NSObject
+- (id)initWithRecordWithDerivings:(DBRecordWithDerivings *)recordWithDerivings;
+- (id)initWithKey1:(int32_t)key1 key2:(NSString *)key2;
 
 @property (nonatomic, readonly) int32_t key1;
 

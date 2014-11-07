@@ -7,8 +7,6 @@
 
 @interface DBPrimitiveList ()
 
-- (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList;
-- (id)initWithList:(NSMutableArray *)list;
 - (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList;
 - (PrimitiveList)cppPrimitiveList;
 

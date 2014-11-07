@@ -6,6 +6,8 @@
 
 
 @interface DBRecordWithNestedDerivings : NSObject
+- (id)initWithRecordWithNestedDerivings:(DBRecordWithNestedDerivings *)recordWithNestedDerivings;
+- (id)initWithKey:(int32_t)key rec:(DBRecordWithDerivings *)rec;
 
 @property (nonatomic, readonly) int32_t key;
 

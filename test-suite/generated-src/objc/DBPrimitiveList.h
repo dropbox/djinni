@@ -5,6 +5,8 @@
 
 
 @interface DBPrimitiveList : NSObject
+- (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList;
+- (id)initWithList:(NSMutableArray *)list;
 
 @property (nonatomic, readonly) NSMutableArray *list;
 

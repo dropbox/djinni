@@ -7,8 +7,6 @@
 
 @interface DBRecordWithNestedDerivings ()
 
-- (id)initWithRecordWithNestedDerivings:(DBRecordWithNestedDerivings *)recordWithNestedDerivings;
-- (id)initWithKey:(int32_t)key rec:(DBRecordWithDerivings *)rec;
 - (id)initWithCppRecordWithNestedDerivings:(const RecordWithNestedDerivings &)recordWithNestedDerivings;
 - (RecordWithNestedDerivings)cppRecordWithNestedDerivings;
 
