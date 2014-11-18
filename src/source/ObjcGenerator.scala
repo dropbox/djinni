@@ -236,10 +236,10 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val cppName = withNs(spec.cppNamespace, idCpp.ty(ident))
     if (i.ext.cpp) {
       refs.privHeader.add("!#import " + q(headerName(cppExtName)))
-      refs.privHeader.add("#import " + q("DJICppWrapperCache+Private.h"))
+      refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
-      refs.body.add("#import " + q("DJIError.h"))
-      refs.body.add("#import " + q("DJIDate.h"))
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
       refs.body.add("#include <exception>")
       refs.body.add("!#import " + q(privateHeaderName(cppExtName)))
 
@@ -319,7 +319,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val objcExtName = ident.name + "_objc_proxy"
     val objcExtSelf = idCpp.ty(objcExtName)
     if (i.ext.objc) {
-      refs.privHeader.add("#import " + q("DJIObjcWrapperCache+Private.h"))
+      refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
       refs.body.add("!#import " + q(privateHeaderName(objcExtName)))
       writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
@@ -404,7 +404,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.body.add("#include <utility>")
     refs.body.add("#include <vector>")
     refs.body.add("!#import " + q(privateHeaderName(objcName)))
-    refs.body.add("#import " + q("DJIDate.h"))
+    refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
 
     if (r.ext.objc) {
       refs.body.add("#import " + q("../" + headerName(ident)))
