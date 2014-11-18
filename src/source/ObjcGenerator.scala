@@ -41,20 +41,20 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           header.add("#import <Foundation/Foundation.h>")
         case d: MDef => d.defType match {
           case DEnum =>
-            body.add("#import " + q(headerName(d.name)))
-            body.add("#import " + q(enumTranslatorHeaderName(d.name)))
-            header.add("#import " + q(headerName(d.name)))
+            body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
+            body.add("#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(d.name)))
+            header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
           case DInterface =>
             header.add("#import <Foundation/Foundation.h>")
-            header.add("#import " + q(headerName(d.name)))
+            header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
             val ext = d.body.asInstanceOf[Interface].ext
-            if (ext.cpp) body.add("#import " + q(privateHeaderName(d.name + "_cpp_proxy")))
-            if (ext.objc) body.add("#import " + q(privateHeaderName(d.name + "_objc_proxy")))
+            if (ext.cpp) body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_cpp_proxy")))
+            if (ext.objc) body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
             val prefix = if (r.ext.objc) "../" else ""
             header.add("@class " + idObjc.ty(d.name) + ";")
-            body.add("#import " + q(prefix + privateHeaderName(d.name)))
+            body.add("#import " + q(spec.objcIncludePrivatePrefix + prefix + privateHeaderName(d.name)))
         }
         case p: MParam =>
       }
@@ -67,17 +67,17 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.header.add("#import <Foundation/Foundation.h>")
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("!#import " + q(headerName(ident)))
+    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
     refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#import <Foundation/Foundation.h>")
-    refs.body.add("!#import " + q(enumTranslatorHeaderName(ident)))
+    refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(ident)))
 
     val self = idObjc.ty(ident)
     val cppSelf = withNs(spec.cppNamespace, idCpp.enumType(ident))
     val name = IdentStyle.camelUpper(ident)
     val argName = idObjc.local(ident.name)
-    writeObjcFile(headerName(ident), origin, refs.header, w => {
+    writePublicObjcFile(headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"typedef NS_ENUM(NSInteger, $self)")
       w.bracedSemi {
@@ -89,7 +89,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
     })
 
-    writeObjcFile(enumTranslatorHeaderName(ident), origin, refs.privHeader, w => {
+    writePrivateObjcFile(enumTranslatorHeaderName(ident), origin, refs.privHeader, w => {
       w.wl("@interface " + self + "Translator : NSObject")
       w.wl
       w.wl(s"+ ($self)cpp${name}ToObjc${name}:($cppSelf)$argName;")
@@ -98,7 +98,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("@end")
     })
 
-    writeObjcFile(enumTranslatorName(ident), origin, refs.body, w => {
+    writePrivateObjcFile(enumTranslatorName(ident), origin, refs.body, w => {
       w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
       w.wl
       w.wl(s"@implementation " + self + "Translator")
@@ -188,7 +188,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#include <memory>")
-    refs.privHeader.add("!#import " + q(headerName(ident)))
+    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
     refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
@@ -202,7 +202,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    writeObjcFile(headerName(ident), origin, refs.header, w => {
+    writePublicObjcFile(headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       for (c <- i.consts) {
         writeDoc(w, c.doc)
@@ -223,10 +223,10 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
 
     refs.body.add("#include <vector>")
-    refs.body.add("#import " + q(headerName(ident)))
+    refs.body.add("#import " + q(spec.objcIncludePrefix + headerName(ident)))
 
     if (i.consts.nonEmpty) {
-      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
+      writePrivateObjcFile(bodyName(ident.name), origin, refs.body, w => {
         generateObjcConstants(w, i.consts, self)
       })
     }
@@ -235,23 +235,23 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val cppExtSelf = idObjc.ty(cppExtName)
     val cppName = withNs(spec.cppNamespace, idCpp.ty(ident))
     if (i.ext.cpp) {
-      refs.privHeader.add("!#import " + q(headerName(cppExtName)))
+      refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(cppExtName)))
       refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
       refs.body.add("#include <exception>")
-      refs.body.add("!#import " + q(privateHeaderName(cppExtName)))
+      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(cppExtName)))
 
-      writeObjcFile(headerName(cppExtName), origin, mutable.TreeSet[String](), w => {
-        w.wl("#import " + q(headerName(ident)))
+      writePublicObjcFile(headerName(cppExtName), origin, mutable.TreeSet[String](), w => {
+        w.wl("#import " + q(spec.objcIncludePrefix + headerName(ident)))
         w.wl("#import <Foundation/Foundation.h>")
         w.wl
         w.wl(s"@interface $cppExtSelf : NSObject <$self>")
         w.wl("@end")
       })
 
-      writeObjcFile(privateHeaderName(cppExtName), origin, refs.privHeader, w => {
+      writePrivateObjcFile(privateHeaderName(cppExtName), origin, refs.privHeader, w => {
         w.wl(s"@interface $cppExtSelf ()")
         w.wl
         w.wl(s"@property (nonatomic, readonly) std::shared_ptr<$cppName> cppRef;")
@@ -261,7 +261,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl("@end")
       })
 
-      writeObjcFile(bodyName(cppExtName), origin, refs.body, w => {
+      writePrivateObjcFile(bodyName(cppExtName), origin, refs.body, w => {
         w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
         w.wl
         w.wl(s"@interface $cppExtSelf ()")
@@ -320,8 +320,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val objcExtSelf = idCpp.ty(objcExtName)
     if (i.ext.objc) {
       refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(privateHeaderName(objcExtName)))
-      writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
+      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcExtName)))
+      writePrivateObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wl("public:")
@@ -340,7 +340,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         })
       })
 
-      writeObjcFile(bodyName(objcExtName), origin, refs.body, w => {
+      writePrivateObjcFile(bodyName(objcExtName), origin, refs.body, w => {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"$objcExtSelf::$objcExtSelf (id objcRef)")
           w.wl(s"    : _objcRef((assert([[objcRef class] conformsToProtocol:@protocol($self)]), objcRef)),")
@@ -397,18 +397,18 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.header.add("#import <Foundation/Foundation.h>")
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("!#import " + q(headerName(objcName)))
+    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(objcName)))
     refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("#include <utility>")
     refs.body.add("#include <vector>")
-    refs.body.add("!#import " + q(privateHeaderName(objcName)))
+    refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcName)))
     refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
 
     if (r.ext.objc) {
-      refs.body.add("#import " + q("../" + headerName(ident)))
-      refs.privHeader.add("#import " + q("../" + headerName(ident)))
+      refs.body.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
+      refs.privHeader.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
       refs.header.add(s"@class ${idObjc.ty(ident.name)};")
     }
 
@@ -419,7 +419,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       case _ => false
     }
 
-    writeObjcFile(headerName(objcName), origin, refs.header, w => {
+    writePublicObjcFile(headerName(objcName), origin, refs.header, w => {
       writeDoc(w, doc)
       for (c <- r.consts) {
         writeDoc(w, c.doc)
@@ -455,7 +455,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("@end")
     })
 
-    writeObjcFile(privateHeaderName(objcName), origin, refs.privHeader, w => {
+    writePrivateObjcFile(privateHeaderName(objcName), origin, refs.privHeader, w => {
       w.wl(s"@interface $self ()")
       w.wl
       // Deep copy constructor
@@ -465,7 +465,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("@end")
     })
 
-    writeObjcFile(bodyName(objcName), origin, refs.body, w => {
+    writePrivateObjcFile(bodyName(objcName), origin, refs.body, w => {
       if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
       w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
       w.wl
@@ -609,8 +609,14 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def writeObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) {
-    createFile(spec.objcOutFolder.get, fileName, (w: IndentWriter) => {
+  def writePublicObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) =
+    writeObjcFile(spec.objcOutFolder, fileName, origin, refs, f)
+
+  def writePrivateObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) =
+    writeObjcFile(spec.objcPrivateOutFolder, fileName, origin, refs, f)
+
+  def writeObjcFile(folder: Option[java.io.File], fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) {
+    createFile(folder.get, fileName, (w: IndentWriter) => {
       w.wl("// AUTOGENERATED FILE - DO NOT MODIFY!")
       w.wl("// This file generated by Djinni from " + origin)
       w.wl

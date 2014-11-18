@@ -53,11 +53,13 @@ package object generatorTools {
                    cppExt: String,
                    cppHeaderExt: String,
                    objcOutFolder: Option[File],
+                   objcPrivateOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,
                    objcFileIdentStyle: IdentConverter,
                    objcExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
+                   objcIncludePrivatePrefix: String,
                    objcIncludeCppPrefix: String,
                    objcppNamespace: String,
                    objcBaseLibIncludePrefix: String)
@@ -165,6 +167,7 @@ package object generatorTools {
       }
       if (spec.objcOutFolder.isDefined) {
         createFolder("Objective-C[++]", spec.objcOutFolder.get)
+        createFolder("Objective-C[++] private", spec.objcPrivateOutFolder.get)
         new ObjcGenerator(spec).generate(idl)
       }
       None
