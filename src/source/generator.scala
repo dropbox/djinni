@@ -59,7 +59,8 @@ package object generatorTools {
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
                    objcIncludeCppPrefix: String,
-                   objcppNamespace: String)
+                   objcppNamespace: String,
+                   objcBaseLibIncludePrefix: String)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
