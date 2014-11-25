@@ -96,9 +96,9 @@ class GlobalRef : public std::unique_ptr<typename std::remove_pointer<PointerTyp
 public:
     GlobalRef() {}
     GlobalRef(JNIEnv * env, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, GlobalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::GlobalRefDeleter>(
             static_cast<PointerType>(env->NewGlobalRef(localRef)),
-            GlobalRefDeleter{}
+            ::djinni::GlobalRefDeleter{}
         ) {}
 };
 
@@ -110,7 +110,7 @@ class LocalRef : public std::unique_ptr<typename std::remove_pointer<PointerType
 public:
     LocalRef() {}
     LocalRef(JNIEnv * /*env*/, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::LocalRefDeleter>(
             localRef) {}
     explicit LocalRef(PointerType localRef)
         : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
