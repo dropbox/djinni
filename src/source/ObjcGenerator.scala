@@ -236,16 +236,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#include <exception>")
-      // refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(cppExtName)))
-/*
-      writePublicObjcFile(headerName(cppExtName), origin, mutable.TreeSet[String](), w => {
-        w.wl("#import " + q(spec.objcIncludePrefix + headerName(ident)))
-        w.wl("#import <Foundation/Foundation.h>")
-        w.wl
-        w.wl(s"@interface $cppExtSelf : NSObject <$self>")
-        w.wl("@end")
-      })
-*/
+
       writePrivateObjcFile(privateHeaderName(ident.name), origin, refs.privHeader, w => {
         w.wl(s"@interface $self ()")
         w.wl
