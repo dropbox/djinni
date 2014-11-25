@@ -46,10 +46,15 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
           case DInterface =>
             header.add("#import <Foundation/Foundation.h>")
-            header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
             val ext = d.body.asInstanceOf[Interface].ext
-            if (ext.cpp) body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_cpp_proxy")))
-            if (ext.objc) body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
+            if (ext.cpp) {
+              header.add("@class " + idObjc.ty(d.name) + ";")
+              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
+            }
+            if (ext.objc) {
+              header.add("@protocol " + idObjc.ty(d.name) + ";")
+              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
+            }
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
             val prefix = if (r.ext.objc) "../" else ""
@@ -186,6 +191,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     val self = idObjc.ty(ident)
 
+    refs.header.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#include <memory>")
     refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
@@ -211,7 +217,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s";")
       }
       w.wl
-      w.wl(s"@protocol $self")
+      if (i.ext.cpp) w.wl(s"@interface $self : NSObject") else w.wl(s"@protocol $self")
       for (m <- i.methods) {
         w.wl
         writeDoc(w, m.doc)
@@ -235,24 +241,15 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val cppExtSelf = idObjc.ty(cppExtName)
     val cppName = withNs(spec.cppNamespace, idCpp.ty(ident))
     if (i.ext.cpp) {
-      refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(cppExtName)))
-      refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
+      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
       refs.body.add("#include <exception>")
-      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(cppExtName)))
 
-      writePublicObjcFile(headerName(cppExtName), origin, mutable.TreeSet[String](), w => {
-        w.wl("#import " + q(spec.objcIncludePrefix + headerName(ident)))
-        w.wl("#import <Foundation/Foundation.h>")
-        w.wl
-        w.wl(s"@interface $cppExtSelf : NSObject <$self>")
-        w.wl("@end")
-      })
-
-      writePrivateObjcFile(privateHeaderName(cppExtName), origin, refs.privHeader, w => {
-        w.wl(s"@interface $cppExtSelf ()")
+      writePrivateObjcFile(privateHeaderName(ident.name), origin, refs.privHeader, w => {
+        w.wl(s"@interface $self ()")
         w.wl
         w.wl(s"@property (nonatomic, readonly) std::shared_ptr<$cppName> cppRef;")
         w.wl
@@ -261,14 +258,14 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl("@end")
       })
 
-      writePrivateObjcFile(bodyName(cppExtName), origin, refs.body, w => {
+      writePrivateObjcFile(bodyName(ident.name), origin, refs.body, w => {
         w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
         w.wl
-        w.wl(s"@interface $cppExtSelf ()")
+        w.wl(s"@interface $self ()")
         w.wl(s"@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> cache;")
         w.wl("@end")
         w.wl
-        w.wl(s"@implementation $cppExtSelf")
+        w.wl(s"@implementation $self")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> &)cache")
         w.braced {
@@ -330,7 +327,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl
             w.wl(s"explicit $objcExtSelf (id objcRef);")
             w.wl(s"virtual ~$objcExtSelf () override;")
-            w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id objcRef);")
+            w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
             for (m <- i.methods) {
               val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
               val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
@@ -813,8 +810,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name + "_cpp_proxy")} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
-                  case (false, true) => w.wl(s"$objcType$objcIdent = std::static_pointer_cast<$objcProxy>($cppIdent)->_objcRef;")
+                  case (true, false) => w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name)} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
+                  case (false, true) => w.wl(s"$objcType$objcIdent = std::static_pointer_cast<$objcProxy>($cppIdent)->objcRef;")
                 }
             }
           }
@@ -909,7 +906,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$cppType $cppIdent = [(${idObjc.ty(d.name + "_cpp_proxy")} *)$objcIdent cppRef];")
+                  case (true, false) => w.wl(s"$cppType $cppIdent = $objcIdent.cppRef;")
                   case (false, true) => w.wl(s"$cppType $cppIdent = ${withNs(Some(spec.objcppNamespace), idCpp.ty(d.name + "_objc_proxy"))}" +
                     s"::${idCpp.method(d.name + "_with_objc")}($objcIdent);")
                 }
@@ -950,7 +947,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case d: MDef => d.defType match {
               case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
               case DRecord => (idObjc.ty(d.name), true)
-              case DInterface => (s"id <${idObjc.ty(d.name)}>", false)
+              case DInterface =>
+                val ext = d.body.asInstanceOf[Interface].ext
+                if (ext.cpp) (s"${idObjc.ty(d.name)}*", false) else (s"id<${idObjc.ty(d.name)}>", false)
             }
             case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
           }

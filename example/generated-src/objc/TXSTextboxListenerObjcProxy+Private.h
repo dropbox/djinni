@@ -17,7 +17,7 @@ class TextboxListenerObjcProxy final : public ::textsort::TextboxListener
 
     explicit TextboxListenerObjcProxy (id objcRef);
     virtual ~TextboxListenerObjcProxy () override;
-    static std::shared_ptr<::textsort::TextboxListener> textbox_listener_with_objc (id objcRef);
+    static std::shared_ptr<::textsort::TextboxListener> textbox_listener_with_objc (id<TXSTextboxListener> objcRef);
     virtual void update (const ::textsort::ItemList & items) override;
 };
 
