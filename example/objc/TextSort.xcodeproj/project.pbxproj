@@ -21,6 +21,7 @@
 		A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */; };
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
+		CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,9 +38,6 @@
 		65834E1E19AC5C9B0061AD3F /* TXSItemList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSItemList.h; sourceTree = "<group>"; };
 		65834E1F19AC5C9B0061AD3F /* TXSItemList.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSItemList.mm; sourceTree = "<group>"; };
 		65834E2019AC5C9B0061AD3F /* TXSSortItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortItems.h; sourceTree = "<group>"; };
-		65834E2119AC5C9B0061AD3F /* TXSSortItemsCppProxy+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItemsCppProxy+Private.h"; sourceTree = "<group>"; };
-		65834E2219AC5C9B0061AD3F /* TXSSortItemsCppProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortItemsCppProxy.h; sourceTree = "<group>"; };
-		65834E2319AC5C9B0061AD3F /* TXSSortItemsCppProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortItemsCppProxy.mm; sourceTree = "<group>"; };
 		65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSTextboxListener.h; sourceTree = "<group>"; };
 		65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSTextboxListenerObjcProxy+Private.h"; sourceTree = "<group>"; };
 		65834E2619AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSTextboxListenerObjcProxy.mm; sourceTree = "<group>"; };
@@ -63,6 +61,8 @@
 		A29DB12F19BCB94300BFC38D /* DJIWeakPtrWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIWeakPtrWrapper+Private.h"; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
+		CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortItems.mm; sourceTree = "<group>"; };
+		CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItems+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,16 +138,15 @@
 		65834E1919AC5C9B0061AD3F /* generated-objc */ = {
 			isa = PBXGroup;
 			children = (
-				65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */,
 				65834E1E19AC5C9B0061AD3F /* TXSItemList.h */,
 				65834E1F19AC5C9B0061AD3F /* TXSItemList.mm */,
+				65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */,
 				65834E2019AC5C9B0061AD3F /* TXSSortItems.h */,
-				65834E2119AC5C9B0061AD3F /* TXSSortItemsCppProxy+Private.h */,
-				65834E2219AC5C9B0061AD3F /* TXSSortItemsCppProxy.h */,
-				65834E2319AC5C9B0061AD3F /* TXSSortItemsCppProxy.mm */,
+				CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */,
+				CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */,
 				65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */,
-				65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */,
 				65834E2619AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy.mm */,
+				65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */,
 			);
 			name = "generated-objc";
 			path = "../generated-src/objc";
@@ -275,6 +274,7 @@
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */,
 				A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.m in Sources */,
+				CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
