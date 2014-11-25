@@ -25,6 +25,12 @@
 
 #include <jni.h>
 
+// work-around for missing noexcept and constexpr support in MSVC prior to 2015
+#if (defined _MSC_VER) && (_MSC_VER < 1900)
+#  define noexcept _NOEXCEPT
+#  define constexpr
+#endif
+
 /*
  * Djinni support library
  */
@@ -57,7 +63,11 @@ void jniExceptionCheck(JNIEnv * env);
 /*
  * Set an AssertionError in env with message message, and then throw jni_exception_pending.
  */
-__attribute__((noreturn))
+#ifdef _MSC_VER
+  __declspec(noreturn)
+#else
+  __attribute__((noreturn))
+#endif
 void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
 
 #define DJINNI_ASSERT(check, env) \

@@ -124,7 +124,12 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
     const char * file_basename = slash ? slash + 1 : file;
 
     char buf[256];
+#if (defined _MSC_VER) && (_MSC_VER < 1900)
+    // snprintf not implemented on MSVC prior to 2015 
+    _snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
+#else
     snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
+#endif
 
     jclass cassert = env->FindClass("java/lang/AssertionError");
     assert(cassert);
@@ -388,7 +393,11 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
     return out;
 }
 
-__attribute__((weak))
+#ifdef _MSC_VER
+  // weak attribute not supported by MSVC
+#else
+  __attribute__((weak))
+#endif
 void jniSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
     try {
         throw;
