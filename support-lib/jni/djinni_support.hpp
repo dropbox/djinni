@@ -194,7 +194,7 @@ private:
 };
 
 template <class C>
-const JniClassInitializer JniClass<C>::s_initializer { allocate };
+const JniClassInitializer JniClass<C>::s_initializer ( allocate );
 
 template <class C>
 std::unique_ptr<C> JniClass<C>::s_singleton;
