@@ -30,11 +30,22 @@ public class MainActivity extends Activity {
         sortItemsInterface = SortItems.createWithListener(textboxListener);
     }
 
-    public void sort(View view) {
+    public void sort(SortOrder order) {
         String str = text.getText().toString();
         ArrayList<String> items = new ArrayList<String>(Arrays.asList(str.split("\n")));
         ItemList itemList = new ItemList(items);
-        sortItemsInterface.sort(itemList);
+        sortItemsInterface.sort(order, itemList);
     }
 
+    public void sortAsc(View view) {
+        this.sort(SortOrder.ASCENDING);
+    }
+
+    public void sortDesc(View view) {
+        this.sort(SortOrder.DESCENDING);
+    }
+
+    public void sortRandom(View view) {
+        this.sort(SortOrder.RANDOM);
+    }
 }

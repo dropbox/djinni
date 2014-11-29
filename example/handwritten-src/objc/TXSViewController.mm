@@ -43,7 +43,7 @@
     NSString *str = self.textView.text;
     NSMutableArray *strList = [NSMutableArray arrayWithArray:[str componentsSeparatedByString:@"\n"]];
     TXSItemList *list = [[TXSItemList alloc] initWithItems:strList];
-    [_sortItemInterface sort:list];
+    [_sortItemInterface sort:TXSSortOrderAscending items:list];
 }
 
 - (void)dismissKeyboard
