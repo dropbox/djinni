@@ -311,6 +311,10 @@ abstract class Generator(spec: Spec)
 
     f.ty.resolved.base match {
       case MPrimitive(_,_,_,_,_,_,_,_) => valueType
+      case d: MDef => d.defType match {
+        case DEnum => valueType
+        case _  => constType
+      }
       case MOptional => f.ty.resolved.args.head.base match {
         case MPrimitive(_,_,_,_,_,_,_,_) => valueType
         case _ => constType
