@@ -6,7 +6,9 @@
 
 @interface DBClientReturnedRecord : NSObject
 - (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord;
-- (id)initWithContent:(NSString *)content;
+- (id)initWithRecordId:(int64_t)recordId content:(NSString *)content;
+
+@property (nonatomic, readonly) int64_t recordId;
 
 @property (nonatomic, readonly) NSString *content;
 
