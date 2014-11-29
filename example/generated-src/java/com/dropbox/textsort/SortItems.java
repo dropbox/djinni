@@ -6,7 +6,7 @@ package com.dropbox.textsort;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class SortItems {
-    public abstract void sort(ItemList items);
+    public abstract void sort(SortOrder order, ItemList items);
 
     public static native SortItems createWithListener(TextboxListener listener);
 
@@ -34,11 +34,11 @@ public abstract class SortItems {
         }
 
         @Override
-        public void sort(ItemList items)
+        public void sort(SortOrder order, ItemList items)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_sort(this.nativeRef, items);
+            native_sort(this.nativeRef, order, items);
         }
-        private native void native_sort(long _nativeRef, ItemList items);
+        private native void native_sort(long _nativeRef, SortOrder order, ItemList items);
     }
 }

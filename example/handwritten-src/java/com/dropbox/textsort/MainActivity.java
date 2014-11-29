@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
         String str = text.getText().toString();
         ArrayList<String> items = new ArrayList<String>(Arrays.asList(str.split("\n")));
         ItemList itemList = new ItemList(items);
-        sortItemsInterface.sort(itemList);
+        sortItemsInterface.sort(SortOrder.ASCENDING, itemList);
     }
 
 }

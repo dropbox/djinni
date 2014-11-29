@@ -8,8 +8,8 @@ namespace textsort {
 class SortItemsImpl : public SortItems {
 
 public:
-    SortItemsImpl (const std::shared_ptr<TextboxListener> & listener);
-    virtual void sort (const ItemList & items) override;
+    SortItemsImpl(const std::shared_ptr<TextboxListener> & listener);
+    virtual void sort(sort_order order, const ItemList & items) override;
 
 private:
     std::shared_ptr<TextboxListener> m_listener;
