@@ -46,20 +46,23 @@ package object generatorTools {
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
                    jniIncludeCppPrefix: String,
-                   jniNamespace: String = "dropboxsync",
+                   jniNamespace: String,
                    jniClassIdentStyle: IdentConverter,
                    jniFileIdentStyle: IdentConverter,
                    jniBaseLibIncludePrefix: String,
                    cppExt: String,
                    cppHeaderExt: String,
                    objcOutFolder: Option[File],
+                   objcPrivateOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,
                    objcFileIdentStyle: IdentConverter,
                    objcExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
+                   objcIncludePrivatePrefix: String,
                    objcIncludeCppPrefix: String,
-                   objcppNamespace: String)
+                   objcppNamespace: String,
+                   objcBaseLibIncludePrefix: String)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -164,6 +167,7 @@ package object generatorTools {
       }
       if (spec.objcOutFolder.isDefined) {
         createFolder("Objective-C[++]", spec.objcOutFolder.get)
+        createFolder("Objective-C[++] private", spec.objcPrivateOutFolder.get)
         new ObjcGenerator(spec).generate(idl)
       }
       None
