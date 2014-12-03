@@ -1,12 +1,18 @@
 item_list = record {
-	items: list<string>;
+    items: list<string>;
+}
+
+sort_order = enum {
+    ascending;
+    descending;
+    random;
 }
 
 sort_items = interface +c {
-	sort(items: item_list);
-	static create_with_listener(listener: textbox_listener): sort_items;
+    sort(order: sort_order, items: item_list);
+    static create_with_listener(listener: textbox_listener): sort_items;
 }
 
 textbox_listener = interface +j +o {
-	update(items: item_list);
+    update(items: item_list);
 }

@@ -210,7 +210,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"JavaProxy(jobject obj);")
             for (m <- i.methods) {
               val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
-              val params = m.params.map(p => "const " + toCppType(p.ty, spec.cppNamespace) + " & " + idCpp.local(p.ident))
+              val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
             }
             w.wl
@@ -239,7 +239,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods) {
           w.wl
           val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
-          val params = m.params.map(p => "const " + toCppType(p.ty, spec.cppNamespace) + " & c_" + idCpp.local(p.ident))
+          val params = m.params.map(p => toCppParamType(p, spec.cppNamespace, "c_"))
           writeJniTypeParams(w, typeParams)
           w.w(s"$ret $jniClassName::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
             w.wl(s"JNIEnv * const jniEnv = djinni::jniGetThreadEnv();")

@@ -238,7 +238,7 @@ abstract class Generator(spec: Spec)
             w.wl
           }
           f(w)
-	}
+        }
       )
       f2(w)
     })
@@ -299,6 +299,26 @@ abstract class Generator(spec: Spec)
       base(tm.base) + args
     }
     expr(tm)
+  }
+
+  // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
+  def toCppParamType(f: Field): String = toCppParamType(f, None, "")
+  def toCppParamType(f: Field, namespace: Option[String] = None, prefix: String = ""): String = {
+    val cppType = toCppType(f.ty, namespace)
+    val localName = prefix + idCpp.local(f.ident);
+    val refType = "const " + cppType + " & " + localName
+    val valueType = cppType + " " + localName
+
+    def toType(expr: MExpr): String = expr.base match {
+      case MPrimitive(_,_,_,_,_,_,_,_) => valueType
+      case d: MDef => d.defType match {
+        case DEnum => valueType
+        case _  => refType
+      }
+      case MOptional => toType(expr.args.head)
+      case _ => refType
+    }
+    toType(f.ty.resolved)
   }
 
   def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::"+_+"::"+t)
