@@ -5,5 +5,5 @@ package com.dropbox.djinni.test;
 
 public abstract class ClientInterface {
     /** Returns record of given string */
-    public abstract ClientReturnedRecord getRecord(String utf8string);
+    public abstract ClientReturnedRecord getRecord(long recordId, String utf8string);
 }

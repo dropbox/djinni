@@ -16,12 +16,12 @@ public:
     static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
-    const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
+    const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
 
     class JavaProxy final : djinni::JavaProxyCacheEntry, public ClientInterface {
     public:
         JavaProxy(jobject obj);
-        virtual ClientReturnedRecord get_record(const std::string & utf8string) override;
+        virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override;
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;

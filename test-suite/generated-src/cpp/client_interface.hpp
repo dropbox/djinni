@@ -4,6 +4,7 @@
 #pragma once
 
 #include "client_returned_record.hpp"
+#include <cstdint>
 #include <string>
 
 class ClientInterface {
@@ -11,5 +12,5 @@ public:
     virtual ~ClientInterface() {}
 
     /** Returns record of given string */
-    virtual ClientReturnedRecord get_record(const std::string & utf8string) = 0;
+    virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) = 0;
 };
