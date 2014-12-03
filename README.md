@@ -263,7 +263,7 @@ and Objective-C `NSInteger` are not used because their length varies by architec
 integers are not included because they are not available in Java.
 
 ## Test Suite
-Run `make` in the `test-suite` directory to inovke the test suite.
+Run `make` in the `test-suite` directory to invoke the test suite.
 
 ## Authors
 - Kannan Goundan
