@@ -11,6 +11,7 @@
 #import "DBPrimitiveList+Private.h"
 #import "DBSetRecord+Private.h"
 #import "DBTestHelpers.h"
+#import "DBTokenCppProxy+Private.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>
@@ -188,6 +189,39 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
         TestHelpers::check_enum_map(std::move(cppM));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (id <DBToken>)tokenId:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        std::shared_ptr<Token> cppRet = TestHelpers::token_id(std::move(cppT));
+        id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
+        return objcRet;
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (id <DBToken>)createCppToken {
+    try {
+        std::shared_ptr<Token> cppRet = TestHelpers::create_cpp_token();
+        id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
+        return objcRet;
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (void)checkCppToken:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        TestHelpers::check_cpp_token(std::move(cppT));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (int64_t)cppTokenId:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        int64_t cppRet = TestHelpers::cpp_token_id(std::move(cppT));
+        int64_t objcRet = cppRet;
+        return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

@@ -51,19 +51,19 @@ JNIEnv * jniGetThreadEnv() {
     return env;
 }
 
-void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
-    if (!globalRef || !g_cachedJVM) {
-        return;
+static JNIEnv * getOptThreadEnv() {
+    if (!g_cachedJVM) {
+        return nullptr;
     }
 
-    // Special case: ignore GlobalRef deletions that happen after this thread has been
-    // detached. (This can happen during process shutdown, so there's no need to release the
-    // ref anyway.)
+    // Special case: this allows us to ignore GlobalRef deletions that happen after this
+    // thread has been detached. (This is known to happen during process shutdown, when
+    // there's no need to release the ref anyway.)
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
 
     if (get_res == JNI_EDETACHED) {
-        return;
+        return nullptr;
     }
 
     // Still bail on any other error.
@@ -72,11 +72,29 @@ void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
         std::abort();
     }
 
-    env->DeleteGlobalRef(globalRef);
+    return env;
+}
+
+void WeakGlobalRefDeleter::operator() (jobject wgr) noexcept {
+    if (wgr) {
+        if (JNIEnv * env = getOptThreadEnv()) {
+            env->DeleteWeakGlobalRef(wgr);
+        }
+    }
+}
+
+void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
+    if (globalRef) {
+        if (JNIEnv * env = getOptThreadEnv()) {
+            env->DeleteGlobalRef(globalRef);
+        }
+    }
 }
 
 void LocalRefDeleter::operator() (jobject localRef) noexcept {
-    jniGetThreadEnv()->DeleteLocalRef(localRef);
+    if (localRef) {
+        jniGetThreadEnv()->DeleteLocalRef(localRef);
+    }
 }
 
 void jniExceptionCheck(JNIEnv * env) {
@@ -440,6 +458,56 @@ std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_pt
     std::pair<std::shared_ptr<void>, jobject> ret = factory(obj);
     st.m[ret.second] = ret.first;
     return ret.first;
+}
+
+CppProxyClassInfo::CppProxyClassInfo(const char * className)
+    : clazz(jniFindClass(className)),
+      constructor(jniGetMethodID(clazz.get(), "<init>", "(J)V")),
+      idField(jniGetFieldID(clazz.get(), "nativeRef", "J")) {
+}
+
+CppProxyClassInfo::CppProxyClassInfo() : constructor{}, idField{} {
+}
+
+CppProxyClassInfo::~CppProxyClassInfo() {
+}
+
+struct CppProxyCacheState {
+    std::mutex mtx;
+    std::unordered_map<void *, WeakGlobalRef<jobject>> m;
+
+    static CppProxyCacheState & get() {
+        static CppProxyCacheState st;
+        return st;
+    }
+};
+
+/*static*/ void JniCppProxyCache::erase(void * key) {
+    CppProxyCacheState & st = CppProxyCacheState::get();
+    const std::lock_guard<std::mutex> lock(st.mtx);
+    st.m.erase(key);
+}
+
+/*static*/ jobject JniCppProxyCache::get(const std::shared_ptr<void> & cppObj,
+                                         JNIEnv * jniEnv,
+                                         const CppProxyClassInfo & proxyClass,
+                                         jobject (*factory)(const std::shared_ptr<void> &,
+                                                            JNIEnv *,
+                                                            const CppProxyClassInfo &)) {
+    CppProxyCacheState & st = CppProxyCacheState::get();
+    const std::lock_guard<std::mutex> lock(st.mtx);
+
+    auto it = st.m.find(cppObj.get());
+    if (it != st.m.end()) {
+        jobject localRef = jniEnv->NewLocalRef(it->second.get());
+        if (localRef) {
+            return localRef;
+        }
+    }
+
+    jobject wrapper = factory(cppObj, jniEnv, proxyClass);
+    st.m.emplace(cppObj.get(), WeakGlobalRef<jobject>(jniEnv, wrapper));
+    return wrapper;
 }
 
 } // namespace djinni

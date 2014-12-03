@@ -6,7 +6,7 @@
 
 namespace djinni_generated {
 
-NativeTextboxListener::NativeTextboxListener() : djinni::JniInterfaceJavaExt<::textsort::TextboxListener, NativeTextboxListener>() {}
+NativeTextboxListener::NativeTextboxListener() : djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>() {}
 
 NativeTextboxListener::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 

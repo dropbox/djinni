@@ -3,6 +3,7 @@
 
 #import "DBClientInterface.h"
 #import "DBColor.h"
+#import "DBToken.h"
 #import <Foundation/Foundation.h>
 @class DBAssortedIntegers;
 @class DBMapListRecord;
@@ -42,6 +43,14 @@
 + (void)checkClientInterfaceNonascii:(id <DBClientInterface>)i;
 
 + (void)checkEnumMap:(NSMutableDictionary *)m;
+
++ (id <DBToken>)tokenId:(id <DBToken>)t;
+
++ (id <DBToken>)createCppToken;
+
++ (void)checkCppToken:(id <DBToken>)t;
+
++ (int64_t)cppTokenId:(id <DBToken>)t;
 
 + (NSNumber *)returnNone;
 

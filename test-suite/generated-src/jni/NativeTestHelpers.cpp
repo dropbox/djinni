@@ -15,18 +15,19 @@
 #include "NativeNestedCollection.hpp"
 #include "NativePrimitiveList.hpp"
 #include "NativeSetRecord.hpp"
+#include "NativeToken.hpp"
 
 namespace djinni_generated {
 
-NativeTestHelpers::NativeTestHelpers() : djinni::JniInterfaceCppExt<TestHelpers>("com/dropbox/djinni/test/TestHelpers$NativeProxy") {}
+NativeTestHelpers::NativeTestHelpers() : djinni::JniInterface<TestHelpers, NativeTestHelpers>("com/dropbox/djinni/test/TestHelpers$CppProxy") {}
 
 using namespace ::djinni_generated;
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024NativeProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<std::shared_ptr<TestHelpers>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<TestHelpers>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -196,6 +197,51 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JN
 
         TestHelpers::check_enum_map(c_m);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+
+        std::shared_ptr<Token> cr = TestHelpers::token_id(c_t);
+
+        return NativeToken::toJava(jniEnv, cr);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
+}
+
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppToken(JNIEnv* jniEnv, jobject /*this*/)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+
+        std::shared_ptr<Token> cr = TestHelpers::create_cpp_token();
+
+        return NativeToken::toJava(jniEnv, cr);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
+}
+
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkCppToken(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+
+        TestHelpers::check_cpp_token(c_t);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+
+        int64_t cr = TestHelpers::cpp_token_id(c_t);
+
+        return ::djinni::HI64::Unboxed::toJava(jniEnv, cr);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
 }
 
 CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(JNIEnv* jniEnv, jobject /*this*/)

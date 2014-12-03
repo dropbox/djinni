@@ -8,11 +8,12 @@
 
 namespace djinni_generated {
 
-class NativeClientInterface final : djinni::JniInterfaceJavaExt<ClientInterface, NativeClientInterface> {
+class NativeClientInterface final : djinni::JniInterface<ClientInterface, NativeClientInterface> {
 public:
     using CppType = std::shared_ptr<ClientInterface>;
     using JniType = jobject;
 
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<ClientInterface> c) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._toJava(jniEnv, c); }
     static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
@@ -25,7 +26,7 @@ public:
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterfaceJavaExt<ClientInterface, ::djinni_generated::NativeClientInterface>;
+        friend class djinni::JniInterface<ClientInterface, ::djinni_generated::NativeClientInterface>;
         friend class djinni::JavaProxyCache<JavaProxy>;
     };
 

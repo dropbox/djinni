@@ -37,17 +37,25 @@ public abstract class TestHelpers {
 
     public static native void checkEnumMap(HashMap<Color, String> m);
 
+    public static native Token tokenId(Token t);
+
+    public static native Token createCppToken();
+
+    public static native void checkCppToken(Token t);
+
+    public static native long cppTokenId(Token t);
+
     public static native Integer returnNone();
 
     /** Ensures that we generate integer translation code */
     public static native AssortedIntegers assortedIntegersId(AssortedIntegers i);
 
-    public static final class NativeProxy extends TestHelpers
+    public static final class CppProxy extends TestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
 
-        private NativeProxy(long nativeRef)
+        private CppProxy(long nativeRef)
         {
             if (nativeRef == 0) throw new RuntimeException("nativeRef is zero");
             this.nativeRef = nativeRef;

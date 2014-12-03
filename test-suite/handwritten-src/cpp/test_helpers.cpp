@@ -1,6 +1,7 @@
 #include "test_helpers.hpp"
 #include "client_returned_record.hpp"
 #include "client_interface.hpp"
+#include "token.hpp"
 #include <exception>
 
 SetRecord TestHelpers::get_set_record() {
@@ -83,6 +84,25 @@ void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientIn
         std::string error_msg = "Expected String: " + NON_ASCII + " Actual: " + cReturnedRecord.content;
         throw std::invalid_argument(error_msg);
     }
+}
+
+std::shared_ptr<Token> TestHelpers::token_id(const std::shared_ptr<Token> & in) {
+    return in;
+}
+
+class CppToken : public Token {};
+
+std::shared_ptr<Token> TestHelpers::create_cpp_token() {
+    return std::make_shared<CppToken>();
+}
+
+void TestHelpers::check_cpp_token(const std::shared_ptr<Token> & in) {
+    // Throws bad_cast if type is wrong
+    (void)dynamic_cast<CppToken &>(*in);
+}
+
+int64_t TestHelpers::cpp_token_id(const std::shared_ptr<Token> & in) {
+    return reinterpret_cast<int64_t>(in.get());
 }
 
 std::experimental::optional<int32_t> TestHelpers::return_none() {

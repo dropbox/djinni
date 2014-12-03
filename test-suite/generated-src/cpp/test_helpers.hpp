@@ -16,6 +16,7 @@
 #include <unordered_map>
 
 class ClientInterface;
+class Token;
 
 class TestHelpers {
 public:
@@ -50,6 +51,14 @@ public:
     static void check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i);
 
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
+
+    static std::shared_ptr<Token> token_id(const std::shared_ptr<Token> & t);
+
+    static std::shared_ptr<Token> create_cpp_token();
+
+    static void check_cpp_token(const std::shared_ptr<Token> & t);
+
+    static int64_t cpp_token_id(const std::shared_ptr<Token> & t);
 
     static std::experimental::optional<int32_t> return_none();
 

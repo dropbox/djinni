@@ -20,6 +20,11 @@ test_helpers = interface +c {
 
     static check_enum_map(m: map<color, string>);
 
+    static token_id(t: token): token;
+    static create_cpp_token(): token;
+    static check_cpp_token(t: token);
+    static cpp_token_id(t: token): i64;
+
     static return_none(): optional<i32>;
 
     # Ensures that we generate integer translation code

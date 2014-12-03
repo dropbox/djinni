@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-NativeClientInterface::NativeClientInterface() : djinni::JniInterfaceJavaExt<ClientInterface, NativeClientInterface>() {}
+NativeClientInterface::NativeClientInterface() : djinni::JniInterface<ClientInterface, NativeClientInterface>() {}
 
 NativeClientInterface::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 

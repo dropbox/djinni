@@ -8,7 +8,7 @@
 
 namespace djinni_generated {
 
-class NativeTestHelpers final : djinni::JniInterfaceCppExt<TestHelpers> {
+class NativeTestHelpers final : djinni::JniInterface<TestHelpers, NativeTestHelpers> {
 public:
     using CppType = std::shared_ptr<TestHelpers>;
     using JniType = jobject;
