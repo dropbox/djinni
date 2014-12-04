@@ -25,7 +25,7 @@ namespace djinni_generated
         return static_cast<std::shared_ptr<::djinni::cpp::ClientInterface>>(cache.get(objcRef));
     }
 
-    ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
+    ::djinni::cpp::ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
     {
         @autoreleasepool {
             int64_t cpp_record_id = record_id;

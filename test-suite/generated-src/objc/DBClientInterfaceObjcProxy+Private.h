@@ -16,7 +16,7 @@ namespace djinni_generated
         ClientInterfaceObjcProxy (id objcRef);
         virtual ~ClientInterfaceObjcProxy () override;
         static std::shared_ptr<::djinni::cpp::ClientInterface> client_interface_with_objc (id objcRef);
-        virtual ClientReturnedRecord get_record (int64_t record_id, const std::string & utf8string) override;
+        virtual ::djinni::cpp::ClientReturnedRecord get_record (int64_t record_id, const std::string & utf8string) override;
 
         private:
         ClientInterfaceObjcProxy () {};
