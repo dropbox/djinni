@@ -3,6 +3,8 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
+using djinni::cpp::PrimitiveList;
+
 static PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
 static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithList:
                                              [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithLongLong:1],

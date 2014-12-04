@@ -4,6 +4,8 @@
 #include "token.hpp"
 #include <exception>
 
+using namespace ::djinni::cpp;
+
 SetRecord TestHelpers::get_set_record() {
     return SetRecord { {
         "StringA",

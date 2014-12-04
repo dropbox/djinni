@@ -2,6 +2,7 @@
 #import <XCTest/XCTest.h>
 
 #include "set_record.hpp"
+using djinni::cpp::SetRecord;
 
 @interface DBSetRecordTests : XCTestCase
 
