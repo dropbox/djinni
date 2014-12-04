@@ -6,20 +6,20 @@
 #include "djinni_support.hpp"
 #include "test_helpers.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-class NativeTestHelpers final : djinni::JniInterface<TestHelpers, NativeTestHelpers> {
+class NativeTestHelpers final : djinni::JniInterface<::djinni::cpp::TestHelpers, NativeTestHelpers> {
 public:
-    using CppType = std::shared_ptr<TestHelpers>;
+    using CppType = std::shared_ptr<::djinni::cpp::TestHelpers>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<TestHelpers> c) { return djinni::JniClass<::djinni_generated::NativeTestHelpers>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<TestHelpers> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeTestHelpers>::get()._fromJava(jniEnv, j); }
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::djinni::cpp::TestHelpers> c) { return djinni::JniClass<::djinni::jni::NativeTestHelpers>::get()._toJava(jniEnv, c); }
+    static std::shared_ptr<::djinni::cpp::TestHelpers> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni::jni::NativeTestHelpers>::get()._fromJava(jniEnv, j); }
 
 
 private:
     NativeTestHelpers();
-    friend class djinni::JniClass<::djinni_generated::NativeTestHelpers>;
+    friend class djinni::JniClass<::djinni::jni::NativeTestHelpers>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

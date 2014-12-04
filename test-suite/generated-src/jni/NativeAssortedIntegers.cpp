@@ -8,9 +8,9 @@
 #include "HI8.hpp"
 #include "HOptional.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, AssortedIntegers c) {
+jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, ::djinni::cpp::AssortedIntegers c) {
     jbyte j_eight = ::djinni::HI8::Unboxed::toJava(jniEnv, c.eight);
     jshort j_sixteen = ::djinni::HI16::Unboxed::toJava(jniEnv, c.sixteen);
     jint j_thirtytwo = ::djinni::HI32::Unboxed::toJava(jniEnv, c.thirtytwo);
@@ -19,16 +19,16 @@ jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, AssortedIntegers c) {
     djinni::LocalRef<jobject> j_o_sixteen(jniEnv, ::djinni::HOptional<std::experimental::optional, ::djinni::HI16>::toJava(jniEnv, c.o_sixteen));
     djinni::LocalRef<jobject> j_o_thirtytwo(jniEnv, ::djinni::HOptional<std::experimental::optional, ::djinni::HI32>::toJava(jniEnv, c.o_thirtytwo));
     djinni::LocalRef<jobject> j_o_sixtyfour(jniEnv, ::djinni::HOptional<std::experimental::optional, ::djinni::HI64>::toJava(jniEnv, c.o_sixtyfour));
-    const auto & data = djinni::JniClass<::djinni_generated::NativeAssortedIntegers>::get();
+    const auto & data = djinni::JniClass<::djinni::jni::NativeAssortedIntegers>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_eight, j_sixteen, j_thirtytwo, j_sixtyfour, j_o_eight.get(), j_o_sixteen.get(), j_o_thirtytwo.get(), j_o_sixtyfour.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
-AssortedIntegers NativeAssortedIntegers::fromJava(JNIEnv* jniEnv, jobject j) {
+::djinni::cpp::AssortedIntegers NativeAssortedIntegers::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const auto & data = djinni::JniClass<::djinni_generated::NativeAssortedIntegers>::get();
-    return AssortedIntegers(
+    const auto & data = djinni::JniClass<::djinni::jni::NativeAssortedIntegers>::get();
+    return ::djinni::cpp::AssortedIntegers(
         ::djinni::HI8::Unboxed::fromJava(jniEnv, jniEnv->GetByteField(j, data.field_mEight)),
         ::djinni::HI16::Unboxed::fromJava(jniEnv, jniEnv->GetShortField(j, data.field_mSixteen)),
         ::djinni::HI32::Unboxed::fromJava(jniEnv, jniEnv->GetIntField(j, data.field_mThirtytwo)),
@@ -39,4 +39,4 @@ AssortedIntegers NativeAssortedIntegers::fromJava(JNIEnv* jniEnv, jobject j) {
         ::djinni::HOptional<std::experimental::optional, ::djinni::HI64>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mOSixtyfour)).get()));
 }
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

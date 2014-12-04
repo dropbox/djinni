@@ -20,7 +20,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @implementation DBTestHelpersCppProxy
 
-- (id)initWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef
+- (id)initWithCpp:(const std::shared_ptr<::djinni::cpp::TestHelpers> &)cppRef
 {
     if (self = [super init]) {
         _cppRef = cppRef;
@@ -30,19 +30,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (void)dealloc
 {
-    djinni::DbxCppWrapperCache<TestHelpers> & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
+    djinni::DbxCppWrapperCache<::djinni::cpp::TestHelpers> & cache = djinni::DbxCppWrapperCache<::djinni::cpp::TestHelpers>::getInstance();
     cache.remove(_cppRef);
 }
 
-+ (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef
++ (id)testHelpersWithCpp:(const std::shared_ptr<::djinni::cpp::TestHelpers> &)cppRef
 {
-    djinni::DbxCppWrapperCache<TestHelpers> & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
-    return cache.get(cppRef, [] (const std::shared_ptr<TestHelpers> & p) { return [[DBTestHelpersCppProxy alloc] initWithCpp:p]; });
+    djinni::DbxCppWrapperCache<::djinni::cpp::TestHelpers> & cache = djinni::DbxCppWrapperCache<::djinni::cpp::TestHelpers>::getInstance();
+    return cache.get(cppRef, [] (const std::shared_ptr<::djinni::cpp::TestHelpers> & p) { return [[DBTestHelpersCppProxy alloc] initWithCpp:p]; });
 }
 
 + (DBSetRecord *)getSetRecord {
     try {
-        SetRecord cppRet = TestHelpers::get_set_record();
+        ::djinni::cpp::SetRecord cppRet = ::djinni::cpp::TestHelpers::get_set_record();
         DBSetRecord *objcRet = [[DBSetRecord alloc] initWithCppSetRecord:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -50,8 +50,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (BOOL)checkSetRecord:(DBSetRecord *)rec {
     try {
-        SetRecord cppRec = std::move([rec cppSetRecord]);
-        bool cppRet = TestHelpers::check_set_record(std::move(cppRec));
+        ::djinni::cpp::SetRecord cppRec = std::move([rec cppSetRecord]);
+        bool cppRet = ::djinni::cpp::TestHelpers::check_set_record(std::move(cppRec));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -59,7 +59,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (DBPrimitiveList *)getPrimitiveList {
     try {
-        PrimitiveList cppRet = TestHelpers::get_primitive_list();
+        ::djinni::cpp::PrimitiveList cppRet = ::djinni::cpp::TestHelpers::get_primitive_list();
         DBPrimitiveList *objcRet = [[DBPrimitiveList alloc] initWithCppPrimitiveList:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -67,8 +67,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (BOOL)checkPrimitiveList:(DBPrimitiveList *)pl {
     try {
-        PrimitiveList cppPl = std::move([pl cppPrimitiveList]);
-        bool cppRet = TestHelpers::check_primitive_list(std::move(cppPl));
+        ::djinni::cpp::PrimitiveList cppPl = std::move([pl cppPrimitiveList]);
+        bool cppRet = ::djinni::cpp::TestHelpers::check_primitive_list(std::move(cppPl));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -76,7 +76,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (DBNestedCollection *)getNestedCollection {
     try {
-        NestedCollection cppRet = TestHelpers::get_nested_collection();
+        ::djinni::cpp::NestedCollection cppRet = ::djinni::cpp::TestHelpers::get_nested_collection();
         DBNestedCollection *objcRet = [[DBNestedCollection alloc] initWithCppNestedCollection:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -84,8 +84,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (BOOL)checkNestedCollection:(DBNestedCollection *)nc {
     try {
-        NestedCollection cppNc = std::move([nc cppNestedCollection]);
-        bool cppRet = TestHelpers::check_nested_collection(std::move(cppNc));
+        ::djinni::cpp::NestedCollection cppNc = std::move([nc cppNestedCollection]);
+        bool cppRet = ::djinni::cpp::TestHelpers::check_nested_collection(std::move(cppNc));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -93,7 +93,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (NSMutableDictionary *)getMap {
     try {
-        std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_map();
+        std::unordered_map<std::string, int64_t> cppRet = ::djinni::cpp::TestHelpers::get_map();
         NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
@@ -114,7 +114,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             int64_t cppValue_0 = [[m objectForKey:objcKey_0] longLongValue];
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
-        bool cppRet = TestHelpers::check_map(std::move(cppM));
+        bool cppRet = ::djinni::cpp::TestHelpers::check_map(std::move(cppM));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -122,7 +122,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (NSMutableDictionary *)getEmptyMap {
     try {
-        std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_empty_map();
+        std::unordered_map<std::string, int64_t> cppRet = ::djinni::cpp::TestHelpers::get_empty_map();
         NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
@@ -143,7 +143,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             int64_t cppValue_0 = [[m objectForKey:objcKey_0] longLongValue];
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
-        bool cppRet = TestHelpers::check_empty_map(std::move(cppM));
+        bool cppRet = ::djinni::cpp::TestHelpers::check_empty_map(std::move(cppM));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -151,7 +151,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (DBMapListRecord *)getMapListRecord {
     try {
-        MapListRecord cppRet = TestHelpers::get_map_list_record();
+        ::djinni::cpp::MapListRecord cppRet = ::djinni::cpp::TestHelpers::get_map_list_record();
         DBMapListRecord *objcRet = [[DBMapListRecord alloc] initWithCppMapListRecord:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -159,8 +159,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (BOOL)checkMapListRecord:(DBMapListRecord *)m {
     try {
-        MapListRecord cppM = std::move([m cppMapListRecord]);
-        bool cppRet = TestHelpers::check_map_list_record(std::move(cppM));
+        ::djinni::cpp::MapListRecord cppM = std::move([m cppMapListRecord]);
+        bool cppRet = ::djinni::cpp::TestHelpers::check_map_list_record(std::move(cppM));
         BOOL objcRet = (cppRet) ? YES : NO;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -168,34 +168,34 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (void)checkClientInterfaceAscii:(id <DBClientInterface>)i {
     try {
-        std::shared_ptr<ClientInterface> cppI = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(i);
-        TestHelpers::check_client_interface_ascii(std::move(cppI));
+        std::shared_ptr<::djinni::cpp::ClientInterface> cppI = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(i);
+        ::djinni::cpp::TestHelpers::check_client_interface_ascii(std::move(cppI));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkClientInterfaceNonascii:(id <DBClientInterface>)i {
     try {
-        std::shared_ptr<ClientInterface> cppI = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(i);
-        TestHelpers::check_client_interface_nonascii(std::move(cppI));
+        std::shared_ptr<::djinni::cpp::ClientInterface> cppI = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(i);
+        ::djinni::cpp::TestHelpers::check_client_interface_nonascii(std::move(cppI));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkEnumMap:(NSMutableDictionary *)m {
     try {
-        std::unordered_map<color, std::string> cppM;
+        std::unordered_map<::djinni::cpp::color, std::string> cppM;
         for (id objcKey_0 in m) {
-            color cppKey_0 = [DBColorTranslator objcColorToCppColor:(DBColor)[objcKey_0 intValue]];
+            ::djinni::cpp::color cppKey_0 = [DBColorTranslator objcColorToCppColor:(DBColor)[objcKey_0 intValue]];
             std::string cppValue_0([[m objectForKey:objcKey_0] UTF8String], [[m objectForKey:objcKey_0] lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
-        TestHelpers::check_enum_map(std::move(cppM));
+        ::djinni::cpp::TestHelpers::check_enum_map(std::move(cppM));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (id <DBToken>)tokenId:(id <DBToken>)t {
     try {
-        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
-        std::shared_ptr<Token> cppRet = TestHelpers::token_id(std::move(cppT));
+        std::shared_ptr<::djinni::cpp::Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        std::shared_ptr<::djinni::cpp::Token> cppRet = ::djinni::cpp::TestHelpers::token_id(std::move(cppT));
         id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -203,7 +203,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (id <DBToken>)createCppToken {
     try {
-        std::shared_ptr<Token> cppRet = TestHelpers::create_cpp_token();
+        std::shared_ptr<::djinni::cpp::Token> cppRet = ::djinni::cpp::TestHelpers::create_cpp_token();
         id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -211,15 +211,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (void)checkCppToken:(id <DBToken>)t {
     try {
-        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
-        TestHelpers::check_cpp_token(std::move(cppT));
+        std::shared_ptr<::djinni::cpp::Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        ::djinni::cpp::TestHelpers::check_cpp_token(std::move(cppT));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (int64_t)cppTokenId:(id <DBToken>)t {
     try {
-        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
-        int64_t cppRet = TestHelpers::cpp_token_id(std::move(cppT));
+        std::shared_ptr<::djinni::cpp::Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        int64_t cppRet = ::djinni::cpp::TestHelpers::cpp_token_id(std::move(cppT));
         int64_t objcRet = cppRet;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -227,7 +227,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (NSNumber *)returnNone {
     try {
-        std::experimental::optional<int32_t> cppRet = TestHelpers::return_none();
+        std::experimental::optional<int32_t> cppRet = ::djinni::cpp::TestHelpers::return_none();
         NSNumber *objcRet;
         if (cppRet) {
             objcRet = [NSNumber numberWithInt:(*(cppRet))];
@@ -240,8 +240,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i {
     try {
-        AssortedIntegers cppI = std::move([i cppAssortedIntegers]);
-        AssortedIntegers cppRet = TestHelpers::assorted_integers_id(std::move(cppI));
+        ::djinni::cpp::AssortedIntegers cppI = std::move([i cppAssortedIntegers]);
+        ::djinni::cpp::AssortedIntegers cppRet = ::djinni::cpp::TestHelpers::assorted_integers_id(std::move(cppI));
         DBAssortedIntegers *objcRet = [[DBAssortedIntegers alloc] initWithCppAssortedIntegers:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()

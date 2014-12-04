@@ -28,7 +28,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppRecordWithNestedDerivings:(const RecordWithNestedDerivings &)recordWithNestedDerivings
+- (id)initWithCppRecordWithNestedDerivings:(const ::djinni::cpp::RecordWithNestedDerivings &)recordWithNestedDerivings
 {
     if (self = [super init]) {
         _key = recordWithNestedDerivings.key;
@@ -37,11 +37,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (RecordWithNestedDerivings)cppRecordWithNestedDerivings
+- (::djinni::cpp::RecordWithNestedDerivings)cppRecordWithNestedDerivings
 {
     int32_t key = _key;
-    RecordWithDerivings rec = std::move([_rec cppRecordWithDerivings]);
-    return RecordWithNestedDerivings(
+    ::djinni::cpp::RecordWithDerivings rec = std::move([_rec cppRecordWithDerivings]);
+    return ::djinni::cpp::RecordWithNestedDerivings(
             std::move(key),
             std::move(rec));
 }

@@ -3,6 +3,8 @@
 
 #include "record_with_derivings.hpp"  // my header
 
+namespace djinni { namespace cpp {
+
 
 bool RecordWithDerivings::operator==(const RecordWithDerivings & other) const {
     return key1 == other.key1 &&
@@ -40,3 +42,5 @@ bool RecordWithDerivings::operator<=(const RecordWithDerivings & other) const {
 bool RecordWithDerivings::operator>=(const RecordWithDerivings & other) const {
     return other <= *this;
 }
+
+} }  // namespace djinni::cpp

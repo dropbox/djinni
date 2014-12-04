@@ -6,15 +6,15 @@
 #include "djinni_support.hpp"
 #include "primitive_list.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativePrimitiveList final {
 public:
-    using CppType = PrimitiveList;
+    using CppType = ::djinni::cpp::PrimitiveList;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, PrimitiveList);
-    static PrimitiveList fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::PrimitiveList);
+    static ::djinni::cpp::PrimitiveList fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/PrimitiveList") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
@@ -22,7 +22,7 @@ public:
 
 private:
     NativePrimitiveList() {}
-    friend class djinni::JniClass<::djinni_generated::NativePrimitiveList>;
+    friend class djinni::JniClass<::djinni::jni::NativePrimitiveList>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

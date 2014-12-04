@@ -15,6 +15,8 @@
 #include <string>
 #include <unordered_map>
 
+namespace djinni { namespace cpp {
+
 class ClientInterface;
 class Token;
 
@@ -65,3 +67,5 @@ public:
     /** Ensures that we generate integer translation code */
     static AssortedIntegers assorted_integers_id(const AssortedIntegers & i);
 };
+
+} }  // namespace djinni::cpp

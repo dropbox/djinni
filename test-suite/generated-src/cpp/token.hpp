@@ -3,7 +3,11 @@
 
 #pragma once
 
+namespace djinni { namespace cpp {
+
 class Token {
 public:
     virtual ~Token() {}
 };
+
+} }  // namespace djinni::cpp

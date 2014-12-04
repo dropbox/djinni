@@ -10,10 +10,10 @@
 
 @interface DBTestHelpersCppProxy ()
 
-@property (nonatomic, readonly) std::shared_ptr<TestHelpers> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::djinni::cpp::TestHelpers> cppRef;
 
-+ (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef;
++ (id)testHelpersWithCpp:(const std::shared_ptr<::djinni::cpp::TestHelpers> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<::djinni::cpp::TestHelpers> &)cppRef;
 
 @end

@@ -6,15 +6,15 @@
 #include "djinni_support.hpp"
 #include "record_with_nested_derivings.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeRecordWithNestedDerivings final {
 public:
-    using CppType = RecordWithNestedDerivings;
+    using CppType = ::djinni::cpp::RecordWithNestedDerivings;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, RecordWithNestedDerivings);
-    static RecordWithNestedDerivings fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::RecordWithNestedDerivings);
+    static ::djinni::cpp::RecordWithNestedDerivings fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/RecordWithNestedDerivings") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(ILcom/dropbox/djinni/test/RecordWithDerivings;)V") };
@@ -23,7 +23,7 @@ public:
 
 private:
     NativeRecordWithNestedDerivings() {}
-    friend class djinni::JniClass<::djinni_generated::NativeRecordWithNestedDerivings>;
+    friend class djinni::JniClass<::djinni::jni::NativeRecordWithNestedDerivings>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

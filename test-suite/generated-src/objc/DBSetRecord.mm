@@ -30,7 +30,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppSetRecord:(const SetRecord &)setRecord
+- (id)initWithCppSetRecord:(const ::djinni::cpp::SetRecord &)setRecord
 {
     if (self = [super init]) {
         _set = [NSMutableSet setWithCapacity:setRecord.set.size()];
@@ -44,14 +44,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (SetRecord)cppSetRecord
+- (::djinni::cpp::SetRecord)cppSetRecord
 {
     std::unordered_set<std::string> set;
     for (NSString *objcValue_0 in _set) {
         std::string cppValue_0([objcValue_0 UTF8String], [objcValue_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
         set.insert(std::move(cppValue_0));
     }
-    return SetRecord(
+    return ::djinni::cpp::SetRecord(
             std::move(set));
 }
 

@@ -7,7 +7,7 @@
 
 @interface DBSetRecord ()
 
-- (id)initWithCppSetRecord:(const SetRecord &)setRecord;
-- (SetRecord)cppSetRecord;
+- (id)initWithCppSetRecord:(const ::djinni::cpp::SetRecord &)setRecord;
+- (::djinni::cpp::SetRecord)cppSetRecord;
 
 @end

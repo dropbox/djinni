@@ -35,7 +35,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppNestedCollection:(const NestedCollection &)nestedCollection
+- (id)initWithCppNestedCollection:(const ::djinni::cpp::NestedCollection &)nestedCollection
 {
     if (self = [super init]) {
         _setList = [NSMutableArray arrayWithCapacity:nestedCollection.set_list.size()];
@@ -53,7 +53,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (NestedCollection)cppNestedCollection
+- (::djinni::cpp::NestedCollection)cppNestedCollection
 {
     std::vector<std::unordered_set<std::string>> setList;
     setList.reserve([_setList count]);
@@ -65,7 +65,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         }
         setList.push_back(std::move(cppValue_0));
     }
-    return NestedCollection(
+    return ::djinni::cpp::NestedCollection(
             std::move(setList));
 }
 

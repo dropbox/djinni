@@ -7,7 +7,7 @@
 
 @interface DBClientReturnedRecord ()
 
-- (id)initWithCppClientReturnedRecord:(const ClientReturnedRecord &)clientReturnedRecord;
-- (ClientReturnedRecord)cppClientReturnedRecord;
+- (id)initWithCppClientReturnedRecord:(const ::djinni::cpp::ClientReturnedRecord &)clientReturnedRecord;
+- (::djinni::cpp::ClientReturnedRecord)cppClientReturnedRecord;
 
 @end

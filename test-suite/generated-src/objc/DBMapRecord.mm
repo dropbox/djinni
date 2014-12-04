@@ -32,7 +32,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppMapRecord:(const MapRecord &)mapRecord
+- (id)initWithCppMapRecord:(const ::djinni::cpp::MapRecord &)mapRecord
 {
     if (self = [super init]) {
         _map = [NSMutableDictionary dictionaryWithCapacity:mapRecord.map.size()];
@@ -47,7 +47,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (MapRecord)cppMapRecord
+- (::djinni::cpp::MapRecord)cppMapRecord
 {
     std::unordered_map<std::string, int64_t> map;
     for (id objcKey_0 in _map) {
@@ -55,7 +55,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         int64_t cppValue_0 = [[_map objectForKey:objcKey_0] longLongValue];
         map.emplace(std::move(cppKey_0), std::move(cppValue_0));
     }
-    return MapRecord(
+    return ::djinni::cpp::MapRecord(
             std::move(map));
 }
 

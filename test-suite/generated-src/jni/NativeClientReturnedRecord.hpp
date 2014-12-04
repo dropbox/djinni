@@ -6,15 +6,15 @@
 #include "client_returned_record.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeClientReturnedRecord final {
 public:
-    using CppType = ClientReturnedRecord;
+    using CppType = ::djinni::cpp::ClientReturnedRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ClientReturnedRecord);
-    static ClientReturnedRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::ClientReturnedRecord);
+    static ::djinni::cpp::ClientReturnedRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientReturnedRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(JLjava/lang/String;)V") };
@@ -23,7 +23,7 @@ public:
 
 private:
     NativeClientReturnedRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>;
+    friend class djinni::JniClass<::djinni::jni::NativeClientReturnedRecord>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

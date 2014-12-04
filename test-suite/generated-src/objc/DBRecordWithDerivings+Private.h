@@ -7,7 +7,7 @@
 
 @interface DBRecordWithDerivings ()
 
-- (id)initWithCppRecordWithDerivings:(const RecordWithDerivings &)recordWithDerivings;
-- (RecordWithDerivings)cppRecordWithDerivings;
+- (id)initWithCppRecordWithDerivings:(const ::djinni::cpp::RecordWithDerivings &)recordWithDerivings;
+- (::djinni::cpp::RecordWithDerivings)cppRecordWithDerivings;
 
 @end

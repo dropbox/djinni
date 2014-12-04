@@ -6,15 +6,15 @@
 #include "djinni_support.hpp"
 #include "map_list_record.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeMapListRecord final {
 public:
-    using CppType = MapListRecord;
+    using CppType = ::djinni::cpp::MapListRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, MapListRecord);
-    static MapListRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::MapListRecord);
+    static ::djinni::cpp::MapListRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/MapListRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
@@ -22,7 +22,7 @@ public:
 
 private:
     NativeMapListRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeMapListRecord>;
+    friend class djinni::JniClass<::djinni::jni::NativeMapListRecord>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

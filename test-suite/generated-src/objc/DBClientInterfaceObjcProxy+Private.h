@@ -9,13 +9,13 @@
 
 namespace djinni_generated
 {
-    class ClientInterfaceObjcProxy final : public ClientInterface
+    class ClientInterfaceObjcProxy final : public ::djinni::cpp::ClientInterface
     {
         public:
         id <DBClientInterface> objcRef;
         ClientInterfaceObjcProxy (id objcRef);
         virtual ~ClientInterfaceObjcProxy () override;
-        static std::shared_ptr<ClientInterface> client_interface_with_objc (id objcRef);
+        static std::shared_ptr<::djinni::cpp::ClientInterface> client_interface_with_objc (id objcRef);
         virtual ClientReturnedRecord get_record (int64_t record_id, const std::string & utf8string) override;
 
         private:
