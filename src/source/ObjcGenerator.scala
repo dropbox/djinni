@@ -311,7 +311,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       refs.privHeader.add("#import " + q("DJIObjcWrapperCache+Private.h"))
       refs.body.add("!#import " + q(privateHeaderName(objcExtName)))
       writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
-        w.wl(s"namespace ${spec.objcppNamespace}").braced {
+        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wl("public:")
             w.wl(s"id <$self> objcRef;")
@@ -327,11 +327,11 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl("private:")
             w.wl(s"$objcExtSelf () {};")
           }
-        }
+        })
       })
 
       writeObjcFile(bodyName(objcExtName), origin, refs.body, w => {
-        w.wl(s"namespace ${spec.objcppNamespace}").braced {
+        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"$objcExtSelf::$objcExtSelf (id objcRef)").braced {
             w.wl(s"assert([[objcRef class] conformsToProtocol:@protocol($self)]);")
             w.wl("this->objcRef = objcRef;")
@@ -369,7 +369,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               }
             }
           }
-        }
+        })
       })
     }
   }
