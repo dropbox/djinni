@@ -107,20 +107,6 @@ public:
             localRef) {}
 };
 
-struct WeakGlobalRefDeleter { void operator() (jobject wgr) noexcept; };
-
-template <typename PointerType>
-class WeakGlobalRef : public std::unique_ptr<typename std::remove_pointer<PointerType>::type,
-                                             WeakGlobalRefDeleter> {
-public:
-    WeakGlobalRef() {}
-    WeakGlobalRef(JNIEnv * env, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, WeakGlobalRefDeleter>(
-            static_cast<PointerType>(env->NewWeakGlobalRef(localRef)),
-            WeakGlobalRefDeleter{}
-        ) {}
-};
-
 /*
  * Helper for JniClassInitializer. Copied from Oxygen.
  */
@@ -307,12 +293,17 @@ public:
  *   |              |      |        |                |                |           |
  *   | Foo.CppProxy | ------------> | CppProxyHandle | =============> |    Foo    |
  *   |______________|   (jlong)     |      <Foo>     |  (shared_ptr)  |___________|
- *               ^         |        |________________|
- *                \        |
- *                 \       |                __________________
- *                  -----------------------|                  |
- *                  (WeakGlobalRef)        | jniCppProxyCache |
- *                         |               |__________________|
+ *           ^             |        |________________|
+ *            \            |
+ *        _________        |                     __________________
+ *       |         |       |                    |                  |
+ *       | WeakRef | <------------------------- | jniCppProxyCache |
+ *       |_________|  (GlobalRef)               |__________________|
+ *                         |
+ *
+ * We don't use JNI WeakGlobalRef objects, because they last longer than is safe - a
+ * WeakGlobalRef can still be upgraded to a strong reference even during finalization, which
+ * leads to use-after-free. Java WeakRefs provide the right lifetime guarantee.
  */
 
 /*
