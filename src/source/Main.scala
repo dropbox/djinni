@@ -58,7 +58,7 @@ object Main {
     var objcIncludePrefix: String = ""
     var objcIncludeCppPrefix: String = ""
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
-    var objcppNamespace: String = "dropboxsync"
+    var objcppNamespace: String = "djinni"
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
