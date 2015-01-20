@@ -282,6 +282,7 @@ abstract class Generator(spec: Spec)
       case p: MPrimitive => p.cName
       case MString => "std::string"
       case MBinary => "std::vector<uint8_t>"
+      case MDate => "double"
       case MOptional => spec.cppOptionalTemplate
       case MList => "std::vector"
       case MSet => "std::unordered_set"

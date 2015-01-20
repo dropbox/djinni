@@ -364,6 +364,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       case o: MOpaque => o match {
         case p: MPrimitive => p.jSig
         case MString => "Ljava/lang/String;"
+        case MDate => "Ljava/lang/Date;"
         case MBinary => "[B"
         case MOptional =>  e.args.head.base match {
           case p: MPrimitive => s"Ljava/lang/${p.jBoxed};"

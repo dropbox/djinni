@@ -541,6 +541,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               skipFirst { w.wl(" &&") }
               f.ty.resolved.base match {
                 case MBinary => w.w(s"[self.${idObjc.field(f.ident)} isEqualToData:typedOther.${idObjc.field(f.ident)}]")
+                case MDate => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDate:typedOther.${idObjc.field(f.ident)}]")
                 case MList => w.w(s"[self.${idObjc.field(f.ident)} isEqualToArray:typedOther.${idObjc.field(f.ident)}]")
                 case MSet => w.w(s"[self.${idObjc.field(f.ident)} isEqualToSet:typedOther.${idObjc.field(f.ident)}]")
                 case MMap => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDictionary:typedOther.${idObjc.field(f.ident)}]")
@@ -638,6 +639,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
         case MString => w.wl(s"$to = [$from copy];")
         case MBinary => w.wl(s"$to = [$from copy];")
+        case MDate => w.wl(s"$to = $from;") // NSDate is immutable
         case MList => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
@@ -736,6 +738,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl("encoding:NSUTF8StringEncoding];")
           }
           case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
+          case MDate => w.wl(s"$objcType$objcIdent = [[NSDate alloc] initWithTimeIntervalSince1970:$cppIdent];")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val objcName = "objcValue_" + valueLevel
@@ -840,6 +843,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           case MBinary =>
             w.wl(s"$cppType $cppIdent([$objcIdent length]);")
             w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
+          case MDate => w.wl(s"$cppType $cppIdent = [$objcIdent timeIntervalSince1970];")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val cppName = "cppValue_" + valueLevel
@@ -914,6 +918,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case p: MPrimitive => if (needRef) (p.objcBoxed, true) else (p.objcName, false)
             case MString => ("NSString", true)
             case MBinary => ("NSData", true)
+            case MDate => ("NSDate", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MList => ("NSArray", true)
             case MSet => ("NSSet", true)

@@ -53,6 +53,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           case MBinary =>
             hpp.add("#include <vector>")
             hpp.add("#include <cstdint>")
+          case MDate =>
+            hpp.add("#include <cstdint>")
           case MOptional =>
             hpp.add("#include " + spec.cppOptionalHeader)
           case MList =>
