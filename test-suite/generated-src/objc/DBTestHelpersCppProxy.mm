@@ -91,22 +91,23 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSMutableDictionary *)getMap {
++ (NSDictionary *)getMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_map();
-        NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRet setObject:objcValue_0 forKey:objcKey_0];
+            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
         }
+        NSDictionary *objcRet = objcRetTempDictionary;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkMap:(NSMutableDictionary *)m {
++ (BOOL)checkMap:(NSDictionary *)m {
     try {
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
@@ -120,22 +121,23 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSMutableDictionary *)getEmptyMap {
++ (NSDictionary *)getEmptyMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_empty_map();
-        NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRet setObject:objcValue_0 forKey:objcKey_0];
+            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
         }
+        NSDictionary *objcRet = objcRetTempDictionary;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkEmptyMap:(NSMutableDictionary *)m {
++ (BOOL)checkEmptyMap:(NSDictionary *)m {
     try {
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
@@ -180,7 +182,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkEnumMap:(NSMutableDictionary *)m {
++ (void)checkEnumMap:(NSDictionary *)m {
     try {
         std::unordered_map<color, std::string> cppM;
         for (id objcKey_0 in m) {

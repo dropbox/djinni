@@ -6,8 +6,8 @@
 
 @interface DBSetRecord : NSObject
 - (id)initWithSetRecord:(DBSetRecord *)setRecord;
-- (id)initWithSet:(NSMutableSet *)set;
+- (id)initWithSet:(NSSet *)set;
 
-@property (nonatomic, readonly) NSMutableSet *set;
+@property (nonatomic, readonly) NSSet *set;
 
 @end

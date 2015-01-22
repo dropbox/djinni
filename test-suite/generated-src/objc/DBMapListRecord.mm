@@ -12,24 +12,26 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord
 {
     if (self = [super init]) {
-        _mapList = [NSMutableArray arrayWithCapacity:[mapListRecord.mapList count]];
-        for (NSMutableDictionary *currentValue_0 in mapListRecord.mapList) {
+        NSMutableArray *_mapListTempArray = [NSMutableArray arrayWithCapacity:[mapListRecord.mapList count]];
+        for (NSDictionary *currentValue_0 in mapListRecord.mapList) {
             id copiedValue_0;
-            copiedValue_0 = [NSMutableDictionary dictionaryWithCapacity:[currentValue_0 count]];
+            NSMutableDictionary *copiedValue_0TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[currentValue_0 count]];
             for (id key_1 in currentValue_0) {
                 id copiedKey_1, copiedValue_1;
                 copiedKey_1 = [key_1 copy];
                 id value_1 = [currentValue_0 objectForKey:key_1];
                 copiedValue_1 = value_1;
-                [copiedValue_0 setObject:copiedValue_1 forKey:copiedKey_1];
+                [copiedValue_0TempDictionary setObject:copiedValue_1 forKey:copiedKey_1];
             }
-            [_mapList addObject:copiedValue_0];
+            copiedValue_0 = copiedValue_0TempDictionary;
+            [_mapListTempArray addObject:copiedValue_0];
         }
+        _mapList = _mapListTempArray;
     }
     return self;
 }
 
-- (id)initWithMapList:(NSMutableArray *)mapList
+- (id)initWithMapList:(NSArray *)mapList
 {
     if (self = [super init]) {
         _mapList = mapList;
@@ -40,18 +42,20 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppMapListRecord:(const MapListRecord &)mapListRecord
 {
     if (self = [super init]) {
-        _mapList = [NSMutableArray arrayWithCapacity:mapListRecord.map_list.size()];
+        NSMutableArray *_mapListTempArray = [NSMutableArray arrayWithCapacity:mapListRecord.map_list.size()];
         for (const auto & cppValue_0 : mapListRecord.map_list) {
-            NSMutableDictionary *objcValue_0 = [NSMutableDictionary dictionaryWithCapacity:cppValue_0.size()];
+            NSMutableDictionary *objcValue_0TempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppValue_0.size()];
             for (const auto & cppPair_1 : cppValue_0) {
                 NSString *objcKey_1 = [[NSString alloc] initWithBytes:cppPair_1.first.data()
                         length:cppPair_1.first.length()
                         encoding:NSUTF8StringEncoding];
                 NSNumber *objcValue_1 = [NSNumber numberWithLongLong:cppPair_1.second];
-                [objcValue_0 setObject:objcValue_1 forKey:objcKey_1];
+                [objcValue_0TempDictionary setObject:objcValue_1 forKey:objcKey_1];
             }
-            [_mapList addObject:objcValue_0];
+            NSDictionary *objcValue_0 = objcValue_0TempDictionary;
+            [_mapListTempArray addObject:objcValue_0];
         }
+        _mapList = _mapListTempArray;
     }
     return self;
 }
@@ -60,7 +64,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     std::vector<std::unordered_map<std::string, int64_t>> mapList;
     mapList.reserve([_mapList count]);
-    for (NSMutableDictionary *objcValue_0 in _mapList) {
+    for (NSDictionary *objcValue_0 in _mapList) {
         std::unordered_map<std::string, int64_t> cppValue_0;
         for (id objcKey_1 in objcValue_0) {
             std::string cppKey_1([objcKey_1 UTF8String], [objcKey_1 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);

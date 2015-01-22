@@ -641,25 +641,27 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         case MList => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
-          w.wl(s"$to = [NSMutableArray arrayWithCapacity:[$from count]];")
+          w.wl(s"NSMutableArray *${to}TempArray = [NSMutableArray arrayWithCapacity:[$from count]];")
           w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
             w.wl(s"id $copyName;")
             f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[$to addObject:$copyName];")
+            w.wl(s"[${to}TempArray addObject:$copyName];")
           }
+          w.wl(s"$to = ${to}TempArray;")
         }
         case MSet => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
-          w.wl(s"$to = [NSMutableSet setWithCapacity:[$from count]];")
+          w.wl(s"NSMutableSet *${to}TempSet = [NSMutableSet setWithCapacity:[$from count]];")
           w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
             w.wl(s"id $copyName;")
             f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[$to addObject:$copyName];")
+            w.wl(s"[${to}TempSet addObject:$copyName];")
           }
+          w.wl(s"$to = ${to}TempSet;")
         }
         case MMap => {
-          w.wl(s"$to = [NSMutableDictionary dictionaryWithCapacity:[$from count]];")
+          w.wl(s"NSMutableDictionary *${to}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[$from count]];")
           val keyName = "key_" + valueLevel
           val valueName = "value_" + valueLevel
           val copiedKeyName = "copiedKey_" + valueLevel
@@ -669,8 +671,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             f(copiedKeyName, keyName, tm.args.apply(0), true, w, valueLevel + 1)
             w.wl(s"id $valueName = [$from objectForKey:$keyName];")
             f(copiedValueName, valueName, tm.args.apply(1), true, w, valueLevel + 1)
-            w.wl(s"[$to setObject:$copiedValueName forKey:$copiedKeyName];")
+            w.wl(s"[${to}TempDictionary setObject:$copiedValueName forKey:$copiedKeyName];")
           }
+          w.wl(s"$to = ${to}TempDictionary;")
         }
         case d: MDef => {
           val typeName = d.name
@@ -737,31 +740,34 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           case MList =>
             val objcName = "objcValue_" + valueLevel
             val cppName = "cppValue_" + valueLevel
-            w.wl(s"$objcType$objcIdent = [NSMutableArray arrayWithCapacity:${cppIdent}.size()];")
+            w.wl(s"NSMutableArray *${objcIdent}TempArray = [NSMutableArray arrayWithCapacity:${cppIdent}.size()];")
             w.w(s"for (const auto & $cppName : ${cppIdent})")
             w.braced {
               f(objcName, cppName, tm.args.head, true, true, w, valueLevel + 1)
-              w.wl(s"[$objcIdent addObject:$objcName];")
+              w.wl(s"[${objcIdent}TempArray addObject:$objcName];")
             }
+            w.wl(s"$objcType$objcIdent = ${objcIdent}TempArray;")
           case MSet =>
             val objcName = "objcValue_" + valueLevel
             val cppName = "cppValue_" + valueLevel
-            w.wl(s"$objcType$objcIdent = [NSMutableSet setWithCapacity:${cppIdent}.size()];")
+            w.wl(s"NSMutableSet *${objcIdent}TempSet = [NSMutableSet setWithCapacity:${cppIdent}.size()];")
             w.w(s"for (const auto & $cppName : ${cppIdent})")
             w.braced {
               f(objcName, cppName, tm.args.head, true, true, w, valueLevel + 1)
-              w.wl(s"[$objcIdent addObject:$objcName];")
+              w.wl(s"[${objcIdent}TempSet addObject:$objcName];")
             }
+            w.wl(s"$objcType$objcIdent = ${objcIdent}TempSet;")
           case MMap => {
             val cppPairName = "cppPair_" + valueLevel
             val objcKeyName = "objcKey_" + valueLevel
             val objcValueName = "objcValue_" + valueLevel
-            w.wl(s"$objcType$objcIdent = [NSMutableDictionary dictionaryWithCapacity:${cppIdent}.size()];")
+            w.wl(s"NSMutableDictionary *${objcIdent}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:${cppIdent}.size()];")
             w.w(s"for (const auto & $cppPairName : ${cppIdent})").braced {
               f(objcKeyName, cppPairName + ".first", tm.args.apply(0), true, true, w, valueLevel + 1)
               f(objcValueName, cppPairName + ".second", tm.args.apply(1), true, true, w, valueLevel + 1)
-              w.wl(s"[$objcIdent setObject:$objcValueName forKey:$objcKeyName];")
+              w.wl(s"[${objcIdent}TempDictionary setObject:$objcValueName forKey:$objcKeyName];")
             }
+            w.wl(s"$objcType$objcIdent = ${objcIdent}TempDictionary;")
           }
           case d: MDef => {
             val typeName = d.name
@@ -909,9 +915,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case MString => ("NSString", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
-            case MList => ("NSMutableArray", true)
-            case MSet => ("NSMutableSet", true)
-            case MMap => ("NSMutableDictionary", true)
+            case MList => ("NSArray", true)
+            case MSet => ("NSSet", true)
+            case MMap => ("NSDictionary", true)
             case d: MDef => d.defType match {
               case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
               case DRecord => (idObjc.ty(d.name), true)

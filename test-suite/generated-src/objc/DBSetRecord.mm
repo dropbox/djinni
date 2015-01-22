@@ -12,17 +12,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithSetRecord:(DBSetRecord *)setRecord
 {
     if (self = [super init]) {
-        _set = [NSMutableSet setWithCapacity:[setRecord.set count]];
+        NSMutableSet *_setTempSet = [NSMutableSet setWithCapacity:[setRecord.set count]];
         for (NSString *currentValue_0 in setRecord.set) {
             id copiedValue_0;
             copiedValue_0 = [currentValue_0 copy];
-            [_set addObject:copiedValue_0];
+            [_setTempSet addObject:copiedValue_0];
         }
+        _set = _setTempSet;
     }
     return self;
 }
 
-- (id)initWithSet:(NSMutableSet *)set
+- (id)initWithSet:(NSSet *)set
 {
     if (self = [super init]) {
         _set = set;
@@ -33,13 +34,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppSetRecord:(const SetRecord &)setRecord
 {
     if (self = [super init]) {
-        _set = [NSMutableSet setWithCapacity:setRecord.set.size()];
+        NSMutableSet *_setTempSet = [NSMutableSet setWithCapacity:setRecord.set.size()];
         for (const auto & cppValue_0 : setRecord.set) {
             NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
                     length:cppValue_0.length()
                     encoding:NSUTF8StringEncoding];
-            [_set addObject:objcValue_0];
+            [_setTempSet addObject:objcValue_0];
         }
+        _set = _setTempSet;
     }
     return self;
 }
