@@ -123,34 +123,38 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcExt
 
+  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
+    // MBinary | MList | MSet | MMap are not allowed for constants.
+    // Primitives should be `const type`. All others are pointers and should be `type * const`
+    case t: MPrimitive => w.w(s"const ${toObjcTypeDef(c.ty)}$s${idObjc.const(c.ident)}")
+    case _ => w.w(s"${toObjcTypeDef(c.ty)} const $s${idObjc.const(c.ident)}")
+  }
+
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
     def boxedPrimitive(ty: TypeRef): String = {
       val (_, needRef) = toObjcType(ty)
       if (needRef) "@" else ""
     }
-    def writeObjcConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+    def writeObjcConstValue(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(boxedPrimitive(ty) + l.toString)
       case d: Double => w.w(boxedPrimitive(ty) + d.toString)
       case b: Boolean => w.w(boxedPrimitive(ty) + (if (b) "YES" else "NO"))
       case s: String => w.w("@" + s)
       case e: EnumValue => w.w(idObjc.enum(e.ty + "_" + e.name))
-      case v: ConstRef => ty.resolved.base match {
-        case MString => w.w("[" + selfName + idObjc.const (v.name) + " copy]")
-        case _ => w.w(selfName + idObjc.const (v.name))
-      }
+      case v: ConstRef => w.w(selfName + idObjc.const (v.name))
       case z: Map[_, _] => { // Value is record
         val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
         val head = record.fields.head
                 w.w(s"[[${idObjc.ty(recordMdef.name)} alloc] initWith${IdentStyle.camelUpper(head.ident)}:")
-        writeObjcConst(w, head.ty, vMap.apply(head.ident))
+        writeObjcConstValue(w, head.ty, vMap.apply(head.ident))
         w.nestedN(2) {
           val skipFirst = SkipFirst()
           for (f <- record.fields) skipFirst {
             w.wl
             w.w(s"${idObjc.field(f.ident)}:")
-            writeObjcConst(w, f.ty, vMap.apply(f.ident))
+            writeObjcConstValue(w, f.ty, vMap.apply(f.ident))
           }
         }
         w.w("]")
@@ -161,8 +165,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     w.wl("#pragma clang diagnostic ignored " + q("-Wunused-variable"))
     for (c <- consts) {
       w.wl
-      w.w(s"const ${toObjcTypeDef(c.ty)}$selfName${idObjc.const(c.ident)} = ")
-      writeObjcConst(w, c.ty, c.value)
+      writeObjcConstVariable(w, c, selfName)
+      w.w(s" = ")
+      writeObjcConstValue(w, c.ty, c.value)
       w.wl(";")
     }
     w.wl
@@ -201,7 +206,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
       for (c <- i.consts) {
         writeDoc(w, c.doc)
-        w.wl(s"extern const ${toObjcTypeDef(c.ty)}$self${idObjc.const(c.ident)};")
+        w.w(s"extern ")
+        writeObjcConstVariable(w, c, self)
+        w.wl(s";")
       }
       w.wl
       w.wl(s"@protocol $self")
@@ -413,7 +420,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
       for (c <- r.consts) {
         writeDoc(w, c.doc)
-        w.wl(s"extern const ${toObjcTypeDef(c.ty)}$noBaseSelf${idObjc.const(c.ident)};")
+        w.w(s"extern ")
+        writeObjcConstVariable(w, c, noBaseSelf);
+        w.wl(s";")
       }
       w.wl
       w.wl(s"@interface $self : NSObject")

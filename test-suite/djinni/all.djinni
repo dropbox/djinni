@@ -9,3 +9,4 @@
 @import "token.djinni"
 @import "test.djinni"
 @import "inttypes.djinni"
+@import "constants.djinni"
