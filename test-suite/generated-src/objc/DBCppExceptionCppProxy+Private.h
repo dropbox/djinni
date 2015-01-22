@@ -10,10 +10,10 @@
 
 @interface DBCppExceptionCppProxy ()
 
-@property (nonatomic, readonly) std::shared_ptr<CppException> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::djinni::cpp::CppException> cppRef;
 
-+ (id)cppExceptionWithCpp:(const std::shared_ptr<CppException> &)cppRef;
++ (id)cppExceptionWithCpp:(const std::shared_ptr<::djinni::cpp::CppException> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<CppException> &)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<::djinni::cpp::CppException> &)cppRef;
 
 @end

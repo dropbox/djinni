@@ -5,21 +5,21 @@
 #include "HSet.hpp"
 #include "HString.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-jobject NativeSetRecord::toJava(JNIEnv* jniEnv, SetRecord c) {
+jobject NativeSetRecord::toJava(JNIEnv* jniEnv, ::djinni::cpp::SetRecord c) {
     djinni::LocalRef<jobject> j_set(jniEnv, ::djinni::HSet<::djinni::HString>::toJava(jniEnv, c.set));
-    const auto & data = djinni::JniClass<::djinni_generated::NativeSetRecord>::get();
+    const auto & data = djinni::JniClass<::djinni::jni::NativeSetRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_set.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
-SetRecord NativeSetRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+::djinni::cpp::SetRecord NativeSetRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const auto & data = djinni::JniClass<::djinni_generated::NativeSetRecord>::get();
-    return SetRecord(
+    const auto & data = djinni::JniClass<::djinni::jni::NativeSetRecord>::get();
+    return ::djinni::cpp::SetRecord(
         ::djinni::HSet<::djinni::HString>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mSet)).get()));
 }
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

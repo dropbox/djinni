@@ -7,7 +7,7 @@
 
 @interface DBRecordWithNestedDerivings ()
 
-- (id)initWithCppRecordWithNestedDerivings:(const RecordWithNestedDerivings &)recordWithNestedDerivings;
-- (RecordWithNestedDerivings)cppRecordWithNestedDerivings;
+- (id)initWithCppRecordWithNestedDerivings:(const ::djinni::cpp::RecordWithNestedDerivings &)recordWithNestedDerivings;
+- (::djinni::cpp::RecordWithNestedDerivings)cppRecordWithNestedDerivings;
 
 @end

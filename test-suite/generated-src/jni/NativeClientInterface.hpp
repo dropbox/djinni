@@ -6,33 +6,33 @@
 #include "client_interface.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-class NativeClientInterface final : djinni::JniInterface<ClientInterface, NativeClientInterface> {
+class NativeClientInterface final : djinni::JniInterface<::djinni::cpp::ClientInterface, NativeClientInterface> {
 public:
-    using CppType = std::shared_ptr<ClientInterface>;
+    using CppType = std::shared_ptr<::djinni::cpp::ClientInterface>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<ClientInterface> c) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._fromJava(jniEnv, j); }
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::djinni::cpp::ClientInterface> c) { return djinni::JniClass<::djinni::jni::NativeClientInterface>::get()._toJava(jniEnv, c); }
+    static std::shared_ptr<::djinni::cpp::ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni::jni::NativeClientInterface>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
     const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
 
-    class JavaProxy final : djinni::JavaProxyCacheEntry, public ClientInterface {
+    class JavaProxy final : djinni::JavaProxyCacheEntry, public ::djinni::cpp::ClientInterface {
     public:
         JavaProxy(jobject obj);
-        virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override;
+        virtual ::djinni::cpp::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override;
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterface<ClientInterface, ::djinni_generated::NativeClientInterface>;
+        friend class djinni::JniInterface<::djinni::cpp::ClientInterface, ::djinni::jni::NativeClientInterface>;
         friend class djinni::JavaProxyCache<JavaProxy>;
     };
 
 private:
     NativeClientInterface();
-    friend class djinni::JniClass<::djinni_generated::NativeClientInterface>;
+    friend class djinni::JniClass<::djinni::jni::NativeClientInterface>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

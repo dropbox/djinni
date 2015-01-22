@@ -319,7 +319,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"virtual ~$objcExtSelf () override;")
             w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id objcRef);")
             for (m <- i.methods) {
-              val ret = m.ret.fold("void")(toCppType(_))
+              val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
               val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
@@ -348,7 +348,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           }
           for (m <- i.methods) {
             w.wl
-            val ret = m.ret.fold("void")(toCppType(_))
+            val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
             val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
             w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
               w.w("@autoreleasepool").braced {

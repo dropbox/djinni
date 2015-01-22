@@ -3,6 +3,8 @@
 #import "DBTestHelpersCppProxy.h"
 #import <XCTest/XCTest.h>
 
+using djinni::cpp::ClientInterface;
+
 @interface DBClientInterfaceTests : XCTestCase
 
 @end

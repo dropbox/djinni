@@ -5,21 +5,21 @@
 #include "HI64.hpp"
 #include "HList.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-jobject NativePrimitiveList::toJava(JNIEnv* jniEnv, PrimitiveList c) {
+jobject NativePrimitiveList::toJava(JNIEnv* jniEnv, ::djinni::cpp::PrimitiveList c) {
     djinni::LocalRef<jobject> j_list(jniEnv, ::djinni::HList<::djinni::HI64>::toJava(jniEnv, c.list));
-    const auto & data = djinni::JniClass<::djinni_generated::NativePrimitiveList>::get();
+    const auto & data = djinni::JniClass<::djinni::jni::NativePrimitiveList>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_list.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
-PrimitiveList NativePrimitiveList::fromJava(JNIEnv* jniEnv, jobject j) {
+::djinni::cpp::PrimitiveList NativePrimitiveList::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const auto & data = djinni::JniClass<::djinni_generated::NativePrimitiveList>::get();
-    return PrimitiveList(
+    const auto & data = djinni::JniClass<::djinni::jni::NativePrimitiveList>::get();
+    return ::djinni::cpp::PrimitiveList(
         ::djinni::HList<::djinni::HI64>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mList)).get()));
 }
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

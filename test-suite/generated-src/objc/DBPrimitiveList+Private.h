@@ -7,7 +7,7 @@
 
 @interface DBPrimitiveList ()
 
-- (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList;
-- (PrimitiveList)cppPrimitiveList;
+- (id)initWithCppPrimitiveList:(const ::djinni::cpp::PrimitiveList &)primitiveList;
+- (::djinni::cpp::PrimitiveList)cppPrimitiveList;
 
 @end

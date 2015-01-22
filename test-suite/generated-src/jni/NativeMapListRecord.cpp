@@ -7,21 +7,21 @@
 #include "HMap.hpp"
 #include "HString.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-jobject NativeMapListRecord::toJava(JNIEnv* jniEnv, MapListRecord c) {
+jobject NativeMapListRecord::toJava(JNIEnv* jniEnv, ::djinni::cpp::MapListRecord c) {
     djinni::LocalRef<jobject> j_map_list(jniEnv, ::djinni::HList<::djinni::HMap<::djinni::HString, ::djinni::HI64>>::toJava(jniEnv, c.map_list));
-    const auto & data = djinni::JniClass<::djinni_generated::NativeMapListRecord>::get();
+    const auto & data = djinni::JniClass<::djinni::jni::NativeMapListRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_map_list.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
-MapListRecord NativeMapListRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+::djinni::cpp::MapListRecord NativeMapListRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
-    const auto & data = djinni::JniClass<::djinni_generated::NativeMapListRecord>::get();
-    return MapListRecord(
+    const auto & data = djinni::JniClass<::djinni::jni::NativeMapListRecord>::get();
+    return ::djinni::cpp::MapListRecord(
         ::djinni::HList<::djinni::HMap<::djinni::HString, ::djinni::HI64>>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mMapList)).get()));
 }
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

@@ -5,17 +5,17 @@
 #include "HI32.hpp"
 #include "NativeCppException.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
-NativeCppException::NativeCppException() : djinni::JniInterface<CppException, NativeCppException>("com/dropbox/djinni/test/CppException$CppProxy") {}
+NativeCppException::NativeCppException() : djinni::JniInterface<::djinni::cpp::CppException, NativeCppException>("com/dropbox/djinni/test/CppException$CppProxy") {}
 
-using namespace ::djinni_generated;
+using namespace ::djinni::jni;
 
 CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<CppException>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::djinni::cpp::CppException>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -23,7 +23,7 @@ CJNIEXPORT jint JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const std::shared_ptr<CppException> & ref = djinni::CppProxyHandle<CppException>::get(nativeRef);
+        const std::shared_ptr<::djinni::cpp::CppException> & ref = djinni::CppProxyHandle<::djinni::cpp::CppException>::get(nativeRef);
 
         int32_t cr = ref->throw_an_exception();
 
@@ -36,10 +36,10 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_CppException_get(JNIEnv*
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::shared_ptr<CppException> cr = CppException::get();
+        std::shared_ptr<::djinni::cpp::CppException> cr = ::djinni::cpp::CppException::get();
 
         return NativeCppException::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
 }
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

@@ -6,15 +6,15 @@
 #include "assorted_integers.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeAssortedIntegers final {
 public:
-    using CppType = AssortedIntegers;
+    using CppType = ::djinni::cpp::AssortedIntegers;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, AssortedIntegers);
-    static AssortedIntegers fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::AssortedIntegers);
+    static ::djinni::cpp::AssortedIntegers fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/AssortedIntegers") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(BSIJLjava/lang/Byte;Ljava/lang/Short;Ljava/lang/Integer;Ljava/lang/Long;)V") };
@@ -29,7 +29,7 @@ public:
 
 private:
     NativeAssortedIntegers() {}
-    friend class djinni::JniClass<::djinni_generated::NativeAssortedIntegers>;
+    friend class djinni::JniClass<::djinni::jni::NativeAssortedIntegers>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

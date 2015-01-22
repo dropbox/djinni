@@ -56,11 +56,13 @@ $base_dir/../src/run-assume-built \
     --ident-java-field mFooBar \
     \
     --cpp-out "$temp_out/cpp" \
+    --cpp-namespace "djinni::cpp" \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
     --cpp-optional-header "<experimental/optional>" \
     \
     --jni-out "$temp_out/jni" \
+    --jni-namespace "djinni::jni" \
     --ident-jni-class NativeFooBar \
     --ident-jni-file NativeFooBar \
     \

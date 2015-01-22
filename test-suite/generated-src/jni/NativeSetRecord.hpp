@@ -6,15 +6,15 @@
 #include "djinni_support.hpp"
 #include "set_record.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeSetRecord final {
 public:
-    using CppType = SetRecord;
+    using CppType = ::djinni::cpp::SetRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, SetRecord);
-    static SetRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::SetRecord);
+    static ::djinni::cpp::SetRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/SetRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashSet;)V") };
@@ -22,7 +22,7 @@ public:
 
 private:
     NativeSetRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeSetRecord>;
+    friend class djinni::JniClass<::djinni::jni::NativeSetRecord>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni

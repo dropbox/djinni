@@ -5,6 +5,8 @@
 
 #include <functional>
 
+namespace djinni { namespace cpp {
+
 enum class color : int {
     RED,
     ORANGE,
@@ -20,11 +22,13 @@ enum class color : int {
     VIOLET,
 };
 
+} }  // namespace djinni::cpp
+
 namespace std {
 
 template <>
-struct hash<color> {
-    size_t operator()(color type) const {
+struct hash<::djinni::cpp::color> {
+    size_t operator()(::djinni::cpp::color type) const {
         return std::hash<int>()(static_cast<int>(type));
     }
 };

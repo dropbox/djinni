@@ -19,13 +19,13 @@ namespace djinni_generated
         cache.remove(objcRef);
     }
 
-    std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id objcRef)
+    std::shared_ptr<::djinni::cpp::ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id objcRef)
     {
         djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy> & cache = djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance();
-        return static_cast<std::shared_ptr<ClientInterface>>(cache.get(objcRef));
+        return static_cast<std::shared_ptr<::djinni::cpp::ClientInterface>>(cache.get(objcRef));
     }
 
-    ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
+    ::djinni::cpp::ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
     {
         @autoreleasepool {
             int64_t cpp_record_id = record_id;
@@ -33,7 +33,7 @@ namespace djinni_generated
                     length:utf8string.length()
                     encoding:NSUTF8StringEncoding];
             DBClientReturnedRecord *objcRet = [objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
-            ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
+            ::djinni::cpp::ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
             return cppRet;
         }
     }

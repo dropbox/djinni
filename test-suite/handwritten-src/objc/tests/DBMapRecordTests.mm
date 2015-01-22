@@ -3,6 +3,8 @@
 #import <XCTest/XCTest.h>
 
 #include "map_record.hpp"
+using djinni::cpp::MapRecord;
+using djinni::cpp::MapListRecord;
 
 @interface DBMapRecordTests : XCTestCase
 

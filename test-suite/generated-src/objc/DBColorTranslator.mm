@@ -8,14 +8,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @implementation DBColorTranslator
 
-+ (DBColor)cppColorToObjcColor:(color)color
++ (DBColor)cppColorToObjcColor:(::djinni::cpp::color)color
 {
     return static_cast<DBColor>(color);
 }
 
-+ (color)objcColorToCppColor:(DBColor)color
++ (::djinni::cpp::color)objcColorToCppColor:(DBColor)color
 {
-    return static_cast<enum color>(color);
+    return static_cast<enum ::djinni::cpp::color>(color);
 }
 
 @end

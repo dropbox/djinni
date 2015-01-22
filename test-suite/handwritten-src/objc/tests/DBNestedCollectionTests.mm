@@ -2,6 +2,7 @@
 #import <XCTest/XCTest.h>
 
 #include "nested_collection.hpp"
+using djinni::cpp::NestedCollection;
 
 static NestedCollection cppNestedCollection { { {u8"String1", u8"String2"}, {u8"StringA", u8"StringB"} } };
 static DBNestedCollection *objcNestedCollection =

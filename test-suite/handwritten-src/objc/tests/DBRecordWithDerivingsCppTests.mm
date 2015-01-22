@@ -1,5 +1,7 @@
 #import "record_with_derivings.hpp"
 #import "record_with_nested_derivings.hpp"
+using djinni::cpp::RecordWithDerivings;
+using djinni::cpp::RecordWithNestedDerivings;
 
 #import <XCTest/XCTest.h>
 

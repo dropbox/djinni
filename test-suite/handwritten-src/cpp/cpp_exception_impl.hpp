@@ -9,7 +9,7 @@ class ExampleException: public std::exception {
 
 extern ExampleException EXAMPLE_EXCEPTION;
 
-class CppExceptionImpl : public CppException {
+class CppExceptionImpl : public djinni::cpp::CppException {
     public:
     CppExceptionImpl() {}
     virtual ~CppExceptionImpl() {}

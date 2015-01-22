@@ -7,7 +7,7 @@
 
 @interface DBColorTranslator : NSObject
 
-+ (DBColor)cppColorToObjcColor:(color)color;
-+ (color)objcColorToCppColor:(DBColor)color;
++ (DBColor)cppColorToObjcColor:(::djinni::cpp::color)color;
++ (::djinni::cpp::color)objcColorToCppColor:(DBColor)color;
 
 @end

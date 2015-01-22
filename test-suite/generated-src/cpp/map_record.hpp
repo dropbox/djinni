@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <utility>
 
+namespace djinni { namespace cpp {
+
 struct MapRecord final {
 
     std::unordered_map<std::string, int64_t> map;
@@ -18,3 +20,5 @@ struct MapRecord final {
                 map(std::move(map)) {
     }
 };
+
+} }  // namespace djinni::cpp

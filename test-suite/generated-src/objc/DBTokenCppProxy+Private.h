@@ -10,10 +10,10 @@
 
 @interface DBTokenCppProxy ()
 
-@property (nonatomic, readonly) std::shared_ptr<Token> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::djinni::cpp::Token> cppRef;
 
-+ (id)tokenWithCpp:(const std::shared_ptr<Token> &)cppRef;
++ (id)tokenWithCpp:(const std::shared_ptr<::djinni::cpp::Token> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<Token> &)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<::djinni::cpp::Token> &)cppRef;
 
 @end

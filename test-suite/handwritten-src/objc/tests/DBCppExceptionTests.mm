@@ -2,6 +2,7 @@
 #import <XCTest/XCTest.h>
 
 #include "cpp_exception_impl.hpp"
+using djinni::cpp::CppException;
 
 @interface DBCppExceptionTests : XCTestCase
 

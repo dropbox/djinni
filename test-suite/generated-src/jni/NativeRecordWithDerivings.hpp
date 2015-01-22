@@ -6,15 +6,15 @@
 #include "djinni_support.hpp"
 #include "record_with_derivings.hpp"
 
-namespace djinni_generated {
+namespace djinni { namespace jni {
 
 class NativeRecordWithDerivings final {
 public:
-    using CppType = RecordWithDerivings;
+    using CppType = ::djinni::cpp::RecordWithDerivings;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, RecordWithDerivings);
-    static RecordWithDerivings fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::djinni::cpp::RecordWithDerivings);
+    static ::djinni::cpp::RecordWithDerivings fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/RecordWithDerivings") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
@@ -23,7 +23,7 @@ public:
 
 private:
     NativeRecordWithDerivings() {}
-    friend class djinni::JniClass<::djinni_generated::NativeRecordWithDerivings>;
+    friend class djinni::JniClass<::djinni::jni::NativeRecordWithDerivings>;
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni::jni
