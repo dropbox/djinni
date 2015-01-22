@@ -534,6 +534,9 @@ struct CppProxyCacheState {
         // It's in the map. See if the WeakReference still points to an object.
         if (jobject javaObj = it->second.get(jniEnv)) {
             return javaObj;
+        } else {
+            // The WeakReference is expired, so prune it from the map eagerly.
+            st.m.erase(it);
         }
     }
 
