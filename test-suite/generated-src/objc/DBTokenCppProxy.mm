@@ -3,6 +3,7 @@
 
 #import "DBTokenCppProxy+Private.h"
 #import "DBToken.h"
+#import "DJIDate.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>

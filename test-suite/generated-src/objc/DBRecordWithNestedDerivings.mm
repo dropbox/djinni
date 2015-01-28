@@ -3,6 +3,7 @@
 
 #import "DBRecordWithNestedDerivings+Private.h"
 #import "DBRecordWithDerivings+Private.h"
+#import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 

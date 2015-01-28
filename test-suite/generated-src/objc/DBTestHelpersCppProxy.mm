@@ -12,6 +12,7 @@
 #import "DBSetRecord+Private.h"
 #import "DBTestHelpers.h"
 #import "DBTokenCppProxy+Private.h"
+#import "DJIDate.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>

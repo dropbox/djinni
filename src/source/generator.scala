@@ -281,6 +281,7 @@ abstract class Generator(spec: Spec)
     def base(m: Meta): String = m match {
       case p: MPrimitive => p.cName
       case MString => "std::string"
+      case MDate => "std::chrono::system_clock::time_point"
       case MBinary => "std::vector<uint8_t>"
       case MOptional => spec.cppOptionalTemplate
       case MList => "std::vector"
@@ -311,6 +312,7 @@ abstract class Generator(spec: Spec)
 
     def toType(expr: MExpr): String = expr.base match {
       case MPrimitive(_,_,_,_,_,_,_,_) => valueType
+      case MDate => valueType
       case d: MDef => d.defType match {
         case DEnum => valueType
         case _  => refType

@@ -4,6 +4,7 @@
 #import "DBCppExceptionCppProxy+Private.h"
 #import "DBCppException.h"
 #import "DBCppExceptionCppProxy+Private.h"
+#import "DJIDate.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>

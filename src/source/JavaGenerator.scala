@@ -47,6 +47,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             java.add("java.util.HashSet")
           case MMap =>
             java.add("java.util.HashMap")
+          case MDate =>
+            java.add("java.util.Date")
           case _ =>
         }
       case _ =>
@@ -348,6 +350,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           val base = o match {
             case p: MPrimitive => if (needRef) p.jBoxed else p.jName
             case MString => "String"
+            case MDate => "Date"
             case MBinary => "byte[]"
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MList => "ArrayList"

@@ -10,3 +10,4 @@
 @import "test.djinni"
 @import "inttypes.djinni"
 @import "constants.djinni"
+@import "date.djinni"

@@ -20,6 +20,7 @@
 		A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12C19BCB94300BFC38D /* DJIError.mm */; };
 		A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */; };
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
+		B05863941A7980CD00C2CFF5 /* DJIDate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B05863931A7980CD00C2CFF5 /* DJIDate.mm */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,8 @@
 		A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIWeakPtrWrapper.mm; sourceTree = "<group>"; };
 		A29DB12F19BCB94300BFC38D /* DJIWeakPtrWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIWeakPtrWrapper+Private.h"; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
+		B05863921A7980CD00C2CFF5 /* DJIDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDate.h; sourceTree = "<group>"; };
+		B05863931A7980CD00C2CFF5 /* DJIDate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIDate.mm; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,6 +170,8 @@
 		65834E3219AC5CDA0061AD3F /* objc-support-lib */ = {
 			isa = PBXGroup;
 			children = (
+				B05863921A7980CD00C2CFF5 /* DJIDate.h */,
+				B05863931A7980CD00C2CFF5 /* DJIDate.mm */,
 				A29DB12A19BCB94300BFC38D /* DJICppWrapperCache+Private.h */,
 				A29DB12B19BCB94300BFC38D /* DJIError.h */,
 				A29DB12C19BCB94300BFC38D /* DJIError.mm */,
@@ -271,6 +276,7 @@
 			files = (
 				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
 				A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */,
+				B05863941A7980CD00C2CFF5 /* DJIDate.mm in Sources */,
 				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */,
 				A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */,

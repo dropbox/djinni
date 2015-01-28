@@ -3,6 +3,7 @@
 
 #import "DBConstants+Private.h"
 #import "DBConstants+Private.h"
+#import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 

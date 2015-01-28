@@ -212,6 +212,7 @@ private def resolveRecord(scope: Scope, r: Record) {
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare collections in Ord deriving (Java limitation)").toException
       case MString =>
+      case MDate =>
       case MOptional =>
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare optional in Ord deriving").toException

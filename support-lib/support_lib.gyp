@@ -24,6 +24,7 @@
             "sources": [
               "objc/DJIWeakPtrWrapper.mm",
               "objc/DJIError.mm",
+              "objc/DJIDate.mm",
             ],
             "include_dirs": [
               "objc",
