@@ -68,7 +68,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("!#import " + q(headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("!#import " + q(enumTranslatorHeaderName(ident)))
@@ -184,7 +184,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#include <memory>")
     refs.privHeader.add("!#import " + q(headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
@@ -390,7 +390,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("!#import " + q(headerName(objcName)))
-    refs.privHeader.add("!#include " + q(spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("#include <utility>")
