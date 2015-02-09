@@ -18,6 +18,8 @@
 #include <cassert>
 #include <cstdlib>
 
+#include <iostream>
+
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
 
 namespace djinni {
@@ -43,8 +45,15 @@ JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    if (get_res != 0 || !env) {
+    if (get_res == JNI_EDETACHED) {
+        if (g_cachedJVM->AttachCurrentThread(&env, NULL) != 0) {
+            // :(
+            std::cout << "djinni::jniGetThreadEnv: Failed to attach to current thread" << std::endl;
+            std::abort();
+        }
+    } else if (get_res != 0 || !env) {
         // :(
+        std::cout << "djinni::jniGetThreadEnv: Failed to get thread environment" << std::endl;
         std::abort();
     }
 
