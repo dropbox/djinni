@@ -28,8 +28,8 @@ public:
         return jniUTF8FromString(jniEnv, j);
     }
 
-    static jstring toJava(JNIEnv* jniEnv, std::string c) {
-        return jniStringFromUTF8(jniEnv, c.c_str());
+    static jstring toJava(JNIEnv* jniEnv, const std::string & c) {
+        return jniStringFromUTF8(jniEnv, c);
     }
 };
 
