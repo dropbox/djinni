@@ -12,14 +12,16 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord
 {
     if (self = [super init]) {
+        _recordId = clientReturnedRecord.recordId;
         _content = [clientReturnedRecord.content copy];
     }
     return self;
 }
 
-- (id)initWithContent:(NSString *)content
+- (id)initWithRecordId:(int64_t)recordId content:(NSString *)content
 {
     if (self = [super init]) {
+        _recordId = recordId;
         _content = [content copy];
     }
     return self;
@@ -28,6 +30,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppClientReturnedRecord:(const ClientReturnedRecord &)clientReturnedRecord
 {
     if (self = [super init]) {
+        _recordId = clientReturnedRecord.record_id;
         _content = [[NSString alloc] initWithBytes:clientReturnedRecord.content.data()
                 length:clientReturnedRecord.content.length()
                 encoding:NSUTF8StringEncoding];
@@ -37,8 +40,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (ClientReturnedRecord)cppClientReturnedRecord
 {
+    int64_t recordId = _recordId;
     std::string content([_content UTF8String], [_content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     return ClientReturnedRecord(
+            std::move(recordId),
             std::move(content));
 }
 

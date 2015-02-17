@@ -6,8 +6,8 @@
 
 @interface DBNestedCollection : NSObject
 - (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection;
-- (id)initWithSetList:(NSMutableArray *)setList;
+- (id)initWithSetList:(NSArray *)setList;
 
-@property (nonatomic, readonly) NSMutableArray *setList;
+@property (nonatomic, readonly) NSArray *setList;
 
 @end

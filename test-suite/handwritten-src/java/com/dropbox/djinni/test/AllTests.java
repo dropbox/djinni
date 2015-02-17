@@ -16,6 +16,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(ClientInterfaceTest.class);
         mySuite.addTestSuite(EnumTest.class);
         mySuite.addTestSuite(IntegerTest.class);
+        mySuite.addTestSuite(TokenTest.class);
         return mySuite;
     }
 

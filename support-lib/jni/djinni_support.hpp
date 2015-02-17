@@ -282,50 +282,215 @@ public:
     }
 };
 
-template <class I>
-class JniInterfaceCppExt {
-public:
-    jobject _toJava(JNIEnv* jniEnv, const std::shared_ptr<I> & c) const {
-        if (c == nullptr) {
-            return 0;
-        }
-        std::unique_ptr<std::shared_ptr<I>> to_encapsulate(new std::shared_ptr<I>(c));
-        jlong shared_ptr_val = static_cast<jlong>(reinterpret_cast<uintptr_t>(to_encapsulate.get()));
-        jobject nativeProxy = jniEnv->NewObject(nativeProxyClass.get(), nativeProxyConstructor, shared_ptr_val);
-        jniExceptionCheck(jniEnv);
-        to_encapsulate.release();
-        return nativeProxy;
-    }
+/*
+ * Cache for CppProxy objects. This is the inverse of the JavaProxyCache mechanism above,
+ * ensuring that each time we pass an interface from Java to C++, we get the *same* CppProxy
+ * object on the Java side:
+ *
+ *      Java               |            C++
+ *                         |
+ *    ______________       |         ________________                  ___________
+ *   |              |      |        |                |                |           |
+ *   | Foo.CppProxy | ------------> | CppProxyHandle | =============> |    Foo    |
+ *   |______________|   (jlong)     |      <Foo>     |  (shared_ptr)  |___________|
+ *           ^             |        |________________|
+ *            \            |
+ *        _________        |                     __________________
+ *       |         |       |                    |                  |
+ *       | WeakRef | <------------------------- | jniCppProxyCache |
+ *       |_________|  (GlobalRef)               |__________________|
+ *                         |
+ *
+ * We don't use JNI WeakGlobalRef objects, because they last longer than is safe - a
+ * WeakGlobalRef can still be upgraded to a strong reference even during finalization, which
+ * leads to use-after-free. Java WeakRefs provide the right lifetime guarantee.
+ */
 
-    std::shared_ptr<I> _fromJava(JNIEnv* jniEnv, jobject j) const {
-        if (j == 0) {
-            return nullptr;
-        }
-        jlong packed_raw_shared_ptr = jniEnv->GetLongField(j, nativeProxyField);
-        jniExceptionCheck(jniEnv);
-        return *reinterpret_cast<const std::shared_ptr<I> *>(packed_raw_shared_ptr);
-    }
+/*
+ * Information needed to use a CppProxy class.
+ *
+ * In an ideal world, this object would be properly always-valid RAII, and we'd use an
+ * optional<CppProxyClassInfo> where needed. Unfortunately we don't want to depend on optional
+ * here, so this object has an invalid state and default constructor.
+ */
+struct CppProxyClassInfo {
+    const GlobalRef<jclass> clazz;
+    const jmethodID constructor;
+    const jfieldID idField;
 
-    JniInterfaceCppExt(const char* nativeProxyClassName) :
-        nativeProxyClass(jniFindClass(nativeProxyClassName)),
-        nativeProxyConstructor(jniGetMethodID(nativeProxyClass.get(), "<init>", "(J)V")),
-        nativeProxyField(jniGetFieldID(nativeProxyClass.get(), "nativeRef", "J"))
-    {}
+    CppProxyClassInfo(const char * className);
+    CppProxyClassInfo();
+    ~CppProxyClassInfo();
 
-    const GlobalRef<jclass> nativeProxyClass;
-    const jmethodID nativeProxyConstructor;
-    const jfieldID nativeProxyField;
+    // Validity check
+    explicit operator bool() const { return bool(clazz); }
 };
 
-template <class I, class Self>
-class JniInterfaceJavaExt {
+/*
+ * Proxy cache implementation. These functions are used by CppProxyHandle::~CppProxyHandle()
+ * and JniInterface::_toJava, respectively. They're declared in a separate class to avoid
+ * having to templatize them. This way, all the map lookup code is only generated once,
+ * rather than once for each T, saving substantially on binary size. (We do something simiar
+ * in the other direction too; see javaProxyCacheLookup() above.)
+ *
+ * The data used by this class is declared only in djinni_support.cpp, since it's global and
+ * opaque to all other code.
+ */
+class JniCppProxyCache {
+private:
+    template <class T> friend class CppProxyHandle;
+    static void erase(void * key);
+
+    template <class I, class Self> friend class JniInterface;
+    static jobject get(const std::shared_ptr<void> & cppObj,
+                       JNIEnv * jniEnv,
+                       const CppProxyClassInfo & proxyClass,
+                       jobject (*factory)(const std::shared_ptr<void> &,
+                                          JNIEnv *,
+                                          const CppProxyClassInfo &));
+
+    /* This "class" is basically a namespace, to make clear that get() and erase() should only
+     * be used by the helper infrastructure below. */
+    JniCppProxyCache() = delete;
+};
+
+template <class T>
+class CppProxyHandle {
 public:
-    std::shared_ptr<I> _fromJava(JNIEnv* /*jniEnv*/, jobject j) const {
-        if (j == 0) {
+    CppProxyHandle(std::shared_ptr<T> obj) : m_obj(move(obj)) {}
+    ~CppProxyHandle() {
+        JniCppProxyCache::erase(m_obj.get());
+    }
+
+    static const std::shared_ptr<T> & get(jlong handle) {
+        return reinterpret_cast<const CppProxyHandle<T> *>(handle)->m_obj;
+    }
+
+private:
+    const std::shared_ptr<T> m_obj;
+};
+
+/*
+ * Base class for Java <-> C++ interface adapters.
+ *
+ * I is the C++ base class (interface) being adapted; Self is the interface adapter class
+ * derived from JniInterface (using CRTP). For example:
+ *
+ *     class NativeToken final : djinni::JniInterface<Token, NativeToken> { ... }
+ */
+template <class I, class Self>
+class JniInterface {
+public:
+    /*
+     * Given a C++ object, find or create a Java version. The cases here are:
+     * 1. Null
+     * 2. The provided C++ object is actually a JavaProxy (C++-side proxy for Java impl)
+     * 3. The provided C++ object has an existing CppProxy (Java-side proxy for C++ impl)
+     * 4. The provided C++ object needs a new CppProxy allocated
+     */
+    jobject _toJava(JNIEnv* jniEnv, const std::shared_ptr<I> & c) const {
+        // Case 1 - null
+        if (!c) {
             return nullptr;
         }
-        return JavaProxyCache<typename Self::JavaProxy>::get(j);
+
+        // Case 2 - already a JavaProxy. Only possible if Self::JavaProxy exists.
+        if (jobject impl = _unwrapJavaProxy<Self>(&c)) {
+            return jniEnv->NewLocalRef(impl);
+        }
+
+        // Cases 3 and 4.
+        assert(m_cppProxyClass);
+        return JniCppProxyCache::get(c, jniEnv, m_cppProxyClass, &newCppProxy);
     }
+
+    /*
+     * Given a Java object, find or create a C++ version. The cases here are:
+     * 1. Null
+     * 2. The provided Java object is actually a CppProxy (Java-side proxy for a C++ impl)
+     * 3. The provided Java object has an existing JavaProxy (C++-side proxy for a Java impl)
+     * 4. The provided Java object needs a new JavaProxy allocated
+     */
+    std::shared_ptr<I> _fromJava(JNIEnv* jniEnv, jobject j) const {
+        // Case 1 - null
+        if (!j) {
+            return nullptr;
+        }
+
+        // Case 2 - already a Java proxy; we just need to pull the C++ impl out. (This case
+        // is only possible if we were constructed with a cppProxyClassName parameter.)
+        if (m_cppProxyClass
+                && jniEnv->IsSameObject(jniEnv->GetObjectClass(j), m_cppProxyClass.clazz.get())) {
+            jlong handle = jniEnv->GetLongField(j, m_cppProxyClass.idField);
+            jniExceptionCheck(jniEnv);
+            return CppProxyHandle<I>::get(handle);
+        }
+
+        // Cases 3 and 4 - see _getJavaProxy helper below. JavaProxyCache is responsible for
+        // distinguishing between the two cases. Only possible if Self::JavaProxy exists.
+        return _getJavaProxy<Self>(j);
+    }
+
+    // Constructor for interfaces for which a Java-side CppProxy class exists
+    JniInterface(const char * cppProxyClassName) : m_cppProxyClass(cppProxyClassName) {}
+
+    // Constructor for interfaces without a Java proxy class
+    JniInterface() : m_cppProxyClass{} {}
+
+private:
+    /*
+     * Helpers for _toJava above. The possibility that an object is already a C++-side proxy
+     * only exists if the code generator emitted one (if Self::JavaProxy exists).
+     */
+    template <typename S, typename = typename S::JavaProxy>
+    jobject _unwrapJavaProxy(const std::shared_ptr<I> * c) const {
+        if (auto proxy = dynamic_cast<typename S::JavaProxy *>(c->get())) {
+            return proxy->getGlobalRef();
+        } else {
+            return nullptr;
+        }
+    }
+
+    template <typename S>
+    jobject _unwrapJavaProxy(...) const {
+        return nullptr;
+    }
+
+    /*
+     * Helper for _toJava above: given a C++ object, allocate a CppProxy on the Java side for
+     * it. This is actually called by jniCppProxyCacheGet, which holds a lock on the global
+     * C++-to-Java proxy map object.
+     */
+    static jobject newCppProxy(const std::shared_ptr<void> & cppObj,
+                               JNIEnv * jniEnv,
+                               const CppProxyClassInfo & proxyClass) {
+        std::unique_ptr<CppProxyHandle<I>> to_encapsulate(
+                new CppProxyHandle<I>(std::static_pointer_cast<I>(cppObj)));
+        jlong handle = static_cast<jlong>(reinterpret_cast<uintptr_t>(to_encapsulate.get()));
+        jobject cppProxy = jniEnv->NewObject(proxyClass.clazz.get(),
+                                             proxyClass.constructor,
+                                             handle);
+        jniExceptionCheck(jniEnv);
+        to_encapsulate.release();
+        return cppProxy;
+    }
+
+    /*
+     * Helpers for _fromJava above. We can only produce a C++-side proxy if the code generator
+     * emitted one (if Self::JavaProxy exists).
+     */
+    template <typename S, typename = typename S::JavaProxy>
+    std::shared_ptr<I> _getJavaProxy(jobject j) const {
+        return JavaProxyCache<typename S::JavaProxy>::get(j);
+    }
+
+    template <typename S>
+    std::shared_ptr<I> _getJavaProxy(...) const {
+        assert(false);
+        return nullptr;
+    }
+
+    const CppProxyClassInfo m_cppProxyClass;
 };
 
 /*

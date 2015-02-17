@@ -3,6 +3,7 @@
 
 #import "DBClientInterface.h"
 #import "DBColor.h"
+#import "DBToken.h"
 #import <Foundation/Foundation.h>
 @class DBAssortedIntegers;
 @class DBMapListRecord;
@@ -25,13 +26,13 @@
 
 + (BOOL)checkNestedCollection:(DBNestedCollection *)nc;
 
-+ (NSMutableDictionary *)getMap;
++ (NSDictionary *)getMap;
 
-+ (BOOL)checkMap:(NSMutableDictionary *)m;
++ (BOOL)checkMap:(NSDictionary *)m;
 
-+ (NSMutableDictionary *)getEmptyMap;
++ (NSDictionary *)getEmptyMap;
 
-+ (BOOL)checkEmptyMap:(NSMutableDictionary *)m;
++ (BOOL)checkEmptyMap:(NSDictionary *)m;
 
 + (DBMapListRecord *)getMapListRecord;
 
@@ -41,7 +42,15 @@
 
 + (void)checkClientInterfaceNonascii:(id <DBClientInterface>)i;
 
-+ (void)checkEnumMap:(NSMutableDictionary *)m;
++ (void)checkEnumMap:(NSDictionary *)m;
+
++ (id <DBToken>)tokenId:(id <DBToken>)t;
+
++ (id <DBToken>)createCppToken;
+
++ (void)checkCppToken:(id <DBToken>)t;
+
++ (int64_t)cppTokenId:(id <DBToken>)t;
 
 + (NSNumber *)returnNone;
 

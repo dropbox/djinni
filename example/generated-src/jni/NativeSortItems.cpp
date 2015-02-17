@@ -4,30 +4,32 @@
 #include "NativeSortItems.hpp"  // my header
 #include "NativeItemList.hpp"
 #include "NativeSortItems.hpp"
+#include "NativeSortOrder.hpp"
 #include "NativeTextboxListener.hpp"
 
 namespace djinni_generated {
 
-NativeSortItems::NativeSortItems() : djinni::JniInterfaceCppExt<::textsort::SortItems>("com/dropbox/textsort/SortItems$NativeProxy") {}
+NativeSortItems::NativeSortItems() : djinni::JniInterface<::textsort::SortItems, NativeSortItems>("com/dropbox/textsort/SortItems$CppProxy") {}
 
 using namespace ::djinni_generated;
 
-CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024NativeProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<std::shared_ptr<::textsort::SortItems>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::textsort::SortItems>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024NativeProxy_native_1sort(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_items)
+CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_native_1sort(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_order, jobject j_items)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const std::shared_ptr<::textsort::SortItems> & ref = *reinterpret_cast<const std::shared_ptr<::textsort::SortItems>*>(nativeRef);
+        const std::shared_ptr<::textsort::SortItems> & ref = djinni::CppProxyHandle<::textsort::SortItems>::get(nativeRef);
+        ::textsort::sort_order c_order = NativeSortOrder::fromJava(jniEnv, j_order);
         ::textsort::ItemList c_items = NativeItemList::fromJava(jniEnv, j_items);
 
-        ref->sort(c_items);
+        ref->sort(c_order, c_items);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

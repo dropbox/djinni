@@ -165,11 +165,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          w.wl(s"public static final class NativeProxy$typeParamList extends $javaClass$typeParamList").braced {
+          w.wl(s"public static final class CppProxy$typeParamList extends $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl
-            w.wl(s"private NativeProxy(long nativeRef)").braced {
+            w.wl(s"private CppProxy(long nativeRef)").braced {
               w.wl("if (nativeRef == 0) throw new RuntimeException(\"nativeRef is zero\");")
               w.wl(s"this.nativeRef = nativeRef;")
             }
@@ -183,7 +183,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in NativeProxy
+            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
             val ret = m.ret.fold("void")(toJavaType(_))
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => toJavaType(p.ty)+" "+idJava.local(p.ident)).mkString(", ")

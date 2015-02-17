@@ -51,19 +51,19 @@ JNIEnv * jniGetThreadEnv() {
     return env;
 }
 
-void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
-    if (!globalRef || !g_cachedJVM) {
-        return;
+static JNIEnv * getOptThreadEnv() {
+    if (!g_cachedJVM) {
+        return nullptr;
     }
 
-    // Special case: ignore GlobalRef deletions that happen after this thread has been
-    // detached. (This can happen during process shutdown, so there's no need to release the
-    // ref anyway.)
+    // Special case: this allows us to ignore GlobalRef deletions that happen after this
+    // thread has been detached. (This is known to happen during process shutdown, when
+    // there's no need to release the ref anyway.)
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
 
     if (get_res == JNI_EDETACHED) {
-        return;
+        return nullptr;
     }
 
     // Still bail on any other error.
@@ -72,11 +72,21 @@ void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
         std::abort();
     }
 
-    env->DeleteGlobalRef(globalRef);
+    return env;
+}
+
+void GlobalRefDeleter::operator() (jobject globalRef) noexcept {
+    if (globalRef) {
+        if (JNIEnv * env = getOptThreadEnv()) {
+            env->DeleteGlobalRef(globalRef);
+        }
+    }
 }
 
 void LocalRefDeleter::operator() (jobject localRef) noexcept {
-    jniGetThreadEnv()->DeleteLocalRef(localRef);
+    if (localRef) {
+        jniGetThreadEnv()->DeleteLocalRef(localRef);
+    }
 }
 
 void jniExceptionCheck(JNIEnv * env) {
@@ -440,6 +450,101 @@ std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_pt
     std::pair<std::shared_ptr<void>, jobject> ret = factory(obj);
     st.m[ret.second] = ret.first;
     return ret.first;
+}
+
+CppProxyClassInfo::CppProxyClassInfo(const char * className)
+    : clazz(jniFindClass(className)),
+      constructor(jniGetMethodID(clazz.get(), "<init>", "(J)V")),
+      idField(jniGetFieldID(clazz.get(), "nativeRef", "J")) {
+}
+
+CppProxyClassInfo::CppProxyClassInfo() : constructor{}, idField{} {
+}
+
+CppProxyClassInfo::~CppProxyClassInfo() {
+}
+
+/*
+ * Wrapper around Java WeakReference objects. (We can't use JNI NewWeakGlobalRef() because
+ * it doesn't have the right semantics - see comment in djinni_support.hpp.)
+ */
+class JavaWeakRef {
+private:
+    struct JniInfo {
+    public:
+        const GlobalRef<jclass> clazz { jniFindClass("java/lang/ref/WeakReference") };
+        const jmethodID constructor { jniGetMethodID(clazz.get(), "<init>", "(Ljava/lang/Object;)V") };
+        const jmethodID method_get { jniGetMethodID(clazz.get(), "get", "()Ljava/lang/Object;") };
+    };
+
+    // Helper used by constructor
+    static jobject create(JNIEnv * jniEnv, jobject obj) {
+        const JniInfo & weakRefClass = JniClass<JniInfo>::get();
+        jobject weakRef = jniEnv->NewObject(weakRefClass.clazz.get(), weakRefClass.constructor, obj);
+        // DJINNI_ASSERT performs an exception check before anything else, so we don't need
+        // a separate jniExceptionCheck call.
+        DJINNI_ASSERT(weakRef, jniEnv);
+        return weakRef;
+    }
+
+public:
+    // Constructor
+    JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(jniEnv, create(jniEnv, obj)) {}
+
+    // Get the object pointed to if it's still strongly reachable or, return null if not.
+    // (Analogous to weak_ptr::lock.) Returns a local reference.
+    jobject get(JNIEnv * jniEnv) {
+        const JniInfo & weakRefClass = JniClass<JniInfo>::get();
+        jobject javaObj = jniEnv->CallObjectMethod(m_weakRef.get(), weakRefClass.method_get);
+        jniExceptionCheck(jniEnv);
+        return javaObj;
+    }
+
+private:
+    GlobalRef<jobject> m_weakRef;
+};
+
+struct CppProxyCacheState {
+    std::mutex mtx;
+    std::unordered_map<void *, JavaWeakRef> m;
+
+    static CppProxyCacheState & get() {
+        static CppProxyCacheState st;
+        return st;
+    }
+};
+
+/*static*/ void JniCppProxyCache::erase(void * key) {
+    CppProxyCacheState & st = CppProxyCacheState::get();
+    const std::lock_guard<std::mutex> lock(st.mtx);
+    st.m.erase(key);
+}
+
+/*static*/ jobject JniCppProxyCache::get(const std::shared_ptr<void> & cppObj,
+                                         JNIEnv * jniEnv,
+                                         const CppProxyClassInfo & proxyClass,
+                                         jobject (*factory)(const std::shared_ptr<void> &,
+                                                            JNIEnv *,
+                                                            const CppProxyClassInfo &)) {
+    CppProxyCacheState & st = CppProxyCacheState::get();
+    const std::lock_guard<std::mutex> lock(st.mtx);
+
+    auto it = st.m.find(cppObj.get());
+    if (it != st.m.end()) {
+        // It's in the map. See if the WeakReference still points to an object.
+        if (jobject javaObj = it->second.get(jniEnv)) {
+            return javaObj;
+        } else {
+            // The WeakReference is expired, so prune it from the map eagerly.
+            st.m.erase(it);
+        }
+    }
+
+    jobject wrapper = factory(cppObj, jniEnv, proxyClass);
+
+    /* Make a Java WeakRef object */
+    st.m.emplace(cppObj.get(), JavaWeakRef(jniEnv, wrapper));
+    return wrapper;
 }
 
 } // namespace djinni

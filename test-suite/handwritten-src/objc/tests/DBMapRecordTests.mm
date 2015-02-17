@@ -54,7 +54,7 @@
 {
     MapListRecord cppMapListRecord{ { [self getCppMap] } };
     DBMapListRecord *objcMapListRecord = [[DBMapListRecord alloc] initWithCppMapListRecord:cppMapListRecord];
-    NSMutableArray *objcMapList = objcMapListRecord.mapList;
+    NSArray *objcMapList = objcMapListRecord.mapList;
     XCTAssertEqual([objcMapList count], 1, @"List with 1 map expected, actual no: %lu", (unsigned long)[objcMapList count]);
     [self checkObjcMap:[objcMapList objectAtIndex:0]];
 }
@@ -77,7 +77,7 @@
     XCTAssertEqual(cppMap.at("String3"), 3, @"\"String3 -> 3\" expected");
 }
 
-- (void)checkObjcMap:(NSMutableDictionary *)objcMap
+- (void)checkObjcMap:(NSDictionary *)objcMap
 {
     XCTAssertEqual([objcMap count], 3, @"Count 3 expected, actual: %lu", (unsigned long)[objcMap count]);
     XCTAssertEqual([objcMap objectForKey:@"String1"], [NSNumber numberWithLongLong:1], @"\"String1 -> 1\" expected");

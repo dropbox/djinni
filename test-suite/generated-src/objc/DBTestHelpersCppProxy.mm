@@ -11,6 +11,7 @@
 #import "DBPrimitiveList+Private.h"
 #import "DBSetRecord+Private.h"
 #import "DBTestHelpers.h"
+#import "DBTokenCppProxy+Private.h"
 #import "DJIError.h"
 #include <exception>
 #include <utility>
@@ -90,22 +91,23 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSMutableDictionary *)getMap {
++ (NSDictionary *)getMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_map();
-        NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRet setObject:objcValue_0 forKey:objcKey_0];
+            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
         }
+        NSDictionary *objcRet = objcRetTempDictionary;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkMap:(NSMutableDictionary *)m {
++ (BOOL)checkMap:(NSDictionary *)m {
     try {
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
@@ -119,22 +121,23 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSMutableDictionary *)getEmptyMap {
++ (NSDictionary *)getEmptyMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_empty_map();
-        NSMutableDictionary *objcRet = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRet setObject:objcValue_0 forKey:objcKey_0];
+            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
         }
+        NSDictionary *objcRet = objcRetTempDictionary;
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkEmptyMap:(NSMutableDictionary *)m {
++ (BOOL)checkEmptyMap:(NSDictionary *)m {
     try {
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
@@ -179,7 +182,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkEnumMap:(NSMutableDictionary *)m {
++ (void)checkEnumMap:(NSDictionary *)m {
     try {
         std::unordered_map<color, std::string> cppM;
         for (id objcKey_0 in m) {
@@ -188,6 +191,39 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
         TestHelpers::check_enum_map(std::move(cppM));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (id <DBToken>)tokenId:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        std::shared_ptr<Token> cppRet = TestHelpers::token_id(std::move(cppT));
+        id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
+        return objcRet;
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (id <DBToken>)createCppToken {
+    try {
+        std::shared_ptr<Token> cppRet = TestHelpers::create_cpp_token();
+        id <DBToken> objcRet = [DBTokenCppProxy tokenWithCpp:cppRet];
+        return objcRet;
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (void)checkCppToken:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        TestHelpers::check_cpp_token(std::move(cppT));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (int64_t)cppTokenId:(id <DBToken>)t {
+    try {
+        std::shared_ptr<Token> cppT = [(DBTokenCppProxy *)t cppRef];
+        int64_t cppRet = TestHelpers::cpp_token_id(std::move(cppT));
+        int64_t objcRet = cppRet;
+        return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

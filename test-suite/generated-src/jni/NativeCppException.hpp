@@ -8,7 +8,7 @@
 
 namespace djinni_generated {
 
-class NativeCppException final : djinni::JniInterfaceCppExt<CppException> {
+class NativeCppException final : djinni::JniInterface<CppException, NativeCppException> {
 public:
     using CppType = std::shared_ptr<CppException>;
     using JniType = jobject;
