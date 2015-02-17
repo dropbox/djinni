@@ -8,11 +8,12 @@
 
 namespace djinni_generated {
 
-class NativeTextboxListener final : djinni::JniInterfaceJavaExt<::textsort::TextboxListener, NativeTextboxListener> {
+class NativeTextboxListener final : djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener> {
 public:
     using CppType = std::shared_ptr<::textsort::TextboxListener>;
     using JniType = jobject;
 
+    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::textsort::TextboxListener> c) { return djinni::JniClass<::djinni_generated::NativeTextboxListener>::get()._toJava(jniEnv, c); }
     static std::shared_ptr<::textsort::TextboxListener> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeTextboxListener>::get()._fromJava(jniEnv, j); }
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };
@@ -25,7 +26,7 @@ public:
 
     private:
         using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterfaceJavaExt<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
+        friend class djinni::JniInterface<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
         friend class djinni::JavaProxyCache<JavaProxy>;
     };
 

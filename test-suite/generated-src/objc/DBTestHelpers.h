@@ -8,6 +8,7 @@
 @class DBNestedCollection;
 @class DBPrimitiveList;
 @class DBSetRecord;
+@class DBToken;
 @protocol DBClientInterface;
 
 
@@ -25,13 +26,13 @@
 
 + (BOOL)checkNestedCollection:(DBNestedCollection *)nc;
 
-+ (NSMutableDictionary *)getMap;
++ (NSDictionary *)getMap;
 
-+ (BOOL)checkMap:(NSMutableDictionary *)m;
++ (BOOL)checkMap:(NSDictionary *)m;
 
-+ (NSMutableDictionary *)getEmptyMap;
++ (NSDictionary *)getEmptyMap;
 
-+ (BOOL)checkEmptyMap:(NSMutableDictionary *)m;
++ (BOOL)checkEmptyMap:(NSDictionary *)m;
 
 + (DBMapListRecord *)getMapListRecord;
 
@@ -41,7 +42,15 @@
 
 + (void)checkClientInterfaceNonascii:(id<DBClientInterface>)i;
 
-+ (void)checkEnumMap:(NSMutableDictionary *)m;
++ (void)checkEnumMap:(NSDictionary *)m;
+
++ (DBToken*)tokenId:(DBToken*)t;
+
++ (DBToken*)createCppToken;
+
++ (void)checkCppToken:(DBToken*)t;
+
++ (int64_t)cppTokenId:(DBToken*)t;
 
 + (NSNumber *)returnNone;
 

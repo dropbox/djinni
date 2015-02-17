@@ -12,19 +12,20 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithMapRecord:(DBMapRecord *)mapRecord
 {
     if (self = [super init]) {
-        _map = [NSMutableDictionary dictionaryWithCapacity:[mapRecord.map count]];
+        NSMutableDictionary *_mapTempDictionary = [NSMutableDictionary dictionaryWithCapacity:[mapRecord.map count]];
         for (id key_0 in mapRecord.map) {
             id copiedKey_0, copiedValue_0;
             copiedKey_0 = [key_0 copy];
             id value_0 = [mapRecord.map objectForKey:key_0];
             copiedValue_0 = value_0;
-            [_map setObject:copiedValue_0 forKey:copiedKey_0];
+            [_mapTempDictionary setObject:copiedValue_0 forKey:copiedKey_0];
         }
+        _map = _mapTempDictionary;
     }
     return self;
 }
 
-- (id)initWithMap:(NSMutableDictionary *)map
+- (id)initWithMap:(NSDictionary *)map
 {
     if (self = [super init]) {
         _map = map;
@@ -35,14 +36,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppMapRecord:(const MapRecord &)mapRecord
 {
     if (self = [super init]) {
-        _map = [NSMutableDictionary dictionaryWithCapacity:mapRecord.map.size()];
+        NSMutableDictionary *_mapTempDictionary = [NSMutableDictionary dictionaryWithCapacity:mapRecord.map.size()];
         for (const auto & cppPair_0 : mapRecord.map) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [_map setObject:objcValue_0 forKey:objcKey_0];
+            [_mapTempDictionary setObject:objcValue_0 forKey:objcKey_0];
         }
+        _map = _mapTempDictionary;
     }
     return self;
 }

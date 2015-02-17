@@ -12,17 +12,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList
 {
     if (self = [super init]) {
-        _list = [NSMutableArray arrayWithCapacity:[primitiveList.list count]];
+        NSMutableArray *_listTempArray = [NSMutableArray arrayWithCapacity:[primitiveList.list count]];
         for (NSNumber *currentValue_0 in primitiveList.list) {
             id copiedValue_0;
             copiedValue_0 = currentValue_0;
-            [_list addObject:copiedValue_0];
+            [_listTempArray addObject:copiedValue_0];
         }
+        _list = _listTempArray;
     }
     return self;
 }
 
-- (id)initWithList:(NSMutableArray *)list
+- (id)initWithList:(NSArray *)list
 {
     if (self = [super init]) {
         _list = list;
@@ -33,11 +34,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList
 {
     if (self = [super init]) {
-        _list = [NSMutableArray arrayWithCapacity:primitiveList.list.size()];
+        NSMutableArray *_listTempArray = [NSMutableArray arrayWithCapacity:primitiveList.list.size()];
         for (const auto & cppValue_0 : primitiveList.list) {
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppValue_0];
-            [_list addObject:objcValue_0];
+            [_listTempArray addObject:objcValue_0];
         }
+        _list = _listTempArray;
     }
     return self;
 }

@@ -6,6 +6,8 @@
 #import "DJIError.h"
 #import "TXSItemList+Private.h"
 #import "TXSSortItems+Private.h"
+#import "TXSSortOrder.h"
+#import "TXSSortOrderTranslator+Private.h"
 #import "TXSTextboxListenerObjcProxy+Private.h"
 #include <exception>
 #include <utility>
@@ -34,10 +36,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return cache.get(cppRef, [] (const std::shared_ptr<::textsort::SortItems> & p) { return [[TXSSortItems alloc] initWithCpp:p]; });
 }
 
-- (void)sort:(TXSItemList *)items {
+- (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
     try {
+        ::textsort::sort_order cppOrder = [TXSSortOrderTranslator objcSortOrderToCppSortOrder:order];
         ::textsort::ItemList cppItems = std::move([items cppItemList]);
-        _cppRef->sort(std::move(cppItems));
+        _cppRef->sort(std::move(cppOrder), std::move(cppItems));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

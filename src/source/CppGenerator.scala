@@ -314,7 +314,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           writeDoc(w, m.doc)
           val ret = m.ret.fold("void")(toCppType(_))
-          val params = m.params.map(p => "const " + toCppType(p.ty) + " & " + idCpp.local(p.ident))
+          val params = m.params.map(toCppParamType)
           if (m.static) {
             w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {

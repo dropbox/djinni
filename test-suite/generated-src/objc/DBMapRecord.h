@@ -6,8 +6,8 @@
 
 @interface DBMapRecord : NSObject
 - (id)initWithMapRecord:(DBMapRecord *)mapRecord;
-- (id)initWithMap:(NSMutableDictionary *)map;
+- (id)initWithMap:(NSDictionary *)map;
 
-@property (nonatomic, readonly) NSMutableDictionary *map;
+@property (nonatomic, readonly) NSDictionary *map;
 
 @end

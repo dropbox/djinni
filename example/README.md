@@ -56,3 +56,27 @@ Making Changes to Djinni file
 -----------------------------
 The Djinni file used in this example is `example.djinni`. After modifying this file, you can run
 either `make android` or `make ios` to generate the source code and new project files.
+
+
+Troubleshooting
+---------------
+
+### Android build fails &mdash; NDK not configured
+
+If you're getting this error:
+
+> NDK is not configured. Make sure there is a local.properties file with an ndk.dir entry in the directory
+
+then gradle can not find your NDK installation. First make sure that you've
+installed the NDK. On Mac OS X, you can install easily via
+[homebrew](http://brew.sh/): `brew install android-ndk`
+
+After that, you have to tell gradle where the location of the NDK location.
+This can happen by either setting the `ANDROID_NDK_HOME` environment variable
+to the path where the NDK was installed, or by creating a `local.properties`
+file in the project directory.
+
+This file must contain the `ndk.dir=<path-to-ndk>` setting. A
+[`local.properties.sample`](local.properties.sample) file is included with this
+example. In order to use it, you have to rename it to `local.properties` and
+replace `<path-to-ndk>` with the real path to your NDK installation.

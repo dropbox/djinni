@@ -22,6 +22,7 @@
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
 		CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */; };
+		CFB119D41A935802004CBEFE /* TXSSortOrderTranslator.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB119D21A935802004CBEFE /* TXSSortOrderTranslator.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,10 @@
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
 		CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortItems.mm; sourceTree = "<group>"; };
 		CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItems+Private.h"; sourceTree = "<group>"; };
+		CFB119D01A9357F7004CBEFE /* sort_order.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sort_order.hpp; sourceTree = "<group>"; };
+		CFB119D11A935802004CBEFE /* TXSSortOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortOrder.h; sourceTree = "<group>"; };
+		CFB119D21A935802004CBEFE /* TXSSortOrderTranslator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortOrderTranslator.mm; sourceTree = "<group>"; };
+		CFB119D31A935802004CBEFE /* TXSSortOrderTranslator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortOrderTranslator+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +149,9 @@
 				65834E2019AC5C9B0061AD3F /* TXSSortItems.h */,
 				CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */,
 				CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */,
+				CFB119D11A935802004CBEFE /* TXSSortOrder.h */,
+				CFB119D21A935802004CBEFE /* TXSSortOrderTranslator.mm */,
+				CFB119D31A935802004CBEFE /* TXSSortOrderTranslator+Private.h */,
 				65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */,
 				65834E2619AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy.mm */,
 				65834E2519AC5C9B0061AD3F /* TXSTextboxListenerObjcProxy+Private.h */,
@@ -157,6 +165,7 @@
 			children = (
 				65834E2E19AC5CB90061AD3F /* item_list.hpp */,
 				65834E2F19AC5CB90061AD3F /* sort_items.hpp */,
+				CFB119D01A9357F7004CBEFE /* sort_order.hpp */,
 				65834E3019AC5CB90061AD3F /* textbox_listener.hpp */,
 			);
 			name = "generated-cpp";
@@ -274,6 +283,7 @@
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */,
 				A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.m in Sources */,
+				CFB119D41A935802004CBEFE /* TXSSortOrderTranslator.mm in Sources */,
 				CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

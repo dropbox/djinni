@@ -10,12 +10,12 @@ public abstract class CppException {
 
     public static native CppException get();
 
-    public static final class NativeProxy extends CppException
+    public static final class CppProxy extends CppException
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
 
-        private NativeProxy(long nativeRef)
+        private CppProxy(long nativeRef)
         {
             if (nativeRef == 0) throw new RuntimeException("nativeRef is zero");
             this.nativeRef = nativeRef;
