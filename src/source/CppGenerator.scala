@@ -26,6 +26,8 @@ import scala.collection.mutable
 
 class CppGenerator(spec: Spec) extends Generator(spec) {
 
+  val marshal = new CppMarshal(spec)
+
   val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
   def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
     writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
@@ -74,7 +76,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           case DInterface =>
             hpp.add("#include <memory>")
             if (d.name != name) {
-              hppFwds.add(s"class ${idCpp.ty(d.name)};")
+              hppFwds.add(s"class ${marshal.typename(d.name, d.body)};")
             }
         }
       case p: MParam =>
@@ -84,7 +86,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new CppRefs(ident.name)
-    val self = idCpp.enumType(ident)
+    val self = marshal.typename(ident, e)
 
     if (spec.cppEnumHashWorkaround) {
       refs.hpp.add("#include <functional>") // needed for std::hash
@@ -101,7 +103,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     w => {
       // std::hash specialization has to go *outside* of the wrapNs
       if (spec.cppEnumHashWorkaround) {
-        val fqSelf = withNs(spec.cppNamespace, self)
+        val fqSelf = marshal.fqTypename(ident, e)
         w.wl
         wrapNamespace(w, Some("std"),
           (w: IndentWriter) => {
@@ -121,7 +123,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static const ${toCppType(c.ty)} ${idCpp.const(c.ident)};")
+      w.wl(s"static const ${marshal.typename(c.ty)} ${idCpp.const(c.ident)};")
     }
   }
 
@@ -131,13 +133,13 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => w.w(idCpp.enumType(e.ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
+      case e: EnumValue => w.w(marshal.typename(ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
       case v: ConstRef => w.w(selfName + "::" + idCpp.const(v))
       case z: Map[_, _] => { // Value is record
-      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(idCpp.ty(recordMdef.name) + "(")
+        w.wl(marshal.typename(ty) + "(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
@@ -154,7 +156,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"const ${toCppType(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
+      w.w(s"const ${marshal.typename(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
       writeCppConst(w, c.ty, c.value)
       w.wl(";")
     }
@@ -166,9 +168,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     r.consts.foreach(c => refs.find(c.ty))
     refs.hpp.add("#include <utility>") // Add for std::move
 
-    val self = idCpp.ty(ident)
+    val self = marshal.typename(ident, r)
     val (cppName, cppFinal) = if (r.ext.cpp) (ident.name + "_base", "") else (ident.name, " final")
-    val actualSelf = idCpp.ty(cppName)
+    val actualSelf = marshal.typename(cppName, r)
 
     // Requiring the extended class
     if (r.ext.cpp) {
@@ -186,7 +188,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         for (f <- r.fields) {
           w.wl
           writeDoc(w, f.doc)
-          w.wl(toCppType(f.ty) + " " + idCpp.field(f.ident) + ";")
+          w.wl(marshal.typename(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
 
         w.wl
@@ -210,7 +212,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             val skipFirst = SkipFirst()
             for (f <- r.fields) {
               skipFirst { w.wl(",") }
-              w.w(toCppType(f.ty) + " " + idCpp.local(f.ident))
+              w.w(marshal.typename(f.ty) + " " + idCpp.local(f.ident))
             }
             w.wl(") :")
             w.nested {
@@ -300,7 +302,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = idCpp.ty(ident)
+    val self = marshal.typename(ident, i)
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
@@ -308,14 +310,14 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"class $self").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
-        w.wl("virtual ~" + idCpp.ty(ident) + "() {}")
+        w.wl(s"virtual ~$self() {}")
         // Constants
         generateHppConstants(w, i.consts)
         // Methods
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toCppType(_))
+          val ret = m.ret.fold("void")(marshal.typename(_))
           val params = m.params.map(toCppParamType)
           if (m.static) {
             w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
