@@ -27,6 +27,7 @@ import scala.collection.mutable
 class JavaGenerator(spec: Spec) extends Generator(spec) {
 
   var javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
     var java = mutable.TreeSet[String]()
@@ -74,20 +75,17 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => {
-        val enumMdef = ty.resolved.base.asInstanceOf[MDef]
-        w.w(s"${idJava.ty(enumMdef.name)}.${idJava.enum(e)}")
-      }
+      case e: EnumValue =>  w.w(s"${marshal.typename(ty)}.${idJava.enum(e)}")
       case v: ConstRef => w.w(idJava.const(v))
       case z: Map[_, _] => { // Value is record
-      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(s"new ${idJava.ty(recordMdef.name)}(")
+        w.wl(s"new ${marshal.typename(ty)}(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
-        for (f <- record.fields) {
+        for (f <- record.fields) { 
           skipFirst {w.wl(",")}
           writeJavaConst(w, f.ty, vMap.apply(f.ident.name))
           w.w(" /* " + idJava.field(f.ident) + " */ ")
@@ -100,7 +98,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public static final ${toJavaType(c.ty)} ${idJava.const(c.ident)} = ")
+      w.w(s"public static final ${marshal.typename(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl
@@ -113,7 +111,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(ident, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public enum ${idJava.ty(ident)}").braced {
+      w.w(s"public enum ${marshal.typename(ident, e)}").braced {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
@@ -138,7 +136,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     }
 
     writeJavaFile(ident, origin, refs.java, w => {
-      val javaClass = idJava.ty(ident)
+      val javaClass = marshal.typename(ident, i)
       val typeParamList = javaTypeParams(typeParams)
       writeDoc(w, doc)
 
@@ -151,15 +149,15 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods if !m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toJavaType(_))
-          val params = m.params.map(p => toJavaType(p.ty) + " " + idJava.local(p.ident))
+          val ret = m.ret.fold("void")(marshal.typename(_))
+          val params = m.params.map(p => marshal.typename(p.ty) + " " + idJava.local(p.ident))
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toJavaType(_))
-          val params = m.params.map(p => toJavaType(p.ty) + " " + idJava.local(p.ident))
+          val ret = m.ret.fold("void")(marshal.typename(_))
+          val params = m.params.map(p => marshal.typename(p.ty) + " " + idJava.local(p.ident))
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
         if (i.ext.cpp) {
@@ -184,9 +182,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("super.finalize();")
             }
             for (m <- i.methods if !m.static) { // Static methods not in CppProxy
-            val ret = m.ret.fold("void")(toJavaType(_))
+            val ret = m.ret.fold("void")(marshal.typename(_))
               val returnStmt = m.ret.fold("")(_ => "return ")
-              val params = m.params.map(p => toJavaType(p.ty)+" "+idJava.local(p.ident)).mkString(", ")
+              val params = m.params.map(p => marshal.typename(p.ty)+" "+idJava.local(p.ident)).mkString(", ")
               val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")
               val meth = idJava.method(m.ident)
               w.wl
@@ -211,34 +209,35 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
+      val self = marshal.typename(javaName, r)
 
       // HACK: Use generic base class to correctly implement Comparable interface
       val comparableFlag =
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           if (r.ext.java) {
-            s"<E extends ${idJava.ty(javaName)}> implements Comparable<E>"
+            s"<E extends $self> implements Comparable<E>"
           } else {
-            s" implements Comparable<${idJava.ty(javaName)}>"
+            s" implements Comparable<$self>"
           }
         } else {
           ""
         }
-      w.w(s"public$javaFinal class ${idJava.ty(javaName) + javaTypeParams(params)}$comparableFlag").braced {
+      w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
           w.wl
-          w.wl(s"/*package*/ final ${toJavaType(f.ty)} ${idJava.field(f.ident)};")
+          w.wl(s"/*package*/ final ${marshal.typename(f.ty)} ${idJava.field(f.ident)};")
         }
 
         // Constructor.
         w.wl
-        w.wl(s"public ${idJava.ty(javaName)}(").nestedN(2) {
+        w.wl(s"public $self(").nestedN(2) {
           val skipFirst = SkipFirst()
           for (f <- r.fields) {
             skipFirst { w.wl(",") }
-            w.w(toJavaType(f.ty) + " " + idJava.local(f.ident))
+            w.w(marshal.typename(f.ty) + " " + idJava.local(f.ident))
           }
           w.wl(") {")
         }
@@ -253,7 +252,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         for (f <- r.fields) {
           w.wl
           writeDoc(w, f.doc)
-          w.w("public " + toJavaType(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
+          w.w("public " + marshal.typename(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
             w.wl("return " + idJava.field(f.ident) + ";")
           }
         }
@@ -262,10 +261,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl("@Override")
           w.w("public boolean equals(Object obj)").braced {
-            w.w(s"if (!(obj instanceof ${idJava.ty(javaName)}))").braced {
+            w.w(s"if (!(obj instanceof $self))").braced {
               w.wl("return false;");
             }
-            w.wl(s"${idJava.ty(javaName)} other = (${idJava.ty(javaName)}) obj;")
+            w.wl(s"$self other = ($self) obj;")
             w.w(s"return ").nestedN(2) {
               val skipFirst = SkipFirst()
               for (f <- r.fields) {
@@ -294,7 +293,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
           w.wl("@Override")
-          val tyName = if (r.ext.java) "E" else idJava.ty(javaName)
+          val tyName = if (r.ext.java) "E" else self
           w.w(s"public int compareTo($tyName other) ").braced {
             w.wl("int tempResult;")
             for (f <- r.fields) {
@@ -328,38 +327,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
       }
     })
-  }
-
-  def toJavaType(ty: TypeRef, packageName: Option[String] = None): String = toJavaType(ty.resolved, packageName)
-  def toJavaType(tm: MExpr, packageName: Option[String]): String = {
-    def f(tm: MExpr, needRef: Boolean): String = {
-      tm.base match {
-        case MOptional =>
-          // HACK: We use "null" for the empty optional in Java.
-          assert(tm.args.size == 1)
-          val arg = tm.args.head
-          arg.base match {
-            case p: MPrimitive => p.jBoxed
-            case MOptional => throw new AssertionError("nested optional?")
-            case m => f(arg, true)
-          }
-        case o =>
-          val args = if (tm.args.isEmpty) "" else tm.args.map(f(_, true)).mkString("<", ", ", ">")
-          val base = o match {
-            case p: MPrimitive => if (needRef) p.jBoxed else p.jName
-            case MString => "String"
-            case MBinary => "byte[]"
-            case MOptional => throw new AssertionError("optional should have been special cased")
-            case MList => "ArrayList"
-            case MSet => "HashSet"
-            case MMap => "HashMap"
-            case d: MDef => withPackage(packageName, idJava.ty(d.name))
-            case p: MParam => idJava.typeParam(p.name)
-          }
-          base + args
-      }
-    }
-    f(tm, false)
   }
 
   def javaTypeParams(params: Seq[TypeParam]): String =
