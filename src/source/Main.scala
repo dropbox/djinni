@@ -59,6 +59,7 @@ object Main {
     var objcIncludeCppPrefix: String = ""
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
     var objcppNamespace: String = "dropboxsync"
+    var objcBaseLibIncludePrefix: String = ""
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -131,6 +132,8 @@ object Main {
         .text("The prefix for #include of the main header files from Objective-C files.")
       opt[String]("objcpp-namespace").valueName("<prefix>").foreach(objcppNamespace = _)
         .text("Namespace for C++ objects defined in Objective-C++, such as wrapper caches")
+      opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
+        .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -226,7 +229,8 @@ object Main {
       objcHeaderExt,
       objcIncludePrefix,
       objcIncludeCppPrefix,
-      objcppNamespace)
+      objcppNamespace,
+      objcBaseLibIncludePrefix)
 
     System.out.println("Generating...")
     val r = generate(idl, outSpec)
