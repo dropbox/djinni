@@ -12,17 +12,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithItemList:(TXSItemList *)itemList
 {
     if (self = [super init]) {
-        _items = [NSMutableArray arrayWithCapacity:[itemList.items count]];
+        NSMutableArray *_itemsTempArray = [NSMutableArray arrayWithCapacity:[itemList.items count]];
         for (NSString *currentValue_0 in itemList.items) {
             id copiedValue_0;
             copiedValue_0 = [currentValue_0 copy];
-            [_items addObject:copiedValue_0];
+            [_itemsTempArray addObject:copiedValue_0];
         }
+        _items = _itemsTempArray;
     }
     return self;
 }
 
-- (id)initWithItems:(NSMutableArray *)items
+- (id)initWithItems:(NSArray *)items
 {
     if (self = [super init]) {
         _items = items;
@@ -33,13 +34,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppItemList:(const ::textsort::ItemList &)itemList
 {
     if (self = [super init]) {
-        _items = [NSMutableArray arrayWithCapacity:itemList.items.size()];
+        NSMutableArray *_itemsTempArray = [NSMutableArray arrayWithCapacity:itemList.items.size()];
         for (const auto & cppValue_0 : itemList.items) {
             NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
                     length:cppValue_0.length()
                     encoding:NSUTF8StringEncoding];
-            [_items addObject:objcValue_0];
+            [_itemsTempArray addObject:objcValue_0];
         }
+        _items = _itemsTempArray;
     }
     return self;
 }

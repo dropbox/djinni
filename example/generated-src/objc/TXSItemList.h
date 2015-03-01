@@ -6,8 +6,8 @@
 
 @interface TXSItemList : NSObject
 - (id)initWithItemList:(TXSItemList *)itemList;
-- (id)initWithItems:(NSMutableArray *)items;
+- (id)initWithItems:(NSArray *)items;
 
-@property (nonatomic, readonly) NSMutableArray *items;
+@property (nonatomic, readonly) NSArray *items;
 
 @end

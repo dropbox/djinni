@@ -1,8 +1,8 @@
-#import "TXSItemList+Private.h"
-#import "TXSSortItemsCppProxy+Private.h"
+#import "TXSItemList.h"
+#import "TXSSortItems.h"
 #import "TXSTextboxListenerImpl.h"
 #import "TXSViewController.h"
-#import "TXSTextboxListenerObjcProxy+Private.h"
+#import "TXSTextboxListener.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -15,7 +15,7 @@
 @end
 
 @implementation TXSViewController {
-    id <TXSSortItems> _sortItemInterface;
+    TXSSortItems* _sortItemInterface;
     id <TXSTextboxListener> _textboxListener;
 }
 
@@ -35,7 +35,7 @@
 
     // Create the Objective-C TXSTextboxListener
     _textboxListener = [[TXSTextboxListenerImpl alloc] initWithUITextView:self.textView];
-    _sortItemInterface = [TXSSortItemsCppProxy createWithListener:_textboxListener];
+    _sortItemInterface = [TXSSortItems createWithListener:_textboxListener];
 }
 
 - (IBAction)sort:(id)sender
