@@ -169,6 +169,7 @@ package object generatorTools {
         createFolder("Objective-C[++]", spec.objcOutFolder.get)
         createFolder("Objective-C[++] private", spec.objcPrivateOutFolder.get)
         new ObjcGenerator(spec).generate(idl)
+        new ObjcppGenerator(spec).generate(idl)
       }
       None
     }
