@@ -1,6 +1,6 @@
 #import "DBClientInterfaceImpl.h"
 #import "DBClientInterfaceObjcProxy+Private.h"
-#import "DBTestHelpersCppProxy.h"
+#import "DBTestHelpers.h"
 #import <XCTest/XCTest.h>
 
 @interface DBClientInterfaceTests : XCTestCase
@@ -21,12 +21,12 @@
 
 - (void)testCppString
 {
-    [DBTestHelpersCppProxy checkClientInterfaceAscii:[[DBClientInterfaceImpl alloc] init]];
+    [DBTestHelpers checkClientInterfaceAscii:[[DBClientInterfaceImpl alloc] init]];
 }
 
 - (void)testCppUTF8String
 {
-    [DBTestHelpersCppProxy checkClientInterfaceNonascii:[[DBClientInterfaceImpl alloc] init]];
+    [DBTestHelpers checkClientInterfaceNonascii:[[DBClientInterfaceImpl alloc] init]];
 }
 
 - (void)testObjcInterfaceWrapper
