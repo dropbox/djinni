@@ -28,10 +28,11 @@ import scala.collection.parallel.immutable
 
 class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
+  val marshal = new ObjcMarshal(spec)
+
   class ObjcRefs() {
     var body = mutable.TreeSet[String]()
     var header = mutable.TreeSet[String]()
-    var privHeader = mutable.TreeSet[String]()
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
@@ -41,25 +42,23 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           header.add("#import <Foundation/Foundation.h>")
         case d: MDef => d.defType match {
           case DEnum =>
-            body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-            body.add("#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(d.name)))
             header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
           case DInterface =>
             header.add("#import <Foundation/Foundation.h>")
             val ext = d.body.asInstanceOf[Interface].ext
             if (ext.cpp) {
-              header.add("@class " + idObjc.ty(d.name) + ";")
-              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
+              header.add("@class " + marshal.typename(tm) + ";")
+              body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
             }
             if (ext.objc) {
-              header.add("@protocol " + idObjc.ty(d.name) + ";")
-              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
+              header.add("@protocol " + marshal.typename(tm) + ";")
+              body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
             }
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
             val prefix = if (r.ext.objc) "../" else ""
-            header.add("@class " + idObjc.ty(d.name) + ";")
-            body.add("#import " + q(spec.objcIncludePrivatePrefix + prefix + privateHeaderName(d.name)))
+            header.add("@class " + marshal.typename(tm) + ";")
+            body.add("#import " + q(spec.objcIncludePrefix + prefix + headerName(d.name)))
         }
         case p: MParam =>
       }
@@ -71,7 +70,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     refs.header.add("#import <Foundation/Foundation.h>")
 
-    val self = idObjc.ty(ident)
+    val self = marshal.typename(ident, e)
     writeObjcFile(headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"typedef NS_ENUM(NSInteger, $self)")
@@ -85,10 +84,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def enumTranslatorName(ident: String): String = idObjc.ty(ident) + "Translator." + spec.objcExt
-  def enumTranslatorHeaderName(ident: String): String = idObjc.ty(ident) + "Translator+Private." + spec.objcHeaderExt
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
-  def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcExt
 
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
@@ -115,7 +111,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
         val head = record.fields.head
-                w.w(s"[[${idObjc.ty(recordMdef.name)} alloc] initWith${IdentStyle.camelUpper(head.ident)}:")
+        w.w(s"[[${marshal.typename(ty)} alloc] initWith${IdentStyle.camelUpper(head.ident)}:")
         writeObjcConstValue(w, head.ty, vMap.apply(head.ident))
         w.nestedN(2) {
           val skipFirst = SkipFirst()
@@ -152,13 +148,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = idObjc.ty(ident)
+    val self = marshal.typename(ident, i)
 
     refs.header.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("#include <memory>")
-    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
@@ -206,24 +198,14 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       refs.find(f.ty)
 
     val objcName = ident.name + (if (r.ext.objc) "_base" else "")
-    val noBaseSelf = idObjc.ty(ident) // Used for constant names
-    val self = idObjc.ty(objcName)
-    val cppSelf = withNs(spec.cppNamespace, idCpp.ty(ident))
+    val noBaseSelf = marshal.typename(ident, r) // Used for constant names
+    val self = marshal.typename(objcName, r)
 
     refs.header.add("#import <Foundation/Foundation.h>")
 
-    refs.privHeader.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(objcName)))
-    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
-
-    refs.body.add("#import <Foundation/Foundation.h>")
-    refs.body.add("#include <utility>")
-    refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcName)))
-
     if (r.ext.objc) {
       refs.body.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
-      refs.privHeader.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
-      refs.header.add(s"@class ${idObjc.ty(ident.name)};")
+      refs.header.add(s"@class $noBaseSelf;")
     }
 
     def checkMutable(tm: MExpr): Boolean = tm.base match {
@@ -245,7 +227,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@interface $self : NSObject")
 
       // Deep copy construtor
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:(${idObjc.ty(ident)} *)${idObjc.field(ident)};")
+      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.field(ident)};")
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
