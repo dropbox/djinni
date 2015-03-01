@@ -6,10 +6,10 @@ import djinni.meta._
 
 class JavaMarshal(spec: Spec) extends Marshal(spec) {
 
-  def typename(tm: MExpr): String = toJavaType(tm, None)
+  override def typename(tm: MExpr): String = toJavaType(tm, None)
   def typename(name: String, ty: TypeDef): String = idJava.ty(name)
 
-  def fqTypename(tm: MExpr): String = toJavaType(tm, spec.javaPackage)
+  override def fqTypename(tm: MExpr): String = toJavaType(tm, spec.javaPackage)
   def fqTypename(name: String, ty: TypeDef): String = withPackage(spec.javaPackage, idJava.ty(name))
 
   def toJavaType(tm: MExpr, packageName: Option[String]): String = {
