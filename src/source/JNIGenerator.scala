@@ -25,6 +25,9 @@ import scala.collection.mutable
 
 class JNIGenerator(spec: Spec) extends Generator(spec) {
 
+  val jniMarshal = new JNIMarshal(spec)
+  val cppMarshal = new CppMarshal(spec)
+  val javaMarshal = new JavaMarshal(spec)
   val jniBaseLibClassIdentStyle = IdentStyle.prefix("H", IdentStyle.camelUpper)
   val jniBaseLibFileIdentStyle = jniBaseLibClassIdentStyle
 
@@ -55,23 +58,22 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new JNIRefs(ident.name)
-    val self = idCpp.enumType(ident)
-    val selfQ = withNs(spec.cppNamespace, self)
-    val jniClassName = spec.jniClassIdentStyle(ident)
+    val jniHelper = jniMarshal.helperClass(ident)
+    val cppSelf = cppMarshal.fqTypename(ident, e)
 
     writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), Nil, w => {
-      w.w(s"class $jniClassName final : djinni::JniEnum").bracedSemi {
+      w.w(s"class $jniHelper final : djinni::JniEnum").bracedSemi {
         w.wlOutdent("public:")
-        w.wl(s"using CppType = $selfQ;")
+        w.wl(s"using CppType = $cppSelf;")
         w.wl(s"using JniType = jobject;")
         w.wl
-        w.wl(s"static jobject toJava(JNIEnv* jniEnv, $selfQ c) { return djinni::JniClass<$jniClassName>::get().create(jniEnv, static_cast<int>(c)).release(); }")
-        w.wl(s"static $selfQ fromJava(JNIEnv* jniEnv, jobject j) { return static_cast<$selfQ>(djinni::JniClass<$jniClassName>::get().ordinal(jniEnv, j)); }")
+        w.wl(s"static jobject toJava(JNIEnv* jniEnv, $cppSelf c) { return djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<int>(c)).release(); }")
+        w.wl(s"static $cppSelf fromJava(JNIEnv* jniEnv, jobject j) { return static_cast<$cppSelf>(djinni::JniClass<$jniHelper>::get().ordinal(jniEnv, j)); }")
         w.wl
         w.wlOutdent("private:")
-        val classLookup = q(toJavaClassLookup(ident, spec.javaPackage))
-        w.wl(s"$jniClassName() : JniEnum($classLookup) {}")
-        w.wl(s"friend class djinni::JniClass<$jniClassName>;")
+        val classLookup = q(jniMarshal.undecoratedTypename(ident, e))
+        w.wl(s"$jniHelper() : JniEnum($classLookup) {}")
+        w.wl(s"friend class djinni::JniClass<$jniHelper>;")
       }
     })
   }
@@ -79,35 +81,34 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new JNIRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty))
-    val jniClassName = spec.jniClassIdentStyle(ident)
-    val fqJniClassName = withNs(Some(spec.jniNamespace), jniClassName)
 
-    val self = idCpp.ty(ident)
-    val selfQ = withNs(spec.cppNamespace, self) + cppTypeArgs(params)  // Qualified "self"
+    val jniHelper = jniMarshal.helperClass(ident)
+    val cppSelf = cppMarshal.fqTypename(ident, r) + cppTypeArgs(params)
+    val fqJniHelper = jniMarshal.fqHelperClass(ident)
 
     def writeJniPrototype(w: IndentWriter) {
       writeJniTypeParams(w, params)
-      w.w(s"class $jniClassName final").bracedSemi {
+      w.w(s"class $jniHelper final").bracedSemi {
         w.wlOutdent("public:")
-        w.wl(s"using CppType = $selfQ;")
+        w.wl(s"using CppType = $cppSelf;")
         w.wl(s"using JniType = jobject;")
         w.wl
-        w.wl(s"static jobject toJava(JNIEnv*, $selfQ);")
-        w.wl(s"static $selfQ fromJava(JNIEnv*, jobject);")
+        w.wl(s"static jobject toJava(JNIEnv*, $cppSelf);")
+        w.wl(s"static $cppSelf fromJava(JNIEnv*, jobject);")
         w.wl
-        val classLookup = q(toJavaClassLookup(ident, spec.javaPackage))
+        val classLookup = q(jniMarshal.undecoratedTypename(ident, r))
         w.wl(s"const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass($classLookup) };")
         val constructorSig = q(toJavaMethodSig(spec.javaPackage, r.fields, None))
         w.wl(s"const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), ${q("<init>")}, $constructorSig) };")
         for (f <- r.fields) {
           val javaFieldName = idJava.field(f.ident)
-          val javaSig = q(toJavaTypeSig(f.ty, spec.javaPackage))
+          val javaSig = q(jniMarshal.typename(f.ty))
           w.wl(s"const jfieldID field_$javaFieldName { djinni::jniGetFieldID(clazz.get(), ${q(javaFieldName)}, $javaSig) };")
         }
         w.wl
         w.wlOutdent("private:")
-        w.wl(s"$jniClassName() {}")
-        w.wl(s"friend class djinni::JniClass<$fqJniClassName>;")
+        w.wl(s"$jniHelper() {}")
+        w.wl(s"friend class djinni::JniClass<$fqJniHelper>;")
       }
     }
 
@@ -115,7 +116,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       writeJniTypeParams(w, params)
 
       val dataVar = if (r.fields.nonEmpty) " c" else ""
-      w.w(s"jobject $jniClassName::toJava(JNIEnv* jniEnv, $selfQ$dataVar)").braced{
+      w.w(s"jobject $jniHelper::toJava(JNIEnv* jniEnv, $cppSelf$dataVar)").braced{
         //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
         val jniArgs = mutable.ListBuffer[String]()
         for (f <- r.fields) {
@@ -125,7 +126,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           val jniLocalRead = storeLocal(w, jniLocal, f.ty, s"$jniHelperClass::toJava(jniEnv, c.$cppFieldName)")
           jniArgs.append(jniLocalRead)
         }
-        w.wl(s"const auto & data = djinni::JniClass<$fqJniClassName>::get();")
+        w.wl(s"const auto & data = djinni::JniClass<$fqJniHelper>::get();")
         val argList = jniArgs.map(", " + _).mkString("")
         w.wl(s"jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor$argList);")
         w.wl(s"djinni::jniExceptionCheck(jniEnv);")
@@ -134,11 +135,11 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       writeJniTypeParams(w, params)
       if (r.fields.nonEmpty) {
-        w.w(s"$selfQ $jniClassName::fromJava(JNIEnv* jniEnv, jobject j)").braced {
+        w.w(s"$cppSelf $jniHelper::fromJava(JNIEnv* jniEnv, jobject j)").braced {
           //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
           w.wl(s"assert(j != nullptr);")
-          w.wl(s"const auto & data = djinni::JniClass<$fqJniClassName>::get();")
-          w.wl(s"return $selfQ(").nested {
+          w.wl(s"const auto & data = djinni::JniClass<$fqJniHelper>::get();")
+          w.wl(s"return $cppSelf(").nested {
             val skipFirst = SkipFirst()
             for (f <- r.fields) {
               skipFirst { w.wl(",") }
@@ -155,10 +156,10 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           }
         }
       } else {
-        w.w(s"$selfQ $jniClassName::fromJava(JNIEnv*, jobject j)").braced {
+        w.w(s"$cppSelf $jniHelper::fromJava(JNIEnv*, jobject j)").braced {
           w.wl("assert(j != nullptr);")
           w.wl("(void) j; // Suppress unused error in release build")
-          w.wl(s"return $selfQ();")
+          w.wl(s"return $cppSelf();")
         }
       }
 
@@ -177,23 +178,22 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = idCpp.ty(ident)
-    val selfQ = withNs(spec.cppNamespace, self) + cppTypeArgs(typeParams)  // Qualified "self"
+    val jniSelf = jniMarshal.helperClass(ident)
+    val cppSelf = cppMarshal.fqTypename(ident, i) + cppTypeArgs(typeParams)
+    val fqJniClassName = jniMarshal.fqHelperClass(ident)
 
-    val jniClassName = spec.jniClassIdentStyle(ident)
-    val fqJniClassName = withNs(Some(spec.jniNamespace), jniClassName)
-    val classLookup = toJavaClassLookup(ident, spec.javaPackage)
-    val baseType = s"djinni::JniInterface<$selfQ, $jniClassName>"
+    val classLookup = jniMarshal.undecoratedTypename(ident, i)
+    val baseType = s"djinni::JniInterface<$cppSelf, $jniSelf>"
 
     def writeJniPrototype(w: IndentWriter) {
       writeJniTypeParams(w, typeParams)
-      w.w(s"class $jniClassName final : $baseType").bracedSemi {
+      w.w(s"class $jniSelf final : $baseType").bracedSemi {
         w.wlOutdent(s"public:")
-        w.wl(s"using CppType = std::shared_ptr<$selfQ>;")
+        w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
         w.wl(s"using JniType = jobject;")
         w.wl
-        w.wl(s"static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<$selfQ> c) { return djinni::JniClass<$fqJniClassName>::get()._toJava(jniEnv, c); }")
-        w.wl(s"static std::shared_ptr<$selfQ> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<$fqJniClassName>::get()._fromJava(jniEnv, j); }")
+        w.wl(s"static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<$cppSelf> c) { return djinni::JniClass<$fqJniClassName>::get()._toJava(jniEnv, c); }")
+        w.wl(s"static std::shared_ptr<$cppSelf> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<$fqJniClassName>::get()._fromJava(jniEnv, j); }")
         w.wl
         if (i.ext.java) {
           w.wl(s"const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass(${q(classLookup)}) };")
@@ -216,13 +216,13 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl
             w.wlOutdent(s"private:")
             w.wl(s"using djinni::JavaProxyCacheEntry::getGlobalRef;")
-            w.wl(s"friend class djinni::JniInterface<$selfQ, $fqJniClassName>;")
+            w.wl(s"friend class djinni::JniInterface<$cppSelf, $fqJniClassName>;")
             w.wl(s"friend class djinni::JavaProxyCache<JavaProxy>;")
           }
         }
         w.wl
         w.wlOutdent("private:")
-        w.wl(s"$jniClassName();")
+        w.wl(s"$jniSelf();")
         w.wl(s"friend class djinni::JniClass<$fqJniClassName>;")
       }
     }
@@ -230,18 +230,18 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     def writeJniBody(w: IndentWriter) {
       val baseClassParam = if (i.ext.cpp) q(classLookup+"$CppProxy") else ""
       writeJniTypeParams(w, typeParams)
-      w.wl(s"$jniClassName::$jniClassName() : $baseType($baseClassParam) {}")
+      w.wl(s"$jniSelf::$jniSelf() : $baseType($baseClassParam) {}")
       w.wl
       if (i.ext.java) {
         writeJniTypeParams(w, typeParams)
-        w.wl(s"$jniClassName::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}")
+        w.wl(s"$jniSelf::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}")
 
         for (m <- i.methods) {
           w.wl
           val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
           val params = m.params.map(p => toCppParamType(p, spec.cppNamespace, "c_"))
           writeJniTypeParams(w, typeParams)
-          w.w(s"$ret $jniClassName::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
+          w.w(s"$ret $jniSelf::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
             w.wl(s"JNIEnv * const jniEnv = djinni::jniGetThreadEnv();")
             w.wl(s"djinni::JniLocalScope jscope(jniEnv, 10);")
             val jniArgs = mutable.ListBuffer[String]()
@@ -272,7 +272,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       if (i.ext.cpp) {
         w.wl(s"using namespace ::${spec.jniNamespace};")
         // Generate CEXPORT functions for JNI to call.
-        val classIdentMunged = withPackage(spec.javaPackage, idJava.ty(ident))
+        val classIdentMunged = javaMarshal.fqTypename(ident, i)
           .replaceAllLiterally("_", "_1")
           .replaceAllLiterally(".", "_")
         val prefix = "Java_" + classIdentMunged
@@ -302,13 +302,13 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         nativeHook("nativeDestroy", false, Seq.empty, None, {
-          w.wl(s"delete reinterpret_cast<djinni::CppProxyHandle<$selfQ>*>(nativeRef);")
+          w.wl(s"delete reinterpret_cast<djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
         })
         for (m <- i.methods) {
           val nativeAddon = if (m.static) "" else "native_"
           nativeHook(nativeAddon + idJava.method(m.ident), m.static, m.params, m.ret, {
             //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
-              if (!m.static) w.wl(s"const std::shared_ptr<$selfQ> & ref = djinni::CppProxyHandle<$selfQ>::get(nativeRef);")
+              if (!m.static) w.wl(s"const std::shared_ptr<$cppSelf> & ref = djinni::CppProxyHandle<$cppSelf>::get(nativeRef);")
             for (p <- m.params) {
               val jniHelperClass = toJniHelperClass(p.ty)
               val cppType = toCppType(p.ty, spec.cppNamespace)
@@ -318,7 +318,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             }
             val callArgs = m.params.map(p => "c_" + idCpp.local(p.ident)).mkString(", ")
             val methodName = idCpp.method(m.ident)
-            val callExpr = if (m.static) s"$selfQ::$methodName($callArgs)" else s"ref->$methodName($callArgs)"
+            val callExpr = if (m.static) s"$cppSelf::$methodName($callArgs)" else s"ref->$methodName($callArgs)"
             w.wl
             m.ret match {
               case Some(r) =>
@@ -354,35 +354,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  def toJavaClassLookup(name: String, javaPackage: Option[String]): String = {
-    val javaClassName = idJava.ty(name)
-    javaPackage.fold(javaClassName)(p => p.replaceAllLiterally(".", "/") + "/" + javaClassName)
-  }
-
-  def toJavaTypeSig(ty: TypeRef, javaPackage: Option[String] = None): String = {
-    def f(e: MExpr): String = e.base match {
-      case o: MOpaque => o match {
-        case p: MPrimitive => p.jSig
-        case MString => "Ljava/lang/String;"
-        case MDate => "Ljava/util/Date;"
-        case MBinary => "[B"
-        case MOptional =>  e.args.head.base match {
-          case p: MPrimitive => s"Ljava/lang/${p.jBoxed};"
-          case MOptional => throw new AssertionError("nested optional?")
-          case m => f(e.args.head)
-        }
-        case MList => "Ljava/util/ArrayList;"
-        case MSet => "Ljava/util/HashSet;"
-        case MMap => "Ljava/util/HashMap;"
-      }
-      case MParam(_) => "Ljava/lang/Object;"
-      case d: MDef => s"L${toJavaClassLookup(d.name, javaPackage)};"
-    }
-    f(ty.resolved)
-  }
-
   def toJavaMethodSig(javaPackage: Option[String], params: Iterable[Field], ret: Option[TypeRef]) = {
-    params.map(f => toJavaTypeSig(f.ty, javaPackage)).mkString("(", "", ")") + ret.fold("V")(toJavaTypeSig(_, javaPackage))
+    params.map(f => jniMarshal.typename(f.ty)).mkString("(", "", ")") + ret.fold("V")(jniMarshal.typename(_))
   }
 
   def writeJniTypeParams(w: IndentWriter, params: Seq[TypeParam]) {
