@@ -26,7 +26,7 @@ make example_ios
 ```
 
 **Details**
-This example proejct utilizes [gyp](https://code.google.com/p/gyp/) to generate project files for
+This example project utilizes [gyp](https://code.google.com/p/gyp/) to generate project files for
 each platform. So, before running any of the example code the first time you will need to run `make ios`
 or `make android` depending on the platform you wish you run.  Additionally, those commands will need
 to be run each time the djinni file has been changed.  Gyp will automatically detect the new files
