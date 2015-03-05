@@ -42,7 +42,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_createWithListene
         std::shared_ptr<::textsort::SortItems> cr = ::textsort::SortItems::create_with_listener(c_listener);
 
         return NativeSortItems::toJava(jniEnv, cr);
-    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0  /* value doesn't matter */ )
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
 }  // namespace djinni_generated

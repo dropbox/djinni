@@ -209,7 +209,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBToken*)tokenId:(DBToken*)t {
++ (DBToken *)tokenId:(DBToken *)t {
     try {
         std::shared_ptr<Token> cppT = t.cppRef;
         std::shared_ptr<Token> cppRet = TestHelpers::token_id(std::move(cppT));
@@ -218,7 +218,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBToken*)createCppToken {
++ (DBToken *)createCppToken {
     try {
         std::shared_ptr<Token> cppRet = TestHelpers::create_cpp_token();
         DBToken* objcRet = [DBToken tokenWithCpp:cppRet];
@@ -226,14 +226,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkCppToken:(DBToken*)t {
++ (void)checkCppToken:(DBToken *)t {
     try {
         std::shared_ptr<Token> cppT = t.cppRef;
         TestHelpers::check_cpp_token(std::move(cppT));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (int64_t)cppTokenId:(DBToken*)t {
++ (int64_t)cppTokenId:(DBToken *)t {
     try {
         std::shared_ptr<Token> cppT = t.cppRef;
         int64_t cppRet = TestHelpers::cpp_token_id(std::move(cppT));

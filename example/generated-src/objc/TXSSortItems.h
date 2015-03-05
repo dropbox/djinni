@@ -12,6 +12,6 @@
 
 - (void)sort:(TXSSortOrder)order items:(TXSItemList *)items;
 
-+ (TXSSortItems*)createWithListener:(id<TXSTextboxListener>)listener;
++ (TXSSortItems *)createWithListener:(id<TXSTextboxListener>)listener;
 
 @end

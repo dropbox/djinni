@@ -193,12 +193,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
-      val ret = method.ret.fold("void")(toObjcFullType(_))
+      val ret = method.ret.fold("void")(objcMarshal.paramType)
       w.w(s"$label ($ret)${idObjc.method(method.ident)}")
       val skipFirst = SkipFirst()
       for (p <- method.params) {
         skipFirst { w.w(s" ${idObjc.local(p.ident)}") }
-        w.w(s":(${toObjcFullType(p.ty)})${idObjc.local(p.ident)}")
+        w.w(s":(${objcMarshal.paramType(p.ty)})${idObjc.local(p.ident)}")
       }
     }
 
@@ -294,7 +294,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"static std::shared_ptr<$cppSelf> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
             for (m <- i.methods) {
               val ret = m.ret.fold("void")(cppMarshal.fqTypename)
-              val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
+              val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
           }
@@ -318,7 +318,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           for (m <- i.methods) {
             w.wl
             val ret = m.ret.fold("void")(cppMarshal.fqTypename)
-            val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
+            val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
             w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
               w.w("@autoreleasepool").braced {
                 m.params.foreach(p =>
@@ -410,9 +410,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${toObjcFullType(head.ty)})${idObjc.field(head.ident)}")
+        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${objcMarshal.paramType(head.ty)})${idObjc.field(head.ident)}")
         for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident.name)}:(${toObjcFullType(f.ty)})${idObjc.local(f.ident)}")
+          w.w(s" ${idObjc.field(f.ident.name)}:(${objcMarshal.paramType(f.ty)})${idObjc.local(f.ident)}")
         }
         w.wl
         w.braced {
@@ -728,7 +728,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               case DRecord => w.wl(s"$objcType$objcIdent = [[${self} alloc] initWithCpp${IdentStyle.camelUpper(typeName)}:$cppIdent];")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
-                val objcProxy = withNs(Some(spec.objcppNamespace), idCpp.ty(d.name + "_objc_proxy"))
+                val objcProxy = objcppMarshal.fqHelperClass(d.name + "_objc_proxy")
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
@@ -829,7 +829,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
                   case (true, false) => w.wl(s"$cppType $cppIdent = $objcIdent.cppRef;")
-                  case (false, true) => w.wl(s"$cppType $cppIdent = ${withNs(Some(spec.objcppNamespace), idCpp.ty(d.name + "_objc_proxy"))}" +
+                  case (false, true) => w.wl(s"$cppType $cppIdent = ${objcppMarshal.fqHelperClass(d.name + "_objc_proxy")}" +
                     s"::${idCpp.method(d.name + "_with_objc")}($objcIdent);")
                 }
             }
@@ -879,14 +879,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
     f(tm, needRef)
-  }
-
-  def toObjcFullType(ty: TypeRef): String = toObjcFullType(ty.resolved, false)
-  def toObjcFullType(ty: TypeRef, needRef: Boolean): String = toObjcFullType(ty.resolved, needRef)
-  def toObjcFullType(tm: MExpr): String = toObjcFullType(tm, false)
-  def toObjcFullType(tm: MExpr, needRef: Boolean = false): String = {
-    val (name, asterisk) = toObjcType(tm, needRef)
-    name + (if (asterisk) " *" else "")
   }
 
   def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)

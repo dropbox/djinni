@@ -16,6 +16,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fqTypename(tm: MExpr): String = typename(tm)
   def fqTypename(name: String, ty: TypeDef): String = typename(name, ty)
 
+  override def paramType(tm: MExpr): String = toObjcParamType(tm)
+  override def fqParamType(tm: MExpr): String = paramType(tm)
+
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)
@@ -46,7 +49,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
               case DRecord => (idObjc.ty(d.name), true)
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
-                (idObjc.ty(d.name), false)
+                (idObjc.ty(d.name), true)
             }
             case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
           }
@@ -54,6 +57,25 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
       }
     }
     f(tm, needRef)
+  }
+
+  def toObjcParamType(tm: MExpr): String = {
+    val (name, needRef) = toObjcType(tm)
+    val param = name + (if(needRef) " *" else "")
+    tm.base match {
+      case d: MDef => d.body match {
+        case i: Interface => if(i.ext.objc) s"id<$name>" else param
+        case _ => param
+      }
+      case MOptional => tm.args.head.base match {
+        case d: MDef => d.body match {
+          case i: Interface => if(i.ext.objc) s"id<$name>" else param
+          case _ => param
+        }
+        case _ => param
+      }
+      case _ => param
+    }
   }
 
 }

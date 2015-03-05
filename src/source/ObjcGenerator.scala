@@ -154,12 +154,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
-      val ret = method.ret.fold("void")(toObjcFullType(_))
+      val ret = method.ret.fold("void")(marshal.paramType)
       w.w(s"$label ($ret)${idObjc.method(method.ident)}")
       val skipFirst = SkipFirst()
       for (p <- method.params) {
         skipFirst { w.w(s" ${idObjc.local(p.ident)}") }
-        w.w(s":(${toObjcFullType(p.ty)})${idObjc.local(p.ident)}")
+        w.w(s":(${marshal.paramType(p.ty)})${idObjc.local(p.ident)}")
       }
     }
 
@@ -234,9 +234,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${toObjcFullType(head.ty)})${idObjc.local(head.ident)}")
+        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${marshal.paramType(head.ty)})${idObjc.local(head.ident)}")
         for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident)}:(${toObjcFullType(f.ty)})${idObjc.field(f.ident)}")
+          w.w(s" ${idObjc.field(f.ident)}:(${marshal.paramType(f.ty)})${idObjc.field(f.ident)}")
         }
         w.wl(";")
       }
@@ -308,14 +308,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
     }
     f(tm, needRef)
-  }
-
-  def toObjcFullType(ty: TypeRef): String = toObjcFullType(ty.resolved, false)
-  def toObjcFullType(ty: TypeRef, needRef: Boolean): String = toObjcFullType(ty.resolved, needRef)
-  def toObjcFullType(tm: MExpr): String = toObjcFullType(tm, false)
-  def toObjcFullType(tm: MExpr, needRef: Boolean = false): String = {
-    val (name, asterisk) = toObjcType(tm, needRef)
-    name + (if (asterisk) " *" else "")
   }
 
   def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)

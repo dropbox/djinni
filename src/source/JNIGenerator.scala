@@ -205,12 +205,12 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         }
         if (i.ext.java) {
           w.wl
-          w.w(s"class JavaProxy final : djinni::JavaProxyCacheEntry, public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
+          w.w(s"class JavaProxy final : djinni::JavaProxyCacheEntry, public $cppSelf").bracedSemi {
             w.wlOutdent(s"public:")
             w.wl(s"JavaProxy(jobject obj);")
             for (m <- i.methods) {
               val ret = m.ret.fold("void")(cppMarshal.fqTypename)
-              val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
+              val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
             }
             w.wl
@@ -239,7 +239,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods) {
           w.wl
           val ret = m.ret.fold("void")(cppMarshal.fqTypename)
-          val params = m.params.map(p => toCppParamType(p, spec.cppNamespace, "c_"))
+          val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
           writeJniTypeParams(w, typeParams)
           w.w(s"$ret $jniSelf::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
             w.wl(s"JNIEnv * const jniEnv = djinni::jniGetThreadEnv();")
@@ -277,15 +277,14 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           .replaceAllLiterally(".", "_")
         val prefix = "Java_" + classIdentMunged
         def nativeHook(name: String, static: Boolean, params: Iterable[Field], ret: Option[TypeRef], f: => Unit) = {
-          val paramList = params.map(p => toJniType(p.ty) + " j_" + idJava.local(p.ident)).mkString(", ")
+          val paramList = params.map(p => jniMarshal.paramType(p.ty) + " j_" + idJava.local(p.ident)).mkString(", ")
           val jniRetType = ret.fold("void")(toJniType)
           w.wl
           val methodNameMunged = name.replaceAllLiterally("_", "_1")
+          val zero = ret.fold("")(s => "0 /* value doesn't matter */")
           if (static) {
             w.wl(s"CJNIEXPORT $jniRetType JNICALL ${prefix}_$methodNameMunged(JNIEnv* jniEnv, jobject /*this*/${preComma(paramList)})").braced {
-              w.w("try").bracedEnd(s" JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, ${
-                ret.fold("")(s => "0  /* value doesn't matter */ ")
-              })") {
+              w.w("try").bracedEnd(s" JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, $zero)") {
                 w.wl(s"DJINNI_FUNCTION_PROLOGUE0(jniEnv);")
                 f
               }
@@ -293,8 +292,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           }
           else {
             w.wl(s"CJNIEXPORT $jniRetType JNICALL ${prefix}_00024CppProxy_$methodNameMunged(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef${preComma(paramList)})").braced {
-              val zero = "0 /* value doesn't matter*/"
-              w.w("try").bracedEnd(s" JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, ${ret.fold("")(s => zero)})") {
+              w.w("try").bracedEnd(s" JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, $zero)") {
                 w.wl(s"DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);")
                 f
               }

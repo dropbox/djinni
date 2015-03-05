@@ -12,7 +12,10 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   override def fqTypename(tm: MExpr): String = toJavaType(tm, spec.javaPackage)
   def fqTypename(name: String, ty: TypeDef): String = withPackage(spec.javaPackage, idJava.ty(name))
 
-  def toJavaType(tm: MExpr, packageName: Option[String]): String = {
+  override def paramType(tm: MExpr): String = typename(tm)
+  override def fqParamType(tm: MExpr): String = fqTypename(tm)
+
+  private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
     def f(tm: MExpr, needRef: Boolean): String = {
       tm.base match {
         case MOptional =>
@@ -44,6 +47,6 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     f(tm, false)
   }
 
-  def withPackage(packageName: Option[String], t: String) = packageName.fold(t)(_+"."+t)
+  private def withPackage(packageName: Option[String], t: String) = packageName.fold(t)(_ + "." + t)
 
  }

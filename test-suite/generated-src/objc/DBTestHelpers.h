@@ -44,13 +44,13 @@
 
 + (void)checkEnumMap:(NSDictionary *)m;
 
-+ (DBToken*)tokenId:(DBToken*)t;
++ (DBToken *)tokenId:(DBToken *)t;
 
-+ (DBToken*)createCppToken;
++ (DBToken *)createCppToken;
 
-+ (void)checkCppToken:(DBToken*)t;
++ (void)checkCppToken:(DBToken *)t;
 
-+ (int64_t)cppTokenId:(DBToken*)t;
++ (int64_t)cppTokenId:(DBToken *)t;
 
 + (NSNumber *)returnNone;
 
