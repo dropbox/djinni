@@ -28,6 +28,10 @@ import scala.collection.parallel.immutable
 
 class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
+  val objcMarshal = new ObjcMarshal(spec)
+  val objcppMarshal = new ObjcppMarshal(spec)
+  val cppMarshal = new CppMarshal(spec)
+
   class ObjcRefs() {
     var body = mutable.TreeSet[String]()
     var header = mutable.TreeSet[String]()
@@ -48,17 +52,17 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             header.add("#import <Foundation/Foundation.h>")
             val ext = d.body.asInstanceOf[Interface].ext
             if (ext.cpp) {
-              header.add("@class " + idObjc.ty(d.name) + ";")
+              header.add("@class " + objcMarshal.typename(tm) + ";")
               body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
             }
             if (ext.objc) {
-              header.add("@protocol " + idObjc.ty(d.name) + ";")
+              header.add("@protocol " + objcMarshal.typename(tm) + ";")
               body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
             }
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
             val prefix = if (r.ext.objc) "../" else ""
-            header.add("@class " + idObjc.ty(d.name) + ";")
+            header.add("@class " + objcMarshal.typename(tm) + ";")
             body.add("#import " + q(spec.objcIncludePrivatePrefix + prefix + privateHeaderName(d.name)))
         }
         case p: MParam =>
@@ -78,8 +82,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(ident)))
 
-    val self = idObjc.ty(ident)
-    val cppSelf = withNs(spec.cppNamespace, idCpp.enumType(ident))
+    val self = objcMarshal.typename(ident, e)
+    val cppSelf = cppMarshal.fqTypename(ident, e)
     val name = IdentStyle.camelUpper(ident)
     val argName = idObjc.local(ident.name)
 
@@ -178,7 +182,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = idObjc.ty(ident)
+    val self = objcMarshal.typename(ident, i)
 
     refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#include <memory>")
@@ -198,7 +202,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    val cppName = withNs(spec.cppNamespace, idCpp.ty(ident))
+    val cppSelf = cppMarshal.fqTypename(ident, i)
     if (i.ext.cpp) {
       refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
@@ -210,9 +214,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       writeObjcFile(privateHeaderName(ident.name), origin, refs.privHeader, w => {
         w.wl(s"@interface $self ()")
         w.wl
-        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<$cppName> cppRef;")
+        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<$cppSelf> cppRef;")
         w.wl
-        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppName> &)cppRef;")
+        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppSelf> &)cppRef;")
         w.wl
         w.wl("@end")
       })
@@ -222,12 +226,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         if (i.consts.nonEmpty) generateObjcConstants(w, i.consts, self)
         w.wl
         w.wl(s"@interface $self ()")
-        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> cache;")
+        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<$cppSelf>> cache;")
         w.wl("@end")
         w.wl
         w.wl(s"@implementation $self")
         w.wl
-        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> &)cache")
+        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<$cppSelf>> &)cache")
         w.braced {
           w.w("if (self = [super init])").braced {
             w.wl("_cppRef = cppRef;")
@@ -241,10 +245,10 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl("_cache->remove(_cppRef);")
         }
         w.wl
-        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppName> &)cppRef")
+        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppSelf> &)cppRef")
         w.braced {
-          w.wl(s"const auto & cache = djinni::DbxCppWrapperCache<$cppName>::getInstance();")
-          w.wl(s"return cache->get(cppRef, [&] (const std::shared_ptr<$cppName> & p) { return [[$self alloc] initWithCpp:p cache:cache]; });")
+          w.wl(s"const auto & cache = djinni::DbxCppWrapperCache<$cppSelf>::getInstance();")
+          w.wl(s"return cache->get(cppRef, [&] (const std::shared_ptr<$cppSelf> & p) { return [[$self alloc] initWithCpp:p cache:cache]; });")
         }
         for (m <- i.methods) {
           w.wl
@@ -255,12 +259,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 translateObjcTypeToCpp(idObjc.local("cpp_" + p.ident.name), idObjc.local(p.ident.name), p.ty, w)
               }
               val params = m.params.map(p => "std::move(" + idObjc.local("cpp_" + p.ident.name) + ")").mkString("(", ", ", ")")
-              val cppRef = if (!m.static) "_cppRef->" else  cppName + "::"
+              val cppRef = if (!m.static) "_cppRef->" else  cppSelf + "::"
               m.ret match {
                 case None =>
                   w.wl(s"$cppRef${idCpp.method(m.ident)}$params;")
                 case Some(r) =>
-                  w.wl(s"${toCppType(r, spec.cppNamespace)} cppRet = $cppRef${idCpp.method(m.ident)}$params;")
+                  w.wl(s"${cppMarshal.fqTypename(r)} cppRet = $cppRef${idCpp.method(m.ident)}$params;")
                   translateCppTypeToObjc("objcRet", "cppRet", r, true, w)
                   w.wl("return objcRet;")
               }
@@ -273,23 +277,23 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       })
     }
 
-    val objcExtName = ident.name + "_objc_proxy"
-    val objcExtSelf = idCpp.ty(objcExtName)
     if (i.ext.objc) {
+      val objcExtName = ident.name + "_objc_proxy"
+      val objcExtSelf = objcppMarshal.helperClass(objcExtName)
       refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
       refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcExtName)))
       writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
-          w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
+          w.wl(s"class $objcExtSelf final : public $cppSelf").bracedSemi {
             w.wl("public:")
             w.wl(s"const id <$self> _objcRef;")
             w.wl(s"const std::shared_ptr<djinni::DbxObjcWrapperCache<$objcExtSelf>> _cache;")
             w.wl
             w.wl(s"explicit $objcExtSelf (id objcRef);")
             w.wl(s"virtual ~$objcExtSelf () override;")
-            w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
+            w.wl(s"static std::shared_ptr<$cppSelf> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
             for (m <- i.methods) {
-              val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
+              val ret = m.ret.fold("void")(cppMarshal.fqTypename)
               val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
@@ -308,12 +312,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"_cache->remove(_objcRef);")
           }
           w.wl
-          w.wl(s"std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident))}> $objcExtSelf::${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef)").braced {
+          w.wl(s"std::shared_ptr<$cppSelf> $objcExtSelf::${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef)").braced {
             w.wl(s"return djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objcRef);")
           }
           for (m <- i.methods) {
             w.wl
-            val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
+            val ret = m.ret.fold("void")(cppMarshal.fqTypename)
             val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
             w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
               w.w("@autoreleasepool").braced {
@@ -347,9 +351,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(f.ty)
 
     val objcName = ident.name + (if (r.ext.objc) "_base" else "")
-    val noBaseSelf = idObjc.ty(ident) // Used for constant names
-    val self = idObjc.ty(objcName)
-    val cppSelf = withNs(spec.cppNamespace, idCpp.ty(ident))
+    val noBaseSelf = objcMarshal.typename(ident, r) // Used for constant names
+    val self = objcMarshal.typename(objcName, r)
+    val cppSelf = cppMarshal.fqTypename(ident, r)
 
     refs.header.add("#import <Foundation/Foundation.h>")
 
@@ -366,7 +370,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     if (r.ext.objc) {
       refs.body.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
       refs.privHeader.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
-      refs.header.add(s"@class ${idObjc.ty(ident.name)};")
+      refs.header.add(s"@class ${objcMarshal.typename(ident, r)};")
     }
 
     def checkMutable(tm: MExpr): Boolean = tm.base match {
@@ -392,7 +396,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl(s"@implementation $self")
       w.wl
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:(${idObjc.ty(ident)} *)${idObjc.local(ident)}")
+      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($noBaseSelf *)${idObjc.local(ident)}")
       w.braced {
         w.w("if (self = [super init])").braced {
           for (f <- r.fields) {
@@ -744,7 +748,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     translateObjcTypeToCpp(cppIdent, objcIdent, ty.resolved, w)
   def translateObjcTypeToCpp(cppIdent: String, objcIdent: String, tm: MExpr, w: IndentWriter): Unit = {
     def f(cppIdent: String, objcIdent: String, tm: MExpr, needRef: Boolean, w: IndentWriter, valueLevel: Int): Unit = {
-      val cppType = toCppType(tm, spec.cppNamespace)
+      val cppType = cppMarshal.fqTypename(tm)
       tm.base match {
         case MOptional =>
           // We use "nil" for the empty optional.
