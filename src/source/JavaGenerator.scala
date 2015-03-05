@@ -150,14 +150,14 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
           val ret = m.ret.fold("void")(marshal.typename(_))
-          val params = m.params.map(p => marshal.typename(p.ty) + " " + idJava.local(p.ident))
+          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident))
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
           val ret = m.ret.fold("void")(marshal.typename(_))
-          val params = m.params.map(p => marshal.typename(p.ty) + " " + idJava.local(p.ident))
+          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident))
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
         if (i.ext.cpp) {
@@ -184,7 +184,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             for (m <- i.methods if !m.static) { // Static methods not in CppProxy
             val ret = m.ret.fold("void")(marshal.typename(_))
               val returnStmt = m.ret.fold("")(_ => "return ")
-              val params = m.params.map(p => marshal.typename(p.ty)+" "+idJava.local(p.ident)).mkString(", ")
+              val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
               val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")
               val meth = idJava.method(m.ident)
               w.wl

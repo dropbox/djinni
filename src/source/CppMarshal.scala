@@ -20,6 +20,9 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   	case r: Record => withNs(spec.cppNamespace, idCpp.ty(name))
   }
 
+  override def paramType(tm: MExpr): String = toCppParamType(tm)
+  override def fqParamType(tm: MExpr): String = toCppParamType(tm, spec.cppNamespace)
+
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {
@@ -46,15 +49,13 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
-  private def toCppParamType(f: Field): String = toCppParamType(f, None, "")
-  private def toCppParamType(f: Field, namespace: Option[String] = None, prefix: String = ""): String = {
-    val cppType = toCppType(f.ty, namespace)
-    val localName = prefix + idCpp.local(f.ident);
-    val refType = "const " + cppType + " & " + localName
-    val valueType = cppType + " " + localName
+  private def toCppParamType(tm: MExpr, namespace: Option[String] = None): String = {
+    val cppType = toCppType(tm, namespace)
+    val refType = "const " + cppType + " &"
+    val valueType = cppType
 
     def toType(expr: MExpr): String = expr.base match {
-      case MPrimitive(_,_,_,_,_,_,_,_) => valueType
+      case p: MPrimitive => valueType
       case d: MDef => d.defType match {
         case DEnum => valueType
         case _  => refType
@@ -62,6 +63,6 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case MOptional => toType(expr.args.head)
       case _ => refType
     }
-    toType(f.ty.resolved)
+    toType(tm)
   }
 }

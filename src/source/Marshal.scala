@@ -16,6 +16,11 @@ abstract class Marshal(spec: Spec) {
   // Same as typename() but always fully namespace or package qualified
   def fqTypename(tm: MExpr): String
   def fqTypename(ty: TypeRef): String = fqTypename(ty.resolved)
+  // Type signature for a function parameter
+  def paramType(tm: MExpr): String
+  def paramType(ty: TypeRef): String = paramType(ty.resolved)
+  def fqParamType(tm: MExpr): String
+  def fqParamType(ty: TypeRef): String = fqParamType(ty.resolved)
 
   implicit def identToString(ident: Ident): String = ident.name
   protected val idCpp = spec.cppIdentStyle
