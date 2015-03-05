@@ -209,7 +209,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wlOutdent(s"public:")
             w.wl(s"JavaProxy(jobject obj);")
             for (m <- i.methods) {
-              val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
+              val ret = m.ret.fold("void")(cppMarshal.fqTypename)
               val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
             }
@@ -238,7 +238,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
         for (m <- i.methods) {
           w.wl
-          val ret = m.ret.fold("void")(toCppType(_, spec.cppNamespace))
+          val ret = m.ret.fold("void")(cppMarshal.fqTypename)
           val params = m.params.map(p => toCppParamType(p, spec.cppNamespace, "c_"))
           writeJniTypeParams(w, typeParams)
           w.w(s"$ret $jniSelf::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
@@ -311,7 +311,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               if (!m.static) w.wl(s"const std::shared_ptr<$cppSelf> & ref = djinni::CppProxyHandle<$cppSelf>::get(nativeRef);")
             for (p <- m.params) {
               val jniHelperClass = toJniHelperClass(p.ty)
-              val cppType = toCppType(p.ty, spec.cppNamespace)
+              val cppType = cppMarshal.fqTypename(p.ty)
               val localVar = "c_" + idCpp.local(p.ident)
               val paramName = "j_" + idJava.local(p.ident)
               w.wl(s"$cppType $localVar = $jniHelperClass::fromJava(jniEnv, $paramName);")
@@ -322,7 +322,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl
             m.ret match {
               case Some(r) =>
-                val cppRetType = toCppType(r, spec.cppNamespace)
+                val cppRetType = cppMarshal.fqTypename(r)
                 val jniHelperClass = toJniHelperClass(r)
                 w.wl(s"$cppRetType cr = $callExpr;")
                 w.wl
@@ -355,7 +355,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   }
 
   def toJavaMethodSig(javaPackage: Option[String], params: Iterable[Field], ret: Option[TypeRef]) = {
-    params.map(f => jniMarshal.typename(f.ty)).mkString("(", "", ")") + ret.fold("V")(jniMarshal.typename(_))
+    params.map(f => jniMarshal.typename(f.ty)).mkString("(", "", ")") + ret.fold("V")(jniMarshal.typename)
   }
 
   def writeJniTypeParams(w: IndentWriter, params: Seq[TypeParam]) {
