@@ -209,7 +209,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wlOutdent(s"public:")
             w.wl(s"JavaProxy(jobject obj);")
             for (m <- i.methods) {
-              val ret = m.ret.fold("void")(cppMarshal.fqTypename)
+              val ret = cppMarshal.fqReturnType(m.ret)
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
             }
@@ -238,7 +238,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
         for (m <- i.methods) {
           w.wl
-          val ret = m.ret.fold("void")(cppMarshal.fqTypename)
+          val ret = cppMarshal.fqReturnType(m.ret)
           val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
           writeJniTypeParams(w, typeParams)
           w.w(s"$ret $jniSelf::JavaProxy::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").bracedSemi {
@@ -278,7 +278,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         val prefix = "Java_" + classIdentMunged
         def nativeHook(name: String, static: Boolean, params: Iterable[Field], ret: Option[TypeRef], f: => Unit) = {
           val paramList = params.map(p => jniMarshal.paramType(p.ty) + " j_" + idJava.local(p.ident)).mkString(", ")
-          val jniRetType = ret.fold("void")(toJniType)
+          val jniRetType = jniMarshal.fqReturnType(ret)
           w.wl
           val methodNameMunged = name.replaceAllLiterally("_", "_1")
           val zero = ret.fold("")(s => "0 /* value doesn't matter */")

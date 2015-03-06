@@ -191,7 +191,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
-      val ret = method.ret.fold("void")(objcMarshal.paramType)
+      val ret = objcMarshal.fqReturnType(method.ret)
       w.w(s"$label ($ret)${idObjc.method(method.ident)}")
       val skipFirst = SkipFirst()
       for (p <- method.params) {
@@ -285,7 +285,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"virtual ~$objcExtSelf () override;")
             w.wl(s"static std::shared_ptr<$cppSelf> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
             for (m <- i.methods) {
-              val ret = m.ret.fold("void")(cppMarshal.fqTypename)
+              val ret = cppMarshal.fqReturnType(m.ret)
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
@@ -313,7 +313,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
           for (m <- i.methods) {
             w.wl
-            val ret = m.ret.fold("void")(cppMarshal.fqTypename)
+            val ret = cppMarshal.fqReturnType(m.ret)
             val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
             w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
               w.w("@autoreleasepool").braced {
