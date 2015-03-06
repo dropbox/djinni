@@ -15,6 +15,9 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   override def paramType(tm: MExpr): String = typename(tm)
   override def fqParamType(tm: MExpr): String = fqTypename(tm)
 
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaType(ty.resolved, None))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaType(ty.resolved, spec.javaPackage))
+
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
     def f(tm: MExpr, needRef: Boolean): String = {
       tm.base match {

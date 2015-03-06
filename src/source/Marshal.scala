@@ -22,10 +22,13 @@ abstract class Marshal(spec: Spec) {
   def fqParamType(tm: MExpr): String
   def fqParamType(ty: TypeRef): String = fqParamType(ty.resolved)
 
+  def returnType(ret: Option[TypeRef]): String
+  def fqReturnType(ret: Option[TypeRef]): String
+
   implicit def identToString(ident: Ident): String = ident.name
   protected val idCpp = spec.cppIdentStyle
   protected val idJava = spec.javaIdentStyle
   protected val idObjc = spec.objcIdentStyle
 
-  protected def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::"+_+"::"+t)
+  protected def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::" + _ + "::" + t)
 }

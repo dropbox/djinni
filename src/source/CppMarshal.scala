@@ -23,6 +23,9 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   override def paramType(tm: MExpr): String = toCppParamType(tm)
   override def fqParamType(tm: MExpr): String = toCppParamType(tm, spec.cppNamespace)
 
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, None))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, spec.cppNamespace))
+
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

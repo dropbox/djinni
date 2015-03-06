@@ -154,7 +154,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
-      val ret = method.ret.fold("void")(marshal.paramType)
+      val ret = marshal.returnType(method.ret)
       w.w(s"$label ($ret)${idObjc.method(method.ident)}")
       val skipFirst = SkipFirst()
       for (p <- method.params) {
