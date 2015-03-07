@@ -46,7 +46,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     }
     def find(m: Meta) = m match {
       case o: MOpaque =>
-        jniCpp.add("#include " + q(spec.jniBaseLibIncludePrefix + jniBaseLibFileIdentStyle(o.idlName) + "." + spec.cppHeaderExt))
+        jniCpp.add("#include " + q(spec.jniBaseLibIncludePrefix + jniBaseLibFileIdentStyle(o.idlName) + ".hpp"))
       case d: MDef =>
         jniCpp.add("#include " + q(spec.jniIncludePrefix + spec.jniFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
       case p: MParam =>
