@@ -102,7 +102,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), ${q("<init>")}, $constructorSig) };")
         for (f <- r.fields) {
           val javaFieldName = idJava.field(f.ident)
-          val javaSig = q(jniMarshal.typename(f.ty))
+          val javaSig = q(jniMarshal.fqTypename(f.ty))
           w.wl(s"const jfieldID field_$javaFieldName { djinni::jniGetFieldID(clazz.get(), ${q(javaFieldName)}, $javaSig) };")
         }
         w.wl
@@ -309,7 +309,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               if (!m.static) w.wl(s"const std::shared_ptr<$cppSelf> & ref = djinni::CppProxyHandle<$cppSelf>::get(nativeRef);")
             for (p <- m.params) {
               val jniHelperClass = toJniHelperClass(p.ty)
-              val cppType = cppMarshal.fqTypename(p.ty)
+              val cppType = cppMarshal.fqFieldType(p.ty)
               val localVar = "c_" + idCpp.local(p.ident)
               val paramName = "j_" + idJava.local(p.ident)
               w.wl(s"$cppType $localVar = $jniHelperClass::fromJava(jniEnv, $paramName);")
@@ -320,7 +320,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl
             m.ret match {
               case Some(r) =>
-                val cppRetType = cppMarshal.fqTypename(r)
+                val cppRetType = cppMarshal.fqFieldType(r)
                 val jniHelperClass = toJniHelperClass(r)
                 w.wl(s"$cppRetType cr = $callExpr;")
                 w.wl
@@ -410,7 +410,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   }
 
   def storeLocal(w: IndentWriter, name: String, ty: TypeRef, expr: String) = {
-    val jniTy = toJniType(ty)
+    val jniTy = jniMarshal.fqFieldType(ty)
     if (isJavaHeapObject(ty)) {
       w.wl(s"djinni::LocalRef<$jniTy> $name(jniEnv, $expr);")
       s"$name.get()"

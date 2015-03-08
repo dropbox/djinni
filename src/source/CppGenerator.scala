@@ -121,7 +121,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static const ${marshal.typename(c.ty)} ${idCpp.const(c.ident)};")
+      w.wl(s"static const ${marshal.fieldType(c.ty)} ${idCpp.const(c.ident)};")
     }
   }
 
@@ -154,7 +154,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"const ${marshal.typename(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
+      w.w(s"const ${marshal.fieldType(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
       writeCppConst(w, c.ty, c.value)
       w.wl(";")
     }
@@ -186,7 +186,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         for (f <- r.fields) {
           w.wl
           writeDoc(w, f.doc)
-          w.wl(marshal.typename(f.ty) + " " + idCpp.field(f.ident) + ";")
+          w.wl(marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
 
         w.wl
@@ -210,7 +210,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             val skipFirst = SkipFirst()
             for (f <- r.fields) {
               skipFirst { w.wl(",") }
-              w.w(marshal.typename(f.ty) + " " + idCpp.local(f.ident))
+              w.w(marshal.fieldType(f.ty) + " " + idCpp.local(f.ident))
             }
             w.wl(") :")
             w.nested {
