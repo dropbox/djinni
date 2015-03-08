@@ -25,6 +25,11 @@ abstract class Marshal(spec: Spec) {
   def returnType(ret: Option[TypeRef]): String
   def fqReturnType(ret: Option[TypeRef]): String
 
+  def fieldType(tm: MExpr): String
+  def fieldType(ty: TypeRef): String = fieldType(ty.resolved)
+  def fqFieldType(tm: MExpr): String
+  def fqFieldType(ty: TypeRef): String = fqFieldType(ty.resolved)
+
   implicit def identToString(ident: Ident): String = ident.name
   protected val idCpp = spec.cppIdentStyle
   protected val idJava = spec.javaIdentStyle

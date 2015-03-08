@@ -26,6 +26,9 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, None))
   override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, spec.cppNamespace))
 
+  override def fieldType(tm: MExpr): String = typename(tm)
+  override def fqFieldType(tm: MExpr): String = fqTypename(tm)
+
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

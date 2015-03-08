@@ -22,6 +22,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(paramType)
   override def fqReturnType(ret: Option[TypeRef]): String = returnType(ret)
 
+  override def fieldType(tm: MExpr): String = paramType(tm)
+  override def fqFieldType(tm: MExpr): String = fqParamType(tm)
+
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)

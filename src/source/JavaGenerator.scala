@@ -100,7 +100,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public static final ${marshal.typename(c.ty)} ${idJava.const(c.ident)} = ")
+      w.w(s"public static final ${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl
@@ -230,7 +230,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         // Field definitions.
         for (f <- r.fields) {
           w.wl
-          w.wl(s"/*package*/ final ${marshal.typename(f.ty)} ${idJava.field(f.ident)};")
+          w.wl(s"/*package*/ final ${marshal.fieldType(f.ty)} ${idJava.field(f.ident)};")
         }
 
         // Constructor.

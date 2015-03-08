@@ -90,8 +90,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
     // MBinary | MList | MSet | MMap are not allowed for constants.
     // Primitives should be `const type`. All others are pointers and should be `type * const`
-    case t: MPrimitive => w.w(s"const ${toObjcTypeDef(c.ty)}$s${idObjc.const(c.ident)}")
-    case _ => w.w(s"${toObjcTypeDef(c.ty)} const $s${idObjc.const(c.ident)}")
+    case t: MPrimitive => w.w(s"const ${marshal.fqFieldType(c.ty)} $s${idObjc.const(c.ident)}")
+    case _ => w.w(s"${marshal.fqFieldType(c.ty)} const $s${idObjc.const(c.ident)}")
   }
 
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
@@ -244,7 +244,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       for (f <- r.fields) {
         w.wl
         writeDoc(w, f.doc)
-        w.wl(s"@property (nonatomic, readonly) ${toObjcTypeDef(f.ty)}${idObjc.field(f.ident)};")
+        w.wl(s"@property (nonatomic, readonly) ${marshal.fqFieldType(f.ty)} ${idObjc.field(f.ident)};")
       }
       if (r.derivingTypes.contains(DerivingType.Ord)) {
         w.wl
@@ -308,14 +308,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
     }
     f(tm, needRef)
-  }
-
-  def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)
-  def toObjcTypeDef(ty: TypeRef, needRef: Boolean): String = toObjcTypeDef(ty.resolved, needRef)
-  def toObjcTypeDef(tm: MExpr): String = toObjcTypeDef(tm, false)
-  def toObjcTypeDef(tm: MExpr, needRef: Boolean): String = {
-    val (name, asterisk) = toObjcType(tm, needRef)
-    name + (if (asterisk) " *" else " ")
   }
 
 }

@@ -124,8 +124,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
     // MBinary | MList | MSet | MMap are not allowed for constants.
     // Primitives should be `const type`. All others are pointers and should be `type * const`
-    case t: MPrimitive => w.w(s"const ${toObjcTypeDef(c.ty)}$s${idObjc.const(c.ident)}")
-    case _ => w.w(s"${toObjcTypeDef(c.ty)} const $s${idObjc.const(c.ident)}")
+    case t: MPrimitive => w.w(s"const ${objcMarshal.fqFieldType(c.ty)} $s${idObjc.const(c.ident)}")
+    case _ => w.w(s"${objcMarshal.fqFieldType(c.ty)} const $s${idObjc.const(c.ident)}")
   }
 
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
@@ -323,7 +323,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.w("@autoreleasepool").braced {
                 m.params.foreach(p =>
                   translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
-                m.ret.fold()(r => w.w(toObjcTypeDef(r) + "objcRet = "))
+                m.ret.fold()(r => w.w(objcMarshal.fqFieldType(r) + " objcRet = "))
                 w.w("[_objcRef " + idObjc.method(m.ident))
                 val skipFirst = SkipFirst()
                 for (p <- m.params) {
