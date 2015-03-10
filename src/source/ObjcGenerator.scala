@@ -37,6 +37,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     def find(tm: MExpr) {
       tm.args.map(find).mkString("<", ",", ">")
       tm.base match {
+        case MEither =>
+          header.add("#import <Foundation/Foundation.h>")
+          spec.objcEitherHeader match {
+            case None => throw GenerateException("No Objective-C header specified for 'either'")
+            case Some(h) => header.add("#import " + q(h))
+          }
         case o: MOpaque =>
           header.add("#import <Foundation/Foundation.h>")
         case d: MDef => d.defType match {
@@ -635,6 +641,24 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           }
           w.wl("}")
         }
+        case MEither => {
+          spec.objcEitherClass match {
+            case None => throw GenerateException("No Objective-C class specified for 'either'")
+            case Some(c) => {
+              w.wl(s"if ($from.left != nil) {").nested {
+                val copyName = "copiedLeft_" + valueLevel
+                f(copyName, s"$from.left", tm.args.apply(0), true, w, valueLevel + 1)
+                w.wl(s"$to = [$c initWithLeft:$copyName];")
+              }
+              w.wl("} else {").nested {
+                val copyName = "copiedRight_" + valueLevel
+                f(copyName, s"$from.right", tm.args.apply(1), true, w, valueLevel + 1)
+                w.wl(s"$to = [$c initWithRight:$copyName];")
+              }
+              w.wl("}")
+            }
+          }
+        }
         case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
         case MString => w.wl(s"$to = [$from copy];")
         case MBinary => w.wl(s"$to = [$from copy];")
@@ -737,6 +761,28 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           }
           case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
           case MOptional => throw new AssertionError("optional should have been special cased")
+          case MEither =>
+            spec.objcEitherClass match {
+              case None => throw GenerateException("No Objective-C class specified for 'either'")
+              case Some(objcEither) => {
+                val objcLeftName = "objcLeftValue_" + valueLevel
+                val objcRightName = "objcRightValue_" + valueLevel
+                val cppLeftName = "cppLeftValue_" + valueLevel
+                val cppRightName = "cppRightValue_" + valueLevel
+                w.wl(s"$objcType$objcIdent = [$objcEither alloc];")
+                w.wl(s"if ($cppIdent.isLeft()) {").nested {
+                  w.wl(s"const auto & $cppLeftName = $cppIdent.left();")
+                  f(objcLeftName, cppLeftName, tm.args.apply(0), true, true, w, valueLevel + 1)
+                  w.wl(s"$objcIdent = [$objcIdent initWithLeft:$objcLeftName];")
+                }
+                w.wl("} else {").nested {
+                  w.wl(s"const auto & $cppRightName = $cppIdent.right();")
+                  f(objcRightName, cppRightName, tm.args.apply(1), true, true, w, valueLevel + 1)
+                  w.wl(s"$objcIdent = [$objcIdent initWithRight:$objcRightName];")
+                }
+                w.wl("}")
+              }
+            }
           case MList =>
             val objcName = "objcValue_" + valueLevel
             val cppName = "cppValue_" + valueLevel
@@ -841,6 +887,22 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"$cppType $cppIdent([$objcIdent length]);")
             w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
           case MOptional => throw new AssertionError("optional should have been special cased")
+          case MEither =>
+            val cppLeftName = "cppLeftValue_" + valueLevel
+            val cppRightName = "cppRightValue_" + valueLevel
+            val cppOptLeftName = "cppOptLeftValue_" + valueLevel
+            val cppOptRightName = "cppOptRightValue_" + valueLevel
+            w.wl(spec.cppOptionalTemplate + "<" + toCppType(tm.args.apply(0), None) + "> " + cppOptLeftName + ";")
+            w.wl(spec.cppOptionalTemplate + "<" + toCppType(tm.args.apply(1), None) + "> " + cppOptRightName + ";")
+            w.wl(s"if ($objcIdent.left != nil)").braced {
+              f(cppLeftName, objcIdent + ".left", tm.args.apply(0), true, w, valueLevel + 1)
+              w.wl(s"$cppOptLeftName = std::move($cppLeftName);")
+            }
+            w.wl("else").braced {
+              f(cppRightName, objcIdent + ".right", tm.args.apply(1), true, w, valueLevel + 1)
+              w.wl(s"$cppOptRightName = std::move($cppRightName);")
+            }
+            w.wl(s"$cppType $cppIdent = $cppOptLeftName ? $cppType(*$cppOptLeftName) : $cppType(*$cppOptRightName);")
           case MList =>
             val cppName = "cppValue_" + valueLevel
             val objcName = "objcValue_" + valueLevel
@@ -915,6 +977,10 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case MString => ("NSString", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
+            case MEither => spec.objcEitherClass match {
+              case None => throw GenerateException("No Objective-C class specified for 'either'")
+              case Some(c) => (c, true)
+            }
             case MList => ("NSArray", true)
             case MSet => ("NSSet", true)
             case MMap => ("NSDictionary", true)

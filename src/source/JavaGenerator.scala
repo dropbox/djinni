@@ -41,6 +41,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     def find(m: Meta) = m match {
       case o: MOpaque =>
         o match {
+          case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+            case (p, Some(c)) => java.add(withPackage(p, c))
+            case _ => throw GenerateException("No Java class specified for 'either'")
+          }
           case MList =>
             java.add("java.util.ArrayList")
           case MSet =>
@@ -272,7 +276,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 skipFirst { w.wl(" &&") }
                 f.ty.resolved.base match {
                   case MBinary => w.w(s"java.util.Arrays.equals(${idJava.field(f.ident)}, other.${idJava.field(f.ident)})")
-                  case MList | MSet | MMap => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                  case MEither | MList | MSet | MMap => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case MOptional =>
                     w.w(s"((this.${idJava.field(f.ident)} == null && other.${idJava.field(f.ident)} == null) || ")
                     w.w(s"(this.${idJava.field(f.ident)} != null && this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})))")
@@ -350,6 +354,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             case MString => "String"
             case MBinary => "byte[]"
             case MOptional => throw new AssertionError("optional should have been special cased")
+            case MEither => spec.javaEitherClass match {
+              case None => throw GenerateException("No Java class specified for 'either'")
+              case Some(c) => c
+            }
             case MList => "ArrayList"
             case MSet => "HashSet"
             case MMap => "HashMap"

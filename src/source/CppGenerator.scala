@@ -55,6 +55,10 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             hpp.add("#include <cstdint>")
           case MOptional =>
             hpp.add("#include " + spec.cppOptionalHeader)
+          case MEither => spec.cppEitherHeader match {
+            case None => throw GenerateException("No header file specified for 'either'")
+            case Some(h) => hpp.add("#include " + h)
+          }
           case MList =>
             hpp.add("#include <vector>")
           case MSet =>

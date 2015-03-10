@@ -33,6 +33,8 @@ package object generatorTools {
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
+                   javaEitherClass: Option[String],
+                   javaEitherPackage: Option[String],
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
                    cppIncludePrefix: String,
@@ -41,6 +43,8 @@ package object generatorTools {
                    cppFileIdentStyle: IdentConverter,
                    cppOptionalTemplate: String,
                    cppOptionalHeader: String,
+                   cppEitherTemplate: Option[String],
+                   cppEitherHeader: Option[String],
                    cppEnumHashWorkaround: Boolean,
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
@@ -59,6 +63,8 @@ package object generatorTools {
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
                    objcIncludeCppPrefix: String,
+                   objcEitherClass: Option[String],
+                   objcEitherHeader: Option[String],
                    objcppNamespace: String)
 
   def preComma(s: String) = {
@@ -283,6 +289,10 @@ abstract class Generator(spec: Spec)
       case MString => "std::string"
       case MBinary => "std::vector<uint8_t>"
       case MOptional => spec.cppOptionalTemplate
+      case MEither => spec.cppEitherTemplate match {
+        case None => throw GenerateException("No class template specified for 'either'")
+        case Some(t) => t
+      }
       case MList => "std::vector"
       case MSet => "std::unordered_set"
       case MMap => "std::unordered_map"

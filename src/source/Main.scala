@@ -30,11 +30,15 @@ object Main {
     var cppFileIdentStyle: IdentConverter = IdentStyle.underLower
     var cppOptionalTemplate: String = "std::optional"
     var cppOptionalHeader: String = "<optional>"
+    var cppEitherTemplate: Option[String] = None
+    var cppEitherHeader: Option[String] = None
     var cppEnumHashWorkaround : Boolean = true
     var javaOutFolder: Option[File] = None
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
     var javaAnnotation: Option[String] = None
+    var javaEitherClass: Option[String] = None
+    var javaEitherPackage: Option[String] = None
     var objcOutFolder: Option[File] = None
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
@@ -58,6 +62,8 @@ object Main {
     var objcIncludePrefix: String = ""
     var objcIncludeCppPrefix: String = ""
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
+    var objcEitherClass: Option[String] = None
+    var objcEitherHeader: Option[String] = None
     var objcppNamespace: String = "dropboxsync"
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
@@ -84,6 +90,10 @@ object Main {
         .text("The type for translated C++ exceptions in Java (default: java.lang.RuntimeException that is not checked)")
       opt[String]("java-annotation").valueName("<annotation-class>").foreach(x => javaAnnotation = Some(x))
         .text("Java annotation (@Foo) to place on all generated Java classes")
+      opt[String]("java-either-class").valueName("<class>").foreach(x => javaEitherClass = Some(x))
+        .text("The Java class to use for either values")
+      opt[String]("java-either-package").valueName("<package>").foreach(x => javaEitherPackage = Some(x))
+        .text("The package containing the Java class for either values")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
         .text("The output folder for C++ files (Generator disabled if unspecified).")
@@ -101,6 +111,10 @@ object Main {
         .text("The template to use for optional values (default: \"std::optional\")")
       opt[String]("cpp-optional-header").valueName("<header>").foreach(x => cppOptionalHeader = x)
         .text("The header to use for optional values (default: \"<optional>\")")
+      opt[String]("cpp-either-template").valueName("<template>").foreach(x => cppEitherTemplate = Some(x))
+        .text("The template to use for either values")
+      opt[String]("cpp-either-header").valueName("<header>").foreach(x => cppEitherHeader = Some(x))
+        .text("The header to use for either values")
       opt[Boolean]("cpp-enum-hash-workaround").valueName("<true/false>").foreach(x => cppEnumHashWorkaround = x)
         .text("Work around LWG-2148 by generating std::hash specializations for C++ enums (default: true)")
       note("")
@@ -129,6 +143,10 @@ object Main {
         .text("The prefix for #import of header files from Objective-C files.")
       opt[String]("objc-include-cpp-prefix").valueName("<prefix>").foreach(objcIncludeCppPrefix = _)
         .text("The prefix for #include of the main header files from Objective-C files.")
+      opt[String]("objc-either-class").valueName("<class>").foreach(x => objcEitherClass = Some(x))
+        .text("The class for Objective-C either values")
+      opt[String]("objc-either-header").valueName("<header>").foreach(x => objcEitherHeader = Some(x))
+        .text("The header for the Objective-C either value class")
       opt[String]("objcpp-namespace").valueName("<prefix>").foreach(objcppNamespace = _)
         .text("Namespace for C++ objects defined in Objective-C++, such as wrapper caches")
 
@@ -200,6 +218,8 @@ object Main {
       javaIdentStyle,
       javaCppException,
       javaAnnotation,
+      javaEitherClass,
+      javaEitherPackage,
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,
@@ -208,6 +228,8 @@ object Main {
       cppFileIdentStyle,
       cppOptionalTemplate,
       cppOptionalHeader,
+      cppEitherTemplate,
+      cppEitherHeader,
       cppEnumHashWorkaround,
       jniOutFolder,
       jniHeaderOutFolder,
@@ -226,6 +248,8 @@ object Main {
       objcHeaderExt,
       objcIncludePrefix,
       objcIncludeCppPrefix,
+      objcEitherClass,
+      objcEitherHeader,
       objcppNamespace)
 
     System.out.println("Generating...")

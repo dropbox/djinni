@@ -45,8 +45,16 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       find(tm.base)
     }
     def find(m: Meta) = m match {
-      case o: MOpaque =>
-        jniCpp.add("#include " + q(spec.jniBaseLibIncludePrefix + jniBaseLibFileIdentStyle(o.idlName) + "." + spec.cppHeaderExt))
+      case o: MOpaque => o match {
+        case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+          case (p, Some(c)) =>
+            jniCpp.add(s"""#define HEITHER_JCLASSNAME "${toJavaClassLookup(c, p)}"
+                       |#include ${q(spec.jniBaseLibIncludePrefix + jniBaseLibFileIdentStyle(o.idlName) + "." + spec.cppHeaderExt)}
+                       |#undef HEITHER_JCLASSNAME""".stripMargin)
+          case _ => throw GenerateException("No Java class specified for 'either'")
+        }
+        case _ => jniCpp.add("#include " + q(spec.jniBaseLibIncludePrefix + jniBaseLibFileIdentStyle(o.idlName) + "." + spec.cppHeaderExt))
+      }
       case d: MDef =>
         jniCpp.add("#include " + q(spec.jniIncludePrefix + spec.jniFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
       case p: MParam =>
@@ -370,6 +378,10 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           case MOptional => throw new AssertionError("nested optional?")
           case m => f(e.args.head)
         }
+        case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+          case (p, Some(c)) => "L" + toJavaClassLookup(c, p) + ";"
+          case _ => throw GenerateException("No Java class specified for 'either'")
+        }
         case MList => "Ljava/util/ArrayList;"
         case MSet => "Ljava/util/HashSet;"
         case MMap => "Ljava/util/HashMap;"
@@ -402,12 +414,20 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       case p: MParam => idCpp.typeParam(p.name)
     }
     def expr(tm: MExpr, needRef: Boolean): String = {
-      val args = if (tm.args.isEmpty) "" else tm.args.map(expr(_, true)).mkString("<", ", ", ">")
+      val args = if (tm.args.isEmpty) "" else (tm.base, spec.cppEitherTemplate) match {
+        case (MEither, Some(t)) => "<" + t + ", " + tm.args.map(expr(_, true)).mkString(", ") + ">"
+        case _ => tm.args.map(expr(_, true)).mkString("<", ", ", ">")
+      }
       base(tm.base, needRef) + args
     }
-    // Hacky special case - HOptional needs an extra parameter that's the optional impl in use
+    // Hacky special case - HOptional and HEither need an extra parameter
+    // that's the class impl in use
     tm.base match {
       case MOptional => base(tm.base, false) + "<" + spec.cppOptionalTemplate + ", " + expr(tm.args.head, true) + ">"
+      case MEither => spec.cppEitherTemplate match {
+        case None => throw GenerateException("No C++ class specified for 'either'")
+        case Some(t) => base(tm.base, false) + "<" + t + ", " + tm.args.map(expr(_, true)).mkString(", ") + ">"
+      }
       case _ => expr(tm, false)
     }
   }

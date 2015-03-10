@@ -41,6 +41,7 @@ case class MPrimitive(_idlName: String, jName: String, jniName: String, cName: S
 case object MString extends MOpaque { val numParams = 0; val idlName = "string" }
 case object MBinary extends MOpaque { val numParams = 0; val idlName = "binary" }
 case object MOptional extends MOpaque { val numParams = 1; val idlName = "optional" }
+case object MEither extends MOpaque { val numParams = 2; val idlName = "either" }
 case object MList extends MOpaque { val numParams = 1; val idlName = "list" }
 case object MSet extends MOpaque { val numParams = 1; val idlName = "set" }
 case object MMap extends MOpaque { val numParams = 2; val idlName = "map" }
@@ -55,6 +56,7 @@ val defaults: Map[String,MOpaque] = immutable.HashMap(
   ("string", MString),
   ("binary", MBinary),
   ("optional", MOptional),
+  ("either", MEither),
   ("list", MList),
   ("set", MSet),
   ("map", MMap))
