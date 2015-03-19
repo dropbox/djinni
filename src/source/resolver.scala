@@ -133,7 +133,7 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
     throw new AssertionError(s"Const ${ref.name} does not exist")
   }
   ty.base match {
-    case MEither | MBinary | MList | MSet | MMap =>
+    case MEither | MBinary | MDate | MList | MSet | MMap =>
       throw new AssertionError("Type not allowed for constant")
     case MString =>
       if (!value.isInstanceOf[String] ||
@@ -211,7 +211,7 @@ private def resolveRecord(scope: Scope, r: Record) {
       case MBinary | MList | MSet | MMap =>
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare collections in Ord deriving (Java limitation)").toException
-      case MString =>
+      case MDate | MString =>
       case MOptional =>
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare optional in Ord deriving").toException

@@ -324,7 +324,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       refs.privHeader.add("#import " + q("DJIObjcWrapperCache+Private.h"))
       refs.body.add("!#import " + q(privateHeaderName(objcExtName)))
       writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
-        w.wl(s"namespace ${spec.objcppNamespace}").braced {
+        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wl("public:")
             w.wl(s"id <$self> objcRef;")
@@ -340,11 +340,11 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl("private:")
             w.wl(s"$objcExtSelf () {};")
           }
-        }
+        })
       })
 
       writeObjcFile(bodyName(objcExtName), origin, refs.body, w => {
-        w.wl(s"namespace ${spec.objcppNamespace}").braced {
+        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"$objcExtSelf::$objcExtSelf (id objcRef)").braced {
             w.wl(s"assert([[objcRef class] conformsToProtocol:@protocol($self)]);")
             w.wl("this->objcRef = objcRef;")
@@ -382,7 +382,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               }
             }
           }
-        }
+        })
       })
     }
   }
@@ -547,6 +547,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               skipFirst { w.wl(" &&") }
               f.ty.resolved.base match {
                 case MBinary => w.w(s"[self.${idObjc.field(f.ident)} isEqualToData:typedOther.${idObjc.field(f.ident)}]")
+                case MDate => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDate:typedOther.${idObjc.field(f.ident)}]")
                 case MList => w.w(s"[self.${idObjc.field(f.ident)} isEqualToArray:typedOther.${idObjc.field(f.ident)}]")
                 case MSet => w.w(s"[self.${idObjc.field(f.ident)} isEqualToSet:typedOther.${idObjc.field(f.ident)}]")
                 case MMap => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDictionary:typedOther.${idObjc.field(f.ident)}]")
@@ -662,6 +663,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
         case MString => w.wl(s"$to = [$from copy];")
         case MBinary => w.wl(s"$to = [$from copy];")
+        case MDate => w.wl(s"$to = $from;") // NSDate is immutable
         case MList => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
@@ -760,6 +762,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             w.wl("encoding:NSUTF8StringEncoding];")
           }
           case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
+          case MDate => w.wl(s"$objcType$objcIdent = [[NSDate alloc] initWithTimeIntervalSince1970:$cppIdent];")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MEither =>
             spec.objcEitherClass match {
@@ -886,6 +889,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           case MBinary =>
             w.wl(s"$cppType $cppIdent([$objcIdent length]);")
             w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
+          case MDate => w.wl(s"$cppType $cppIdent = [$objcIdent timeIntervalSince1970];")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MEither =>
             val cppLeftName = "cppLeftValue_" + valueLevel
@@ -976,6 +980,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case p: MPrimitive => if (needRef) (p.objcBoxed, true) else (p.objcName, false)
             case MString => ("NSString", true)
             case MBinary => ("NSData", true)
+            case MDate => ("NSDate", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MEither => spec.objcEitherClass match {
               case None => throw GenerateException("No Objective-C class specified for 'either'")

@@ -41,6 +41,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     def find(m: Meta) = m match {
       case o: MOpaque =>
         o match {
+          case MDate =>
+            java.add("java.util.Date")
           case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
             case (p, Some(c)) => java.add(withPackage(p, c))
             case _ => throw GenerateException("No Java class specified for 'either'")
@@ -280,7 +282,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                   case MOptional =>
                     w.w(s"((this.${idJava.field(f.ident)} == null && other.${idJava.field(f.ident)} == null) || ")
                     w.w(s"(this.${idJava.field(f.ident)} != null && this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})))")
-                  case MString => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                  case MString | MDate => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case t: MPrimitive => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
                   case df: MDef => df.defType match {
                     case DRecord => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
@@ -353,6 +355,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             case p: MPrimitive => if (needRef) p.jBoxed else p.jName
             case MString => "String"
             case MBinary => "byte[]"
+            case MDate => "Date"
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MEither => spec.javaEitherClass match {
               case None => throw GenerateException("No Java class specified for 'either'")

@@ -288,6 +288,7 @@ abstract class Generator(spec: Spec)
       case p: MPrimitive => p.cName
       case MString => "std::string"
       case MBinary => "std::vector<uint8_t>"
+      case MDate => "double"
       case MOptional => spec.cppOptionalTemplate
       case MEither => spec.cppEitherTemplate match {
         case None => throw GenerateException("No class template specified for 'either'")

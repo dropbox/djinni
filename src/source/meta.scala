@@ -39,6 +39,7 @@ case object DRecord extends DefType
 
 case class MPrimitive(_idlName: String, jName: String, jniName: String, cName: String, jBoxed: String, jSig: String, objcName: String, objcBoxed: String) extends MOpaque { val numParams = 0; val idlName = _idlName }
 case object MString extends MOpaque { val numParams = 0; val idlName = "string" }
+case object MDate extends MOpaque { val numParams = 0; val idlName = "date" }
 case object MBinary extends MOpaque { val numParams = 0; val idlName = "binary" }
 case object MOptional extends MOpaque { val numParams = 1; val idlName = "optional" }
 case object MEither extends MOpaque { val numParams = 2; val idlName = "either" }
@@ -54,6 +55,7 @@ val defaults: Map[String,MOpaque] = immutable.HashMap(
   ("f64",  MPrimitive("f64",  "double",  "jdouble",  "double",  "Double",  "D", "double",  "NSNumber")),
   ("bool", MPrimitive("bool", "boolean", "jboolean", "bool",    "Boolean", "Z", "BOOL",    "NSNumber")),
   ("string", MString),
+  ("date", MDate),
   ("binary", MBinary),
   ("optional", MOptional),
   ("either", MEither),
