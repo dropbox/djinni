@@ -11,7 +11,7 @@
 
 @property (nonatomic, readonly) int32_t key;
 
-@property (nonatomic, readonly) DBRecordWithDerivings *rec;
+@property (nonatomic, readonly) DBRecordWithDerivings * rec;
 
 - (NSComparisonResult)compare:(DBRecordWithNestedDerivings *)other;
 

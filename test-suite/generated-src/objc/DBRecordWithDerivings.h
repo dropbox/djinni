@@ -10,7 +10,7 @@
 
 @property (nonatomic, readonly) int32_t key1;
 
-@property (nonatomic, readonly) NSString *key2;
+@property (nonatomic, readonly) NSString * key2;
 
 - (NSComparisonResult)compare:(DBRecordWithDerivings *)other;
 

@@ -8,6 +8,6 @@
 - (id)initWithItemList:(TXSItemList *)itemList;
 - (id)initWithItems:(NSArray *)items;
 
-@property (nonatomic, readonly) NSArray *items;
+@property (nonatomic, readonly) NSArray * items;
 
 @end

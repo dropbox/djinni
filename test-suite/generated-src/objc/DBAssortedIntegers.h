@@ -16,12 +16,12 @@
 
 @property (nonatomic, readonly) int64_t sixtyfour;
 
-@property (nonatomic, readonly) NSNumber *oEight;
+@property (nonatomic, readonly) NSNumber * oEight;
 
-@property (nonatomic, readonly) NSNumber *oSixteen;
+@property (nonatomic, readonly) NSNumber * oSixteen;
 
-@property (nonatomic, readonly) NSNumber *oThirtytwo;
+@property (nonatomic, readonly) NSNumber * oThirtytwo;
 
-@property (nonatomic, readonly) NSNumber *oSixtyfour;
+@property (nonatomic, readonly) NSNumber * oSixtyfour;
 
 @end

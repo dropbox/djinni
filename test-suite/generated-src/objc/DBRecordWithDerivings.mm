@@ -3,6 +3,7 @@
 
 #import "DBRecordWithDerivings+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -32,7 +33,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppRecordWithDerivings:(const RecordWithDerivings &)recordWithDerivings
 {
     if (self = [super init]) {
-        _key1 = recordWithDerivings.key1;
+        _key1 = ::djinni::I32::fromCpp(recordWithDerivings.key1);
         _key2 = [[NSString alloc] initWithBytes:recordWithDerivings.key2.data()
                 length:recordWithDerivings.key2.length()
                 encoding:NSUTF8StringEncoding];
@@ -42,7 +43,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (RecordWithDerivings)cppRecordWithDerivings
 {
-    int32_t key1 = _key1;
+    int32_t key1 = ::djinni::I32::toCpp(_key1);
     std::string key2([_key2 UTF8String], [_key2 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     return RecordWithDerivings(
             std::move(key1),

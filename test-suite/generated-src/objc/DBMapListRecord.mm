@@ -3,6 +3,7 @@
 
 #import "DBMapListRecord+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -59,7 +60,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
                 NSString *objcKey_1 = [[NSString alloc] initWithBytes:cppPair_1.first.data()
                         length:cppPair_1.first.length()
                         encoding:NSUTF8StringEncoding];
-                NSNumber *objcValue_1 = [NSNumber numberWithLongLong:cppPair_1.second];
+                NSNumber *objcValue_1 = ::djinni::I64::Boxed::fromCpp(cppPair_1.second);
                 objcValue_0TempKeyVector.push_back(objcKey_1);
                 objcValue_0TempValueVector.push_back(objcValue_1);
             }
@@ -79,7 +80,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::unordered_map<std::string, int64_t> cppValue_0;
         for (id objcKey_1 in objcValue_0) {
             std::string cppKey_1([objcKey_1 UTF8String], [objcKey_1 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-            int64_t cppValue_1 = [[objcValue_0 objectForKey:objcKey_1] longLongValue];
+            int64_t cppValue_1 = ::djinni::I64::Boxed::toCpp([objcValue_0 objectForKey:objcKey_1]);
             cppValue_0.emplace(std::move(cppKey_1), std::move(cppValue_1));
         }
         mapList.push_back(std::move(cppValue_0));

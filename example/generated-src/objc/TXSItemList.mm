@@ -3,6 +3,7 @@
 
 #import "TXSItemList+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>

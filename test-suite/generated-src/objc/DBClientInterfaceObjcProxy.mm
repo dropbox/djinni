@@ -4,6 +4,7 @@
 #import "DBClientInterfaceObjcProxy+Private.h"
 #import "DBClientInterface.h"
 #import "DBClientReturnedRecord+Private.h"
+#import "DJIMarshal+Private.h"
 #include <vector>
 
 namespace djinni_generated {
@@ -26,11 +27,11 @@ std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with
 ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
 {
     @autoreleasepool {
-        int64_t cpp_record_id = record_id;
+        int64_t cpp_record_id = ::djinni::I64::fromCpp(record_id);
         NSString *cpp_utf8string = [[NSString alloc] initWithBytes:utf8string.data()
                 length:utf8string.length()
                 encoding:NSUTF8StringEncoding];
-        DBClientReturnedRecord *objcRet = [_objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
+        DBClientReturnedRecord * objcRet = [_objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
         ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
         return cppRet;
     }

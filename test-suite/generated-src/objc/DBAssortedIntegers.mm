@@ -3,6 +3,7 @@
 
 #import "DBAssortedIntegers+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -60,27 +61,27 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppAssortedIntegers:(const AssortedIntegers &)assortedIntegers
 {
     if (self = [super init]) {
-        _eight = assortedIntegers.eight;
-        _sixteen = assortedIntegers.sixteen;
-        _thirtytwo = assortedIntegers.thirtytwo;
-        _sixtyfour = assortedIntegers.sixtyfour;
+        _eight = ::djinni::I8::fromCpp(assortedIntegers.eight);
+        _sixteen = ::djinni::I16::fromCpp(assortedIntegers.sixteen);
+        _thirtytwo = ::djinni::I32::fromCpp(assortedIntegers.thirtytwo);
+        _sixtyfour = ::djinni::I64::fromCpp(assortedIntegers.sixtyfour);
         if (assortedIntegers.o_eight) {
-            _oEight = [NSNumber numberWithChar:(*(assortedIntegers.o_eight))];
+            _oEight = ::djinni::I8::Boxed::fromCpp((*(assortedIntegers.o_eight)));
         } else {
             _oEight = nil;
         }
         if (assortedIntegers.o_sixteen) {
-            _oSixteen = [NSNumber numberWithShort:(*(assortedIntegers.o_sixteen))];
+            _oSixteen = ::djinni::I16::Boxed::fromCpp((*(assortedIntegers.o_sixteen)));
         } else {
             _oSixteen = nil;
         }
         if (assortedIntegers.o_thirtytwo) {
-            _oThirtytwo = [NSNumber numberWithInt:(*(assortedIntegers.o_thirtytwo))];
+            _oThirtytwo = ::djinni::I32::Boxed::fromCpp((*(assortedIntegers.o_thirtytwo)));
         } else {
             _oThirtytwo = nil;
         }
         if (assortedIntegers.o_sixtyfour) {
-            _oSixtyfour = [NSNumber numberWithLongLong:(*(assortedIntegers.o_sixtyfour))];
+            _oSixtyfour = ::djinni::I64::Boxed::fromCpp((*(assortedIntegers.o_sixtyfour)));
         } else {
             _oSixtyfour = nil;
         }
@@ -90,28 +91,28 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (AssortedIntegers)cppAssortedIntegers
 {
-    int8_t eight = _eight;
-    int16_t sixteen = _sixteen;
-    int32_t thirtytwo = _thirtytwo;
-    int64_t sixtyfour = _sixtyfour;
+    int8_t eight = ::djinni::I8::toCpp(_eight);
+    int16_t sixteen = ::djinni::I16::toCpp(_sixteen);
+    int32_t thirtytwo = ::djinni::I32::toCpp(_thirtytwo);
+    int64_t sixtyfour = ::djinni::I64::toCpp(_sixtyfour);
     std::experimental::optional<int8_t> oEight;
     if (_oEight != nil) {
-        int8_t optValue = [_oEight charValue];
+        int8_t optValue = ::djinni::I8::Boxed::toCpp(_oEight);
         oEight = optValue;
     }
     std::experimental::optional<int16_t> oSixteen;
     if (_oSixteen != nil) {
-        int16_t optValue = [_oSixteen shortValue];
+        int16_t optValue = ::djinni::I16::Boxed::toCpp(_oSixteen);
         oSixteen = optValue;
     }
     std::experimental::optional<int32_t> oThirtytwo;
     if (_oThirtytwo != nil) {
-        int32_t optValue = [_oThirtytwo intValue];
+        int32_t optValue = ::djinni::I32::Boxed::toCpp(_oThirtytwo);
         oThirtytwo = optValue;
     }
     std::experimental::optional<int64_t> oSixtyfour;
     if (_oSixtyfour != nil) {
-        int64_t optValue = [_oSixtyfour longLongValue];
+        int64_t optValue = ::djinni::I64::Boxed::toCpp(_oSixtyfour);
         oSixtyfour = optValue;
     }
     return AssortedIntegers(

@@ -3,6 +3,7 @@
 
 #import "DBClientReturnedRecord+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -32,7 +33,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppClientReturnedRecord:(const ClientReturnedRecord &)clientReturnedRecord
 {
     if (self = [super init]) {
-        _recordId = clientReturnedRecord.record_id;
+        _recordId = ::djinni::I64::fromCpp(clientReturnedRecord.record_id);
         _content = [[NSString alloc] initWithBytes:clientReturnedRecord.content.data()
                 length:clientReturnedRecord.content.length()
                 encoding:NSUTF8StringEncoding];
@@ -42,7 +43,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (ClientReturnedRecord)cppClientReturnedRecord
 {
-    int64_t recordId = _recordId;
+    int64_t recordId = ::djinni::I64::toCpp(_recordId);
     std::string content([_content UTF8String], [_content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     return ClientReturnedRecord(
             std::move(recordId),

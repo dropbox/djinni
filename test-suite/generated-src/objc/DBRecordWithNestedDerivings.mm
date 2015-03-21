@@ -4,6 +4,7 @@
 #import "DBRecordWithNestedDerivings+Private.h"
 #import "DBRecordWithDerivings+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -33,7 +34,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppRecordWithNestedDerivings:(const RecordWithNestedDerivings &)recordWithNestedDerivings
 {
     if (self = [super init]) {
-        _key = recordWithNestedDerivings.key;
+        _key = ::djinni::I32::fromCpp(recordWithNestedDerivings.key);
         _rec = [[DBRecordWithDerivings alloc] initWithCppRecordWithDerivings:recordWithNestedDerivings.rec];
     }
     return self;
@@ -41,7 +42,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (RecordWithNestedDerivings)cppRecordWithNestedDerivings
 {
-    int32_t key = _key;
+    int32_t key = ::djinni::I32::toCpp(_key);
     RecordWithDerivings rec = std::move([_rec cppRecordWithDerivings]);
     return RecordWithNestedDerivings(
             std::move(key),

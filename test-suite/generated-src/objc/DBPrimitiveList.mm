@@ -3,6 +3,7 @@
 
 #import "DBPrimitiveList+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -40,7 +41,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::vector<NSNumber *> _listTempVector;
         _listTempVector.reserve(primitiveList.list.size());
         for (const auto & cppValue_0 : primitiveList.list) {
-            NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppValue_0];
+            NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppValue_0);
             _listTempVector.push_back(objcValue_0);
         }
         _list = [NSArray arrayWithObjects:&_listTempVector[0] count:_listTempVector.size()];
@@ -53,7 +54,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     std::vector<int64_t> list;
     list.reserve([_list count]);
     for (NSNumber *objcValue_0 in _list) {
-        int64_t cppValue_0 = [objcValue_0 longLongValue];
+        int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp(objcValue_0);
         list.push_back(std::move(cppValue_0));
     }
     return PrimitiveList(

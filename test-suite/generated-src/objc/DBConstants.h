@@ -20,6 +20,6 @@ extern DBConstants * const DBConstantsObjectConstant;
 
 @property (nonatomic, readonly) int32_t someInteger;
 
-@property (nonatomic, readonly) NSString *someString;
+@property (nonatomic, readonly) NSString * someString;
 
 @end

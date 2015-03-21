@@ -4,6 +4,7 @@
 #import "DBConstants+Private.h"
 #import "DBConstants+Private.h"
 #import "DJIDate.h"
+#import "DJIMarshal+Private.h"
 #import <Foundation/Foundation.h>
 #include <utility>
 #include <vector>
@@ -56,7 +57,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppConstants:(const Constants &)constants
 {
     if (self = [super init]) {
-        _someInteger = constants.some_integer;
+        _someInteger = ::djinni::I32::fromCpp(constants.some_integer);
         _someString = [[NSString alloc] initWithBytes:constants.some_string.data()
                 length:constants.some_string.length()
                 encoding:NSUTF8StringEncoding];
@@ -66,7 +67,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (Constants)cppConstants
 {
-    int32_t someInteger = _someInteger;
+    int32_t someInteger = ::djinni::I32::toCpp(_someInteger);
     std::string someString([_someString UTF8String], [_someString lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     return Constants(
             std::move(someInteger),

@@ -15,6 +15,7 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIDate.h"
 #import "DJIError.h"
+#import "DJIMarshal+Private.h"
 #include <exception>
 #include <utility>
 #include <vector>
@@ -59,7 +60,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         SetRecord cppRec = std::move([rec cppSetRecord]);
         bool cppRet = TestHelpers::check_set_record(std::move(cppRec));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -76,7 +77,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         PrimitiveList cppPl = std::move([pl cppPrimitiveList]);
         bool cppRet = TestHelpers::check_primitive_list(std::move(cppPl));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -93,7 +94,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         NestedCollection cppNc = std::move([nc cppNestedCollection]);
         bool cppRet = TestHelpers::check_nested_collection(std::move(cppNc));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -109,7 +110,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
-            NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
+            NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppPair_0.second);
             objcRetTempKeyVector.push_back(objcKey_0);
             objcRetTempValueVector.push_back(objcValue_0);
         }
@@ -123,11 +124,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
             std::string cppKey_0([objcKey_0 UTF8String], [objcKey_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-            int64_t cppValue_0 = [[m objectForKey:objcKey_0] longLongValue];
+            int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([m objectForKey:objcKey_0]);
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
         bool cppRet = TestHelpers::check_map(std::move(cppM));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -143,7 +144,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
-            NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
+            NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppPair_0.second);
             objcRetTempKeyVector.push_back(objcKey_0);
             objcRetTempValueVector.push_back(objcValue_0);
         }
@@ -157,11 +158,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::unordered_map<std::string, int64_t> cppM;
         for (id objcKey_0 in m) {
             std::string cppKey_0([objcKey_0 UTF8String], [objcKey_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-            int64_t cppValue_0 = [[m objectForKey:objcKey_0] longLongValue];
+            int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([m objectForKey:objcKey_0]);
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }
         bool cppRet = TestHelpers::check_empty_map(std::move(cppM));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -178,7 +179,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         MapListRecord cppM = std::move([m cppMapListRecord]);
         bool cppRet = TestHelpers::check_map_list_record(std::move(cppM));
-        BOOL objcRet = (cppRet) ? YES : NO;
+        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -237,7 +238,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         std::shared_ptr<Token> cppT = t.cppRef;
         int64_t cppRet = TestHelpers::cpp_token_id(std::move(cppT));
-        int64_t objcRet = cppRet;
+        int64_t objcRet = ::djinni::I64::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -247,7 +248,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::experimental::optional<int32_t> cppRet = TestHelpers::return_none();
         NSNumber *objcRet;
         if (cppRet) {
-            objcRet = [NSNumber numberWithInt:(*(cppRet))];
+            objcRet = ::djinni::I32::Boxed::fromCpp((*(cppRet)));
         } else {
             objcRet = nil;
         }
