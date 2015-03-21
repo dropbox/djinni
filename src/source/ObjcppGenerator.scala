@@ -43,6 +43,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       tm.base match {
         case o: MOpaque =>
           header.add("#import <Foundation/Foundation.h>")
+          body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
         case d: MDef => d.defType match {
           case DEnum =>
             body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
@@ -639,20 +640,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
         case o => o match {
           case p: MPrimitive =>
-            if (needRef)
-              p.idlName match {
-                case "i8" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithChar:$cppIdent];")
-                case "i16" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithShort:$cppIdent];")
-                case "i32" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithInt:$cppIdent];")
-                case "i64" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithLongLong:$cppIdent];")
-                case "f64" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithDouble:$cppIdent];")
-                case "bool" => w.wl(s"$objcType$objcIdent = [NSNumber numberWithBool:(($cppIdent) ? YES : NO)];")
-              }
-            else
-              p.idlName match {
-                case "bool" => w.wl(s"$objcType$objcIdent = ($cppIdent) ? YES : NO;")
-                case _ => w.wl(s"$objcType$objcIdent = $cppIdent;")
-              }
+            val boxed = if(needRef) "::Boxed" else ""
+            p.idlName match {
+              case "i8" => w.wl(s"$objcType$objcIdent = ::djinni::I8$boxed::fromCpp($cppIdent);")
+              case "i16" => w.wl(s"$objcType$objcIdent = ::djinni::I16$boxed::fromCpp($cppIdent);")
+              case "i32" => w.wl(s"$objcType$objcIdent = ::djinni::I32$boxed::fromCpp($cppIdent);")
+              case "i64" => w.wl(s"$objcType$objcIdent = ::djinni::I64$boxed::fromCpp($cppIdent);")
+              case "f64" => w.wl(s"$objcType$objcIdent = ::djinni::F64$boxed::fromCpp($cppIdent);")
+              case "bool" => w.wl(s"$objcType$objcIdent = ::djinni::Bool$boxed::fromCpp($cppIdent);")
+            }
           case MString => w.wl(s"$objcType$objcIdent = [[NSString alloc] initWithBytes:$cppIdent.data()").nestedN(2) {
             w.wl(s"length:$cppIdent.length()")
             w.wl("encoding:NSUTF8StringEncoding];")
@@ -747,17 +743,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
         case o => o match {
           case p: MPrimitive =>
-            if (needRef)
-              p.idlName match {
-                case "i8" => w.wl(s"$cppType $cppIdent = [$objcIdent charValue];")
-                case "i16" => w.wl(s"$cppType $cppIdent = [$objcIdent shortValue];")
-                case "i32" => w.wl(s"$cppType $cppIdent = [$objcIdent intValue];")
-                case "i64" => w.wl(s"$cppType $cppIdent = [$objcIdent longLongValue];")
-                case "f64" => w.wl(s"$cppType $cppIdent = [$objcIdent doubleValue];")
-                case "bool" => w.wl(s"$cppType $cppIdent = [$objcIdent boolValue];")
-              }
-            else
-              w.wl(s"$cppType $cppIdent = $objcIdent;")
+            val boxed = if(needRef) "::Boxed" else ""
+            p.idlName match {
+              case "i8" => w.wl(s"$cppType $cppIdent = ::djinni::I8$boxed::toCpp($objcIdent);")
+              case "i16" => w.wl(s"$cppType $cppIdent = ::djinni::I16$boxed::toCpp($objcIdent);")
+              case "i32" => w.wl(s"$cppType $cppIdent = ::djinni::I32$boxed::toCpp($objcIdent);")
+              case "i64" => w.wl(s"$cppType $cppIdent = ::djinni::I64$boxed::toCpp($objcIdent);")
+              case "f64" => w.wl(s"$cppType $cppIdent = ::djinni::F64$boxed::toCpp($objcIdent);")
+              case "bool" => w.wl(s"$cppType $cppIdent = ::djinni::Bool$boxed::toCpp($objcIdent);")
+            }
           case MString => w.wl(s"$cppType $cppIdent([$objcIdent UTF8String], [$objcIdent lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);")
           case MBinary =>
             w.wl(s"$cppType $cppIdent([$objcIdent length]);")
