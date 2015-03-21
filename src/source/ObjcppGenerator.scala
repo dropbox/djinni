@@ -47,7 +47,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         case d: MDef => d.defType match {
           case DEnum =>
             body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-            body.add("#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(d.name)))
+            body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
             header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
           case DInterface =>
             header.add("#import <Foundation/Foundation.h>")
@@ -72,52 +72,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    val refs = new ObjcRefs()
-
-    refs.header.add("#import <Foundation/Foundation.h>")
-
-    refs.privHeader.add("#import <Foundation/Foundation.h>")
-    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
-
-    refs.body.add("#import <Foundation/Foundation.h>")
-    refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + enumTranslatorHeaderName(ident)))
-
-    val self = objcMarshal.typename(ident, e)
-    val cppSelf = cppMarshal.fqTypename(ident, e)
-    val name = IdentStyle.camelUpper(ident)
-    val argName = idObjc.local(ident.name)
-
-    writeObjcFile(enumTranslatorHeaderName(ident.name), origin, refs.privHeader, w => {
-      w.wl("@interface " + self + "Translator : NSObject")
-      w.wl
-      w.wl(s"+ ($self)cpp${name}ToObjc${name}:($cppSelf)$argName;")
-      w.wl(s"+ ($cppSelf)objc${name}ToCpp${name}:($self)$argName;")
-      w.wl
-      w.wl("@end")
-    })
-
-    writeObjcFile(enumTranslatorName(ident), origin, refs.body, w => {
-      w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
-      w.wl
-      w.wl(s"@implementation " + self + "Translator")
-      w.wl
-      w.wl(s"+ ($self)cpp${name}ToObjc${name}:($cppSelf)${argName}")
-      w.braced {
-        w.wl(s"return static_cast<$self>($argName);");
-      }
-      w.wl
-      w.wl(s"+ ($cppSelf)objc${name}ToCpp${name}:($self)${argName}")
-      w.braced {
-        w.wl(s"return static_cast<enum $cppSelf>($argName);")
-      }
-      w.wl
-      w.wl("@end")
-    })
+    // No generation required
   }
 
-  def enumTranslatorName(ident: String): String = idObjc.ty(ident) + "Translator." + spec.objcExt
-  def enumTranslatorHeaderName(ident: String): String = idObjc.ty(ident) + "Translator+Private." + spec.objcHeaderExt
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcExt
@@ -692,11 +649,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             val self = idObjc.ty(typeName)
             d.defType match {
               case DEnum =>
-                val objcEnum = s"[${self}Translator ${idObjc.method("cpp_" + typeName + "_to_objc_" + typeName)}:$cppIdent]"
+                val cppSelf = cppMarshal.fqTypename(tm)
                 if (needRef)
-                  w.wl(s"$objcType$objcIdent = [NSNumber numberWithInt:$objcEnum];")
+                  w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::fromCpp($cppIdent);")
                 else
-                  w.wl(s"$objcType$objcIdent = $objcEnum;")
+                  w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::fromCpp($cppIdent);")
               case DRecord => w.wl(s"$objcType$objcIdent = [[${self} alloc] initWithCpp${IdentStyle.camelUpper(typeName)}:$cppIdent];")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
@@ -789,8 +746,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             val self = idObjc.ty(typeName)
             d.defType match {
               case DEnum =>
-                val unboxed = if (needRef) s"($self)[$objcIdent intValue]" else objcIdent
-                w.wl(s"$cppType $cppIdent = [${self}Translator ${idObjc.method("objc_" + typeName + "_to_cpp_" + typeName)}:$unboxed];")
+                val cppSelf = cppMarshal.fqTypename(tm)
+                if(needRef)
+                  w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::toCpp($objcIdent);")
+                else
+                  w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::toCpp($objcIdent);")
               case DRecord => w.wl(s"$cppType $cppIdent = std::move([$objcIdent cpp${IdentStyle.camelUpper(typeName)}]);")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext

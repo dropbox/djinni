@@ -80,4 +80,21 @@ namespace djinni {
 			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithDouble:x]; }
 		};
 	};
+	
+	template<class CppEnum, class ObjcEnum>
+	struct Enum
+	{
+		using CppType = CppEnum;
+		using ObjcType = ObjcEnum;
+
+		static CppType toCpp(ObjcType e) noexcept { return static_cast<CppType>(e); }
+		static ObjcType fromCpp(CppType e) noexcept { return static_cast<ObjcType>(e); }
+		
+		struct Boxed
+		{
+			using ObjcType = NSNumber*;
+			static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp([x integerValue]); }
+			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:Enum::fromCpp(x)]; }
+		};
+	};
 } // namespace djinni
