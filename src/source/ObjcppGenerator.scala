@@ -606,10 +606,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               case "f64" => w.wl(s"$objcType$objcIdent = ::djinni::F64$boxed::fromCpp($cppIdent);")
               case "bool" => w.wl(s"$objcType$objcIdent = ::djinni::Bool$boxed::fromCpp($cppIdent);")
             }
-          case MString => w.wl(s"$objcType$objcIdent = [[NSString alloc] initWithBytes:$cppIdent.data()").nestedN(2) {
-            w.wl(s"length:$cppIdent.length()")
-            w.wl("encoding:NSUTF8StringEncoding];")
-          }
+          case MString => 
+            w.wl(s"$objcType$objcIdent = ::djinni::String::fromCpp($cppIdent);")
           case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
@@ -709,7 +707,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               case "f64" => w.wl(s"$cppType $cppIdent = ::djinni::F64$boxed::toCpp($objcIdent);")
               case "bool" => w.wl(s"$cppType $cppIdent = ::djinni::Bool$boxed::toCpp($objcIdent);")
             }
-          case MString => w.wl(s"$cppType $cppIdent([$objcIdent UTF8String], [$objcIdent lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);")
+          case MString =>
+            w.wl(s"$cppType $cppIdent = ::djinni::String::toCpp($objcIdent);")
           case MBinary =>
             w.wl(s"$cppType $cppIdent([$objcIdent length]);")
             w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
