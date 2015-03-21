@@ -58,9 +58,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     if (self = [super init]) {
         _someInteger = ::djinni::I32::fromCpp(constants.some_integer);
-        _someString = [[NSString alloc] initWithBytes:constants.some_string.data()
-                length:constants.some_string.length()
-                encoding:NSUTF8StringEncoding];
+        _someString = ::djinni::String::fromCpp(constants.some_string);
     }
     return self;
 }
@@ -68,7 +66,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (Constants)cppConstants
 {
     int32_t someInteger = ::djinni::I32::toCpp(_someInteger);
-    std::string someString([_someString UTF8String], [_someString lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    std::string someString = ::djinni::String::toCpp(_someString);
     return Constants(
             std::move(someInteger),
             std::move(someString));

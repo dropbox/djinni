@@ -47,9 +47,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::vector<NSDate *> _datesByIdTempValueVector;
         _datesByIdTempValueVector.reserve(mapDateRecord.dates_by_id.size());
         for (const auto & cppPair_0 : mapDateRecord.dates_by_id) {
-            NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
-                    length:cppPair_0.first.length()
-                    encoding:NSUTF8StringEncoding];
+            NSString *objcKey_0 = ::djinni::String::fromCpp(cppPair_0.first);
             NSDate *objcValue_0 = [NSDate dateWithTimeIntervalSince1970:
                     std::chrono::duration_cast<std::chrono::duration<double>>(cppPair_0.second.time_since_epoch()).count()];
             _datesByIdTempKeyVector.push_back(objcKey_0);
@@ -64,7 +62,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     std::unordered_map<std::string, std::chrono::system_clock::time_point> datesById;
     for (id objcKey_0 in _datesById) {
-        std::string cppKey_0([objcKey_0 UTF8String], [objcKey_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        std::string cppKey_0 = ::djinni::String::toCpp(objcKey_0);
         std::chrono::system_clock::time_point cppValue_0 = ::djinni::convert_date([[_datesById objectForKey:objcKey_0] timeIntervalSince1970]);
         datesById.emplace(std::move(cppKey_0), std::move(cppValue_0));
     }

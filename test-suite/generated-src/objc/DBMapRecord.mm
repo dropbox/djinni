@@ -47,9 +47,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::vector<NSNumber *> _mapTempValueVector;
         _mapTempValueVector.reserve(mapRecord.map.size());
         for (const auto & cppPair_0 : mapRecord.map) {
-            NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
-                    length:cppPair_0.first.length()
-                    encoding:NSUTF8StringEncoding];
+            NSString *objcKey_0 = ::djinni::String::fromCpp(cppPair_0.first);
             NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppPair_0.second);
             _mapTempKeyVector.push_back(objcKey_0);
             _mapTempValueVector.push_back(objcValue_0);
@@ -63,7 +61,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     std::unordered_map<std::string, int64_t> map;
     for (id objcKey_0 in _map) {
-        std::string cppKey_0([objcKey_0 UTF8String], [objcKey_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        std::string cppKey_0 = ::djinni::String::toCpp(objcKey_0);
         int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([_map objectForKey:objcKey_0]);
         map.emplace(std::move(cppKey_0), std::move(cppValue_0));
     }

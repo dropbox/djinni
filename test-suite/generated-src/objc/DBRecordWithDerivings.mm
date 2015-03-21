@@ -34,9 +34,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     if (self = [super init]) {
         _key1 = ::djinni::I32::fromCpp(recordWithDerivings.key1);
-        _key2 = [[NSString alloc] initWithBytes:recordWithDerivings.key2.data()
-                length:recordWithDerivings.key2.length()
-                encoding:NSUTF8StringEncoding];
+        _key2 = ::djinni::String::fromCpp(recordWithDerivings.key2);
     }
     return self;
 }
@@ -44,7 +42,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (RecordWithDerivings)cppRecordWithDerivings
 {
     int32_t key1 = ::djinni::I32::toCpp(_key1);
-    std::string key2([_key2 UTF8String], [_key2 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    std::string key2 = ::djinni::String::toCpp(_key2);
     return RecordWithDerivings(
             std::move(key1),
             std::move(key2));

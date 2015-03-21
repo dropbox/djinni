@@ -51,9 +51,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
             std::vector<NSString *> objcValue_0TempVector;
             objcValue_0TempVector.reserve(cppValue_0.size());
             for (const auto & cppValue_1 : cppValue_0) {
-                NSString *objcValue_1 = [[NSString alloc] initWithBytes:cppValue_1.data()
-                        length:cppValue_1.length()
-                        encoding:NSUTF8StringEncoding];
+                NSString *objcValue_1 = ::djinni::String::fromCpp(cppValue_1);
                 objcValue_0TempVector.push_back(objcValue_1);
             }
             NSSet *objcValue_0 = [NSSet setWithObjects:&objcValue_0TempVector[0] count:objcValue_0TempVector.size()];
@@ -71,7 +69,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     for (NSSet *objcValue_0 in _setList) {
         std::unordered_set<std::string> cppValue_0;
         for (NSString *objcValue_1 in objcValue_0) {
-            std::string cppValue_1([objcValue_1 UTF8String], [objcValue_1 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+            std::string cppValue_1 = ::djinni::String::toCpp(objcValue_1);
             cppValue_0.insert(std::move(cppValue_1));
         }
         setList.push_back(std::move(cppValue_0));

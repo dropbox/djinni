@@ -9,6 +9,7 @@
 #pragma once
 #import <Foundation/Foundation.h>
 #include <cstdint>
+#include <string>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -90,6 +91,23 @@ struct Enum {
         static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
         static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
     };
+};
+
+struct String {
+    using CppType = std::string;
+    using ObjcType = NSString*;
+
+    using Boxed = String;
+
+    static CppType toCpp(ObjcType string) {
+        return {[string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]};
+    }
+
+    static ObjcType fromCpp(const CppType& string) {
+        assert(string.size() <= std::numeric_limits<NSUInteger>::max());
+        // Using the pointer from .data() on an empty string is UB
+        return string.empty() ? @"" : [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
+    }
 };
 
 } // namespace djinni

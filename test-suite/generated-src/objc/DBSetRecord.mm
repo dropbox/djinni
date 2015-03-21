@@ -41,9 +41,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::vector<NSString *> _setTempVector;
         _setTempVector.reserve(setRecord.set.size());
         for (const auto & cppValue_0 : setRecord.set) {
-            NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
-                    length:cppValue_0.length()
-                    encoding:NSUTF8StringEncoding];
+            NSString *objcValue_0 = ::djinni::String::fromCpp(cppValue_0);
             _setTempVector.push_back(objcValue_0);
         }
         _set = [NSSet setWithObjects:&_setTempVector[0] count:_setTempVector.size()];
@@ -55,7 +53,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 {
     std::unordered_set<std::string> set;
     for (NSString *objcValue_0 in _set) {
-        std::string cppValue_0([objcValue_0 UTF8String], [objcValue_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        std::string cppValue_0 = ::djinni::String::toCpp(objcValue_0);
         set.insert(std::move(cppValue_0));
     }
     return SetRecord(
