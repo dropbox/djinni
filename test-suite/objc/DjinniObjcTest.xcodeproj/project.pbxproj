@@ -28,7 +28,6 @@
 		A242494C1AF192E0003BF8F0 /* DBAssortedIntegers.mm in Sources */ = {isa = PBXBuildFile; fileRef = A242491B1AF192E0003BF8F0 /* DBAssortedIntegers.mm */; };
 		A242494D1AF192E0003BF8F0 /* DBClientInterfaceObjcProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A242491E1AF192E0003BF8F0 /* DBClientInterfaceObjcProxy.mm */; };
 		A242494E1AF192E0003BF8F0 /* DBClientReturnedRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24249211AF192E0003BF8F0 /* DBClientReturnedRecord.mm */; };
-		A242494F1AF192E0003BF8F0 /* DBColorTranslator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24249241AF192E0003BF8F0 /* DBColorTranslator.mm */; };
 		A24249501AF192E0003BF8F0 /* DBConstants.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24249271AF192E0003BF8F0 /* DBConstants.mm */; };
 		A24249511AF192E0003BF8F0 /* DBCppException.mm in Sources */ = {isa = PBXBuildFile; fileRef = A242492A1AF192E0003BF8F0 /* DBCppException.mm */; };
 		A24249521AF192E0003BF8F0 /* DBDateRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = A242492D1AF192E0003BF8F0 /* DBDateRecord.mm */; };
@@ -112,8 +111,6 @@
 		A24249201AF192E0003BF8F0 /* DBClientReturnedRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBClientReturnedRecord.h; sourceTree = "<group>"; };
 		A24249211AF192E0003BF8F0 /* DBClientReturnedRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBClientReturnedRecord.mm; sourceTree = "<group>"; };
 		A24249221AF192E0003BF8F0 /* DBColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBColor.h; sourceTree = "<group>"; };
-		A24249231AF192E0003BF8F0 /* DBColorTranslator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBColorTranslator+Private.h"; sourceTree = "<group>"; };
-		A24249241AF192E0003BF8F0 /* DBColorTranslator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBColorTranslator.mm; sourceTree = "<group>"; };
 		A24249251AF192E0003BF8F0 /* DBConstants+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBConstants+Private.h"; sourceTree = "<group>"; };
 		A24249261AF192E0003BF8F0 /* DBConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBConstants.h; sourceTree = "<group>"; };
 		A24249271AF192E0003BF8F0 /* DBConstants.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBConstants.mm; sourceTree = "<group>"; };
@@ -308,8 +305,6 @@
 				A24249201AF192E0003BF8F0 /* DBClientReturnedRecord.h */,
 				A24249211AF192E0003BF8F0 /* DBClientReturnedRecord.mm */,
 				A24249221AF192E0003BF8F0 /* DBColor.h */,
-				A24249231AF192E0003BF8F0 /* DBColorTranslator+Private.h */,
-				A24249241AF192E0003BF8F0 /* DBColorTranslator.mm */,
 				A24249251AF192E0003BF8F0 /* DBConstants+Private.h */,
 				A24249261AF192E0003BF8F0 /* DBConstants.h */,
 				A24249271AF192E0003BF8F0 /* DBConstants.mm */,
@@ -491,7 +486,6 @@
 				A242494D1AF192E0003BF8F0 /* DBClientInterfaceObjcProxy.mm in Sources */,
 				A24249731AF192FC003BF8F0 /* assorted_integers.cpp in Sources */,
 				A24249561AF192E0003BF8F0 /* DBNestedCollection.mm in Sources */,
-				A242494F1AF192E0003BF8F0 /* DBColorTranslator.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

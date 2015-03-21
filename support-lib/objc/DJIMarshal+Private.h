@@ -77,4 +77,19 @@ struct F64 : public Primitive<double> {
     };
 };
 
+template<class CppEnum, class ObjcEnum>
+struct Enum {
+    using CppType = CppEnum;
+    using ObjcType = ObjcEnum;
+
+    static CppType toCpp(ObjcType e) noexcept { return static_cast<CppType>(e); }
+    static ObjcType fromCpp(CppType e) noexcept { return static_cast<ObjcType>(e); }
+
+    struct Boxed {
+        using ObjcType = NSNumber*;
+        static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
+        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
+    };
+};
+
 } // namespace djinni

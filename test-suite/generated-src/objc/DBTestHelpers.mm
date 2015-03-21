@@ -5,7 +5,6 @@
 #import "DBAssortedIntegers+Private.h"
 #import "DBClientInterfaceObjcProxy+Private.h"
 #import "DBColor.h"
-#import "DBColorTranslator+Private.h"
 #import "DBMapListRecord+Private.h"
 #import "DBNestedCollection+Private.h"
 #import "DBPrimitiveList+Private.h"
@@ -202,7 +201,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         std::unordered_map<color, std::string> cppM;
         for (id objcKey_0 in m) {
-            color cppKey_0 = [DBColorTranslator objcColorToCppColor:(DBColor)[objcKey_0 intValue]];
+            color cppKey_0 = ::djinni::Enum<color, DBColor>::Boxed::toCpp(objcKey_0);
             std::string cppValue_0([[m objectForKey:objcKey_0] UTF8String], [[m objectForKey:objcKey_0] lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
             cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
         }

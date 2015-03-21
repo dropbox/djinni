@@ -5,11 +5,11 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIDate.h"
 #import "DJIError.h"
+#import "DJIMarshal+Private.h"
 #import "TXSItemList+Private.h"
 #import "TXSSortItems+Private.h"
 #import "TXSSortItems.h"
 #import "TXSSortOrder.h"
-#import "TXSSortOrderTranslator+Private.h"
 #import "TXSTextboxListenerObjcProxy+Private.h"
 #include <exception>
 #include <utility>
@@ -45,7 +45,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
     try {
-        ::textsort::sort_order cppOrder = [TXSSortOrderTranslator objcSortOrderToCppSortOrder:order];
+        ::textsort::sort_order cppOrder = ::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order);
         ::textsort::ItemList cppItems = std::move([items cppItemList]);
         _cppRef->sort(std::move(cppOrder), std::move(cppItems));
     } DJINNI_TRANSLATE_EXCEPTIONS()
