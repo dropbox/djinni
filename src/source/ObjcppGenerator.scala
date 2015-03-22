@@ -446,203 +446,73 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
   def translateCppTypeToObjc(objcIdent: String, cppIdent: String, ty: TypeRef, withDecl: Boolean, w: IndentWriter): Unit =
     translateCppTypeToObjc(objcIdent, cppIdent, ty.resolved, withDecl, w)
   def translateCppTypeToObjc(objcIdent: String, cppIdent: String, tm: MExpr, withDecl: Boolean, w: IndentWriter): Unit = {
-    def f(objcIdent: String, cppIdent: String, tm: MExpr, needRef: Boolean, withDecl: Boolean, w: IndentWriter, valueLevel: Int): Unit = {
-      val objcType = if (withDecl) toObjcTypeDef(tm, needRef) else ""
-      tm.base match {
-        case MOptional =>
-          // We use "nil" for the empty optional.
-          assert(tm.args.size == 1)
-          val arg = tm.args.head
-          arg.base match {
-            case MOptional => throw new AssertionError("nested optional?")
-            case m =>
-              if (withDecl) w.wl(s"$objcType$objcIdent;")
-              w.wl(s"if ($cppIdent) {").nested {
-                f(objcIdent, "(*(" + cppIdent + "))", arg, true, false, w, valueLevel)
-              }
-              w.wl("} else {").nested {
-                m match {
-                  case d: MDef if d.defType == DEnum => w.wl(s"$objcIdent = [NSNumber numberWithInt:-1];");
-                  case _ => w.wl(s"$objcIdent = nil;")
-                }
-              }
-              w.wl("}")
-          }
-        case o => o match {
-          case p: MPrimitive =>
-            val boxed = if(needRef) "::Boxed" else ""
-            p.idlName match {
-              case "i8" => w.wl(s"$objcType$objcIdent = ::djinni::I8$boxed::fromCpp($cppIdent);")
-              case "i16" => w.wl(s"$objcType$objcIdent = ::djinni::I16$boxed::fromCpp($cppIdent);")
-              case "i32" => w.wl(s"$objcType$objcIdent = ::djinni::I32$boxed::fromCpp($cppIdent);")
-              case "i64" => w.wl(s"$objcType$objcIdent = ::djinni::I64$boxed::fromCpp($cppIdent);")
-              case "f64" => w.wl(s"$objcType$objcIdent = ::djinni::F64$boxed::fromCpp($cppIdent);")
-              case "bool" => w.wl(s"$objcType$objcIdent = ::djinni::Bool$boxed::fromCpp($cppIdent);")
-            }
-          case MString => 
-            w.wl(s"$objcType$objcIdent = ::djinni::String::fromCpp($cppIdent);")
-          case MBinary =>
-            w.wl(s"$objcType$objcIdent = ::djinni::Binary::fromCpp($cppIdent);")
-          case MOptional => throw new AssertionError("optional should have been special cased")
-          case MList =>
-            val objcName = "objcValue_" + valueLevel
-            val cppName = "cppValue_" + valueLevel
-            w.wl(s"NSMutableArray *${objcIdent}TempArray = [NSMutableArray arrayWithCapacity:${cppIdent}.size()];")
-            w.w(s"for (const auto & $cppName : ${cppIdent})")
-            w.braced {
-              f(objcName, cppName, tm.args.head, true, true, w, valueLevel + 1)
-              w.wl(s"[${objcIdent}TempArray addObject:$objcName];")
-            }
-            w.wl(s"$objcType$objcIdent = ${objcIdent}TempArray;")
-          case MSet =>
-            val objcName = "objcValue_" + valueLevel
-            val cppName = "cppValue_" + valueLevel
-            w.wl(s"NSMutableSet *${objcIdent}TempSet = [NSMutableSet setWithCapacity:${cppIdent}.size()];")
-            w.w(s"for (const auto & $cppName : ${cppIdent})")
-            w.braced {
-              f(objcName, cppName, tm.args.head, true, true, w, valueLevel + 1)
-              w.wl(s"[${objcIdent}TempSet addObject:$objcName];")
-            }
-            w.wl(s"$objcType$objcIdent = ${objcIdent}TempSet;")
-          case MMap => {
-            val cppPairName = "cppPair_" + valueLevel
-            val objcKeyName = "objcKey_" + valueLevel
-            val objcValueName = "objcValue_" + valueLevel
-            w.wl(s"NSMutableDictionary *${objcIdent}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:${cppIdent}.size()];")
-            w.w(s"for (const auto & $cppPairName : ${cppIdent})").braced {
-              f(objcKeyName, cppPairName + ".first", tm.args.apply(0), true, true, w, valueLevel + 1)
-              f(objcValueName, cppPairName + ".second", tm.args.apply(1), true, true, w, valueLevel + 1)
-              w.wl(s"[${objcIdent}TempDictionary setObject:$objcValueName forKey:$objcKeyName];")
-            }
-            w.wl(s"$objcType$objcIdent = ${objcIdent}TempDictionary;")
-          }
-          case d: MDef => {
-            val typeName = d.name
-            val self = idObjc.ty(typeName)
-            val helperClass = objcppMarshal.fqHelperClass(typeName)
-            d.defType match {
-              case DEnum =>
-                val cppSelf = cppMarshal.fqTypename(tm)
-                if (needRef)
-                  w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::fromCpp($cppIdent);")
-                else
-                  w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::fromCpp($cppIdent);")
-              case DRecord =>
-                w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
-              case DInterface =>
-                val ext = d.body.asInstanceOf[Interface].ext
-                val objcProxy = objcppMarshal.fqHelperClass(d.name + "_objc_proxy")
-                (ext.cpp, ext.objc) match {
-                  case (true, true) => throw new AssertionError("Function implemented on both sides")
-                  case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
-                  case (false, true) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
-                }
-            }
-          }
-          case p: MParam =>
-        }
-      }
+    val helperClass = fqHelperClass(tm)
+    val decl = if(withDecl) "auto " else ""
+    tm.base match {
+      case MOptional =>
+        assert(tm.args.size == 1)
+        val argHelperClass = fqHelperClass(tm.args.head)
+        w.wl(s"$decl$objcIdent = $helperClass<${spec.cppOptionalTemplate}, $argHelperClass>::fromCpp($cppIdent);")
+      case MList | MSet =>
+        assert(tm.args.size == 1)
+        val argHelperClass = fqHelperClass(tm.args.head)
+        w.wl(s"$decl$objcIdent = $helperClass<$argHelperClass>::fromCpp($cppIdent);")
+      case MMap =>
+        assert(tm.args.size == 2)
+        val keyHelperClass = fqHelperClass(tm.args.head)
+        val valueHelperClass = fqHelperClass(tm.args.tail.head)
+        w.wl(s"$decl$objcIdent = $helperClass<$keyHelperClass, $valueHelperClass>::fromCpp($cppIdent);")
+      case _ =>
+        w.wl(s"$decl$objcIdent = $helperClass::fromCpp($cppIdent);")
     }
-    f(objcIdent, cppIdent, tm, false, withDecl, w, 0)
   }
 
   def translateObjcTypeToCpp(cppIdent: String, objcIdent: String, ty: TypeRef, w: IndentWriter): Unit =
     translateObjcTypeToCpp(cppIdent, objcIdent, ty.resolved, w)
   def translateObjcTypeToCpp(cppIdent: String, objcIdent: String, tm: MExpr, w: IndentWriter): Unit = {
-    def f(cppIdent: String, objcIdent: String, tm: MExpr, needRef: Boolean, w: IndentWriter, valueLevel: Int): Unit = {
-      val cppType = cppMarshal.fqTypename(tm)
-      tm.base match {
-        case MOptional =>
-          // We use "nil" for the empty optional.
-          assert(tm.args.size == 1)
-          val arg = tm.args.head
-          arg.base match {
-            case MOptional => throw new AssertionError("nested optional?")
-            case m =>
-              w.wl(s"$cppType $cppIdent;")
-              m match {
-                case d: MDef if d.defType == DEnum =>
-                  val enumVal = if (needRef) objcIdent else s"static_cast<${idObjc.ty(d.name)}>([$objcIdent intValue])"
-                  w.w(s"if ($enumVal != static_cast<${idObjc.ty(d.name)}>(-1))")
-                case _ => w.w(s"if ($objcIdent != nil)")
-              }
-              w.braced {
-                f("optValue", objcIdent, arg, true, w, 0)
-                w.wl(s"$cppIdent = optValue;")
-              }
-          }
-        case o => o match {
-          case p: MPrimitive =>
-            val boxed = if(needRef) "::Boxed" else ""
-            p.idlName match {
-              case "i8" => w.wl(s"$cppType $cppIdent = ::djinni::I8$boxed::toCpp($objcIdent);")
-              case "i16" => w.wl(s"$cppType $cppIdent = ::djinni::I16$boxed::toCpp($objcIdent);")
-              case "i32" => w.wl(s"$cppType $cppIdent = ::djinni::I32$boxed::toCpp($objcIdent);")
-              case "i64" => w.wl(s"$cppType $cppIdent = ::djinni::I64$boxed::toCpp($objcIdent);")
-              case "f64" => w.wl(s"$cppType $cppIdent = ::djinni::F64$boxed::toCpp($objcIdent);")
-              case "bool" => w.wl(s"$cppType $cppIdent = ::djinni::Bool$boxed::toCpp($objcIdent);")
-            }
-          case MString =>
-            w.wl(s"$cppType $cppIdent = ::djinni::String::toCpp($objcIdent);")
-          case MBinary =>
-            w.wl(s"$cppType $cppIdent = ::djinni::Binary::toCpp($objcIdent);")
-          case MOptional => throw new AssertionError("optional should have been special cased")
-          case MList =>
-            val cppName = "cppValue_" + valueLevel
-            val objcName = "objcValue_" + valueLevel
-            w.wl(s"$cppType $cppIdent;")
-            w.wl(s"$cppIdent.reserve([$objcIdent count]);")
-            w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$objcName in $objcIdent)").braced {
-              f(cppName, objcName, tm.args.head, true, w, valueLevel + 1)
-              w.wl(s"$cppIdent.push_back(std::move($cppName));")
-            }
-          case MSet =>
-            val cppName = "cppValue_" + valueLevel
-            val objcName = "objcValue_" + valueLevel
-            w.wl(s"$cppType $cppIdent;")
-            w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$objcName in $objcIdent)").braced {
-              f(cppName, objcName, tm.args.head, true, w, valueLevel + 1)
-              w.wl(s"$cppIdent.insert(std::move($cppName));")
-            }
-          case MMap =>
-            val objcKeyName = "objcKey_" + valueLevel
-            val cppKeyName = "cppKey_" + valueLevel
-            val cppValueName = "cppValue_" + valueLevel
-            w.wl(s"$cppType $cppIdent;")
-            w.w(s"for (id $objcKeyName in $objcIdent)").braced {
-              f(cppKeyName, objcKeyName, tm.args.apply(0), true, w, valueLevel + 1)
-              f(cppValueName, s"[$objcIdent objectForKey:$objcKeyName]", tm.args.apply(1), true, w, valueLevel + 1)
-              w.wl(s"$cppIdent.emplace(std::move($cppKeyName), std::move($cppValueName));")
-            }
-          case d: MDef => {
-            val typeName = d.name
-            val self = idObjc.ty(typeName)
-            val helperClass = objcppMarshal.fqHelperClass(typeName)
-            d.defType match {
-              case DEnum =>
-                val cppSelf = cppMarshal.fqTypename(tm)
-                if(needRef)
-                  w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::toCpp($objcIdent);")
-                else
-                  w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::toCpp($objcIdent);")
-              case DRecord =>
-                w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
-              case DInterface =>
-                val ext = d.body.asInstanceOf[Interface].ext
-                (ext.cpp, ext.objc) match {
-                  case (true, true) => throw new AssertionError("Function implemented on both sides")
-                  case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
-                  case (false, true) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
-                }
-            }
-          }
-          case p: MParam =>
-        }
-      }
+    val helperClass = fqHelperClass(tm)
+    tm.base match {
+      case MOptional =>
+        assert(tm.args.size == 1)
+        val argHelperClass = fqHelperClass(tm.args.head)
+        w.wl(s"auto $cppIdent = $helperClass<${spec.cppOptionalTemplate}, $argHelperClass>::toCpp($objcIdent);")
+      case MList | MSet =>
+        assert(tm.args.size == 1)
+        val argHelperClass = fqHelperClass(tm.args.head)
+        w.wl(s"auto $cppIdent = $helperClass<$argHelperClass>::toCpp($objcIdent);")
+      case MMap =>
+        assert(tm.args.size == 2)
+        val keyHelperClass = fqHelperClass(tm.args.head)
+        val valueHelperClass = fqHelperClass(tm.args.tail.head)
+        w.wl(s"auto $cppIdent = $helperClass<$keyHelperClass, $valueHelperClass>::toCpp($objcIdent);")
+      case _ =>
+        w.wl(s"auto $cppIdent = $helperClass::toCpp($objcIdent);")
     }
-    f(cppIdent, objcIdent, tm, false, w, 0)
+  }
+
+  def fqHelperClass(tm: MExpr) = tm.base match {
+    case d: MDef => d.defType match {
+      case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${objcMarshal.fqTypename(tm)}>")
+      case _ => objcppMarshal.fqHelperClass(d.name)
+    }
+    case o => withNs(Some("djinni"), o match {
+      case p: MPrimitive => p.idlName match {
+        case "i8" => "I8"
+        case "i16" => "I16"
+        case "i32" => "I32"
+        case "i64" => "I64"
+        case "f64" => "F64"
+        case "bool" => "Bool"
+      }
+      case MOptional => "Optional"
+      case MBinary => "Binary"
+      case MString => "String"
+      case MList => "List"
+      case MSet => "Set"
+      case MMap => "Map"
+      case d: MDef => throw new AssertionError("unreachable")
+      case p: MParam => throw new AssertionError("not applicable")
+    })
   }
 
   // Return value: (Type_Name, Is_Class_Or_Not)
@@ -683,13 +553,4 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     }
     f(tm, needRef)
   }
-
-  def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)
-  def toObjcTypeDef(ty: TypeRef, needRef: Boolean): String = toObjcTypeDef(ty.resolved, needRef)
-  def toObjcTypeDef(tm: MExpr): String = toObjcTypeDef(tm, false)
-  def toObjcTypeDef(tm: MExpr, needRef: Boolean): String = {
-    val (name, asterisk) = toObjcType(tm, needRef)
-    name + (if (asterisk) " *" else " ")
-  }
-
 }

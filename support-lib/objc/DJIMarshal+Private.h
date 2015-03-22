@@ -136,4 +136,115 @@ namespace djinni {
 			return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data() length:bytes.size()];
 		}
 	};
+	
+	template<template<class> class OptionalType, class T>
+	class Optional
+	{
+	public:
+		using CppType = OptionalType<typename T::CppType>;
+		using ObjcType = typename T::Boxed::ObjcType;
+		
+		using Boxed = Optional;
+		
+		static CppType toCpp(ObjcType obj)
+		{
+			return obj ? CppType(T::Boxed::toCpp(obj)) : CppType();
+		}
+		static ObjcType fromCpp(const CppType& opt)
+		{
+			return opt ? T::Boxed::fromCpp(*opt) : nil;
+		}
+	};
+	
+	template<class T>
+	class List
+	{
+		using ECppType = typename T::CppType;
+		using EObjcType = typename T::Boxed::ObjcType;
+		
+	public:
+		using CppType = std::vector<ECppType>;
+		using ObjcType = NSArray*;
+		
+		using Boxed = List;
+		
+		static CppType toCpp(ObjcType array)
+		{
+			auto v = CppType();
+			v.reserve(array.count);
+			for(EObjcType value in array)
+				v.push_back(T::Boxed::toCpp(value));
+			return v;
+		}
+		static ObjcType fromCpp(const CppType& v)
+		{
+			assert(v.size() <= std::numeric_limits<NSUInteger>::max());
+			auto array = [NSMutableArray arrayWithCapacity:v.size()];
+			for(const auto& value : v)
+				[array addObject:T::Boxed::fromCpp(value)];
+			return array;
+		}
+	};
+	
+	template<class T>
+	class Set
+	{
+		using ECppType = typename T::CppType;
+		using EObjcType = typename T::Boxed::ObjcType;
+		
+	public:
+		using CppType = std::unordered_set<ECppType>;
+		using ObjcType = NSSet*;
+		
+		using Boxed = Set;
+		
+		static CppType toCpp(ObjcType set)
+		{
+			auto s = CppType();
+			for(EObjcType value in set)
+				s.insert(T::Boxed::toCpp(value));
+			return s;
+		}
+		static ObjcType fromCpp(const CppType& s)
+		{
+			assert(s.size() <= std::numeric_limits<NSUInteger>::max());
+			auto set = [NSMutableSet setWithCapacity:s.size()];
+			for(const auto& value : s)
+				[set addObject:T::Boxed::fromCpp(value)];
+			return set;
+		}
+	};
+
+	template<class Key, class Value>
+	class Map
+	{
+		using CppKeyType = typename Key::CppType;
+		using CppValueType = typename Value::CppType;
+		using ObjcKeyType = typename Key::Boxed::ObjcType;
+		using ObjcValueType = typename Value::Boxed::ObjcType;
+		
+	public:
+		using CppType = std::unordered_map<CppKeyType, CppValueType>;
+		using ObjcType = NSDictionary*;
+		
+		using Boxed = Map;
+		
+		static CppType toCpp(ObjcType map)
+		{
+			auto m = CppType();
+			m.reserve(map.count);
+			[map enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+				m.insert(Key::Boxed::toCpp(key), Value::Boxed::toCpp(obj));
+			}];
+			return m;
+		}
+		static ObjcType fromCpp(const CppType& m)
+		{
+			assert(m.size() <= std::numeric_limits<NSUInteger>::max());
+			auto map = [NSMutableDictionary dictionaryWithCapacity:m.size()];
+			for(const auto& kvp : m)
+				[map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
+			return map;
+		}
+	};
 } // namespace djinni
