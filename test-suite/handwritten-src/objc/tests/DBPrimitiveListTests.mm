@@ -35,13 +35,13 @@ static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithLis
 
 - (void)testObjcToCppConverter
 {
-    PrimitiveList convert = [objcPrimitiveList cppPrimitiveList];
+    PrimitiveList convert = djinni_generated::PrimitiveList::toCpp(objcPrimitiveList);
     XCTAssertEqual(convert.list, cppPrimitiveList.list, @"C++ converted list should be the same.");
 }
 
 - (void)testCppToObjcConverter
 {
-    DBPrimitiveList *convert = [[DBPrimitiveList alloc] initWithCppPrimitiveList:cppPrimitiveList];
+    DBPrimitiveList *convert = djinni_generated::PrimitiveList::fromCpp(cppPrimitiveList);
     XCTAssertEqualObjects(convert.list, objcPrimitiveList.list, @"Objective-C converted list should be the same.");
 }
 

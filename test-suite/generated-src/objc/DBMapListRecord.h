@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBMapListRecord : NSObject
 - (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord;
 - (id)initWithMapList:(NSArray *)mapList;

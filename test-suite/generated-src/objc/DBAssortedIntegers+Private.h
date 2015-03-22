@@ -3,11 +3,22 @@
 
 #import "DBAssortedIntegers.h"
 #include "assorted_integers.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBAssortedIntegers ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppAssortedIntegers:(const ::AssortedIntegers &)assortedIntegers;
-- (::AssortedIntegers)cppAssortedIntegers;
+@class DBAssortedIntegers;
 
-@end
+namespace djinni_generated {
+
+struct AssortedIntegers
+{
+    using CppType = ::AssortedIntegers;
+    using ObjcType = DBAssortedIntegers*;
+
+    using Boxed = AssortedIntegers;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

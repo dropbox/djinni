@@ -40,7 +40,7 @@ auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType
 void ObjcProxy::update (const ::textsort::ItemList & items)
 {
     @autoreleasepool {
-        TXSItemList *cpp_items = [[TXSItemList alloc] initWithCppItemList:items];
+        TXSItemList *cpp_items = ::djinni_generated::ItemList::fromCpp(items);
         [Handle::get() update:cpp_items];
     }
 }

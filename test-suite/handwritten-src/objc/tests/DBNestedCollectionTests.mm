@@ -27,13 +27,13 @@ static DBNestedCollection *objcNestedCollection = [[DBNestedCollection alloc] in
 
 - (void)testCppNestedCollectionToObjc
 {
-    DBNestedCollection *converted = [[DBNestedCollection alloc] initWithCppNestedCollection:cppNestedCollection];
+    DBNestedCollection *converted = djinni_generated::NestedCollection::fromCpp(cppNestedCollection);
     XCTAssertEqualObjects(objcNestedCollection.setList, converted.setList, @"List expected to be equivalent");
 }
 
 - (void)testObjcNestedCollectionToCpp
 {
-    NestedCollection converted = [objcNestedCollection cppNestedCollection];
+    NestedCollection converted = djinni_generated::NestedCollection::toCpp(objcNestedCollection);
     XCTAssertEqual(cppNestedCollection.set_list, converted.set_list, @"List expected to be equivalent");
 }
 

@@ -54,7 +54,7 @@ auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
 - (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
     try {
         ::textsort::sort_order cppOrder = ::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order);
-        ::textsort::ItemList cppItems = std::move([items cppItemList]);
+        ::textsort::ItemList cppItems = ::djinni_generated::ItemList::toCpp(items);
         _cppRef.get()->sort(std::move(cppOrder), std::move(cppItems));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface TXSItemList : NSObject
 - (id)initWithItemList:(TXSItemList *)itemList;
 - (id)initWithItems:(NSArray *)items;

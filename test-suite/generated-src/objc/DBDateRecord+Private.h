@@ -3,11 +3,22 @@
 
 #import "DBDateRecord.h"
 #include "date_record.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBDateRecord ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppDateRecord:(const ::DateRecord &)dateRecord;
-- (::DateRecord)cppDateRecord;
+@class DBDateRecord;
 
-@end
+namespace djinni_generated {
+
+struct DateRecord
+{
+    using CppType = ::DateRecord;
+    using ObjcType = DBDateRecord*;
+
+    using Boxed = DateRecord;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

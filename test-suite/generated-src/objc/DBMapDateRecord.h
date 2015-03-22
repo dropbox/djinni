@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBMapDateRecord : NSObject
 - (id)initWithMapDateRecord:(DBMapDateRecord *)mapDateRecord;
 - (id)initWithDatesById:(NSDictionary *)datesById;

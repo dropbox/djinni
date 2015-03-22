@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBSetRecord : NSObject
 - (id)initWithSetRecord:(DBSetRecord *)setRecord;
 - (id)initWithSet:(NSSet *)set;

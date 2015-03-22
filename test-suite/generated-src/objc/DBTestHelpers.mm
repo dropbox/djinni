@@ -58,14 +58,14 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 + (DBSetRecord *)getSetRecord {
     try {
         ::SetRecord cppRet = ::TestHelpers::get_set_record();
-        DBSetRecord *objcRet = [[DBSetRecord alloc] initWithCppSetRecord:cppRet];
+        DBSetRecord *objcRet = ::djinni_generated::SetRecord::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkSetRecord:(DBSetRecord *)rec {
     try {
-        ::SetRecord cppRec = std::move([rec cppSetRecord]);
+        ::SetRecord cppRec = ::djinni_generated::SetRecord::toCpp(rec);
         bool cppRet = ::TestHelpers::check_set_record(std::move(cppRec));
         BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
@@ -75,14 +75,14 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 + (DBPrimitiveList *)getPrimitiveList {
     try {
         ::PrimitiveList cppRet = ::TestHelpers::get_primitive_list();
-        DBPrimitiveList *objcRet = [[DBPrimitiveList alloc] initWithCppPrimitiveList:cppRet];
+        DBPrimitiveList *objcRet = ::djinni_generated::PrimitiveList::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkPrimitiveList:(DBPrimitiveList *)pl {
     try {
-        ::PrimitiveList cppPl = std::move([pl cppPrimitiveList]);
+        ::PrimitiveList cppPl = ::djinni_generated::PrimitiveList::toCpp(pl);
         bool cppRet = ::TestHelpers::check_primitive_list(std::move(cppPl));
         BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
@@ -92,14 +92,14 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 + (DBNestedCollection *)getNestedCollection {
     try {
         ::NestedCollection cppRet = ::TestHelpers::get_nested_collection();
-        DBNestedCollection *objcRet = [[DBNestedCollection alloc] initWithCppNestedCollection:cppRet];
+        DBNestedCollection *objcRet = ::djinni_generated::NestedCollection::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkNestedCollection:(DBNestedCollection *)nc {
     try {
-        ::NestedCollection cppNc = std::move([nc cppNestedCollection]);
+        ::NestedCollection cppNc = ::djinni_generated::NestedCollection::toCpp(nc);
         bool cppRet = ::TestHelpers::check_nested_collection(std::move(cppNc));
         BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
@@ -173,14 +173,14 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 + (DBMapListRecord *)getMapListRecord {
     try {
         ::MapListRecord cppRet = ::TestHelpers::get_map_list_record();
-        DBMapListRecord *objcRet = [[DBMapListRecord alloc] initWithCppMapListRecord:cppRet];
+        DBMapListRecord *objcRet = ::djinni_generated::MapListRecord::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkMapListRecord:(DBMapListRecord *)m {
     try {
-        ::MapListRecord cppM = std::move([m cppMapListRecord]);
+        ::MapListRecord cppM = ::djinni_generated::MapListRecord::toCpp(m);
         bool cppRet = ::TestHelpers::check_map_list_record(std::move(cppM));
         BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
         return objcRet;
@@ -261,9 +261,9 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 
 + (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i {
     try {
-        ::AssortedIntegers cppI = std::move([i cppAssortedIntegers]);
+        ::AssortedIntegers cppI = ::djinni_generated::AssortedIntegers::toCpp(i);
         ::AssortedIntegers cppRet = ::TestHelpers::assorted_integers_id(std::move(cppI));
-        DBAssortedIntegers *objcRet = [[DBAssortedIntegers alloc] initWithCppAssortedIntegers:cppRet];
+        DBAssortedIntegers *objcRet = ::djinni_generated::AssortedIntegers::fromCpp(cppRet);
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

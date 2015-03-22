@@ -44,7 +44,7 @@ auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType
         int64_t cpp_record_id = ::djinni::I64::fromCpp(record_id);
         NSString *cpp_utf8string = ::djinni::String::fromCpp(utf8string);
         DBClientReturnedRecord * objcRet = [Handle::get() getRecord:cpp_record_id utf8string:cpp_utf8string];
-        ::ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
+        ::ClientReturnedRecord cppRet = ::djinni_generated::ClientReturnedRecord::toCpp(objcRet);
         return cppRet;
     }
 }

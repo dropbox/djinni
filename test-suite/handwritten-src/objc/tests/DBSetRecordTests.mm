@@ -34,7 +34,7 @@
 - (void)testCppToObjc
 {
     SetRecord cppSetRecord = [self getCppSetRecord];
-    DBSetRecord *objcSetRecord = [[DBSetRecord alloc] initWithCppSetRecord:cppSetRecord];
+    DBSetRecord *objcSetRecord = djinni_generated::SetRecord::fromCpp(cppSetRecord);
 
     XCTAssertEqual([objcSetRecord.set count], (NSUInteger)3, @"Set length 3 expected, actual: %lu", (unsigned long)[objcSetRecord.set count]);
     XCTAssert([objcSetRecord.set containsObject:@"StringA"], @"\"StringA\" expected but does not exist");
@@ -45,7 +45,7 @@
 -(void)testObjcToCpp
 {
     DBSetRecord *objcSetRecord = [self getObjcSetRecord];
-    SetRecord cppSetRecord = [objcSetRecord cppSetRecord];
+    SetRecord cppSetRecord = djinni_generated::SetRecord::toCpp(objcSetRecord);
     auto & cppSet = cppSetRecord.set;
 
     XCTAssertEqual(cppSet.size(), (NSUInteger)3, @"Set length 3 expected, actual: %zd", cppSet.size());

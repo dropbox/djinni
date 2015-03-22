@@ -1,5 +1,7 @@
 #import "DBMapRecord+Private.h"
+#import "DBMapRecord.h"
 #import "DBMapListRecord+Private.h"
+#import "DBMapListRecord.h"
 #import <XCTest/XCTest.h>
 
 #include "map_record.hpp"
@@ -23,21 +25,21 @@
 - (void)testCppToObjc
 {
     MapRecord cppMapRecord([self getCppMap]);
-    DBMapRecord *objcMapRecord = [[DBMapRecord alloc] initWithCppMapRecord:cppMapRecord];
+    DBMapRecord *objcMapRecord = djinni_generated::MapRecord::fromCpp(cppMapRecord);
     [self checkObjcMap:objcMapRecord.map];
 }
 
 - (void)testObjcToCpp
 {
     DBMapRecord *objcMapRecord = [[DBMapRecord alloc] initWithMap:[self getObjcMap]];
-    MapRecord cppMapRecord = [objcMapRecord cppMapRecord];
+    MapRecord cppMapRecord = djinni_generated::MapRecord::toCpp(objcMapRecord);
     [self checkCppMap:cppMapRecord.map];
 }
 
 - (void)testCppToObjcEmpty
 {
     MapRecord cppMapRecord{ {} };
-    DBMapRecord *objcMapRecord = [[DBMapRecord alloc] initWithCppMapRecord:cppMapRecord];
+    DBMapRecord *objcMapRecord = djinni_generated::MapRecord::fromCpp(cppMapRecord);
 
     XCTAssertEqual([objcMapRecord.map count], (NSUInteger)0, @"Count 0 expected, actual: %lu", (unsigned long)[objcMapRecord.map count]);
 }
@@ -45,7 +47,7 @@
 - (void)testObjcToCppEmpty
 {
     DBMapRecord *objcMapRecord = [[DBMapRecord alloc] initWithMap:[[NSDictionary alloc] init]];
-    MapRecord cppMapRecord = [objcMapRecord cppMapRecord];
+    MapRecord cppMapRecord = djinni_generated::MapRecord::toCpp(objcMapRecord);
     auto & cppMap = cppMapRecord.map;
     XCTAssertEqual(cppMap.size(), (size_t)0, @"Count 0 expected, actual: %zd", cppMap.size());
 }
@@ -53,7 +55,7 @@
 - (void)testCppMapListToObjc
 {
     MapListRecord cppMapListRecord{ { [self getCppMap] } };
-    DBMapListRecord *objcMapListRecord = [[DBMapListRecord alloc] initWithCppMapListRecord:cppMapListRecord];
+    DBMapListRecord *objcMapListRecord = djinni_generated::MapListRecord::fromCpp(cppMapListRecord);
     NSArray *objcMapList = objcMapListRecord.mapList;
     XCTAssertEqual([objcMapList count], (NSUInteger)1, @"List with 1 map expected, actual no: %lu", (unsigned long)[objcMapList count]);
     [self checkObjcMap:[objcMapList objectAtIndex:0]];
@@ -63,7 +65,7 @@
 {
     NSArray *objcMapList = [[NSArray alloc] initWithObjects:[self getObjcMap], nil];
     DBMapListRecord *objcMapListRecord = [[DBMapListRecord alloc] initWithMapList:objcMapList];
-    auto cppMapListRecord = [objcMapListRecord cppMapListRecord];
+    auto cppMapListRecord = djinni_generated::MapListRecord::toCpp(objcMapListRecord);
     auto & cppMapList = cppMapListRecord.map_list;
     XCTAssertEqual(cppMapList.size(), (size_t)1, @"List with 1 map expected, actual no: %zd", cppMapList.size());
     [self checkCppMap:cppMapList[0]];
