@@ -54,6 +54,23 @@ public:
             [m_mapping removeObjectForKey:objcRef];
         }
     }
+	
+	class Handle
+	{
+	public:
+		Handle(id obj) : _obj(obj) { };
+		~Handle()
+		{
+			if(_obj)
+				getInstance().remove(_obj);
+		}
+		void assign(id obj) { _obj = obj; }
+		id get() const noexcept { return _obj; }
+		
+	private:
+		id _obj;
+	};
+	
 
 private:
     NSMapTable *m_mapping;

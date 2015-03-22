@@ -57,6 +57,22 @@ public:
             m_mapping.erase(ptr);
         }
     }
+	
+	class Handle
+	{
+	public:
+		Handle() = default;
+		~Handle()
+		{
+			if(_ptr)
+				getInstance().remove(_ptr);
+		}
+		void assign(const std::shared_ptr<T>& ptr) { _ptr = ptr; }
+		const std::shared_ptr<T>& get() const noexcept { return _ptr; }
+		
+	private:
+		std::shared_ptr<T> _ptr;
+	};
 
 private:
     std::unordered_map<T*, __weak id> m_mapping;

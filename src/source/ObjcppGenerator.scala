@@ -46,11 +46,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
         case d: MDef => d.defType match {
           case DEnum =>
-            body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-            body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
             header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
+            body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
           case DInterface =>
-            header.add("#import <Foundation/Foundation.h>")
             val ext = d.body.asInstanceOf[Interface].ext
             if (ext.cpp) {
               header.add("@class " + objcMarshal.typename(tm) + ";")
@@ -58,7 +56,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             }
             if (ext.objc) {
               header.add("@protocol " + objcMarshal.typename(tm) + ";")
-              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name + "_objc_proxy")))
+              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
             }
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
@@ -70,6 +68,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
   }
+
+  private def arcAssert(w: IndentWriter) = w.wl("static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");")
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     // No generation required
@@ -141,11 +141,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = objcMarshal.typename(ident, i)
+    val cppSelf = cppMarshal.fqTypename(ident, i)
 
-    refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("#include <memory>")
-    refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
     refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.body.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
@@ -158,7 +158,29 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    val cppSelf = cppMarshal.fqTypename(ident, i)
+    val helperClass = objcppMarshal.helperClass(ident)
+    val fqHelperClass = objcppMarshal.fqHelperClass(ident)
+
+    writeObjcFile(privateHeaderName(ident.name), origin, refs.privHeader, w => {
+      arcAssert(w)
+      w.wl
+      w.wl((if(i.ext.objc) "@protocol " else "@class ") + self + ";")
+      w.wl
+      wrapNamespace(w, Some(spec.objcppNamespace), w => {
+        w.wl(s"struct $helperClass")
+        w.bracedSemi {
+          w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+          w.wl("using ObjcType = " + (if(i.ext.objc) s"id<$self>" else s"$self*") + ";");
+          w.wl
+          w.wl(s"using Boxed = $helperClass;")
+          w.wl
+          w.wl(s"static CppType toCpp(ObjcType objc);")
+          w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
+        }
+      })
+      w.wl
+    })
+
     if (i.ext.cpp) {
       refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
@@ -166,52 +188,60 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#include <exception>")
 
-      writeObjcFile(privateHeaderName(ident.name), origin, refs.privHeader, w => {
+      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
+        arcAssert(w)
+        w.wl
+        wrapNamespace(w, Some(""), w => {
+          w.wl(s"using CppType = $fqHelperClass::CppType;")
+          w.wl(s"using ObjcType = $fqHelperClass::ObjcType;")
+        })
+        w.wl
         w.wl(s"@interface $self ()")
         w.wl
-        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<$cppSelf> cppRef;")
+        w.wl(s"@property (nonatomic, readonly) djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
         w.wl
-        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppSelf> &)cppRef;")
-        w.wl
-        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf> &)cppRef;")
+        w.wl("- (id)initWithCpp:(const CppType&)cppRef;")
         w.wl
         w.wl("@end")
-      })
-
-      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
-        w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
+        w.wl
+        wrapNamespace(w, Some(spec.objcppNamespace), w => {
+          w.wl(s"CppType $helperClass::toCpp(ObjcType objc)")
+          w.braced {
+            w.wl(s"return objc ? objc.cppRef.get() : nullptr;")
+          }
+          w.wl
+          w.wl(s"ObjcType $helperClass::fromCpp(const CppType& cpp)")
+          w.braced {
+            w.wl("if(cpp)").braced {
+              w.wl(s"return djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const CppType& p)").bracedEnd(");") {
+                w.wl(s"return [[$self alloc] initWithCpp:p];")
+              }
+            }
+            w.wl("else").braced {
+              w.wl("return nil;")
+            }
+          }
+        })
         w.wl
         w.wl(s"@implementation $self")
         w.wl
-        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf> &)cppRef")
+        w.wl(s"- (id)initWithCpp:(const CppType&)cppRef")
         w.braced {
           w.w("if (self = [super init])").braced {
-            w.wl("_cppRef = cppRef;")
+            w.wl("_cppRef.assign(cppRef);") // Using operator= here deadlocks in DbxWrapperCache::remove()
           }
           w.wl("return self;")
         }
-        w.wl
-        w.wl(s"- (void)dealloc")
-        w.braced {
-          w.wl(s"djinni::DbxCppWrapperCache<$cppSelf> & cache = djinni::DbxCppWrapperCache<$cppSelf>::getInstance();")
-          w.wl("cache.remove(_cppRef);")
-        }
-        w.wl
-        w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppSelf> &)cppRef")
-        w.braced {
-          w.wl(s"djinni::DbxCppWrapperCache<$cppSelf> & cache = djinni::DbxCppWrapperCache<$cppSelf>::getInstance();")
-          w.wl(s"return cache.get(cppRef, [] (const std::shared_ptr<$cppSelf> & p) { return [[$self alloc] initWithCpp:p]; });")
-         }
         for (m <- i.methods) {
           w.wl
           writeObjcFuncDecl(m, w)
           w.braced {
-            w.wl("try {").nested {
+            w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
               for (p <- m.params) {
                 translateObjcTypeToCpp(idObjc.local("cpp_" + p.ident.name), idObjc.local(p.ident.name), p.ty, w)
               }
               val params = m.params.map(p => "std::move(" + idObjc.local("cpp_" + p.ident.name) + ")").mkString("(", ", ", ")")
-              val cppRef = if (!m.static) "_cppRef->" else  cppSelf + "::"
+              val cppRef = if (!m.static) "_cppRef.get()->" else  cppSelf + "::"
               m.ret match {
                 case None =>
                   w.wl(s"$cppRef${idCpp.method(m.ident)}$params;")
@@ -221,7 +251,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   w.wl("return objcRet;")
               }
             }
-            w.wl("} DJINNI_TRANSLATE_EXCEPTIONS()")
           }
         }
         w.wl
@@ -230,69 +259,71 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     }
 
     if (i.ext.objc) {
-      val objcExtName = ident.name + "_objc_proxy"
-      val objcExtSelf = objcppMarshal.helperClass(objcExtName)
-      refs.privHeader.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcExtName)))
-      writeObjcFile(privateHeaderName(objcExtName), origin, refs.privHeader, w => {
-        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
-          w.wl(s"class $objcExtSelf final : public $cppSelf").bracedSemi {
-            w.wl("public:")
-            w.wl(s"id <$self> objcRef;")
-            w.wl(s"$objcExtSelf (id<$self> objcRef);")
-            w.wl(s"virtual ~$objcExtSelf () override;")
-            w.wl(s"static std::shared_ptr<$cppSelf> ${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef);")
+      val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
+      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
+
+      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
+        arcAssert(w)
+        w.wl
+        wrapNamespace(w, Some(""), w => {
+          w.wl(s"using CppType = $fqHelperClass::CppType;")
+          w.wl(s"using ObjcType = $fqHelperClass::ObjcType;")
+          w.wl
+          w.wl(s"class $objcExtSelf final")
+          w.wl(s": public $cppSelf")
+          w.wl(s", public ::djinni::DbxObjcWrapperCache<$objcExtSelf>::Handle") // Use base class to avoid name conflicts with user-defined methods having the same name as this new data member
+          w.bracedSemi {
+            w.wlOutdent("public:")
+            w.wl(s"$objcExtSelf(id objc) : Handle(objc) { }")
             for (m <- i.methods) {
               val ret = cppMarshal.fqReturnType(m.ret)
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
-              w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
+              w.wl(s"$ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
-            w.wl
-            w.wl("private:")
-            w.wl(s"$objcExtSelf () {};")
           }
         })
-      })
-
-      writeObjcFile(bodyName(objcExtName), origin, refs.body, w => {
-        wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
-          w.wl(s"$objcExtSelf::$objcExtSelf (id<$self> objcRef)").braced {
-            w.wl("this->objcRef = objcRef;")
+        w.wl
+        wrapNamespace(w, Some(spec.objcppNamespace), w => {
+          w.wl(s"CppType $helperClass::toCpp(ObjcType objc)")
+          w.braced {
+            w.wl("if(objc)").braced {
+              w.wl(s"return djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance().get(objc);")
+            }
+            w.wl("else").braced {
+              w.wl("return nullptr;")
+            }
           }
           w.wl
-          w.wl(s"$objcExtSelf::~$objcExtSelf ()").braced {
-            w.wl(s"djinni::DbxObjcWrapperCache<$objcExtSelf> & cache = djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance();")
-            w.wl(s"cache.remove(objcRef);")
+          w.wl(s"ObjcType $helperClass::fromCpp(const CppType& cpp)")
+          w.braced {
+            w.wl(s"assert(!cpp || dynamic_cast<$objcExtSelf*>(cpp.get()));")
+            w.wl(s"return cpp ? static_cast<$objcExtSelf&>(*cpp).Handle::get() : nil;")
           }
+        })
+        for (m <- i.methods) {
           w.wl
-          w.wl(s"std::shared_ptr<$cppSelf> $objcExtSelf::${idCpp.method(ident.name + "_with_objc")} (id<$self> objcRef)").braced {
-            w.wl(s"djinni::DbxObjcWrapperCache<$objcExtSelf> & cache = djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance();")
-            w.wl(s"return static_cast<std::shared_ptr<$cppSelf>>(cache.get(objcRef));") // TODO: static_pointer_cast
-          }
-          for (m <- i.methods) {
-            w.wl
-            val ret = cppMarshal.fqReturnType(m.ret)
-            val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
-            w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
-              w.w("@autoreleasepool").braced {
-                m.params.foreach(p =>
-                  translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
-                m.ret.fold()(r => w.w(objcMarshal.fqFieldType(r) + "objcRet = "))
-                w.w("[objcRef " + idObjc.method(m.ident))
-                val skipFirst = SkipFirst()
-                for (p <- m.params) {
-                  skipFirst { w.w(" " + idObjc.local(p.ident)) }
-                  w.w(":" + idCpp.local("cpp_" + p.ident.name))
-                }
-                w.wl("];")
-                m.ret.fold()(r => {
-                  translateObjcTypeToCpp("cppRet", "objcRet", r, w)
-                  w.wl("return cppRet;")
-                })
+          val ret = cppMarshal.fqReturnType(m.ret)
+          val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
+          w.wl(s"$ret $objcExtSelf::${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")}").braced {
+            w.w("@autoreleasepool").braced {
+              m.params.foreach(p =>
+                translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
+              m.ret.fold()(r => w.w(objcMarshal.fqFieldType(r) + "objcRet = "))
+              w.w("[Handle::get() " + idObjc.method(m.ident))
+              val skipFirst = SkipFirst()
+              for (p <- m.params) {
+                skipFirst { w.w(" " + idObjc.local(p.ident)) }
+                w.w(":" + idCpp.local("cpp_" + p.ident.name))
               }
+              w.wl("];")
+              m.ret.fold()(r => {
+                translateObjcTypeToCpp("cppRet", "objcRet", r, w)
+                w.wl("return cppRet;")
+              })
             }
           }
-        })
+        }
       })
     }
   }
@@ -344,7 +375,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     writeObjcFile(bodyName(objcName), origin, refs.body, w => {
       if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
-      w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
+      arcAssert(w)
       w.wl
       w.wl(s"@implementation $self")
       w.wl
@@ -657,11 +688,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
                 val objcProxy = objcppMarshal.fqHelperClass(d.name + "_objc_proxy")
+                val helperClass = objcppMarshal.fqHelperClass(typeName)
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name)} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
-                  case (false, true) => w.wl(s"$objcType$objcIdent = std::static_pointer_cast<$objcProxy>($cppIdent)->objcRef;")
+                  case (true, false) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")//w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name)} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
+                  case (false, true) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
                 }
             }
           }
@@ -753,12 +785,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               case DRecord => w.wl(s"$cppType $cppIdent = std::move([$objcIdent cpp${IdentStyle.camelUpper(typeName)}]);")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
+                val helperClass = objcppMarshal.fqHelperClass(typeName)
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$cppType $cppIdent = $objcIdent.cppRef;")
-                  case (false, true) => w.wl(s"$cppType $cppIdent = ${objcppMarshal.fqHelperClass(d.name + "_objc_proxy")}" +
-                    s"::${idCpp.method(d.name + "_with_objc")}($objcIdent);")
+                  case (true, false) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")//w.wl(s"$cppType $cppIdent = $objcIdent.cppRef;")
+                  case (false, true) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
                 }
             }
           }
