@@ -78,6 +78,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcExt
+  def privateBodyName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcExt
 
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
     // MBinary | MList | MSet | MMap are not allowed for constants.
@@ -342,17 +343,14 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     refs.header.add("#import <Foundation/Foundation.h>")
 
-    refs.privHeader.add("#import <Foundation/Foundation.h>")
     refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(objcName)))
     refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
-
-    refs.body.add("#import <Foundation/Foundation.h>")
-    refs.body.add("#include <utility>")
+    
+    refs.body.add("#include <cassert>")
     refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcName)))
 
     if (r.ext.objc) {
       refs.body.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
-      refs.privHeader.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
       refs.header.add(s"@class ${objcMarshal.typename(ident, r)};")
     }
 
@@ -363,159 +361,72 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       case _ => false
     }
 
-    writeObjcFile(privateHeaderName(objcName), origin, refs.privHeader, w => {
-      w.wl(s"@interface $self ()")
-      w.wl
-      // Deep copy constructor
-      w.wl(s"- (id)${idObjc.method("init_with_cpp_" + ident.name)}:(const $cppSelf &)${idObjc.local(ident)};")
-      w.wl(s"- ($cppSelf)${idObjc.method("cpp_" + ident.name)};")
-      w.wl
-      w.wl("@end")
-    })
+    val helperClass = objcppMarshal.helperClass(ident)
+    val fqHelperClass = objcppMarshal.fqHelperClass(ident)
 
-    writeObjcFile(bodyName(objcName), origin, refs.body, w => {
-      if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
+    writeObjcFile(privateHeaderName(objcName), origin, refs.privHeader, w => {
       arcAssert(w)
       w.wl
-      w.wl(s"@implementation $self")
+      w.wl(s"@class $noBaseSelf;")
       w.wl
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($noBaseSelf *)${idObjc.local(ident)}")
-      w.braced {
-        w.w("if (self = [super init])").braced {
-          for (f <- r.fields) {
-            copyObjcValue(s"_${idObjc.field(f.ident)}", s"${idObjc.local(ident)}.${idObjc.field(f.ident)}", f.ty, w)
-          }
+      wrapNamespace(w, Some(spec.objcppNamespace), w => {
+        w.wl(s"struct $helperClass")
+        w.bracedSemi {
+          w.wl(s"using CppType = $cppSelf;")
+          w.wl(s"using ObjcType = $noBaseSelf*;");
+          w.wl
+          w.wl(s"using Boxed = $helperClass;")
+          w.wl
+          w.wl(s"static CppType toCpp(ObjcType objc);")
+          w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
         }
-        w.wl("return self;")
-      }
-      w.wl
-      // Constructor from all fields (not copying)
-      if (!r.fields.isEmpty) {
-        val head = r.fields.head
-        val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${objcMarshal.paramType(head.ty)})${idObjc.field(head.ident)}")
-        for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident.name)}:(${objcMarshal.paramType(f.ty)})${idObjc.local(f.ident)}")
-        }
-        w.wl
-        w.braced {
-          w.w("if (self = [super init])").braced {
-            for (f <- r.fields) {
-              if (checkMutable(f.ty.resolved))
-                w.wl(s"_${idObjc.field(f.ident)} = [${idObjc.local(f.ident)} copy];")
-              else
-                w.wl(s"_${idObjc.field(f.ident)} = ${idObjc.local(f.ident)};")
-            }
-          }
-          w.wl("return self;")
-        }
-        w.wl
-      }
-      // Cpp -> Objc translator
-      w.wl(s"- (id)${idObjc.method("init_with_cpp_" + ident.name)}:(const $cppSelf &)${idObjc.local(ident)}")
-      w.braced {
-        w.w("if (self = [super init])").braced {
-          for (f <- r.fields) {
-            translateCppTypeToObjc("_" + idObjc.field(f.ident), idObjc.local(ident) + "." + idCpp.field(f.ident), f.ty, false, w)
-          }
-        }
-        w.wl("return self;")
-      }
-      w.wl
-      // Objc -> Cpp translator
-      w.wl(s"- ($cppSelf)${idObjc.method("cpp_" + ident.name)}")
-      w.braced {
-        for (f <- r.fields) {
-          translateObjcTypeToCpp(idObjc.local(f.ident), "_" + idObjc.field(f.ident), f.ty, w)
-        }
-        val skipFirst = SkipFirst()
-        w.wl(s"return $cppSelf(").nestedN(2) {
-          for (f <- r.fields)
-          {
-            skipFirst { w.wl(",") }
-            w.w("std::move(" + idObjc.local(f.ident) + ")")
-          }
-        }
-        w.wl(");")
-      }
-
-      if (r.derivingTypes.contains(DerivingType.Eq)) {
-        w.wl("- (BOOL)isEqual:(id)other")
-        w.braced {
-          w.w(s"if (![other isKindOfClass:[$self class]])").braced {
-            w.wl("return NO;")
-          }
-          w.wl(s"$self *typedOther = ($self *)other;")
-          val skipFirst = SkipFirst()
-          w.w(s"return ").nestedN(2) {
-            for (f <- r.fields) {
-              skipFirst { w.wl(" &&") }
-              f.ty.resolved.base match {
-                case MBinary => w.w(s"[self.${idObjc.field(f.ident)} isEqualToData:typedOther.${idObjc.field(f.ident)}]")
-                case MList => w.w(s"[self.${idObjc.field(f.ident)} isEqualToArray:typedOther.${idObjc.field(f.ident)}]")
-                case MSet => w.w(s"[self.${idObjc.field(f.ident)} isEqualToSet:typedOther.${idObjc.field(f.ident)}]")
-                case MMap => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDictionary:typedOther.${idObjc.field(f.ident)}]")
-                case MOptional =>
-                  f.ty.resolved.args.head.base match {
-                    case df: MDef if df.defType == DEnum =>
-                      w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
-                    case _ =>
-                      w.w(s"((self.${idObjc.field(f.ident)} == nil && typedOther.${idObjc.field(f.ident)} == nil) || ")
-                      w.w(s"(self.${idObjc.field(f.ident)} != nil && [self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]))")
-                  }
-                case MString => w.w(s"[self.${idObjc.field(f.ident)} isEqualToString:typedOther.${idObjc.field(f.ident)}]")
-                case t: MPrimitive => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
-                case df: MDef => df.defType match {
-                  case DRecord => w.w(s"[self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]")
-                  case DEnum => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
-                  case _ => throw new AssertionError("Unreachable")
-                }
-                case _ => throw new AssertionError("Unreachable")
-              }
-            }
-          }
-          w.wl(";")
-        }
-      }
-
-      def generatePrimitiveOrder(ident: Ident, w: IndentWriter): Unit = {
-        w.wl(s"if (self.${idObjc.field(ident)} < other.${idObjc.field(ident)}) {").nested {
-          w.wl(s"tempResult = NSOrderedAscending;")
-        }
-        w.wl(s"} else if (self.${idObjc.field(ident)} > other.${idObjc.field(ident)}) {").nested {
-          w.wl(s"tempResult = NSOrderedDescending;")
-        }
-        w.wl(s"} else {").nested {
-          w.wl(s"tempResult = NSOrderedSame;")
-        }
-        w.wl("}")
-      }
-      if (r.derivingTypes.contains(DerivingType.Ord)) {
-        w.wl(s"- (NSComparisonResult)compare:($self *)other")
-        w.braced {
-          w.wl("NSComparisonResult tempResult;")
-          for (f <- r.fields) {
-            f.ty.resolved.base match {
-              case MString => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
-              case t: MPrimitive => generatePrimitiveOrder(f.ident, w)
-              case df: MDef => df.defType match {
-                case DRecord => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
-                case DEnum => generatePrimitiveOrder(f.ident, w)
-                case _ => throw new AssertionError("Unreachable")
-              }
-              case _ => throw new AssertionError("Unreachable")
-            }
-            w.w("if (tempResult != NSOrderedSame)").braced {
-              w.wl("return tempResult;")
-            }
-          }
-          w.wl("return NSOrderedSame;")
-        }
-      }
-      w.wl
-      w.wl("@end")
+      })
     })
-  }
+
+    writeObjcFile(privateBodyName(objcName), origin, refs.body, w => {
+      wrapNamespace(w, Some(spec.objcppNamespace), w => {
+        w.wl(s"auto $helperClass::toCpp(ObjcType obj) -> CppType")
+        w.braced {
+          w.wl("assert(obj);")
+          for (f <- r.fields) {
+            translateObjcTypeToCpp(idCpp.local(f.ident), "obj." + idObjc.field(f.ident), f.ty, w)
+          }
+          w.w(s"return $cppSelf(")
+          w.nested {
+            val skipFirst = new SkipFirst
+            for (f <- r.fields) {
+              skipFirst { w.w(",") }
+              w.wl
+              w.w(idCpp.local(f.ident))
+            }
+          }
+          w.wl(");")
+        }
+        w.wl
+        w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
+        w.braced {
+          for (f <- r.fields) {
+            translateCppTypeToObjc(idObjc.local(f.ident), "cpp." + idCpp.field(f.ident), f.ty, true, w)
+          }
+          w.w(s"return [[$noBaseSelf alloc]")
+          if(!r.fields.isEmpty) {
+            w.nested {
+              w.wl
+              w.w("initWith" + IdentStyle.camelUpper(r.fields.head.ident) + ":" + idObjc.local(r.fields.head.ident))
+              for (f <- r.fields.tail) {
+                w.wl
+                w.w(idObjc.field(f.ident) + ":" + idObjc.local(f.ident))
+              }
+            }
+          }
+          else {
+            w.w(" init")
+          }
+          w.wl("];")
+        }
+      })
+    })
+ }
 
   def writeObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) {
     createFile(spec.objcPrivateOutFolder.get, fileName, (w: IndentWriter) => {
@@ -530,75 +441,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       }
       f(w)
     })
-  }
-
-  def copyObjcValue(to: String, from: String, ty: TypeRef, w: IndentWriter): Unit =
-    copyObjcValue(to, from, ty.resolved, w)
-  def copyObjcValue(to: String, from: String, tm: MExpr, w: IndentWriter): Unit = {
-    def f(to: String, from: String, tm: MExpr, needRef: Boolean, w: IndentWriter, valueLevel: Int): Unit = {
-      tm.base match {
-        case MOptional => {
-          w.wl(s"if ($from == nil) {").nested {
-            w.wl(s"$to = nil;")
-          }
-          w.wl("} else {").nested {
-            f(to, from, tm.args.head, true, w, valueLevel)
-          }
-          w.wl("}")
-        }
-        case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
-        case MString => w.wl(s"$to = [$from copy];")
-        case MBinary => w.wl(s"$to = [$from copy];")
-        case MList => {
-          val copyName = "copiedValue_" + valueLevel
-          val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableArray *${to}TempArray = [NSMutableArray arrayWithCapacity:[$from count]];")
-          w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
-            f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempArray addObject:$copyName];")
-          }
-          w.wl(s"$to = ${to}TempArray;")
-        }
-        case MSet => {
-          val copyName = "copiedValue_" + valueLevel
-          val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableSet *${to}TempSet = [NSMutableSet setWithCapacity:[$from count]];")
-          w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
-            f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempSet addObject:$copyName];")
-          }
-          w.wl(s"$to = ${to}TempSet;")
-        }
-        case MMap => {
-          w.wl(s"NSMutableDictionary *${to}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[$from count]];")
-          val keyName = "key_" + valueLevel
-          val valueName = "value_" + valueLevel
-          val copiedKeyName = "copiedKey_" + valueLevel
-          val copiedValueName = "copiedValue_" + valueLevel
-          w.w(s"for (id $keyName in $from)").braced {
-            w.wl(s"id $copiedKeyName, $copiedValueName;")
-            f(copiedKeyName, keyName, tm.args.apply(0), true, w, valueLevel + 1)
-            w.wl(s"id $valueName = [$from objectForKey:$keyName];")
-            f(copiedValueName, valueName, tm.args.apply(1), true, w, valueLevel + 1)
-            w.wl(s"[${to}TempDictionary setObject:$copiedValueName forKey:$copiedKeyName];")
-          }
-          w.wl(s"$to = ${to}TempDictionary;")
-        }
-        case d: MDef => {
-          val typeName = d.name
-          val self = idObjc.ty(typeName)
-          d.defType match {
-            case DEnum => w.wl(s"$to = $from;")
-            case DRecord => w.wl(s"$to = [[${idObjc.ty(d.name)} alloc] ${idObjc.method("init_with_" + d.name)}:$from];")
-            case DInterface => w.wl(s"$to = $from;")
-          }
-        }
-        case p: MParam =>
-      }
-    }
-    f(to, from, tm, false, w, 0)
   }
 
   def translateCppTypeToObjc(objcIdent: String, cppIdent: String, ty: TypeRef, withDecl: Boolean, w: IndentWriter): Unit =
@@ -677,6 +519,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           case d: MDef => {
             val typeName = d.name
             val self = idObjc.ty(typeName)
+            val helperClass = objcppMarshal.fqHelperClass(typeName)
             d.defType match {
               case DEnum =>
                 val cppSelf = cppMarshal.fqTypename(tm)
@@ -684,15 +527,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::fromCpp($cppIdent);")
                 else
                   w.wl(s"$objcType$objcIdent = ::djinni::Enum<$cppSelf, $self>::fromCpp($cppIdent);")
-              case DRecord => w.wl(s"$objcType$objcIdent = [[${self} alloc] initWithCpp${IdentStyle.camelUpper(typeName)}:$cppIdent];")
+              case DRecord =>
+                w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
                 val objcProxy = objcppMarshal.fqHelperClass(d.name + "_objc_proxy")
-                val helperClass = objcppMarshal.fqHelperClass(typeName)
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")//w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name)} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
+                  case (true, false) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
                   case (false, true) => w.wl(s"$objcType$objcIdent = $helperClass::fromCpp($cppIdent);")
                 }
             }
@@ -775,6 +618,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           case d: MDef => {
             val typeName = d.name
             val self = idObjc.ty(typeName)
+            val helperClass = objcppMarshal.fqHelperClass(typeName)
             d.defType match {
               case DEnum =>
                 val cppSelf = cppMarshal.fqTypename(tm)
@@ -782,14 +626,14 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::Boxed::toCpp($objcIdent);")
                 else
                   w.wl(s"$cppType $cppIdent = ::djinni::Enum<$cppSelf, $self>::toCpp($objcIdent);")
-              case DRecord => w.wl(s"$cppType $cppIdent = std::move([$objcIdent cpp${IdentStyle.camelUpper(typeName)}]);")
+              case DRecord =>
+                w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
-                val helperClass = objcppMarshal.fqHelperClass(typeName)
                 (ext.cpp, ext.objc) match {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
-                  case (true, false) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")//w.wl(s"$cppType $cppIdent = $objcIdent.cppRef;")
+                  case (true, false) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
                   case (false, true) => w.wl(s"$cppType $cppIdent = $helperClass::toCpp($objcIdent);")
                 }
             }
