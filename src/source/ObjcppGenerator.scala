@@ -608,7 +608,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             }
           case MString => 
             w.wl(s"$objcType$objcIdent = ::djinni::String::fromCpp($cppIdent);")
-          case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
+          case MBinary =>
+            w.wl(s"$objcType$objcIdent = ::djinni::Binary::fromCpp($cppIdent);")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val objcName = "objcValue_" + valueLevel
@@ -710,8 +711,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           case MString =>
             w.wl(s"$cppType $cppIdent = ::djinni::String::toCpp($objcIdent);")
           case MBinary =>
-            w.wl(s"$cppType $cppIdent([$objcIdent length]);")
-            w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
+            w.wl(s"$cppType $cppIdent = ::djinni::Binary::toCpp($objcIdent);")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val cppName = "cppValue_" + valueLevel
