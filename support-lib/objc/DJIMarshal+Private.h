@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -107,6 +108,24 @@ struct String {
         assert(string.size() <= std::numeric_limits<NSUInteger>::max());
         // Using the pointer from .data() on an empty string is UB
         return string.empty() ? @"" : [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
+    }
+};
+
+struct Binary {
+    using CppType = std::vector<uint8_t>;
+    using ObjcType = NSData*;
+
+    using Boxed = Binary;
+
+    static CppType toCpp(ObjcType data) {
+        auto bytes = reinterpret_cast<const uint8_t*>(data.bytes);
+        return data.length > 0 ? CppType{bytes, bytes + data.length} : CppType{};
+    }
+
+    static ObjcType fromCpp(const CppType& bytes) {
+        assert(bytes.size() <= std::numeric_limits<NSUInteger>::max());
+        // Using the pointer from .data() on an empty vector is UB
+        return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data() length:bytes.size()];
     }
 };
 

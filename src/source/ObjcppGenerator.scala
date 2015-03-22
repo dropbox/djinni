@@ -626,7 +626,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"std::chrono::duration_cast<std::chrono::duration<double>>($cppIdent.time_since_epoch()).count()];")
             }
           }
-          case MBinary => w.wl(s"$objcType$objcIdent = [NSData dataWithBytes:(&$cppIdent[0]) length:($cppIdent.size())];")
+          case MBinary =>
+            w.wl(s"$objcType$objcIdent = ::djinni::Binary::fromCpp($cppIdent);")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val objcName = "objcValue_" + valueLevel
@@ -735,8 +736,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"$cppType $cppIdent = ::djinni::String::toCpp($objcIdent);")
           case MDate => w.wl(s"$cppType $cppIdent = ::djinni::convert_date([$objcIdent timeIntervalSince1970]);")
           case MBinary =>
-            w.wl(s"$cppType $cppIdent([$objcIdent length]);")
-            w.wl(s"[$objcIdent getBytes:(static_cast<void *>($cppIdent.data())) length:[$objcIdent length]];")
+            w.wl(s"$cppType $cppIdent = ::djinni::Binary::toCpp($objcIdent);")
           case MOptional => throw new AssertionError("optional should have been special cased")
           case MList =>
             val cppName = "cppValue_" + valueLevel

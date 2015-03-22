@@ -41,9 +41,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::vector<NSString *> _itemsTempVector;
         _itemsTempVector.reserve(itemList.items.size());
         for (const auto & cppValue_0 : itemList.items) {
-            NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
-                    length:cppValue_0.length()
-                    encoding:NSUTF8StringEncoding];
+            NSString *objcValue_0 = ::djinni::String::fromCpp(cppValue_0);
             _itemsTempVector.push_back(objcValue_0);
         }
         _items = [NSArray arrayWithObjects:&_itemsTempVector[0] count:_itemsTempVector.size()];
@@ -56,7 +54,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     std::vector<std::string> items;
     items.reserve([_items count]);
     for (NSString *objcValue_0 in _items) {
-        std::string cppValue_0([objcValue_0 UTF8String], [objcValue_0 lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        std::string cppValue_0 = ::djinni::String::toCpp(objcValue_0);
         items.push_back(std::move(cppValue_0));
     }
     return ::textsort::ItemList(
