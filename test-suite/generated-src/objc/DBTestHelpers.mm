@@ -57,214 +57,144 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 
 + (DBSetRecord *)getSetRecord {
     try {
-        ::SetRecord cppRet = ::TestHelpers::get_set_record();
-        DBSetRecord *objcRet = ::djinni_generated::SetRecord::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::get_set_record();
+        return ::djinni_generated::SetRecord::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkSetRecord:(DBSetRecord *)rec {
     try {
-        ::SetRecord cppRec = ::djinni_generated::SetRecord::toCpp(rec);
-        bool cppRet = ::TestHelpers::check_set_record(std::move(cppRec));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(rec));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBPrimitiveList *)getPrimitiveList {
     try {
-        ::PrimitiveList cppRet = ::TestHelpers::get_primitive_list();
-        DBPrimitiveList *objcRet = ::djinni_generated::PrimitiveList::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::get_primitive_list();
+        return ::djinni_generated::PrimitiveList::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkPrimitiveList:(DBPrimitiveList *)pl {
     try {
-        ::PrimitiveList cppPl = ::djinni_generated::PrimitiveList::toCpp(pl);
-        bool cppRet = ::TestHelpers::check_primitive_list(std::move(cppPl));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_primitive_list(::djinni_generated::PrimitiveList::toCpp(pl));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBNestedCollection *)getNestedCollection {
     try {
-        ::NestedCollection cppRet = ::TestHelpers::get_nested_collection();
-        DBNestedCollection *objcRet = ::djinni_generated::NestedCollection::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::get_nested_collection();
+        return ::djinni_generated::NestedCollection::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkNestedCollection:(DBNestedCollection *)nc {
     try {
-        ::NestedCollection cppNc = ::djinni_generated::NestedCollection::toCpp(nc);
-        bool cppRet = ::TestHelpers::check_nested_collection(std::move(cppNc));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_nested_collection(::djinni_generated::NestedCollection::toCpp(nc));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSDictionary *)getMap {
     try {
-        std::unordered_map<std::string, int64_t> cppRet = ::TestHelpers::get_map();
-        std::vector<NSString *> objcRetTempKeyVector;
-        objcRetTempKeyVector.reserve(cppRet.size());
-        std::vector<NSNumber *> objcRetTempValueVector;
-        objcRetTempValueVector.reserve(cppRet.size());
-        for (const auto & cppPair_0 : cppRet) {
-            NSString *objcKey_0 = ::djinni::String::fromCpp(cppPair_0.first);
-            NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppPair_0.second);
-            objcRetTempKeyVector.push_back(objcKey_0);
-            objcRetTempValueVector.push_back(objcValue_0);
-        }
-        NSDictionary *objcRet = [NSDictionary dictionaryWithObjects:&objcRetTempValueVector[0] forKeys:&objcRetTempKeyVector[0] count:cppRet.size()];
-        return objcRet;
+        auto r = ::TestHelpers::get_map();
+        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkMap:(NSDictionary *)m {
     try {
-        std::unordered_map<std::string, int64_t> cppM;
-        for (id objcKey_0 in m) {
-            std::string cppKey_0 = ::djinni::String::toCpp(objcKey_0);
-            int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([m objectForKey:objcKey_0]);
-            cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
-        }
-        bool cppRet = ::TestHelpers::check_map(std::move(cppM));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSDictionary *)getEmptyMap {
     try {
-        std::unordered_map<std::string, int64_t> cppRet = ::TestHelpers::get_empty_map();
-        std::vector<NSString *> objcRetTempKeyVector;
-        objcRetTempKeyVector.reserve(cppRet.size());
-        std::vector<NSNumber *> objcRetTempValueVector;
-        objcRetTempValueVector.reserve(cppRet.size());
-        for (const auto & cppPair_0 : cppRet) {
-            NSString *objcKey_0 = ::djinni::String::fromCpp(cppPair_0.first);
-            NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppPair_0.second);
-            objcRetTempKeyVector.push_back(objcKey_0);
-            objcRetTempValueVector.push_back(objcValue_0);
-        }
-        NSDictionary *objcRet = [NSDictionary dictionaryWithObjects:&objcRetTempValueVector[0] forKeys:&objcRetTempKeyVector[0] count:cppRet.size()];
-        return objcRet;
+        auto r = ::TestHelpers::get_empty_map();
+        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkEmptyMap:(NSDictionary *)m {
     try {
-        std::unordered_map<std::string, int64_t> cppM;
-        for (id objcKey_0 in m) {
-            std::string cppKey_0 = ::djinni::String::toCpp(objcKey_0);
-            int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([m objectForKey:objcKey_0]);
-            cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
-        }
-        bool cppRet = ::TestHelpers::check_empty_map(std::move(cppM));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBMapListRecord *)getMapListRecord {
     try {
-        ::MapListRecord cppRet = ::TestHelpers::get_map_list_record();
-        DBMapListRecord *objcRet = ::djinni_generated::MapListRecord::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::get_map_list_record();
+        return ::djinni_generated::MapListRecord::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkMapListRecord:(DBMapListRecord *)m {
     try {
-        ::MapListRecord cppM = ::djinni_generated::MapListRecord::toCpp(m);
-        bool cppRet = ::TestHelpers::check_map_list_record(std::move(cppM));
-        BOOL objcRet = ::djinni::Bool::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::check_map_list_record(::djinni_generated::MapListRecord::toCpp(m));
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkClientInterfaceAscii:(id<DBClientInterface>)i {
     try {
-        std::shared_ptr<::ClientInterface> cppI = ::djinni_generated::ClientInterface::toCpp(i);
-        ::TestHelpers::check_client_interface_ascii(std::move(cppI));
+        ::TestHelpers::check_client_interface_ascii(::djinni_generated::ClientInterface::toCpp(i));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkClientInterfaceNonascii:(id<DBClientInterface>)i {
     try {
-        std::shared_ptr<::ClientInterface> cppI = ::djinni_generated::ClientInterface::toCpp(i);
-        ::TestHelpers::check_client_interface_nonascii(std::move(cppI));
+        ::TestHelpers::check_client_interface_nonascii(::djinni_generated::ClientInterface::toCpp(i));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkEnumMap:(NSDictionary *)m {
     try {
-        std::unordered_map<::color, std::string> cppM;
-        for (id objcKey_0 in m) {
-            ::color cppKey_0 = ::djinni::Enum<::color, DBColor>::Boxed::toCpp(objcKey_0);
-            std::string cppValue_0 = ::djinni::String::toCpp([m objectForKey:objcKey_0]);
-            cppM.emplace(std::move(cppKey_0), std::move(cppValue_0));
-        }
-        ::TestHelpers::check_enum_map(std::move(cppM));
+        ::TestHelpers::check_enum_map(::djinni::Map<::djinni::Enum<::color, DBColor>, ::djinni::String>::toCpp(m));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBToken *)tokenId:(DBToken *)t {
     try {
-        std::shared_ptr<::Token> cppT = ::djinni_generated::Token::toCpp(t);
-        std::shared_ptr<::Token> cppRet = ::TestHelpers::token_id(std::move(cppT));
-        DBToken* objcRet = ::djinni_generated::Token::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::token_id(::djinni_generated::Token::toCpp(t));
+        return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBToken *)createCppToken {
     try {
-        std::shared_ptr<::Token> cppRet = ::TestHelpers::create_cpp_token();
-        DBToken* objcRet = ::djinni_generated::Token::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::create_cpp_token();
+        return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (void)checkCppToken:(DBToken *)t {
     try {
-        std::shared_ptr<::Token> cppT = ::djinni_generated::Token::toCpp(t);
-        ::TestHelpers::check_cpp_token(std::move(cppT));
+        ::TestHelpers::check_cpp_token(::djinni_generated::Token::toCpp(t));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (int64_t)cppTokenId:(DBToken *)t {
     try {
-        std::shared_ptr<::Token> cppT = ::djinni_generated::Token::toCpp(t);
-        int64_t cppRet = ::TestHelpers::cpp_token_id(std::move(cppT));
-        int64_t objcRet = ::djinni::I64::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::cpp_token_id(::djinni_generated::Token::toCpp(t));
+        return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSNumber *)returnNone {
     try {
-        std::experimental::optional<int32_t> cppRet = ::TestHelpers::return_none();
-        NSNumber *objcRet;
-        if (cppRet) {
-            objcRet = ::djinni::I32::Boxed::fromCpp((*(cppRet)));
-        } else {
-            objcRet = nil;
-        }
-        return objcRet;
+        auto r = ::TestHelpers::return_none();
+        return ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i {
     try {
-        ::AssortedIntegers cppI = ::djinni_generated::AssortedIntegers::toCpp(i);
-        ::AssortedIntegers cppRet = ::TestHelpers::assorted_integers_id(std::move(cppI));
-        DBAssortedIntegers *objcRet = ::djinni_generated::AssortedIntegers::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::TestHelpers::assorted_integers_id(::djinni_generated::AssortedIntegers::toCpp(i));
+        return ::djinni_generated::AssortedIntegers::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

@@ -14,17 +14,12 @@ namespace djinni_generated {
 auto DateRecord::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    std::chrono::system_clock::time_point created_at = ::djinni::convert_date([obj.createdAt timeIntervalSince1970]);
-    return ::DateRecord(
-        created_at);
+    return {::djinni::Date::toCpp(obj.createdAt)};
 }
 
 auto DateRecord::fromCpp(const CppType& cpp) -> ObjcType
 {
-    NSDate *createdAt = [NSDate dateWithTimeIntervalSince1970:
-            std::chrono::duration_cast<std::chrono::duration<double>>(cpp.created_at.time_since_epoch()).count()];
-    return [[DBDateRecord alloc]
-        initWithCreatedAt:createdAt];
+    return [[DBDateRecord alloc] initWithCreatedAt:(::djinni::Date::fromCpp(cpp.created_at))];
 }
 
 }  // namespace djinni_generated

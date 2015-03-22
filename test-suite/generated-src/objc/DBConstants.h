@@ -6,7 +6,8 @@
 
 @interface DBConstants : NSObject
 - (id)initWithConstants:(DBConstants *)constants;
-- (id)initWithSomeInteger:(int32_t)someInteger someString:(NSString *)someString;
+- (id)initWithSomeInteger:(int32_t)someInteger
+               someString:(NSString *)someString;
 
 @property (nonatomic, readonly) int32_t someInteger;
 

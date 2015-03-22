@@ -155,12 +155,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
       val ret = marshal.returnType(method.ret)
-      w.w(s"$label ($ret)${idObjc.method(method.ident)}")
-      val skipFirst = SkipFirst()
-      for (p <- method.params) {
-        skipFirst { w.w(s" ${idObjc.local(p.ident)}") }
-        w.w(s":(${marshal.paramType(p.ty)})${idObjc.local(p.ident)}")
-      }
+      val decl = s"$label ($ret)${idObjc.method(method.ident)}"
+      writeAlignedObjcCall(w, decl, method.params, "", p => (idObjc.field(p.ident), s"(${marshal.paramType(p.ty)})${idObjc.local(p.ident)}"))
     }
 
     writeObjcFile(headerName(ident), origin, refs.header, w => {
@@ -187,7 +183,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.body.add("#import " + q(spec.objcIncludePrefix + headerName(ident)))
 
     if (i.consts.nonEmpty) {
-      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
+      writeObjcFile(bodyName(ident.name + "_constants"), origin, refs.body, w => { // TODO(j4cbo): this is named differently because otherwise it conflicts with interface +c wrappers
         generateObjcConstants(w, i.consts, self)
       })
     }
@@ -223,14 +219,13 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@interface $self : NSObject")
 
       // Deep copy construtor
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.field(ident)};")
+      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.local(ident)};")
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${marshal.paramType(head.ty)})${idObjc.local(head.ident)}")
-        for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident)}:(${marshal.paramType(f.ty)})${idObjc.field(f.ident)}")
-        }
+        val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
+        val decl = s"- (id)init$first"
+        writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl(";")
       }
 
@@ -275,10 +270,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
-        w.w(s"- (id)${idObjc.method("init_with_" + head.ident.name)}:(${marshal.paramType(head.ty)})${idObjc.field(head.ident)}")
-        for (f <- r.fields) skipFirst {
-          w.w(s" ${idObjc.field(f.ident.name)}:(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}")
-        }
+        val decl = s"- (id)${idObjc.method("init_with_" + head.ident.name)}"
+        writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl
         w.braced {
           w.w("if (self = [super init])").braced {

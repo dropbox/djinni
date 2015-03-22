@@ -39,7 +39,8 @@ DBConstants * const DBConstantsObjectConstant = [[DBConstants alloc] initWithSom
     return self;
 }
 
-- (id)initWithSomeInteger:(int32_t)someInteger someString:(NSString *)someString
+- (id)initWithSomeInteger:(int32_t)someInteger
+               someString:(NSString *)someString
 {
     if (self = [super init]) {
         _someInteger = someInteger;

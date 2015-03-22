@@ -10,7 +10,8 @@
 
 @interface TXSSortItems : NSObject
 
-- (void)sort:(TXSSortOrder)order items:(TXSItemList *)items;
+- (void)sort:(TXSSortOrder)order
+       items:(TXSItemList *)items;
 
 + (TXSSortItems *)createWithListener:(id<TXSTextboxListener>)listener;
 

@@ -10,20 +10,23 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-namespace { // anonymous namespace
+namespace djinni_generated {
 
-class ObjcProxy final
+class ClientInterface::ObjcProxy final
 : public ::ClientInterface
 , public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
 {
 public:
     using Handle::Handle;
-    ::ClientReturnedRecord get_record (int64_t record_id, const std::string & utf8string) override;
+    ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getRecord:(::djinni::I64::fromCpp(record_id))
+                                   utf8string:(::djinni::String::fromCpp(utf8string))];
+            return ::djinni_generated::ClientReturnedRecord::toCpp(r);
+        }
+    }
 };
-
-} // end anonymous namespace
-
-namespace djinni_generated {
 
 auto ClientInterface::toCpp(ObjcType objc) -> CppType
 {
@@ -37,14 +40,3 @@ auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 }  // namespace djinni_generated
-
-::ClientReturnedRecord ObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
-{
-    @autoreleasepool {
-        int64_t cpp_record_id = ::djinni::I64::fromCpp(record_id);
-        NSString *cpp_utf8string = ::djinni::String::fromCpp(utf8string);
-        DBClientReturnedRecord * objcRet = [Handle::get() getRecord:cpp_record_id utf8string:cpp_utf8string];
-        ::ClientReturnedRecord cppRet = ::djinni_generated::ClientReturnedRecord::toCpp(objcRet);
-        return cppRet;
-    }
-}

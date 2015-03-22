@@ -10,13 +10,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 namespace djinni_generated {
 
-struct Token
+class Token
 {
+public:
     using CppType = std::shared_ptr<::Token>;
     using ObjcType = DBToken*;
 
+    using Boxed = Token;
+
     static CppType toCpp(ObjcType objc);
     static ObjcType fromCpp(const CppType& cpp);
+
+private:
+    class ObjcProxy;
 };
 
 }  // namespace djinni_generated

@@ -15,20 +15,14 @@ namespace djinni_generated {
 auto Constants::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    int32_t some_integer = ::djinni::I32::toCpp(obj.someInteger);
-    std::string some_string = ::djinni::String::toCpp(obj.someString);
-    return ::Constants(
-        some_integer,
-        some_string);
+    return {::djinni::I32::toCpp(obj.someInteger),
+            ::djinni::String::toCpp(obj.someString)};
 }
 
 auto Constants::fromCpp(const CppType& cpp) -> ObjcType
 {
-    int32_t someInteger = ::djinni::I32::fromCpp(cpp.some_integer);
-    NSString *someString = ::djinni::String::fromCpp(cpp.some_string);
-    return [[DBConstants alloc]
-        initWithSomeInteger:someInteger
-        someString:someString];
+    return [[DBConstants alloc] initWithSomeInteger:(::djinni::I32::fromCpp(cpp.some_integer))
+                                         someString:(::djinni::String::fromCpp(cpp.some_string))];
 }
 
 }  // namespace djinni_generated

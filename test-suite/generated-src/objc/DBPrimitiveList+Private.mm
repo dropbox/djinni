@@ -14,27 +14,12 @@ namespace djinni_generated {
 auto PrimitiveList::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    std::vector<int64_t> list;
-    list.reserve([obj.list count]);
-    for (NSNumber *objcValue_0 in obj.list) {
-        int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp(objcValue_0);
-        list.push_back(std::move(cppValue_0));
-    }
-    return ::PrimitiveList(
-        list);
+    return {::djinni::List<::djinni::I64>::toCpp(obj.list)};
 }
 
 auto PrimitiveList::fromCpp(const CppType& cpp) -> ObjcType
 {
-    std::vector<NSNumber *> listTempVector;
-    listTempVector.reserve(cpp.list.size());
-    for (const auto & cppValue_0 : cpp.list) {
-        NSNumber *objcValue_0 = ::djinni::I64::Boxed::fromCpp(cppValue_0);
-        listTempVector.push_back(objcValue_0);
-    }
-    NSArray *list = [NSArray arrayWithObjects:&listTempVector[0] count:listTempVector.size()];
-    return [[DBPrimitiveList alloc]
-        initWithList:list];
+    return [[DBPrimitiveList alloc] initWithList:(::djinni::List<::djinni::I64>::fromCpp(cpp.list))];
 }
 
 }  // namespace djinni_generated

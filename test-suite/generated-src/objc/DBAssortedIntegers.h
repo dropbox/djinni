@@ -5,7 +5,14 @@
 
 @interface DBAssortedIntegers : NSObject
 - (id)initWithAssortedIntegers:(DBAssortedIntegers *)assortedIntegers;
-- (id)initWithEight:(int8_t)eight sixteen:(int16_t)sixteen thirtytwo:(int32_t)thirtytwo sixtyfour:(int64_t)sixtyfour oEight:(NSNumber *)oEight oSixteen:(NSNumber *)oSixteen oThirtytwo:(NSNumber *)oThirtytwo oSixtyfour:(NSNumber *)oSixtyfour;
+- (id)initWithEight:(int8_t)eight
+            sixteen:(int16_t)sixteen
+          thirtytwo:(int32_t)thirtytwo
+          sixtyfour:(int64_t)sixtyfour
+             oEight:(NSNumber *)oEight
+           oSixteen:(NSNumber *)oSixteen
+         oThirtytwo:(NSNumber *)oThirtytwo
+         oSixtyfour:(NSNumber *)oSixtyfour;
 
 @property (nonatomic, readonly) int8_t eight;
 

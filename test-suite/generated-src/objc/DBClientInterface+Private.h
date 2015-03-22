@@ -10,13 +10,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 namespace djinni_generated {
 
-struct ClientInterface
+class ClientInterface
 {
+public:
     using CppType = std::shared_ptr<::ClientInterface>;
     using ObjcType = id<DBClientInterface>;
 
+    using Boxed = ClientInterface;
+
     static CppType toCpp(ObjcType objc);
     static ObjcType fromCpp(const CppType& cpp);
+
+private:
+    class ObjcProxy;
 };
 
 }  // namespace djinni_generated

@@ -15,20 +15,14 @@ namespace djinni_generated {
 auto RecordWithNestedDerivings::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    int32_t key = ::djinni::I32::toCpp(obj.key);
-    ::RecordWithDerivings rec = ::djinni_generated::RecordWithDerivings::toCpp(obj.rec);
-    return ::RecordWithNestedDerivings(
-        key,
-        rec);
+    return {::djinni::I32::toCpp(obj.key),
+            ::djinni_generated::RecordWithDerivings::toCpp(obj.rec)};
 }
 
 auto RecordWithNestedDerivings::fromCpp(const CppType& cpp) -> ObjcType
 {
-    int32_t key = ::djinni::I32::fromCpp(cpp.key);
-    DBRecordWithDerivings *rec = ::djinni_generated::RecordWithDerivings::fromCpp(cpp.rec);
-    return [[DBRecordWithNestedDerivings alloc]
-        initWithKey:key
-        rec:rec];
+    return [[DBRecordWithNestedDerivings alloc] initWithKey:(::djinni::I32::fromCpp(cpp.key))
+                                                        rec:(::djinni_generated::RecordWithDerivings::fromCpp(cpp.rec))];
 }
 
 }  // namespace djinni_generated

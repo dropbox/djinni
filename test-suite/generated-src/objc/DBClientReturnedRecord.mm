@@ -15,7 +15,8 @@
     return self;
 }
 
-- (id)initWithRecordId:(int64_t)recordId content:(NSString *)content
+- (id)initWithRecordId:(int64_t)recordId
+               content:(NSString *)content
 {
     if (self = [super init]) {
         _recordId = recordId;

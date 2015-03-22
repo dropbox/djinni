@@ -14,20 +14,14 @@ namespace djinni_generated {
 auto RecordWithDerivings::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    int32_t key1 = ::djinni::I32::toCpp(obj.key1);
-    std::string key2 = ::djinni::String::toCpp(obj.key2);
-    return ::RecordWithDerivings(
-        key1,
-        key2);
+    return {::djinni::I32::toCpp(obj.key1),
+            ::djinni::String::toCpp(obj.key2)};
 }
 
 auto RecordWithDerivings::fromCpp(const CppType& cpp) -> ObjcType
 {
-    int32_t key1 = ::djinni::I32::fromCpp(cpp.key1);
-    NSString *key2 = ::djinni::String::fromCpp(cpp.key2);
-    return [[DBRecordWithDerivings alloc]
-        initWithKey1:key1
-        key2:key2];
+    return [[DBRecordWithDerivings alloc] initWithKey1:(::djinni::I32::fromCpp(cpp.key1))
+                                                  key2:(::djinni::String::fromCpp(cpp.key2))];
 }
 
 }  // namespace djinni_generated

@@ -29,6 +29,9 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   override def fieldType(tm: MExpr): String = typename(tm)
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)
 
+  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
+  override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
+
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

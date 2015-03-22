@@ -10,13 +10,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 namespace djinni_generated {
 
-struct SortItems
+class SortItems
 {
+public:
     using CppType = std::shared_ptr<::textsort::SortItems>;
     using ObjcType = TXSSortItems*;
 
+    using Boxed = SortItems;
+
     static CppType toCpp(ObjcType objc);
     static ObjcType fromCpp(const CppType& cpp);
+
+private:
+    class ObjcProxy;
 };
 
 }  // namespace djinni_generated

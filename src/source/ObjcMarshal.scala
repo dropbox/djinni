@@ -25,6 +25,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fieldType(tm: MExpr): String = paramType(tm)
   override def fqFieldType(tm: MExpr): String = fqParamType(tm)
 
+  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
+  override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")
+
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)

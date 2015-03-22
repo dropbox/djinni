@@ -16,7 +16,8 @@
     return self;
 }
 
-- (id)initWithKey:(int32_t)key rec:(DBRecordWithDerivings *)rec
+- (id)initWithKey:(int32_t)key
+              rec:(DBRecordWithDerivings *)rec
 {
     if (self = [super init]) {
         _key = key;

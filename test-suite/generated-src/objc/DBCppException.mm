@@ -51,17 +51,15 @@ auto CppException::fromCpp(const CppType& cpp) -> ObjcType
 
 - (int32_t)throwAnException {
     try {
-        int32_t cppRet = _cppRef.get()->throw_an_exception();
-        int32_t objcRet = ::djinni::I32::fromCpp(cppRet);
-        return objcRet;
+        auto r = _cppRef.get()->throw_an_exception();
+        return ::djinni::I32::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (DBCppException *)get {
     try {
-        std::shared_ptr<::CppException> cppRet = ::CppException::get();
-        DBCppException* objcRet = ::djinni_generated::CppException::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::CppException::get();
+        return ::djinni_generated::CppException::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

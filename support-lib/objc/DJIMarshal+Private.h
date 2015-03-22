@@ -11,6 +11,10 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <unordered_set>
+#include <unordered_map>
+#include "DJIDate.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -111,6 +115,23 @@ struct String {
     }
 };
 
+struct Date {
+    using CppType = std::chrono::system_clock::time_point;
+    using ObjcType = NSDate*;
+
+    using Boxed = Date;
+
+    static CppType toCpp(ObjcType date) {
+        return ::djinni::convert_date([date timeIntervalSince1970]);
+    }
+
+    static ObjcType fromCpp(const CppType& date) {
+        return [NSDate dateWithTimeIntervalSince1970:
+                                                    ::std::chrono::duration_cast<::std::chrono::duration<double>>(date.time_since_epoch()).count()];
+
+    }
+};
+
 struct Binary {
     using CppType = std::vector<uint8_t>;
     using ObjcType = NSData*;
@@ -126,6 +147,117 @@ struct Binary {
         assert(bytes.size() <= std::numeric_limits<NSUInteger>::max());
         // Using the pointer from .data() on an empty vector is UB
         return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data() length:bytes.size()];
+    }
+};
+
+
+template<template<class> class OptionalType, class T>
+class Optional {
+public:
+    using CppType = OptionalType<typename T::CppType>;
+    using ObjcType = typename T::Boxed::ObjcType;
+
+    using Boxed = Optional;
+
+    static CppType toCpp(ObjcType obj) {
+        return obj ? CppType(T::Boxed::toCpp(obj)) : CppType();
+    }
+
+    static ObjcType fromCpp(const CppType& opt) {
+        return opt ? T::Boxed::fromCpp(*opt) : nil;
+    }
+};
+
+template<class T>
+class List {
+    using ECppType = typename T::CppType;
+    using EObjcType = typename T::Boxed::ObjcType;
+
+public:
+    using CppType = std::vector<ECppType>;
+    using ObjcType = NSArray*;
+
+    using Boxed = List;
+
+    static CppType toCpp(ObjcType array) {
+        assert(array);
+        auto v = CppType();
+        v.reserve(array.count);
+        for(EObjcType value in array)
+            v.push_back(T::Boxed::toCpp(value));
+        return v;
+    }
+
+    static ObjcType fromCpp(const CppType& v) {
+        assert(v.size() <= std::numeric_limits<NSUInteger>::max());
+        auto array = [NSMutableArray arrayWithCapacity:static_cast<NSUInteger>(v.size())];
+        for(const auto& value : v) {
+            [array addObject:T::Boxed::fromCpp(value)];
+        }
+        return array;
+    }
+};
+
+template<class T>
+class Set {
+    using ECppType = typename T::CppType;
+    using EObjcType = typename T::Boxed::ObjcType;
+
+public:
+    using CppType = std::unordered_set<ECppType>;
+    using ObjcType = NSSet*;
+
+    using Boxed = Set;
+
+    static CppType toCpp(ObjcType set) {
+        assert(set);
+        auto s = CppType();
+        for(EObjcType value in set) {
+            s.insert(T::Boxed::toCpp(value));
+        }
+        return s;
+    }
+
+    static ObjcType fromCpp(const CppType& s) {
+        assert(s.size() <= std::numeric_limits<NSUInteger>::max());
+        auto set = [NSMutableSet setWithCapacity:static_cast<NSUInteger>(s.size())];
+        for(const auto& value : s) {
+            [set addObject:T::Boxed::fromCpp(value)];
+        }
+        return set;
+    }
+};
+
+template<class Key, class Value>
+class Map {
+    using CppKeyType = typename Key::CppType;
+    using CppValueType = typename Value::CppType;
+    using ObjcKeyType = typename Key::Boxed::ObjcType;
+    using ObjcValueType = typename Value::Boxed::ObjcType;
+
+public:
+    using CppType = std::unordered_map<CppKeyType, CppValueType>;
+    using ObjcType = NSDictionary*;
+
+    using Boxed = Map;
+
+    static CppType toCpp(ObjcType map) {
+        assert(map);
+        __block auto m = CppType();
+        m.reserve(map.count);
+        [map enumerateKeysAndObjectsUsingBlock:^(ObjcKeyType key, ObjcValueType obj, BOOL *) {
+            m.emplace(Key::Boxed::toCpp(key), Value::Boxed::toCpp(obj));
+        }];
+        return m;
+    }
+
+    static ObjcType fromCpp(const CppType& m) {
+        assert(m.size() <= std::numeric_limits<NSUInteger>::max());
+        auto map = [NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
+        for(const auto& kvp : m) {
+            [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
+        }
+        return map;
     }
 };
 

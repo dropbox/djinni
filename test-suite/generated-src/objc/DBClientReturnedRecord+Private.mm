@@ -14,20 +14,14 @@ namespace djinni_generated {
 auto ClientReturnedRecord::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    int64_t record_id = ::djinni::I64::toCpp(obj.recordId);
-    std::string content = ::djinni::String::toCpp(obj.content);
-    return ::ClientReturnedRecord(
-        record_id,
-        content);
+    return {::djinni::I64::toCpp(obj.recordId),
+            ::djinni::String::toCpp(obj.content)};
 }
 
 auto ClientReturnedRecord::fromCpp(const CppType& cpp) -> ObjcType
 {
-    int64_t recordId = ::djinni::I64::fromCpp(cpp.record_id);
-    NSString *content = ::djinni::String::fromCpp(cpp.content);
-    return [[DBClientReturnedRecord alloc]
-        initWithRecordId:recordId
-        content:content];
+    return [[DBClientReturnedRecord alloc] initWithRecordId:(::djinni::I64::fromCpp(cpp.record_id))
+                                                    content:(::djinni::String::fromCpp(cpp.content))];
 }
 
 }  // namespace djinni_generated

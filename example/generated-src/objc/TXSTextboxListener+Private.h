@@ -10,13 +10,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 namespace djinni_generated {
 
-struct TextboxListener
+class TextboxListener
 {
+public:
     using CppType = std::shared_ptr<::textsort::TextboxListener>;
     using ObjcType = id<TXSTextboxListener>;
 
+    using Boxed = TextboxListener;
+
     static CppType toCpp(ObjcType objc);
     static ObjcType fromCpp(const CppType& cpp);
+
+private:
+    class ObjcProxy;
 };
 
 }  // namespace djinni_generated

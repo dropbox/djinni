@@ -14,27 +14,12 @@ namespace djinni_generated {
 auto ItemList::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    std::vector<std::string> items;
-    items.reserve([obj.items count]);
-    for (NSString *objcValue_0 in obj.items) {
-        std::string cppValue_0 = ::djinni::String::toCpp(objcValue_0);
-        items.push_back(std::move(cppValue_0));
-    }
-    return ::textsort::ItemList(
-        items);
+    return {::djinni::List<::djinni::String>::toCpp(obj.items)};
 }
 
 auto ItemList::fromCpp(const CppType& cpp) -> ObjcType
 {
-    std::vector<NSString *> itemsTempVector;
-    itemsTempVector.reserve(cpp.items.size());
-    for (const auto & cppValue_0 : cpp.items) {
-        NSString *objcValue_0 = ::djinni::String::fromCpp(cppValue_0);
-        itemsTempVector.push_back(objcValue_0);
-    }
-    NSArray *items = [NSArray arrayWithObjects:&itemsTempVector[0] count:itemsTempVector.size()];
-    return [[TXSItemList alloc]
-        initWithItems:items];
+    return [[TXSItemList alloc] initWithItems:(::djinni::List<::djinni::String>::fromCpp(cpp.items))];
 }
 
 }  // namespace djinni_generated

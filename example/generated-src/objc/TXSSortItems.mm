@@ -51,20 +51,18 @@ auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
     return self;
 }
 
-- (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
+- (void)sort:(TXSSortOrder)order
+       items:(TXSItemList *)items {
     try {
-        ::textsort::sort_order cppOrder = ::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order);
-        ::textsort::ItemList cppItems = ::djinni_generated::ItemList::toCpp(items);
-        _cppRef.get()->sort(std::move(cppOrder), std::move(cppItems));
+        _cppRef.get()->sort(::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order),
+                            ::djinni_generated::ItemList::toCpp(items));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (TXSSortItems *)createWithListener:(id<TXSTextboxListener>)listener {
     try {
-        std::shared_ptr<::textsort::TextboxListener> cppListener = ::djinni_generated::TextboxListener::toCpp(listener);
-        std::shared_ptr<::textsort::SortItems> cppRet = ::textsort::SortItems::create_with_listener(std::move(cppListener));
-        TXSSortItems* objcRet = ::djinni_generated::SortItems::fromCpp(cppRet);
-        return objcRet;
+        auto r = ::textsort::SortItems::create_with_listener(::djinni_generated::TextboxListener::toCpp(listener));
+        return ::djinni_generated::SortItems::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

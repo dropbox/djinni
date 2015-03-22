@@ -14,26 +14,12 @@ namespace djinni_generated {
 auto SetRecord::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    std::unordered_set<std::string> set;
-    for (NSString *objcValue_0 in obj.set) {
-        std::string cppValue_0 = ::djinni::String::toCpp(objcValue_0);
-        set.insert(std::move(cppValue_0));
-    }
-    return ::SetRecord(
-        set);
+    return {::djinni::Set<::djinni::String>::toCpp(obj.set)};
 }
 
 auto SetRecord::fromCpp(const CppType& cpp) -> ObjcType
 {
-    std::vector<NSString *> setTempVector;
-    setTempVector.reserve(cpp.set.size());
-    for (const auto & cppValue_0 : cpp.set) {
-        NSString *objcValue_0 = ::djinni::String::fromCpp(cppValue_0);
-        setTempVector.push_back(objcValue_0);
-    }
-    NSSet *set = [NSSet setWithObjects:&setTempVector[0] count:setTempVector.size()];
-    return [[DBSetRecord alloc]
-        initWithSet:set];
+    return [[DBSetRecord alloc] initWithSet:(::djinni::Set<::djinni::String>::fromCpp(cpp.set))];
 }
 
 }  // namespace djinni_generated

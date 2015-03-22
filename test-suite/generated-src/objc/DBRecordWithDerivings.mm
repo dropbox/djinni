@@ -15,7 +15,8 @@
     return self;
 }
 
-- (id)initWithKey1:(int32_t)key1 key2:(NSString *)key2
+- (id)initWithKey1:(int32_t)key1
+              key2:(NSString *)key2
 {
     if (self = [super init]) {
         _key1 = key1;

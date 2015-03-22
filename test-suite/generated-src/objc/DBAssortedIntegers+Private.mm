@@ -14,80 +14,26 @@ namespace djinni_generated {
 auto AssortedIntegers::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    int8_t eight = ::djinni::I8::toCpp(obj.eight);
-    int16_t sixteen = ::djinni::I16::toCpp(obj.sixteen);
-    int32_t thirtytwo = ::djinni::I32::toCpp(obj.thirtytwo);
-    int64_t sixtyfour = ::djinni::I64::toCpp(obj.sixtyfour);
-    std::experimental::optional<int8_t> o_eight;
-    if (obj.oEight != nil) {
-        int8_t optValue = ::djinni::I8::Boxed::toCpp(obj.oEight);
-        o_eight = optValue;
-    }
-    std::experimental::optional<int16_t> o_sixteen;
-    if (obj.oSixteen != nil) {
-        int16_t optValue = ::djinni::I16::Boxed::toCpp(obj.oSixteen);
-        o_sixteen = optValue;
-    }
-    std::experimental::optional<int32_t> o_thirtytwo;
-    if (obj.oThirtytwo != nil) {
-        int32_t optValue = ::djinni::I32::Boxed::toCpp(obj.oThirtytwo);
-        o_thirtytwo = optValue;
-    }
-    std::experimental::optional<int64_t> o_sixtyfour;
-    if (obj.oSixtyfour != nil) {
-        int64_t optValue = ::djinni::I64::Boxed::toCpp(obj.oSixtyfour);
-        o_sixtyfour = optValue;
-    }
-    return ::AssortedIntegers(
-        eight,
-        sixteen,
-        thirtytwo,
-        sixtyfour,
-        o_eight,
-        o_sixteen,
-        o_thirtytwo,
-        o_sixtyfour);
+    return {::djinni::I8::toCpp(obj.eight),
+            ::djinni::I16::toCpp(obj.sixteen),
+            ::djinni::I32::toCpp(obj.thirtytwo),
+            ::djinni::I64::toCpp(obj.sixtyfour),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I8>::toCpp(obj.oEight),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I16>::toCpp(obj.oSixteen),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I32>::toCpp(obj.oThirtytwo),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I64>::toCpp(obj.oSixtyfour)};
 }
 
 auto AssortedIntegers::fromCpp(const CppType& cpp) -> ObjcType
 {
-    int8_t eight = ::djinni::I8::fromCpp(cpp.eight);
-    int16_t sixteen = ::djinni::I16::fromCpp(cpp.sixteen);
-    int32_t thirtytwo = ::djinni::I32::fromCpp(cpp.thirtytwo);
-    int64_t sixtyfour = ::djinni::I64::fromCpp(cpp.sixtyfour);
-    NSNumber *oEight;
-    if (cpp.o_eight) {
-        oEight = ::djinni::I8::Boxed::fromCpp((*(cpp.o_eight)));
-    } else {
-        oEight = nil;
-    }
-    NSNumber *oSixteen;
-    if (cpp.o_sixteen) {
-        oSixteen = ::djinni::I16::Boxed::fromCpp((*(cpp.o_sixteen)));
-    } else {
-        oSixteen = nil;
-    }
-    NSNumber *oThirtytwo;
-    if (cpp.o_thirtytwo) {
-        oThirtytwo = ::djinni::I32::Boxed::fromCpp((*(cpp.o_thirtytwo)));
-    } else {
-        oThirtytwo = nil;
-    }
-    NSNumber *oSixtyfour;
-    if (cpp.o_sixtyfour) {
-        oSixtyfour = ::djinni::I64::Boxed::fromCpp((*(cpp.o_sixtyfour)));
-    } else {
-        oSixtyfour = nil;
-    }
-    return [[DBAssortedIntegers alloc]
-        initWithEight:eight
-        sixteen:sixteen
-        thirtytwo:thirtytwo
-        sixtyfour:sixtyfour
-        oEight:oEight
-        oSixteen:oSixteen
-        oThirtytwo:oThirtytwo
-        oSixtyfour:oSixtyfour];
+    return [[DBAssortedIntegers alloc] initWithEight:(::djinni::I8::fromCpp(cpp.eight))
+                                             sixteen:(::djinni::I16::fromCpp(cpp.sixteen))
+                                           thirtytwo:(::djinni::I32::fromCpp(cpp.thirtytwo))
+                                           sixtyfour:(::djinni::I64::fromCpp(cpp.sixtyfour))
+                                              oEight:(::djinni::Optional<std::experimental::optional, ::djinni::I8>::fromCpp(cpp.o_eight))
+                                            oSixteen:(::djinni::Optional<std::experimental::optional, ::djinni::I16>::fromCpp(cpp.o_sixteen))
+                                          oThirtytwo:(::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(cpp.o_thirtytwo))
+                                          oSixtyfour:(::djinni::Optional<std::experimental::optional, ::djinni::I64>::fromCpp(cpp.o_sixtyfour))];
 }
 
 }  // namespace djinni_generated

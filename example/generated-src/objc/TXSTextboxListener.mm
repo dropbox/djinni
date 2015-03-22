@@ -9,20 +9,21 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-namespace { // anonymous namespace
+namespace djinni_generated {
 
-class ObjcProxy final
+class TextboxListener::ObjcProxy final
 : public ::textsort::TextboxListener
 , public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
 {
 public:
     using Handle::Handle;
-    void update (const ::textsort::ItemList & items) override;
+    void update(const ::textsort::ItemList & items) override
+    {
+        @autoreleasepool {
+            [Handle::get() update:(::djinni_generated::ItemList::fromCpp(items))];
+        }
+    }
 };
-
-} // end anonymous namespace
-
-namespace djinni_generated {
 
 auto TextboxListener::toCpp(ObjcType objc) -> CppType
 {
@@ -36,11 +37,3 @@ auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 }  // namespace djinni_generated
-
-void ObjcProxy::update (const ::textsort::ItemList & items)
-{
-    @autoreleasepool {
-        TXSItemList *cpp_items = ::djinni_generated::ItemList::fromCpp(items);
-        [Handle::get() update:cpp_items];
-    }
-}
