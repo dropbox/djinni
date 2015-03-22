@@ -57,6 +57,22 @@ public:
         }
     }
 
+    class Handle {
+    public:
+        Handle(id obj) : _obj(obj) { };
+        ~Handle() {
+            if (_obj) {
+                _cache->remove(_obj);
+            }
+        }
+        id get() const noexcept { return _obj; }
+
+    private:
+        const std::shared_ptr<DbxObjcWrapperCache> _cache = getInstance();
+        const id _obj;
+    };
+
+
 private:
     NSMapTable *m_mapping;
     std::mutex m_mutex;

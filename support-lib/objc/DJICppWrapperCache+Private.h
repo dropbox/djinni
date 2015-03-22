@@ -60,6 +60,22 @@ public:
         }
     }
 
+    class Handle {
+    public:
+        Handle() = default;
+        ~Handle() {
+            if (_ptr) {
+                _cache->remove(_ptr);
+            }
+        }
+        void assign(const std::shared_ptr<T>& ptr) { _ptr = ptr; }
+        const std::shared_ptr<T>& get() const noexcept { return _ptr; }
+
+    private:
+        const std::shared_ptr<DbxCppWrapperCache> _cache = getInstance();
+        std::shared_ptr<T> _ptr;
+    };
+
 private:
     std::unordered_map<T*, __weak id> m_mapping;
     std::mutex m_mutex;

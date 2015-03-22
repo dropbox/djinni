@@ -25,12 +25,12 @@ struct Bool {
 
     struct Boxed {
         using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x boolValue] ? true : false; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithChar:x ? YES : NO]; }
+        static CppType toCpp(ObjcType x) noexcept { assert(x); return [x boolValue] ? true : false; }
+        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:x ? YES : NO]; }
     };
 };
 
-template<class T>
+template<class Self, class T>
 struct Primitive {
     using CppType = T;
     using ObjcType = T;
@@ -39,7 +39,7 @@ struct Primitive {
     static ObjcType fromCpp(CppType x) noexcept { return x; }
 };
 
-struct I8 : public Primitive<int8_t> {
+struct I8 : public Primitive<I8, int8_t> {
     struct Boxed {
         using ObjcType = NSNumber*;
         static CppType toCpp(ObjcType x) noexcept { return [x charValue]; }
@@ -47,7 +47,7 @@ struct I8 : public Primitive<int8_t> {
     };
 };
 
-struct I16 : public Primitive<int16_t> {
+struct I16 : public Primitive<I16, int16_t> {
     struct Boxed {
         using ObjcType = NSNumber*;
         static CppType toCpp(ObjcType x) noexcept { return [x shortValue]; }
@@ -55,7 +55,7 @@ struct I16 : public Primitive<int16_t> {
     };
 };
 
-struct I32 : public Primitive<int32_t> {
+struct I32 : public Primitive<I32, int32_t> {
     struct Boxed {
         using ObjcType = NSNumber*;
         static CppType toCpp(ObjcType x) noexcept { return [x intValue]; }
@@ -63,7 +63,7 @@ struct I32 : public Primitive<int32_t> {
     };
 };
 
-struct I64 : public Primitive<int64_t> {
+struct I64 : public Primitive<I64, int64_t> {
     struct Boxed {
         using ObjcType = NSNumber*;
         static CppType toCpp(ObjcType x) noexcept { return [x longLongValue]; }
@@ -71,7 +71,7 @@ struct I64 : public Primitive<int64_t> {
     };
 };
 
-struct F64 : public Primitive<double> {
+struct F64 : public Primitive<F64, double> {
     struct Boxed {
         using ObjcType = NSNumber*;
         static CppType toCpp(ObjcType x) noexcept { return [x doubleValue]; }
