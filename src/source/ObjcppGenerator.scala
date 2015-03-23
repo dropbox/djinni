@@ -192,41 +192,31 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
         arcAssert(w)
         w.wl
-        wrapNamespace(w, Some(""), w => {
-          w.wl(s"using CppType = $fqHelperClass::CppType;")
-          w.wl(s"using ObjcType = $fqHelperClass::ObjcType;")
-        })
-        w.wl
         w.wl(s"@interface $self ()")
         w.wl
         w.wl(s"@property (nonatomic, readonly) djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
         w.wl
-        w.wl("- (id)initWithCpp:(const CppType&)cppRef;")
+        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef;")
         w.wl
         w.wl("@end")
         w.wl
         wrapNamespace(w, Some(spec.objcppNamespace), w => {
-          w.wl(s"CppType $helperClass::toCpp(ObjcType objc)")
+          w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
             w.wl(s"return objc ? objc.cppRef.get() : nullptr;")
           }
           w.wl
-          w.wl(s"ObjcType $helperClass::fromCpp(const CppType& cpp)")
+          w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
           w.braced {
-            w.wl("if(cpp)").braced {
-              w.wl(s"return djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const CppType& p)").bracedEnd(");") {
-                w.wl(s"return [[$self alloc] initWithCpp:p];")
-              }
-            }
-            w.wl("else").braced {
-              w.wl("return nil;")
+            w.wl(s"return !cpp ? nil : djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const auto& p)").bracedEnd(");") {
+              w.wl(s"return [[$self alloc] initWithCpp:p];")
             }
           }
         })
         w.wl
         w.wl(s"@implementation $self")
         w.wl
-        w.wl(s"- (id)initWithCpp:(const CppType&)cppRef")
+        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef")
         w.braced {
           w.w("if (self = [super init])").braced {
             w.wl("_cppRef.assign(cppRef);") // Using operator= here deadlocks in DbxWrapperCache::remove()
@@ -268,15 +258,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         arcAssert(w)
         w.wl
         wrapNamespace(w, Some(""), w => {
-          w.wl(s"using CppType = $fqHelperClass::CppType;")
-          w.wl(s"using ObjcType = $fqHelperClass::ObjcType;")
-          w.wl
           w.wl(s"class $objcExtSelf final")
           w.wl(s": public $cppSelf")
           w.wl(s", public ::djinni::DbxObjcWrapperCache<$objcExtSelf>::Handle") // Use base class to avoid name conflicts with user-defined methods having the same name as this new data member
           w.bracedSemi {
             w.wlOutdent("public:")
-            w.wl(s"$objcExtSelf(id objc) : Handle(objc) { }")
+            w.wl("using Handle::Handle;")
             for (m <- i.methods) {
               val ret = cppMarshal.fqReturnType(m.ret)
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
@@ -286,17 +273,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         })
         w.wl
         wrapNamespace(w, Some(spec.objcppNamespace), w => {
-          w.wl(s"CppType $helperClass::toCpp(ObjcType objc)")
+          w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
-            w.wl("if(objc)").braced {
-              w.wl(s"return djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance().get(objc);")
-            }
-            w.wl("else").braced {
-              w.wl("return nullptr;")
-            }
+            w.wl(s"return objc ? djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance().get(objc) : nullptr;")
           }
           w.wl
-          w.wl(s"ObjcType $helperClass::fromCpp(const CppType& cpp)")
+          w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
           w.braced {
             w.wl(s"assert(!cpp || dynamic_cast<$objcExtSelf*>(cpp.get()));")
             w.wl(s"return cpp ? static_cast<$objcExtSelf&>(*cpp).Handle::get() : nil;")

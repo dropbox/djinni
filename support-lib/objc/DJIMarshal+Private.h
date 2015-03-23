@@ -30,12 +30,12 @@ namespace djinni {
 		struct Boxed
 		{
 			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return [x boolValue] ? true : false; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithChar:x ? YES : NO]; }
+			static CppType toCpp(ObjcType x) noexcept { assert(x); return [x boolValue] ? true : false; }
+			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:x ? YES : NO]; }
 		};
 	};
 	
-	template<class T>
+	template<class Self, class T>
 	struct Primitive
 	{
 		using CppType = T;
@@ -43,42 +43,37 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType x) noexcept { return x; }
 		static ObjcType fromCpp(CppType x) noexcept { return x; }
-	};
-	struct I8 : public Primitive<int8_t>
-	{
+		
 		struct Boxed
 		{
 			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return [x charValue]; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithChar:x]; }
+			static CppType toCpp(ObjcType x) noexcept { assert(x); return static_cast<T>(Self::unbox(x)); }
+			static ObjcType fromCpp(CppType x) noexcept { return Self::box(x); }
 		};
 	};
-	struct I16 : public Primitive<int16_t>
+	class I8 : public Primitive<I8, int8_t>
 	{
-		struct Boxed
-		{
-			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return [x shortValue]; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithShort:x]; }
-		};
+		friend Primitive<I8, int8_t>;
+		static auto unbox(NSNumber* x) noexcept { return [x charValue]; }
+		static auto box(int8_t x) noexcept { return [NSNumber numberWithChar:x]; }
 	};
-	struct I32 : public Primitive<int32_t>
+	class I16 : public Primitive<I16, int16_t>
 	{
-		struct Boxed
-		{
-			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return [x intValue]; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInt:x]; }
-		};
+		friend Primitive<I16, int16_t>;
+		static auto unbox(NSNumber* x) noexcept { return [x shortValue]; }
+		static auto box(int16_t x) noexcept { return [NSNumber numberWithShort:x]; }
 	};
-	struct F64 : public Primitive<double>
+	class I32 : public Primitive<I32, int32_t>
 	{
-		struct Boxed
-		{
-			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return [x doubleValue]; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithDouble:x]; }
-		};
+		friend Primitive<I32, int32_t>;
+		static auto unbox(NSNumber* x) noexcept { return [x intValue]; }
+		static auto box(int32_t x) noexcept { return [NSNumber numberWithInt:x]; }
+	};
+	struct F64 : public Primitive<F64, double>
+	{
+		friend Primitive<F64, double>;
+		static auto unbox(NSNumber* x) noexcept { return [x doubleValue]; }
+		static auto box(double x) noexcept { return [NSNumber numberWithDouble:x]; }
 	};
 	
 	template<class CppEnum, class ObjcEnum>
@@ -107,13 +102,13 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType string)
 		{
+			assert(string);
 			return {[string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]};
 		}
 		static ObjcType fromCpp(const CppType& string)
 		{
 			assert(string.size() <= std::numeric_limits<NSUInteger>::max());
-			// Using the pointer from .data() on an empty string is UB
-			return string.empty() ? @"" : [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
+			return [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
 		}
 	};
 	
@@ -126,6 +121,7 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType data)
 		{
+			assert(data);
 			auto bytes = reinterpret_cast<const uint8_t*>(data.bytes);
 			return data.length > 0 ? CppType{bytes, bytes + data.length} : CppType{};
 		}
@@ -170,6 +166,7 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType array)
 		{
+			assert(array);
 			auto v = CppType();
 			v.reserve(array.count);
 			for(EObjcType value in array)
@@ -200,6 +197,7 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType set)
 		{
+			assert(set);
 			auto s = CppType();
 			for(EObjcType value in set)
 				s.insert(T::Boxed::toCpp(value));
@@ -231,6 +229,7 @@ namespace djinni {
 		
 		static CppType toCpp(ObjcType map)
 		{
+			assert(map);
 			auto m = CppType();
 			m.reserve(map.count);
 			[map enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
