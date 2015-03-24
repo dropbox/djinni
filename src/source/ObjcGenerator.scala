@@ -222,13 +222,13 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@interface $self : NSObject")
 
       // Deep copy construtor
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.field(ident)};")
+      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.local(ident)};")
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
         val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
         val decl = s"- (id)init$first"
-        writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.field(f.ident)}"))
+        writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl(";")
       }
 
