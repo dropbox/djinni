@@ -283,6 +283,17 @@ abstract class Generator(spec: Spec)
 
   def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::"+_+"::"+t)
 
+  def writeAlignedObjcCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => (String, String)) = {
+    w.w(call)
+    val skipFirst = new SkipFirst
+    params.foreach(p => {
+      val (name, value) = f(p)
+      skipFirst { w.wl; w.w(" " * math.max(0, call.length() - name.length)); w.w(name)  }
+      w.w(":" + value)
+    })
+    w.w(end)
+  }
+
   // --------------------------------------------------------------------------
 
   def writeDoc(w: IndentWriter, doc: Doc) {
