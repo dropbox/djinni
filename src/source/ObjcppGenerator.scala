@@ -141,7 +141,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl(s"@interface $self ()")
         w.wl
-        w.wl(s"@property (nonatomic, readonly) djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
+        w.wl(s"@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef;")
         w.wl
@@ -155,7 +155,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
           w.braced {
-            w.wl(s"return !cpp ? nil : djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const auto& p)").bracedEnd(");") {
+            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const auto& p)").bracedEnd(");") {
               w.wl(s"return [[$self alloc] initWithCpp:p];")
             }
           }
@@ -220,7 +220,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
-            w.wl(s"return objc ? djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance().get(objc) : nullptr;")
+            w.wl(s"return objc ? ::djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance().get(objc) : nullptr;")
           }
           w.wl
           w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
