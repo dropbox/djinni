@@ -209,7 +209,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
                 w.w("@autoreleasepool").braced {
                   val ret = m.ret.fold("")(_ => "auto r = ")
-                  val call = ret + "[Handle::get() " + idObjc.method(m.ident)
+                  val call = "[Handle::get() " + idObjc.method(m.ident)
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, idCpp.local(p.ident))})"))
                   w.wl(";")
                   m.ret.fold()(r => { w.wl(s"return ${objcppMarshal.toCpp(r, "r")};") })
@@ -293,7 +293,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl("assert(obj);")
           if(r.fields.isEmpty) w.wl("(void)obj; // Suppress warnings in relase builds for empty records")
           val call = "return CppType("
-          writeAlignedCall(w, "return CppType(", r.fields, ")", f => objcppMarshal.toCpp(f.ty, "obj." + idObjc.field(f.ident)))
+          writeAlignedCall(w, "return {", r.fields, "}", f => objcppMarshal.toCpp(f.ty, "obj." + idObjc.field(f.ident)))
           w.wl(";")
         }
         w.wl
