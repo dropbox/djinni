@@ -30,8 +30,8 @@ namespace djinni {
 		struct Boxed
 		{
 			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { assert(x); return [x boolValue] ? true : false; }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:x ? YES : NO]; }
+			static CppType toCpp(ObjcType x) noexcept { assert(x); return Bool::toCpp([x boolValue]); }
+			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:Bool::fromCpp(x)]; }
 		};
 	};
 	
@@ -47,33 +47,33 @@ namespace djinni {
 		struct Boxed
 		{
 			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { assert(x); return static_cast<T>(Self::unbox(x)); }
+			static CppType toCpp(ObjcType x) noexcept { assert(x); return static_cast<CppType>(Self::unbox(x)); }
 			static ObjcType fromCpp(CppType x) noexcept { return Self::box(x); }
 		};
 	};
 	class I8 : public Primitive<I8, int8_t>
 	{
 		friend Primitive<I8, int8_t>;
-		static auto unbox(NSNumber* x) noexcept { return [x charValue]; }
-		static auto box(int8_t x) noexcept { return [NSNumber numberWithChar:x]; }
+		static auto unbox(Boxed::ObjcType x) noexcept { return [x charValue]; }
+		static auto box(CppType x) noexcept { return [NSNumber numberWithChar:static_cast<char>(x)]; }
 	};
 	class I16 : public Primitive<I16, int16_t>
 	{
 		friend Primitive<I16, int16_t>;
-		static auto unbox(NSNumber* x) noexcept { return [x shortValue]; }
-		static auto box(int16_t x) noexcept { return [NSNumber numberWithShort:x]; }
+		static auto unbox(Boxed::ObjcType x) noexcept { return [x shortValue]; }
+		static auto box(CppType x) noexcept { return [NSNumber numberWithShort:static_cast<short>(x)]; }
 	};
 	class I32 : public Primitive<I32, int32_t>
 	{
 		friend Primitive<I32, int32_t>;
-		static auto unbox(NSNumber* x) noexcept { return [x intValue]; }
-		static auto box(int32_t x) noexcept { return [NSNumber numberWithInt:x]; }
+		static auto unbox(Boxed::ObjcType x) noexcept { return [x intValue]; }
+		static auto box(CppType x) noexcept { return [NSNumber numberWithInt:static_cast<int>(x)]; }
 	};
 	struct F64 : public Primitive<F64, double>
 	{
 		friend Primitive<F64, double>;
-		static auto unbox(NSNumber* x) noexcept { return [x doubleValue]; }
-		static auto box(double x) noexcept { return [NSNumber numberWithDouble:x]; }
+		static auto unbox(Boxed::ObjcType x) noexcept { return [x doubleValue]; }
+		static auto box(CppType x) noexcept { return [NSNumber numberWithDouble:x]; }
 	};
 	
 	template<class CppEnum, class ObjcEnum>
@@ -108,7 +108,9 @@ namespace djinni {
 		static ObjcType fromCpp(const CppType& string)
 		{
 			assert(string.size() <= std::numeric_limits<NSUInteger>::max());
-			return [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
+			return [[NSString alloc] initWithBytes:string.data()
+											length:static_cast<NSUInteger>(string.size())
+										  encoding:NSUTF8StringEncoding];
 		}
 	};
 	
@@ -129,7 +131,8 @@ namespace djinni {
 		{
 			assert(bytes.size() <= std::numeric_limits<NSUInteger>::max());
 			// Using the pointer from .data() on an empty vector is UB
-			return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data() length:bytes.size()];
+			return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data()
+																  length:static_cast<NSUInteger>(bytes.size())];
 		}
 	};
 	
@@ -176,7 +179,7 @@ namespace djinni {
 		static ObjcType fromCpp(const CppType& v)
 		{
 			assert(v.size() <= std::numeric_limits<NSUInteger>::max());
-			auto array = [NSMutableArray arrayWithCapacity:v.size()];
+			auto array = [NSMutableArray arrayWithCapacity:static_cast<NSUInteger>(v.size())];
 			for(const auto& value : v)
 				[array addObject:T::Boxed::fromCpp(value)];
 			return array;
@@ -206,7 +209,7 @@ namespace djinni {
 		static ObjcType fromCpp(const CppType& s)
 		{
 			assert(s.size() <= std::numeric_limits<NSUInteger>::max());
-			auto set = [NSMutableSet setWithCapacity:s.size()];
+			auto set = [NSMutableSet setWithCapacity:static_cast<NSUInteger>(s.size())];
 			for(const auto& value : s)
 				[set addObject:T::Boxed::fromCpp(value)];
 			return set;
@@ -240,7 +243,7 @@ namespace djinni {
 		static ObjcType fromCpp(const CppType& m)
 		{
 			assert(m.size() <= std::numeric_limits<NSUInteger>::max());
-			auto map = [NSMutableDictionary dictionaryWithCapacity:m.size()];
+			auto map = [NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
 			for(const auto& kvp : m)
 				[map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
 			return map;
