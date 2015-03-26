@@ -53,14 +53,15 @@ package object generatorTools {
                    cppExt: String,
                    cppHeaderExt: String,
                    objcOutFolder: Option[File],
-                   objcPrivateOutFolder: Option[File],
+                   objcppOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,
                    objcFileIdentStyle: IdentConverter,
-                   objcExt: String,
+                   objcppExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
-                   objcIncludePrivatePrefix: String,
-                   objcIncludeCppPrefix: String,
+                   objcppIncludePrefix: String,
+                   objcppIncludeCppPrefix: String,
+                   objcppIncludeObjcPrefix: String,
                    objcppNamespace: String,
                    objcBaseLibIncludePrefix: String)
 
@@ -166,9 +167,11 @@ package object generatorTools {
         new JNIGenerator(spec).generate(idl)
       }
       if (spec.objcOutFolder.isDefined) {
-        createFolder("Objective-C[++]", spec.objcOutFolder.get)
-        createFolder("Objective-C[++] private", spec.objcPrivateOutFolder.get)
+        createFolder("Objective-C", spec.objcOutFolder.get)
         new ObjcGenerator(spec).generate(idl)
+      }
+      if (spec.objcppOutFolder.isDefined) {
+        createFolder("Objective-C++", spec.objcppOutFolder.get)
         new ObjcppGenerator(spec).generate(idl)
       }
       None
