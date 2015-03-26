@@ -36,7 +36,7 @@
     djinni_generated::SetRecord cppSetRecord = [self getCppSetRecord];
 	DBSetRecord *objcSetRecord = djinni_generated::objc::SetRecord::fromCpp(cppSetRecord);
 
-    XCTAssertEqual([objcSetRecord.set count], 3, @"Set length 3 expected, actual: %lu", (unsigned long)[objcSetRecord.set count]);
+    XCTAssertEqual((int)[objcSetRecord.set count], 3, @"Set length 3 expected, actual: %lu", (unsigned long)[objcSetRecord.set count]);
     XCTAssert([objcSetRecord.set containsObject:@"StringA"], @"\"StringA\" expected but does not exist");
     XCTAssert([objcSetRecord.set containsObject:@"StringB"], @"\"StringB\" expected but does not exist");
     XCTAssert([objcSetRecord.set containsObject:@"StringC"], @"\"StringC\" expected but does not exist");
@@ -48,7 +48,7 @@
 	djinni_generated::SetRecord cppSetRecord = djinni_generated::objc::SetRecord::toCpp(objcSetRecord);
     auto & cppSet = cppSetRecord.set;
 
-    XCTAssertEqual(cppSet.size(), 3, @"Set length 3 expected, actual: %zd", cppSet.size());
+    XCTAssertEqual((int)cppSet.size(), 3, @"Set length 3 expected, actual: %zd", cppSet.size());
     XCTAssertNotEqual(cppSet.find("StringA"), cppSet.end(), @"\"StringA\" expected but does not exist");
     XCTAssertNotEqual(cppSet.find("StringB"), cppSet.end(), @"\"StringB\" expected but does not exist");
     XCTAssertNotEqual(cppSet.find("StringC"), cppSet.end(), @"\"StringC\" expected but does not exist");
