@@ -4,9 +4,10 @@
 #pragma once
 
 #include <cstdint>
-#include <experimental/optional>
 #include <string>
 #include <utility>
+
+namespace djinni_generated {
 
 struct Constants final {
 
@@ -24,10 +25,6 @@ struct Constants final {
 
     static const std::string STRING_CONSTANT;
 
-    static const std::experimental::optional<int32_t> OPTIONAL_INTEGER_CONSTANT;
-
-    static const Constants OBJECT_CONSTANT;
-
     int32_t some_integer;
 
     std::string some_string;
@@ -40,3 +37,5 @@ struct Constants final {
                 some_string(std::move(some_string)) {
     }
 };
+
+}  // namespace djinni_generated

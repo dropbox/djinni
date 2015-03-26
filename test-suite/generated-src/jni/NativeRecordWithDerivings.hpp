@@ -6,24 +6,29 @@
 #include "djinni_support.hpp"
 #include "record_with_derivings.hpp"
 
-namespace djinni_generated {
+namespace djinni_generated { namespace jni {
 
-class NativeRecordWithDerivings final {
+class NativeRecordWithDerivings final
+{
 public:
-    using CppType = RecordWithDerivings;
+    using CppType = ::djinni_generated::RecordWithDerivings;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, RecordWithDerivings);
-    static RecordWithDerivings fromJava(JNIEnv*, jobject);
+    using Boxed = NativeRecordWithDerivings;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/RecordWithDerivings") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
-    const jfieldID field_mKey1 { djinni::jniGetFieldID(clazz.get(), "mKey1", "I") };
-    const jfieldID field_mKey2 { djinni::jniGetFieldID(clazz.get(), "mKey2", "Ljava/lang/String;") };
+    ~NativeRecordWithDerivings();
+
+    static CppType toCpp(JNIEnv*, JniType);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv*, const CppType&);
 
 private:
-    NativeRecordWithDerivings() {}
-    friend class djinni::JniClass<::djinni_generated::NativeRecordWithDerivings>;
+    NativeRecordWithDerivings();
+    friend ::djinni::JniClass<NativeRecordWithDerivings>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/RecordWithDerivings") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
+    const jfieldID field_mKey1 { ::djinni::jniGetFieldID(clazz.get(), "mKey1", "I") };
+    const jfieldID field_mKey2 { ::djinni::jniGetFieldID(clazz.get(), "mKey2", "Ljava/lang/String;") };
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni_generated::jni

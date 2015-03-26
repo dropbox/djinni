@@ -6,30 +6,35 @@
 #include "assorted_integers.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni_generated { namespace jni {
 
-class NativeAssortedIntegers final {
+class NativeAssortedIntegers final
+{
 public:
-    using CppType = AssortedIntegers;
+    using CppType = ::djinni_generated::AssortedIntegers;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, AssortedIntegers);
-    static AssortedIntegers fromJava(JNIEnv*, jobject);
+    using Boxed = NativeAssortedIntegers;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/AssortedIntegers") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(BSIJLjava/lang/Byte;Ljava/lang/Short;Ljava/lang/Integer;Ljava/lang/Long;)V") };
-    const jfieldID field_mEight { djinni::jniGetFieldID(clazz.get(), "mEight", "B") };
-    const jfieldID field_mSixteen { djinni::jniGetFieldID(clazz.get(), "mSixteen", "S") };
-    const jfieldID field_mThirtytwo { djinni::jniGetFieldID(clazz.get(), "mThirtytwo", "I") };
-    const jfieldID field_mSixtyfour { djinni::jniGetFieldID(clazz.get(), "mSixtyfour", "J") };
-    const jfieldID field_mOEight { djinni::jniGetFieldID(clazz.get(), "mOEight", "Ljava/lang/Byte;") };
-    const jfieldID field_mOSixteen { djinni::jniGetFieldID(clazz.get(), "mOSixteen", "Ljava/lang/Short;") };
-    const jfieldID field_mOThirtytwo { djinni::jniGetFieldID(clazz.get(), "mOThirtytwo", "Ljava/lang/Integer;") };
-    const jfieldID field_mOSixtyfour { djinni::jniGetFieldID(clazz.get(), "mOSixtyfour", "Ljava/lang/Long;") };
+    ~NativeAssortedIntegers();
+
+    static CppType toCpp(JNIEnv*, JniType);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv*, const CppType&);
 
 private:
-    NativeAssortedIntegers() {}
-    friend class djinni::JniClass<::djinni_generated::NativeAssortedIntegers>;
+    NativeAssortedIntegers();
+    friend ::djinni::JniClass<NativeAssortedIntegers>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/AssortedIntegers") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(BSIJLjava/lang/Byte;Ljava/lang/Short;Ljava/lang/Integer;Ljava/lang/Long;)V") };
+    const jfieldID field_mEight { ::djinni::jniGetFieldID(clazz.get(), "mEight", "B") };
+    const jfieldID field_mSixteen { ::djinni::jniGetFieldID(clazz.get(), "mSixteen", "S") };
+    const jfieldID field_mThirtytwo { ::djinni::jniGetFieldID(clazz.get(), "mThirtytwo", "I") };
+    const jfieldID field_mSixtyfour { ::djinni::jniGetFieldID(clazz.get(), "mSixtyfour", "J") };
+    const jfieldID field_mOEight { ::djinni::jniGetFieldID(clazz.get(), "mOEight", "Ljava/lang/Byte;") };
+    const jfieldID field_mOSixteen { ::djinni::jniGetFieldID(clazz.get(), "mOSixteen", "Ljava/lang/Short;") };
+    const jfieldID field_mOThirtytwo { ::djinni::jniGetFieldID(clazz.get(), "mOThirtytwo", "Ljava/lang/Integer;") };
+    const jfieldID field_mOSixtyfour { ::djinni::jniGetFieldID(clazz.get(), "mOSixtyfour", "Ljava/lang/Long;") };
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni_generated::jni

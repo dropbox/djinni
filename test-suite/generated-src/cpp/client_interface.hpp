@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <string>
 
+namespace djinni_generated {
+
 class ClientInterface {
 public:
     virtual ~ClientInterface() {}
@@ -14,3 +16,5 @@ public:
     /** Returns record of given string */
     virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) = 0;
 };
+
+}  // namespace djinni_generated

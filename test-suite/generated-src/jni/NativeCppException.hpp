@@ -6,20 +6,26 @@
 #include "cpp_exception.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni_generated { namespace jni {
 
-class NativeCppException final : djinni::JniInterface<CppException, NativeCppException> {
+class NativeCppException final : ::djinni::JniInterface<::djinni_generated::CppException, NativeCppException>
+{
 public:
-    using CppType = std::shared_ptr<CppException>;
+    using CppType = std::shared_ptr<::djinni_generated::CppException>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<CppException> c) { return djinni::JniClass<::djinni_generated::NativeCppException>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<CppException> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeCppException>::get()._fromJava(jniEnv, j); }
+    using Boxed = NativeCppException;
 
+    ~NativeCppException();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeCppException>::get()._fromJava(jniEnv, j); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeCppException>::get()._toJava(jniEnv, c)}; }
 
 private:
     NativeCppException();
-    friend class djinni::JniClass<::djinni_generated::NativeCppException>;
+    friend ::djinni::JniClass<NativeCppException>;
+    friend ::djinni::JniInterface<::djinni_generated::CppException, NativeCppException>;
+
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni_generated::jni

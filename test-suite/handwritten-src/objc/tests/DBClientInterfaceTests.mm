@@ -1,5 +1,5 @@
 #import "DBClientInterfaceImpl.h"
-#import "DBClientInterfaceObjcProxy+Private.h"
+#import "DBClientInterface+Private.h"
 #import "DBTestHelpers.h"
 #import <XCTest/XCTest.h>
 
@@ -33,12 +33,12 @@
 {
     __weak id <DBClientInterface> objcClientInterfaceWeak;
     @autoreleasepool {
-        std::shared_ptr<ClientInterface> cppClientInterface1, cppClientInterface2;
+        std::shared_ptr<djinni_generated::ClientInterface> cppClientInterface1, cppClientInterface2;
         @autoreleasepool {
             id <DBClientInterface> objcClientInterface = [[DBClientInterfaceImpl alloc] init];
             objcClientInterfaceWeak = objcClientInterface;
-            cppClientInterface1 = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(objcClientInterface);
-            cppClientInterface2 = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(objcClientInterface);
+			cppClientInterface1 = ::djinni_generated::objc::ClientInterface::toCpp(objcClientInterface);
+            cppClientInterface2 = ::djinni_generated::objc::ClientInterface::toCpp(objcClientInterface);
             XCTAssertEqual(cppClientInterface1, cppClientInterface2);
         }
         XCTAssertNotNil(objcClientInterfaceWeak);

@@ -7,6 +7,8 @@
 #include <experimental/optional>
 #include <utility>
 
+namespace djinni_generated {
+
 struct AssortedIntegers final {
 
     int8_t eight;
@@ -47,3 +49,5 @@ struct AssortedIntegers final {
                 o_sixtyfour(std::move(o_sixtyfour)) {
     }
 };
+
+}  // namespace djinni_generated

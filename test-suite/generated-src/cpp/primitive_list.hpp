@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+namespace djinni_generated {
+
 struct PrimitiveList final {
 
     std::vector<int64_t> list;
@@ -17,3 +19,5 @@ struct PrimitiveList final {
                 list(std::move(list)) {
     }
 };
+
+}  // namespace djinni_generated

@@ -8,6 +8,6 @@
 - (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord;
 - (id)initWithMapList:(NSArray *)mapList;
 
-@property (nonatomic, readonly) NSArray *mapList;
+@property (nonatomic, readonly) NSArray * mapList;
 
 @end

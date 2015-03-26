@@ -6,7 +6,14 @@
 
 @interface DBAssortedIntegers : NSObject
 - (id)initWithAssortedIntegers:(DBAssortedIntegers *)assortedIntegers;
-- (id)initWithEight:(int8_t)eight sixteen:(int16_t)sixteen thirtytwo:(int32_t)thirtytwo sixtyfour:(int64_t)sixtyfour oEight:(NSNumber *)oEight oSixteen:(NSNumber *)oSixteen oThirtytwo:(NSNumber *)oThirtytwo oSixtyfour:(NSNumber *)oSixtyfour;
+- (id)initWithEight:(int8_t)eight
+            sixteen:(int16_t)sixteen
+          thirtytwo:(int32_t)thirtytwo
+          sixtyfour:(int64_t)sixtyfour
+             oEight:(NSNumber *)oEight
+           oSixteen:(NSNumber *)oSixteen
+         oThirtytwo:(NSNumber *)oThirtytwo
+         oSixtyfour:(NSNumber *)oSixtyfour;
 
 @property (nonatomic, readonly) int8_t eight;
 
@@ -16,12 +23,12 @@
 
 @property (nonatomic, readonly) int64_t sixtyfour;
 
-@property (nonatomic, readonly) NSNumber *oEight;
+@property (nonatomic, readonly) NSNumber * oEight;
 
-@property (nonatomic, readonly) NSNumber *oSixteen;
+@property (nonatomic, readonly) NSNumber * oSixteen;
 
-@property (nonatomic, readonly) NSNumber *oThirtytwo;
+@property (nonatomic, readonly) NSNumber * oThirtytwo;
 
-@property (nonatomic, readonly) NSNumber *oSixtyfour;
+@property (nonatomic, readonly) NSNumber * oSixtyfour;
 
 @end

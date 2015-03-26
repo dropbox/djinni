@@ -3,7 +3,11 @@
 
 #pragma once
 
+namespace djinni_generated {
+
 class Token {
 public:
     virtual ~Token() {}
 };
+
+}  // namespace djinni_generated

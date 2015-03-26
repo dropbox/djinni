@@ -7,6 +7,8 @@
 #include <string>
 #include <utility>
 
+namespace djinni_generated {
+
 struct ClientReturnedRecord final {
 
     int64_t record_id;
@@ -21,3 +23,5 @@ struct ClientReturnedRecord final {
                 content(std::move(content)) {
     }
 };
+
+}  // namespace djinni_generated

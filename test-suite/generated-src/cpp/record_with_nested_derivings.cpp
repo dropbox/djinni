@@ -3,6 +3,8 @@
 
 #include "record_with_nested_derivings.hpp"  // my header
 
+namespace djinni_generated {
+
 
 bool RecordWithNestedDerivings::operator==(const RecordWithNestedDerivings & other) const {
     return key == other.key &&
@@ -40,3 +42,5 @@ bool RecordWithNestedDerivings::operator<=(const RecordWithNestedDerivings & oth
 bool RecordWithNestedDerivings::operator>=(const RecordWithNestedDerivings & other) const {
     return other <= *this;
 }
+
+}  // namespace djinni_generated

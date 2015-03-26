@@ -7,6 +7,8 @@
 #include <string>
 #include <utility>
 
+namespace djinni_generated {
+
 struct RecordWithDerivings final {
 
     int32_t key1;
@@ -27,3 +29,5 @@ struct RecordWithDerivings final {
                 key2(std::move(key2)) {
     }
 };
+
+}  // namespace djinni_generated

@@ -23,11 +23,11 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   override def fieldType(tm: MExpr): String = throw new AssertionError("not applicable")
   override def fqFieldType(tm: MExpr): String = throw new AssertionError("not applicable")
 
-  def toCpp(tm: MExpr, expr: String): String = {
+  override def toCpp(tm: MExpr, expr: String): String = {
     val helper = helperName(tm) + helperTemplates(tm)
     s"$helper::toCpp($expr)"
   }
-  def fromCpp(tm: MExpr, expr: String): String = {
+  override def fromCpp(tm: MExpr, expr: String): String = {
     val helper = helperName(tm) + helperTemplates(tm)
     s"$helper::fromCpp($expr)"
   }

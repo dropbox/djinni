@@ -69,6 +69,12 @@ namespace djinni {
 		static auto unbox(Boxed::ObjcType x) noexcept { return [x intValue]; }
 		static auto box(CppType x) noexcept { return [NSNumber numberWithInt:static_cast<int>(x)]; }
 	};
+	class I64 : public Primitive<I64, int64_t>
+	{
+		friend Primitive<I64, int64_t>;
+		static auto unbox(Boxed::ObjcType x) noexcept { return [x longLongValue]; }
+		static auto box(CppType x) noexcept { return [NSNumber numberWithLongLong:static_cast<long long>(x)]; }
+	};
 	struct F64 : public Primitive<F64, double>
 	{
 		friend Primitive<F64, double>;
@@ -88,8 +94,8 @@ namespace djinni {
 		struct Boxed
 		{
 			using ObjcType = NSNumber*;
-			static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp([x integerValue]); }
-			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:Enum::fromCpp(x)]; }
+			static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
+			static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
 		};
 	};
 	
@@ -233,10 +239,10 @@ namespace djinni {
 		static CppType toCpp(ObjcType map)
 		{
 			assert(map);
-			auto m = CppType();
+			__block auto m = CppType();
 			m.reserve(map.count);
-			[map enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-				m.insert(Key::Boxed::toCpp(key), Value::Boxed::toCpp(obj));
+			[map enumerateKeysAndObjectsUsingBlock:^(ObjcKeyType key, ObjcValueType obj, BOOL *) {
+				m.emplace(Key::Boxed::toCpp(key), Value::Boxed::toCpp(obj));
 			}];
 			return m;
 		}

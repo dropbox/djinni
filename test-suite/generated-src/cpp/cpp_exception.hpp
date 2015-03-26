@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <memory>
 
+namespace djinni_generated {
+
 class CppException {
 public:
     virtual ~CppException() {}
@@ -14,3 +16,5 @@ public:
 
     static std::shared_ptr<CppException> get();
 };
+
+}  // namespace djinni_generated

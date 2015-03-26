@@ -222,7 +222,7 @@ namespace djinni
 			{
 				auto je = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(j, data.method_get, i));
 				jniExceptionCheck(jniEnv);
-				c.push_back(T::Boxed::toCpp(jniEnv, static_cast<EJniType>(je)));
+				c.push_back(T::Boxed::toCpp(jniEnv, static_cast<EJniType>(je.get())));
 			}
 			return c;
 		}
@@ -282,7 +282,7 @@ namespace djinni
 			{
 				auto je = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(it, iteData.method_next));
 				jniExceptionCheck(jniEnv);
-				c.insert(T::Boxed::toCpp(jniEnv, static_cast<EJniType>(je)));
+				c.insert(T::Boxed::toCpp(jniEnv, static_cast<EJniType>(je.get())));
 			}
 			return c;
 		}
@@ -356,8 +356,8 @@ namespace djinni
 				auto jKey = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(je, entryData.method_getKey));
 				auto jValue = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(je, entryData.method_getValue));
 				jniExceptionCheck(jniEnv);
-				c.emplace(Key::Boxed::toCpp(jniEnv, static_cast<JniKeyType>(jKey)),
-						  Value::Boxed::toCpp(jniEnv, static_cast<JniValueType>(jValue)));
+				c.emplace(Key::Boxed::toCpp(jniEnv, static_cast<JniKeyType>(jKey.get())),
+						  Value::Boxed::toCpp(jniEnv, static_cast<JniValueType>(jValue.get())));
 			}
 			return c;
 		}

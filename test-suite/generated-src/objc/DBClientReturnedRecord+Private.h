@@ -3,11 +3,22 @@
 
 #import "DBClientReturnedRecord.h"
 #include "client_returned_record.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBClientReturnedRecord ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppClientReturnedRecord:(const ClientReturnedRecord &)clientReturnedRecord;
-- (ClientReturnedRecord)cppClientReturnedRecord;
+@class DBClientReturnedRecord;
 
-@end
+namespace djinni_generated { namespace objc {
+
+struct ClientReturnedRecord
+{
+    using CppType = ::djinni_generated::ClientReturnedRecord;
+    using ObjcType = DBClientReturnedRecord*;
+
+    using Boxed = ClientReturnedRecord;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+} }  // namespace djinni_generated::objc

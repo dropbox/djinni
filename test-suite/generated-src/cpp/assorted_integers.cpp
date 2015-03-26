@@ -3,6 +3,8 @@
 
 #include "assorted_integers.hpp"  // my header
 
+namespace djinni_generated {
+
 
 bool AssortedIntegers::operator==(const AssortedIntegers & other) const {
     return eight == other.eight &&
@@ -18,3 +20,5 @@ bool AssortedIntegers::operator==(const AssortedIntegers & other) const {
 bool AssortedIntegers::operator!=(const AssortedIntegers & other) const {
     return !(*this == other);
 }
+
+}  // namespace djinni_generated

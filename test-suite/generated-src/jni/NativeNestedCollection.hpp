@@ -6,23 +6,28 @@
 #include "djinni_support.hpp"
 #include "nested_collection.hpp"
 
-namespace djinni_generated {
+namespace djinni_generated { namespace jni {
 
-class NativeNestedCollection final {
+class NativeNestedCollection final
+{
 public:
-    using CppType = NestedCollection;
+    using CppType = ::djinni_generated::NestedCollection;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, NestedCollection);
-    static NestedCollection fromJava(JNIEnv*, jobject);
+    using Boxed = NativeNestedCollection;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/NestedCollection") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
-    const jfieldID field_mSetList { djinni::jniGetFieldID(clazz.get(), "mSetList", "Ljava/util/ArrayList;") };
+    ~NativeNestedCollection();
+
+    static CppType toCpp(JNIEnv*, JniType);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv*, const CppType&);
 
 private:
-    NativeNestedCollection() {}
-    friend class djinni::JniClass<::djinni_generated::NativeNestedCollection>;
+    NativeNestedCollection();
+    friend ::djinni::JniClass<NativeNestedCollection>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/NestedCollection") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
+    const jfieldID field_mSetList { ::djinni::jniGetFieldID(clazz.get(), "mSetList", "Ljava/util/ArrayList;") };
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni_generated::jni

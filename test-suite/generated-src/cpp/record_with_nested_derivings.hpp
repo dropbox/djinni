@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <utility>
 
+namespace djinni_generated {
+
 struct RecordWithNestedDerivings final {
 
     int32_t key;
@@ -27,3 +29,5 @@ struct RecordWithNestedDerivings final {
                 rec(std::move(rec)) {
     }
 };
+
+}  // namespace djinni_generated

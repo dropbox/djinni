@@ -7,6 +7,8 @@
 #include <unordered_set>
 #include <utility>
 
+namespace djinni_generated {
+
 struct SetRecord final {
 
     std::unordered_set<std::string> set;
@@ -17,3 +19,5 @@ struct SetRecord final {
                 set(std::move(set)) {
     }
 };
+
+}  // namespace djinni_generated

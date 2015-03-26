@@ -3,11 +3,22 @@
 
 #import "TXSItemList.h"
 #include "item_list.hpp"
-#import <Foundation/Foundation.h>
 
-@interface TXSItemList ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppItemList:(const ::textsort::ItemList &)itemList;
-- (::textsort::ItemList)cppItemList;
+@class TXSItemList;
 
-@end
+namespace djinni_generated {
+
+struct ItemList
+{
+    using CppType = ::textsort::ItemList;
+    using ObjcType = TXSItemList*;
+
+    using Boxed = ItemList;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

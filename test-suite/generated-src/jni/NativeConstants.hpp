@@ -6,24 +6,29 @@
 #include "constants.hpp"
 #include "djinni_support.hpp"
 
-namespace djinni_generated {
+namespace djinni_generated { namespace jni {
 
-class NativeConstants final {
+class NativeConstants final
+{
 public:
-    using CppType = Constants;
+    using CppType = ::djinni_generated::Constants;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, Constants);
-    static Constants fromJava(JNIEnv*, jobject);
+    using Boxed = NativeConstants;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/Constants") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
-    const jfieldID field_mSomeInteger { djinni::jniGetFieldID(clazz.get(), "mSomeInteger", "I") };
-    const jfieldID field_mSomeString { djinni::jniGetFieldID(clazz.get(), "mSomeString", "Ljava/lang/String;") };
+    ~NativeConstants();
+
+    static CppType toCpp(JNIEnv*, JniType);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv*, const CppType&);
 
 private:
-    NativeConstants() {}
-    friend class djinni::JniClass<::djinni_generated::NativeConstants>;
+    NativeConstants();
+    friend ::djinni::JniClass<NativeConstants>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/Constants") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
+    const jfieldID field_mSomeInteger { ::djinni::jniGetFieldID(clazz.get(), "mSomeInteger", "I") };
+    const jfieldID field_mSomeString { ::djinni::jniGetFieldID(clazz.get(), "mSomeString", "Ljava/lang/String;") };
 };
 
-}  // namespace djinni_generated
+} }  // namespace djinni_generated::jni

@@ -3,7 +3,7 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
-static PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
+static djinni_generated::PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
 static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithList:
                                              [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithLongLong:1],
                                                                                      [NSNumber numberWithLongLong:2],
@@ -35,13 +35,13 @@ static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithLis
 
 - (void)testObjcToCppConverter
 {
-    PrimitiveList convert = [objcPrimitiveList cppPrimitiveList];
+    djinni_generated::PrimitiveList convert = djinni_generated::objc::PrimitiveList::toCpp(objcPrimitiveList);
     XCTAssertEqual(convert.list, cppPrimitiveList.list, @"C++ converted list should be the same.");
 }
 
 - (void)testCppToObjcConverter
 {
-    DBPrimitiveList *convert = [[DBPrimitiveList alloc] initWithCppPrimitiveList:cppPrimitiveList];
+    DBPrimitiveList *convert = djinni_generated::objc::PrimitiveList::fromCpp(cppPrimitiveList);
     XCTAssertEqualObjects(convert.list, objcPrimitiveList.list, @"Objective-C converted list should be the same.");
 }
 

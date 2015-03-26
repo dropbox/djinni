@@ -22,11 +22,11 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
   override def fieldType(tm: MExpr): String = paramType(tm)
   override def fqFieldType(tm: MExpr): String = fqParamType(tm)
 
-  def toCpp(tm: MExpr, expr: String): String = {
+  override def toCpp(tm: MExpr, expr: String): String = {
     val jniHelper = helperName(tm) + helperTemplates(tm)
     s"$jniHelper::toCpp(jniEnv, $expr)"
   }
-  def fromCpp(tm: MExpr, expr: String): String = {
+  override def fromCpp(tm: MExpr, expr: String): String = {
     val jniHelper = helperName(tm) + helperTemplates(tm)
     s"$jniHelper::fromCpp(jniEnv, $expr)"
   }

@@ -1,3 +1,4 @@
+#import "DBCppException.h"
 #import "DBCppException+Private.h"
 #import <XCTest/XCTest.h>
 
@@ -20,7 +21,7 @@
 }
 
 - (void)testThrown {
-    DBCppException* objcInterface = [DBCppException cppExceptionWithCpp:(std::make_shared<CppExceptionImpl>())];
+	DBCppException* objcInterface = djinni_generated::objc::CppException::fromCpp(std::make_shared<CppExceptionImpl>());
 
     NSString *exceptionName = nil;
     @try {
@@ -32,11 +33,11 @@
 }
 
 - (void)testInterfaceWrapperCache {
-    std::shared_ptr<CppException> cppInterface = std::make_shared<CppExceptionImpl>();
-    std::weak_ptr<CppException> weakCppInterface(cppInterface);
+    std::shared_ptr<djinni_generated::CppException> cppInterface = std::make_shared<CppExceptionImpl>();
+    std::weak_ptr<djinni_generated::CppException> weakCppInterface(cppInterface);
     @autoreleasepool {
-        DBCppException* objcInterface1 = [DBCppException cppExceptionWithCpp:cppInterface];
-        DBCppException* objcInterface2 = [DBCppException cppExceptionWithCpp:cppInterface];
+		DBCppException* objcInterface1 = djinni_generated::objc::CppException::fromCpp(cppInterface);
+        DBCppException* objcInterface2 = djinni_generated::objc::CppException::fromCpp(cppInterface);
         XCTAssertEqual(objcInterface1, objcInterface2, @"The same wrapper should be returned");
 
         cppInterface.reset();

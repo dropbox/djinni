@@ -8,6 +8,6 @@
 - (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList;
 - (id)initWithList:(NSArray *)list;
 
-@property (nonatomic, readonly) NSArray *list;
+@property (nonatomic, readonly) NSArray * list;
 
 @end
