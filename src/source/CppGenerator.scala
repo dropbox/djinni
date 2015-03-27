@@ -214,7 +214,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         if (r.ext.cpp) {
           w.wl
-          w.wl(s"virtual ~$actualSelf() {}")
+          w.wl(s"virtual ~$actualSelf() = default;")
+          w.wl
+          // Defining the dtor disables implicit copy/move operation generation, so re-enable them
+          // Make them protected to avoid slicing
+          w.wlOutdent("protected:")
+          w.wl(s"$actualSelf(const $actualSelf&) = default;")
+          w.wl(s"$actualSelf($actualSelf&&) = default;")
+          w.wl(s"$actualSelf& operator=(const $actualSelf&) = default;")
+          w.wl(s"$actualSelf& operator=($actualSelf&&) = default;")
         }
       }
     }
