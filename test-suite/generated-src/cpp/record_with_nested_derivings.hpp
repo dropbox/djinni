@@ -8,9 +8,7 @@
 #include <utility>
 
 struct RecordWithNestedDerivings final {
-
     int32_t key;
-
     RecordWithDerivings rec;
 
     bool operator==(const RecordWithNestedDerivings & other) const;
@@ -19,11 +17,9 @@ struct RecordWithNestedDerivings final {
     bool operator>(const RecordWithNestedDerivings & other) const;
     bool operator<=(const RecordWithNestedDerivings & other) const;
     bool operator>=(const RecordWithNestedDerivings & other) const;
-
-    RecordWithNestedDerivings(
-            int32_t key,
-            RecordWithDerivings rec) :
-                key(std::move(key)),
-                rec(std::move(rec)) {
-    }
+    RecordWithNestedDerivings(int32_t key,
+                              RecordWithDerivings rec)
+    : key(std::move(key))
+    , rec(std::move(rec))
+    {}
 };

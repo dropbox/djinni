@@ -22,7 +22,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBTestHelpers ()
 
-@property (nonatomic, readonly) djinni::DbxCppWrapperCache<::TestHelpers>::Handle cppRef;
+@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::TestHelpers>::Handle cppRef;
 
 - (id)initWithCpp:(const std::shared_ptr<::TestHelpers>&)cppRef;
 
@@ -37,7 +37,7 @@ auto TestHelpers::toCpp(ObjcType objc) -> CppType
 
 auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : djinni::DbxCppWrapperCache<::TestHelpers>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::TestHelpers>::getInstance()->get(cpp, [] (const auto& p)
     {
         return [[DBTestHelpers alloc] initWithCpp:p];
     });

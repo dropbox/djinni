@@ -16,7 +16,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBCppException ()
 
-@property (nonatomic, readonly) djinni::DbxCppWrapperCache<::CppException>::Handle cppRef;
+@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::CppException>::Handle cppRef;
 
 - (id)initWithCpp:(const std::shared_ptr<::CppException>&)cppRef;
 
@@ -31,7 +31,7 @@ auto CppException::toCpp(ObjcType objc) -> CppType
 
 auto CppException::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const auto& p)
     {
         return [[DBCppException alloc] initWithCpp:p];
     });

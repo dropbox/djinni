@@ -30,7 +30,7 @@ public:
 
 auto ClientInterface::toCpp(ObjcType objc) -> CppType
 {
-    return objc ? djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;
+    return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;
 }
 
 auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType

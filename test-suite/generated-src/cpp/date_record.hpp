@@ -7,12 +7,9 @@
 #include <utility>
 
 struct DateRecord final {
-
     std::chrono::system_clock::time_point created_at;
 
-
-    DateRecord(
-            std::chrono::system_clock::time_point created_at) :
-                created_at(std::move(created_at)) {
-    }
+    DateRecord(std::chrono::system_clock::time_point created_at)
+    : created_at(std::move(created_at))
+    {}
 };

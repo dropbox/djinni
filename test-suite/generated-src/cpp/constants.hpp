@@ -27,16 +27,12 @@ struct Constants final {
     static const std::experimental::optional<int32_t> OPTIONAL_INTEGER_CONSTANT;
 
     static const Constants OBJECT_CONSTANT;
-
     int32_t some_integer;
-
     std::string some_string;
 
-
-    Constants(
-            int32_t some_integer,
-            std::string some_string) :
-                some_integer(std::move(some_integer)),
-                some_string(std::move(some_string)) {
-    }
+    Constants(int32_t some_integer,
+              std::string some_string)
+    : some_integer(std::move(some_integer))
+    , some_string(std::move(some_string))
+    {}
 };
