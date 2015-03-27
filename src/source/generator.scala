@@ -295,15 +295,18 @@ abstract class Generator(spec: Spec)
       case Some(s) => "::" + s + "::" + t
     }
 
-  def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => String) = {
+  def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], delim: String, end: String, f: Field => String): IndentWriter = {
     w.w(call)
     val skipFirst = new SkipFirst
     params.foreach(p => {
-      skipFirst { w.wl(","); w.w(" " * call.length()) }
+      skipFirst { w.wl(delim); w.w(" " * call.length()) }
       w.w(f(p))
     })
     w.w(end)
   }
+
+  def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => String): IndentWriter =
+    writeAlignedCall(w, call, params, ",", end, f)
 
   def writeAlignedObjcCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => (String, String)) = {
     w.w(call)

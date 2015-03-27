@@ -17,8 +17,9 @@ struct AssortedIntegers final {
     std::experimental::optional<int32_t> o_thirtytwo;
     std::experimental::optional<int64_t> o_sixtyfour;
 
-    bool operator==(const AssortedIntegers & other) const;
-    bool operator!=(const AssortedIntegers & other) const;
+    friend bool operator==(const AssortedIntegers& lhs, const AssortedIntegers& rhs);
+    friend bool operator!=(const AssortedIntegers& lhs, const AssortedIntegers& rhs);
+
     AssortedIntegers(int8_t eight,
                      int16_t sixteen,
                      int32_t thirtytwo,
