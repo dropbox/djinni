@@ -188,22 +188,25 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
 
-        w.wl
         if (r.derivingTypes.contains(DerivingType.Eq)) {
-          w.wl(s"bool operator==(const $actualSelf & other) const;")
-          w.wl(s"bool operator!=(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator==(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl(s"bool operator<(const $actualSelf & other) const;")
-          w.wl(s"bool operator>(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator<(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator>(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl(s"bool operator<=(const $actualSelf & other) const;")
-          w.wl(s"bool operator>=(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
 
         // Constructor.
         if(r.fields.nonEmpty) {
+          w.wl
           writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident))
           w.wl
           val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "))"
@@ -235,47 +238,45 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
-          w.w(s"bool $actualSelf::operator==(const $actualSelf & other) const").braced {
-            w.w("return ").nested {
-              val skipFirst = SkipFirst()
-              for (f <- r.fields) {
-                skipFirst { w.wl(" &&") }
-                w.w(s"${idCpp.field(f.ident)} == other.${idCpp.field(f.ident)}")
-              }
+          w.wl(s"bool operator==(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            if(!r.fields.isEmpty) {
+              writeAlignedCall(w, "return ", r.fields, " &&", "", f => s"lhs.${idCpp.field(f.ident)} == rhs.${idCpp.field(f.ident)}")
               w.wl(";")
-            }
+            } else {
+             w.wl("return true;")
+           }
           }
           w.wl
-          w.w(s"bool $actualSelf::operator!=(const $actualSelf & other) const").braced {
-            w.wl("return !(*this == other);")
+          w.wl(s"bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(lhs == rhs);")
           }
         }
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.w(s"bool $actualSelf::operator<(const $actualSelf & other) const").braced {
-            for (f <- r.fields) {
-              w.w(s"if (${idCpp.field(f.ident)} < other.${idCpp.field(f.ident)})").braced {
+          w.wl(s"bool operator<(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            for(f <- r.fields) {
+              w.w(s"if(lhs.${idCpp.field(f.ident)} < rhs.${idCpp.field(f.ident)})").braced {
                 w.wl("return true;")
               }
-              w.w(s"if (other.${idCpp.field(f.ident)} < ${idCpp.field(f.ident)})").braced {
+              w.w(s"if(rhs.${idCpp.field(f.ident)} < lhs.${idCpp.field(f.ident)})").braced {
                 w.wl("return false;")
               }
             }
             w.wl("return false;")
           }
           w.wl
-          w.w(s"bool $actualSelf::operator>(const $actualSelf & other) const").braced {
-            w.wl("return other < *this;")
+          w.wl(s"bool operator>(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return rhs < lhs;")
           }
         }
         if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.w(s"bool $actualSelf::operator<=(const $actualSelf & other) const").braced {
-            w.wl("return (*this < other || *this == other);")
+          w.wl(s"bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(rhs < lhs);")
           }
           w.wl
-          w.w(s"bool $actualSelf::operator>=(const $actualSelf & other) const").braced {
-            w.wl("return other <= *this;")
+          w.wl(s"bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(lhs < rhs);")
           }
         }
       })
