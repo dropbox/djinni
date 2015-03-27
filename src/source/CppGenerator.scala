@@ -180,11 +180,10 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     def writeCppPrototype(w: IndentWriter) {
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
-      w.w("struct " + actualSelf + cppFinal).bracedSemi {
+      w.wl("struct " + actualSelf + cppFinal).bracedSemi {
         generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
-          w.wl
           writeDoc(w, f.doc)
           w.wl(marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
@@ -204,27 +203,13 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
 
         // Constructor.
-        w.wl
-        if (r.fields.nonEmpty) {
-          w.wl(actualSelf + "(").nestedN(2) {
-            val skipFirst = SkipFirst()
-            for (f <- r.fields) {
-              skipFirst { w.wl(",") }
-              w.w(marshal.fieldType(f.ty) + " " + idCpp.local(f.ident))
-            }
-            w.wl(") :")
-            w.nested {
-              val skipFirst = SkipFirst()
-              for (f <- r.fields) {
-                skipFirst { w.wl(",") }
-                w.w(idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "))")
-              }
-              w.wl(" {")
-            }
-          }
-          w.wl("}")
-        } else {
-          w.wl(actualSelf + "() {};")
+        if(r.fields.nonEmpty) {
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident))
+          w.wl
+          val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "))"
+          w.wl(": " + init(r.fields.head))
+          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
+          w.wl("{}")
         }
 
         if (r.ext.cpp) {
