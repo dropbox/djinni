@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBClientReturnedRecord : NSObject
 - (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord;
 - (id)initWithRecordId:(int64_t)recordId
@@ -14,3 +13,4 @@
 @property (nonatomic, readonly) NSString * content;
 
 @end
+

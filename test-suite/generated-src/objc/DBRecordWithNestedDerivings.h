@@ -4,7 +4,6 @@
 #import "DBRecordWithDerivings.h"
 #import <Foundation/Foundation.h>
 
-
 @interface DBRecordWithNestedDerivings : NSObject
 - (id)initWithRecordWithNestedDerivings:(DBRecordWithNestedDerivings *)recordWithNestedDerivings;
 - (id)initWithKey:(int32_t)key
@@ -17,3 +16,4 @@
 - (NSComparisonResult)compare:(DBRecordWithNestedDerivings *)other;
 
 @end
+

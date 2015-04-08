@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBAssortedIntegers : NSObject
 - (id)initWithAssortedIntegers:(DBAssortedIntegers *)assortedIntegers;
 - (id)initWithEight:(int8_t)eight
@@ -32,3 +31,4 @@
 @property (nonatomic, readonly) NSNumber * oSixtyfour;
 
 @end
+

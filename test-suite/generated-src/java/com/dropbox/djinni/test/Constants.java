@@ -19,6 +19,12 @@ public final class Constants {
 
     public static final String STRING_CONSTANT = "string-constant";
 
+    public static final Integer OPTIONAL_INTEGER_CONSTANT = 1;
+
+    public static final Constants OBJECT_CONSTANT = new Constants(
+        I32_CONSTANT /* mSomeInteger */ ,
+        STRING_CONSTANT /* mSomeString */ );
+
 
     /*package*/ final int mSomeInteger;
 

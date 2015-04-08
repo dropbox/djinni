@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBPrimitiveList : NSObject
 - (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList;
 - (id)initWithList:(NSArray *)list;
@@ -11,3 +10,4 @@
 @property (nonatomic, readonly) NSArray * list;
 
 @end
+

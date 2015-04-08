@@ -19,4 +19,10 @@ const double Constants::F64_CONSTANT = 5.0;
 
 const std::string Constants::STRING_CONSTANT = "string-constant";
 
+const std::experimental::optional<int32_t> Constants::OPTIONAL_INTEGER_CONSTANT = 1;
+
+const Constants Constants::OBJECT_CONSTANT = Constants(
+    Constants::I32_CONSTANT /* some_integer */ ,
+    Constants::STRING_CONSTANT /* some_string */ );
+
 }  // namespace djinni_generated

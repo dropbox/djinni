@@ -9,4 +9,10 @@ constants = record {
     const i64_constant: i64 = 4;
     const f64_constant: f64 = 5.0;
     const string_constant: string = "string-constant";
+	const optional_integer_constant: optional<i32> = 1;
+
+	const object_constant: constants = {
+		some_integer = i32_constant,
+		some_string = string_constant
+	};
 }
