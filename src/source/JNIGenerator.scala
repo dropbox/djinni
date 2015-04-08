@@ -37,7 +37,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     var jniCpp = mutable.TreeSet[String]()
 
     jniHpp.add("#include " + q(spec.jniIncludeCppPrefix + spec.cppFileIdentStyle(name) + "." + spec.cppHeaderExt))
-    jniHpp.add("#include \"djinni_support.hpp\"")
+    jniHpp.add("#include " + q(spec.jniBaseLibIncludePrefix + "djinni_support.hpp"))
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
