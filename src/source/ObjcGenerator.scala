@@ -64,28 +64,41 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def bodyName(ident: String): String = idObjc.ty(ident) + ".m"
+  def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcppExt // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
 
-  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
-    // MBinary | MList | MSet | MMap are not allowed for constants.
-    // Primitives should be `const type`. All others are pointers and should be `type * const`
-    case t: MPrimitive => w.w(s"const ${marshal.fqFieldType(c.ty)} $s${idObjc.const(c.ident)}")
-    case _ => w.w(s"${marshal.fqFieldType(c.ty)} const $s${idObjc.const(c.ident)}")
-  }
+  // MBinary | MList | MSet | MMap are not allowed for constants.
+  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = w.w(s"${marshal.fqFieldType(c.ty)} const $s${idObjc.const(c.ident)}")
 
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
-    def boxedPrimitive(ty: TypeRef, ident: String): String = {
+    def boxedPrimitive(ty: TypeRef): String = {
       val (_, needRef) = toObjcType(ty)
-      if (needRef) throw new AssertionError(s"$selfName.$ident: Objective-C only supports compile-time constants at file scope.") else ""
+      if (needRef) "@" else ""
     }
-    def writeObjcConstValue(w: IndentWriter, ty: TypeRef, v: Any, ident: String): Unit = v match {
-      case l: Long => w.w(boxedPrimitive(ty, ident) + l.toString)
-      case d: Double => w.w(boxedPrimitive(ty, ident) + d.toString)
-      case b: Boolean => w.w(boxedPrimitive(ty, ident) + (if (b) "YES" else "NO"))
+    def writeObjcConstValue(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+      case l: Long => w.w(boxedPrimitive(ty) + l.toString)
+      case d: Double => w.w(boxedPrimitive(ty) + d.toString)
+      case b: Boolean => w.w(boxedPrimitive(ty) + (if (b) "YES" else "NO"))
       case s: String => w.w("@" + s)
       case e: EnumValue => w.w(idObjc.enum(e.ty + "_" + e.name))
       case v: ConstRef => w.w(selfName + idObjc.const (v.name))
-      case _ => throw new AssertionError(s"$selfName.$ident: Objective-C only supports compile-time constants at file scope.") 
+      case z: Map[_, _] => { // Value is record
+        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+        val record = recordMdef.body.asInstanceOf[Record]
+        val vMap = z.asInstanceOf[Map[String, Any]]
+        val head = record.fields.head
+        // writeAlignedObjcCall(w, s"[[${marshal.typename(ty)} alloc] initWith${IdentStyle.camelUpper(head.ident)}", record.fields, "]", f => (idObjc.field(f.ident), writeObjcConstValue(w, f.ty, vMap.apply(f.ident))))
+        w.w(s"[[${marshal.typename(ty)} alloc] initWith${IdentStyle.camelUpper(head.ident)}:")
+        writeObjcConstValue(w, head.ty, vMap.apply(head.ident))
+        w.nestedN(2) {
+          val skipFirst = SkipFirst()
+          for (f <- record.fields) skipFirst {
+            w.wl
+            w.w(s"${idObjc.field(f.ident)}:")
+            writeObjcConstValue(w, f.ty, vMap.apply(f.ident))
+          }
+        }
+        w.w("]")
+      }
     }
 
     w.wl("#pragma clang diagnostic push")
@@ -94,7 +107,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       writeObjcConstVariable(w, c, selfName)
       w.w(s" = ")
-      writeObjcConstValue(w, c.ty, c.value, c.ident)
+      writeObjcConstValue(w, c.ty, c.value)
       w.wl(";")
     }
     w.wl
@@ -143,6 +156,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
 
     if (i.consts.nonEmpty) {
+      refs.body.add("#import " + q(spec.objcIncludePrefix + marshal.headerName(ident)))
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
         generateObjcConstants(w, i.consts, self)
       })
