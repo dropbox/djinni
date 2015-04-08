@@ -25,6 +25,12 @@
 
 #include <jni.h>
 
+// work-around for missing noexcept and constexpr support in MSVC prior to 2015
+#if (defined _MSC_VER) && (_MSC_VER < 1900)
+#  define noexcept _NOEXCEPT
+#  define constexpr
+#endif
+
 /*
  * Djinni support library
  */
@@ -57,7 +63,11 @@ void jniExceptionCheck(JNIEnv * env);
 /*
  * Set an AssertionError in env with message message, and then throw jni_exception_pending.
  */
-__attribute__((noreturn))
+#ifdef _MSC_VER
+  __declspec(noreturn)
+#else
+  __attribute__((noreturn))
+#endif
 void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
 
 #define DJINNI_ASSERT(check, env) \
@@ -85,10 +95,14 @@ class GlobalRef : public std::unique_ptr<typename std::remove_pointer<PointerTyp
                                          GlobalRefDeleter> {
 public:
     GlobalRef() {}
+    GlobalRef(GlobalRef && obj)
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::GlobalRefDeleter>(
+            std::move(obj)
+        ) {}
     GlobalRef(JNIEnv * env, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, GlobalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::GlobalRefDeleter>(
             static_cast<PointerType>(env->NewGlobalRef(localRef)),
-            GlobalRefDeleter{}
+            ::djinni::GlobalRefDeleter{}
         ) {}
 };
 
@@ -100,7 +114,7 @@ class LocalRef : public std::unique_ptr<typename std::remove_pointer<PointerType
 public:
     LocalRef() {}
     LocalRef(JNIEnv * /*env*/, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::LocalRefDeleter>(
             localRef) {}
     explicit LocalRef(PointerType localRef)
         : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
@@ -184,7 +198,7 @@ private:
 };
 
 template <class C>
-const JniClassInitializer JniClass<C>::s_initializer { allocate };
+const JniClassInitializer JniClass<C>::s_initializer ( allocate );
 
 template <class C>
 std::unique_ptr<C> JniClass<C>::s_singleton;
