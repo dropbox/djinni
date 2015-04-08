@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,15 +14,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithMapDateRecord:(DBMapDateRecord *)mapDateRecord
 {
     if (self = [super init]) {
-        NSMutableDictionary *_datesByIdTempDictionary = [NSMutableDictionary dictionaryWithCapacity:[mapDateRecord.datesById count]];
-        for (id key_0 in mapDateRecord.datesById) {
-            id copiedKey_0, copiedValue_0;
-            copiedKey_0 = [key_0 copy];
-            id value_0 = [mapDateRecord.datesById objectForKey:key_0];
+        std::vector<NSString *> _datesByIdTempKeyVector;
+        _datesByIdTempKeyVector.reserve([mapDateRecord.datesById count]);
+        std::vector<NSDate *> _datesByIdTempValueVector;
+        _datesByIdTempValueVector.reserve([mapDateRecord.datesById count]);
+        for (NSString *key_0 in mapDateRecord.datesById) {
+            NSDate *copiedValue_0;
+            _datesByIdTempKeyVector.push_back(key_0);
+            NSDate *value_0 = [mapDateRecord.datesById objectForKey:key_0];
             copiedValue_0 = [value_0 copy];
-            [_datesByIdTempDictionary setObject:copiedValue_0 forKey:copiedKey_0];
+            _datesByIdTempValueVector.push_back(copiedValue_0);
         }
-        _datesById = _datesByIdTempDictionary;
+        _datesById = [NSDictionary dictionaryWithObjects:&_datesByIdTempValueVector[0] forKeys:&_datesByIdTempKeyVector[0] count:[mapDateRecord.datesById count]];
     }
     return self;
 }
@@ -37,16 +41,20 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppMapDateRecord:(const MapDateRecord &)mapDateRecord
 {
     if (self = [super init]) {
-        NSMutableDictionary *_datesByIdTempDictionary = [NSMutableDictionary dictionaryWithCapacity:mapDateRecord.dates_by_id.size()];
+        std::vector<NSString *> _datesByIdTempKeyVector;
+        _datesByIdTempKeyVector.reserve(mapDateRecord.dates_by_id.size());
+        std::vector<NSDate *> _datesByIdTempValueVector;
+        _datesByIdTempValueVector.reserve(mapDateRecord.dates_by_id.size());
         for (const auto & cppPair_0 : mapDateRecord.dates_by_id) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSDate *objcValue_0 = [NSDate dateWithTimeIntervalSince1970:
                     std::chrono::duration_cast<std::chrono::duration<double>>(cppPair_0.second.time_since_epoch()).count()];
-            [_datesByIdTempDictionary setObject:objcValue_0 forKey:objcKey_0];
+            _datesByIdTempKeyVector.push_back(objcKey_0);
+            _datesByIdTempValueVector.push_back(objcValue_0);
         }
-        _datesById = _datesByIdTempDictionary;
+        _datesById = [NSDictionary dictionaryWithObjects:&_datesByIdTempValueVector[0] forKeys:&_datesByIdTempKeyVector[0] count:mapDateRecord.dates_by_id.size()];
     }
     return self;
 }

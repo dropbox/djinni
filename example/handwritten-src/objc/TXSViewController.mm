@@ -41,7 +41,7 @@
 - (IBAction)sort:(id)sender
 {
     NSString *str = self.textView.text;
-    NSMutableArray *strList = [NSMutableArray arrayWithArray:[str componentsSeparatedByString:@"\n"]];
+    NSArray *strList = [str componentsSeparatedByString:@"\n"];
     TXSItemList *list = [[TXSItemList alloc] initWithItems:strList];
     [_sortItemInterface sort:TXSSortOrderAscending items:list];
 }

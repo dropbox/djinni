@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,13 +14,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithSetRecord:(DBSetRecord *)setRecord
 {
     if (self = [super init]) {
-        NSMutableSet *_setTempSet = [NSMutableSet setWithCapacity:[setRecord.set count]];
+        std::vector<NSString *> _setTempVector;
+        _setTempVector.reserve([setRecord.set count]);
         for (NSString *currentValue_0 in setRecord.set) {
-            id copiedValue_0;
+            NSString *copiedValue_0;
             copiedValue_0 = [currentValue_0 copy];
-            [_setTempSet addObject:copiedValue_0];
+            _setTempVector.push_back(copiedValue_0);
         }
-        _set = _setTempSet;
+        _set = [NSSet setWithObjects:&_setTempVector[0] count:_setTempVector.size()];
     }
     return self;
 }
@@ -35,14 +37,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppSetRecord:(const SetRecord &)setRecord
 {
     if (self = [super init]) {
-        NSMutableSet *_setTempSet = [NSMutableSet setWithCapacity:setRecord.set.size()];
+        std::vector<NSString *> _setTempVector;
+        _setTempVector.reserve(setRecord.set.size());
         for (const auto & cppValue_0 : setRecord.set) {
             NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
                     length:cppValue_0.length()
                     encoding:NSUTF8StringEncoding];
-            [_setTempSet addObject:objcValue_0];
+            _setTempVector.push_back(objcValue_0);
         }
-        _set = _setTempSet;
+        _set = [NSSet setWithObjects:&_setTempVector[0] count:_setTempVector.size()];
     }
     return self;
 }

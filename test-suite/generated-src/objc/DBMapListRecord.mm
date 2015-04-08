@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,21 +14,25 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord
 {
     if (self = [super init]) {
-        NSMutableArray *_mapListTempArray = [NSMutableArray arrayWithCapacity:[mapListRecord.mapList count]];
+        std::vector<NSDictionary *> _mapListTempVector;
+        _mapListTempVector.reserve([mapListRecord.mapList count]);
         for (NSDictionary *currentValue_0 in mapListRecord.mapList) {
-            id copiedValue_0;
-            NSMutableDictionary *copiedValue_0TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[currentValue_0 count]];
-            for (id key_1 in currentValue_0) {
-                id copiedKey_1, copiedValue_1;
-                copiedKey_1 = [key_1 copy];
-                id value_1 = [currentValue_0 objectForKey:key_1];
+            NSDictionary *copiedValue_0;
+            std::vector<NSString *> copiedValue_0TempKeyVector;
+            copiedValue_0TempKeyVector.reserve([currentValue_0 count]);
+            std::vector<NSNumber *> copiedValue_0TempValueVector;
+            copiedValue_0TempValueVector.reserve([currentValue_0 count]);
+            for (NSString *key_1 in currentValue_0) {
+                NSNumber *copiedValue_1;
+                copiedValue_0TempKeyVector.push_back(key_1);
+                NSNumber *value_1 = [currentValue_0 objectForKey:key_1];
                 copiedValue_1 = value_1;
-                [copiedValue_0TempDictionary setObject:copiedValue_1 forKey:copiedKey_1];
+                copiedValue_0TempValueVector.push_back(copiedValue_1);
             }
-            copiedValue_0 = copiedValue_0TempDictionary;
-            [_mapListTempArray addObject:copiedValue_0];
+            copiedValue_0 = [NSDictionary dictionaryWithObjects:&copiedValue_0TempValueVector[0] forKeys:&copiedValue_0TempKeyVector[0] count:[currentValue_0 count]];
+            _mapListTempVector.push_back(copiedValue_0);
         }
-        _mapList = _mapListTempArray;
+        _mapList = [NSArray arrayWithObjects:&_mapListTempVector[0] count:_mapListTempVector.size()];
     }
     return self;
 }
@@ -43,20 +48,25 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppMapListRecord:(const MapListRecord &)mapListRecord
 {
     if (self = [super init]) {
-        NSMutableArray *_mapListTempArray = [NSMutableArray arrayWithCapacity:mapListRecord.map_list.size()];
+        std::vector<NSDictionary *> _mapListTempVector;
+        _mapListTempVector.reserve(mapListRecord.map_list.size());
         for (const auto & cppValue_0 : mapListRecord.map_list) {
-            NSMutableDictionary *objcValue_0TempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppValue_0.size()];
+            std::vector<NSString *> objcValue_0TempKeyVector;
+            objcValue_0TempKeyVector.reserve(cppValue_0.size());
+            std::vector<NSNumber *> objcValue_0TempValueVector;
+            objcValue_0TempValueVector.reserve(cppValue_0.size());
             for (const auto & cppPair_1 : cppValue_0) {
                 NSString *objcKey_1 = [[NSString alloc] initWithBytes:cppPair_1.first.data()
                         length:cppPair_1.first.length()
                         encoding:NSUTF8StringEncoding];
                 NSNumber *objcValue_1 = [NSNumber numberWithLongLong:cppPair_1.second];
-                [objcValue_0TempDictionary setObject:objcValue_1 forKey:objcKey_1];
+                objcValue_0TempKeyVector.push_back(objcKey_1);
+                objcValue_0TempValueVector.push_back(objcValue_1);
             }
-            NSDictionary *objcValue_0 = objcValue_0TempDictionary;
-            [_mapListTempArray addObject:objcValue_0];
+            NSDictionary *objcValue_0 = [NSDictionary dictionaryWithObjects:&objcValue_0TempValueVector[0] forKeys:&objcValue_0TempKeyVector[0] count:cppValue_0.size()];
+            _mapListTempVector.push_back(objcValue_0);
         }
-        _mapList = _mapListTempArray;
+        _mapList = [NSArray arrayWithObjects:&_mapListTempVector[0] count:_mapListTempVector.size()];
     }
     return self;
 }

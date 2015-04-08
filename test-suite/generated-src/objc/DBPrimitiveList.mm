@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,13 +14,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList
 {
     if (self = [super init]) {
-        NSMutableArray *_listTempArray = [NSMutableArray arrayWithCapacity:[primitiveList.list count]];
+        std::vector<NSNumber *> _listTempVector;
+        _listTempVector.reserve([primitiveList.list count]);
         for (NSNumber *currentValue_0 in primitiveList.list) {
-            id copiedValue_0;
+            NSNumber *copiedValue_0;
             copiedValue_0 = currentValue_0;
-            [_listTempArray addObject:copiedValue_0];
+            _listTempVector.push_back(copiedValue_0);
         }
-        _list = _listTempArray;
+        _list = [NSArray arrayWithObjects:&_listTempVector[0] count:_listTempVector.size()];
     }
     return self;
 }
@@ -35,12 +37,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList
 {
     if (self = [super init]) {
-        NSMutableArray *_listTempArray = [NSMutableArray arrayWithCapacity:primitiveList.list.size()];
+        std::vector<NSNumber *> _listTempVector;
+        _listTempVector.reserve(primitiveList.list.size());
         for (const auto & cppValue_0 : primitiveList.list) {
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppValue_0];
-            [_listTempArray addObject:objcValue_0];
+            _listTempVector.push_back(objcValue_0);
         }
-        _list = _listTempArray;
+        _list = [NSArray arrayWithObjects:&_listTempVector[0] count:_listTempVector.size()];
     }
     return self;
 }

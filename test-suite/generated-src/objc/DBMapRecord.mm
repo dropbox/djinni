@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,15 +14,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithMapRecord:(DBMapRecord *)mapRecord
 {
     if (self = [super init]) {
-        NSMutableDictionary *_mapTempDictionary = [NSMutableDictionary dictionaryWithCapacity:[mapRecord.map count]];
-        for (id key_0 in mapRecord.map) {
-            id copiedKey_0, copiedValue_0;
-            copiedKey_0 = [key_0 copy];
-            id value_0 = [mapRecord.map objectForKey:key_0];
+        std::vector<NSString *> _mapTempKeyVector;
+        _mapTempKeyVector.reserve([mapRecord.map count]);
+        std::vector<NSNumber *> _mapTempValueVector;
+        _mapTempValueVector.reserve([mapRecord.map count]);
+        for (NSString *key_0 in mapRecord.map) {
+            NSNumber *copiedValue_0;
+            _mapTempKeyVector.push_back(key_0);
+            NSNumber *value_0 = [mapRecord.map objectForKey:key_0];
             copiedValue_0 = value_0;
-            [_mapTempDictionary setObject:copiedValue_0 forKey:copiedKey_0];
+            _mapTempValueVector.push_back(copiedValue_0);
         }
-        _map = _mapTempDictionary;
+        _map = [NSDictionary dictionaryWithObjects:&_mapTempValueVector[0] forKeys:&_mapTempKeyVector[0] count:[mapRecord.map count]];
     }
     return self;
 }
@@ -37,15 +41,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppMapRecord:(const MapRecord &)mapRecord
 {
     if (self = [super init]) {
-        NSMutableDictionary *_mapTempDictionary = [NSMutableDictionary dictionaryWithCapacity:mapRecord.map.size()];
+        std::vector<NSString *> _mapTempKeyVector;
+        _mapTempKeyVector.reserve(mapRecord.map.size());
+        std::vector<NSNumber *> _mapTempValueVector;
+        _mapTempValueVector.reserve(mapRecord.map.size());
         for (const auto & cppPair_0 : mapRecord.map) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [_mapTempDictionary setObject:objcValue_0 forKey:objcKey_0];
+            _mapTempKeyVector.push_back(objcKey_0);
+            _mapTempValueVector.push_back(objcValue_0);
         }
-        _map = _mapTempDictionary;
+        _map = [NSDictionary dictionaryWithObjects:&_mapTempValueVector[0] forKeys:&_mapTempKeyVector[0] count:mapRecord.map.size()];
     }
     return self;
 }

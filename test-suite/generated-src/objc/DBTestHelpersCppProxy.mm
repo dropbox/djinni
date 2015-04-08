@@ -95,15 +95,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (NSDictionary *)getMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_map();
-        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        std::vector<NSString *> objcRetTempKeyVector;
+        objcRetTempKeyVector.reserve(cppRet.size());
+        std::vector<NSNumber *> objcRetTempValueVector;
+        objcRetTempValueVector.reserve(cppRet.size());
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
+            objcRetTempKeyVector.push_back(objcKey_0);
+            objcRetTempValueVector.push_back(objcValue_0);
         }
-        NSDictionary *objcRet = objcRetTempDictionary;
+        NSDictionary *objcRet = [NSDictionary dictionaryWithObjects:&objcRetTempValueVector[0] forKeys:&objcRetTempKeyVector[0] count:cppRet.size()];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -125,15 +129,19 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (NSDictionary *)getEmptyMap {
     try {
         std::unordered_map<std::string, int64_t> cppRet = TestHelpers::get_empty_map();
-        NSMutableDictionary *objcRetTempDictionary = [NSMutableDictionary dictionaryWithCapacity:cppRet.size()];
+        std::vector<NSString *> objcRetTempKeyVector;
+        objcRetTempKeyVector.reserve(cppRet.size());
+        std::vector<NSNumber *> objcRetTempValueVector;
+        objcRetTempValueVector.reserve(cppRet.size());
         for (const auto & cppPair_0 : cppRet) {
             NSString *objcKey_0 = [[NSString alloc] initWithBytes:cppPair_0.first.data()
                     length:cppPair_0.first.length()
                     encoding:NSUTF8StringEncoding];
             NSNumber *objcValue_0 = [NSNumber numberWithLongLong:cppPair_0.second];
-            [objcRetTempDictionary setObject:objcValue_0 forKey:objcKey_0];
+            objcRetTempKeyVector.push_back(objcKey_0);
+            objcRetTempValueVector.push_back(objcValue_0);
         }
-        NSDictionary *objcRet = objcRetTempDictionary;
+        NSDictionary *objcRet = [NSDictionary dictionaryWithObjects:&objcRetTempValueVector[0] forKeys:&objcRetTempKeyVector[0] count:cppRet.size()];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

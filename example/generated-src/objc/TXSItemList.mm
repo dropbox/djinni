@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,13 +14,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithItemList:(TXSItemList *)itemList
 {
     if (self = [super init]) {
-        NSMutableArray *_itemsTempArray = [NSMutableArray arrayWithCapacity:[itemList.items count]];
+        std::vector<NSString *> _itemsTempVector;
+        _itemsTempVector.reserve([itemList.items count]);
         for (NSString *currentValue_0 in itemList.items) {
-            id copiedValue_0;
+            NSString *copiedValue_0;
             copiedValue_0 = [currentValue_0 copy];
-            [_itemsTempArray addObject:copiedValue_0];
+            _itemsTempVector.push_back(copiedValue_0);
         }
-        _items = _itemsTempArray;
+        _items = [NSArray arrayWithObjects:&_itemsTempVector[0] count:_itemsTempVector.size()];
     }
     return self;
 }
@@ -35,14 +37,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppItemList:(const ::textsort::ItemList &)itemList
 {
     if (self = [super init]) {
-        NSMutableArray *_itemsTempArray = [NSMutableArray arrayWithCapacity:itemList.items.size()];
+        std::vector<NSString *> _itemsTempVector;
+        _itemsTempVector.reserve(itemList.items.size());
         for (const auto & cppValue_0 : itemList.items) {
             NSString *objcValue_0 = [[NSString alloc] initWithBytes:cppValue_0.data()
                     length:cppValue_0.length()
                     encoding:NSUTF8StringEncoding];
-            [_itemsTempArray addObject:objcValue_0];
+            _itemsTempVector.push_back(objcValue_0);
         }
-        _items = _itemsTempArray;
+        _items = [NSArray arrayWithObjects:&_itemsTempVector[0] count:_itemsTempVector.size()];
     }
     return self;
 }

@@ -5,6 +5,7 @@
 #import "DJIDate.h"
 #import <Foundation/Foundation.h>
 #include <utility>
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -13,19 +14,21 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection
 {
     if (self = [super init]) {
-        NSMutableArray *_setListTempArray = [NSMutableArray arrayWithCapacity:[nestedCollection.setList count]];
+        std::vector<NSSet *> _setListTempVector;
+        _setListTempVector.reserve([nestedCollection.setList count]);
         for (NSSet *currentValue_0 in nestedCollection.setList) {
-            id copiedValue_0;
-            NSMutableSet *copiedValue_0TempSet = [NSMutableSet setWithCapacity:[currentValue_0 count]];
+            NSSet *copiedValue_0;
+            std::vector<NSString *> copiedValue_0TempVector;
+            copiedValue_0TempVector.reserve([currentValue_0 count]);
             for (NSString *currentValue_1 in currentValue_0) {
-                id copiedValue_1;
+                NSString *copiedValue_1;
                 copiedValue_1 = [currentValue_1 copy];
-                [copiedValue_0TempSet addObject:copiedValue_1];
+                copiedValue_0TempVector.push_back(copiedValue_1);
             }
-            copiedValue_0 = copiedValue_0TempSet;
-            [_setListTempArray addObject:copiedValue_0];
+            copiedValue_0 = [NSSet setWithObjects:&copiedValue_0TempVector[0] count:copiedValue_0TempVector.size()];
+            _setListTempVector.push_back(copiedValue_0);
         }
-        _setList = _setListTempArray;
+        _setList = [NSArray arrayWithObjects:&_setListTempVector[0] count:_setListTempVector.size()];
     }
     return self;
 }
@@ -41,19 +44,21 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (id)initWithCppNestedCollection:(const NestedCollection &)nestedCollection
 {
     if (self = [super init]) {
-        NSMutableArray *_setListTempArray = [NSMutableArray arrayWithCapacity:nestedCollection.set_list.size()];
+        std::vector<NSSet *> _setListTempVector;
+        _setListTempVector.reserve(nestedCollection.set_list.size());
         for (const auto & cppValue_0 : nestedCollection.set_list) {
-            NSMutableSet *objcValue_0TempSet = [NSMutableSet setWithCapacity:cppValue_0.size()];
+            std::vector<NSString *> objcValue_0TempVector;
+            objcValue_0TempVector.reserve(cppValue_0.size());
             for (const auto & cppValue_1 : cppValue_0) {
                 NSString *objcValue_1 = [[NSString alloc] initWithBytes:cppValue_1.data()
                         length:cppValue_1.length()
                         encoding:NSUTF8StringEncoding];
-                [objcValue_0TempSet addObject:objcValue_1];
+                objcValue_0TempVector.push_back(objcValue_1);
             }
-            NSSet *objcValue_0 = objcValue_0TempSet;
-            [_setListTempArray addObject:objcValue_0];
+            NSSet *objcValue_0 = [NSSet setWithObjects:&objcValue_0TempVector[0] count:objcValue_0TempVector.size()];
+            _setListTempVector.push_back(objcValue_0);
         }
-        _setList = _setListTempArray;
+        _setList = [NSArray arrayWithObjects:&_setListTempVector[0] count:_setListTempVector.size()];
     }
     return self;
 }
