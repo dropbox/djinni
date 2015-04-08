@@ -9,15 +9,13 @@
 
 namespace djinni_generated {
 
-struct SetRecord final {
-
+struct SetRecord final
+{
     std::unordered_set<std::string> set;
 
-
-    SetRecord(
-            std::unordered_set<std::string> set) :
-                set(std::move(set)) {
-    }
+    SetRecord(std::unordered_set<std::string> set)
+    : set(std::move(set))
+    {}
 };
 
 }  // namespace djinni_generated

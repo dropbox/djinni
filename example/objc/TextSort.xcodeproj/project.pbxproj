@@ -19,10 +19,10 @@
 		65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF919AD0CDF0038F82F /* TXSViewController.mm */; };
 		A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12C19BCB94300BFC38D /* DJIError.mm */; };
 		A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A29DB12E19BCB94300BFC38D /* DJIWeakPtrWrapper.mm */; };
-		CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */; };
+		CF3D713D1AD575A3001714DB /* TXSItemList+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3D71381AD575A3001714DB /* TXSItemList+Private.mm */; };
+		CF3D713E1AD575A3001714DB /* TXSSortItems+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3D713A1AD575A3001714DB /* TXSSortItems+Private.mm */; };
+		CF3D713F1AD575A3001714DB /* TXSTextboxListener+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3D713C1AD575A3001714DB /* TXSTextboxListener+Private.mm */; };
 		CFC5762B1AC3079C002FB1E9 /* TXSItemList.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC576271AC3079C002FB1E9 /* TXSItemList.m */; };
-		CFC5762C1AC3079C002FB1E9 /* TXSItemList+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC576281AC3079C002FB1E9 /* TXSItemList+Private.mm */; };
-		CFC5762D1AC3079C002FB1E9 /* TXSTextboxListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC576291AC3079C002FB1E9 /* TXSTextboxListener.mm */; };
 		CFC5762F1AC3086A002FB1E9 /* sort_items_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65834E3A19AC5D9F0061AD3F /* sort_items_impl.cpp */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +36,6 @@
 		65834DEE19AC599E0061AD3F /* TextSort-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSort-Prefix.pch"; sourceTree = "<group>"; };
 		65834DF319AC599E0061AD3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		65834DFB19AC599E0061AD3F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSItemList+Private.h"; sourceTree = "<group>"; };
 		65834E1E19AC5C9B0061AD3F /* TXSItemList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSItemList.h; sourceTree = "<group>"; };
 		65834E2019AC5C9B0061AD3F /* TXSSortItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortItems.h; sourceTree = "<group>"; };
 		65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSTextboxListener.h; sourceTree = "<group>"; };
@@ -60,14 +59,15 @@
 		A29DB12F19BCB94300BFC38D /* DJIWeakPtrWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIWeakPtrWrapper+Private.h"; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
-		CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSSortItems.mm; sourceTree = "<group>"; };
-		CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItems+Private.h"; sourceTree = "<group>"; };
+		CF3D71371AD575A3001714DB /* TXSItemList+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSItemList+Private.h"; sourceTree = "<group>"; };
+		CF3D71381AD575A3001714DB /* TXSItemList+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "TXSItemList+Private.mm"; sourceTree = "<group>"; };
+		CF3D71391AD575A3001714DB /* TXSSortItems+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSSortItems+Private.h"; sourceTree = "<group>"; };
+		CF3D713A1AD575A3001714DB /* TXSSortItems+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "TXSSortItems+Private.mm"; sourceTree = "<group>"; };
+		CF3D713B1AD575A3001714DB /* TXSTextboxListener+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSTextboxListener+Private.h"; sourceTree = "<group>"; };
+		CF3D713C1AD575A3001714DB /* TXSTextboxListener+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "TXSTextboxListener+Private.mm"; sourceTree = "<group>"; };
 		CFB119D01A9357F7004CBEFE /* sort_order.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sort_order.hpp; sourceTree = "<group>"; };
 		CFB119D11A935802004CBEFE /* TXSSortOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSSortOrder.h; sourceTree = "<group>"; };
 		CFC576271AC3079C002FB1E9 /* TXSItemList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSItemList.m; sourceTree = "<group>"; };
-		CFC576281AC3079C002FB1E9 /* TXSItemList+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "TXSItemList+Private.mm"; sourceTree = "<group>"; };
-		CFC576291AC3079C002FB1E9 /* TXSTextboxListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TXSTextboxListener.mm; sourceTree = "<group>"; };
-		CFC5762A1AC3079C002FB1E9 /* TXSTextboxListener+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TXSTextboxListener+Private.h"; sourceTree = "<group>"; };
 		CFC5762E1AC307AE002FB1E9 /* DJIMarshal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIMarshal+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +93,7 @@
 				65834E3219AC5CDA0061AD3F /* objc-support-lib */,
 				65834E2B19AC5CB90061AD3F /* generated-cpp */,
 				65834E1919AC5C9B0061AD3F /* generated-objc */,
+				CF3D71301AD574FF001714DB /* generated-objcpp */,
 				65834DE619AC599E0061AD3F /* TextSort */,
 				65834DDF19AC599E0061AD3F /* Frameworks */,
 				65834DDE19AC599E0061AD3F /* Products */,
@@ -144,15 +145,9 @@
 			children = (
 				65834E1E19AC5C9B0061AD3F /* TXSItemList.h */,
 				CFC576271AC3079C002FB1E9 /* TXSItemList.m */,
-				65834E1D19AC5C9B0061AD3F /* TXSItemList+Private.h */,
-				CFC576281AC3079C002FB1E9 /* TXSItemList+Private.mm */,
 				65834E2019AC5C9B0061AD3F /* TXSSortItems.h */,
-				CF8788EB1A24D32D0058F854 /* TXSSortItems.mm */,
-				CF8788EC1A24D32D0058F854 /* TXSSortItems+Private.h */,
 				CFB119D11A935802004CBEFE /* TXSSortOrder.h */,
 				65834E2419AC5C9B0061AD3F /* TXSTextboxListener.h */,
-				CFC576291AC3079C002FB1E9 /* TXSTextboxListener.mm */,
-				CFC5762A1AC3079C002FB1E9 /* TXSTextboxListener+Private.h */,
 			);
 			name = "generated-objc";
 			path = "../generated-src/objc";
@@ -208,6 +203,20 @@
 			);
 			name = "handwritten-objc";
 			path = "../handwritten-src/objc";
+			sourceTree = "<group>";
+		};
+		CF3D71301AD574FF001714DB /* generated-objcpp */ = {
+			isa = PBXGroup;
+			children = (
+				CF3D71371AD575A3001714DB /* TXSItemList+Private.h */,
+				CF3D71381AD575A3001714DB /* TXSItemList+Private.mm */,
+				CF3D71391AD575A3001714DB /* TXSSortItems+Private.h */,
+				CF3D713A1AD575A3001714DB /* TXSSortItems+Private.mm */,
+				CF3D713B1AD575A3001714DB /* TXSTextboxListener+Private.h */,
+				CF3D713C1AD575A3001714DB /* TXSTextboxListener+Private.mm */,
+			);
+			name = "generated-objcpp";
+			path = "../generated-src/objcpp";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,17 +285,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFC5762C1AC3079C002FB1E9 /* TXSItemList+Private.mm in Sources */,
+				CF3D713E1AD575A3001714DB /* TXSSortItems+Private.mm in Sources */,
+				CF3D713D1AD575A3001714DB /* TXSItemList+Private.mm in Sources */,
+				CF3D713F1AD575A3001714DB /* TXSTextboxListener+Private.mm in Sources */,
 				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
 				CFC5762F1AC3086A002FB1E9 /* sort_items_impl.cpp in Sources */,
 				A29DB13019BCB94300BFC38D /* DJIError.mm in Sources */,
 				CFC5762B1AC3079C002FB1E9 /* TXSItemList.m in Sources */,
 				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.mm in Sources */,
-				CFC5762D1AC3079C002FB1E9 /* TXSTextboxListener.mm in Sources */,
 				A29DB13119BCB94300BFC38D /* DJIWeakPtrWrapper.mm in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.m in Sources */,
-				CF8788ED1A24D32D0058F854 /* TXSSortItems.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

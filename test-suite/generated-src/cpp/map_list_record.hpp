@@ -11,15 +11,13 @@
 
 namespace djinni_generated {
 
-struct MapListRecord final {
-
+struct MapListRecord final
+{
     std::vector<std::unordered_map<std::string, int64_t>> map_list;
 
-
-    MapListRecord(
-            std::vector<std::unordered_map<std::string, int64_t>> map_list) :
-                map_list(std::move(map_list)) {
-    }
+    MapListRecord(std::vector<std::unordered_map<std::string, int64_t>> map_list)
+    : map_list(std::move(map_list))
+    {}
 };
 
 }  // namespace djinni_generated

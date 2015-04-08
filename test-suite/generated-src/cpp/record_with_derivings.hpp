@@ -9,25 +9,25 @@
 
 namespace djinni_generated {
 
-struct RecordWithDerivings final {
-
+struct RecordWithDerivings final
+{
     int32_t key1;
-
     std::string key2;
 
-    bool operator==(const RecordWithDerivings & other) const;
-    bool operator!=(const RecordWithDerivings & other) const;
-    bool operator<(const RecordWithDerivings & other) const;
-    bool operator>(const RecordWithDerivings & other) const;
-    bool operator<=(const RecordWithDerivings & other) const;
-    bool operator>=(const RecordWithDerivings & other) const;
+    friend bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    friend bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
 
-    RecordWithDerivings(
-            int32_t key1,
-            std::string key2) :
-                key1(std::move(key1)),
-                key2(std::move(key2)) {
-    }
+    friend bool operator<(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    friend bool operator>(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+
+    friend bool operator<=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    friend bool operator>=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+
+    RecordWithDerivings(int32_t key1,
+                        std::string key2)
+    : key1(std::move(key1))
+    , key2(std::move(key2))
+    {}
 };
 
 }  // namespace djinni_generated

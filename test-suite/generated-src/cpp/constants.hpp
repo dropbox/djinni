@@ -9,7 +9,8 @@
 
 namespace djinni_generated {
 
-struct Constants final {
+struct Constants final
+{
 
     static const bool BOOL_CONSTANT;
 
@@ -24,18 +25,14 @@ struct Constants final {
     static const double F64_CONSTANT;
 
     static const std::string STRING_CONSTANT;
-
     int32_t some_integer;
-
     std::string some_string;
 
-
-    Constants(
-            int32_t some_integer,
-            std::string some_string) :
-                some_integer(std::move(some_integer)),
-                some_string(std::move(some_string)) {
-    }
+    Constants(int32_t some_integer,
+              std::string some_string)
+    : some_integer(std::move(some_integer))
+    , some_string(std::move(some_string))
+    {}
 };
 
 }  // namespace djinni_generated
