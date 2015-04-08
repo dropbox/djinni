@@ -190,13 +190,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     writeObjcFile(marshal.headerName(objcName), origin, refs.header, w => {
       writeDoc(w, doc)
-      for (c <- r.consts) {
-        writeDoc(w, c.doc)
-        w.w(s"extern ")
-        writeObjcConstVariable(w, c, noBaseSelf);
-        w.wl(s";")
-      }
-      w.wl
       w.wl(s"@interface $self : NSObject")
 
       // Deep copy construtor
@@ -221,6 +214,14 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
       w.wl
       w.wl("@end")
+      w.wl
+      // Constants come last in case one of them is of the record's type
+      for (c <- r.consts) {
+        writeDoc(w, c.doc)
+        w.w(s"extern ")
+        writeObjcConstVariable(w, c, noBaseSelf);
+        w.wl(s";")
+      }
     })
 
     writeObjcFile(bodyName(objcName), origin, refs.body, w => {
