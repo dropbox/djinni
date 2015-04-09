@@ -152,6 +152,7 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
 
 GlobalRef<jclass> jniFindClass(const char * name) {
     JNIEnv * env = jniGetThreadEnv();
+    DJINNI_ASSERT(name, env);
     GlobalRef<jclass> guard(env, env->FindClass(name));
     jniExceptionCheck(env);
     if (!guard) {
@@ -162,6 +163,9 @@ GlobalRef<jclass> jniFindClass(const char * name) {
 
 jmethodID jniGetStaticMethodID(jclass clazz, const char * name, const char * sig) {
     JNIEnv * env = jniGetThreadEnv();
+    DJINNI_ASSERT(clazz, env);
+    DJINNI_ASSERT(name, env);
+    DJINNI_ASSERT(sig, env);
     jmethodID id = env->GetStaticMethodID(clazz, name, sig);
     jniExceptionCheck(env);
     if (!id) {
@@ -172,6 +176,9 @@ jmethodID jniGetStaticMethodID(jclass clazz, const char * name, const char * sig
 
 jmethodID jniGetMethodID(jclass clazz, const char * name, const char * sig) {
     JNIEnv * env = jniGetThreadEnv();
+    DJINNI_ASSERT(clazz, env);
+    DJINNI_ASSERT(name, env);
+    DJINNI_ASSERT(sig, env);
     jmethodID id = env->GetMethodID(clazz, name, sig);
     jniExceptionCheck(env);
     if (!id) {
@@ -182,6 +189,9 @@ jmethodID jniGetMethodID(jclass clazz, const char * name, const char * sig) {
 
 jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig) {
     JNIEnv * env = jniGetThreadEnv();
+    DJINNI_ASSERT(clazz, env);
+    DJINNI_ASSERT(name, env);
+    DJINNI_ASSERT(sig, env);
     jfieldID id = env->GetFieldID(clazz, name, sig);
     jniExceptionCheck(env);
     if (!id) {
@@ -197,6 +207,7 @@ JniEnum::JniEnum(const std::string & name)
     {}
 
 jint JniEnum::ordinal(JNIEnv * env, jobject obj) const {
+    DJINNI_ASSERT(obj, env);
     const jint res = env->CallIntMethod(obj, m_methOrdinal);
     jniExceptionCheck(env);
     return res;
@@ -222,6 +233,7 @@ JniLocalScope::~JniLocalScope() {
 }
 
 bool JniLocalScope::_pushLocalFrame(JNIEnv* const env, jint capacity) {
+    DJINNI_ASSERT(capacity >= 0, env);
     const jint push_res = env->PushLocalFrame(capacity);
     return 0 == push_res;
 }
@@ -388,6 +400,7 @@ static void utf8_encode(char32_t pt, std::string & out) {
 }
 
 std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
+    DJINNI_ASSERT(jstr, env);
     const jsize length = env->GetStringLength(jstr);
     jniExceptionCheck(env);
 
