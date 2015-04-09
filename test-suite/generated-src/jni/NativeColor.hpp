@@ -17,7 +17,7 @@ public:
     using Boxed = NativeColor;
 
     static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<NativeColor>::get().ordinal(jniEnv, j)); }
-    static ::djinni::LocalRef<JniType> toJava(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<jint>(c)); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<jint>(c)); }
 
 private:
     NativeColor() : JniEnum("com/dropbox/djinni/test/Color") {}
