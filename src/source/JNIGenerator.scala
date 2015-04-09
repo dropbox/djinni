@@ -67,7 +67,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"using Boxed = $jniHelper;")
         w.wl
         w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<$jniHelper>::get().ordinal(jniEnv, j)); }")
-        w.wl(s"static ::djinni::LocalRef<JniType> toJava(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<jint>(c)); }")
+        w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<jint>(c)); }")
         w.wl
         w.wlOutdent("private:")
         val classLookup = q(jniMarshal.undecoratedTypename(ident, e))
