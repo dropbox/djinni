@@ -14,6 +14,4 @@
 
 + (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef;
-
 @end

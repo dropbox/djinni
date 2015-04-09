@@ -14,6 +14,4 @@
 
 + (id)cppExceptionWithCpp:(const std::shared_ptr<CppException> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<CppException> &)cppRef;
-
 @end

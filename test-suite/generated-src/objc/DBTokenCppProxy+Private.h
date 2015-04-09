@@ -14,6 +14,4 @@
 
 + (id)tokenWithCpp:(const std::shared_ptr<Token> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<Token> &)cppRef;
-
 @end

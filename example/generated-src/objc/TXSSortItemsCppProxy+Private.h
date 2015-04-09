@@ -14,6 +14,4 @@
 
 + (id)sortItemsWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef;
-
 @end

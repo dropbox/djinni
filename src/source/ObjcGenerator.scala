@@ -257,8 +257,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppName> &)cppRef;")
         w.wl
-        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef;")
-        w.wl
         w.wl("@end")
       })
 
