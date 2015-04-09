@@ -135,7 +135,7 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
 
     char buf[256];
 #if (defined _MSC_VER) && (_MSC_VER < 1900)
-    // snprintf not implemented on MSVC prior to 2015 
+    // snprintf not implemented on MSVC prior to 2015
     _snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
 #else
     snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);

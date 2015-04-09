@@ -10,7 +10,6 @@
 
 - (void)methodThatTakesString:(__unused NSString *)string
 {
-    
 }
 
 - (void)testCallingMethodThatTakesStringWithConstant
