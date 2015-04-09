@@ -7,18 +7,19 @@
 #import <Foundation/Foundation.h>
 #include <memory>
 
-namespace djinni_generated
-{
-    class TextboxListenerObjcProxy final : public ::textsort::TextboxListener
-    {
-        public:
-        id <TXSTextboxListener> objcRef;
-        TextboxListenerObjcProxy (id objcRef);
-        virtual ~TextboxListenerObjcProxy () override;
-        static std::shared_ptr<::textsort::TextboxListener> textbox_listener_with_objc (id objcRef);
-        virtual void update (const ::textsort::ItemList & items) override;
+namespace djinni_generated {
 
-        private:
-        TextboxListenerObjcProxy () {};
-    };
-}
+class TextboxListenerObjcProxy final : public ::textsort::TextboxListener
+{
+    public:
+    id <TXSTextboxListener> objcRef;
+    TextboxListenerObjcProxy (id objcRef);
+    virtual ~TextboxListenerObjcProxy () override;
+    static std::shared_ptr<::textsort::TextboxListener> textbox_listener_with_objc (id objcRef);
+    virtual void update (const ::textsort::ItemList & items) override;
+
+    private:
+    TextboxListenerObjcProxy () {};
+};
+
+}  // namespace djinni_generated
