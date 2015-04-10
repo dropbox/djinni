@@ -23,15 +23,14 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
   override def fqFieldType(tm: MExpr): String = fqParamType(tm)
 
   override def toCpp(tm: MExpr, expr: String): String = {
-    val jniHelper = helperName(tm) + helperTemplates(tm)
-    s"$jniHelper::toCpp(jniEnv, $expr)"
+    s"${helperClass(tm)}::toCpp(jniEnv, $expr)"
   }
   override def fromCpp(tm: MExpr, expr: String): String = {
-    val jniHelper = helperName(tm) + helperTemplates(tm)
-    s"$jniHelper::fromCpp(jniEnv, $expr)"
+    s"${helperClass(tm)}::fromCpp(jniEnv, $expr)"
   }
 
   def helperClass(name: String) = spec.jniClassIdentStyle(name)
+  private def helperClass(tm: MExpr) = helperName(tm) + helperTemplates(tm)
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
     case o: MOpaque => List(ImportRef(q(spec.jniBaseLibIncludePrefix + "Marshal.hpp")))
@@ -102,19 +101,19 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
   private def helperTemplates(tm: MExpr): String = tm.base match {
       case MOptional =>
         assert(tm.args.size == 1)
-        val argHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
+        val argHelperClass = helperClass(tm.args.head)
         s"<${spec.cppOptionalTemplate}, $argHelperClass>"
       case MList | MSet =>
         assert(tm.args.size == 1)
-        val argHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
+        val argHelperClass = helperClass(tm.args.head)
         s"<$argHelperClass>"
       case MMap =>
         assert(tm.args.size == 2)
-        val keyHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
-        val valueHelperClass = helperName(tm.args.tail.head) + helperTemplates(tm.args.tail.head)
+        val keyHelperClass = helperClass(tm.args.head)
+        val valueHelperClass = helperClass(tm.args.tail.head)
         s"<$keyHelperClass, $valueHelperClass>"
       case _ =>
-        ""
+        if(tm.args.isEmpty) "" else tm.args.map(helperClass).mkString("<", ",", ">")
   }
 
   def isJavaHeapObject(ty: TypeRef): Boolean = isJavaHeapObject(ty.resolved.base)
@@ -122,5 +121,4 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
     case _: MPrimitive => false
     case _ => true
   }
-
 }

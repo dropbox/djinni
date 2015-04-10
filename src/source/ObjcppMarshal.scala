@@ -24,12 +24,10 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   override def fqFieldType(tm: MExpr): String = throw new AssertionError("not applicable")
 
   override def toCpp(tm: MExpr, expr: String): String = {
-    val helper = helperName(tm) + helperTemplates(tm)
-    s"$helper::toCpp($expr)"
+    s"${helperClass(tm)}::toCpp($expr)"
   }
   override def fromCpp(tm: MExpr, expr: String): String = {
-    val helper = helperName(tm) + helperTemplates(tm)
-    s"$helper::fromCpp($expr)"
+    s"${helperClass(tm)}::fromCpp($expr)"
   }
 
   def references(m: Meta): Seq[SymbolReference] = m match {
@@ -49,6 +47,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   def helperClass(name: String) = idCpp.ty(name)
+  private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
 
@@ -80,18 +79,18 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   private def helperTemplates(tm: MExpr): String = tm.base match {
       case MOptional =>
         assert(tm.args.size == 1)
-        val argHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
+        val argHelperClass = helperClass(tm.args.head)
         s"<${spec.cppOptionalTemplate}, $argHelperClass>"
       case MList | MSet =>
         assert(tm.args.size == 1)
-        val argHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
+        val argHelperClass = helperClass(tm.args.head)
         s"<$argHelperClass>"
       case MMap =>
         assert(tm.args.size == 2)
-        val keyHelperClass = helperName(tm.args.head) + helperTemplates(tm.args.head)
-        val valueHelperClass = helperName(tm.args.tail.head) + helperTemplates(tm.args.tail.head)
+        val keyHelperClass = helperClass(tm.args.head)
+        val valueHelperClass = helperClass(tm.args.tail.head)
         s"<$keyHelperClass, $valueHelperClass>"
       case _ =>
-        ""
+        if(tm.args.isEmpty) "" else tm.args.map(helperClass).mkString("<", ",", ">")
   }
 }
