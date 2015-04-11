@@ -46,7 +46,7 @@ package object generatorTools {
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
                    jniIncludeCppPrefix: String,
-                   jniNamespace: String = "dropboxsync",
+                   jniNamespace: String,
                    jniClassIdentStyle: IdentConverter,
                    jniFileIdentStyle: IdentConverter,
                    jniBaseLibIncludePrefix: String,
