@@ -13,13 +13,10 @@ class ClientInterfaceObjcProxy final : public ClientInterface
 {
     public:
     id <DBClientInterface> objcRef;
-    ClientInterfaceObjcProxy (id objcRef);
+    explicit ClientInterfaceObjcProxy (id objcRef);
     virtual ~ClientInterfaceObjcProxy () override;
     static std::shared_ptr<ClientInterface> client_interface_with_objc (id objcRef);
     virtual ClientReturnedRecord get_record (int64_t record_id, const std::string & utf8string) override;
-
-    private:
-    ClientInterfaceObjcProxy () {};
 };
 
 }  // namespace djinni_generated

@@ -321,7 +321,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wl("public:")
             w.wl(s"id <$self> objcRef;")
-            w.wl(s"$objcExtSelf (id objcRef);")
+            w.wl(s"explicit $objcExtSelf (id objcRef);")
             w.wl(s"virtual ~$objcExtSelf () override;")
             w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id objcRef);")
             for (m <- i.methods) {
@@ -329,9 +329,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               val params = m.params.map(p => toCppParamType(p, spec.cppNamespace))
               w.wl(s"virtual $ret ${idCpp.method(m.ident)} ${params.mkString("(", ", ", ")")} override;")
             }
-            w.wl
-            w.wl("private:")
-            w.wl(s"$objcExtSelf () {};")
           }
         })
       })
