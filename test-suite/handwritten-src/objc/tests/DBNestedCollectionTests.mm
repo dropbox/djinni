@@ -4,12 +4,10 @@
 #include "nested_collection.hpp"
 
 static djinni_generated::NestedCollection cppNestedCollection { { {u8"String1", u8"String2"}, {u8"StringA", u8"StringB"} } };
-static DBNestedCollection *objcNestedCollection =
-    [[DBNestedCollection alloc]
-     initWithSetList:[[NSMutableArray alloc]
-                      initWithObjects:[[NSMutableSet alloc] initWithObjects:@"String1", @"String2", nil],
-                                      [[NSMutableSet alloc] initWithObjects:@"StringA", @"StringB", nil],
-                                      nil]];
+static DBNestedCollection *objcNestedCollection = [[DBNestedCollection alloc] initWithSetList:@[
+            [NSSet setWithArray:@[ @"String1", @"String2" ]],
+            [NSSet setWithArray:@[ @"StringA", @"StringB" ]],
+        ]];
 
 @interface DBNestedCollectionTests : XCTestCase
 

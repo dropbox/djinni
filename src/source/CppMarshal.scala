@@ -39,6 +39,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     }
     case MString => List(ImportRef("<string>"))
     case MBinary => List(ImportRef("<vector>"), ImportRef("<cstdint>"))
+    case MDate => List(ImportRef("<chrono>"))
     case MOptional => List(ImportRef(spec.cppOptionalHeader))
     case MList => List(ImportRef("<vector>"))
     case MSet => List(ImportRef("<unordered_set>"))
@@ -66,6 +67,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case p: MPrimitive => p.cName
       case MString => "std::string"
       case MBinary => "std::vector<uint8_t>"
+      case MDate => "std::chrono::system_clock::time_point"
       case MOptional => spec.cppOptionalTemplate
       case MList => "std::vector"
       case MSet => "std::unordered_set"

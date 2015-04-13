@@ -1,0 +1,7 @@
+date_record = record {
+    created_at: date;
+}
+
+map_date_record = record {
+    dates_by_id: map<string, date>;
+}

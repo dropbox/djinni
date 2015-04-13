@@ -18,6 +18,7 @@
 
 #include "djinni_support.hpp"
 #include <cassert>
+#include <chrono>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -170,6 +171,43 @@ namespace djinni
 			}
 			return j;
 		}
+	};
+	
+	struct Date
+	{
+		using CppType = std::chrono::system_clock::time_point;
+		using JniType = jobject;
+		
+		using Boxed = Date;
+		
+		static CppType toCpp(JNIEnv* jniEnv, JniType j)
+		{
+			static const auto POSIX_EPOCH = std::chrono::system_clock::from_time_t(0);
+			assert(j != nullptr);
+			const auto & data = JniClass<Date>::get();
+			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
+			auto time_millis = jniEnv->CallLongMethod(j, data.method_get_time);
+			return POSIX_EPOCH + std::chrono::milliseconds{time_millis};
+		}
+		
+		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
+		{
+			static const auto POSIX_EPOCH = std::chrono::system_clock::from_time_t(0);
+			const auto & data = JniClass<Date>::get();
+			const auto cpp_millis = std::chrono::duration_cast<std::chrono::milliseconds>(value - POSIX_EPOCH);
+			const jlong millis = static_cast<jlong>(cpp_millis.count());
+			auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor, millis));
+			jniExceptionCheck(jniEnv);
+			return j.release();
+		}
+		
+	private:
+		Date() = default;
+		friend ::djinni::JniClass<Date>;
+		
+		const GlobalRef<jclass> clazz { jniFindClass("java/util/Date") };
+		const jmethodID constructor { jniGetMethodID(clazz.get(), "<init>", "(J)V") };
+		const jmethodID method_get_time { jniGetMethodID(clazz.get(), "getTime", "()J") };
 	};
 
 	template <template <class> class OptionalType, class T>

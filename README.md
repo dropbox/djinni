@@ -196,12 +196,12 @@ The available data types for a record are:
  - Strings (`string`)
  - Binary (`binary`). This is implemented as `std::vector<uint8_t>` in C++, `byte[]` in Java,
    and `NSData` in Objective-C.
- - List (`list<type>`). This is `vector<T>` in C++, `ArrayList` in Java, and `NSMutableArray`
+ - List (`list<type>`). This is `vector<T>` in C++, `ArrayList` in Java, and `NSArray`
    in Objective-C. Primitives in a list will be boxed in Java and Objective-C.
- - Set (`set<type>`). This is `set<T>` in C++, `TreeSet` in Java, and `NSMutableSet` in
+ - Set (`set<type>`). This is `set<T>` in C++, `TreeSet` in Java, and `NSSet` in
    Objective-C. Primitives in a set will be boxed in Java and Objective-C.
  - Map (`map<typeA, typeB>`). This is `unordered_map<K, V>` in C++, `HashMap` in Java, and
-  `NSMutableDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
+  `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
  - Enumerations
  - Optionals (`optional<typeA>`). This is `std::experimental::optional<T>` in C++11, object /
    boxed primitive reference in Java (which can be `null`), and object / NSNumber strong

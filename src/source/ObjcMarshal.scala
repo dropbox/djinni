@@ -78,6 +78,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
             case MList => ("NSArray", true)
             case MSet => ("NSSet", true)
             case MMap => ("NSDictionary", true)
+            case MDate => ("NSDate", true)
             case d: MDef => d.defType match {
               case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
               case DRecord => (idObjc.ty(d.name), true)

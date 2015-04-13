@@ -9,6 +9,7 @@
 #pragma once
 #import <Foundation/Foundation.h>
 #include <cassert>
+#include <chrono>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -139,6 +140,27 @@ namespace djinni {
 			// Using the pointer from .data() on an empty vector is UB
 			return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data()
 																  length:static_cast<NSUInteger>(bytes.size())];
+		}
+	};
+	
+	struct Date
+	{
+		using CppType = std::chrono::system_clock::time_point;
+		using ObjcType = NSDate*;
+		
+		using Boxed = Date;
+		
+		static CppType toCpp(ObjcType date)
+		{
+			assert(date);
+			static const auto POSIX_EPOCH = std::chrono::system_clock::from_time_t(0);
+			auto converted_date = std::chrono::duration<double>([date timeIntervalSince1970]);
+			auto converted_system_date = std::chrono::duration_cast<std::chrono::system_clock::duration>(converted_date);
+			return POSIX_EPOCH + converted_system_date;
+		}
+		static ObjcType fromCpp(const CppType& date)
+		{
+			return [NSDate dateWithTimeIntervalSince1970:std::chrono::duration_cast<std::chrono::duration<double>>(date.time_since_epoch()).count()];
 		}
 	};
 	

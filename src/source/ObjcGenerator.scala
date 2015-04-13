@@ -176,6 +176,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     refs.header.add("#import <Foundation/Foundation.h>")
     refs.body.add("!#import " + q(spec.objcIncludePrefix + (if (r.ext.objc) "../" else "") + marshal.headerName(ident)))
+    refs.body.add("#include <utility>")
+    refs.body.add("#include <vector>")
 
     if (r.ext.objc) {
       refs.header.add(s"@class $noBaseSelf;")
@@ -354,43 +356,50 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         }
         case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
         case MString => w.wl(s"$to = [$from copy];")
+        case MDate => w.wl(s"$to = [$from copy];")
         case MBinary => w.wl(s"$to = [$from copy];")
         case MList => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableArray *${to}TempArray = [NSMutableArray arrayWithCapacity:[$from count]];")
+          w.wl(s"std::vector<${toObjcTypeDef(tm.args.head, true)}> ${to}TempVector;")
+          w.wl(s"${to}TempVector.reserve([$from count]);")
           w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
+            w.wl(s"${toObjcTypeDef(tm.args.head, true)}$copyName;")
             f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempArray addObject:$copyName];")
+            w.wl(s"${to}TempVector.push_back($copyName);")
           }
-          w.wl(s"$to = ${to}TempArray;")
+          w.wl(s"$to = [NSArray arrayWithObjects:&${to}TempVector[0] count:${to}TempVector.size()];")
         }
         case MSet => {
           val copyName = "copiedValue_" + valueLevel
           val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableSet *${to}TempSet = [NSMutableSet setWithCapacity:[$from count]];")
+          w.wl(s"std::vector<${toObjcTypeDef(tm.args.head, true)}> ${to}TempVector;")
+          w.wl(s"${to}TempVector.reserve([$from count]);")
           w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
+            w.wl(s"${toObjcTypeDef(tm.args.head, true)}$copyName;")
             f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempSet addObject:$copyName];")
+            w.wl(s"${to}TempVector.push_back($copyName);")
           }
-          w.wl(s"$to = ${to}TempSet;")
+          w.wl(s"$to = [NSSet setWithObjects:&${to}TempVector[0] count:${to}TempVector.size()];")
         }
         case MMap => {
-          w.wl(s"NSMutableDictionary *${to}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[$from count]];")
+          val keyType = toObjcTypeDef(tm.args.apply(0), true)
+          val valueType = toObjcTypeDef(tm.args.apply(1), true)
+          w.wl(s"std::vector<$keyType> ${to}TempKeyVector;")
+          w.wl(s"${to}TempKeyVector.reserve([$from count]);")
+          w.wl(s"std::vector<$valueType> ${to}TempValueVector;")
+          w.wl(s"${to}TempValueVector.reserve([$from count]);")
           val keyName = "key_" + valueLevel
           val valueName = "value_" + valueLevel
-          val copiedKeyName = "copiedKey_" + valueLevel
           val copiedValueName = "copiedValue_" + valueLevel
-          w.w(s"for (id $keyName in $from)").braced {
-            w.wl(s"id $copiedKeyName, $copiedValueName;")
-            f(copiedKeyName, keyName, tm.args.apply(0), true, w, valueLevel + 1)
-            w.wl(s"id $valueName = [$from objectForKey:$keyName];")
+          w.w(s"for ($keyType$keyName in $from)").braced {
+            w.wl(s"$valueType$copiedValueName;")
+            w.wl(s"${to}TempKeyVector.push_back($keyName);")
+            w.wl(s"$valueType$valueName = [$from objectForKey:$keyName];")
             f(copiedValueName, valueName, tm.args.apply(1), true, w, valueLevel + 1)
-            w.wl(s"[${to}TempDictionary setObject:$copiedValueName forKey:$copiedKeyName];")
+            w.wl(s"${to}TempValueVector.push_back($copiedValueName);")
           }
-          w.wl(s"$to = ${to}TempDictionary;")
+          w.wl(s"$to = [NSDictionary dictionaryWithObjects:&${to}TempValueVector[0] forKeys:&${to}TempKeyVector[0] count:[$from count]];")
         }
         case d: MDef => {
           val typeName = d.name
@@ -441,6 +450,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           val base = o match {
             case p: MPrimitive => if (needRef) (p.objcBoxed, true) else (p.objcName, false)
             case MString => ("NSString", true)
+            case MDate => ("NSDate", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MList => ("NSArray", true)

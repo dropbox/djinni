@@ -71,6 +71,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case MList => "List"
       case MSet => "Set"
       case MMap => "Map"
+      case MDate => "Date"
       case d: MDef => throw new AssertionError("unreachable")
       case p: MParam => throw new AssertionError("not applicable")
     })

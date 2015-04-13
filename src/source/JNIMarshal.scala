@@ -59,6 +59,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
       case p: MPrimitive => p.jSig
       case MString => "Ljava/lang/String;"
       case MBinary => "[B"
+      case MDate => "Ljava/util/Date;"
       case MOptional =>  tm.args.head.base match {
         case p: MPrimitive => s"Ljava/lang/${p.jBoxed};"
         case MOptional => throw new AssertionError("nested optional?")
@@ -93,6 +94,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
       case MList => "List"
       case MSet => "Set"
       case MMap => "Map"
+      case MDate => "Date"
       case d: MDef => throw new AssertionError("unreachable")
       case p: MParam => throw new AssertionError("not applicable")
     })

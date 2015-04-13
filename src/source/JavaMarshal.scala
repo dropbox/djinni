@@ -30,6 +30,7 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
         case MList => List(ImportRef("java.util.ArrayList"))
         case MSet => List(ImportRef("java.util.HashSet"))
         case MMap => List(ImportRef("java.util.HashMap"))
+        case MDate => List(ImportRef("java.util.Date"))
         case _ => List()
       }
     case _ => List()
@@ -57,6 +58,7 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
             case MList => "ArrayList"
             case MSet => "HashSet"
             case MMap => "HashMap"
+            case MDate => "Date"
             case d: MDef => withPackage(packageName, idJava.ty(d.name))
             case p: MParam => idJava.typeParam(p.name)
           }
