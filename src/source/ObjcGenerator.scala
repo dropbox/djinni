@@ -222,6 +222,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("@end")
     })
 
+    refs.body.add("#include <vector>")
     refs.body.add("#import " + q(headerName(ident)))
 
     if (i.consts.nonEmpty) {

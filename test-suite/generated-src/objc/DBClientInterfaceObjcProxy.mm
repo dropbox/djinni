@@ -4,6 +4,7 @@
 #import "DBClientInterfaceObjcProxy+Private.h"
 #import "DBClientInterface.h"
 #import "DBClientReturnedRecord+Private.h"
+#include <vector>
 
 namespace djinni_generated {
 

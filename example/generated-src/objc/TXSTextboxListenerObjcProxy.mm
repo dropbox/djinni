@@ -4,6 +4,7 @@
 #import "TXSTextboxListenerObjcProxy+Private.h"
 #import "TXSItemList+Private.h"
 #import "TXSTextboxListener.h"
+#include <vector>
 
 namespace djinni_generated {
 
