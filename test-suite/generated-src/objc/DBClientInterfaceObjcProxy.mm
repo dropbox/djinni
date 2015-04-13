@@ -9,21 +9,18 @@
 namespace djinni_generated {
 
 ClientInterfaceObjcProxy::ClientInterfaceObjcProxy (id objcRef)
-{
-    assert([[objcRef class] conformsToProtocol:@protocol(DBClientInterface)]);
-    this->objcRef = objcRef;
-}
+    : _objcRef((assert([[objcRef class] conformsToProtocol:@protocol(DBClientInterface)]), objcRef)),
+      _cache(djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance())
+    {}
 
 ClientInterfaceObjcProxy::~ClientInterfaceObjcProxy ()
 {
-    djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy> & cache = djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance();
-    cache.remove(objcRef);
+    _cache->remove(_objcRef);
 }
 
 std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id objcRef)
 {
-    djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy> & cache = djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance();
-    return static_cast<std::shared_ptr<ClientInterface>>(cache.get(objcRef));
+    return djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance()->get(objcRef);
 }
 
 ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
@@ -33,7 +30,7 @@ ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, co
         NSString *cpp_utf8string = [[NSString alloc] initWithBytes:utf8string.data()
                 length:utf8string.length()
                 encoding:NSUTF8StringEncoding];
-        DBClientReturnedRecord *objcRet = [objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
+        DBClientReturnedRecord *objcRet = [_objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
         ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
         return cppRet;
     }

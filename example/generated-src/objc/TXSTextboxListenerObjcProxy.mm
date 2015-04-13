@@ -9,28 +9,25 @@
 namespace djinni_generated {
 
 TextboxListenerObjcProxy::TextboxListenerObjcProxy (id objcRef)
-{
-    assert([[objcRef class] conformsToProtocol:@protocol(TXSTextboxListener)]);
-    this->objcRef = objcRef;
-}
+    : _objcRef((assert([[objcRef class] conformsToProtocol:@protocol(TXSTextboxListener)]), objcRef)),
+      _cache(djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>::getInstance())
+    {}
 
 TextboxListenerObjcProxy::~TextboxListenerObjcProxy ()
 {
-    djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy> & cache = djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>::getInstance();
-    cache.remove(objcRef);
+    _cache->remove(_objcRef);
 }
 
 std::shared_ptr<::textsort::TextboxListener> TextboxListenerObjcProxy::textbox_listener_with_objc (id objcRef)
 {
-    djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy> & cache = djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>::getInstance();
-    return static_cast<std::shared_ptr<::textsort::TextboxListener>>(cache.get(objcRef));
+    return djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>::getInstance()->get(objcRef);
 }
 
 void TextboxListenerObjcProxy::update (const ::textsort::ItemList & items)
 {
     @autoreleasepool {
         TXSItemList *cpp_items = [[TXSItemList alloc] initWithCppItemList:items];
-        [objcRef update:cpp_items];
+        [_objcRef update:cpp_items];
     }
 }
 

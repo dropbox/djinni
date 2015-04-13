@@ -12,7 +12,9 @@ namespace djinni_generated {
 class ClientInterfaceObjcProxy final : public ClientInterface
 {
     public:
-    id <DBClientInterface> objcRef;
+    const id <DBClientInterface> _objcRef;
+    const std::shared_ptr<djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>> _cache;
+
     explicit ClientInterfaceObjcProxy (id objcRef);
     virtual ~ClientInterfaceObjcProxy () override;
     static std::shared_ptr<ClientInterface> client_interface_with_objc (id objcRef);

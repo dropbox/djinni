@@ -20,26 +20,30 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
+@interface DBTestHelpersCppProxy ()
+@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<TestHelpers>> cache;
+@end
+
 @implementation DBTestHelpersCppProxy
 
-- (id)initWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef
+- (id)initWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<TestHelpers>> &)cache
 {
     if (self = [super init]) {
         _cppRef = cppRef;
+        _cache = cache;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    djinni::DbxCppWrapperCache<TestHelpers> & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
-    cache.remove(_cppRef);
+    _cache->remove(_cppRef);
 }
 
 + (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef
 {
-    djinni::DbxCppWrapperCache<TestHelpers> & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
-    return cache.get(cppRef, [] (const std::shared_ptr<TestHelpers> & p) { return [[DBTestHelpersCppProxy alloc] initWithCpp:p]; });
+    const auto & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
+    return cache->get(cppRef, [&] (const std::shared_ptr<TestHelpers> & p) { return [[DBTestHelpersCppProxy alloc] initWithCpp:p cache:cache]; });
 }
 
 + (DBSetRecord *)getSetRecord {

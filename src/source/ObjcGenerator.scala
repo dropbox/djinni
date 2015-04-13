@@ -264,26 +264,30 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeObjcFile(bodyName(cppExtName), origin, refs.body, w => {
         w.wl(s"static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");" )
         w.wl
+        w.wl(s"@interface $cppExtSelf ()")
+        w.wl(s"@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> cache;")
+        w.wl("@end")
+        w.wl
         w.wl(s"@implementation $cppExtSelf")
         w.wl
-        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef")
+        w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppName> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<$cppName>> &)cache")
         w.braced {
           w.w("if (self = [super init])").braced {
             w.wl("_cppRef = cppRef;")
+            w.wl("_cache = cache;")
           }
           w.wl("return self;")
         }
         w.wl
         w.wl(s"- (void)dealloc")
         w.braced {
-          w.wl(s"djinni::DbxCppWrapperCache<$cppName> & cache = djinni::DbxCppWrapperCache<$cppName>::getInstance();")
-          w.wl("cache.remove(_cppRef);")
+          w.wl("_cache->remove(_cppRef);")
         }
         w.wl
         w.wl(s"+ (id)${idObjc.method(ident.name + "_with_cpp")}:(const std::shared_ptr<$cppName> &)cppRef")
         w.braced {
-          w.wl(s"djinni::DbxCppWrapperCache<$cppName> & cache = djinni::DbxCppWrapperCache<$cppName>::getInstance();")
-          w.wl(s"return cache.get(cppRef, [] (const std::shared_ptr<$cppName> & p) { return [[$cppExtSelf alloc] initWithCpp:p]; });")
+          w.wl(s"const auto & cache = djinni::DbxCppWrapperCache<$cppName>::getInstance();")
+          w.wl(s"return cache->get(cppRef, [&] (const std::shared_ptr<$cppName> & p) { return [[$cppExtSelf alloc] initWithCpp:p cache:cache]; });")
          }
         for (m <- i.methods) {
           w.wl
@@ -321,7 +325,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
           w.wl(s"class $objcExtSelf final : public ${withNs(spec.cppNamespace, idCpp.ty(ident))}").bracedSemi {
             w.wl("public:")
-            w.wl(s"id <$self> objcRef;")
+            w.wl(s"const id <$self> _objcRef;")
+            w.wl(s"const std::shared_ptr<djinni::DbxObjcWrapperCache<$objcExtSelf>> _cache;")
+            w.wl
             w.wl(s"explicit $objcExtSelf (id objcRef);")
             w.wl(s"virtual ~$objcExtSelf () override;")
             w.wl(s"static std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}> ${idCpp.method(ident.name + "_with_objc")} (id objcRef);")
@@ -336,19 +342,17 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
       writeObjcFile(bodyName(objcExtName), origin, refs.body, w => {
         wrapNamespace(w, Some(spec.objcppNamespace), (w: IndentWriter) => {
-          w.wl(s"$objcExtSelf::$objcExtSelf (id objcRef)").braced {
-            w.wl(s"assert([[objcRef class] conformsToProtocol:@protocol($self)]);")
-            w.wl("this->objcRef = objcRef;")
-          }
+          w.wl(s"$objcExtSelf::$objcExtSelf (id objcRef)")
+          w.wl(s"    : _objcRef((assert([[objcRef class] conformsToProtocol:@protocol($self)]), objcRef)),")
+          w.wl(s"      _cache(djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance())")
+          w.wl(s"    {}")
           w.wl
           w.wl(s"$objcExtSelf::~$objcExtSelf ()").braced {
-            w.wl(s"djinni::DbxObjcWrapperCache<$objcExtSelf> & cache = djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance();")
-            w.wl(s"cache.remove(objcRef);")
+            w.wl(s"_cache->remove(_objcRef);")
           }
           w.wl
           w.wl(s"std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident))}> $objcExtSelf::${idCpp.method(ident.name + "_with_objc")} (id objcRef)").braced {
-            w.wl(s"djinni::DbxObjcWrapperCache<$objcExtSelf> & cache = djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance();")
-            w.wl(s"return static_cast<std::shared_ptr<${withNs(spec.cppNamespace, idCpp.ty(ident.name))}>>(cache.get(objcRef));")
+            w.wl(s"return djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objcRef);")
           }
           for (m <- i.methods) {
             w.wl
@@ -359,7 +363,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 m.params.foreach(p =>
                   translateCppTypeToObjc(idCpp.local("cpp_" + p.ident.name), idCpp.local(p.ident), p.ty, true, w))
                 m.ret.fold()(r => w.w(toObjcTypeDef(r) + "objcRet = "))
-                w.w("[objcRef " + idObjc.method(m.ident))
+                w.w("[_objcRef " + idObjc.method(m.ident))
                 val skipFirst = SkipFirst()
                 for (p <- m.params) {
                   skipFirst { w.w(" " + idObjc.local(p.ident)) }

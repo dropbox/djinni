@@ -12,7 +12,9 @@ namespace djinni_generated {
 class TextboxListenerObjcProxy final : public ::textsort::TextboxListener
 {
     public:
-    id <TXSTextboxListener> objcRef;
+    const id <TXSTextboxListener> _objcRef;
+    const std::shared_ptr<djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>> _cache;
+
     explicit TextboxListenerObjcProxy (id objcRef);
     virtual ~TextboxListenerObjcProxy () override;
     static std::shared_ptr<::textsort::TextboxListener> textbox_listener_with_objc (id objcRef);

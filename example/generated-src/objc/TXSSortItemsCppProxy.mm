@@ -16,26 +16,30 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
+@interface TXSSortItemsCppProxy ()
+@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<::textsort::SortItems>> cache;
+@end
+
 @implementation TXSSortItemsCppProxy
 
-- (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef
+- (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<::textsort::SortItems>> &)cache
 {
     if (self = [super init]) {
         _cppRef = cppRef;
+        _cache = cache;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    djinni::DbxCppWrapperCache<::textsort::SortItems> & cache = djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance();
-    cache.remove(_cppRef);
+    _cache->remove(_cppRef);
 }
 
 + (id)sortItemsWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef
 {
-    djinni::DbxCppWrapperCache<::textsort::SortItems> & cache = djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance();
-    return cache.get(cppRef, [] (const std::shared_ptr<::textsort::SortItems> & p) { return [[TXSSortItemsCppProxy alloc] initWithCpp:p]; });
+    const auto & cache = djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance();
+    return cache->get(cppRef, [&] (const std::shared_ptr<::textsort::SortItems> & p) { return [[TXSSortItemsCppProxy alloc] initWithCpp:p cache:cache]; });
 }
 
 - (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
