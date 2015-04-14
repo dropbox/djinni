@@ -20,6 +20,12 @@
 
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
 
+#ifdef _MSC_VER // weak attribute not supported by MSVC
+#define DJINNI_WEAK_DEFINITION
+#else
+#define DJINNI_WEAK_DEFINITION __attribute__((weak))
+#endif
+
 namespace djinni {
 
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
@@ -32,7 +38,11 @@ void jniInit(JavaVM * jvm) {
         for (const auto & kv : JniClassInitializer::Registration::get_all()) {
             kv.second->init();
         }
-    } catch (const jni_exception_pending &) {}
+    } catch (const std::exception & e) {
+        // Default exception handling only, since non-default might not be safe if init
+        // is incomplete.
+        jniDefaultSetPendingFromCurrent(jniGetThreadEnv(), __func__);
+    }
 }
 
 void jniShutdown() {
@@ -89,13 +99,26 @@ void LocalRefDeleter::operator() (jobject localRef) noexcept {
     }
 }
 
+void jni_exception::set_as_pending(JNIEnv * env) const noexcept {
+    assert(env);
+    env->Throw(java_exception());
+}
+
+
 void jniExceptionCheck(JNIEnv * env) {
     if (!env) {
         abort();
     }
-    if (env->ExceptionCheck()) {
-        throw jni_exception_pending();
+    const LocalRef<jthrowable> e(env->ExceptionOccurred());
+    if (e) {
+        env->ExceptionClear();
+        jniThrowCppFromJavaException(env, e.get());
     }
+}
+
+DJINNI_WEAK_DEFINITION __attribute__((noreturn))
+void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception) {
+    throw jni_exception { env, java_exception };
 }
 
 namespace { // anonymous namespace to guard the struct below
@@ -141,13 +164,18 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
     snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
 #endif
 
-    jclass cassert = env->FindClass("java/lang/AssertionError");
+    const jclass cassert = env->FindClass("java/lang/Error");
     assert(cassert);
     env->ThrowNew(cassert, buf);
     assert(env->ExceptionCheck());
+    const jthrowable e = env->ExceptionOccurred();
+    assert(e);
+    env->ExceptionClear();
 
     env->DeleteLocalRef(cassert);
-    throw jni_exception_pending {};
+    env->DeleteLocalRef(e);
+
+    jniThrowCppFromJavaException(env, e);
 }
 
 GlobalRef<jclass> jniFindClass(const char * name) {
@@ -416,19 +444,24 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
     return out;
 }
 
-#ifdef _MSC_VER
-  // weak attribute not supported by MSVC
-#else
-  __attribute__((weak))
-#endif
-void jniSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
+DJINNI_WEAK_DEFINITION
+void jniSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept {
+    jniDefaultSetPendingFromCurrent(env, ctx);
+}
+
+void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
+    assert(env);
     try {
         throw;
-    } catch (const jni_exception_pending &) {
+    } catch (const jni_exception & e) {
+        e.set_as_pending(env);
         return;
     } catch (const std::exception & e) {
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), e.what());
     }
+
+    // noexcept will call terminate() for anything not caught above (i.e.
+    // exceptions which aren't std::exception subclasses).
 }
 
 struct JavaProxyCacheState {
