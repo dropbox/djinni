@@ -26,8 +26,10 @@ namespace djinni {
 template <class T>
 class DbxCppWrapperCache {
 public:
-    static DbxCppWrapperCache & getInstance() {
-        static DbxCppWrapperCache instance;
+    static const std::shared_ptr<DbxCppWrapperCache> & getInstance() {
+        static const std::shared_ptr<DbxCppWrapperCache> instance(new DbxCppWrapperCache);
+        // Return by const-ref. This is safe to call any time except during static destruction.
+        // Returning by reference lets us avoid touching the refcount unless needed.
         return instance;
     }
 
