@@ -64,13 +64,13 @@ public:
 		~Handle()
 		{
 			if(_obj)
-				getInstance().remove(_obj);
+				_cache->remove(_obj);
 		}
-		void assign(id obj) { _obj = obj; }
 		id get() const noexcept { return _obj; }
 		
 	private:
-		id _obj;
+		const std::shared_ptr<DbxObjcWrapperCache> _cache = getInstance();
+		const id _obj;
 	};
 	
 

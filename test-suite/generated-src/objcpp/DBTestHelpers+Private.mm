@@ -35,7 +35,7 @@ auto TestHelpers::toCpp(ObjcType objc) -> CppType
 
 auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::djinni_generated::TestHelpers>::getInstance().get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::djinni_generated::TestHelpers>::getInstance()->get(cpp, [] (const auto& p)
     {
         return [[DBTestHelpers alloc] initWithCpp:p];
     });

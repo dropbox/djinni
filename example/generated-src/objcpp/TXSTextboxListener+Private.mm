@@ -26,7 +26,7 @@ public:
 
 auto TextboxListener::toCpp(ObjcType objc) -> CppType
 {
-    return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance().get(objc) : nullptr;
+    return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;
 }
 
 auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType

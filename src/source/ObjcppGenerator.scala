@@ -131,7 +131,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
           w.braced {
-            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance().get(cpp, [] (const auto& p)").bracedEnd(");") {
+            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const auto& p)").bracedEnd(");") {
               w.wl(s"return [[$self alloc] initWithCpp:p];")
             }
           }
@@ -142,7 +142,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef")
         w.braced {
           w.w("if (self = [super init])").braced {
-            w.wl("_cppRef.assign(cppRef);") // Using operator= here deadlocks in DbxWrapperCache::remove()
+            w.wl("_cppRef.assign(cppRef);")
           }
           w.wl("return self;")
         }
@@ -195,7 +195,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
-            w.wl(s"return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance().get(objc) : nullptr;")
+            w.wl(s"return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;")
           }
           w.wl
           w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
