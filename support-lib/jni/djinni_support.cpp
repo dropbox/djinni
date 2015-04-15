@@ -17,6 +17,7 @@
 #include "djinni_support.hpp"
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
 
