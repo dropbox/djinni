@@ -3,14 +3,14 @@
 
 #import <XCTest/XCTest.h>
 
-static RecordWithDerivings record1(1, "String1");
-static RecordWithDerivings record1A(1, "String1");
-static RecordWithDerivings record2(1, "String2");
-static RecordWithDerivings record3(2, "String1");
+static djinni_generated::RecordWithDerivings record1(1, "String1");
+static djinni_generated::RecordWithDerivings record1A(1, "String1");
+static djinni_generated::RecordWithDerivings record2(1, "String2");
+static djinni_generated::RecordWithDerivings record3(2, "String1");
 
-static RecordWithNestedDerivings nestedRecord1(1, record1);
-static RecordWithNestedDerivings nestedRecord1A(1, record1A);
-static RecordWithNestedDerivings nestedRecord2(1, record2);
+static djinni_generated::RecordWithNestedDerivings nestedRecord1(1, record1);
+static djinni_generated::RecordWithNestedDerivings nestedRecord1A(1, record1A);
+static djinni_generated::RecordWithNestedDerivings nestedRecord2(1, record2);
 
 @interface DBRecordWithDerivingsCppTests : XCTestCase
 

@@ -3,11 +3,11 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBMapRecord : NSObject
 - (id)initWithMapRecord:(DBMapRecord *)mapRecord;
 - (id)initWithMap:(NSDictionary *)map;
 
-@property (nonatomic, readonly) NSDictionary *map;
+@property (nonatomic, readonly) NSDictionary * map;
 
 @end
+

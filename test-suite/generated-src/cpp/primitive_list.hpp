@@ -7,13 +7,15 @@
 #include <utility>
 #include <vector>
 
-struct PrimitiveList final {
+namespace djinni_generated {
 
+struct PrimitiveList final
+{
     std::vector<int64_t> list;
 
-
-    PrimitiveList(
-            std::vector<int64_t> list) :
-                list(std::move(list)) {
-    }
+    PrimitiveList(std::vector<int64_t> list)
+    : list(std::move(list))
+    {}
 };
+
+}  // namespace djinni_generated

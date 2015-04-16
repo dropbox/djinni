@@ -7,23 +7,27 @@
 #include <cstdint>
 #include <utility>
 
-struct RecordWithNestedDerivings final {
+namespace djinni_generated {
 
+struct RecordWithNestedDerivings final
+{
     int32_t key;
-
     RecordWithDerivings rec;
 
-    bool operator==(const RecordWithNestedDerivings & other) const;
-    bool operator!=(const RecordWithNestedDerivings & other) const;
-    bool operator<(const RecordWithNestedDerivings & other) const;
-    bool operator>(const RecordWithNestedDerivings & other) const;
-    bool operator<=(const RecordWithNestedDerivings & other) const;
-    bool operator>=(const RecordWithNestedDerivings & other) const;
+    friend bool operator==(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    friend bool operator!=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
 
-    RecordWithNestedDerivings(
-            int32_t key,
-            RecordWithDerivings rec) :
-                key(std::move(key)),
-                rec(std::move(rec)) {
-    }
+    friend bool operator<(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    friend bool operator>(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+
+    friend bool operator<=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    friend bool operator>=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+
+    RecordWithNestedDerivings(int32_t key,
+                              RecordWithDerivings rec)
+    : key(std::move(key))
+    , rec(std::move(rec))
+    {}
 };
+
+}  // namespace djinni_generated

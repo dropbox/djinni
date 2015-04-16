@@ -3,11 +3,11 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBDateRecord : NSObject
 - (id)initWithDateRecord:(DBDateRecord *)dateRecord;
 - (id)initWithCreatedAt:(NSDate *)createdAt;
 
-@property (nonatomic, readonly) NSDate *createdAt;
+@property (nonatomic, readonly) NSDate * createdAt;
 
 @end
+

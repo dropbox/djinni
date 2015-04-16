@@ -46,20 +46,24 @@ package object generatorTools {
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
                    jniIncludeCppPrefix: String,
-                   jniNamespace: String = "dropboxsync",
+                   jniNamespace: String,
                    jniClassIdentStyle: IdentConverter,
                    jniFileIdentStyle: IdentConverter,
                    jniBaseLibIncludePrefix: String,
                    cppExt: String,
                    cppHeaderExt: String,
                    objcOutFolder: Option[File],
+                   objcppOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,
                    objcFileIdentStyle: IdentConverter,
-                   objcExt: String,
+                   objcppExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
-                   objcIncludeCppPrefix: String,
-                   objcppNamespace: String)
+                   objcppIncludePrefix: String,
+                   objcppIncludeCppPrefix: String,
+                   objcppIncludeObjcPrefix: String,
+                   objcppNamespace: String,
+                   objcBaseLibIncludePrefix: String)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -163,8 +167,12 @@ package object generatorTools {
         new JNIGenerator(spec).generate(idl)
       }
       if (spec.objcOutFolder.isDefined) {
-        createFolder("Objective-C[++]", spec.objcOutFolder.get)
+        createFolder("Objective-C", spec.objcOutFolder.get)
         new ObjcGenerator(spec).generate(idl)
+      }
+      if (spec.objcppOutFolder.isDefined) {
+        createFolder("Objective-C++", spec.objcppOutFolder.get)
+        new ObjcppGenerator(spec).generate(idl)
       }
       None
     }
@@ -172,6 +180,10 @@ package object generatorTools {
       case GenerateException(message) => Some(message)
     }
   }
+
+  sealed abstract class SymbolReference
+  case class ImportRef(arg: String) extends SymbolReference // Already contains <> or "" in C contexts
+  case class DeclRef(decl: String, namespace: Option[String]) extends SymbolReference
 }
 
 abstract class Generator(spec: Spec)
@@ -276,56 +288,31 @@ abstract class Generator(spec: Spec)
   // --------------------------------------------------------------------------
   // Render type expression
 
-  def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
-  def toCppType(tm: MExpr, namespace: Option[String]): String = {
-    def base(m: Meta): String = m match {
-      case p: MPrimitive => p.cName
-      case MString => "std::string"
-      case MDate => "std::chrono::system_clock::time_point"
-      case MBinary => "std::vector<uint8_t>"
-      case MOptional => spec.cppOptionalTemplate
-      case MList => "std::vector"
-      case MSet => "std::unordered_set"
-      case MMap => "std::unordered_map"
-      case d: MDef =>
-        d.defType match {
-          case DEnum => withNs(namespace, idCpp.enumType(d.name))
-          case DRecord => withNs(namespace, idCpp.ty(d.name))
-          case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
-        }
-      case p: MParam => idCpp.typeParam(p.name)
-    }
-    def expr(tm: MExpr): String = {
-      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
-      base(tm.base) + args
-    }
-    expr(tm)
-  }
-
-  // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
-  def toCppParamType(f: Field): String = toCppParamType(f, None, "")
-  def toCppParamType(f: Field, namespace: Option[String] = None, prefix: String = ""): String = {
-    val cppType = toCppType(f.ty, namespace)
-    val localName = prefix + idCpp.local(f.ident);
-    val refType = "const " + cppType + " & " + localName
-    val valueType = cppType + " " + localName
-
-    def toType(expr: MExpr): String = expr.base match {
-      case MPrimitive(_,_,_,_,_,_,_,_) => valueType
-      case MDate => valueType
-      case d: MDef => d.defType match {
-        case DEnum => valueType
-        case _  => refType
-      }
-      case MOptional => toType(expr.args.head)
-      case _ => refType
-    }
-    toType(f.ty.resolved)
-  }
-
   def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::"+_+"::"+t)
 
-  def withPackage(packageName: Option[String], t: String) = packageName.fold(t)(_+"."+t)
+  def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], delim: String, end: String, f: Field => String): IndentWriter = {
+    w.w(call)
+    val skipFirst = new SkipFirst
+    params.foreach(p => {
+      skipFirst { w.wl(delim); w.w(" " * call.length()) }
+      w.w(f(p))
+    })
+    w.w(end)
+  }
+
+  def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => String): IndentWriter =
+    writeAlignedCall(w, call, params, ",", end, f)
+
+  def writeAlignedObjcCall(w: IndentWriter, call: String, params: Seq[Field], end: String, f: Field => (String, String)) = {
+    w.w(call)
+    val skipFirst = new SkipFirst
+    params.foreach(p => {
+      val (name, value) = f(p)
+      skipFirst { w.wl; w.w(" " * math.max(0, call.length() - name.length)); w.w(name)  }
+      w.w(":" + value)
+    })
+    w.w(end)
+  }
 
   // --------------------------------------------------------------------------
 

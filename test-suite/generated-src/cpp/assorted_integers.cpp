@@ -3,18 +3,24 @@
 
 #include "assorted_integers.hpp"  // my header
 
+namespace djinni_generated {
 
-bool AssortedIntegers::operator==(const AssortedIntegers & other) const {
-    return eight == other.eight &&
-        sixteen == other.sixteen &&
-        thirtytwo == other.thirtytwo &&
-        sixtyfour == other.sixtyfour &&
-        o_eight == other.o_eight &&
-        o_sixteen == other.o_sixteen &&
-        o_thirtytwo == other.o_thirtytwo &&
-        o_sixtyfour == other.o_sixtyfour;
+
+bool operator==(const AssortedIntegers& lhs, const AssortedIntegers& rhs)
+{
+    return lhs.eight == rhs.eight &&
+           lhs.sixteen == rhs.sixteen &&
+           lhs.thirtytwo == rhs.thirtytwo &&
+           lhs.sixtyfour == rhs.sixtyfour &&
+           lhs.o_eight == rhs.o_eight &&
+           lhs.o_sixteen == rhs.o_sixteen &&
+           lhs.o_thirtytwo == rhs.o_thirtytwo &&
+           lhs.o_sixtyfour == rhs.o_sixtyfour;
 }
 
-bool AssortedIntegers::operator!=(const AssortedIntegers & other) const {
-    return !(*this == other);
+bool operator!=(const AssortedIntegers& lhs, const AssortedIntegers& rhs)
+{
+    return !(lhs == rhs);
 }
+
+}  // namespace djinni_generated

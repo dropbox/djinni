@@ -35,7 +35,6 @@ object Main {
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
     var javaAnnotation: Option[String] = None
-    var objcOutFolder: Option[File] = None
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
     var jniNamespace: String = "djinni_generated"
@@ -51,14 +50,19 @@ object Main {
     var javaIdentStyle = IdentStyle.javaDefault
     var cppIdentStyle = IdentStyle.cppDefault
     var cppTypeEnumIdentStyle: IdentConverter = null
-    var objcExt: String = "mm"
+    var objcOutFolder: Option[File] = None
+    var objcppOutFolder: Option[File] = None
+    var objcppExt: String = "mm"
     var objcHeaderExt: String = "h"
     var objcIdentStyle = IdentStyle.objcDefault
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
-    var objcIncludeCppPrefix: String = ""
+    var objcppIncludePrefix: String = ""
+    var objcppIncludeCppPrefix: String = ""
+    var objcppIncludeObjcPrefixOptional: Option[String] = None
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
-    var objcppNamespace: String = "dropboxsync"
+    var objcppNamespace: String = "djinni_generated"
+    var objcBaseLibIncludePrefix: String = ""
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -119,18 +123,27 @@ object Main {
       note("")
       opt[File]("objc-out").valueName("<out-folder>").foreach(x => objcOutFolder = Some(x))
         .text("The output folder for Objective-C files (Generator disabled if unspecified).")
-      opt[String]("objc-ext").valueName("<ext>").foreach(objcExt = _)
-        .text("The filename extension for Objective-C files (default: \"mm\")")
       opt[String]("objc-h-ext").valueName("<ext>").foreach(objcHeaderExt = _)
-        .text("The filename extension for Objective-C header files (default: \"h\")")
+        .text("The filename extension for Objective-C[++] header files (default: \"h\")")
       opt[String]("objc-type-prefix").valueName("<pre>").foreach(objcTypePrefix = _)
         .text("The prefix for Objective-C data types (usually two or three letters)")
       opt[String]("objc-include-prefix").valueName("<prefix>").foreach(objcIncludePrefix = _)
         .text("The prefix for #import of header files from Objective-C files.")
-      opt[String]("objc-include-cpp-prefix").valueName("<prefix>").foreach(objcIncludeCppPrefix = _)
-        .text("The prefix for #include of the main header files from Objective-C files.")
+      note("")
+      opt[File]("objcpp-out").valueName("<out-folder>").foreach(x => objcppOutFolder = Some(x))
+        .text("The output folder for private Objective-C++ files (Generator disabled if unspecified).")
+      opt[String]("objcpp-ext").valueName("<ext>").foreach(objcppExt = _)
+        .text("The filename extension for Objective-C++ files (default: \"mm\")")
+      opt[String]("objcpp-include-prefix").valueName("<prefix>").foreach(objcppIncludePrefix = _)
+        .text("The prefix for #import of Objective-C++ header files from Objective-C++ files.")
+      opt[String]("objcpp-include-cpp-prefix").valueName("<prefix>").foreach(objcppIncludeCppPrefix = _)
+        .text("The prefix for #include of the main C++ header files from Objective-C++ files.")
+      opt[String]("objcpp-include-objc-prefix").valueName("<prefix>").foreach(x => objcppIncludeObjcPrefixOptional = Some(x))
+        .text("The prefix for #import of the Objective-C header files from Objective-C++ files (default: the same as --objcpp-include-prefix)")
       opt[String]("objcpp-namespace").valueName("<prefix>").foreach(objcppNamespace = _)
-        .text("Namespace for C++ objects defined in Objective-C++, such as wrapper caches")
+        .text("The namespace name to use for generated Objective-C++ classes.")
+      opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
+        .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -165,6 +178,7 @@ object Main {
     val jniBaseLibClassIdentStyle = jniBaseLibClassIdentStyleOptional.getOrElse(jniClassIdentStyle)
     val jniFileIdentStyle = jniFileIdentStyleOptional.getOrElse(cppFileIdentStyle)
     var objcFileIdentStyle = objcFileIdentStyleOptional.getOrElse(objcIdentStyle.ty)
+    val objcppIncludeObjcPrefix = objcppIncludeObjcPrefixOptional.getOrElse(objcppIncludePrefix)
 
     // Add ObjC prefix to identstyle
     objcIdentStyle = objcIdentStyle.copy(ty = IdentStyle.prefix(objcTypePrefix,objcIdentStyle.ty))
@@ -220,13 +234,17 @@ object Main {
       cppExt,
       cppHeaderExt,
       objcOutFolder,
+      objcppOutFolder,
       objcIdentStyle,
       objcFileIdentStyle,
-      objcExt,
+      objcppExt,
       objcHeaderExt,
       objcIncludePrefix,
-      objcIncludeCppPrefix,
-      objcppNamespace)
+      objcppIncludePrefix,
+      objcppIncludeCppPrefix,
+      objcppIncludeObjcPrefix,
+      objcppNamespace,
+      objcBaseLibIncludePrefix)
 
     System.out.println("Generating...")
     val r = generate(idl, outSpec)

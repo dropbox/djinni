@@ -1,8 +1,8 @@
-#import <XCTest/XCTest.h>
 #import "DBDateRecord+Private.h"
 #include <chrono>
 #include <thread>
 #include "date_record.hpp"
+#import <XCTest/XCTest.h>
 
 @interface DBDateRecordTests : XCTestCase
 
@@ -37,11 +37,11 @@
 {
     NSDate *now = [NSDate date];
     DBDateRecord *date1 = [[DBDateRecord alloc] initWithCreatedAt:now];
-    const auto cpp_date1 = [date1 cppDateRecord];
-    DBDateRecord *date2 = [[DBDateRecord alloc] initWithCppDateRecord:cpp_date1];
-    const auto cpp_date2 = [date2 cppDateRecord];
-    DBDateRecord *date3 = [[DBDateRecord alloc] initWithCppDateRecord:cpp_date2];
-    const auto cpp_date3 = [date3 cppDateRecord];
+	const auto cpp_date1 = djinni_generated::objc::DateRecord::toCpp(date1);
+    DBDateRecord *date2 = djinni_generated::objc::DateRecord::fromCpp(cpp_date1);
+    const auto cpp_date2 = djinni_generated::objc::DateRecord::toCpp(date2);
+    DBDateRecord *date3 = djinni_generated::objc::DateRecord::fromCpp(cpp_date2);
+    const auto cpp_date3 = djinni_generated::objc::DateRecord::toCpp(date3);
     const bool cpp_is_equal = cpp_date1.created_at == cpp_date2.created_at && cpp_date2.created_at == cpp_date3.created_at;
     // cpp is a integer representation (with less precision than NSDate), so direct comparison will work
     XCTAssertTrue(cpp_is_equal);
@@ -58,10 +58,11 @@
 - (void)testCppRoundTrip
 {
     const auto now = std::chrono::system_clock::now();
-    DateRecord cpp_date_now(now);
-    DBDateRecord *objcDate = [[DBDateRecord alloc] initWithCppDateRecord:cpp_date_now];
-    const auto boomerang_cpp_date = [objcDate cppDateRecord];
+    djinni_generated::DateRecord cpp_date_now(now);
+    DBDateRecord *objcDate = djinni_generated::objc::DateRecord::fromCpp(cpp_date_now);
+    const auto boomerang_cpp_date = djinni_generated::objc::DateRecord::toCpp(objcDate);
     XCTAssertTrue(now == boomerang_cpp_date.created_at);
 }
 
 @end
+

@@ -22,6 +22,7 @@ in="$base_dir/example.djinni"
 cpp_out="$base_dir/generated-src/cpp"
 jni_out="$base_dir/generated-src/jni"
 objc_out="$base_dir/generated-src/objc"
+objcpp_out="$base_dir/generated-src/objcpp"
 java_out="$base_dir/generated-src/java/com/dropbox/textsort"
 
 java_package="com.dropbox.textsort"
@@ -66,6 +67,8 @@ $base_dir/../src/run-assume-built \
     --objc-out "$temp_out/objc" \
     --objcpp-namespace djinni_generated \
     --objc-type-prefix TXS \
+	\
+	--objcpp-out "$temp_out/objcpp" \
     \
     --idl "$in"
 
@@ -84,6 +87,7 @@ mirror "cpp" "$temp_out/cpp" "$cpp_out"
 mirror "java" "$temp_out/java" "$java_out"
 mirror "jni" "$temp_out/jni" "$jni_out"
 mirror "objc" "$temp_out/objc" "$objc_out"
+mirror "objcpp" "$temp_out/objcpp" "$objcpp_out"
 
 date > "$gen_stamp"
 

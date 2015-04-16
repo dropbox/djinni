@@ -3,11 +3,11 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBNestedCollection : NSObject
 - (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection;
 - (id)initWithSetList:(NSArray *)setList;
 
-@property (nonatomic, readonly) NSArray *setList;
+@property (nonatomic, readonly) NSArray * setList;
 
 @end
+

@@ -158,18 +158,23 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 ##### Includes & Build Target
 Generated file for Objective-C / C++ is as follows (assuming prefix is `DB`):
 
-| Type           | C++ header             | C++ source                 | Objective-C header               | Objective-C source        |
-|----------------|------------------------|----------------------------|----------------------------------|---------------------------|
-| Enum           | my\_enum.hpp           |                            | DBMyEnum.h                       | DBMyEnumTranslator.mm     |
-|                |                        |                            | DBMyEnumTranslator+Private.h     |                           |
-| Record         | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h               | DBMyRecord[Base].mm       |
-|                |                        |                            | DBMyRecord[Base]+Private.h       |                           |
-| Interface `+c` | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h                  | DBMyInterfaceCppProxy.mm  |
-|                |                        |                            | DBMyInterfaceCppProxy+Private.h  |                           |
-| Interface `+o` | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h                  | DBMyInterfaceObjcProxy.mm |
-|                |                        |                            | DBMyInterfaceObjcProxy+Private.h |                           |
+| Type           | C++ header             | C++ source                 | Objective-C header                         | Objective-C source                  |
+|----------------|------------------------|----------------------------|--------------------------------------------|-------------------------------------|
+| Enum           | my\_enum.hpp           |                            | ` public/`DBMyEnum.h                       | `private/`DBMyEnumTranslator.mm     |
+|                |                        |                            | `private/`DBMyEnumTranslator+Private.h     |                                     |
+| Record         | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | ` public/`DBMyRecord[Base].h               | `private/`DBMyRecord[Base].mm       |
+|                |                        |                            | `private/`DBMyRecord[Base]+Private.h       |                                     |
+| Interface `+c` | my\_interface.hpp      | my\_interface.cpp (+)      | ` public/`DBMyInterface.h                  | `private/`DBMyInterfaceCppProxy.mm  |
+|                |                        |                            | ` public/`DBMyInterfaceCppProxy.h          |                                     |
+|                |                        |                            | `private/`DBMyInterfaceCppProxy+Private.h  |                                     |
+| Interface `+o` | my\_interface.hpp      | my\_interface.cpp (+)      | ` public/`DBMyInterface.h                  | `private/`DBMyInterfaceObjcProxy.mm |
+|                |                        |                            | `private/`DBMyInterfaceObjcProxy+Private.h |                                     |
 
 (+) Generated only for types that contain constants.
+
+The folders `public` and `private` correspond to the options `--objc-out` and `--objc-private-out`
+respecitvely, allowing you to isolate implementation headers and sources from the public files
+exposed to Objective-C clients.
 
 Add all generated files to your build target, as well as the contents of `support-lib/objc`.
 Note that `+Private` headers can only be used with ObjC++ source (other headers are pure ObjC).

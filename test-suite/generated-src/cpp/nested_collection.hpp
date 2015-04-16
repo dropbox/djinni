@@ -8,13 +8,15 @@
 #include <utility>
 #include <vector>
 
-struct NestedCollection final {
+namespace djinni_generated {
 
+struct NestedCollection final
+{
     std::vector<std::unordered_set<std::string>> set_list;
 
-
-    NestedCollection(
-            std::vector<std::unordered_set<std::string>> set_list) :
-                set_list(std::move(set_list)) {
-    }
+    NestedCollection(std::vector<std::unordered_set<std::string>> set_list)
+    : set_list(std::move(set_list))
+    {}
 };
+
+}  // namespace djinni_generated

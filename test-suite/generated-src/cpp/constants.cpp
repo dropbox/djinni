@@ -3,6 +3,8 @@
 
 #include "constants.hpp"  // my header
 
+namespace djinni_generated {
+
 const bool Constants::BOOL_CONSTANT = true;
 
 const int8_t Constants::I8_CONSTANT = 1;
@@ -22,3 +24,5 @@ const std::experimental::optional<int32_t> Constants::OPTIONAL_INTEGER_CONSTANT 
 const Constants Constants::OBJECT_CONSTANT = Constants(
     Constants::I32_CONSTANT /* some_integer */ ,
     Constants::STRING_CONSTANT /* some_string */ );
+
+}  // namespace djinni_generated
