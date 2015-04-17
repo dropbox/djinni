@@ -3,6 +3,6 @@
 
 package com.dropbox.textsort;
 
-public abstract class TextboxListener {
-    public abstract void update(ItemList items);
+public interface TextboxListener {
+    public void update(ItemList items);
 }

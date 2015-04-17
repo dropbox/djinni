@@ -145,7 +145,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public abstract class $javaClass$typeParamList").braced {
+      val isAbstractClass = i.ext.cpp || i.methods.exists(_.static) || i.consts.size > 0
+      val classPrefix = if (isAbstractClass) "abstract class" else "interface"
+      val methodPrefix = if (isAbstractClass) "abstract " else ""
+      w.w(s"public $classPrefix $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
         generateJavaConstants(w, i.consts)
 
@@ -155,7 +158,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           writeDoc(w, m.doc)
           val ret = m.ret.fold("void")(toJavaType(_))
           val params = m.params.map(p => toJavaType(p.ty) + " " + idJava.local(p.ident))
-          w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
+          w.wl(s"public $methodPrefix" + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }

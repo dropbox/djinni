@@ -3,7 +3,7 @@
 
 package com.dropbox.djinni.test;
 
-public abstract class ClientInterface {
+public interface ClientInterface {
     /** Returns record of given string */
-    public abstract ClientReturnedRecord getRecord(long recordId, String utf8string);
+    public ClientReturnedRecord getRecord(long recordId, String utf8string);
 }
