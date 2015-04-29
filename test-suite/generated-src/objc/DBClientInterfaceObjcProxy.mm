@@ -18,7 +18,7 @@ ClientInterfaceObjcProxy::~ClientInterfaceObjcProxy ()
     _cache->remove(_objcRef);
 }
 
-std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id objcRef)
+std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id<DBClientInterface> objcRef)
 {
     return djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance()->get(objcRef);
 }

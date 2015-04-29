@@ -44,7 +44,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef
 {
     const auto & cache = djinni::DbxCppWrapperCache<TestHelpers>::getInstance();
-    return cache->get(cppRef, [&] (const std::shared_ptr<TestHelpers> & p) { return [[DBTestHelpersCppProxy alloc] initWithCpp:p cache:cache]; });
+    return cache->get(cppRef, [&] (const std::shared_ptr<TestHelpers> & p) { return [[DBTestHelpers alloc] initWithCpp:p cache:cache]; });
 }
 
 + (DBSetRecord *)getSetRecord {

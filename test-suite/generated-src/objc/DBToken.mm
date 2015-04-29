@@ -35,7 +35,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (id)tokenWithCpp:(const std::shared_ptr<Token> &)cppRef
 {
     const auto & cache = djinni::DbxCppWrapperCache<Token>::getInstance();
-    return cache->get(cppRef, [&] (const std::shared_ptr<Token> & p) { return [[DBTokenCppProxy alloc] initWithCpp:p cache:cache]; });
+    return cache->get(cppRef, [&] (const std::shared_ptr<Token> & p) { return [[DBToken alloc] initWithCpp:p cache:cache]; });
 }
 
 @end

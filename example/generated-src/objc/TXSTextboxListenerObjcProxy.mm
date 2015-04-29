@@ -18,7 +18,7 @@ TextboxListenerObjcProxy::~TextboxListenerObjcProxy ()
     _cache->remove(_objcRef);
 }
 
-std::shared_ptr<::textsort::TextboxListener> TextboxListenerObjcProxy::textbox_listener_with_objc (id objcRef)
+std::shared_ptr<::textsort::TextboxListener> TextboxListenerObjcProxy::textbox_listener_with_objc (id<TXSTextboxListener> objcRef)
 {
     return djinni::DbxObjcWrapperCache<TextboxListenerObjcProxy>::getInstance()->get(objcRef);
 }

@@ -40,7 +40,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (id)sortItemsWithCpp:(const std::shared_ptr<::textsort::SortItems> &)cppRef
 {
     const auto & cache = djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance();
-    return cache->get(cppRef, [&] (const std::shared_ptr<::textsort::SortItems> & p) { return [[TXSSortItemsCppProxy alloc] initWithCpp:p cache:cache]; });
+    return cache->get(cppRef, [&] (const std::shared_ptr<::textsort::SortItems> & p) { return [[TXSSortItems alloc] initWithCpp:p cache:cache]; });
 }
 
 - (void)sort:(TXSSortOrder)order items:(TXSItemList *)items {
