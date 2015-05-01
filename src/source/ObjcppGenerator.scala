@@ -733,7 +733,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   case (true, true) => throw new AssertionError("Function implemented on both sides")
                   case (false, false) => throw new AssertionError("Function not implemented")
                   case (true, false) => w.wl(s"$objcType$objcIdent = [${idObjc.ty(d.name)} ${idObjc.method(d.name + "_with_cpp")}:$cppIdent];")
-                  case (false, true) => w.wl(s"$objcType$objcIdent = std::static_pointer_cast<$objcProxy>($cppIdent)->objcRef;")
+                  case (false, true) => w.wl(s"$objcType$objcIdent = std::static_pointer_cast<$objcProxy>($cppIdent)->_objcRef;")
                 }
             }
           }
