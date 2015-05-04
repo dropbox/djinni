@@ -8,8 +8,8 @@
 
 @interface DBTestHelpers ()
 
-@property (nonatomic, readonly) std::shared_ptr<TestHelpers> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::TestHelpers> cppRef;
 
-+ (id)testHelpersWithCpp:(const std::shared_ptr<TestHelpers> &)cppRef;
++ (id)testHelpersWithCpp:(const std::shared_ptr<::TestHelpers> &)cppRef;
 
 @end

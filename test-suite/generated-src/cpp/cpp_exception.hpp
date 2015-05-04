@@ -12,5 +12,5 @@ public:
 
     virtual int32_t throw_an_exception() = 0;
 
-    static std::shared_ptr<CppException> get();
+    static std::shared_ptr<::CppException> get();
 };

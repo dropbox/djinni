@@ -11,7 +11,7 @@ struct RecordWithNestedDerivings final {
 
     int32_t key;
 
-    RecordWithDerivings rec;
+    ::RecordWithDerivings rec;
 
     bool operator==(const RecordWithNestedDerivings & other) const;
     bool operator!=(const RecordWithNestedDerivings & other) const;
@@ -22,7 +22,7 @@ struct RecordWithNestedDerivings final {
 
     RecordWithNestedDerivings(
             int32_t key,
-            RecordWithDerivings rec) :
+            ::RecordWithDerivings rec) :
                 key(std::move(key)),
                 rec(std::move(rec)) {
     }

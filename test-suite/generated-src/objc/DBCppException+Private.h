@@ -8,8 +8,8 @@
 
 @interface DBCppException ()
 
-@property (nonatomic, readonly) std::shared_ptr<CppException> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::CppException> cppRef;
 
-+ (id)cppExceptionWithCpp:(const std::shared_ptr<CppException> &)cppRef;
++ (id)cppExceptionWithCpp:(const std::shared_ptr<::CppException> &)cppRef;
 
 @end

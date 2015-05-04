@@ -39,7 +39,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppMapRecord:(const MapRecord &)mapRecord
+- (id)initWithCppMapRecord:(const ::MapRecord &)mapRecord
 {
     if (self = [super init]) {
         std::vector<NSString *> _mapTempKeyVector;
@@ -57,7 +57,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (MapRecord)cppMapRecord
+- (::MapRecord)cppMapRecord
 {
     std::unordered_map<std::string, int64_t> map;
     for (id objcKey_0 in _map) {
@@ -65,7 +65,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp([_map objectForKey:objcKey_0]);
         map.emplace(std::move(cppKey_0), std::move(cppValue_0));
     }
-    return MapRecord(
+    return ::MapRecord(
             std::move(map));
 }
 

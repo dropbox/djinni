@@ -7,7 +7,7 @@
 
 @interface DBDateRecord ()
 
-- (id)initWithCppDateRecord:(const DateRecord &)dateRecord;
-- (DateRecord)cppDateRecord;
+- (id)initWithCppDateRecord:(const ::DateRecord &)dateRecord;
+- (::DateRecord)cppDateRecord;
 
 @end

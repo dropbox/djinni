@@ -54,7 +54,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppConstants:(const Constants &)constants
+- (id)initWithCppConstants:(const ::Constants &)constants
 {
     if (self = [super init]) {
         _someInteger = ::djinni::I32::fromCpp(constants.some_integer);
@@ -63,11 +63,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (Constants)cppConstants
+- (::Constants)cppConstants
 {
     int32_t someInteger = ::djinni::I32::toCpp(_someInteger);
     std::string someString = ::djinni::String::toCpp(_someString);
-    return Constants(
+    return ::Constants(
             std::move(someInteger),
             std::move(someString));
 }

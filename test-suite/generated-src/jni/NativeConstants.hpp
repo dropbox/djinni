@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeConstants final {
 public:
-    using CppType = Constants;
+    using CppType = ::Constants;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, Constants);
-    static Constants fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::Constants);
+    static ::Constants fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/Constants") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };

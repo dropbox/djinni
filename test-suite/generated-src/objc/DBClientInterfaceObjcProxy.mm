@@ -19,18 +19,18 @@ ClientInterfaceObjcProxy::~ClientInterfaceObjcProxy ()
     _cache->remove(_objcRef);
 }
 
-std::shared_ptr<ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id<DBClientInterface> objcRef)
+std::shared_ptr<::ClientInterface> ClientInterfaceObjcProxy::client_interface_with_objc (id<DBClientInterface> objcRef)
 {
     return djinni::DbxObjcWrapperCache<ClientInterfaceObjcProxy>::getInstance()->get(objcRef);
 }
 
-ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
+::ClientReturnedRecord ClientInterfaceObjcProxy::get_record (int64_t record_id, const std::string & utf8string)
 {
     @autoreleasepool {
         int64_t cpp_record_id = ::djinni::I64::fromCpp(record_id);
         NSString *cpp_utf8string = ::djinni::String::fromCpp(utf8string);
         DBClientReturnedRecord * objcRet = [_objcRef getRecord:cpp_record_id utf8string:cpp_utf8string];
-        ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
+        ::ClientReturnedRecord cppRet = std::move([objcRet cppClientReturnedRecord]);
         return cppRet;
     }
 }

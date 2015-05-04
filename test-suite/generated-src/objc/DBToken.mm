@@ -13,12 +13,12 @@
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
 @interface DBToken ()
-@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<Token>> cache;
+@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<::Token>> cache;
 @end
 
 @implementation DBToken
 
-- (id)initWithCpp:(const std::shared_ptr<Token> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<Token>> &)cache
+- (id)initWithCpp:(const std::shared_ptr<::Token> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<::Token>> &)cache
 {
     if (self = [super init]) {
         _cppRef = cppRef;
@@ -32,10 +32,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     _cache->remove(_cppRef);
 }
 
-+ (id)tokenWithCpp:(const std::shared_ptr<Token> &)cppRef
++ (id)tokenWithCpp:(const std::shared_ptr<::Token> &)cppRef
 {
-    const auto & cache = djinni::DbxCppWrapperCache<Token>::getInstance();
-    return cache->get(cppRef, [&] (const std::shared_ptr<Token> & p) { return [[DBToken alloc] initWithCpp:p cache:cache]; });
+    const auto & cache = djinni::DbxCppWrapperCache<::Token>::getInstance();
+    return cache->get(cppRef, [&] (const std::shared_ptr<::Token> & p) { return [[DBToken alloc] initWithCpp:p cache:cache]; });
 }
 
 @end

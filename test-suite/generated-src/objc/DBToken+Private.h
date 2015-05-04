@@ -8,8 +8,8 @@
 
 @interface DBToken ()
 
-@property (nonatomic, readonly) std::shared_ptr<Token> cppRef;
+@property (nonatomic, readonly) std::shared_ptr<::Token> cppRef;
 
-+ (id)tokenWithCpp:(const std::shared_ptr<Token> &)cppRef;
++ (id)tokenWithCpp:(const std::shared_ptr<::Token> &)cppRef;
 
 @end

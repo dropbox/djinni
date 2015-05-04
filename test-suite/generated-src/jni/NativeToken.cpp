@@ -5,7 +5,7 @@
 
 namespace djinni_generated {
 
-NativeToken::NativeToken() : djinni::JniInterface<Token, NativeToken>("com/dropbox/djinni/test/Token$CppProxy") {}
+NativeToken::NativeToken() : djinni::JniInterface<::Token, NativeToken>("com/dropbox/djinni/test/Token$CppProxy") {}
 
 NativeToken::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 using namespace ::djinni_generated;
@@ -14,7 +14,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_Token_00024CppProxy_nativeD
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<Token>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::Token>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

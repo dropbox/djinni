@@ -8,11 +8,11 @@
 
 namespace djinni_generated {
 
-NativeClientInterface::NativeClientInterface() : djinni::JniInterface<ClientInterface, NativeClientInterface>() {}
+NativeClientInterface::NativeClientInterface() : djinni::JniInterface<::ClientInterface, NativeClientInterface>() {}
 
 NativeClientInterface::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
 
-ClientReturnedRecord NativeClientInterface::JavaProxy::JavaProxy::get_record(int64_t c_record_id, const std::string & c_utf8string) {
+::ClientReturnedRecord NativeClientInterface::JavaProxy::JavaProxy::get_record(int64_t c_record_id, const std::string & c_utf8string) {
     JNIEnv * const jniEnv = djinni::jniGetThreadEnv();
     djinni::JniLocalScope jscope(jniEnv, 10);
     jlong j_record_id = ::djinni::HI64::Unboxed::toJava(jniEnv, c_record_id);

@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeAssortedIntegers final {
 public:
-    using CppType = AssortedIntegers;
+    using CppType = ::AssortedIntegers;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, AssortedIntegers);
-    static AssortedIntegers fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::AssortedIntegers);
+    static ::AssortedIntegers fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/AssortedIntegers") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(BSIJLjava/lang/Byte;Ljava/lang/Short;Ljava/lang/Integer;Ljava/lang/Long;)V") };

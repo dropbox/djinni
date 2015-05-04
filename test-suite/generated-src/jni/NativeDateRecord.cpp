@@ -6,7 +6,7 @@
 
 namespace djinni_generated {
 
-jobject NativeDateRecord::toJava(JNIEnv* jniEnv, DateRecord c) {
+jobject NativeDateRecord::toJava(JNIEnv* jniEnv, ::DateRecord c) {
     djinni::LocalRef<jobject> j_created_at(jniEnv, ::djinni::HDate::toJava(jniEnv, c.created_at));
     const auto & data = djinni::JniClass<::djinni_generated::NativeDateRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_created_at.get());
@@ -14,10 +14,10 @@ jobject NativeDateRecord::toJava(JNIEnv* jniEnv, DateRecord c) {
     return r;
 }
 
-DateRecord NativeDateRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+::DateRecord NativeDateRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeDateRecord>::get();
-    return DateRecord(
+    return ::DateRecord(
         ::djinni::HDate::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mCreatedAt)).get()));
 }
 

@@ -22,17 +22,17 @@ class TestHelpers {
 public:
     virtual ~TestHelpers() {}
 
-    static SetRecord get_set_record();
+    static ::SetRecord get_set_record();
 
-    static bool check_set_record(const SetRecord & rec);
+    static bool check_set_record(const ::SetRecord & rec);
 
-    static PrimitiveList get_primitive_list();
+    static ::PrimitiveList get_primitive_list();
 
-    static bool check_primitive_list(const PrimitiveList & pl);
+    static bool check_primitive_list(const ::PrimitiveList & pl);
 
-    static NestedCollection get_nested_collection();
+    static ::NestedCollection get_nested_collection();
 
-    static bool check_nested_collection(const NestedCollection & nc);
+    static bool check_nested_collection(const ::NestedCollection & nc);
 
     static std::unordered_map<std::string, int64_t> get_map();
 
@@ -42,26 +42,26 @@ public:
 
     static bool check_empty_map(const std::unordered_map<std::string, int64_t> & m);
 
-    static MapListRecord get_map_list_record();
+    static ::MapListRecord get_map_list_record();
 
-    static bool check_map_list_record(const MapListRecord & m);
+    static bool check_map_list_record(const ::MapListRecord & m);
 
-    static void check_client_interface_ascii(const std::shared_ptr<ClientInterface> & i);
+    static void check_client_interface_ascii(const std::shared_ptr<::ClientInterface> & i);
 
-    static void check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i);
+    static void check_client_interface_nonascii(const std::shared_ptr<::ClientInterface> & i);
 
-    static void check_enum_map(const std::unordered_map<color, std::string> & m);
+    static void check_enum_map(const std::unordered_map<::color, std::string> & m);
 
-    static std::shared_ptr<Token> token_id(const std::shared_ptr<Token> & t);
+    static std::shared_ptr<::Token> token_id(const std::shared_ptr<::Token> & t);
 
-    static std::shared_ptr<Token> create_cpp_token();
+    static std::shared_ptr<::Token> create_cpp_token();
 
-    static void check_cpp_token(const std::shared_ptr<Token> & t);
+    static void check_cpp_token(const std::shared_ptr<::Token> & t);
 
-    static int64_t cpp_token_id(const std::shared_ptr<Token> & t);
+    static int64_t cpp_token_id(const std::shared_ptr<::Token> & t);
 
     static std::experimental::optional<int32_t> return_none();
 
     /** Ensures that we generate integer translation code */
-    static AssortedIntegers assorted_integers_id(const AssortedIntegers & i);
+    static ::AssortedIntegers assorted_integers_id(const ::AssortedIntegers & i);
 };

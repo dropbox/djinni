@@ -15,12 +15,12 @@
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
 @interface DBCppException ()
-@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<CppException>> cache;
+@property (nonatomic, readonly) std::shared_ptr<djinni::DbxCppWrapperCache<::CppException>> cache;
 @end
 
 @implementation DBCppException
 
-- (id)initWithCpp:(const std::shared_ptr<CppException> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<CppException>> &)cache
+- (id)initWithCpp:(const std::shared_ptr<::CppException> &)cppRef cache:(const std::shared_ptr<djinni::DbxCppWrapperCache<::CppException>> &)cache
 {
     if (self = [super init]) {
         _cppRef = cppRef;
@@ -34,10 +34,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     _cache->remove(_cppRef);
 }
 
-+ (id)cppExceptionWithCpp:(const std::shared_ptr<CppException> &)cppRef
++ (id)cppExceptionWithCpp:(const std::shared_ptr<::CppException> &)cppRef
 {
-    const auto & cache = djinni::DbxCppWrapperCache<CppException>::getInstance();
-    return cache->get(cppRef, [&] (const std::shared_ptr<CppException> & p) { return [[DBCppException alloc] initWithCpp:p cache:cache]; });
+    const auto & cache = djinni::DbxCppWrapperCache<::CppException>::getInstance();
+    return cache->get(cppRef, [&] (const std::shared_ptr<::CppException> & p) { return [[DBCppException alloc] initWithCpp:p cache:cache]; });
 }
 
 - (int32_t)throwAnException {
@@ -50,7 +50,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (DBCppException *)get {
     try {
-        std::shared_ptr<CppException> cppRet = CppException::get();
+        std::shared_ptr<::CppException> cppRet = ::CppException::get();
         DBCppException* objcRet = [DBCppException cppExceptionWithCpp:cppRet];
         return objcRet;
     } DJINNI_TRANSLATE_EXCEPTIONS()
