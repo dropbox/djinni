@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeNestedCollection final {
 public:
-    using CppType = ::NestedCollection;
+    using CppType = NestedCollection;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::NestedCollection);
-    static ::NestedCollection fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, NestedCollection);
+    static NestedCollection fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/NestedCollection") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };

@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeMapListRecord final {
 public:
-    using CppType = ::MapListRecord;
+    using CppType = MapListRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::MapListRecord);
-    static ::MapListRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, MapListRecord);
+    static MapListRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/MapListRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };

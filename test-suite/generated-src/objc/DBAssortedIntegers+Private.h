@@ -7,7 +7,7 @@
 
 @interface DBAssortedIntegers ()
 
-- (id)initWithCppAssortedIntegers:(const ::AssortedIntegers &)assortedIntegers;
-- (::AssortedIntegers)cppAssortedIntegers;
+- (id)initWithCppAssortedIntegers:(const AssortedIntegers &)assortedIntegers;
+- (AssortedIntegers)cppAssortedIntegers;
 
 @end

@@ -46,7 +46,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppMapListRecord:(const ::MapListRecord &)mapListRecord
+- (id)initWithCppMapListRecord:(const MapListRecord &)mapListRecord
 {
     if (self = [super init]) {
         std::vector<NSDictionary *> _mapListTempVector;
@@ -70,7 +70,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (::MapListRecord)cppMapListRecord
+- (MapListRecord)cppMapListRecord
 {
     std::vector<std::unordered_map<std::string, int64_t>> mapList;
     mapList.reserve([_mapList count]);
@@ -83,7 +83,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         }
         mapList.push_back(std::move(cppValue_0));
     }
-    return ::MapListRecord(
+    return MapListRecord(
             std::move(mapList));
 }
 

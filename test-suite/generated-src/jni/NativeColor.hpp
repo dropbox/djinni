@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeColor final : djinni::JniEnum {
 public:
-    using CppType = ::color;
+    using CppType = color;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, ::color c) { return djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<int>(c)).release(); }
-    static ::color fromJava(JNIEnv* jniEnv, jobject j) { return static_cast<::color>(djinni::JniClass<NativeColor>::get().ordinal(jniEnv, j)); }
+    static jobject toJava(JNIEnv* jniEnv, color c) { return djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<int>(c)).release(); }
+    static color fromJava(JNIEnv* jniEnv, jobject j) { return static_cast<color>(djinni::JniClass<NativeColor>::get().ordinal(jniEnv, j)); }
 
 private:
     NativeColor() : JniEnum("com/dropbox/djinni/test/Color") {}

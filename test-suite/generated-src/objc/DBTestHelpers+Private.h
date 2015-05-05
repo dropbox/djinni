@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct TestHelpers
 {
-    using CppType = std::shared_ptr<::TestHelpers>;
+    using CppType = std::shared_ptr<TestHelpers>;
     using ObjcType = DBTestHelpers*;
 
     static CppType toCpp(ObjcType objc);

@@ -35,7 +35,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppPrimitiveList:(const ::PrimitiveList &)primitiveList
+- (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList
 {
     if (self = [super init]) {
         std::vector<NSNumber *> _listTempVector;
@@ -49,7 +49,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (::PrimitiveList)cppPrimitiveList
+- (PrimitiveList)cppPrimitiveList
 {
     std::vector<int64_t> list;
     list.reserve([_list count]);
@@ -57,7 +57,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         int64_t cppValue_0 = ::djinni::I64::Boxed::toCpp(objcValue_0);
         list.push_back(std::move(cppValue_0));
     }
-    return ::PrimitiveList(
+    return PrimitiveList(
             std::move(list));
 }
 

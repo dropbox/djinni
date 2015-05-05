@@ -7,7 +7,7 @@
 
 @interface DBConstants ()
 
-- (id)initWithCppConstants:(const ::Constants &)constants;
-- (::Constants)cppConstants;
+- (id)initWithCppConstants:(const Constants &)constants;
+- (Constants)cppConstants;
 
 @end

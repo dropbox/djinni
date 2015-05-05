@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-jobject NativeSetRecord::toJava(JNIEnv* jniEnv, ::SetRecord c) {
+jobject NativeSetRecord::toJava(JNIEnv* jniEnv, SetRecord c) {
     djinni::LocalRef<jobject> j_set(jniEnv, ::djinni::HSet<::djinni::HString>::toJava(jniEnv, c.set));
     const auto & data = djinni::JniClass<::djinni_generated::NativeSetRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_set.get());
@@ -15,10 +15,10 @@ jobject NativeSetRecord::toJava(JNIEnv* jniEnv, ::SetRecord c) {
     return r;
 }
 
-::SetRecord NativeSetRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+SetRecord NativeSetRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeSetRecord>::get();
-    return ::SetRecord(
+    return SetRecord(
         ::djinni::HSet<::djinni::HString>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mSet)).get()));
 }
 

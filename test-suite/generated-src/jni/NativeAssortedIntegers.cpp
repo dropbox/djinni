@@ -10,7 +10,7 @@
 
 namespace djinni_generated {
 
-jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, ::AssortedIntegers c) {
+jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, AssortedIntegers c) {
     jbyte j_eight = ::djinni::HI8::Unboxed::toJava(jniEnv, c.eight);
     jshort j_sixteen = ::djinni::HI16::Unboxed::toJava(jniEnv, c.sixteen);
     jint j_thirtytwo = ::djinni::HI32::Unboxed::toJava(jniEnv, c.thirtytwo);
@@ -25,10 +25,10 @@ jobject NativeAssortedIntegers::toJava(JNIEnv* jniEnv, ::AssortedIntegers c) {
     return r;
 }
 
-::AssortedIntegers NativeAssortedIntegers::fromJava(JNIEnv* jniEnv, jobject j) {
+AssortedIntegers NativeAssortedIntegers::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeAssortedIntegers>::get();
-    return ::AssortedIntegers(
+    return AssortedIntegers(
         ::djinni::HI8::Unboxed::fromJava(jniEnv, jniEnv->GetByteField(j, data.field_mEight)),
         ::djinni::HI16::Unboxed::fromJava(jniEnv, jniEnv->GetShortField(j, data.field_mSixteen)),
         ::djinni::HI32::Unboxed::fromJava(jniEnv, jniEnv->GetIntField(j, data.field_mThirtytwo)),

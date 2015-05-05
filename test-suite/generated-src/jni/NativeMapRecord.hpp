@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeMapRecord final {
 public:
-    using CppType = ::MapRecord;
+    using CppType = MapRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::MapRecord);
-    static ::MapRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, MapRecord);
+    static MapRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/MapRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashMap;)V") };

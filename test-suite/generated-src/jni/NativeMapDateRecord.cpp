@@ -8,7 +8,7 @@
 
 namespace djinni_generated {
 
-jobject NativeMapDateRecord::toJava(JNIEnv* jniEnv, ::MapDateRecord c) {
+jobject NativeMapDateRecord::toJava(JNIEnv* jniEnv, MapDateRecord c) {
     djinni::LocalRef<jobject> j_dates_by_id(jniEnv, ::djinni::HMap<::djinni::HString, ::djinni::HDate>::toJava(jniEnv, c.dates_by_id));
     const auto & data = djinni::JniClass<::djinni_generated::NativeMapDateRecord>::get();
     jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_dates_by_id.get());
@@ -16,10 +16,10 @@ jobject NativeMapDateRecord::toJava(JNIEnv* jniEnv, ::MapDateRecord c) {
     return r;
 }
 
-::MapDateRecord NativeMapDateRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+MapDateRecord NativeMapDateRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeMapDateRecord>::get();
-    return ::MapDateRecord(
+    return MapDateRecord(
         ::djinni::HMap<::djinni::HString, ::djinni::HDate>::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mDatesById)).get()));
 }
 

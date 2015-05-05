@@ -39,7 +39,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppMapDateRecord:(const ::MapDateRecord &)mapDateRecord
+- (id)initWithCppMapDateRecord:(const MapDateRecord &)mapDateRecord
 {
     if (self = [super init]) {
         std::vector<NSString *> _datesByIdTempKeyVector;
@@ -58,7 +58,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (::MapDateRecord)cppMapDateRecord
+- (MapDateRecord)cppMapDateRecord
 {
     std::unordered_map<std::string, std::chrono::system_clock::time_point> datesById;
     for (id objcKey_0 in _datesById) {
@@ -66,7 +66,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         std::chrono::system_clock::time_point cppValue_0 = ::djinni::convert_date([[_datesById objectForKey:objcKey_0] timeIntervalSince1970]);
         datesById.emplace(std::move(cppKey_0), std::move(cppValue_0));
     }
-    return ::MapDateRecord(
+    return MapDateRecord(
             std::move(datesById));
 }
 

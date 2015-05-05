@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativePrimitiveList final {
 public:
-    using CppType = ::PrimitiveList;
+    using CppType = PrimitiveList;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::PrimitiveList);
-    static ::PrimitiveList fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, PrimitiveList);
+    static PrimitiveList fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/PrimitiveList") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };

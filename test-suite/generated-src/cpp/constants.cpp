@@ -19,6 +19,6 @@ const std::string Constants::STRING_CONSTANT = "string-constant";
 
 const std::experimental::optional<int32_t> Constants::OPTIONAL_INTEGER_CONSTANT = 1;
 
-const ::Constants Constants::OBJECT_CONSTANT = ::Constants(
+const Constants Constants::OBJECT_CONSTANT = Constants(
     Constants::I32_CONSTANT /* some_integer */ ,
     Constants::STRING_CONSTANT /* some_string */ );

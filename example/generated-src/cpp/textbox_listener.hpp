@@ -11,7 +11,7 @@ class TextboxListener {
 public:
     virtual ~TextboxListener() {}
 
-    virtual void update(const ::ItemList & items) = 0;
+    virtual void update(const ItemList & items) = 0;
 };
 
 }  // namespace textsort

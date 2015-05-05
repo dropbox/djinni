@@ -14,9 +14,9 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBToken ()
 
-@property (nonatomic, readonly) djinni::DbxCppWrapperCache<::Token>::Handle cppRef;
+@property (nonatomic, readonly) djinni::DbxCppWrapperCache<Token>::Handle cppRef;
 
-- (id)initWithCpp:(const std::shared_ptr<::Token>&)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<Token>&)cppRef;
 
 @end
 
@@ -29,7 +29,7 @@ auto Token::toCpp(ObjcType objc) -> CppType
 
 auto Token::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : djinni::DbxCppWrapperCache<::Token>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : djinni::DbxCppWrapperCache<Token>::getInstance()->get(cpp, [] (const auto& p)
     {
         return [[DBToken alloc] initWithCpp:p];
     });
@@ -39,7 +39,7 @@ auto Token::fromCpp(const CppType& cpp) -> ObjcType
 
 @implementation DBToken
 
-- (id)initWithCpp:(const std::shared_ptr<::Token>&)cppRef
+- (id)initWithCpp:(const std::shared_ptr<Token>&)cppRef
 {
     if (self = [super init]) {
         _cppRef.assign(cppRef);

@@ -35,5 +35,5 @@ abstract class Marshal(spec: Spec) {
   protected val idJava = spec.javaIdentStyle
   protected val idObjc = spec.objcIdentStyle
 
-  protected def withNs(namespace: Option[String], t: String) = "::" + namespace.fold(t)(_ + "::" + t)
+  protected def withNs(namespace: Option[String], t: String) = namespace.fold(t)("::" + _ + "::" + t)
 }

@@ -15,9 +15,9 @@ class SortItems {
 public:
     virtual ~SortItems() {}
 
-    virtual void sort(::sort_order order, const ::ItemList & items) = 0;
+    virtual void sort(sort_order order, const ItemList & items) = 0;
 
-    static std::shared_ptr<::SortItems> create_with_listener(const std::shared_ptr<::TextboxListener> & listener);
+    static std::shared_ptr<SortItems> create_with_listener(const std::shared_ptr<TextboxListener> & listener);
 };
 
 }  // namespace textsort

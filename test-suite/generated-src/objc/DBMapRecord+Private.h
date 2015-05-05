@@ -7,7 +7,7 @@
 
 @interface DBMapRecord ()
 
-- (id)initWithCppMapRecord:(const ::MapRecord &)mapRecord;
-- (::MapRecord)cppMapRecord;
+- (id)initWithCppMapRecord:(const MapRecord &)mapRecord;
+- (MapRecord)cppMapRecord;
 
 @end

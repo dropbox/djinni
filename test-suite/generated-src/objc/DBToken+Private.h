@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct Token
 {
-    using CppType = std::shared_ptr<::Token>;
+    using CppType = std::shared_ptr<Token>;
     using ObjcType = DBToken*;
 
     static CppType toCpp(ObjcType objc);

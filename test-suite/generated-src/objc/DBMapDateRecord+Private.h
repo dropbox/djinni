@@ -7,7 +7,7 @@
 
 @interface DBMapDateRecord ()
 
-- (id)initWithCppMapDateRecord:(const ::MapDateRecord &)mapDateRecord;
-- (::MapDateRecord)cppMapDateRecord;
+- (id)initWithCppMapDateRecord:(const MapDateRecord &)mapDateRecord;
+- (MapDateRecord)cppMapDateRecord;
 
 @end

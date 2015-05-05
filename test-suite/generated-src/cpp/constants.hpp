@@ -26,7 +26,7 @@ struct Constants final {
 
     static const std::experimental::optional<int32_t> OPTIONAL_INTEGER_CONSTANT;
 
-    static const ::Constants OBJECT_CONSTANT;
+    static const Constants OBJECT_CONSTANT;
 
     int32_t some_integer;
 
