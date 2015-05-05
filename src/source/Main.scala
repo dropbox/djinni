@@ -25,7 +25,7 @@ object Main {
   def main(args: Array[String]) {
     var idlFile: File = null
     var cppOutFolder: Option[File] = None
-    var cppNamespace: Option[String] = None
+    var cppNamespace: String = ""
     var cppIncludePrefix: String = ""
     var cppFileIdentStyle: IdentConverter = IdentStyle.underLower
     var cppOptionalTemplate: String = "std::optional"
@@ -94,7 +94,7 @@ object Main {
         .text("The output folder for C++ header files (default: the same as --cpp-out).")
       opt[String]("cpp-include-prefix").valueName("<prefix>").foreach(cppIncludePrefix = _)
         .text("The prefix for #includes of header files from C++ files.")
-      opt[String]("cpp-namespace").valueName("...").foreach(x => cppNamespace = Some(x))
+      opt[String]("cpp-namespace").valueName("...").foreach(x => cppNamespace = x)
         .text("The namespace name to use for generated C++ classes.")
       opt[String]("cpp-ext").valueName("<ext>").foreach(cppExt = _)
         .text("The filename extension for C++ files (default: \"cpp\").")

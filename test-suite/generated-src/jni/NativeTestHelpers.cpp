@@ -19,7 +19,7 @@
 
 namespace djinni_generated {
 
-NativeTestHelpers::NativeTestHelpers() : djinni::JniInterface<TestHelpers, NativeTestHelpers>("com/dropbox/djinni/test/TestHelpers$CppProxy") {}
+NativeTestHelpers::NativeTestHelpers() : djinni::JniInterface<::TestHelpers, NativeTestHelpers>("com/dropbox/djinni/test/TestHelpers$CppProxy") {}
 
 using namespace ::djinni_generated;
 
@@ -27,7 +27,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_n
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<TestHelpers>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::TestHelpers>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -36,7 +36,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getSetRecord
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        SetRecord cr = TestHelpers::get_set_record();
+        ::SetRecord cr = ::TestHelpers::get_set_record();
 
         return NativeSetRecord::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -46,9 +46,9 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkSetRec
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        SetRecord c_rec = NativeSetRecord::fromJava(jniEnv, j_rec);
+        ::SetRecord c_rec = NativeSetRecord::fromJava(jniEnv, j_rec);
 
-        bool cr = TestHelpers::check_set_record(c_rec);
+        bool cr = ::TestHelpers::check_set_record(c_rec);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -59,7 +59,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getPrimitive
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        PrimitiveList cr = TestHelpers::get_primitive_list();
+        ::PrimitiveList cr = ::TestHelpers::get_primitive_list();
 
         return NativePrimitiveList::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -69,9 +69,9 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkPrimit
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        PrimitiveList c_pl = NativePrimitiveList::fromJava(jniEnv, j_pl);
+        ::PrimitiveList c_pl = NativePrimitiveList::fromJava(jniEnv, j_pl);
 
-        bool cr = TestHelpers::check_primitive_list(c_pl);
+        bool cr = ::TestHelpers::check_primitive_list(c_pl);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -82,7 +82,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getNestedCol
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        NestedCollection cr = TestHelpers::get_nested_collection();
+        ::NestedCollection cr = ::TestHelpers::get_nested_collection();
 
         return NativeNestedCollection::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -92,9 +92,9 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkNested
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        NestedCollection c_nc = NativeNestedCollection::fromJava(jniEnv, j_nc);
+        ::NestedCollection c_nc = NativeNestedCollection::fromJava(jniEnv, j_nc);
 
-        bool cr = TestHelpers::check_nested_collection(c_nc);
+        bool cr = ::TestHelpers::check_nested_collection(c_nc);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -105,7 +105,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMap(JNIEn
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::unordered_map<std::string, int64_t> cr = TestHelpers::get_map();
+        std::unordered_map<std::string, int64_t> cr = ::TestHelpers::get_map();
 
         return ::djinni::HMap<::djinni::HString, ::djinni::HI64>::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -117,7 +117,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMap(JN
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::unordered_map<std::string, int64_t> c_m = ::djinni::HMap<::djinni::HString, ::djinni::HI64>::fromJava(jniEnv, j_m);
 
-        bool cr = TestHelpers::check_map(c_m);
+        bool cr = ::TestHelpers::check_map(c_m);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -128,7 +128,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getEmptyMap(
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::unordered_map<std::string, int64_t> cr = TestHelpers::get_empty_map();
+        std::unordered_map<std::string, int64_t> cr = ::TestHelpers::get_empty_map();
 
         return ::djinni::HMap<::djinni::HString, ::djinni::HI64>::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -140,7 +140,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEmptyM
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         std::unordered_map<std::string, int64_t> c_m = ::djinni::HMap<::djinni::HString, ::djinni::HI64>::fromJava(jniEnv, j_m);
 
-        bool cr = TestHelpers::check_empty_map(c_m);
+        bool cr = ::TestHelpers::check_empty_map(c_m);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -151,7 +151,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMapListRe
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        MapListRecord cr = TestHelpers::get_map_list_record();
+        ::MapListRecord cr = ::TestHelpers::get_map_list_record();
 
         return NativeMapListRecord::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -161,9 +161,9 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMapLis
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        MapListRecord c_m = NativeMapListRecord::fromJava(jniEnv, j_m);
+        ::MapListRecord c_m = NativeMapListRecord::fromJava(jniEnv, j_m);
 
-        bool cr = TestHelpers::check_map_list_record(c_m);
+        bool cr = ::TestHelpers::check_map_list_record(c_m);
 
         return ::djinni::HBool::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -173,9 +173,9 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::shared_ptr<ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
+        std::shared_ptr<::ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
 
-        TestHelpers::check_client_interface_ascii(c_i);
+        ::TestHelpers::check_client_interface_ascii(c_i);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -183,9 +183,9 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::shared_ptr<ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
+        std::shared_ptr<::ClientInterface> c_i = NativeClientInterface::fromJava(jniEnv, j_i);
 
-        TestHelpers::check_client_interface_nonascii(c_i);
+        ::TestHelpers::check_client_interface_nonascii(c_i);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -193,9 +193,9 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JN
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::unordered_map<color, std::string> c_m = ::djinni::HMap<NativeColor, ::djinni::HString>::fromJava(jniEnv, j_m);
+        std::unordered_map<::color, std::string> c_m = ::djinni::HMap<NativeColor, ::djinni::HString>::fromJava(jniEnv, j_m);
 
-        TestHelpers::check_enum_map(c_m);
+        ::TestHelpers::check_enum_map(c_m);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -203,9 +203,9 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIE
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+        std::shared_ptr<::Token> c_t = NativeToken::fromJava(jniEnv, j_t);
 
-        std::shared_ptr<Token> cr = TestHelpers::token_id(c_t);
+        std::shared_ptr<::Token> cr = ::TestHelpers::token_id(c_t);
 
         return NativeToken::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -216,7 +216,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppTok
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::shared_ptr<Token> cr = TestHelpers::create_cpp_token();
+        std::shared_ptr<::Token> cr = ::TestHelpers::create_cpp_token();
 
         return NativeToken::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -226,9 +226,9 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkCppToken(J
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+        std::shared_ptr<::Token> c_t = NativeToken::fromJava(jniEnv, j_t);
 
-        TestHelpers::check_cpp_token(c_t);
+        ::TestHelpers::check_cpp_token(c_t);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -236,9 +236,9 @@ CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        std::shared_ptr<Token> c_t = NativeToken::fromJava(jniEnv, j_t);
+        std::shared_ptr<::Token> c_t = NativeToken::fromJava(jniEnv, j_t);
 
-        int64_t cr = TestHelpers::cpp_token_id(c_t);
+        int64_t cr = ::TestHelpers::cpp_token_id(c_t);
 
         return ::djinni::HI64::Unboxed::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -249,7 +249,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
 
-        std::experimental::optional<int32_t> cr = TestHelpers::return_none();
+        std::experimental::optional<int32_t> cr = ::TestHelpers::return_none();
 
         return ::djinni::HOptional<std::experimental::optional, ::djinni::HI32>::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -259,9 +259,9 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedInte
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        AssortedIntegers c_i = NativeAssortedIntegers::fromJava(jniEnv, j_i);
+        ::AssortedIntegers c_i = NativeAssortedIntegers::fromJava(jniEnv, j_i);
 
-        AssortedIntegers cr = TestHelpers::assorted_integers_id(c_i);
+        ::AssortedIntegers cr = ::TestHelpers::assorted_integers_id(c_i);
 
         return NativeAssortedIntegers::toJava(jniEnv, cr);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)

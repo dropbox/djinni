@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct CppException
 {
-    using CppType = std::shared_ptr<CppException>;
+    using CppType = std::shared_ptr<::CppException>;
     using ObjcType = DBCppException*;
 
     static CppType toCpp(ObjcType objc);

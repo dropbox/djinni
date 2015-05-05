@@ -13,18 +13,18 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case r: Record => idCpp.ty(name)
   }
 
-  override def fqTypename(tm: MExpr): String = toCppType(tm, spec.cppNamespace)
+  override def fqTypename(tm: MExpr): String = toCppType(tm, Some(spec.cppNamespace))
   def fqTypename(name: String, ty: TypeDef): String = ty match {
-    case e: Enum => withNs(spec.cppNamespace, idCpp.enumType(name))
-    case i: Interface => withNs(spec.cppNamespace, idCpp.ty(name))
-    case r: Record => withNs(spec.cppNamespace, idCpp.ty(name))
+    case e: Enum => withNs(Some(spec.cppNamespace), idCpp.enumType(name))
+    case i: Interface => withNs(Some(spec.cppNamespace), idCpp.ty(name))
+    case r: Record => withNs(Some(spec.cppNamespace), idCpp.ty(name))
   }
 
   override def paramType(tm: MExpr): String = toCppParamType(tm)
-  override def fqParamType(tm: MExpr): String = toCppParamType(tm, spec.cppNamespace)
+  override def fqParamType(tm: MExpr): String = toCppParamType(tm, Some(spec.cppNamespace))
 
   override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, None))
-  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, spec.cppNamespace))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, Some(spec.cppNamespace)))
 
   override def fieldType(tm: MExpr): String = typename(tm)
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)

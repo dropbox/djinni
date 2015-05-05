@@ -35,7 +35,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppSetRecord:(const SetRecord &)setRecord
+- (id)initWithCppSetRecord:(const ::SetRecord &)setRecord
 {
     if (self = [super init]) {
         std::vector<NSString *> _setTempVector;
@@ -49,14 +49,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (SetRecord)cppSetRecord
+- (::SetRecord)cppSetRecord
 {
     std::unordered_set<std::string> set;
     for (NSString *objcValue_0 in _set) {
         std::string cppValue_0 = ::djinni::String::toCpp(objcValue_0);
         set.insert(std::move(cppValue_0));
     }
-    return SetRecord(
+    return ::SetRecord(
             std::move(set));
 }
 

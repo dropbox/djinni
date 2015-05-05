@@ -105,7 +105,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       if (spec.cppEnumHashWorkaround) {
         val fqSelf = marshal.fqTypename(ident, e)
         w.wl
-        wrapNamespace(w, Some("std"),
+        wrapNamespace(w, "std",
           (w: IndentWriter) => {
             w.wl("template <>")
             w.w(s"struct hash<$fqSelf>").bracedSemi {

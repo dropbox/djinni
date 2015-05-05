@@ -7,7 +7,7 @@
 
 @interface DBNestedCollection ()
 
-- (id)initWithCppNestedCollection:(const NestedCollection &)nestedCollection;
-- (NestedCollection)cppNestedCollection;
+- (id)initWithCppNestedCollection:(const ::NestedCollection &)nestedCollection;
+- (::NestedCollection)cppNestedCollection;
 
 @end

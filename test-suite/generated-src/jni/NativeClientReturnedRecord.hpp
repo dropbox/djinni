@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeClientReturnedRecord final {
 public:
-    using CppType = ClientReturnedRecord;
+    using CppType = ::ClientReturnedRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ClientReturnedRecord);
-    static ClientReturnedRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::ClientReturnedRecord);
+    static ::ClientReturnedRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientReturnedRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(JLjava/lang/String;)V") };

@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-jobject NativeRecordWithNestedDerivings::toJava(JNIEnv* jniEnv, RecordWithNestedDerivings c) {
+jobject NativeRecordWithNestedDerivings::toJava(JNIEnv* jniEnv, ::RecordWithNestedDerivings c) {
     jint j_key = ::djinni::HI32::Unboxed::toJava(jniEnv, c.key);
     djinni::LocalRef<jobject> j_rec(jniEnv, NativeRecordWithDerivings::toJava(jniEnv, c.rec));
     const auto & data = djinni::JniClass<::djinni_generated::NativeRecordWithNestedDerivings>::get();
@@ -16,10 +16,10 @@ jobject NativeRecordWithNestedDerivings::toJava(JNIEnv* jniEnv, RecordWithNested
     return r;
 }
 
-RecordWithNestedDerivings NativeRecordWithNestedDerivings::fromJava(JNIEnv* jniEnv, jobject j) {
+::RecordWithNestedDerivings NativeRecordWithNestedDerivings::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeRecordWithNestedDerivings>::get();
-    return RecordWithNestedDerivings(
+    return ::RecordWithNestedDerivings(
         ::djinni::HI32::Unboxed::fromJava(jniEnv, jniEnv->GetIntField(j, data.field_mKey)),
         NativeRecordWithDerivings::fromJava(jniEnv, djinni::LocalRef<jobject>(jniEnv, jniEnv->GetObjectField(j, data.field_mRec)).get()));
 }

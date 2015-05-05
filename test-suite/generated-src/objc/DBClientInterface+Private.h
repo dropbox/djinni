@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct ClientInterface
 {
-    using CppType = std::shared_ptr<ClientInterface>;
+    using CppType = std::shared_ptr<::ClientInterface>;
     using ObjcType = id<DBClientInterface>;
 
     static CppType toCpp(ObjcType objc);

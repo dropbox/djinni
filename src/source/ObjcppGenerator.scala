@@ -167,7 +167,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl((if(i.ext.objc) "@protocol " else "@class ") + self + ";")
       w.wl
-      wrapNamespace(w, Some(spec.objcppNamespace), w => {
+      wrapNamespace(w, spec.objcppNamespace, w => {
         w.wl(s"struct $helperClass")
         w.bracedSemi {
           w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
@@ -200,7 +200,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl("@end")
         w.wl
-        wrapNamespace(w, Some(spec.objcppNamespace), w => {
+        wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
             w.wl(s"return objc ? objc.cppRef.get() : nullptr;")
@@ -272,7 +272,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
         })
         w.wl
-        wrapNamespace(w, Some(spec.objcppNamespace), w => {
+        wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
           w.braced {
             w.wl(s"return objc ? djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objc) : nullptr;")

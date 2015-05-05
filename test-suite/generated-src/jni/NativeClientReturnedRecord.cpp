@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ClientReturnedRecord c) {
+jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ::ClientReturnedRecord c) {
     jlong j_record_id = ::djinni::HI64::Unboxed::toJava(jniEnv, c.record_id);
     djinni::LocalRef<jstring> j_content(jniEnv, ::djinni::HString::toJava(jniEnv, c.content));
     const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
@@ -16,10 +16,10 @@ jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ClientReturnedRecord 
     return r;
 }
 
-ClientReturnedRecord NativeClientReturnedRecord::fromJava(JNIEnv* jniEnv, jobject j) {
+::ClientReturnedRecord NativeClientReturnedRecord::fromJava(JNIEnv* jniEnv, jobject j) {
     assert(j != nullptr);
     const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
-    return ClientReturnedRecord(
+    return ::ClientReturnedRecord(
         ::djinni::HI64::Unboxed::fromJava(jniEnv, jniEnv->GetLongField(j, data.field_mRecordId)),
         ::djinni::HString::fromJava(jniEnv, djinni::LocalRef<jstring>(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mContent))).get()));
 }

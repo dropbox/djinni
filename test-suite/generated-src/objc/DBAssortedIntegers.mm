@@ -58,7 +58,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppAssortedIntegers:(const AssortedIntegers &)assortedIntegers
+- (id)initWithCppAssortedIntegers:(const ::AssortedIntegers &)assortedIntegers
 {
     if (self = [super init]) {
         _eight = ::djinni::I8::fromCpp(assortedIntegers.eight);
@@ -89,7 +89,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (AssortedIntegers)cppAssortedIntegers
+- (::AssortedIntegers)cppAssortedIntegers
 {
     int8_t eight = ::djinni::I8::toCpp(_eight);
     int16_t sixteen = ::djinni::I16::toCpp(_sixteen);
@@ -115,7 +115,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         int64_t optValue = ::djinni::I64::Boxed::toCpp(_oSixtyfour);
         oSixtyfour = optValue;
     }
-    return AssortedIntegers(
+    return ::AssortedIntegers(
             std::move(eight),
             std::move(sixteen),
             std::move(thirtytwo),

@@ -10,11 +10,11 @@ namespace djinni_generated {
 
 class NativeDateRecord final {
 public:
-    using CppType = DateRecord;
+    using CppType = ::DateRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, DateRecord);
-    static DateRecord fromJava(JNIEnv*, jobject);
+    static jobject toJava(JNIEnv*, ::DateRecord);
+    static ::DateRecord fromJava(JNIEnv*, jobject);
 
     const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/DateRecord") };
     const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/Date;)V") };

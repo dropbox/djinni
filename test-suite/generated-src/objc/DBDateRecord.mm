@@ -28,7 +28,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (id)initWithCppDateRecord:(const DateRecord &)dateRecord
+- (id)initWithCppDateRecord:(const ::DateRecord &)dateRecord
 {
     if (self = [super init]) {
         _createdAt = [NSDate dateWithTimeIntervalSince1970:
@@ -37,10 +37,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (DateRecord)cppDateRecord
+- (::DateRecord)cppDateRecord
 {
     std::chrono::system_clock::time_point createdAt = ::djinni::convert_date([_createdAt timeIntervalSince1970]);
-    return DateRecord(
+    return ::DateRecord(
             std::move(createdAt));
 }
 
