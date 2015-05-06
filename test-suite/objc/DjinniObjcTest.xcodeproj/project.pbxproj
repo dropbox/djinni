@@ -194,8 +194,8 @@
 		A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBRecordWithNestedDerivings.mm; sourceTree = "<group>"; };
 		A24850251AF96EBC00AFE907 /* DBSetRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBSetRecord.mm; sourceTree = "<group>"; };
 		A278D45219BA3601006FD937 /* test_helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helpers.cpp; sourceTree = "<group>"; };
-		A2A162D01AF190D200C0B00A /* DJIDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DJIDate.h; path = "../../../../djinni/support-lib/objc/DJIDate.h"; sourceTree = "<group>"; };
-		A2A162D11AF190D200C0B00A /* DJIDate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DJIDate.mm; path = "../../../../djinni/support-lib/objc/DJIDate.mm"; sourceTree = "<group>"; };
+		A2A162D01AF190D200C0B00A /* DJIDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDate.h; sourceTree = "<group>"; };
+		A2A162D11AF190D200C0B00A /* DJIDate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIDate.mm; sourceTree = "<group>"; };
 		A2CB54B319BA6E6000A9E600 /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIError.mm; sourceTree = "<group>"; };
 		A2CCB9401AF80DFC00E6230A /* DBClientInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBClientInterface.mm; sourceTree = "<group>"; };
 		A2CCB9411AF80DFC00E6230A /* DBClientInterface+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBClientInterface+Private.h"; sourceTree = "<group>"; };
