@@ -57,7 +57,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
             val prefix = if (r.ext.objc) "../" else ""
-            header.add("#import " + q(spec.objcIncludePrefix + prefix + headerName(d.name)))
+            header.add("@class " + marshal.typename(tm) + ";")
+            body.add("#import " + q(spec.objcIncludePrefix + prefix + headerName(d.name)))
         }
         case p: MParam =>
       }
