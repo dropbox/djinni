@@ -26,7 +26,7 @@
     return self;
 }
 
-- (id)initWithSetList:(NSArray *)setList
+- (id)initWithSetList:(nonnull NSArray *)setList
 {
     if (self = [super init]) {
         _setList = setList;

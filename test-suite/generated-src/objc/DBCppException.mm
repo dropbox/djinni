@@ -56,7 +56,7 @@ auto CppException::fromCpp(const CppType& cpp) -> ObjcType
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBCppException *)get {
++ (nullable DBCppException *)get {
     try {
         auto r = ::CppException::get();
         return ::djinni_generated::CppException::fromCpp(r);

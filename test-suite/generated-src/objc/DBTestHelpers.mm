@@ -55,103 +55,103 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
     return self;
 }
 
-+ (DBSetRecord *)getSetRecord {
++ (nonnull DBSetRecord *)getSetRecord {
     try {
         auto r = ::TestHelpers::get_set_record();
         return ::djinni_generated::SetRecord::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkSetRecord:(DBSetRecord *)rec {
++ (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec {
     try {
         auto r = ::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(rec));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBPrimitiveList *)getPrimitiveList {
++ (nonnull DBPrimitiveList *)getPrimitiveList {
     try {
         auto r = ::TestHelpers::get_primitive_list();
         return ::djinni_generated::PrimitiveList::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkPrimitiveList:(DBPrimitiveList *)pl {
++ (BOOL)checkPrimitiveList:(nonnull DBPrimitiveList *)pl {
     try {
         auto r = ::TestHelpers::check_primitive_list(::djinni_generated::PrimitiveList::toCpp(pl));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBNestedCollection *)getNestedCollection {
++ (nonnull DBNestedCollection *)getNestedCollection {
     try {
         auto r = ::TestHelpers::get_nested_collection();
         return ::djinni_generated::NestedCollection::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkNestedCollection:(DBNestedCollection *)nc {
++ (BOOL)checkNestedCollection:(nonnull DBNestedCollection *)nc {
     try {
         auto r = ::TestHelpers::check_nested_collection(::djinni_generated::NestedCollection::toCpp(nc));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSDictionary *)getMap {
++ (nonnull NSDictionary *)getMap {
     try {
         auto r = ::TestHelpers::get_map();
         return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkMap:(NSDictionary *)m {
++ (BOOL)checkMap:(nonnull NSDictionary *)m {
     try {
         auto r = ::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSDictionary *)getEmptyMap {
++ (nonnull NSDictionary *)getEmptyMap {
     try {
         auto r = ::TestHelpers::get_empty_map();
         return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkEmptyMap:(NSDictionary *)m {
++ (BOOL)checkEmptyMap:(nonnull NSDictionary *)m {
     try {
         auto r = ::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBMapListRecord *)getMapListRecord {
++ (nonnull DBMapListRecord *)getMapListRecord {
     try {
         auto r = ::TestHelpers::get_map_list_record();
         return ::djinni_generated::MapListRecord::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkMapListRecord:(DBMapListRecord *)m {
++ (BOOL)checkMapListRecord:(nonnull DBMapListRecord *)m {
     try {
         auto r = ::TestHelpers::check_map_list_record(::djinni_generated::MapListRecord::toCpp(m));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkClientInterfaceAscii:(id<DBClientInterface>)i {
++ (void)checkClientInterfaceAscii:(nullable id<DBClientInterface>)i {
     try {
         ::TestHelpers::check_client_interface_ascii(::djinni_generated::ClientInterface::toCpp(i));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkClientInterfaceNonascii:(id<DBClientInterface>)i {
++ (void)checkClientInterfaceNonascii:(nullable id<DBClientInterface>)i {
     try {
         ::TestHelpers::check_client_interface_nonascii(::djinni_generated::ClientInterface::toCpp(i));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkEnumMap:(NSDictionary *)m {
++ (void)checkEnumMap:(nonnull NSDictionary *)m {
     try {
         ::TestHelpers::check_enum_map(::djinni::Map<::djinni::Enum<::color, DBColor>, ::djinni::String>::toCpp(m));
     } DJINNI_TRANSLATE_EXCEPTIONS()
@@ -163,41 +163,41 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBToken *)tokenId:(DBToken *)t {
++ (nullable DBToken *)tokenId:(nullable DBToken *)t {
     try {
         auto r = ::TestHelpers::token_id(::djinni_generated::Token::toCpp(t));
         return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBToken *)createCppToken {
++ (nullable DBToken *)createCppToken {
     try {
         auto r = ::TestHelpers::create_cpp_token();
         return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkCppToken:(DBToken *)t {
++ (void)checkCppToken:(nullable DBToken *)t {
     try {
         ::TestHelpers::check_cpp_token(::djinni_generated::Token::toCpp(t));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (int64_t)cppTokenId:(DBToken *)t {
++ (int64_t)cppTokenId:(nullable DBToken *)t {
     try {
         auto r = ::TestHelpers::cpp_token_id(::djinni_generated::Token::toCpp(t));
         return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (NSNumber *)returnNone {
++ (nullable NSNumber *)returnNone {
     try {
         auto r = ::TestHelpers::return_none();
         return ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i {
++ (nonnull DBAssortedIntegers *)assortedIntegersId:(nonnull DBAssortedIntegers *)i {
     try {
         auto r = ::TestHelpers::assorted_integers_id(::djinni_generated::AssortedIntegers::toCpp(i));
         return ::djinni_generated::AssortedIntegers::fromCpp(r);

@@ -41,10 +41,10 @@
             sixteen:(int16_t)sixteen
           thirtytwo:(int32_t)thirtytwo
           sixtyfour:(int64_t)sixtyfour
-             oEight:(NSNumber *)oEight
-           oSixteen:(NSNumber *)oSixteen
-         oThirtytwo:(NSNumber *)oThirtytwo
-         oSixtyfour:(NSNumber *)oSixtyfour
+             oEight:(nullable NSNumber *)oEight
+           oSixteen:(nullable NSNumber *)oSixteen
+         oThirtytwo:(nullable NSNumber *)oThirtytwo
+         oSixtyfour:(nullable NSNumber *)oSixtyfour
 {
     if (self = [super init]) {
         _eight = eight;

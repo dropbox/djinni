@@ -28,7 +28,7 @@
     return self;
 }
 
-- (id)initWithMapList:(NSArray *)mapList
+- (id)initWithMapList:(nonnull NSArray *)mapList
 {
     if (self = [super init]) {
         _mapList = mapList;

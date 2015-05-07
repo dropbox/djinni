@@ -19,11 +19,11 @@ const int64_t DBConstantsI64Constant = 4;
 
 const double DBConstantsF64Constant = 5.0;
 
-NSString * const DBConstantsStringConstant = @"string-constant";
+NSString * __nonnull const DBConstantsStringConstant = @"string-constant";
 
-NSNumber * const DBConstantsOptionalIntegerConstant = @1;
+NSNumber * __nullable const DBConstantsOptionalIntegerConstant = @1;
 
-DBConstants * const DBConstantsObjectConstant = [[DBConstants alloc] initWithSomeInteger:DBConstantsI32Constant
+DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] initWithSomeInteger:DBConstantsI32Constant
         someString:DBConstantsStringConstant];
 
 #pragma clang diagnostic pop
@@ -40,7 +40,7 @@ DBConstants * const DBConstantsObjectConstant = [[DBConstants alloc] initWithSom
 }
 
 - (id)initWithSomeInteger:(int32_t)someInteger
-               someString:(NSString *)someString
+               someString:(nonnull NSString *)someString
 {
     if (self = [super init]) {
         _someInteger = someInteger;

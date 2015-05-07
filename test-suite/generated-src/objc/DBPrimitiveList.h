@@ -4,9 +4,9 @@
 #import <Foundation/Foundation.h>
 
 @interface DBPrimitiveList : NSObject
-- (id)initWithPrimitiveList:(DBPrimitiveList *)primitiveList;
-- (id)initWithList:(NSArray *)list;
+- (nonnull id)initWithPrimitiveList:(nonnull DBPrimitiveList *)primitiveList;
+- (nonnull id)initWithList:(nonnull NSArray *)list;
 
-@property (nonatomic, readonly) NSArray * list;
+@property (nonatomic, readonly, nonnull) NSArray * list;
 
 @end

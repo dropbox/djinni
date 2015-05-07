@@ -14,49 +14,49 @@
 
 @interface DBTestHelpers : NSObject
 
-+ (DBSetRecord *)getSetRecord;
++ (nonnull DBSetRecord *)getSetRecord;
 
-+ (BOOL)checkSetRecord:(DBSetRecord *)rec;
++ (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec;
 
-+ (DBPrimitiveList *)getPrimitiveList;
++ (nonnull DBPrimitiveList *)getPrimitiveList;
 
-+ (BOOL)checkPrimitiveList:(DBPrimitiveList *)pl;
++ (BOOL)checkPrimitiveList:(nonnull DBPrimitiveList *)pl;
 
-+ (DBNestedCollection *)getNestedCollection;
++ (nonnull DBNestedCollection *)getNestedCollection;
 
-+ (BOOL)checkNestedCollection:(DBNestedCollection *)nc;
++ (BOOL)checkNestedCollection:(nonnull DBNestedCollection *)nc;
 
-+ (NSDictionary *)getMap;
++ (nonnull NSDictionary *)getMap;
 
-+ (BOOL)checkMap:(NSDictionary *)m;
++ (BOOL)checkMap:(nonnull NSDictionary *)m;
 
-+ (NSDictionary *)getEmptyMap;
++ (nonnull NSDictionary *)getEmptyMap;
 
-+ (BOOL)checkEmptyMap:(NSDictionary *)m;
++ (BOOL)checkEmptyMap:(nonnull NSDictionary *)m;
 
-+ (DBMapListRecord *)getMapListRecord;
++ (nonnull DBMapListRecord *)getMapListRecord;
 
-+ (BOOL)checkMapListRecord:(DBMapListRecord *)m;
++ (BOOL)checkMapListRecord:(nonnull DBMapListRecord *)m;
 
-+ (void)checkClientInterfaceAscii:(id<DBClientInterface>)i;
++ (void)checkClientInterfaceAscii:(nullable id<DBClientInterface>)i;
 
-+ (void)checkClientInterfaceNonascii:(id<DBClientInterface>)i;
++ (void)checkClientInterfaceNonascii:(nullable id<DBClientInterface>)i;
 
-+ (void)checkEnumMap:(NSDictionary *)m;
++ (void)checkEnumMap:(nonnull NSDictionary *)m;
 
 + (void)checkEnum:(DBColor)c;
 
-+ (DBToken *)tokenId:(DBToken *)t;
++ (nullable DBToken *)tokenId:(nullable DBToken *)t;
 
-+ (DBToken *)createCppToken;
++ (nullable DBToken *)createCppToken;
 
-+ (void)checkCppToken:(DBToken *)t;
++ (void)checkCppToken:(nullable DBToken *)t;
 
-+ (int64_t)cppTokenId:(DBToken *)t;
++ (int64_t)cppTokenId:(nullable DBToken *)t;
 
-+ (NSNumber *)returnNone;
++ (nullable NSNumber *)returnNone;
 
 /** Ensures that we generate integer translation code */
-+ (DBAssortedIntegers *)assortedIntegersId:(DBAssortedIntegers *)i;
++ (nonnull DBAssortedIntegers *)assortedIntegersId:(nonnull DBAssortedIntegers *)i;
 
 @end
