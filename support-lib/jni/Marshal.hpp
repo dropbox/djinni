@@ -194,11 +194,11 @@ namespace djinni
 		{
 			static const auto POSIX_EPOCH = std::chrono::system_clock::from_time_t(0);
 			const auto & data = JniClass<Date>::get();
-			const auto cpp_millis = std::chrono::duration_cast<std::chrono::milliseconds>(value - POSIX_EPOCH);
+			const auto cpp_millis = std::chrono::duration_cast<std::chrono::milliseconds>(c - POSIX_EPOCH);
 			const jlong millis = static_cast<jlong>(cpp_millis.count());
 			auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor, millis));
 			jniExceptionCheck(jniEnv);
-			return j.release();
+			return j;
 		}
 		
 	private:
