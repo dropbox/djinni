@@ -3,6 +3,7 @@
 
 #include "NativeClientReturnedRecord.hpp"  // my header
 #include "HI64.hpp"
+#include "HOptional.hpp"
 #include "HString.hpp"
 
 namespace djinni_generated {
@@ -10,8 +11,9 @@ namespace djinni_generated {
 jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ::ClientReturnedRecord c) {
     jlong j_record_id = ::djinni::HI64::Unboxed::toJava(jniEnv, c.record_id);
     djinni::LocalRef<jstring> j_content(jniEnv, ::djinni::HString::toJava(jniEnv, c.content));
+    djinni::LocalRef<jstring> j_misc(jniEnv, ::djinni::HOptional<std::experimental::optional, ::djinni::HString>::toJava(jniEnv, c.misc));
     const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
-    jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_record_id, j_content.get());
+    jobject r = jniEnv->NewObject(data.clazz.get(), data.jconstructor, j_record_id, j_content.get(), j_misc.get());
     djinni::jniExceptionCheck(jniEnv);
     return r;
 }
@@ -21,7 +23,8 @@ jobject NativeClientReturnedRecord::toJava(JNIEnv* jniEnv, ::ClientReturnedRecor
     const auto & data = djinni::JniClass<::djinni_generated::NativeClientReturnedRecord>::get();
     return ::ClientReturnedRecord(
         ::djinni::HI64::Unboxed::fromJava(jniEnv, jniEnv->GetLongField(j, data.field_mRecordId)),
-        ::djinni::HString::fromJava(jniEnv, djinni::LocalRef<jstring>(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mContent))).get()));
+        ::djinni::HString::fromJava(jniEnv, djinni::LocalRef<jstring>(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mContent))).get()),
+        ::djinni::HOptional<std::experimental::optional, ::djinni::HString>::fromJava(jniEnv, djinni::LocalRef<jstring>(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mMisc))).get()));
 }
 
 }  // namespace djinni_generated

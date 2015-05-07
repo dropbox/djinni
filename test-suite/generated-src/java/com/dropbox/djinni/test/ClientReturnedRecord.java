@@ -10,11 +10,15 @@ public final class ClientReturnedRecord {
 
     /*package*/ final String mContent;
 
+    /*package*/ final String mMisc;
+
     public ClientReturnedRecord(
             long recordId,
-            String content) {
+            String content,
+            String misc) {
         this.mRecordId = recordId;
         this.mContent = content;
+        this.mMisc = misc;
     }
 
     public long getRecordId() {
@@ -23,5 +27,9 @@ public final class ClientReturnedRecord {
 
     public String getContent() {
         return mContent;
+    }
+
+    public String getMisc() {
+        return mMisc;
     }
 }

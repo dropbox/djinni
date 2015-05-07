@@ -199,6 +199,16 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JN
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnum(JNIEnv* jniEnv, jobject /*this*/, jobject j_c)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        ::color c_c = NativeColor::fromJava(jniEnv, j_c);
+
+        ::TestHelpers::check_enum(c_c);
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
 CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
 {
     try {

@@ -157,6 +157,12 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
++ (void)checkEnum:(DBColor)c {
+    try {
+        ::TestHelpers::check_enum(::djinni::Enum<::color, DBColor>::toCpp(c));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 + (DBToken *)tokenId:(DBToken *)t {
     try {
         auto r = ::TestHelpers::token_id(::djinni_generated::Token::toCpp(t));

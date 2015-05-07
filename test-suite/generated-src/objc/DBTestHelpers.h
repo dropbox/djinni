@@ -44,6 +44,8 @@
 
 + (void)checkEnumMap:(NSDictionary *)m;
 
++ (void)checkEnum:(DBColor)c;
+
 + (DBToken *)tokenId:(DBToken *)t;
 
 + (DBToken *)createCppToken;

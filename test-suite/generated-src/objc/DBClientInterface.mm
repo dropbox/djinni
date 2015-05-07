@@ -18,11 +18,12 @@ class ClientInterface::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override
+    ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override
     {
         @autoreleasepool {
             auto r = [Handle::get() getRecord:(::djinni::I64::fromCpp(record_id))
-                                   utf8string:(::djinni::String::fromCpp(utf8string))];
+                                   utf8string:(::djinni::String::fromCpp(utf8string))
+                                         misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(misc))];
             return ::djinni_generated::ClientReturnedRecord::toCpp(r);
         }
     }

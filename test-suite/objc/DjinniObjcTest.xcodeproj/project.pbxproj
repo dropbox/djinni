@@ -662,7 +662,7 @@
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++1y",
+					"-std=c++14",
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -683,7 +683,7 @@
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++1y",
+					"-std=c++14",
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -700,6 +700,7 @@
 		65868B711989FE4200D60EEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -724,6 +725,7 @@
 		65868B721989FE4200D60EEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",

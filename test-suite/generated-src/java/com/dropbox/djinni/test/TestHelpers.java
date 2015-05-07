@@ -37,6 +37,8 @@ public abstract class TestHelpers {
 
     public static native void checkEnumMap(HashMap<Color, String> m);
 
+    public static native void checkEnum(Color c);
+
     public static native Token tokenId(Token t);
 
     public static native Token createCppToken();

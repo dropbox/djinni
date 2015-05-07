@@ -71,7 +71,7 @@ static const std::string HELLO_WORLD = "Hello World!";
 static const std::string NON_ASCII = "Non-ASCII / 非 ASCII 字符";
 
 void TestHelpers::check_client_interface_ascii(const std::shared_ptr<ClientInterface> & i) {
-    ClientReturnedRecord cReturnedRecord = i->get_record(5, HELLO_WORLD);
+    ClientReturnedRecord cReturnedRecord = i->get_record(5, HELLO_WORLD, {});
     if (cReturnedRecord.content != HELLO_WORLD) {
         std::string error_msg = "Expected String: " + HELLO_WORLD + " Actual: " + cReturnedRecord.content;
         throw std::invalid_argument(error_msg);
@@ -79,7 +79,7 @@ void TestHelpers::check_client_interface_ascii(const std::shared_ptr<ClientInter
 }
 
 void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i) {
-    ClientReturnedRecord cReturnedRecord = i->get_record(5, NON_ASCII);
+    ClientReturnedRecord cReturnedRecord = i->get_record(5, NON_ASCII, {});
     if (cReturnedRecord.content != NON_ASCII) {
         std::string error_msg = "Expected String: " + NON_ASCII + " Actual: " + cReturnedRecord.content;
         throw std::invalid_argument(error_msg);
@@ -124,6 +124,8 @@ void TestHelpers::check_enum_map(const std::unordered_map<color, std::string> & 
         throw std::invalid_argument("map mismatch");
     }
 }
+
+void TestHelpers::check_enum(color) {} // stub
 
 AssortedIntegers TestHelpers::assorted_integers_id(const AssortedIntegers & i) {
     return i;

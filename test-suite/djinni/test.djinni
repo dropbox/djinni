@@ -19,6 +19,7 @@ test_helpers = interface +c {
     static check_client_interface_nonascii(i: client_interface);
 
     static check_enum_map(m: map<color, string>);
+    static check_enum(c: color);
 
     static token_id(t: token): token;
     static create_cpp_token(): token;

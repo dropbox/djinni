@@ -52,6 +52,8 @@ public:
 
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
 
+    static void check_enum(color c);
+
     static std::shared_ptr<Token> token_id(const std::shared_ptr<Token> & t);
 
     static std::shared_ptr<Token> create_cpp_token();

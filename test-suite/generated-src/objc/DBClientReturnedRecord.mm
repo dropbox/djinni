@@ -11,16 +11,23 @@
     if (self = [super init]) {
         _recordId = clientReturnedRecord.recordId;
         _content = [clientReturnedRecord.content copy];
+        if (clientReturnedRecord.misc == nil) {
+            _misc = nil;
+        } else {
+            _misc = [clientReturnedRecord.misc copy];
+        }
     }
     return self;
 }
 
 - (id)initWithRecordId:(int64_t)recordId
                content:(NSString *)content
+                  misc:(NSString *)misc
 {
     if (self = [super init]) {
         _recordId = recordId;
         _content = [content copy];
+        _misc = [misc copy];
     }
     return self;
 }

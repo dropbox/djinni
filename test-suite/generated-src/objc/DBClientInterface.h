@@ -9,6 +9,7 @@
 
 /** Returns record of given string */
 - (DBClientReturnedRecord *)getRecord:(int64_t)recordId
-                           utf8string:(NSString *)utf8string;
+                           utf8string:(NSString *)utf8string
+                                 misc:(NSString *)misc;
 
 @end
