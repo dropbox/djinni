@@ -7,4 +7,7 @@
    <FileRef
       location = "group:../../build_ios/example/libtextsort.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../../build_ios/support-lib/support_lib.xcodeproj">
+   </FileRef>
 </Workspace>
