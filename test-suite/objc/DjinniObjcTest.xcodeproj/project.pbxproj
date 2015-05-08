@@ -579,7 +579,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -622,7 +622,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -658,13 +658,8 @@
 		65868B6E1989FE4200D60EEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++14",
-					"$(OTHER_CFLAGS)",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = DjinniObjcTest;
 				SKIP_INSTALL = YES;
@@ -679,13 +674,8 @@
 		65868B6F1989FE4200D60EEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				DSTROOT = /tmp/DjinniObjcTest.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++14",
-					"$(OTHER_CFLAGS)",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = DjinniObjcTest;
 				SKIP_INSTALL = YES;
@@ -700,7 +690,6 @@
 		65868B711989FE4200D60EEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -725,7 +714,6 @@
 		65868B721989FE4200D60EEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
