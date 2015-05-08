@@ -29,7 +29,7 @@ auto Token::toCpp(ObjcType objc) -> CppType
 
 auto Token::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::Token>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::Token>::getInstance()->get(cpp, [] (const CppType& p)
     {
         return [[DBToken alloc] initWithCpp:p];
     });

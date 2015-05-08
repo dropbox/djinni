@@ -82,9 +82,10 @@
 - (void)checkObjcMap:(NSDictionary *)objcMap
 {
     XCTAssertEqual([objcMap count], (NSUInteger)3, @"Count 3 expected, actual: %lu", (unsigned long)[objcMap count]);
-    XCTAssertEqual([objcMap objectForKey:@"String1"], @1, @"\"String1 -> 1\" expected");
-    XCTAssertEqual([objcMap objectForKey:@"String2"], @2, @"\"String2 -> 2\" expected");
-    XCTAssertEqual([objcMap objectForKey:@"String3"], @3, @"\"String3 -> 3\" expected");
+    // Must test with exact NSNumber constructor as used in DJIMarshal otherwise NSNumber comparison fails on x86_64 simulator devices
+    XCTAssertEqual([objcMap objectForKey:@"String1"], @((int64_t)1), @"\"String1 -> 1\" expected");
+    XCTAssertEqual([objcMap objectForKey:@"String2"], @((int64_t)2), @"\"String2 -> 2\" expected");
+    XCTAssertEqual([objcMap objectForKey:@"String3"], @((int64_t)3), @"\"String3 -> 3\" expected");
 }
 
 - (std::unordered_map<std::string, int64_t>)getCppMap

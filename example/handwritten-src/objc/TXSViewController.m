@@ -40,10 +40,25 @@
 
 - (IBAction)sort:(id)sender
 {
+    [self sortWithOrder:TXSSortOrderAscending];
+}
+
+- (IBAction)reverseSort:(id)sender
+{
+    [self sortWithOrder:TXSSortOrderDescending];
+}
+
+- (IBAction)randomSort:(id)sender
+{
+    [self sortWithOrder:TXSSortOrderRandom];
+}
+
+- (void)sortWithOrder:(TXSSortOrder)order
+{
     NSString *str = self.textView.text;
     NSArray *strList = [str componentsSeparatedByString:@"\n"];
     TXSItemList *list = [[TXSItemList alloc] initWithItems:strList];
-    [_sortItemInterface sort:TXSSortOrderAscending items:list];
+    [_sortItemInterface sort:order items:list];
 }
 
 - (void)dismissKeyboard
