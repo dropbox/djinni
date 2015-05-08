@@ -33,7 +33,7 @@ auto SortItems::toCpp(ObjcType objc) -> CppType
 
 auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance()->get(cpp, [] (const CppType& p)
     {
         return [[TXSSortItems alloc] initWithCpp:p];
     });

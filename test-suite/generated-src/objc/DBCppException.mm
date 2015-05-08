@@ -31,7 +31,7 @@ auto CppException::toCpp(ObjcType objc) -> CppType
 
 auto CppException::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const auto& p)
+    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const CppType& p)
     {
         return [[DBCppException alloc] initWithCpp:p];
     });

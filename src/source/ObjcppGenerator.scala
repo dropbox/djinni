@@ -157,7 +157,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
           w.braced {
-            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const auto& p)").bracedEnd(");") {
+            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const CppType& p)").bracedEnd(");") {
               w.wl(s"return [[$self alloc] initWithCpp:p];")
             }
           }
