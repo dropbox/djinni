@@ -105,6 +105,8 @@ When the Djinni file(s) are ready, from the command line or a bash script you ca
        --objc-out OBJC_OUTPUT_FOLDER \
        --objc-type-prefix DB \ # Apple suggests Objective-C classes have a prefix for each defined type.
        \
+       --objcpp-out OBJC_OUTPUT_FOLDER \
+       \
        --idl MY_PROJECT.djinni
 
 Some other options are also available, such as `--cpp-namespace` that put generated C++ code into the namespace specified. For a list of all options, run
@@ -158,26 +160,19 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 ##### Includes & Build Target
 Generated file for Objective-C / C++ is as follows (assuming prefix is `DB`):
 
-| Type           | C++ header             | C++ source                 | Objective-C header                         | Objective-C source                  |
-|----------------|------------------------|----------------------------|--------------------------------------------|-------------------------------------|
-| Enum           | my\_enum.hpp           |                            | ` public/`DBMyEnum.h                       | `private/`DBMyEnumTranslator.mm     |
-|                |                        |                            | `private/`DBMyEnumTranslator+Private.h     |                                     |
-| Record         | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | ` public/`DBMyRecord[Base].h               | `private/`DBMyRecord[Base].mm       |
-|                |                        |                            | `private/`DBMyRecord[Base]+Private.h       |                                     |
-| Interface `+c` | my\_interface.hpp      | my\_interface.cpp (+)      | ` public/`DBMyInterface.h                  | `private/`DBMyInterfaceCppProxy.mm  |
-|                |                        |                            | ` public/`DBMyInterfaceCppProxy.h          |                                     |
-|                |                        |                            | `private/`DBMyInterfaceCppProxy+Private.h  |                                     |
-| Interface `+o` | my\_interface.hpp      | my\_interface.cpp (+)      | ` public/`DBMyInterface.h                  | `private/`DBMyInterfaceObjcProxy.mm |
-|                |                        |                            | `private/`DBMyInterfaceObjcProxy+Private.h |                                     |
+| Type      | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
+|-----------|------------------------|----------------------------|--------------------------|-----------------------------|
+| Enum      | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
+| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
+|           |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
+| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
+|           |                        |                            |                          | DBMyInterface+Private.mm    |
 
 (+) Generated only for types that contain constants.
-
-The folders `public` and `private` correspond to the options `--objc-out` and `--objc-private-out`
-respecitvely, allowing you to isolate implementation headers and sources from the public files
-exposed to Objective-C clients.
+(++) Generated only for types with derived operations and/or constants. These have `.mm` extensions to allow non-trivial constants.
 
 Add all generated files to your build target, as well as the contents of `support-lib/objc`.
-Note that `+Private` headers can only be used with ObjC++ source (other headers are pure ObjC).
+Note that `+Private` files can only be used with ObjC++ source (other headers are pure ObjC) and are not required by Objective-C users of your interface.
 
 ## Details of Generated Types
 ### Enum
