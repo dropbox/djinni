@@ -52,14 +52,14 @@ auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 - (void)sort:(TXSSortOrder)order
-       items:(TXSItemList *)items {
+       items:(nonnull TXSItemList *)items {
     try {
         _cppRef.get()->sort(::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order),
                             ::djinni_generated::ItemList::toCpp(items));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (TXSSortItems *)createWithListener:(id<TXSTextboxListener>)listener {
++ (nullable TXSSortItems *)createWithListener:(nullable id<TXSTextboxListener>)listener {
     try {
         auto r = ::textsort::SortItems::create_with_listener(::djinni_generated::TextboxListener::toCpp(listener));
         return ::djinni_generated::SortItems::fromCpp(r);

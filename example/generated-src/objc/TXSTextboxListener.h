@@ -7,6 +7,6 @@
 
 @protocol TXSTextboxListener
 
-- (void)update:(TXSItemList *)items;
+- (void)update:(nonnull TXSItemList *)items;
 
 @end

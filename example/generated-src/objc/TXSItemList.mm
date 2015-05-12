@@ -20,7 +20,7 @@
     return self;
 }
 
-- (id)initWithItems:(NSArray *)items
+- (id)initWithItems:(nonnull NSArray *)items
 {
     if (self = [super init]) {
         _items = items;

@@ -11,8 +11,8 @@
 @interface TXSSortItems : NSObject
 
 - (void)sort:(TXSSortOrder)order
-       items:(TXSItemList *)items;
+       items:(nonnull TXSItemList *)items;
 
-+ (TXSSortItems *)createWithListener:(id<TXSTextboxListener>)listener;
++ (nullable TXSSortItems *)createWithListener:(nullable id<TXSTextboxListener>)listener;
 
 @end
