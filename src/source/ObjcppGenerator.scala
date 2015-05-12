@@ -52,17 +52,17 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             val ext = d.body.asInstanceOf[Interface].ext
             if (ext.cpp) {
               header.add("@class " + objcMarshal.typename(tm) + ";")
-              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
+              body.add("#import " + q(spec.objcppIncludePrefix + privateHeaderName(d.name)))
             }
             if (ext.objc) {
               header.add("@protocol " + objcMarshal.typename(tm) + ";")
-              body.add("#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(d.name)))
+              body.add("#import " + q(spec.objcppIncludePrefix + privateHeaderName(d.name)))
             }
           case DRecord =>
             val r = d.body.asInstanceOf[Record]
-            val prefix = if (r.ext.objc) "../" else ""
+            val objcName = d.name + (if (r.ext.objc) "_base" else "")
             header.add("@class " + objcMarshal.typename(tm) + ";")
-            body.add("#import " + q(spec.objcIncludePrivatePrefix + prefix + privateHeaderName(d.name)))
+            body.add("#import " + q(spec.objcppIncludePrefix + privateHeaderName(objcName)))
         }
         case p: MParam =>
       }
@@ -77,8 +77,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
-  def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcExt
-  def privateBodyName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcExt
+  def bodyName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcppExt
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
@@ -94,9 +93,9 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     val cppSelf = cppMarshal.fqTypename(ident, i)
 
     refs.privHeader.add("#include <memory>")
-    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     refs.body.add("#include <vector>")
-    refs.body.add("!#import " + q(spec.objcIncludePrefix + headerName(ident)))
+    refs.body.add("!#import " + q(spec.objcppIncludeObjcPrefix + headerName(ident)))
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
@@ -131,7 +130,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     if (i.ext.cpp) {
-      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
+      refs.body.add("!#import " + q(spec.objcppIncludePrefix + privateHeaderName(ident.name)))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
@@ -193,7 +192,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     if (i.ext.objc) {
       val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(ident.name)))
+      refs.body.add("!#import " + q(spec.objcppIncludePrefix + privateHeaderName(ident.name)))
 
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
         arcAssert(w)
@@ -250,17 +249,17 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     refs.header.add("#import <Foundation/Foundation.h>")
 
     refs.privHeader.add("!#import " + q(spec.objcIncludePrefix + headerName(objcName)))
-    refs.privHeader.add("!#include " + q(spec.objcIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("#include <cassert>")
     refs.body.add("#include <utility>")
     refs.body.add("#include <vector>")
     refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIDate.h"))
-    refs.body.add("!#import " + q(spec.objcIncludePrivatePrefix + privateHeaderName(objcName)))
+    refs.body.add("!#import " + q(spec.objcppIncludePrefix + privateHeaderName(objcName)))
 
     if (r.ext.objc) {
-      refs.body.add("#import " + q(spec.objcIncludePrefix + "../" + headerName(ident)))
+      refs.body.add("#import " + q(spec.objcppIncludeObjcPrefix + "../" + headerName(ident)))
       refs.header.add(s"@class ${objcMarshal.typename(ident, r)};")
     }
 
@@ -292,7 +291,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       })
     })
 
-    writeObjcFile(privateBodyName(objcName), origin, refs.body, w => {
+    writeObjcFile(bodyName(objcName), origin, refs.body, w => {
       wrapNamespace(w, spec.objcppNamespace, w => {
         w.wl(s"auto $helperClass::toCpp(ObjcType obj) -> CppType")
         w.braced {
@@ -316,7 +315,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
  }
 
   def writeObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) {
-    createFile(spec.objcPrivateOutFolder.get, fileName, (w: IndentWriter) => {
+    createFile(spec.objcppOutFolder.get, fileName, (w: IndentWriter) => {
       w.wl("// AUTOGENERATED FILE - DO NOT MODIFY!")
       w.wl("// This file generated by Djinni from " + origin)
       w.wl
