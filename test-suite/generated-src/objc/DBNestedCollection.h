@@ -4,9 +4,9 @@
 #import <Foundation/Foundation.h>
 
 @interface DBNestedCollection : NSObject
-- (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection;
-- (id)initWithSetList:(NSArray *)setList;
+- (nonnull id)initWithNestedCollection:(nonnull DBNestedCollection *)nestedCollection;
+- (nonnull id)initWithSetList:(nonnull NSArray *)setList;
 
-@property (nonatomic, readonly) NSArray * setList;
+@property (nonatomic, readonly, nonnull) NSArray * setList;
 
 @end

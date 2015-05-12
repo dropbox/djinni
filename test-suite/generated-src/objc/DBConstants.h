@@ -5,13 +5,13 @@
 @class DBConstants;
 
 @interface DBConstants : NSObject
-- (id)initWithConstants:(DBConstants *)constants;
-- (id)initWithSomeInteger:(int32_t)someInteger
-               someString:(NSString *)someString;
+- (nonnull id)initWithConstants:(nonnull DBConstants *)constants;
+- (nonnull id)initWithSomeInteger:(int32_t)someInteger
+                       someString:(nonnull NSString *)someString;
 
 @property (nonatomic, readonly) int32_t someInteger;
 
-@property (nonatomic, readonly) NSString * someString;
+@property (nonatomic, readonly, nonnull) NSString * someString;
 
 @end
 
@@ -21,6 +21,6 @@ extern const int16_t DBConstantsI16Constant;
 extern const int32_t DBConstantsI32Constant;
 extern const int64_t DBConstantsI64Constant;
 extern const double DBConstantsF64Constant;
-extern NSString * const DBConstantsStringConstant;
-extern NSNumber * const DBConstantsOptionalIntegerConstant;
-extern DBConstants * const DBConstantsObjectConstant;
+extern NSString * __nonnull const DBConstantsStringConstant;
+extern NSNumber * __nullable const DBConstantsOptionalIntegerConstant;
+extern DBConstants * __nonnull const DBConstantsObjectConstant;

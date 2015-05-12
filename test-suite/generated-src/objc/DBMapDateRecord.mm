@@ -22,7 +22,7 @@
     return self;
 }
 
-- (id)initWithDatesById:(NSDictionary *)datesById
+- (id)initWithDatesById:(nonnull NSDictionary *)datesById
 {
     if (self = [super init]) {
         _datesById = datesById;

@@ -4,15 +4,15 @@
 #import <Foundation/Foundation.h>
 
 @interface DBClientReturnedRecord : NSObject
-- (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord;
-- (id)initWithRecordId:(int64_t)recordId
-               content:(NSString *)content
-                  misc:(NSString *)misc;
+- (nonnull id)initWithClientReturnedRecord:(nonnull DBClientReturnedRecord *)clientReturnedRecord;
+- (nonnull id)initWithRecordId:(int64_t)recordId
+                       content:(nonnull NSString *)content
+                          misc:(nullable NSString *)misc;
 
 @property (nonatomic, readonly) int64_t recordId;
 
-@property (nonatomic, readonly) NSString * content;
+@property (nonatomic, readonly, nonnull) NSString * content;
 
-@property (nonatomic, readonly) NSString * misc;
+@property (nonatomic, readonly, nullable) NSString * misc;
 
 @end

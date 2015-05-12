@@ -16,14 +16,29 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fqTypename(tm: MExpr): String = typename(tm)
   def fqTypename(name: String, ty: TypeDef): String = typename(name, ty)
 
-  override def paramType(tm: MExpr): String = toObjcParamType(tm)
+  def nullability(tm: MExpr): Option[String] = {
+    tm.base match {
+      case MOptional => Some("nullable")
+      case MPrimitive(_,_,_,_,_,_,_,_) => None
+      case d: MDef => d.defType match {
+        case DEnum => None
+        case DInterface => Some("nullable")
+        case DRecord => Some("nonnull")
+      }
+      case _ => Some("nonnull")
+    }
+  }
+
+  override def paramType(tm: MExpr): String = {
+    nullability(tm).fold("")(_ + " ") + toObjcParamType(tm)
+  }
   override def fqParamType(tm: MExpr): String = paramType(tm)
 
-  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(paramType)
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")((t: TypeRef) => nullability(t.resolved).fold("")(_ + " ") + toObjcParamType(t.resolved))
   override def fqReturnType(ret: Option[TypeRef]): String = returnType(ret)
 
-  override def fieldType(tm: MExpr): String = paramType(tm)
-  override def fqFieldType(tm: MExpr): String = fqParamType(tm)
+  override def fieldType(tm: MExpr): String = toObjcParamType(tm)
+  override def fqFieldType(tm: MExpr): String = toObjcParamType(tm)
 
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")

@@ -14,7 +14,7 @@
     return self;
 }
 
-- (id)initWithCreatedAt:(NSDate *)createdAt
+- (id)initWithCreatedAt:(nonnull NSDate *)createdAt
 {
     if (self = [super init]) {
         _createdAt = createdAt;

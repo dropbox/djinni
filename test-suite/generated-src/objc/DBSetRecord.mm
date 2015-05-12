@@ -20,7 +20,7 @@
     return self;
 }
 
-- (id)initWithSet:(NSSet *)set
+- (id)initWithSet:(nonnull NSSet *)set
 {
     if (self = [super init]) {
         _set = set;

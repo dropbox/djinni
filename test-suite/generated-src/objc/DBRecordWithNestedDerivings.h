@@ -5,14 +5,14 @@
 @class DBRecordWithDerivings;
 
 @interface DBRecordWithNestedDerivings : NSObject
-- (id)initWithRecordWithNestedDerivings:(DBRecordWithNestedDerivings *)recordWithNestedDerivings;
-- (id)initWithKey:(int32_t)key
-              rec:(DBRecordWithDerivings *)rec;
+- (nonnull id)initWithRecordWithNestedDerivings:(nonnull DBRecordWithNestedDerivings *)recordWithNestedDerivings;
+- (nonnull id)initWithKey:(int32_t)key
+                      rec:(nonnull DBRecordWithDerivings *)rec;
 
 @property (nonatomic, readonly) int32_t key;
 
-@property (nonatomic, readonly) DBRecordWithDerivings * rec;
+@property (nonatomic, readonly, nonnull) DBRecordWithDerivings * rec;
 
-- (NSComparisonResult)compare:(DBRecordWithNestedDerivings *)other;
+- (NSComparisonResult)compare:(nonnull DBRecordWithNestedDerivings *)other;
 
 @end

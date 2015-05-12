@@ -87,11 +87,15 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + ".mm" // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
 
-  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = c.ty.resolved.base match {
-    // MBinary | MList | MSet | MMap are not allowed for constants.
-    // Primitives should be `const type`. All others are pointers and should be `type * const`
-    case t: MPrimitive => w.w(s"const ${marshal.fqFieldType(c.ty)} $s${idObjc.const(c.ident)}")
-    case _ => w.w(s"${marshal.fqFieldType(c.ty)} const $s${idObjc.const(c.ident)}")
+  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = {
+    val nullability = marshal.nullability(c.ty.resolved).fold("")(" __" + _)
+    val td = marshal.fqFieldType(c.ty) + nullability
+    c.ty.resolved.base match {
+      // MBinary | MList | MSet | MMap are not allowed for constants.
+      // Primitives should be `const type`. All others are pointers and should be `type * const`
+      case t: MPrimitive => w.w(s"const ${td} $s${idObjc.const(c.ident)}")
+      case _ => w.w(s"${td} const $s${idObjc.const(c.ident)}")
+    }
   }
 
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
@@ -219,12 +223,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@interface $self : NSObject")
 
       // Deep copy construtor
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($self *)${idObjc.local(ident)};")
+      w.wl(s"- (nonnull id)${idObjc.method("init_with_" + ident.name)}:(nonnull $self *)${idObjc.local(ident)};")
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
         val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
-        val decl = s"- (id)init$first"
+        val decl = s"- (nonnull id)init$first"
         writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl(";")
       }
@@ -232,11 +236,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       for (f <- r.fields) {
         w.wl
         writeDoc(w, f.doc)
-        w.wl(s"@property (nonatomic, readonly) ${marshal.fqFieldType(f.ty)} ${idObjc.field(f.ident)};")
+        val nullability = marshal.nullability(f.ty.resolved).fold("")(", " + _)
+        w.wl(s"@property (nonatomic, readonly${nullability}) ${marshal.fqFieldType(f.ty)} ${idObjc.field(f.ident)};")
       }
       if (r.derivingTypes.contains(DerivingType.Ord)) {
         w.wl
-        w.wl(s"- (NSComparisonResult)compare:($self *)other;")
+        w.wl(s"- (NSComparisonResult)compare:(nonnull $self *)other;")
       }
       w.wl
       w.wl("@end")

@@ -20,7 +20,7 @@
     return self;
 }
 
-- (id)initWithList:(NSArray *)list
+- (id)initWithList:(nonnull NSArray *)list
 {
     if (self = [super init]) {
         _list = list;

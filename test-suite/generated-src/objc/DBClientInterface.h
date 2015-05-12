@@ -8,8 +8,8 @@
 @protocol DBClientInterface
 
 /** Returns record of given string */
-- (DBClientReturnedRecord *)getRecord:(int64_t)recordId
-                           utf8string:(NSString *)utf8string
-                                 misc:(NSString *)misc;
+- (nonnull DBClientReturnedRecord *)getRecord:(int64_t)recordId
+                                   utf8string:(nonnull NSString *)utf8string
+                                         misc:(nullable NSString *)misc;
 
 @end

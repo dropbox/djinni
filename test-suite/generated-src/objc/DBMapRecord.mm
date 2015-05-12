@@ -22,7 +22,7 @@
     return self;
 }
 
-- (id)initWithMap:(NSDictionary *)map
+- (id)initWithMap:(nonnull NSDictionary *)map
 {
     if (self = [super init]) {
         _map = map;
