@@ -63,7 +63,8 @@ $base_dir/../src/run-assume-built \
     --ident-jni-class NativeFooBar \
     --ident-jni-file NativeFooBar \
     \
-    --objc-out "$temp_out/objc" \
+	--objc-out "$temp_out/objc" \
+	--objcpp-out "$temp_out/objc" \
     --objc-type-prefix TXS \
     \
     --idl "$in"
