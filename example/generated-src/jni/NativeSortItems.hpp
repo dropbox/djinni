@@ -8,18 +8,23 @@
 
 namespace djinni_generated {
 
-class NativeSortItems final : djinni::JniInterface<::textsort::SortItems, NativeSortItems> {
+class NativeSortItems final : ::djinni::JniInterface<::textsort::SortItems, NativeSortItems> {
 public:
     using CppType = std::shared_ptr<::textsort::SortItems>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::textsort::SortItems> c) { return djinni::JniClass<::djinni_generated::NativeSortItems>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<::textsort::SortItems> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeSortItems>::get()._fromJava(jniEnv, j); }
+    using Boxed = NativeSortItems;
 
+    ~NativeSortItems();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeSortItems>::get()._fromJava(jniEnv, j); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeSortItems>::get()._toJava(jniEnv, c)}; }
 
 private:
     NativeSortItems();
-    friend class djinni::JniClass<::djinni_generated::NativeSortItems>;
+    friend ::djinni::JniClass<NativeSortItems>;
+    friend ::djinni::JniInterface<::textsort::SortItems, NativeSortItems>;
+
 };
 
 }  // namespace djinni_generated

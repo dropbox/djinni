@@ -13,16 +13,20 @@ public:
     using CppType = ::MapRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::MapRecord);
-    static ::MapRecord fromJava(JNIEnv*, jobject);
+    using Boxed = NativeMapRecord;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/MapRecord") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashMap;)V") };
-    const jfieldID field_mMap { djinni::jniGetFieldID(clazz.get(), "mMap", "Ljava/util/HashMap;") };
+    ~NativeMapRecord();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);
 
 private:
-    NativeMapRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeMapRecord>;
+    NativeMapRecord();
+    friend ::djinni::JniClass<NativeMapRecord>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/MapRecord") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashMap;)V") };
+    const jfieldID field_mMap { ::djinni::jniGetFieldID(clazz.get(), "mMap", "Ljava/util/HashMap;") };
 };
 
 }  // namespace djinni_generated

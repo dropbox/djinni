@@ -5,10 +5,14 @@
 
 namespace djinni_generated {
 
-NativeToken::NativeToken() : djinni::JniInterface<::Token, NativeToken>("com/dropbox/djinni/test/Token$CppProxy") {}
+NativeToken::NativeToken() : ::djinni::JniInterface<::Token, NativeToken>("com/dropbox/djinni/test/Token$CppProxy") {}
 
-NativeToken::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
-using namespace ::djinni_generated;
+NativeToken::~NativeToken() = default;
+
+NativeToken::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }
+
+NativeToken::JavaProxy::~JavaProxy() = default;
+
 
 CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_Token_00024CppProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
 {

@@ -8,31 +8,39 @@
 
 namespace djinni_generated {
 
-class NativeTextboxListener final : djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener> {
+class NativeTextboxListener final : ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener> {
 public:
     using CppType = std::shared_ptr<::textsort::TextboxListener>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<::textsort::TextboxListener> c) { return djinni::JniClass<::djinni_generated::NativeTextboxListener>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<::textsort::TextboxListener> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeTextboxListener>::get()._fromJava(jniEnv, j); }
+    using Boxed = NativeTextboxListener;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };
-    const jmethodID method_update { djinni::jniGetMethodID(clazz.get(), "update", "(Lcom/dropbox/textsort/ItemList;)V") };
+    ~NativeTextboxListener();
 
-    class JavaProxy final : djinni::JavaProxyCacheEntry, public ::textsort::TextboxListener {
-    public:
-        JavaProxy(jobject obj);
-        virtual void update(const ::textsort::ItemList & items) override;
-
-    private:
-        using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterface<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
-        friend class djinni::JavaProxyCache<JavaProxy>;
-    };
+    static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeTextboxListener>::get()._fromJava(jniEnv, j); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeTextboxListener>::get()._toJava(jniEnv, c)}; }
 
 private:
     NativeTextboxListener();
-    friend class djinni::JniClass<::djinni_generated::NativeTextboxListener>;
+    friend ::djinni::JniClass<NativeTextboxListener>;
+    friend ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>;
+
+    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::textsort::TextboxListener
+    {
+    public:
+        JavaProxy(JniType j);
+        ~JavaProxy();
+
+        void update(const ::textsort::ItemList & items) override;
+
+    private:
+        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
+        friend ::djinni::JniInterface<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
+        friend ::djinni::JavaProxyCache<JavaProxy>;
+    };
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };
+    const jmethodID method_update { ::djinni::jniGetMethodID(clazz.get(), "update", "(Lcom/dropbox/textsort/ItemList;)V") };
 };
 
 }  // namespace djinni_generated

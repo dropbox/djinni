@@ -13,16 +13,20 @@ public:
     using CppType = ::textsort::ItemList;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, ::textsort::ItemList);
-    static ::textsort::ItemList fromJava(JNIEnv*, jobject);
+    using Boxed = NativeItemList;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/textsort/ItemList") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
-    const jfieldID field_mItems { djinni::jniGetFieldID(clazz.get(), "mItems", "Ljava/util/ArrayList;") };
+    ~NativeItemList();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);
 
 private:
-    NativeItemList() {}
-    friend class djinni::JniClass<::djinni_generated::NativeItemList>;
+    NativeItemList();
+    friend ::djinni::JniClass<NativeItemList>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/textsort/ItemList") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
+    const jfieldID field_mItems { ::djinni::jniGetFieldID(clazz.get(), "mItems", "Ljava/util/ArrayList;") };
 };
 
 }  // namespace djinni_generated
