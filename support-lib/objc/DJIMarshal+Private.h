@@ -29,8 +29,8 @@ struct Bool {
 
     struct Boxed {
         using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { assert(x); return [x boolValue] ? true : false; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:x ? YES : NO]; }
+        static CppType toCpp(ObjcType x) noexcept { assert(x); return Bool::toCpp([x boolValue]); }
+        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithBool:Bool::fromCpp(x)]; }
     };
 };
 
@@ -41,46 +41,42 @@ struct Primitive {
 
     static CppType toCpp(ObjcType x) noexcept { return x; }
     static ObjcType fromCpp(CppType x) noexcept { return x; }
-};
 
-struct I8 : public Primitive<I8, int8_t> {
     struct Boxed {
         using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x charValue]; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithChar:x]; }
+        static CppType toCpp(ObjcType x) noexcept { assert(x); return static_cast<CppType>(Self::unbox(x)); }
+        static ObjcType fromCpp(CppType x) noexcept { return Self::box(x); }
     };
 };
 
-struct I16 : public Primitive<I16, int16_t> {
-    struct Boxed {
-        using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x shortValue]; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithShort:x]; }
-    };
+class I8 : public Primitive<I8, int8_t> {
+    friend Primitive<I8, int8_t>;
+    static char unbox(Boxed::ObjcType x) noexcept { return [x charValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithChar:static_cast<char>(x)]; }
 };
 
-struct I32 : public Primitive<I32, int32_t> {
-    struct Boxed {
-        using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x intValue]; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInt:x]; }
-    };
+class I16 : public Primitive<I16, int16_t> {
+    friend Primitive<I16, int16_t>;
+    static short unbox(Boxed::ObjcType x) noexcept { return [x shortValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithShort:static_cast<short>(x)]; }
 };
 
-struct I64 : public Primitive<I64, int64_t> {
-    struct Boxed {
-        using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x longLongValue]; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithLongLong:x]; }
-    };
+class I32 : public Primitive<I32, int32_t> {
+    friend Primitive<I32, int32_t>;
+    static int unbox(Boxed::ObjcType x) noexcept { return [x intValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithInt:static_cast<int>(x)]; }
 };
 
-struct F64 : public Primitive<F64, double> {
-    struct Boxed {
-        using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return [x doubleValue]; }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithDouble:x]; }
-    };
+class I64 : public Primitive<I64, int64_t> {
+    friend Primitive<I64, int64_t>;
+    static long long unbox(Boxed::ObjcType x) noexcept { return [x longLongValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithLongLong:static_cast<long long>(x)]; }
+};
+
+class F64 : public Primitive<F64, double> {
+    friend Primitive<F64, double>;
+    static CppType unbox(Boxed::ObjcType x) noexcept { return [x doubleValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithDouble:x]; }
 };
 
 template<class CppEnum, class ObjcEnum>
@@ -105,13 +101,15 @@ struct String {
     using Boxed = String;
 
     static CppType toCpp(ObjcType string) {
+        assert(string);
         return {[string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]};
     }
 
     static ObjcType fromCpp(const CppType& string) {
         assert(string.size() <= std::numeric_limits<NSUInteger>::max());
-        // Using the pointer from .data() on an empty string is UB
-        return string.empty() ? @"" : [[NSString alloc] initWithBytes:string.data() length:string.size() encoding:NSUTF8StringEncoding];
+        return [[NSString alloc] initWithBytes:string.data()
+                                        length:static_cast<NSUInteger>(string.size())
+                                      encoding:NSUTF8StringEncoding];
     }
 };
 
@@ -126,8 +124,8 @@ struct Date {
     }
 
     static ObjcType fromCpp(const CppType& date) {
-        return [NSDate dateWithTimeIntervalSince1970:
-                                                    ::std::chrono::duration_cast<::std::chrono::duration<double>>(date.time_since_epoch()).count()];
+        using namespace std::chrono;
+        return [NSDate dateWithTimeIntervalSince1970:duration_cast<duration<double>>(date.time_since_epoch()).count()];
 
     }
 };
@@ -139,6 +137,7 @@ struct Binary {
     using Boxed = Binary;
 
     static CppType toCpp(ObjcType data) {
+        assert(data);
         auto bytes = reinterpret_cast<const uint8_t*>(data.bytes);
         return data.length > 0 ? CppType{bytes, bytes + data.length} : CppType{};
     }
@@ -146,10 +145,10 @@ struct Binary {
     static ObjcType fromCpp(const CppType& bytes) {
         assert(bytes.size() <= std::numeric_limits<NSUInteger>::max());
         // Using the pointer from .data() on an empty vector is UB
-        return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data() length:bytes.size()];
+        return bytes.empty() ? [NSData data] : [NSData dataWithBytes:bytes.data()
+                                                              length:static_cast<NSUInteger>(bytes.size())];
     }
 };
-
 
 template<template<class> class OptionalType, class T>
 class Optional {
@@ -183,8 +182,9 @@ public:
         assert(array);
         auto v = CppType();
         v.reserve(array.count);
-        for(EObjcType value in array)
+        for(EObjcType value in array) {
             v.push_back(T::Boxed::toCpp(value));
+        }
         return v;
     }
 
