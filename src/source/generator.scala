@@ -180,6 +180,10 @@ package object generatorTools {
       case GenerateException(message) => Some(message)
     }
   }
+
+  sealed abstract class SymbolReference
+  case class ImportRef(arg: String) extends SymbolReference // Already contains <> or "" in C contexts
+  case class DeclRef(decl: String, namespace: Option[String]) extends SymbolReference
 }
 
 abstract class Generator(spec: Spec)

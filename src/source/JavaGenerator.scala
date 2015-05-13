@@ -36,22 +36,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ", ", ">")
+      tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = m match {
-      case o: MOpaque =>
-        o match {
-          case MList =>
-            java.add("java.util.ArrayList")
-          case MSet =>
-            java.add("java.util.HashSet")
-          case MMap =>
-            java.add("java.util.HashMap")
-          case MDate =>
-            java.add("java.util.Date")
-          case _ =>
-        }
+    def find(m: Meta) = for(r <- marshal.references(m)) r match {
+      case ImportRef(arg) => java.add(arg)
       case _ =>
     }
   }

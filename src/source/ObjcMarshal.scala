@@ -43,6 +43,33 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")
 
+  def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
+    case o: MOpaque =>
+      List(ImportRef("<Foundation/Foundation.h>"))
+    case d: MDef => d.defType match {
+      case DEnum =>
+        List(ImportRef(q(spec.objcIncludePrefix + headerName(d.name))))
+      case DInterface =>
+        val ext = d.body.asInstanceOf[Interface].ext
+        if (ext.cpp) {
+          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@class ${typename(d.name, d.body)};", None))
+        }
+        else if (ext.objc) {
+          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@protocol ${typename(d.name, d.body)};", None))
+        }
+        else {
+          List()  
+        }
+      case DRecord =>
+        val r = d.body.asInstanceOf[Record]
+        val prefix = if (r.ext.objc) "../" else ""
+        List(ImportRef(q(spec.objcIncludePrefix + prefix + headerName(d.name))))
+    }
+    case p: MParam => List()
+  }
+
+  def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
+
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)

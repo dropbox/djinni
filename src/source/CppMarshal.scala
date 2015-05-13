@@ -32,6 +32,35 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
 
+  def references(m: Meta, exclude: String): Seq[SymbolReference] = m match {
+    case p: MPrimitive => p.idlName match {
+      case "i8" | "i16" | "i32" | "i64" => List(ImportRef("<cstdint>"))
+      case _ => List()
+    }
+    case MString => List(ImportRef("<string>"))
+    case MDate => List(ImportRef("<chrono>"))
+    case MBinary => List(ImportRef("<vector>"), ImportRef("<cstdint>"))
+    case MOptional => List(ImportRef(spec.cppOptionalHeader))
+    case MList => List(ImportRef("<vector>"))
+    case MSet => List(ImportRef("<unordered_set>"))
+    case MMap => List(ImportRef("<unordered_map>"))
+    case d: MDef => d.defType match {
+      case DEnum | DRecord =>
+        if (d.name != exclude) {
+          List(ImportRef(q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt)))
+        } else {
+          List()
+        }
+      case DInterface =>
+        if (d.name != exclude) {
+          List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
+        } else {
+          List(ImportRef("<memory>"))
+        }
+    }
+    case p: MParam => List()
+ }
+
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

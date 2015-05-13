@@ -24,6 +24,18 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct java to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to java conversion not possible")
 
+  def references(m: Meta): Seq[SymbolReference] = m match {
+    case o: MOpaque =>
+      o match {
+        case MList => List(ImportRef("java.util.ArrayList"))
+        case MSet => List(ImportRef("java.util.HashSet"))
+        case MMap => List(ImportRef("java.util.HashMap"))
+        case MDate => List(ImportRef("java.util.Date"))
+        case _ => List()
+      }
+    case _ => List()
+  }
+
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
     def f(tm: MExpr, needRef: Boolean): String = {
       tm.base match {

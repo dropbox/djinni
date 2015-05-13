@@ -36,7 +36,6 @@
 		A238CA9E1AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA861AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm */; };
 		A238CAA01AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA881AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm */; };
 		A238CAA21AF84B7100CDDCE5 /* DBSetRecord+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA8A1AF84B7100CDDCE5 /* DBSetRecord+Private.mm */; };
-		A239F37A1AF400C600DF27C8 /* DJIDate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A239F3781AF400C600DF27C8 /* DJIDate.mm */; };
 		A24249731AF192FC003BF8F0 /* assorted_integers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A242495E1AF192FC003BF8F0 /* assorted_integers.cpp */; };
 		A24249741AF192FC003BF8F0 /* constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A24249631AF192FC003BF8F0 /* constants.cpp */; };
 		A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A242496C1AF192FC003BF8F0 /* record_with_derivings.cpp */; };
@@ -531,7 +530,6 @@
 				A238CA9E1AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm in Sources */,
 				A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */,
 				A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */,
-				A239F37A1AF400C600DF27C8 /* DJIDate.mm in Sources */,
 				A248502A1AF96EBC00AFE907 /* DBMapDateRecord.mm in Sources */,
 				A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */,
 				A24850261AF96EBC00AFE907 /* DBAssortedIntegers.mm in Sources */,

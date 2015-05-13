@@ -44,15 +44,12 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ", ", ">")
+      tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = m match {
-      case o: MOpaque =>
-        jniCpp.add("#include " + q(spec.jniBaseLibIncludePrefix + "Marshal.hpp"))
-      case d: MDef =>
-        jniCpp.add("#include " + q(spec.jniIncludePrefix + spec.jniFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
-      case p: MParam =>
+    def find(m: Meta) = for(r <- jniMarshal.references(m, name)) r match {
+      case ImportRef(arg) => jniCpp.add("#include " + arg)
+      case _ =>
     }
   }
 

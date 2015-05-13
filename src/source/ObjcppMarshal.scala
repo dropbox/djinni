@@ -32,7 +32,25 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
     s"$helper::fromCpp($expr)"
   }
 
+  def references(m: Meta): Seq[SymbolReference] = m match {
+    case o: MOpaque =>
+      List(ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")))
+    case d: MDef => d.defType match {
+      case DEnum =>
+        List(ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")))
+      case DInterface =>
+        List(ImportRef(q(spec.objcppIncludePrefix + privateHeaderName(d.name))))
+      case DRecord =>
+        val r = d.body.asInstanceOf[Record]
+        val objcName = d.name + (if (r.ext.objc) "_base" else "")
+        List(ImportRef(q(spec.objcppIncludePrefix + privateHeaderName(objcName))))
+    }
+    case p: MParam => List()
+  }
+
   def helperClass(name: String) = idCpp.ty(name)
+
+  def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
 
   private def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {

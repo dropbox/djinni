@@ -39,49 +39,14 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ", ", ">")
+      tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = m match {
-      case o: MOpaque =>
-        o match {
-          case p: MPrimitive =>
-            val n = p.idlName
-            if (n == "i8" || n == "i16" || n == "i32" || n == "i64") {
-              hpp.add("#include <cstdint>")
-            }
-          case MString =>
-            hpp.add("#include <string>")
-          case MDate =>
-            hpp.add("#include <chrono>")
-          case MBinary =>
-            hpp.add("#include <vector>")
-            hpp.add("#include <cstdint>")
-          case MOptional =>
-            hpp.add("#include " + spec.cppOptionalHeader)
-          case MList =>
-            hpp.add("#include <vector>")
-          case MSet =>
-            hpp.add("#include <unordered_set>")
-          case MMap =>
-            hpp.add("#include <unordered_map>")
-        }
-      case d: MDef =>
-        d.defType match {
-          case DEnum
-             | DRecord =>
-            if (d.name != name) {
-              hpp.add("#include " + q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
-            }
-          case DInterface =>
-            hpp.add("#include <memory>")
-            if (d.name != name) {
-              hppFwds.add(s"class ${marshal.typename(d.name, d.body)};")
-            }
-        }
-      case p: MParam =>
+    def find(m: Meta) = for(r <- marshal.references(m, name)) r match {
+      case ImportRef(arg) => hpp.add("#include " + arg)
+      case DeclRef(decl, Some(spec.cppNamespace)) => hppFwds.add(decl)
+      case DeclRef(_, _) =>
     }
-
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {

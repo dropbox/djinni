@@ -36,32 +36,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ",", ">")
-      tm.base match {
-        case o: MOpaque =>
-          header.add("#import <Foundation/Foundation.h>")
-        case d: MDef => d.defType match {
-          case DEnum =>
-            header.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-          case DInterface =>
-            header.add("#import <Foundation/Foundation.h>")
-            val ext = d.body.asInstanceOf[Interface].ext
-            if (ext.cpp) {
-              header.add("@class " + marshal.typename(tm) + ";")
-              body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-            }
-            if (ext.objc) {
-              header.add("@protocol " + marshal.typename(tm) + ";")
-              body.add("#import " + q(spec.objcIncludePrefix + headerName(d.name)))
-            }
-          case DRecord =>
-            val r = d.body.asInstanceOf[Record]
-            val prefix = if (r.ext.objc) "../" else ""
-            header.add("@class " + marshal.typename(tm) + ";")
-            body.add("#import " + q(spec.objcIncludePrefix + prefix + headerName(d.name)))
-        }
-        case p: MParam =>
-      }
+      tm.args.foreach(find)
+      find(tm.base)
+    }
+    def find(m: Meta) = for(r <- marshal.references(m)) r match {
+      case ImportRef(arg) => header.add("#import " + arg)
+      case DeclRef(decl, _) => header.add(decl)
     }
   }
 
@@ -71,7 +51,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.header.add("#import <Foundation/Foundation.h>")
 
     val self = marshal.typename(ident, e)
-    writeObjcFile(headerName(ident), origin, refs.header, w => {
+    writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"typedef NS_ENUM(NSInteger, $self)")
       w.bracedSemi {
@@ -163,7 +143,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeAlignedObjcCall(w, decl, method.params, "", p => (idObjc.field(p.ident), s"(${marshal.paramType(p.ty)})${idObjc.local(p.ident)}"))
     }
 
-    writeObjcFile(headerName(ident), origin, refs.header, w => {
+    writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       for (c <- i.consts) {
         writeDoc(w, c.doc)
@@ -205,7 +185,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val self = marshal.typename(objcName, r)
 
     refs.header.add("#import <Foundation/Foundation.h>")
-    refs.body.add("!#import " + q(spec.objcIncludePrefix + (if (r.ext.objc) "../" else "") + headerName(ident)))
+    refs.body.add("!#import " + q(spec.objcIncludePrefix + (if (r.ext.objc) "../" else "") + marshal.headerName(ident)))
 
     if (r.ext.objc) {
       refs.header.add(s"@class $noBaseSelf;")
@@ -218,7 +198,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       case _ => false
     }
 
-    writeObjcFile(headerName(objcName), origin, refs.header, w => {
+    writeObjcFile(marshal.headerName(objcName), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"@interface $self : NSObject")
 
