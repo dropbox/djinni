@@ -26,17 +26,23 @@ public:
     using JniType = jbyteArray;
 
     static std::vector<uint8_t> fromJava(JNIEnv * jniEnv, jbyteArray j) {
-        const auto deleter = [jniEnv, j] (void * c) {
-            jniEnv->ReleasePrimitiveArrayCritical(j, c, JNI_ABORT);
-        };
-
-        std::unique_ptr<uint8_t, decltype(deleter)> ptr(
-            reinterpret_cast<uint8_t *>(jniEnv->GetPrimitiveArrayCritical(j, nullptr)),
-            deleter);
-
+        std::vector<uint8_t> c;
+        c.resize(jniEnv->GetArrayLength(j));
         jniExceptionCheck(jniEnv);
 
-        return std::vector<uint8_t>(ptr.get(), ptr.get() + jniEnv->GetArrayLength(j));
+        {
+            const auto deleter = [jniEnv, j] (void * c) {
+                jniEnv->ReleasePrimitiveArrayCritical(j, c, JNI_ABORT);
+            };
+
+            std::unique_ptr<uint8_t, decltype(deleter)> ptr(
+                reinterpret_cast<uint8_t *>(jniEnv->GetPrimitiveArrayCritical(j, nullptr)),
+                deleter);
+            std::copy(ptr.get(), ptr.get() + c.size(), c.data());
+        }
+
+        jniExceptionCheck(jniEnv);
+        return c;
     }
 
     static jbyteArray toJava(JNIEnv* jniEnv, const std::vector<uint8_t> & c) {
