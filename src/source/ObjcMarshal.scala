@@ -6,7 +6,6 @@ import djinni.meta._
 
 class ObjcMarshal(spec: Spec) extends Marshal(spec) {
 
-  // For JNI typename() is always fully qualified and describes the mangled Java type to be used in field/method signatures
   override def typename(tm: MExpr): String = {
     val (name, _) = toObjcType(tm)
     name

@@ -64,7 +64,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcppExt // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
 
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = {
@@ -159,10 +158,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("@end")
     })
 
-    refs.body.add("#include <vector>")
-    refs.body.add("#import " + q(spec.objcIncludePrefix + headerName(ident)))
-
     if (i.consts.nonEmpty) {
+      refs.body.add("#import " + q(spec.objcIncludePrefix + marshal.headerName(ident)))
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
         generateObjcConstants(w, i.consts, self)
       })
@@ -221,6 +218,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
       w.wl
       w.wl("@end")
+      // Constants come last in case one of them is of the record's type
       if (r.consts.nonEmpty) {
         w.wl
         for (c <- r.consts) {
