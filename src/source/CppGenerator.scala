@@ -88,7 +88,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static const ${marshal.fieldType(c.ty)} ${idCpp.const(c.ident)};")
+      w.wl(s"static ${marshal.fieldType(c.ty)} const ${idCpp.const(c.ident)};")
     }
   }
 
@@ -121,7 +121,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"const ${marshal.fieldType(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
+      w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
       writeCppConst(w, c.ty, c.value)
       w.wl(";")
     }

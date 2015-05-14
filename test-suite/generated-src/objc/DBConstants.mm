@@ -6,17 +6,17 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-variable"
 
-const BOOL DBConstantsBoolConstant = YES;
+BOOL const DBConstantsBoolConstant = YES;
 
-const int8_t DBConstantsI8Constant = 1;
+int8_t const DBConstantsI8Constant = 1;
 
-const int16_t DBConstantsI16Constant = 2;
+int16_t const DBConstantsI16Constant = 2;
 
-const int32_t DBConstantsI32Constant = 3;
+int32_t const DBConstantsI32Constant = 3;
 
-const int64_t DBConstantsI64Constant = 4;
+int64_t const DBConstantsI64Constant = 4;
 
-const double DBConstantsF64Constant = 5.0;
+double const DBConstantsF64Constant = 5.0;
 
 NSString * __nonnull const DBConstantsStringConstant = @"string-constant";
 

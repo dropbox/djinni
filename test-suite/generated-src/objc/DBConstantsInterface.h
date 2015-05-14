@@ -3,12 +3,12 @@
 
 #import <Foundation/Foundation.h>
 
-extern const BOOL DBConstantsInterfaceBoolConstant;
-extern const int8_t DBConstantsInterfaceI8Constant;
-extern const int16_t DBConstantsInterfaceI16Constant;
-extern const int32_t DBConstantsInterfaceI32Constant;
-extern const int64_t DBConstantsInterfaceI64Constant;
-extern const double DBConstantsInterfaceF64Constant;
+extern BOOL const DBConstantsInterfaceBoolConstant;
+extern int8_t const DBConstantsInterfaceI8Constant;
+extern int16_t const DBConstantsInterfaceI16Constant;
+extern int32_t const DBConstantsInterfaceI32Constant;
+extern int64_t const DBConstantsInterfaceI64Constant;
+extern double const DBConstantsInterfaceF64Constant;
 
 @interface DBConstantsInterface : NSObject
 

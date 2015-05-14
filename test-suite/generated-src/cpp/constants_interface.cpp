@@ -3,14 +3,14 @@
 
 #include "constants_interface.hpp"  // my header
 
-const bool ConstantsInterface::BOOL_CONSTANT = true;
+bool const ConstantsInterface::BOOL_CONSTANT = true;
 
-const int8_t ConstantsInterface::I8_CONSTANT = 1;
+int8_t const ConstantsInterface::I8_CONSTANT = 1;
 
-const int16_t ConstantsInterface::I16_CONSTANT = 2;
+int16_t const ConstantsInterface::I16_CONSTANT = 2;
 
-const int32_t ConstantsInterface::I32_CONSTANT = 3;
+int32_t const ConstantsInterface::I32_CONSTANT = 3;
 
-const int64_t ConstantsInterface::I64_CONSTANT = 4;
+int64_t const ConstantsInterface::I64_CONSTANT = 4;
 
-const double ConstantsInterface::F64_CONSTANT = 5.0;
+double const ConstantsInterface::F64_CONSTANT = 5.0;

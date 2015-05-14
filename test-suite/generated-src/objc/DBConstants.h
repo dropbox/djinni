@@ -15,12 +15,12 @@
 
 @end
 
-extern const BOOL DBConstantsBoolConstant;
-extern const int8_t DBConstantsI8Constant;
-extern const int16_t DBConstantsI16Constant;
-extern const int32_t DBConstantsI32Constant;
-extern const int64_t DBConstantsI64Constant;
-extern const double DBConstantsF64Constant;
+extern BOOL const DBConstantsBoolConstant;
+extern int8_t const DBConstantsI8Constant;
+extern int16_t const DBConstantsI16Constant;
+extern int32_t const DBConstantsI32Constant;
+extern int64_t const DBConstantsI64Constant;
+extern double const DBConstantsF64Constant;
 extern NSString * __nonnull const DBConstantsStringConstant;
 extern NSNumber * __nullable const DBConstantsOptionalIntegerConstant;
 extern DBConstants * __nonnull const DBConstantsObjectConstant;

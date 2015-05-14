@@ -7,16 +7,16 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-variable"
 
-const BOOL DBConstantsInterfaceBoolConstant = YES;
+BOOL const DBConstantsInterfaceBoolConstant = YES;
 
-const int8_t DBConstantsInterfaceI8Constant = 1;
+int8_t const DBConstantsInterfaceI8Constant = 1;
 
-const int16_t DBConstantsInterfaceI16Constant = 2;
+int16_t const DBConstantsInterfaceI16Constant = 2;
 
-const int32_t DBConstantsInterfaceI32Constant = 3;
+int32_t const DBConstantsInterfaceI32Constant = 3;
 
-const int64_t DBConstantsInterfaceI64Constant = 4;
+int64_t const DBConstantsInterfaceI64Constant = 4;
 
-const double DBConstantsInterfaceF64Constant = 5.0;
+double const DBConstantsInterfaceF64Constant = 5.0;
 
 #pragma clang diagnostic pop

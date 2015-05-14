@@ -70,12 +70,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = {
     val nullability = marshal.nullability(c.ty.resolved).fold("")(" __" + _)
     val td = marshal.fqFieldType(c.ty) + nullability
-    c.ty.resolved.base match {
-      // MBinary | MList | MSet | MMap are not allowed for constants.
-      // Primitives should be `const type`. All others are pointers and should be `type * const`
-      case t: MPrimitive => w.w(s"const ${td} $s${idObjc.const(c.ident)}")
-      case _ => w.w(s"${td} const $s${idObjc.const(c.ident)}")
-    }
+    // MBinary | MList | MSet | MMap are not allowed for constants.
+    w.w(s"${td} const $s${idObjc.const(c.ident)}")
   }
 
   def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
