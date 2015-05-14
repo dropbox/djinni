@@ -16,3 +16,14 @@ constants = record {
         some_string = string_constant
     };
 }
+
+constants_interface = interface +c {
+    const bool_constant: bool = true;
+    const i8_constant: i8 = 1;
+    const i16_constant: i16 = 2;
+    const i32_constant: i32 = 3;
+    const i64_constant: i64 = 4;
+    const f64_constant: f64 = 5.0;
+
+    dummy();
+}

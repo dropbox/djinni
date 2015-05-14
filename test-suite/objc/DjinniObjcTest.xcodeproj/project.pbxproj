@@ -63,6 +63,12 @@
 		CFFD58901B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58891B019E79001E10B6 /* DBTestHelpers+Private.mm */; };
 		CFFD58911B019E79001E10B6 /* DBToken+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD588A1B019E79001E10B6 /* DBToken+Private.mm */; };
 		CFFD58921B019E79001E10B6 /* DBToken+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD588A1B019E79001E10B6 /* DBToken+Private.mm */; };
+		CFFD58B11B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58AE1B041BD9001E10B6 /* DBConstantsInterface.mm */; };
+		CFFD58B21B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58AE1B041BD9001E10B6 /* DBConstantsInterface.mm */; };
+		CFFD58B31B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */; };
+		CFFD58B41B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */; };
+		CFFD58B71B041BFD001E10B6 /* constants_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */; };
+		CFFD58B81B041BFD001E10B6 /* constants_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,6 +208,12 @@
 		CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBCppException+Private.mm"; sourceTree = "<group>"; };
 		CFFD58891B019E79001E10B6 /* DBTestHelpers+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBTestHelpers+Private.mm"; sourceTree = "<group>"; };
 		CFFD588A1B019E79001E10B6 /* DBToken+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBToken+Private.mm"; sourceTree = "<group>"; };
+		CFFD58AD1B041BD9001E10B6 /* DBConstantsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBConstantsInterface.h; sourceTree = "<group>"; };
+		CFFD58AE1B041BD9001E10B6 /* DBConstantsInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBConstantsInterface.mm; sourceTree = "<group>"; };
+		CFFD58AF1B041BD9001E10B6 /* DBConstantsInterface+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBConstantsInterface+Private.h"; sourceTree = "<group>"; };
+		CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBConstantsInterface+Private.mm"; sourceTree = "<group>"; };
+		CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = constants_interface.cpp; sourceTree = "<group>"; };
+		CFFD58B61B041BFD001E10B6 /* constants_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = constants_interface.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -338,6 +350,10 @@
 				A248501C1AF96EBC00AFE907 /* DBConstants.mm */,
 				A24249251AF192E0003BF8F0 /* DBConstants+Private.h */,
 				A238CA781AF84B7100CDDCE5 /* DBConstants+Private.mm */,
+				CFFD58AD1B041BD9001E10B6 /* DBConstantsInterface.h */,
+				CFFD58AE1B041BD9001E10B6 /* DBConstantsInterface.mm */,
+				CFFD58AF1B041BD9001E10B6 /* DBConstantsInterface+Private.h */,
+				CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */,
 				A24249291AF192E0003BF8F0 /* DBCppException.h */,
 				A24249281AF192E0003BF8F0 /* DBCppException+Private.h */,
 				CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */,
@@ -396,6 +412,8 @@
 				A24249601AF192FC003BF8F0 /* client_interface.hpp */,
 				A24249611AF192FC003BF8F0 /* client_returned_record.hpp */,
 				A24249621AF192FC003BF8F0 /* color.hpp */,
+				CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */,
+				CFFD58B61B041BFD001E10B6 /* constants_interface.hpp */,
 				A24249631AF192FC003BF8F0 /* constants.cpp */,
 				A24249641AF192FC003BF8F0 /* constants.hpp */,
 				A24249651AF192FC003BF8F0 /* cpp_exception.hpp */,
@@ -514,10 +532,13 @@
 				6536CD7419A6C96C00DD7715 /* DBClientInterfaceImpl.mm in Sources */,
 				A24850301AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm in Sources */,
 				A2A162D21AF190D200C0B00A /* DJIDate.mm in Sources */,
+				CFFD58B11B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */,
+				CFFD58B31B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
 				A248502F1AF96EBC00AFE907 /* DBRecordWithDerivings.mm in Sources */,
 				A24249741AF192FC003BF8F0 /* constants.cpp in Sources */,
 				CFFD588B1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */,
 				A24850281AF96EBC00AFE907 /* DBConstants.mm in Sources */,
+				CFFD58B71B041BFD001E10B6 /* constants_interface.cpp in Sources */,
 				A238CA9A1AF84B7100CDDCE5 /* DBNestedCollection+Private.mm in Sources */,
 				CFFD58911B019E79001E10B6 /* DBToken+Private.mm in Sources */,
 				A238CA8C1AF84B7100CDDCE5 /* DBAssortedIntegers+Private.mm in Sources */,
@@ -548,10 +569,13 @@
 				6536CD9119A6C9A800DD7715 /* DBPrimitiveListTests.mm in Sources */,
 				6536CD8D19A6C9A800DD7715 /* DBClientInterfaceTests.mm in Sources */,
 				CFFD588C1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */,
+				CFFD58B81B041BFD001E10B6 /* constants_interface.cpp in Sources */,
 				6536CD8E19A6C9A800DD7715 /* DBCppExceptionTests.mm in Sources */,
 				CFFD588E1B019E79001E10B6 /* DBCppException+Private.mm in Sources */,
+				CFFD58B41B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
 				CFFD58901B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
 				CFFD58921B019E79001E10B6 /* DBToken+Private.mm in Sources */,
+				CFFD58B21B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */,
 				6536CD9319A6C9A800DD7715 /* DBRecordWithDerivingsObjcTests.mm in Sources */,
 				6536CD9019A6C9A800DD7715 /* DBNestedCollectionTests.mm in Sources */,
 				6536CD8F19A6C9A800DD7715 /* DBMapRecordTests.mm in Sources */,

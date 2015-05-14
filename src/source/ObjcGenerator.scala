@@ -65,7 +65,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   }
 
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
-  def bodyName(ident: String): String = idObjc.ty(ident) + ".mm" // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
+  def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcppExt // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
 
   def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = {
     val nullability = marshal.nullability(c.ty.resolved).fold("")(" __" + _)
@@ -167,7 +167,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.body.add("#import " + q(spec.objcIncludePrefix + headerName(ident)))
 
     if (i.consts.nonEmpty) {
-      writeObjcFile(bodyName(ident.name + "_constants"), origin, refs.body, w => { // TODO(j4cbo): this is named differently because otherwise it conflicts with interface +c wrappers
+      writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
         generateObjcConstants(w, i.consts, self)
       })
     }
