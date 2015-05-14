@@ -372,7 +372,6 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       case o: MOpaque => o match {
         case p: MPrimitive => p.jSig
         case MString => "Ljava/lang/String;"
-        case MDate => "Ljava/lang/Date;"
         case MBinary => "[B"
         case MOptional =>  e.args.head.base match {
           case p: MPrimitive => s"Ljava/lang/${p.jBoxed};"
@@ -386,6 +385,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         case MList => "Ljava/util/ArrayList;"
         case MSet => "Ljava/util/HashSet;"
         case MMap => "Ljava/util/HashMap;"
+        case MDate => "Ljava/util/Date;"
       }
       case MParam(_) => "Ljava/lang/Object;"
       case d: MDef => s"L${toJavaClassLookup(d.name, javaPackage)};"
