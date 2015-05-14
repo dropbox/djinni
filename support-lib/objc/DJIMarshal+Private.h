@@ -8,13 +8,12 @@
 
 #pragma once
 #import <Foundation/Foundation.h>
+#include <chrono>
 #include <cstdint>
 #include <string>
-#include <vector>
-#include <chrono>
 #include <unordered_set>
 #include <unordered_map>
-#include "DJIDate.h"
+#include <vector>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -120,12 +119,16 @@ struct Date {
     using Boxed = Date;
 
     static CppType toCpp(ObjcType date) {
-        return ::djinni::convert_date([date timeIntervalSince1970]);
+        using namespace std::chrono;
+        static const auto POSIX_EPOCH = system_clock::from_time_t(0);
+        auto timeIntervalSince1970 = duration<double>([date timeIntervalSince1970]);
+        return POSIX_EPOCH + duration_cast<system_clock::duration>(timeIntervalSince1970);
     }
 
     static ObjcType fromCpp(const CppType& date) {
         using namespace std::chrono;
-        return [NSDate dateWithTimeIntervalSince1970:duration_cast<duration<double>>(date.time_since_epoch()).count()];
+        static const auto POSIX_EPOCH = system_clock::from_time_t(0);
+        return [NSDate dateWithTimeIntervalSince1970:duration_cast<duration<double>>(date - POSIX_EPOCH).count()];
 
     }
 };

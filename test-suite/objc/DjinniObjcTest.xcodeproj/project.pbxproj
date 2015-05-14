@@ -53,7 +53,6 @@
 		A24850301AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */; };
 		A24850311AF96EBC00AFE907 /* DBSetRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24850251AF96EBC00AFE907 /* DBSetRecord.mm */; };
 		A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A278D45219BA3601006FD937 /* test_helpers.cpp */; };
-		A2A162D21AF190D200C0B00A /* DJIDate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2A162D11AF190D200C0B00A /* DJIDate.mm */; };
 		A2CB54B419BA6E6000A9E600 /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2CB54B319BA6E6000A9E600 /* DJIError.mm */; };
 		CFFD588B1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */; };
 		CFFD588C1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */; };
@@ -131,8 +130,6 @@
 		A238CA861AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBRecordWithDerivings+Private.mm"; sourceTree = "<group>"; };
 		A238CA881AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBRecordWithNestedDerivings+Private.mm"; sourceTree = "<group>"; };
 		A238CA8A1AF84B7100CDDCE5 /* DBSetRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBSetRecord+Private.mm"; sourceTree = "<group>"; };
-		A239F3771AF400C600DF27C8 /* DJIDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDate.h; sourceTree = "<group>"; };
-		A239F3781AF400C600DF27C8 /* DJIDate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIDate.mm; sourceTree = "<group>"; };
 		A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIMarshal+Private.h"; sourceTree = "<group>"; };
 		A24249191AF192E0003BF8F0 /* DBAssortedIntegers+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBAssortedIntegers+Private.h"; sourceTree = "<group>"; };
 		A242491A1AF192E0003BF8F0 /* DBAssortedIntegers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBAssortedIntegers.h; sourceTree = "<group>"; };
@@ -200,8 +197,6 @@
 		A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBRecordWithNestedDerivings.mm; sourceTree = "<group>"; };
 		A24850251AF96EBC00AFE907 /* DBSetRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBSetRecord.mm; sourceTree = "<group>"; };
 		A278D45219BA3601006FD937 /* test_helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helpers.cpp; sourceTree = "<group>"; };
-		A2A162D01AF190D200C0B00A /* DJIDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDate.h; sourceTree = "<group>"; };
-		A2A162D11AF190D200C0B00A /* DJIDate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIDate.mm; sourceTree = "<group>"; };
 		A2CB54B319BA6E6000A9E600 /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIError.mm; sourceTree = "<group>"; };
 		A2CCB9411AF80DFC00E6230A /* DBClientInterface+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBClientInterface+Private.h"; sourceTree = "<group>"; };
 		CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBClientInterface+Private.mm"; sourceTree = "<group>"; };
@@ -242,11 +237,7 @@
 		6536CD6919A6C82200DD7715 /* objc-support-lib */ = {
 			isa = PBXGroup;
 			children = (
-				A239F3771AF400C600DF27C8 /* DJIDate.h */,
-				A239F3781AF400C600DF27C8 /* DJIDate.mm */,
 				A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */,
-				A2A162D01AF190D200C0B00A /* DJIDate.h */,
-				A2A162D11AF190D200C0B00A /* DJIDate.mm */,
 				A2CB54B319BA6E6000A9E600 /* DJIError.mm */,
 				6536CD6A19A6C82200DD7715 /* DJIError.h */,
 				6536CD6B19A6C82200DD7715 /* DJIWeakPtrWrapper+Private.h */,
@@ -531,7 +522,6 @@
 				A248502C1AF96EBC00AFE907 /* DBMapRecord.mm in Sources */,
 				6536CD7419A6C96C00DD7715 /* DBClientInterfaceImpl.mm in Sources */,
 				A24850301AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm in Sources */,
-				A2A162D21AF190D200C0B00A /* DJIDate.mm in Sources */,
 				CFFD58B11B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */,
 				CFFD58B31B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
 				A248502F1AF96EBC00AFE907 /* DBRecordWithDerivings.mm in Sources */,
