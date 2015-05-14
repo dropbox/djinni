@@ -10,8 +10,10 @@ clean:
 	-xcodebuild -workspace example/objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphonesimulator clean
 
 # rule to lazily clone gyp
+# freeze gyp at the last version with android support
 ./deps/gyp:
 	git clone --depth 1 https://chromium.googlesource.com/external/gyp.git ./deps/gyp
+	cd deps/gyp && git checkout -q 0bb67471bca068996e15b56738fa4824dfa19de0
 
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
