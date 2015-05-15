@@ -90,7 +90,9 @@ std::shared_ptr<Token> TestHelpers::token_id(const std::shared_ptr<Token> & in) 
     return in;
 }
 
-class CppToken : public Token {};
+class CppToken : public Token {
+    std::string whoami() { return "C++"; }
+};
 
 std::shared_ptr<Token> TestHelpers::create_cpp_token() {
     return std::make_shared<CppToken>();
@@ -103,6 +105,12 @@ void TestHelpers::check_cpp_token(const std::shared_ptr<Token> & in) {
 
 int64_t TestHelpers::cpp_token_id(const std::shared_ptr<Token> & in) {
     return reinterpret_cast<int64_t>(in.get());
+}
+
+void TestHelpers::check_token_type(const std::shared_ptr<Token> &t, const std::string & type) {
+    if (t->whoami() != type) {
+        throw std::invalid_argument("wrong token type");
+    }
 }
 
 std::experimental::optional<int32_t> TestHelpers::return_none() {

@@ -50,11 +50,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
         List(ImportRef(q(spec.objcIncludePrefix + headerName(d.name))))
       case DInterface =>
         val ext = d.body.asInstanceOf[Interface].ext
-        if (ext.cpp) {
-          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@class ${typename(d.name, d.body)};", None))
-        }
-        else if (ext.objc) {
+        if (ext.objc) {
           List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@protocol ${typename(d.name, d.body)};", None))
+        }
+        else if (ext.cpp) {
+          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@class ${typename(d.name, d.body)};", None))
         }
         else {
           List()  

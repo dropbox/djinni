@@ -111,11 +111,24 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#include <exception>")
+    }
 
-      writeObjcFile(privateBodyName(ident.name), origin, refs.body, w => {
-        arcAssert(w)
+    if (i.ext.objc) {
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
+      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
+    }
+
+    writeObjcFile(privateBodyName(ident.name), origin, refs.body, w => {
+      arcAssert(w)
+
+      val objcSelf = if (i.ext.objc && i.ext.cpp) self + "CppProxy" else self
+
+      if (i.ext.cpp) {
         w.wl
-        w.wl(s"@interface $self ()")
+        if (i.ext.objc)
+          w.wl(s"@interface $objcSelf : NSObject<$self>")
+        else
+          w.wl(s"@interface $objcSelf ()")
         w.wl
         w.wl(s"@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
         w.wl
@@ -123,21 +136,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl("@end")
         w.wl
-        wrapNamespace(w, spec.objcppNamespace, w => {
-          w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
-          w.braced {
-            w.wl(s"return objc ? objc.cppRef.get() : nullptr;")
-          }
-          w.wl
-          w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
-          w.braced {
-            w.wl(s"return !cpp ? nil : ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const CppType& p)").bracedEnd(");") {
-              w.wl(s"return [[$self alloc] initWithCpp:p];")
-            }
-          }
-        })
-        w.wl
-        w.wl(s"@implementation $self")
+        w.wl(s"@implementation $objcSelf")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef")
         w.braced {
@@ -161,16 +160,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         }
         w.wl
         w.wl("@end")
-      })
-    }
+      }
 
-    if (i.ext.objc) {
-      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
-
-      writeObjcFile(privateBodyName(ident.name), origin, refs.body, w => {
-        arcAssert(w)
+      if (i.ext.objc) {
         w.wl
+        val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
         wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"class $helperClass::ObjcProxy final")
           w.wl(s": public $cppSelf")
@@ -192,20 +186,60 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               }
             }
           }
-          w.wl
-          w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType")
-          w.braced {
-            w.wl(s"return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;")
-          }
-          w.wl
-          w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType")
-          w.braced {
-            w.wl(s"assert(!cpp || dynamic_cast<ObjcProxy*>(cpp.get()));")
-            w.wl(s"return cpp ? static_cast<ObjcProxy&>(*cpp).Handle::get() : nil;")
-          }
         })
+      }
+
+      w.wl
+      wrapNamespace(w, spec.objcppNamespace, w => {
+        // ObjC-to-C++ coversion
+        w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType").braced {
+          // Handle null
+          w.w("if (!objc)").braced {
+            w.wl("return nullptr;")
+          }
+          if (i.ext.cpp && !i.ext.objc) {
+            // C++ only. In this case we generate a class instead of a protocol, so
+            // we don't have to do any casting at all, just access cppRef directly.
+            w.wl(s"return objc.cppRef.get();")
+          } else {
+            // ObjC only, or ObjC and C++.
+            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
+            if (i.ext.cpp) {
+              // If it could be implemented in C++, we might have to unwrap a proxy object.
+              w.w(s"if ([(id)objc isKindOfClass:[$objcSelf class]])").braced {
+                w.wl(s"return (($objcSelf*)objc).cppRef.get();")
+              }
+            }
+            w.wl(s"return ::djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objc);")
+          }
+        }
+        w.wl
+        w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType").braced {
+          // Handle null
+          w.w("if (!cpp)").braced {
+            w.wl("return nil;")
+          }
+          if (i.ext.objc && !i.ext.cpp) {
+            // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
+            // throw bad_cast if we gave it something of the wrong type.
+            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
+            w.wl(s"return dynamic_cast<$objcExtSelf&>(*cpp).Handle::get();")
+          } else {
+            // C++ only, or C++ and ObjC.
+            if (i.ext.objc) {
+              // If it could be implemented in ObjC, we might have to unwrap a proxy object.
+              val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
+              w.w(s"if (auto cppPtr = dynamic_cast<${objcExtSelf}*>(cpp.get()))").braced {
+                w.wl("return cppPtr->Handle::get();")
+              }
+            }
+            w.w(s"return ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const CppType& p)").bracedEnd(");") {
+              w.wl(s"return [[$objcSelf alloc] initWithCpp:p];")
+            }
+          }
+        }
       })
-    }
+    })
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {

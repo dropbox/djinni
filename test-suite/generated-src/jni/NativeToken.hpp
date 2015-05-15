@@ -31,6 +31,7 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
+        std::string whoami() override;
 
     private:
         using ::djinni::JavaProxyCacheEntry::getGlobalRef;
@@ -39,6 +40,7 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/Token") };
+    const jmethodID method_whoami { ::djinni::jniGetMethodID(clazz.get(), "whoami", "()Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

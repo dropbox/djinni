@@ -8,8 +8,8 @@
 #import "DBPrimitiveList.h"
 #import "DBSetRecord.h"
 #import <Foundation/Foundation.h>
-@class DBToken;
 @protocol DBClientInterface;
+@protocol DBToken;
 
 
 @interface DBTestHelpers : NSObject
@@ -46,13 +46,16 @@
 
 + (void)checkEnum:(DBColor)c;
 
-+ (nullable DBToken *)tokenId:(nullable DBToken *)t;
++ (nullable id<DBToken>)tokenId:(nullable id<DBToken>)t;
 
-+ (nullable DBToken *)createCppToken;
++ (nullable id<DBToken>)createCppToken;
 
-+ (void)checkCppToken:(nullable DBToken *)t;
++ (void)checkCppToken:(nullable id<DBToken>)t;
 
-+ (int64_t)cppTokenId:(nullable DBToken *)t;
++ (int64_t)cppTokenId:(nullable id<DBToken>)t;
+
++ (void)checkTokenType:(nullable id<DBToken>)t
+                  type:(nonnull NSString *)type;
 
 + (nullable NSNumber *)returnNone;
 

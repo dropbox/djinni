@@ -35,15 +35,24 @@ public:
     }
 };
 
+}  // namespace djinni_generated
+
+namespace djinni_generated {
+
 auto ClientInterface::toCpp(ObjcType objc) -> CppType
 {
-    return objc ? ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc) : nullptr;
+    if (!objc) {
+        return nullptr;
+    }
+    return ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc);
 }
 
 auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType
 {
-    assert(!cpp || dynamic_cast<ObjcProxy*>(cpp.get()));
-    return cpp ? static_cast<ObjcProxy&>(*cpp).Handle::get() : nil;
+    if (!cpp) {
+        return nil;
+    }
+    return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();
 }
 
 }  // namespace djinni_generated

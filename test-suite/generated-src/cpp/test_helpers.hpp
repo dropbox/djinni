@@ -62,6 +62,8 @@ public:
 
     static int64_t cpp_token_id(const std::shared_ptr<Token> & t);
 
+    static void check_token_type(const std::shared_ptr<Token> & t, const std::string & type);
+
     static std::experimental::optional<int32_t> return_none();
 
     /** Ensures that we generate integer translation code */

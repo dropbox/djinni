@@ -25,6 +25,7 @@ test_helpers = interface +c {
     static create_cpp_token(): token;
     static check_cpp_token(t: token);
     static cpp_token_id(t: token): i64;
+    static check_token_type(t: token, type: string);
 
     static return_none(): optional<i32>;
 
