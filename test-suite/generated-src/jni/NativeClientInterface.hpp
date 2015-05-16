@@ -32,6 +32,7 @@ private:
         ~JavaProxy();
 
         ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override;
+        std::string return_str() override;
 
     private:
         using ::djinni::JavaProxyCacheEntry::getGlobalRef;
@@ -41,6 +42,7 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
     const jmethodID method_getRecord { ::djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
+    const jmethodID method_returnStr { ::djinni::jniGetMethodID(clazz.get(), "returnStr", "()Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

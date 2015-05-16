@@ -254,7 +254,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"auto jniEnv = ::djinni::jniGetThreadEnv();")
             w.wl(s"::djinni::JniLocalScope jscope(jniEnv, 10);")
             w.wl(s"const auto& data = ::djinni::JniClass<${withNs(Some(spec.jniNamespace), jniSelf)}>::get();")
-            val call = m.ret.fold("jniEnv->CallVoidMethod(")(r => toJniCall(r, (jt: String) => s"auto jret = jniEnv->Call${jt}Method("))
+            val call = m.ret.fold("jniEnv->CallVoidMethod(")(r => "auto jret = " + toJniCall(r, (jt: String) => s"jniEnv->Call${jt}Method("))
             w.w(call)
             val javaMethodName = idJava.method(m.ident)
             w.w(s"getGlobalRef(), data.method_$javaMethodName")
@@ -350,9 +350,9 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   def toJniCall(ty: TypeRef, f: String => String): String = toJniCall(ty.resolved, f, false)
   def toJniCall(m: MExpr, f: String => String, needRef: Boolean): String = m.base match {
     case p: MPrimitive => f(if (needRef) "Object" else IdentStyle.camelUpper(p.jName))
-    case MString => s"static_cast<jstring>(${f("Object")})"
+    case MString => "(jstring)" + f("Object")
     case MOptional => toJniCall(m.args.head, f, true)
-    case MBinary => s"static_cast<jbyteArray>(${f("Object")})"
+    case MBinary => "(jbyteArray)" + f("Object")
     case _ => f("Object")
   }
 

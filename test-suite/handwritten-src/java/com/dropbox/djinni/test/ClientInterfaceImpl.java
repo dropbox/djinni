@@ -10,4 +10,8 @@ public class ClientInterfaceImpl extends ClientInterface {
         }
         return new ClientReturnedRecord(id, utf8string, misc);
     }
+    @Override
+    public String returnStr() {
+        return "test";
+    }
 }

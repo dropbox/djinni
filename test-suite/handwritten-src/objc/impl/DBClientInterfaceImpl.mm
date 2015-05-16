@@ -12,4 +12,9 @@ static NSString *DBNonAscii = @"Non-ASCII / 非 ASCII 字符";
     return [[DBClientReturnedRecord alloc] initWithRecordId:ident content:utf8string misc:misc];
 }
 
+- (NSString *)returnStr
+{
+    return @"test";
+}
+
 @end

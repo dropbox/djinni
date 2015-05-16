@@ -23,7 +23,7 @@ auto NativeConstants::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeConstants>::get();
     return {::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mSomeInteger)),
-            ::djinni::String::toCpp(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mSomeString)))};
+            ::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mSomeString))};
 }
 
 }  // namespace djinni_generated

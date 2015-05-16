@@ -7,4 +7,5 @@ client_returned_record = record {
 client_interface = interface +j +o {
     # Returns record of given string
     get_record(record_id: i64, utf8string: string, misc: optional<string>): client_returned_record;
+    return_str(): string;
 }

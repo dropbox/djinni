@@ -26,6 +26,13 @@ public:
             return ::djinni_generated::ClientReturnedRecord::toCpp(r);
         }
     }
+    std::string return_str() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() returnStr];
+            return ::djinni::String::toCpp(r);
+        }
+    }
 };
 
 auto ClientInterface::toCpp(ObjcType objc) -> CppType

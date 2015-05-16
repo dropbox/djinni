@@ -26,5 +26,13 @@ NativeClientInterface::JavaProxy::~JavaProxy() = default;
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeClientReturnedRecord::toCpp(jniEnv, jret);
 }
+std::string NativeClientInterface::JavaProxy::return_str() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(getGlobalRef(), data.method_returnStr);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
 
 }  // namespace djinni_generated

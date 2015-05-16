@@ -23,7 +23,7 @@ auto NativeRecordWithDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeRecordWithDerivings>::get();
     return {::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mKey1)),
-            ::djinni::String::toCpp(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mKey2)))};
+            ::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mKey2))};
 }
 
 }  // namespace djinni_generated

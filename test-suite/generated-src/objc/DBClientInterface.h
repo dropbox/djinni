@@ -12,4 +12,6 @@
                                    utf8string:(nonnull NSString *)utf8string
                                          misc:(nullable NSString *)misc;
 
+- (nonnull NSString *)returnStr;
+
 @end

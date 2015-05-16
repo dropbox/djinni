@@ -24,8 +24,8 @@ auto NativeClientReturnedRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeClientReturnedRecord>::get();
     return {::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mRecordId)),
-            ::djinni::String::toCpp(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mContent))),
-            ::djinni::Optional<std::experimental::optional, ::djinni::String>::toCpp(jniEnv, static_cast<jstring>(jniEnv->GetObjectField(j, data.field_mMisc)))};
+            ::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mContent)),
+            ::djinni::Optional<std::experimental::optional, ::djinni::String>::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mMisc))};
 }
 
 }  // namespace djinni_generated
