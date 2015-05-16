@@ -117,7 +117,7 @@ namespace djinni
 	
 	class F64 : public Primitive<F64, double, jdouble>
 	{
-		F64() : Primitive("java/lang/Dobule", "valueOf", "(D)Ljava/lang/Double;", "doubleValue", "()D") {}
+		F64() : Primitive("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", "doubleValue", "()D") {}
 		friend JniClass<F64>;
 		friend Primitive<F64, double, jdouble>;
 		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallDoubleMethod(j, method); }
