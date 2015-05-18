@@ -30,4 +30,6 @@ test_helpers = interface +c {
 
     # Ensures that we generate integer translation code
     static assorted_integers_id(i: assorted_integers): assorted_integers;
+
+    static id_binary(b: binary): binary;
 }

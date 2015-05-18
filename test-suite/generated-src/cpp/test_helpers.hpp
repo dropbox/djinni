@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class ClientInterface;
 class Token;
@@ -66,4 +67,6 @@ public:
 
     /** Ensures that we generate integer translation code */
     static AssortedIntegers assorted_integers_id(const AssortedIntegers & i);
+
+    static std::vector<uint8_t> id_binary(const std::vector<uint8_t> & b);
 };

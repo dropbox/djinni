@@ -130,3 +130,7 @@ void TestHelpers::check_enum(color) {} // stub
 AssortedIntegers TestHelpers::assorted_integers_id(const AssortedIntegers & i) {
     return i;
 }
+
+std::vector<uint8_t> TestHelpers::id_binary(const std::vector<uint8_t> & v) {
+    return v;
+}

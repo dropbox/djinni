@@ -202,4 +202,11 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
++ (nonnull NSData *)idBinary:(nonnull NSData *)b {
+    try {
+        auto r = ::TestHelpers::id_binary(::djinni::Binary::toCpp(b));
+        return ::djinni::Binary::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 @end

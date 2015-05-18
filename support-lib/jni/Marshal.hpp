@@ -151,12 +151,39 @@ namespace djinni
 		
 		static CppType toCpp(JNIEnv* jniEnv, JniType j)
 		{
-			assert(j != nullptr);
-			auto deleter = [jniEnv, j] (void* c) { jniEnv->ReleasePrimitiveArrayCritical(j, c, JNI_ABORT); };
-			std::unique_ptr<uint8_t, decltype(deleter)> ptr(reinterpret_cast<uint8_t*>(jniEnv->GetPrimitiveArrayCritical(j, nullptr)),
-															deleter);
-			jniExceptionCheck(jniEnv);
-			return {ptr.get(), ptr.get() + jniEnv->GetArrayLength(j)};
+            assert(j != nullptr);
+
+            std::vector<uint8_t> ret;
+            jsize length = jniEnv->GetArrayLength(j);
+            jniExceptionCheck(jniEnv);
+
+            if (!length) {
+                return {};
+            }
+
+            {
+                auto deleter = [jniEnv, j] (void* c) {
+                    if (c) {
+                        jniEnv->ReleasePrimitiveArrayCritical(j, c, JNI_ABORT);
+                    }
+                };
+
+                std::unique_ptr<uint8_t, decltype(deleter)> ptr(
+                    reinterpret_cast<uint8_t*>(jniEnv->GetPrimitiveArrayCritical(j, nullptr)),
+                    deleter
+                );
+
+                if (ptr) {
+                    // Construct and then move-assign. This copies the elements only once,
+                    // and avoids having to initialize before filling (as with resize())
+                    ret = std::vector<uint8_t>{ptr.get(), ptr.get() + length};
+                } else {
+                    // Something failed...
+                    jniExceptionCheck(jniEnv);
+                }
+            }
+
+            return ret;
 		}
 		
 		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)

@@ -3,6 +3,7 @@ package com.dropbox.djinni.test;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PrimitiveListTest extends TestCase {
 
@@ -26,5 +27,11 @@ public class PrimitiveListTest extends TestCase {
     {
         PrimitiveList converted = TestHelpers.getPrimitiveList();
         assertEquals(converted.getList(), jPrimitiveList.getList());
+    }
+
+    public void testBinary()
+    {
+        byte[] b = { 1, 2, 3 };
+        assertTrue(Arrays.equals(TestHelpers.idBinary(b), b));
     }
 }
