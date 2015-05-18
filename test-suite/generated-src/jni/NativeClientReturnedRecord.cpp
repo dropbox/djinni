@@ -21,6 +21,7 @@ auto NativeClientReturnedRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::
 }
 
 auto NativeClientReturnedRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
+    ::djinni::JniLocalScope jscope(jniEnv, 4);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeClientReturnedRecord>::get();
     return {::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mRecordId)),

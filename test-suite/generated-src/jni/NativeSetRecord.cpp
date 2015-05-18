@@ -19,6 +19,7 @@ auto NativeSetRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::Loc
 }
 
 auto NativeSetRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
+    ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeSetRecord>::get();
     return {::djinni::Set<::djinni::String>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mSet))};

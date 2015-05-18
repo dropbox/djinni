@@ -19,6 +19,7 @@ auto NativeItemList::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::Loca
 }
 
 auto NativeItemList::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
+    ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeItemList>::get();
     return {::djinni::List<::djinni::String>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mItems))};

@@ -19,6 +19,7 @@ auto NativeMapRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::Loc
 }
 
 auto NativeMapRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
+    ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeMapRecord>::get();
     return {::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mMap))};

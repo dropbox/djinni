@@ -21,6 +21,7 @@ auto NativeRecordWithNestedDerivings::fromCpp(JNIEnv* jniEnv, const CppType& c) 
 }
 
 auto NativeRecordWithNestedDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
+    ::djinni::JniLocalScope jscope(jniEnv, 3);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeRecordWithNestedDerivings>::get();
     return {::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mKey)),
