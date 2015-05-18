@@ -16,7 +16,6 @@
 
 //  This header can only be imported to Objective-C++ source code!
 
-#import "DJIWeakPtrWrapper+Private.h"
 #import <Foundation/Foundation.h>
 #include <memory>
 #include <mutex>
@@ -37,9 +36,9 @@ public:
     std::shared_ptr<T> get(id objcRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
         std::shared_ptr<T> ret;
-        DBWeakPtrWrapper *wrapper = [m_mapping objectForKey:objcRef];
-        if (wrapper != nil) {
-            ret = std::static_pointer_cast<T>(wrapper.ptr.lock());
+        auto it = m_mapping.find((__bridge void*)objcRef);
+        if (it != m_mapping.end()) {
+            ret = std::static_pointer_cast<T>(it->second.lock());
             if (ret == nullptr) {
                 ret = new_wrapper(objcRef);
             }
@@ -51,10 +50,7 @@ public:
 
     void remove(id objcRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        DBWeakPtrWrapper *wrapper = [m_mapping objectForKey:objcRef];
-        if (wrapper.ptr.expired()) {
-            [m_mapping removeObjectForKey:objcRef];
-        }
+        m_mapping.erase((__bridge void*)objcRef);
     }
 
     class Handle {
@@ -74,18 +70,13 @@ public:
 
 
 private:
-    NSMapTable *m_mapping;
+    std::unordered_map<void*, std::weak_ptr<void>> m_mapping;
     std::mutex m_mutex;
-
-    DbxObjcWrapperCache() {
-        m_mapping = [NSMapTable weakToStrongObjectsMapTable];
-    }
 
     std::shared_ptr<T> new_wrapper(id objcRef) {
         std::shared_ptr<T> ret = std::make_shared<T>(objcRef);
         std::weak_ptr<void> ptr(std::static_pointer_cast<void>(ret));
-        DBWeakPtrWrapper *wrapper = [[DBWeakPtrWrapper alloc] initWithWeakPtr:ptr];
-        [m_mapping setObject:wrapper forKey:objcRef];
+        m_mapping[(__bridge void*)objcRef] = ptr;
         return ret;
     }
 
