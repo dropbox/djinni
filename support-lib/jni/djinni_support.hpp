@@ -91,10 +91,11 @@ public:
     explicit LocalRef(PointerType localRef)
         : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
             localRef) {}
-	// Allow implicit conversion to PointerType so it can be passed
-	// as argument to JNI functions expecting PointerType.
-	// All functions creating new local references should return LocalRef instead of PointerType
-	operator PointerType() const { return this->get(); }
+    // Allow implicit conversion to PointerType so it can be passed
+    // as argument to JNI functions expecting PointerType.
+    // All functions creating new local references should return LocalRef instead of PointerType
+    operator PointerType() const & { return this->get(); }
+    operator PointerType() && = delete;
 };
 
 /*
