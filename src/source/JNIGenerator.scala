@@ -148,7 +148,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       writeJniTypeParams(w, params)
       w.w(s"auto $jniHelperWithParams::toCpp(JNIEnv* jniEnv, JniType j) -> CppType").braced {
-        //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
+        w.wl(s"::djinni::JniLocalScope jscope(jniEnv, ${r.fields.size + 1});")
         w.wl(s"assert(j != nullptr);")
         if(r.fields.isEmpty)
           w.wl("(void)j; // Suppress warnings in release builds for empty records")

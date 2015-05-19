@@ -11,8 +11,9 @@
             <src path="../generated-src"/>
             <src path="../handwritten-src"/>
         </javac>
-        <java classname="org.junit.runner.JUnitCore">
+        <java classname="org.junit.runner.JUnitCore" fork="true">
             <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar:classes"/>
+            <jvmarg value="-Xcheck:jni"/>
             <arg value="com.dropbox.djinni.test.AllTests"/>
         </java>
     </target>

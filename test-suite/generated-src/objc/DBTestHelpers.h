@@ -62,4 +62,6 @@
 /** Ensures that we generate integer translation code */
 + (nonnull DBAssortedIntegers *)assortedIntegersId:(nonnull DBAssortedIntegers *)i;
 
++ (nonnull NSData *)idBinary:(nonnull NSData *)b;
+
 @end

@@ -54,6 +54,8 @@ public abstract class TestHelpers {
     /** Ensures that we generate integer translation code */
     public static native AssortedIntegers assortedIntegersId(AssortedIntegers i);
 
+    public static native byte[] idBinary(byte[] b);
+
     public static final class CppProxy extends TestHelpers
     {
         private final long nativeRef;
