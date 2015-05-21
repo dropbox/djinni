@@ -648,13 +648,13 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case Some(c) => {
               w.wl(s"if ($from.left != nil) {").nested {
                 val copyName = "copiedLeft_" + valueLevel
-                f(copyName, s"$from.left", tm.args.apply(0), true, w, valueLevel + 1)
-                w.wl(s"$to = [$c initWithLeft:$copyName];")
+                f(s"id $copyName", s"$from.left", tm.args.apply(0), true, w, valueLevel + 1)
+                w.wl(s"$to = [[$c alloc] initWithLeft:$copyName];")
               }
               w.wl("} else {").nested {
                 val copyName = "copiedRight_" + valueLevel
-                f(copyName, s"$from.right", tm.args.apply(1), true, w, valueLevel + 1)
-                w.wl(s"$to = [$c initWithRight:$copyName];")
+                f(s"id $copyName", s"$from.right", tm.args.apply(1), true, w, valueLevel + 1)
+                w.wl(s"$to = [[$c alloc] initWithRight:$copyName];")
               }
               w.wl("}")
             }
