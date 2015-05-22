@@ -1,13 +1,13 @@
-all: example_ios example_android
+all: example_ios example_android test
 
 clean:
-	-rm GypAndroid.mk
+	-ndk-build -C example/android/app/ clean
+	-xcodebuild -workspace example/objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphonesimulator clean
 	-rm -rf libs/
 	-rm -rf obj/
 	-rm -rf build/
 	-rm -rf build_ios/
-	-ndk-build -C example/android/app/ clean
-	-xcodebuild -workspace example/objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphonesimulator clean
+	-rm GypAndroid.mk
 
 # rule to lazily clone gyp
 # freeze gyp at the last version with android support
@@ -18,7 +18,7 @@ clean:
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
 	./example/run_djinni.sh
-	ANDROID_BUILD_TOP=dirname $(which ndk-build) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
+	ANDROID_BUILD_TOP=$(shell dirname `which ndk-build`) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
 
 # we specify a root target for android to prevent all of the targets from spidering out
 ./build_ios/example/libtextsort.xcodeproj: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
@@ -37,4 +37,7 @@ example_android: GypAndroid.mk
 	@echo "Apks produced at:"
 	@python example/glob.py example/ '*.apk'
 
-.PHONY: example_android example_ios clean all
+test:
+	make -C test-suite
+
+.PHONY: example_android example_ios test clean all
