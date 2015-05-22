@@ -12,7 +12,7 @@ while [ -h "$loc" ]; do
         loc="`dirname "$loc"`/$link"  # Relative link
     fi
 done
-base_dir=$(cd `dirname "$loc"` && pwd)
+base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 # Just the first two digits of the version.
 java_version=$(java -version 2>&1 | sed -ne '1s/.*"\([0-9][0-9]*\.[0-9][0-9]*\)\..*/\1/p')

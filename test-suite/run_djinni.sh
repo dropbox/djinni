@@ -13,7 +13,7 @@ while [ -h "$loc" ]; do
         loc="`dirname "$loc"`/$link"  # Relative link
     fi
 done
-base_dir=$(cd `dirname "$loc"` && pwd)
+base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 temp_out="$base_dir/djinni-output-temp"
 
@@ -50,7 +50,7 @@ fi
 "$base_dir/../src/build"
 
 [ ! -e "$temp_out" ] || rm -r "$temp_out"
-$base_dir/../src/run-assume-built \
+"$base_dir/../src/run-assume-built" \
     --java-out "$temp_out/java" \
     --java-package $java_package \
     --ident-java-field mFooBar \
