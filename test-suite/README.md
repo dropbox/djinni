@@ -11,3 +11,7 @@ like to be generated. After input files are changed, run ./run_djinni.sh to rege
 Testing
 -------
 Run 'make java' or 'make objc' to test the given environment.
+
+You may need to have Xcode open for the simulator portion of the objc
+tests to complete successfully.  Try opening the app if you see a
+failure connecting to the simulator.

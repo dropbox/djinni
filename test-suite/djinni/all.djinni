@@ -8,6 +8,6 @@
 @import "enum.djinni"
 @import "token.djinni"
 @import "test.djinni"
-@import "inttypes.djinni"
+@import "primtypes.djinni"
 @import "constants.djinni"
 @import "date.djinni"

@@ -1,7 +1,5 @@
 package com.dropbox.djinni.test;
 
-import static junit.framework.Assert.assertTrue;
-
 public class ClientInterfaceImpl extends ClientInterface {
     @Override
     public ClientReturnedRecord getRecord(long id, String utf8string, String misc) {
