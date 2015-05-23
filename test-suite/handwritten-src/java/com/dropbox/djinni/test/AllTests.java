@@ -15,7 +15,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(CppExceptionTest.class);
         mySuite.addTestSuite(ClientInterfaceTest.class);
         mySuite.addTestSuite(EnumTest.class);
-        mySuite.addTestSuite(IntegerTest.class);
+        mySuite.addTestSuite(PrimitivesTest.class);
         mySuite.addTestSuite(TokenTest.class);
         return mySuite;
     }
