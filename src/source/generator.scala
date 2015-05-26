@@ -33,6 +33,8 @@ package object generatorTools {
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
+                   javaNullableAnnotation: Option[String],
+                   javaNonnullAnnotation: Option[String],
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
                    cppIncludePrefix: String,
