@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public final class RecordWithNestedDerivings implements Comparable<RecordWithNestedDerivings> {
 
 
@@ -12,7 +15,7 @@ public final class RecordWithNestedDerivings implements Comparable<RecordWithNes
 
     public RecordWithNestedDerivings(
             int key,
-            RecordWithDerivings rec) {
+            @Nonnull RecordWithDerivings rec) {
         this.mKey = key;
         this.mRec = rec;
     }
@@ -21,12 +24,13 @@ public final class RecordWithNestedDerivings implements Comparable<RecordWithNes
         return mKey;
     }
 
+    @Nonnull
     public RecordWithDerivings getRec() {
         return mRec;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@CheckForNull Object obj) {
         if (!(obj instanceof RecordWithNestedDerivings)) {
             return false;
         }

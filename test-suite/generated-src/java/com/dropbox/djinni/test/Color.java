@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public enum Color {
     RED,
     ORANGE,

@@ -4,6 +4,8 @@
 package com.dropbox.djinni.test;
 
 import java.util.HashSet;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class SetRecord {
 
@@ -11,10 +13,11 @@ public final class SetRecord {
     /*package*/ final HashSet<String> mSet;
 
     public SetRecord(
-            HashSet<String> set) {
+            @Nonnull HashSet<String> set) {
         this.mSet = set;
     }
 
+    @Nonnull
     public HashSet<String> getSet() {
         return mSet;
     }

@@ -4,6 +4,8 @@
 package com.dropbox.djinni.test;
 
 import java.util.Date;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class DateRecord {
 
@@ -11,10 +13,11 @@ public final class DateRecord {
     /*package*/ final Date mCreatedAt;
 
     public DateRecord(
-            Date createdAt) {
+            @Nonnull Date createdAt) {
         this.mCreatedAt = createdAt;
     }
 
+    @Nonnull
     public Date getCreatedAt() {
         return mCreatedAt;
     }
