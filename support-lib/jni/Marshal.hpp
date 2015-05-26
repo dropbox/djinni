@@ -158,7 +158,7 @@ namespace djinni
             jniExceptionCheck(jniEnv);
 
             if (!length) {
-                return {};
+                return ret;
             }
 
             {
