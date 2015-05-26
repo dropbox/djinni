@@ -298,14 +298,12 @@ abstract class Generator(spec: Spec)
   }
 
   def generate(idl: Seq[TypeDecl]) {
-    for (td <- idl) {
-      td.body match {
-        case e: Enum =>
-          assert(td.params.isEmpty)
-          generateEnum(td.origin, td.ident, td.doc, e)
-        case r: Record => generateRecord(td.origin, td.ident, td.doc, td.params, r)
-        case i: Interface => generateInterface(td.origin, td.ident, td.doc, td.params, i)
-      }
+    for (td <- idl.collect { case itd: InternTypeDecl => itd }) td.body match {
+      case e: Enum =>
+        assert(td.params.isEmpty)
+        generateEnum(td.origin, td.ident, td.doc, e)
+      case r: Record => generateRecord(td.origin, td.ident, td.doc, td.params, r)
+      case i: Interface => generateInterface(td.origin, td.ident, td.doc, td.params, i)
     }
   }
 

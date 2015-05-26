@@ -51,7 +51,7 @@ private object IdlParser extends RegexParsers {
   def externDirective = "extern".r
 
   def typeDecl(origin: String): Parser[TypeDecl] = doc ~ ident ~ typeList(ident ^^ TypeParam) ~ "=" ~ typeDef ^^ {
-    case doc~ident~typeParams~_~body => TypeDecl(ident, typeParams, body, doc, origin)
+    case doc~ident~typeParams~_~body => InternTypeDecl(ident, typeParams, body, doc, origin)
   }
 
   def ext(default: Ext) = (rep1("+" ~> ident) >> checkExts) | success(default)
