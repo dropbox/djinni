@@ -6,37 +6,6 @@
 
 @implementation DBAssortedIntegers
 
-- (id)initWithAssortedIntegers:(DBAssortedIntegers *)assortedIntegers
-{
-    if (self = [super init]) {
-        _eight = assortedIntegers.eight;
-        _sixteen = assortedIntegers.sixteen;
-        _thirtytwo = assortedIntegers.thirtytwo;
-        _sixtyfour = assortedIntegers.sixtyfour;
-        if (assortedIntegers.oEight == nil) {
-            _oEight = nil;
-        } else {
-            _oEight = assortedIntegers.oEight;
-        }
-        if (assortedIntegers.oSixteen == nil) {
-            _oSixteen = nil;
-        } else {
-            _oSixteen = assortedIntegers.oSixteen;
-        }
-        if (assortedIntegers.oThirtytwo == nil) {
-            _oThirtytwo = nil;
-        } else {
-            _oThirtytwo = assortedIntegers.oThirtytwo;
-        }
-        if (assortedIntegers.oSixtyfour == nil) {
-            _oSixtyfour = nil;
-        } else {
-            _oSixtyfour = assortedIntegers.oSixtyfour;
-        }
-    }
-    return self;
-}
-
 - (id)initWithEight:(int8_t)eight
             sixteen:(int16_t)sixteen
           thirtytwo:(int32_t)thirtytwo

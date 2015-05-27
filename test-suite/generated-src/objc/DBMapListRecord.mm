@@ -6,28 +6,6 @@
 
 @implementation DBMapListRecord
 
-- (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord
-{
-    if (self = [super init]) {
-        NSMutableArray *_mapListTempArray = [NSMutableArray arrayWithCapacity:[mapListRecord.mapList count]];
-        for (NSDictionary *currentValue_0 in mapListRecord.mapList) {
-            id copiedValue_0;
-            NSMutableDictionary *copiedValue_0TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[currentValue_0 count]];
-            for (id key_1 in currentValue_0) {
-                id copiedKey_1, copiedValue_1;
-                copiedKey_1 = [key_1 copy];
-                id value_1 = [currentValue_0 objectForKey:key_1];
-                copiedValue_1 = value_1;
-                [copiedValue_0TempDictionary setObject:copiedValue_1 forKey:copiedKey_1];
-            }
-            copiedValue_0 = copiedValue_0TempDictionary;
-            [_mapListTempArray addObject:copiedValue_0];
-        }
-        _mapList = _mapListTempArray;
-    }
-    return self;
-}
-
 - (id)initWithMapList:(nonnull NSArray *)mapList
 {
     if (self = [super init]) {

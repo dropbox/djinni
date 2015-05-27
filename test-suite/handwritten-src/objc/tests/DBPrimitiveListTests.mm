@@ -26,13 +26,6 @@ static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithLis
     [super tearDown];
 }
 
-- (void)testObjcCopyConstructor
-{
-    DBPrimitiveList *copy = [[DBPrimitiveList alloc] initWithPrimitiveList:objcPrimitiveList];
-    XCTAssertNotEqual(copy.list, objcPrimitiveList.list, @"The two NSArrays should not be the same object.");
-    XCTAssertEqualObjects(copy.list, objcPrimitiveList.list, @"The two NSArrays should have the same content.");
-}
-
 - (void)testObjcToCppConverter
 {
     PrimitiveList convert = djinni_generated::PrimitiveList::toCpp(objcPrimitiveList);

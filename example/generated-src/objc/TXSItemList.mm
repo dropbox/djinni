@@ -6,20 +6,6 @@
 
 @implementation TXSItemList
 
-- (id)initWithItemList:(TXSItemList *)itemList
-{
-    if (self = [super init]) {
-        NSMutableArray *_itemsTempArray = [NSMutableArray arrayWithCapacity:[itemList.items count]];
-        for (NSString *currentValue_0 in itemList.items) {
-            id copiedValue_0;
-            copiedValue_0 = [currentValue_0 copy];
-            [_itemsTempArray addObject:copiedValue_0];
-        }
-        _items = _itemsTempArray;
-    }
-    return self;
-}
-
 - (id)initWithItems:(nonnull NSArray *)items
 {
     if (self = [super init]) {

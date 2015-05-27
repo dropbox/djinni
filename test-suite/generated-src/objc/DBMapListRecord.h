@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBMapListRecord : NSObject
-- (nonnull id)initWithMapListRecord:(nonnull DBMapListRecord *)mapListRecord;
 - (nonnull id)initWithMapList:(nonnull NSArray *)mapList;
 
 @property (nonatomic, readonly, nonnull) NSArray * mapList;

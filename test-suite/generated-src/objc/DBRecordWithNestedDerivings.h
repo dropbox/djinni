@@ -5,7 +5,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBRecordWithNestedDerivings : NSObject
-- (nonnull id)initWithRecordWithNestedDerivings:(nonnull DBRecordWithNestedDerivings *)recordWithNestedDerivings;
 - (nonnull id)initWithKey:(int32_t)key
                       rec:(nonnull DBRecordWithDerivings *)rec;
 

@@ -195,8 +195,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
       w.wl(s"@interface $self : NSObject")
 
-      // Deep copy construtor
-      w.wl(s"- (nonnull id)${idObjc.method("init_with_" + ident.name)}:(nonnull $self *)${idObjc.local(ident)};")
       if (!r.fields.isEmpty) {
         val head = r.fields.head
         val skipFirst = SkipFirst()
@@ -234,16 +232,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
       w.wl
       w.wl(s"@implementation $self")
-      w.wl
-      w.wl(s"- (id)${idObjc.method("init_with_" + ident.name)}:($noBaseSelf *)${idObjc.local(ident)}")
-      w.braced {
-        w.w("if (self = [super init])").braced {
-          for (f <- r.fields) {
-            copyObjcValue(s"_${idObjc.field(f.ident)}", s"${idObjc.local(ident)}.${idObjc.field(f.ident)}", f.ty, w)
-          }
-        }
-        w.wl("return self;")
-      }
       w.wl
       // Constructor from all fields (not copying)
       if (!r.fields.isEmpty) {
@@ -342,76 +330,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl("@end")
     })
-  }
-
-  def copyObjcValue(to: String, from: String, ty: TypeRef, w: IndentWriter): Unit =
-    copyObjcValue(to, from, ty.resolved, w)
-  def copyObjcValue(to: String, from: String, tm: MExpr, w: IndentWriter): Unit = {
-    def f(to: String, from: String, tm: MExpr, needRef: Boolean, w: IndentWriter, valueLevel: Int): Unit = {
-      tm.base match {
-        case MOptional => {
-          w.wl(s"if ($from == nil) {").nested {
-            w.wl(s"$to = nil;")
-          }
-          w.wl("} else {").nested {
-            f(to, from, tm.args.head, true, w, valueLevel)
-          }
-          w.wl("}")
-        }
-        case p: MPrimitive => w.wl(s"$to = $from;") // NSNumber is immutable, so are primitive values
-        case MString => w.wl(s"$to = [$from copy];")
-        case MDate => w.wl(s"$to = [$from copy];")
-        case MBinary => w.wl(s"$to = [$from copy];")
-        case MList => {
-          val copyName = "copiedValue_" + valueLevel
-          val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableArray *${to}TempArray = [NSMutableArray arrayWithCapacity:[$from count]];")
-          w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
-            f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempArray addObject:$copyName];")
-          }
-          w.wl(s"$to = ${to}TempArray;")
-        }
-        case MSet => {
-          val copyName = "copiedValue_" + valueLevel
-          val currentName = "currentValue_" + valueLevel
-          w.wl(s"NSMutableSet *${to}TempSet = [NSMutableSet setWithCapacity:[$from count]];")
-          w.w(s"for (${toObjcTypeDef(tm.args.head, true)}$currentName in $from)").braced {
-            w.wl(s"id $copyName;")
-            f(copyName, currentName, tm.args.head, true, w, valueLevel + 1)
-            w.wl(s"[${to}TempSet addObject:$copyName];")
-          }
-          w.wl(s"$to = ${to}TempSet;")
-        }
-        case MMap => {
-          w.wl(s"NSMutableDictionary *${to}TempDictionary = [NSMutableDictionary dictionaryWithCapacity:[$from count]];")
-          val keyName = "key_" + valueLevel
-          val valueName = "value_" + valueLevel
-          val copiedKeyName = "copiedKey_" + valueLevel
-          val copiedValueName = "copiedValue_" + valueLevel
-          w.w(s"for (id $keyName in $from)").braced {
-            w.wl(s"id $copiedKeyName, $copiedValueName;")
-            f(copiedKeyName, keyName, tm.args.apply(0), true, w, valueLevel + 1)
-            w.wl(s"id $valueName = [$from objectForKey:$keyName];")
-            f(copiedValueName, valueName, tm.args.apply(1), true, w, valueLevel + 1)
-            w.wl(s"[${to}TempDictionary setObject:$copiedValueName forKey:$copiedKeyName];")
-          }
-          w.wl(s"$to = ${to}TempDictionary;")
-        }
-        case d: MDef => {
-          val typeName = d.name
-          val self = idObjc.ty(typeName)
-          d.defType match {
-            case DEnum => w.wl(s"$to = $from;")
-            case DRecord => w.wl(s"$to = [[${idObjc.ty(d.name)} alloc] ${idObjc.method("init_with_" + d.name)}:$from];")
-            case DInterface => w.wl(s"$to = $from;")
-          }
-        }
-        case p: MParam =>
-      }
-    }
-    f(to, from, tm, false, w, 0)
   }
 
   def writeObjcFile(fileName: String, origin: String, refs: Iterable[String], f: IndentWriter => Unit) {

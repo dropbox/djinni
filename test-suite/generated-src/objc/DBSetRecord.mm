@@ -6,20 +6,6 @@
 
 @implementation DBSetRecord
 
-- (id)initWithSetRecord:(DBSetRecord *)setRecord
-{
-    if (self = [super init]) {
-        NSMutableSet *_setTempSet = [NSMutableSet setWithCapacity:[setRecord.set count]];
-        for (NSString *currentValue_0 in setRecord.set) {
-            id copiedValue_0;
-            copiedValue_0 = [currentValue_0 copy];
-            [_setTempSet addObject:copiedValue_0];
-        }
-        _set = _setTempSet;
-    }
-    return self;
-}
-
 - (id)initWithSet:(nonnull NSSet *)set
 {
     if (self = [super init]) {

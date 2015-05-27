@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBClientReturnedRecord : NSObject
-- (nonnull id)initWithClientReturnedRecord:(nonnull DBClientReturnedRecord *)clientReturnedRecord;
 - (nonnull id)initWithRecordId:(int64_t)recordId
                        content:(nonnull NSString *)content
                           misc:(nullable NSString *)misc;

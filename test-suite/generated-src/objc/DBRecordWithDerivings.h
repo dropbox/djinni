@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBRecordWithDerivings : NSObject
-- (nonnull id)initWithRecordWithDerivings:(nonnull DBRecordWithDerivings *)recordWithDerivings;
 - (nonnull id)initWithKey1:(int32_t)key1
                       key2:(nonnull NSString *)key2;
 

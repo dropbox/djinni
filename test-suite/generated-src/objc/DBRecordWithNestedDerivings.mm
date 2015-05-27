@@ -6,15 +6,6 @@
 
 @implementation DBRecordWithNestedDerivings
 
-- (id)initWithRecordWithNestedDerivings:(DBRecordWithNestedDerivings *)recordWithNestedDerivings
-{
-    if (self = [super init]) {
-        _key = recordWithNestedDerivings.key;
-        _rec = [[DBRecordWithDerivings alloc] initWithRecordWithDerivings:recordWithNestedDerivings.rec];
-    }
-    return self;
-}
-
 - (id)initWithKey:(int32_t)key
               rec:(nonnull DBRecordWithDerivings *)rec
 {

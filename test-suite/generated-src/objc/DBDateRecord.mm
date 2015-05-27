@@ -6,14 +6,6 @@
 
 @implementation DBDateRecord
 
-- (id)initWithDateRecord:(DBDateRecord *)dateRecord
-{
-    if (self = [super init]) {
-        _createdAt = [dateRecord.createdAt copy];
-    }
-    return self;
-}
-
 - (id)initWithCreatedAt:(nonnull NSDate *)createdAt
 {
     if (self = [super init]) {

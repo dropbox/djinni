@@ -6,15 +6,6 @@
 
 @implementation DBRecordWithDerivings
 
-- (id)initWithRecordWithDerivings:(DBRecordWithDerivings *)recordWithDerivings
-{
-    if (self = [super init]) {
-        _key1 = recordWithDerivings.key1;
-        _key2 = [recordWithDerivings.key2 copy];
-    }
-    return self;
-}
-
 - (id)initWithKey1:(int32_t)key1
               key2:(nonnull NSString *)key2
 {

@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBMapRecord : NSObject
-- (nonnull id)initWithMapRecord:(nonnull DBMapRecord *)mapRecord;
 - (nonnull id)initWithMap:(nonnull NSDictionary *)map;
 
 @property (nonatomic, readonly, nonnull) NSDictionary * map;

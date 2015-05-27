@@ -6,26 +6,6 @@
 
 @implementation DBNestedCollection
 
-- (id)initWithNestedCollection:(DBNestedCollection *)nestedCollection
-{
-    if (self = [super init]) {
-        NSMutableArray *_setListTempArray = [NSMutableArray arrayWithCapacity:[nestedCollection.setList count]];
-        for (NSSet *currentValue_0 in nestedCollection.setList) {
-            id copiedValue_0;
-            NSMutableSet *copiedValue_0TempSet = [NSMutableSet setWithCapacity:[currentValue_0 count]];
-            for (NSString *currentValue_1 in currentValue_0) {
-                id copiedValue_1;
-                copiedValue_1 = [currentValue_1 copy];
-                [copiedValue_0TempSet addObject:copiedValue_1];
-            }
-            copiedValue_0 = copiedValue_0TempSet;
-            [_setListTempArray addObject:copiedValue_0];
-        }
-        _setList = _setListTempArray;
-    }
-    return self;
-}
-
 - (id)initWithSetList:(nonnull NSArray *)setList
 {
     if (self = [super init]) {

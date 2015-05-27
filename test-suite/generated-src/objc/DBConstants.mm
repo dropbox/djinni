@@ -29,15 +29,6 @@ DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] i
 
 @implementation DBConstants
 
-- (id)initWithConstants:(DBConstants *)constants
-{
-    if (self = [super init]) {
-        _someInteger = constants.someInteger;
-        _someString = [constants.someString copy];
-    }
-    return self;
-}
-
 - (id)initWithSomeInteger:(int32_t)someInteger
                someString:(nonnull NSString *)someString
 {

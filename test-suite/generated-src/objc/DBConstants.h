@@ -5,7 +5,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBConstants : NSObject
-- (nonnull id)initWithConstants:(nonnull DBConstants *)constants;
 - (nonnull id)initWithSomeInteger:(int32_t)someInteger
                        someString:(nonnull NSString *)someString;
 

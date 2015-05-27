@@ -6,20 +6,6 @@
 
 @implementation DBClientReturnedRecord
 
-- (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord
-{
-    if (self = [super init]) {
-        _recordId = clientReturnedRecord.recordId;
-        _content = [clientReturnedRecord.content copy];
-        if (clientReturnedRecord.misc == nil) {
-            _misc = nil;
-        } else {
-            _misc = [clientReturnedRecord.misc copy];
-        }
-    }
-    return self;
-}
-
 - (id)initWithRecordId:(int64_t)recordId
                content:(nonnull NSString *)content
                   misc:(nullable NSString *)misc

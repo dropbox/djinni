@@ -6,22 +6,6 @@
 
 @implementation DBMapRecord
 
-- (id)initWithMapRecord:(DBMapRecord *)mapRecord
-{
-    if (self = [super init]) {
-        NSMutableDictionary *_mapTempDictionary = [NSMutableDictionary dictionaryWithCapacity:[mapRecord.map count]];
-        for (id key_0 in mapRecord.map) {
-            id copiedKey_0, copiedValue_0;
-            copiedKey_0 = [key_0 copy];
-            id value_0 = [mapRecord.map objectForKey:key_0];
-            copiedValue_0 = value_0;
-            [_mapTempDictionary setObject:copiedValue_0 forKey:copiedKey_0];
-        }
-        _map = _mapTempDictionary;
-    }
-    return self;
-}
-
 - (id)initWithMap:(nonnull NSDictionary *)map
 {
     if (self = [super init]) {

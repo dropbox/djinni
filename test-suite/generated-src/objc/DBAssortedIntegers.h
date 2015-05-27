@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 @interface DBAssortedIntegers : NSObject
-- (nonnull id)initWithAssortedIntegers:(nonnull DBAssortedIntegers *)assortedIntegers;
 - (nonnull id)initWithEight:(int8_t)eight
                     sixteen:(int16_t)sixteen
                   thirtytwo:(int32_t)thirtytwo
