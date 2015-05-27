@@ -4,6 +4,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface DBToken : NSObject
+@protocol DBToken
+
+- (nonnull NSString *)whoami;
 
 @end

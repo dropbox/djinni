@@ -26,23 +26,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @end
 
-namespace djinni_generated {
-
-auto TestHelpers::toCpp(ObjcType objc) -> CppType
-{
-    return objc ? objc.cppRef.get() : nullptr;
-}
-
-auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
-{
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::TestHelpers>::getInstance()->get(cpp, [] (const CppType& p)
-    {
-        return [[DBTestHelpers alloc] initWithCpp:p];
-    });
-}
-
-}  // namespace djinni_generated
-
 @implementation DBTestHelpers
 
 - (id)initWithCpp:(const std::shared_ptr<::TestHelpers>&)cppRef
@@ -161,30 +144,38 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nullable DBToken *)tokenId:(nullable DBToken *)t {
++ (nullable id<DBToken>)tokenId:(nullable id<DBToken>)t {
     try {
         auto r = ::TestHelpers::token_id(::djinni_generated::Token::toCpp(t));
         return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nullable DBToken *)createCppToken {
++ (nullable id<DBToken>)createCppToken {
     try {
         auto r = ::TestHelpers::create_cpp_token();
         return ::djinni_generated::Token::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkCppToken:(nullable DBToken *)t {
++ (void)checkCppToken:(nullable id<DBToken>)t {
     try {
         ::TestHelpers::check_cpp_token(::djinni_generated::Token::toCpp(t));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (int64_t)cppTokenId:(nullable DBToken *)t {
++ (int64_t)cppTokenId:(nullable id<DBToken>)t {
     try {
         auto r = ::TestHelpers::cpp_token_id(::djinni_generated::Token::toCpp(t));
         return ::djinni::I64::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (void)checkTokenType:(nullable id<DBToken>)t
+                  type:(nonnull NSString *)type {
+    try {
+        ::TestHelpers::check_token_type(::djinni_generated::Token::toCpp(t),
+                                        ::djinni::String::toCpp(type));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -210,3 +201,25 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 @end
+
+namespace djinni_generated {
+
+auto TestHelpers::toCpp(ObjcType objc) -> CppType
+{
+    if (!objc) {
+        return nullptr;
+    }
+    return objc.cppRef.get();
+}
+
+auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
+{
+    if (!cpp) {
+        return nil;
+    }
+    return ::djinni::DbxCppWrapperCache<::TestHelpers>::getInstance()->get(cpp, [] (const CppType& p) {
+        return [[DBTestHelpers alloc] initWithCpp:p];
+    });
+}
+
+}  // namespace djinni_generated

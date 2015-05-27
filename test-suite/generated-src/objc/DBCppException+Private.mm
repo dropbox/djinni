@@ -20,23 +20,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @end
 
-namespace djinni_generated {
-
-auto CppException::toCpp(ObjcType objc) -> CppType
-{
-    return objc ? objc.cppRef.get() : nullptr;
-}
-
-auto CppException::fromCpp(const CppType& cpp) -> ObjcType
-{
-    return !cpp ? nil : ::djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const CppType& p)
-    {
-        return [[DBCppException alloc] initWithCpp:p];
-    });
-}
-
-}  // namespace djinni_generated
-
 @implementation DBCppException
 
 - (id)initWithCpp:(const std::shared_ptr<::CppException>&)cppRef
@@ -62,3 +45,25 @@ auto CppException::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 @end
+
+namespace djinni_generated {
+
+auto CppException::toCpp(ObjcType objc) -> CppType
+{
+    if (!objc) {
+        return nullptr;
+    }
+    return objc.cppRef.get();
+}
+
+auto CppException::fromCpp(const CppType& cpp) -> ObjcType
+{
+    if (!cpp) {
+        return nil;
+    }
+    return ::djinni::DbxCppWrapperCache<::CppException>::getInstance()->get(cpp, [] (const CppType& p) {
+        return [[DBCppException alloc] initWithCpp:p];
+    });
+}
+
+}  // namespace djinni_generated

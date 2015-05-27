@@ -47,6 +47,8 @@ public abstract class TestHelpers {
 
     public static native long cppTokenId(Token t);
 
+    public static native void checkTokenType(Token t, String type);
+
     public static native Integer returnNone();
 
     /** Ensures that we generate integer translation code */

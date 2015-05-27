@@ -147,7 +147,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s";")
       }
       w.wl
-      if (i.ext.cpp) w.wl(s"@interface $self : NSObject") else w.wl(s"@protocol $self")
+      if (i.ext.objc) w.wl(s"@protocol $self") else w.wl(s"@interface $self : NSObject")
       for (m <- i.methods) {
         w.wl
         writeDoc(w, m.doc)

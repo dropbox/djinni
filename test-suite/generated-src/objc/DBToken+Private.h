@@ -6,7 +6,7 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-@class DBToken;
+@protocol DBToken;
 
 namespace djinni_generated {
 
@@ -14,7 +14,7 @@ class Token
 {
 public:
     using CppType = std::shared_ptr<::Token>;
-    using ObjcType = DBToken*;
+    using ObjcType = id<DBToken>;
 
     using Boxed = Token;
 
