@@ -5,6 +5,8 @@ package com.dropbox.djinni.test;
 
 import java.util.Date;
 import java.util.HashMap;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class MapDateRecord {
 
@@ -12,10 +14,11 @@ public final class MapDateRecord {
     /*package*/ final HashMap<String, Date> mDatesById;
 
     public MapDateRecord(
-            HashMap<String, Date> datesById) {
+            @Nonnull HashMap<String, Date> datesById) {
         this.mDatesById = datesById;
     }
 
+    @Nonnull
     public HashMap<String, Date> getDatesById() {
         return mDatesById;
     }

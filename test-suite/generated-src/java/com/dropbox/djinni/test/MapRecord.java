@@ -4,6 +4,8 @@
 package com.dropbox.djinni.test;
 
 import java.util.HashMap;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class MapRecord {
 
@@ -11,10 +13,11 @@ public final class MapRecord {
     /*package*/ final HashMap<String, Long> mMap;
 
     public MapRecord(
-            HashMap<String, Long> map) {
+            @Nonnull HashMap<String, Long> map) {
         this.mMap = map;
     }
 
+    @Nonnull
     public HashMap<String, Long> getMap() {
         return mMap;
     }

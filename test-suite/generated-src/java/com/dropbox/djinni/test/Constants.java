@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public final class Constants {
 
     public static final boolean BOOL_CONSTANT = true;
@@ -17,10 +20,13 @@ public final class Constants {
 
     public static final double F64_CONSTANT = 5.0;
 
+    @Nonnull
     public static final String STRING_CONSTANT = "string-constant";
 
+    @CheckForNull
     public static final Integer OPTIONAL_INTEGER_CONSTANT = 1;
 
+    @Nonnull
     public static final Constants OBJECT_CONSTANT = new Constants(
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
@@ -32,7 +38,7 @@ public final class Constants {
 
     public Constants(
             int someInteger,
-            String someString) {
+            @Nonnull String someString) {
         this.mSomeInteger = someInteger;
         this.mSomeString = someString;
     }
@@ -41,6 +47,7 @@ public final class Constants {
         return mSomeInteger;
     }
 
+    @Nonnull
     public String getSomeString() {
         return mSomeString;
     }

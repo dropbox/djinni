@@ -4,6 +4,8 @@
 package com.dropbox.djinni.test;
 
 import java.util.ArrayList;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class PrimitiveList {
 
@@ -11,10 +13,11 @@ public final class PrimitiveList {
     /*package*/ final ArrayList<Long> mList;
 
     public PrimitiveList(
-            ArrayList<Long> list) {
+            @Nonnull ArrayList<Long> list) {
         this.mList = list;
     }
 
+    @Nonnull
     public ArrayList<Long> getList() {
         return mList;
     }

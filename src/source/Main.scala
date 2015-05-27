@@ -35,6 +35,8 @@ object Main {
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
     var javaAnnotation: Option[String] = None
+    var javaNullableAnnotation: Option[String] = None
+    var javaNonnullAnnotation: Option[String] = None
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
     var jniNamespace: String = "djinni_generated"
@@ -88,6 +90,10 @@ object Main {
         .text("The type for translated C++ exceptions in Java (default: java.lang.RuntimeException that is not checked)")
       opt[String]("java-annotation").valueName("<annotation-class>").foreach(x => javaAnnotation = Some(x))
         .text("Java annotation (@Foo) to place on all generated Java classes")
+      opt[String]("java-nullable-annotation").valueName("<nullable-annotation-class>").foreach(x => javaNullableAnnotation = Some(x))
+        .text("Java annotation (@Nullable) to place on all fields and return values that are optional")
+      opt[String]("java-nonnull-annotation").valueName("<nonnull-annotation-class>").foreach(x => javaNonnullAnnotation = Some(x))
+        .text("Java annotation (@Nonnull) to place on all fields and return values that are not optional")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
         .text("The output folder for C++ files (Generator disabled if unspecified).")
@@ -214,6 +220,8 @@ object Main {
       javaIdentStyle,
       javaCppException,
       javaAnnotation,
+      javaNullableAnnotation,
+      javaNonnullAnnotation,
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,

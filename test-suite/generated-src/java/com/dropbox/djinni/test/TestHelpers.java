@@ -5,28 +5,36 @@ package com.dropbox.djinni.test;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class TestHelpers {
+    @Nonnull
     public static native SetRecord getSetRecord();
 
     public static native boolean checkSetRecord(SetRecord rec);
 
+    @Nonnull
     public static native PrimitiveList getPrimitiveList();
 
     public static native boolean checkPrimitiveList(PrimitiveList pl);
 
+    @Nonnull
     public static native NestedCollection getNestedCollection();
 
     public static native boolean checkNestedCollection(NestedCollection nc);
 
+    @Nonnull
     public static native HashMap<String, Long> getMap();
 
     public static native boolean checkMap(HashMap<String, Long> m);
 
+    @Nonnull
     public static native HashMap<String, Long> getEmptyMap();
 
     public static native boolean checkEmptyMap(HashMap<String, Long> m);
 
+    @Nonnull
     public static native MapListRecord getMapListRecord();
 
     public static native boolean checkMapListRecord(MapListRecord m);
@@ -39,8 +47,10 @@ public abstract class TestHelpers {
 
     public static native void checkEnum(Color c);
 
+    @Nonnull
     public static native Token tokenId(Token t);
 
+    @Nonnull
     public static native Token createCppToken();
 
     public static native void checkCppToken(Token t);
@@ -49,11 +59,14 @@ public abstract class TestHelpers {
 
     public static native void checkTokenType(Token t, String type);
 
+    @CheckForNull
     public static native Integer returnNone();
 
     /** Ensures that we generate integer translation code */
+    @Nonnull
     public static native AssortedIntegers assortedIntegersId(AssortedIntegers i);
 
+    @Nonnull
     public static native byte[] idBinary(byte[] b);
 
     public static final class CppProxy extends TestHelpers

@@ -4,8 +4,11 @@
 package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class Token {
+    @Nonnull
     public abstract String whoami();
 
     public static final class CppProxy extends Token
