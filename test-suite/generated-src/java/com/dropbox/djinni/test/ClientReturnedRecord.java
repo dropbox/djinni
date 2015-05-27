@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public final class ClientReturnedRecord {
 
 
@@ -14,8 +17,8 @@ public final class ClientReturnedRecord {
 
     public ClientReturnedRecord(
             long recordId,
-            String content,
-            String misc) {
+            @Nonnull String content,
+            @CheckForNull String misc) {
         this.mRecordId = recordId;
         this.mContent = content;
         this.mMisc = misc;
@@ -25,10 +28,12 @@ public final class ClientReturnedRecord {
         return mRecordId;
     }
 
+    @Nonnull
     public String getContent() {
         return mContent;
     }
 
+    @CheckForNull
     public String getMisc() {
         return mMisc;
     }

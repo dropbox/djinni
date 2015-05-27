@@ -4,6 +4,8 @@
 package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class ConstantsInterface {
     public static final boolean BOOL_CONSTANT = true;

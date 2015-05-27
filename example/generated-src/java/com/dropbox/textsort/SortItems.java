@@ -4,10 +4,13 @@
 package com.dropbox.textsort;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class SortItems {
-    public abstract void sort(SortOrder order, ItemList items);
+    public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
+    @Nonnull
     public static native SortItems createWithListener(TextboxListener listener);
 
     public static final class CppProxy extends SortItems

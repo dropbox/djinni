@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public final class AssortedIntegers {
 
 
@@ -27,10 +30,10 @@ public final class AssortedIntegers {
             short sixteen,
             int thirtytwo,
             long sixtyfour,
-            Byte oEight,
-            Short oSixteen,
-            Integer oThirtytwo,
-            Long oSixtyfour) {
+            @CheckForNull Byte oEight,
+            @CheckForNull Short oSixteen,
+            @CheckForNull Integer oThirtytwo,
+            @CheckForNull Long oSixtyfour) {
         this.mEight = eight;
         this.mSixteen = sixteen;
         this.mThirtytwo = thirtytwo;
@@ -57,24 +60,28 @@ public final class AssortedIntegers {
         return mSixtyfour;
     }
 
+    @CheckForNull
     public Byte getOEight() {
         return mOEight;
     }
 
+    @CheckForNull
     public Short getOSixteen() {
         return mOSixteen;
     }
 
+    @CheckForNull
     public Integer getOThirtytwo() {
         return mOThirtytwo;
     }
 
+    @CheckForNull
     public Long getOSixtyfour() {
         return mOSixtyfour;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@CheckForNull Object obj) {
         if (!(obj instanceof AssortedIntegers)) {
             return false;
         }

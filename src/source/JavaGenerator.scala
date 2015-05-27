@@ -27,12 +27,15 @@ import scala.collection.mutable
 class JavaGenerator(spec: Spec) extends Generator(spec) {
 
   var javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
     var java = mutable.TreeSet[String]()
 
     spec.javaAnnotation.foreach(pkg => java.add(pkg))
+    spec.javaNullableAnnotation.foreach(pkg => java.add(pkg))
+    spec.javaNonnullAnnotation.foreach(pkg => java.add(pkg))
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
@@ -89,6 +92,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
+      marshal.nullityAnnotation(c.ty).foreach(w.wl)
       w.w(s"public static final ${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
@@ -141,7 +145,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
           val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident))
+          val params = m.params.map(p => {
+            val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+            nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+          })
+          marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
         for (m <- i.methods if m.static) {
@@ -149,6 +157,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           writeDoc(w, m.doc)
           val ret = marshal.returnType(m.ret)
           val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident))
+          marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
         if (i.ext.cpp) {
@@ -228,6 +237,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           val skipFirst = SkipFirst()
           for (f <- r.fields) {
             skipFirst { w.wl(",") }
+            marshal.nullityAnnotation(f.ty).map(annotation => w.w(annotation + " "))
             w.w(marshal.typename(f.ty) + " " + idJava.local(f.ident))
           }
           w.wl(") {")
@@ -243,6 +253,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         for (f <- r.fields) {
           w.wl
           writeDoc(w, f.doc)
+          marshal.nullityAnnotation(f.ty).foreach(w.wl)
           w.w("public " + marshal.typename(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
             w.wl("return " + idJava.field(f.ident) + ";")
           }
@@ -251,9 +262,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
           w.wl("@Override")
-          w.w("public boolean equals(Object obj)").braced {
+          val nullableAnnotation = javaNullableAnnotation.map(_ + " ").getOrElse("")
+          w.w(s"public boolean equals(${nullableAnnotation}Object obj)").braced {
             w.w(s"if (!(obj instanceof $self))").braced {
-              w.wl("return false;");
+              w.wl("return false;")
             }
             w.wl(s"$self other = ($self) obj;")
             w.w(s"return ").nestedN(2) {

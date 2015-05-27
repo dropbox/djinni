@@ -5,6 +5,8 @@ package com.dropbox.djinni.test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class NestedCollection {
 
@@ -12,10 +14,11 @@ public final class NestedCollection {
     /*package*/ final ArrayList<HashSet<String>> mSetList;
 
     public NestedCollection(
-            ArrayList<HashSet<String>> setList) {
+            @Nonnull ArrayList<HashSet<String>> setList) {
         this.mSetList = setList;
     }
 
+    @Nonnull
     public ArrayList<HashSet<String>> getSetList() {
         return mSetList;
     }

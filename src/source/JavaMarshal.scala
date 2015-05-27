@@ -6,6 +6,9 @@ import djinni.meta._
 
 class JavaMarshal(spec: Spec) extends Marshal(spec) {
 
+  val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaNonnullAnnotation = spec.javaNonnullAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+
   override def typename(tm: MExpr): String = toJavaType(tm, None)
   def typename(name: String, ty: TypeDef): String = idJava.ty(name)
 
@@ -34,6 +37,15 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
         case _ => List()
       }
     case _ => List()
+  }
+
+  def nullityAnnotation(ty: Option[TypeRef]): Option[String] = ty.map(nullityAnnotation).getOrElse(None)
+  def nullityAnnotation(ty: TypeRef): Option[String] = {
+    ty.resolved.base match {
+      case MOptional => javaNullableAnnotation
+      case p: MPrimitive => None
+      case _ => javaNonnullAnnotation
+    }
   }
 
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {

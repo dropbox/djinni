@@ -4,10 +4,13 @@
 package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class CppException {
     public abstract int throwAnException();
 
+    @Nonnull
     public static native CppException get();
 
     public static final class CppProxy extends CppException
