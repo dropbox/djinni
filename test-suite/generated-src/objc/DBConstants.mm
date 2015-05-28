@@ -39,5 +39,4 @@ DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] i
     return self;
 }
 
-
 @end
