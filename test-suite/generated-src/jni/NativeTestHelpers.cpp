@@ -3,7 +3,7 @@
 
 #include "NativeTestHelpers.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeAssortedIntegers.hpp"
+#include "NativeAssortedPrimitives.hpp"
 #include "NativeClientInterface.hpp"
 #include "NativeColor.hpp"
 #include "NativeMapListRecord.hpp"
@@ -220,12 +220,12 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedIntegersId(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedPrimitivesId(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestHelpers::assorted_integers_id(::djinni_generated::NativeAssortedIntegers::toCpp(jniEnv, j_i));
-        return ::djinni_generated::NativeAssortedIntegers::fromCpp(jniEnv, r).release();
+        auto r = ::TestHelpers::assorted_primitives_id(::djinni_generated::NativeAssortedPrimitives::toCpp(jniEnv, j_i));
+        return ::djinni_generated::NativeAssortedPrimitives::fromCpp(jniEnv, r).release();
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 

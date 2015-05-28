@@ -64,7 +64,7 @@ public abstract class TestHelpers {
 
     /** Ensures that we generate integer translation code */
     @Nonnull
-    public static native AssortedIntegers assortedIntegersId(AssortedIntegers i);
+    public static native AssortedPrimitives assortedPrimitivesId(AssortedPrimitives i);
 
     @Nonnull
     public static native byte[] idBinary(byte[] b);
