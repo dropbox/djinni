@@ -44,4 +44,17 @@
             ((self.oSixtyfour == nil && typedOther.oSixtyfour == nil) || (self.oSixtyfour != nil && [self.oSixtyfour isEqual:typedOther.oSixtyfour]));
 }
 
+- (NSUInteger)hash
+{
+    return NSStringFromClass([self class]).hash ^
+            (NSUInteger)self.eight ^
+            (NSUInteger)self.sixteen ^
+            (NSUInteger)self.thirtytwo ^
+            (NSUInteger)self.sixtyfour ^
+            self.oEight.hash ^
+            self.oSixteen.hash ^
+            self.oThirtytwo.hash ^
+            self.oSixtyfour.hash;
+}
+
 @end

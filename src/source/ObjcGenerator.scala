@@ -291,6 +291,33 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           }
           w.wl(";")
         }
+        w.wl
+
+        w.wl("- (NSUInteger)hash")
+        w.braced {
+          w.w(s"return ").nestedN(2) {
+            w.w(s"NSStringFromClass([self class]).hash")
+            for (f <- r.fields) {
+              w.wl(" ^")
+              f.ty.resolved.base match {
+                case MOptional =>
+                  f.ty.resolved.args.head.base match {
+                    case df: MDef if df.defType == DEnum =>
+                      w.w(s"(NSUInteger)self.${idObjc.field(f.ident)}")
+                    case _ => w.w(s"self.${idObjc.field(f.ident)}.hash")
+                  }
+                case t: MPrimitive => w.w(s"(NSUInteger)self.${idObjc.field(f.ident)}")
+                case df: MDef => df.defType match {
+                  case DEnum => w.w(s"(NSUInteger)self.${idObjc.field(f.ident)}")
+                  case _ => w.w(s"self.${idObjc.field(f.ident)}.hash")
+                }
+                case _ => w.w(s"self.${idObjc.field(f.ident)}.hash")
+              }
+            }
+          }
+          w.wl(";")
+        }
+        w.wl
       }
 
       def generatePrimitiveOrder(ident: Ident, w: IndentWriter): Unit = {
@@ -326,8 +353,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           }
           w.wl("return NSOrderedSame;")
         }
+        w.wl
       }
-      w.wl
       w.wl("@end")
     })
   }

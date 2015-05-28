@@ -25,6 +25,14 @@
     return self.key == typedOther.key &&
             [self.rec isEqual:typedOther.rec];
 }
+
+- (NSUInteger)hash
+{
+    return NSStringFromClass([self class]).hash ^
+            (NSUInteger)self.key ^
+            self.rec.hash;
+}
+
 - (NSComparisonResult)compare:(DBRecordWithNestedDerivings *)other
 {
     NSComparisonResult tempResult;
