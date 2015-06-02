@@ -3,7 +3,7 @@
 
 #import "DBTestHelpers+Private.h"
 #import "DBTestHelpers.h"
-#import "DBAssortedIntegers+Private.h"
+#import "DBAssortedPrimitives+Private.h"
 #import "DBClientInterface+Private.h"
 #import "DBMapListRecord+Private.h"
 #import "DBNestedCollection+Private.h"
@@ -186,10 +186,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nonnull DBAssortedIntegers *)assortedIntegersId:(nonnull DBAssortedIntegers *)i {
++ (nonnull DBAssortedPrimitives *)assortedPrimitivesId:(nonnull DBAssortedPrimitives *)i {
     try {
-        auto r = ::TestHelpers::assorted_integers_id(::djinni_generated::AssortedIntegers::toCpp(i));
-        return ::djinni_generated::AssortedIntegers::fromCpp(r);
+        auto r = ::TestHelpers::assorted_primitives_id(::djinni_generated::AssortedPrimitives::toCpp(i));
+        return ::djinni_generated::AssortedPrimitives::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

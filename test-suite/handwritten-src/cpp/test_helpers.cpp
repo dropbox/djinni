@@ -135,8 +135,8 @@ void TestHelpers::check_enum_map(const std::unordered_map<color, std::string> & 
 
 void TestHelpers::check_enum(color) {} // stub
 
-AssortedIntegers TestHelpers::assorted_integers_id(const AssortedIntegers & i) {
-    return i;
+AssortedPrimitives TestHelpers::assorted_primitives_id(const AssortedPrimitives & p) {
+    return p;
 }
 
 std::vector<uint8_t> TestHelpers::id_binary(const std::vector<uint8_t> & v) {
