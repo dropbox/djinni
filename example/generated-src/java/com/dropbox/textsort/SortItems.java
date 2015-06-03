@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 public abstract class SortItems {
     public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
-    @Nonnull
-    public static native SortItems createWithListener(TextboxListener listener);
+    @CheckForNull
+    public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
 
     public static final class CppProxy extends SortItems
     {
