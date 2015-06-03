@@ -50,14 +50,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
         List(ImportRef(q(spec.objcIncludePrefix + headerName(d.name))))
       case DInterface =>
         val ext = d.body.asInstanceOf[Interface].ext
-        if (ext.objc) {
-          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@protocol ${typename(d.name, d.body)};", None))
-        }
-        else if (ext.cpp) {
+        if (ext.cpp && !ext.objc) {
           List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@class ${typename(d.name, d.body)};", None))
         }
         else {
-          List()  
+          List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@protocol ${typename(d.name, d.body)};", None))
         }
       case DRecord =>
         val r = d.body.asInstanceOf[Record]
@@ -99,7 +96,10 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
               case DRecord => (idObjc.ty(d.name), true)
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
-                (idObjc.ty(d.name), true)
+                if (ext.cpp && !ext.objc)
+                  (idObjc.ty(d.name), true)
+                else
+                  (s"id<${idObjc.ty(d.name)}>", false)
             }
             case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
           }
@@ -111,21 +111,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
 
   def toObjcParamType(tm: MExpr): String = {
     val (name, needRef) = toObjcType(tm)
-    val param = name + (if(needRef) " *" else "")
-    tm.base match {
-      case d: MDef => d.body match {
-        case i: Interface => if(i.ext.objc) s"id<$name>" else param
-        case _ => param
-      }
-      case MOptional => tm.args.head.base match {
-        case d: MDef => d.body match {
-          case i: Interface => if(i.ext.objc) s"id<$name>" else param
-          case _ => param
-        }
-        case _ => param
-      }
-      case _ => param
-    }
+    name + (if(needRef) " *" else "")
   }
 
 }
