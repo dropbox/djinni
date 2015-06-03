@@ -44,6 +44,12 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     ty.resolved.base match {
       case MOptional => javaNullableAnnotation
       case p: MPrimitive => None
+      case m: MDef =>
+        m.defType match {
+          case DInterface => javaNullableAnnotation
+          case DEnum => javaNonnullAnnotation
+          case DRecord => javaNonnullAnnotation
+        }
       case _ => javaNonnullAnnotation
     }
   }

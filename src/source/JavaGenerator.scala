@@ -156,7 +156,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
           val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident))
+          val params = m.params.map(p => {
+            val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+            nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+          })
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
