@@ -114,7 +114,15 @@ namespace djinni
 		friend Primitive<I64, int64_t, jlong>;
 		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallLongMethod(j, method); }
 	};
-	
+
+	class F32 : public Primitive<F32, float, jfloat>
+	{
+		F32() : Primitive("java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", "floatValue", "()F") {}
+		friend JniClass<F32>;
+		friend Primitive<F32, float, jfloat>;
+		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallFloatMethod(j, method); }
+	};
+
 	class F64 : public Primitive<F64, double, jdouble>
 	{
 		F64() : Primitive("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", "doubleValue", "()D") {}

@@ -20,6 +20,8 @@ struct Constants final {
 
     static int64_t const I64_CONSTANT;
 
+    static float const F32_CONSTANT;
+
     static double const F64_CONSTANT;
 
     static std::string const STRING_CONSTANT;

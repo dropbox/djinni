@@ -18,6 +18,8 @@ public final class Constants {
 
     public static final long I64_CONSTANT = 4;
 
+    public static final float F32_CONSTANT = 5.0f;
+
     public static final double F64_CONSTANT = 5.0;
 
     @Nonnull

@@ -10,12 +10,14 @@ bool operator==(const AssortedPrimitives& lhs, const AssortedPrimitives& rhs) {
            lhs.sixteen == rhs.sixteen &&
            lhs.thirtytwo == rhs.thirtytwo &&
            lhs.sixtyfour == rhs.sixtyfour &&
+           lhs.fthirtytwo == rhs.fthirtytwo &&
            lhs.fsixtyfour == rhs.fsixtyfour &&
            lhs.o_b == rhs.o_b &&
            lhs.o_eight == rhs.o_eight &&
            lhs.o_sixteen == rhs.o_sixteen &&
            lhs.o_thirtytwo == rhs.o_thirtytwo &&
            lhs.o_sixtyfour == rhs.o_sixtyfour &&
+           lhs.o_fthirtytwo == rhs.o_fthirtytwo &&
            lhs.o_fsixtyfour == rhs.o_fsixtyfour;
 }
 

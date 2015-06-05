@@ -16,6 +16,8 @@ int32_t const DBConstantsInterfaceI32Constant = 3;
 
 int64_t const DBConstantsInterfaceI64Constant = 4;
 
+float const DBConstantsInterfaceF32Constant = 5.0f;
+
 double const DBConstantsInterfaceF64Constant = 5.0;
 
 #pragma clang diagnostic pop

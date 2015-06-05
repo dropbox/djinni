@@ -187,7 +187,7 @@ records (so a record cannot contain itself).
 The available data types for a record are:
 
  - Boolean (`bool`)
- - Primitives (`i8`, `i16`, `i32`, `i64`, `f64`).
+ - Primitives (`i8`, `i16`, `i32`, `i64`, `f32`, `f64`).
  - Strings (`string`)
  - Binary (`binary`). This is implemented as `std::vector<uint8_t>` in C++, `byte[]` in Java,
    and `NSData` in Objective-C.

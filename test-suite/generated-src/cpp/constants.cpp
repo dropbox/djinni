@@ -13,6 +13,8 @@ int32_t const Constants::I32_CONSTANT = 3;
 
 int64_t const Constants::I64_CONSTANT = 4;
 
+float const Constants::F32_CONSTANT = 5.0;
+
 double const Constants::F64_CONSTANT = 5.0;
 
 std::string const Constants::STRING_CONSTANT = "string-constant";

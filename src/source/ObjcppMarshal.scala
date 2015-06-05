@@ -62,6 +62,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
         case "i16" => "I16"
         case "i32" => "I32"
         case "i64" => "I64"
+        case "f32" => "F32"
         case "f64" => "F64"
         case "bool" => "Bool"
       }

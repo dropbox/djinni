@@ -80,6 +80,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     }
     def writeObjcConstValue(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(boxedPrimitive(ty) + l.toString)
+      case d: Double if marshal.fieldType(ty) == "float" => w.w(boxedPrimitive(ty) + d.toString + "f")
       case d: Double => w.w(boxedPrimitive(ty) + d.toString)
       case b: Boolean => w.w(boxedPrimitive(ty) + (if (b) "YES" else "NO"))
       case s: String => w.w("@" + s)

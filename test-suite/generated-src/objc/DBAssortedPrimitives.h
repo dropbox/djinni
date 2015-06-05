@@ -9,12 +9,14 @@
                 sixteen:(int16_t)sixteen
               thirtytwo:(int32_t)thirtytwo
               sixtyfour:(int64_t)sixtyfour
+             fthirtytwo:(float)fthirtytwo
              fsixtyfour:(double)fsixtyfour
                      oB:(nullable NSNumber *)oB
                  oEight:(nullable NSNumber *)oEight
                oSixteen:(nullable NSNumber *)oSixteen
              oThirtytwo:(nullable NSNumber *)oThirtytwo
              oSixtyfour:(nullable NSNumber *)oSixtyfour
+            oFthirtytwo:(nullable NSNumber *)oFthirtytwo
             oFsixtyfour:(nullable NSNumber *)oFsixtyfour;
 
 @property (nonatomic, readonly) BOOL b;
@@ -27,6 +29,8 @@
 
 @property (nonatomic, readonly) int64_t sixtyfour;
 
+@property (nonatomic, readonly) float fthirtytwo;
+
 @property (nonatomic, readonly) double fsixtyfour;
 
 @property (nonatomic, readonly, nullable) NSNumber * oB;
@@ -38,6 +42,8 @@
 @property (nonatomic, readonly, nullable) NSNumber * oThirtytwo;
 
 @property (nonatomic, readonly, nullable) NSNumber * oSixtyfour;
+
+@property (nonatomic, readonly, nullable) NSNumber * oFthirtytwo;
 
 @property (nonatomic, readonly, nullable) NSNumber * oFsixtyfour;
 

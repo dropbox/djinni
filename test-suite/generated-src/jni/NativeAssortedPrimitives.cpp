@@ -18,19 +18,21 @@ auto NativeAssortedPrimitives::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::dj
                                                            ::djinni::I16::fromCpp(jniEnv, c.sixteen),
                                                            ::djinni::I32::fromCpp(jniEnv, c.thirtytwo),
                                                            ::djinni::I64::fromCpp(jniEnv, c.sixtyfour),
+                                                           ::djinni::F32::fromCpp(jniEnv, c.fthirtytwo),
                                                            ::djinni::F64::fromCpp(jniEnv, c.fsixtyfour),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::Bool>::fromCpp(jniEnv, c.o_b).get(),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::I8>::fromCpp(jniEnv, c.o_eight).get(),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::I16>::fromCpp(jniEnv, c.o_sixteen).get(),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(jniEnv, c.o_thirtytwo).get(),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::I64>::fromCpp(jniEnv, c.o_sixtyfour).get(),
+                                                           ::djinni::Optional<std::experimental::optional, ::djinni::F32>::fromCpp(jniEnv, c.o_fthirtytwo).get(),
                                                            ::djinni::Optional<std::experimental::optional, ::djinni::F64>::fromCpp(jniEnv, c.o_fsixtyfour).get())};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
 auto NativeAssortedPrimitives::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
-    ::djinni::JniLocalScope jscope(jniEnv, 13);
+    ::djinni::JniLocalScope jscope(jniEnv, 15);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeAssortedPrimitives>::get();
     return {::djinni::Bool::toCpp(jniEnv, jniEnv->GetBooleanField(j, data.field_mB)),
@@ -38,12 +40,14 @@ auto NativeAssortedPrimitives::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
             ::djinni::I16::toCpp(jniEnv, jniEnv->GetShortField(j, data.field_mSixteen)),
             ::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mThirtytwo)),
             ::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mSixtyfour)),
+            ::djinni::F32::toCpp(jniEnv, jniEnv->GetFloatField(j, data.field_mFthirtytwo)),
             ::djinni::F64::toCpp(jniEnv, jniEnv->GetDoubleField(j, data.field_mFsixtyfour)),
             ::djinni::Optional<std::experimental::optional, ::djinni::Bool>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOB)),
             ::djinni::Optional<std::experimental::optional, ::djinni::I8>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOEight)),
             ::djinni::Optional<std::experimental::optional, ::djinni::I16>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOSixteen)),
             ::djinni::Optional<std::experimental::optional, ::djinni::I32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOThirtytwo)),
             ::djinni::Optional<std::experimental::optional, ::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOSixtyfour)),
+            ::djinni::Optional<std::experimental::optional, ::djinni::F32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOFthirtytwo)),
             ::djinni::Optional<std::experimental::optional, ::djinni::F64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOFsixtyfour))};
 }
 

@@ -72,6 +72,12 @@ class I64 : public Primitive<I64, int64_t> {
     static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithLongLong:static_cast<long long>(x)]; }
 };
 
+class F32 : public Primitive<F32, float> {
+    friend Primitive<F32, float>;
+    static CppType unbox(Boxed::ObjcType x) noexcept { return [x floatValue]; }
+    static Boxed::ObjcType box(CppType x) noexcept { return [NSNumber numberWithFloat:x]; }
+};
+
 class F64 : public Primitive<F64, double> {
     friend Primitive<F64, double>;
     static CppType unbox(Boxed::ObjcType x) noexcept { return [x doubleValue]; }

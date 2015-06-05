@@ -147,22 +147,26 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
         if (!value.isInstanceOf[Boolean])
           throw new AssertionError("Const type mismatch: bool")
       case "i8" =>
-        try { value.asInstanceOf[Long].toByte } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i8")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i8")
+        assert(value.asInstanceOf[Long].toByte == value, "Const value not a valid i8")
       case "i16" =>
-        try { value.asInstanceOf[Long].toShort } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i16")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i16")
+        assert(value.asInstanceOf[Long].toShort == value, "Const value not a valid i16")
       case "i32" =>
-        try { value.asInstanceOf[Long].toInt } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i32")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i32")
+        assert(value.asInstanceOf[Long].toInt == value, "Const value not a valid i32")
       case "i64" =>
-        if (!value.isInstanceOf[Long])
-          throw new AssertionError("Const type mismatch: i64")
+        assert(value.isInstanceOf[Long], "Const type mismatch: i64")
+      case "f32" => value match {
+        case i: Long =>
+          assert(i.toFloat == value, "Const value not a valid f32")
+        case f: Double =>
+          assert(f.toFloat == value, "Const value not a valid f32")
+        case _ => throw new AssertionError("Const type mismatch: f32")
+      }
       case "f64" => value match {
         case i: Long =>
+          assert(i.toDouble == value, "Const value not a valid f64")
         case f: Double =>
         case _ => throw new AssertionError("Const type mismatch: f64")
       }

@@ -16,6 +16,8 @@ int32_t const DBConstantsI32Constant = 3;
 
 int64_t const DBConstantsI64Constant = 4;
 
+float const DBConstantsF32Constant = 5.0f;
+
 double const DBConstantsF64Constant = 5.0;
 
 NSString * __nonnull const DBConstantsStringConstant = @"string-constant";

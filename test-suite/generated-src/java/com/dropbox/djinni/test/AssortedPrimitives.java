@@ -19,6 +19,8 @@ public final class AssortedPrimitives {
 
     /*package*/ final long mSixtyfour;
 
+    /*package*/ final float mFthirtytwo;
+
     /*package*/ final double mFsixtyfour;
 
     /*package*/ final Boolean mOB;
@@ -31,6 +33,8 @@ public final class AssortedPrimitives {
 
     /*package*/ final Long mOSixtyfour;
 
+    /*package*/ final Float mOFthirtytwo;
+
     /*package*/ final Double mOFsixtyfour;
 
     public AssortedPrimitives(
@@ -39,24 +43,28 @@ public final class AssortedPrimitives {
             short sixteen,
             int thirtytwo,
             long sixtyfour,
+            float fthirtytwo,
             double fsixtyfour,
             @CheckForNull Boolean oB,
             @CheckForNull Byte oEight,
             @CheckForNull Short oSixteen,
             @CheckForNull Integer oThirtytwo,
             @CheckForNull Long oSixtyfour,
+            @CheckForNull Float oFthirtytwo,
             @CheckForNull Double oFsixtyfour) {
         this.mB = b;
         this.mEight = eight;
         this.mSixteen = sixteen;
         this.mThirtytwo = thirtytwo;
         this.mSixtyfour = sixtyfour;
+        this.mFthirtytwo = fthirtytwo;
         this.mFsixtyfour = fsixtyfour;
         this.mOB = oB;
         this.mOEight = oEight;
         this.mOSixteen = oSixteen;
         this.mOThirtytwo = oThirtytwo;
         this.mOSixtyfour = oSixtyfour;
+        this.mOFthirtytwo = oFthirtytwo;
         this.mOFsixtyfour = oFsixtyfour;
     }
 
@@ -78,6 +86,10 @@ public final class AssortedPrimitives {
 
     public long getSixtyfour() {
         return mSixtyfour;
+    }
+
+    public float getFthirtytwo() {
+        return mFthirtytwo;
     }
 
     public double getFsixtyfour() {
@@ -110,6 +122,11 @@ public final class AssortedPrimitives {
     }
 
     @CheckForNull
+    public Float getOFthirtytwo() {
+        return mOFthirtytwo;
+    }
+
+    @CheckForNull
     public Double getOFsixtyfour() {
         return mOFsixtyfour;
     }
@@ -125,12 +142,14 @@ public final class AssortedPrimitives {
                 this.mSixteen == other.mSixteen &&
                 this.mThirtytwo == other.mThirtytwo &&
                 this.mSixtyfour == other.mSixtyfour &&
+                this.mFthirtytwo == other.mFthirtytwo &&
                 this.mFsixtyfour == other.mFsixtyfour &&
                 ((this.mOB == null && other.mOB == null) || (this.mOB != null && this.mOB.equals(other.mOB))) &&
                 ((this.mOEight == null && other.mOEight == null) || (this.mOEight != null && this.mOEight.equals(other.mOEight))) &&
                 ((this.mOSixteen == null && other.mOSixteen == null) || (this.mOSixteen != null && this.mOSixteen.equals(other.mOSixteen))) &&
                 ((this.mOThirtytwo == null && other.mOThirtytwo == null) || (this.mOThirtytwo != null && this.mOThirtytwo.equals(other.mOThirtytwo))) &&
                 ((this.mOSixtyfour == null && other.mOSixtyfour == null) || (this.mOSixtyfour != null && this.mOSixtyfour.equals(other.mOSixtyfour))) &&
+                ((this.mOFthirtytwo == null && other.mOFthirtytwo == null) || (this.mOFthirtytwo != null && this.mOFthirtytwo.equals(other.mOFthirtytwo))) &&
                 ((this.mOFsixtyfour == null && other.mOFsixtyfour == null) || (this.mOFsixtyfour != null && this.mOFsixtyfour.equals(other.mOFsixtyfour)));
     }
 }

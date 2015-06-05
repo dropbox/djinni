@@ -8,6 +8,7 @@ extern int8_t const DBConstantsInterfaceI8Constant;
 extern int16_t const DBConstantsInterfaceI16Constant;
 extern int32_t const DBConstantsInterfaceI32Constant;
 extern int64_t const DBConstantsInterfaceI64Constant;
+extern float const DBConstantsInterfaceF32Constant;
 extern double const DBConstantsInterfaceF64Constant;
 
 @interface DBConstantsInterface : NSObject
