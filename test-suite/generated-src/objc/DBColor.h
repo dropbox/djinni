@@ -17,5 +17,4 @@ typedef NS_ENUM(NSInteger, DBColor)
      */
     DBColorIndigo,
     DBColorViolet,
-    DBColorCount,
 };

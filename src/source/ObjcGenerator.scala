@@ -59,7 +59,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           writeDoc(w, i.doc)
           w.wl(self + idObjc.enum(i.ident.name) + ",")
         }
-        w.wl(self + "Count,")
       }
     })
   }
