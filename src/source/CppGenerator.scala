@@ -95,6 +95,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
   def generateCppConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
     def writeCppConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
+      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
