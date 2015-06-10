@@ -13,7 +13,7 @@ int32_t const Constants::I32_CONSTANT = 3;
 
 int64_t const Constants::I64_CONSTANT = 4;
 
-float const Constants::F32_CONSTANT = 5.0;
+float const Constants::F32_CONSTANT = 5.0f;
 
 double const Constants::F64_CONSTANT = 5.0;
 
