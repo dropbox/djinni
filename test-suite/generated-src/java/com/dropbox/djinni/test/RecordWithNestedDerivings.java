@@ -40,7 +40,16 @@ public final class RecordWithNestedDerivings implements Comparable<RecordWithNes
     }
 
     @Override
-    public int compareTo(RecordWithNestedDerivings other)  {
+    public int hashCode() {
+        // Pick an arbitrary non-zero starting value
+        int hashCode = 17;
+        hashCode = hashCode * 31 + mKey;
+        hashCode = hashCode * 31 + mRec.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public int compareTo(@Nonnull RecordWithNestedDerivings other)  {
         int tempResult;
         if (this.mKey < other.mKey) {
             tempResult = -1;

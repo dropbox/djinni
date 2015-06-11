@@ -211,6 +211,12 @@ private def resolveRecord(scope: Scope, r: Record) {
     dupeChecker.check(f.ident)
     resolveRef(scope, f.ty)
     // Deriving Type Check
+    if (r.ext.any())
+      if (r.derivingTypes.contains(DerivingType.Ord)) {
+        throw new Error(f.ident.loc, "Cannot safely implement Ord on a record that may be extended").toException
+      } else if (r.derivingTypes.contains(DerivingType.Eq)) {
+        throw new Error(f.ident.loc, "Cannot safely implement Eq on a record that may be extended").toException
+      }
     f.ty.resolved.base match {
       case MBinary | MList | MSet | MMap =>
         if (r.derivingTypes.contains(DerivingType.Ord))

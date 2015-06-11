@@ -29,6 +29,11 @@ public class RecordWithDerivingsTest extends TestCase {
         assertFalse(record3.equals(record1));
         assertFalse(record2.equals(record3));
         assertFalse(record3.equals(record2));
+
+        assertTrue(record1.hashCode() == record1A.hashCode());
+        assertTrue(record1.hashCode() != record2.hashCode());
+        assertTrue(record1.hashCode() != record3.hashCode());
+        assertTrue(record2.hashCode() != record3.hashCode());
     }
 
     private final RecordWithNestedDerivings nestedRecord1 = new RecordWithNestedDerivings(1, record1);

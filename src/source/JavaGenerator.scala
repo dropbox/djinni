@@ -26,8 +26,9 @@ import scala.collection.mutable
 
 class JavaGenerator(spec: Spec) extends Generator(spec) {
 
-  var javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaNonnullAnnotation = spec.javaNonnullAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
@@ -215,14 +216,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       javaAnnotationHeader.foreach(w.wl)
       val self = marshal.typename(javaName, r)
 
-      // HACK: Use generic base class to correctly implement Comparable interface
       val comparableFlag =
         if (r.derivingTypes.contains(DerivingType.Ord)) {
-          if (r.ext.java) {
-            s"<E extends $self> implements Comparable<E>"
-          } else {
-            s" implements Comparable<$self>"
-          }
+          s" implements Comparable<$self>"
         } else {
           ""
         }
@@ -295,13 +291,46 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             }
             w.wl(";")
           }
+          // Also generate a hashCode function, since you shouldn't override one without the other.
+          // This hashcode implementation is based off of the apache commons-lang implementation of
+          // HashCodeBuilder (excluding support for Java arrays) which is in turn based off of the
+          // the recommendataions made in Effective Java.
+          w.wl
+          w.wl("@Override")
+          w.w("public int hashCode()").braced {
+            w.wl("// Pick an arbitrary non-zero starting value")
+            w.wl("int hashCode = 17;")
+            // Also pick an arbitrary prime to use as the multiplier.
+            val multiplier = "31"
+            for (f <- r.fields) {
+              val fieldHashCode = f.ty.resolved.base match {
+                case MBinary => s"java.util.Arrays.hashCode(${idJava.field(f.ident)})"
+                case MList | MSet | MMap | MString | MDate => s"${idJava.field(f.ident)}.hashCode()"
+                // Need to repeat this case for MDef
+                case df: MDef => s"${idJava.field(f.ident)}.hashCode()"
+                case MOptional => s"(${idJava.field(f.ident)} == null ? 0 : ${idJava.field(f.ident)}.hashCode())"
+                case t: MPrimitive => t.jName match {
+                  case "byte" | "short" | "int" => idJava.field(f.ident)
+                  case "long" => s"((int) (${idJava.field(f.ident)} ^ (${idJava.field(f.ident)} >>> 32)))"
+                  case "float" => s"Float.floatToIntBits(${idJava.field(f.ident)})"
+                  case "double" => s"((int) (Double.doubleToLongBits(${idJava.field(f.ident)}) ^ (Double.doubleToLongBits(${idJava.field(f.ident)}) >>> 32)))"
+                  case "boolean" => s"(${idJava.field(f.ident)} ? 1 : 0)"
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case _ => throw new AssertionError("Unreachable")
+              }
+              w.wl(s"hashCode = hashCode * $multiplier + $fieldHashCode;")
+            }
+            w.wl(s"return hashCode;")
+          }
+
         }
 
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
           w.wl("@Override")
-          val tyName = if (r.ext.java) "E" else self
-          w.w(s"public int compareTo($tyName other) ").braced {
+          val nonnullAnnotation = javaNonnullAnnotation.map(_ + " ").getOrElse("")
+          w.w(s"public int compareTo($nonnullAnnotation$self other) ").braced {
             w.wl("int tempResult;")
             for (f <- r.fields) {
               f.ty.resolved.base match {

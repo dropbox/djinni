@@ -40,7 +40,16 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
     }
 
     @Override
-    public int compareTo(RecordWithDerivings other)  {
+    public int hashCode() {
+        // Pick an arbitrary non-zero starting value
+        int hashCode = 17;
+        hashCode = hashCode * 31 + mKey1;
+        hashCode = hashCode * 31 + mKey2.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public int compareTo(@Nonnull RecordWithDerivings other)  {
         int tempResult;
         if (this.mKey1 < other.mKey1) {
             tempResult = -1;

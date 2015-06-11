@@ -152,4 +152,25 @@ public final class AssortedPrimitives {
                 ((this.mOFthirtytwo == null && other.mOFthirtytwo == null) || (this.mOFthirtytwo != null && this.mOFthirtytwo.equals(other.mOFthirtytwo))) &&
                 ((this.mOFsixtyfour == null && other.mOFsixtyfour == null) || (this.mOFsixtyfour != null && this.mOFsixtyfour.equals(other.mOFsixtyfour)));
     }
+
+    @Override
+    public int hashCode() {
+        // Pick an arbitrary non-zero starting value
+        int hashCode = 17;
+        hashCode = hashCode * 31 + (mB ? 1 : 0);
+        hashCode = hashCode * 31 + mEight;
+        hashCode = hashCode * 31 + mSixteen;
+        hashCode = hashCode * 31 + mThirtytwo;
+        hashCode = hashCode * 31 + ((int) (mSixtyfour ^ (mSixtyfour >>> 32)));
+        hashCode = hashCode * 31 + Float.floatToIntBits(mFthirtytwo);
+        hashCode = hashCode * 31 + ((int) (Double.doubleToLongBits(mFsixtyfour) ^ (Double.doubleToLongBits(mFsixtyfour) >>> 32)));
+        hashCode = hashCode * 31 + (mOB == null ? 0 : mOB.hashCode());
+        hashCode = hashCode * 31 + (mOEight == null ? 0 : mOEight.hashCode());
+        hashCode = hashCode * 31 + (mOSixteen == null ? 0 : mOSixteen.hashCode());
+        hashCode = hashCode * 31 + (mOThirtytwo == null ? 0 : mOThirtytwo.hashCode());
+        hashCode = hashCode * 31 + (mOSixtyfour == null ? 0 : mOSixtyfour.hashCode());
+        hashCode = hashCode * 31 + (mOFthirtytwo == null ? 0 : mOFthirtytwo.hashCode());
+        hashCode = hashCode * 31 + (mOFsixtyfour == null ? 0 : mOFsixtyfour.hashCode());
+        return hashCode;
+    }
 }
