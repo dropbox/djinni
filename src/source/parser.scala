@@ -16,7 +16,7 @@
 
 package djinni
 
-import java.io.{File, InputStreamReader, FileInputStream}
+import java.io.{File, InputStreamReader, FileInputStream, Writer}
 
 import djinni.ast.Interface.Method
 import djinni.ast.Record.DerivingType.DerivingType
@@ -206,7 +206,11 @@ def parse(origin: String, in: java.io.Reader): Either[Error,IdlFile] = {
   }
 }
 
-def parseFile(idlFile: File): Seq[TypeDecl] = {
+def parseFile(idlFile: File, inFileListWriter: Option[Writer]): Seq[TypeDecl] = {
+  if (inFileListWriter.isDefined) {
+    inFileListWriter.get.write(idlFile + "\n")
+  }
+
   visitedFiles.add(idlFile)
   fileStack.push(idlFile)
   val fin = new FileInputStream(idlFile)
@@ -222,7 +226,7 @@ def parseFile(idlFile: File): Seq[TypeDecl] = {
             throw new AssertionError("Circular import detected!")
           }
           if (!visitedFiles.contains(x)) {
-            types = parseFile(x) ++ types
+            types = parseFile(x, inFileListWriter) ++ types
           }
         })
         types

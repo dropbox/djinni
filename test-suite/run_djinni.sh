@@ -16,7 +16,6 @@ done
 base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 temp_out="$base_dir/djinni-output-temp"
-
 in="$base_dir/djinni/all.djinni"
 
 cpp_out="$base_dir/generated-src/cpp"
@@ -48,8 +47,8 @@ fi
 
 # Build Djinni.
 "$base_dir/../src/build"
-
 [ ! -e "$temp_out" ] || rm -r "$temp_out"
+(cd "$base_dir" && \
 "$base_dir/../src/run-assume-built" \
     --java-out "$temp_out/java" \
     --java-package $java_package \
@@ -70,7 +69,10 @@ fi
 	--objcpp-out "$temp_out/objc" \
     --objc-type-prefix DB \
     \
-    --idl "$in"
+    --idl "$in" \
+    --list-in-files "./generated-src/inFileList.txt" \
+    --list-out-files "./generated-src/outFileList.txt"\
+)
 
 # Copy changes from "$temp_output" to final dir.
 

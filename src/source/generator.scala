@@ -17,7 +17,7 @@
 package djinni
 
 import djinni.ast._
-import java.io.{OutputStreamWriter, FileOutputStream, File}
+import java.io._
 import djinni.generatorTools._
 import djinni.meta._
 import djinni.syntax.Error
@@ -65,7 +65,9 @@ package object generatorTools {
                    objcppIncludeCppPrefix: String,
                    objcppIncludeObjcPrefix: String,
                    objcppNamespace: String,
-                   objcBaseLibIncludePrefix: String)
+                   objcBaseLibIncludePrefix: String,
+                   outFileListWriter: Option[Writer],
+                   skipGeneration: Boolean)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -155,25 +157,35 @@ package object generatorTools {
   def generate(idl: Seq[TypeDecl], spec: Spec): Option[String] = {
     try {
       if (spec.cppOutFolder.isDefined) {
-        createFolder("C++", spec.cppOutFolder.get)
-        createFolder("C++ header", spec.cppHeaderOutFolder.get)
+        if (!spec.skipGeneration) {
+          createFolder("C++", spec.cppOutFolder.get)
+          createFolder("C++ header", spec.cppHeaderOutFolder.get)
+        }
         new CppGenerator(spec).generate(idl)
       }
       if (spec.javaOutFolder.isDefined) {
-        createFolder("Java", spec.javaOutFolder.get)
+        if (!spec.skipGeneration) {
+          createFolder("Java", spec.javaOutFolder.get)
+        }
         new JavaGenerator(spec).generate(idl)
       }
       if (spec.jniOutFolder.isDefined) {
-        createFolder("JNI C++", spec.jniOutFolder.get)
-        createFolder("JNI C++ header", spec.jniHeaderOutFolder.get)
+        if (!spec.skipGeneration) {
+          createFolder("JNI C++", spec.jniOutFolder.get)
+          createFolder("JNI C++ header", spec.jniHeaderOutFolder.get)
+        }
         new JNIGenerator(spec).generate(idl)
       }
       if (spec.objcOutFolder.isDefined) {
-        createFolder("Objective-C", spec.objcOutFolder.get)
+        if (!spec.skipGeneration) {
+          createFolder("Objective-C", spec.objcOutFolder.get)
+        }
         new ObjcGenerator(spec).generate(idl)
       }
       if (spec.objcppOutFolder.isDefined) {
-        createFolder("Objective-C++", spec.objcppOutFolder.get)
+        if (!spec.skipGeneration) {
+          createFolder("Objective-C++", spec.objcppOutFolder.get)
+        }
         new ObjcppGenerator(spec).generate(idl)
       }
       None
@@ -190,10 +202,16 @@ package object generatorTools {
 
 abstract class Generator(spec: Spec)
 {
-
   protected val writtenFiles = mutable.HashMap[String,String]()
 
   protected def createFile(folder: File, fileName: String, f: IndentWriter => Unit) {
+    if (spec.outFileListWriter.isDefined) {
+      spec.outFileListWriter.get.write(new File(folder, fileName).getPath + "\n")
+    }
+    if (spec.skipGeneration) {
+      return
+    }
+
     val file = new File(folder, fileName)
     val cp = file.getCanonicalPath
     writtenFiles.put(cp.toLowerCase, cp) match {
@@ -206,15 +224,15 @@ abstract class Generator(spec: Spec)
       case _ =>
     }
 
-    val fout = new FileOutputStream(file)
-    try {
-      val out = new OutputStreamWriter(fout, "UTF-8")
-      f(new IndentWriter(out))
-      out.flush()
-    }
-    finally {
-      fout.close()
-    }
+      val fout = new FileOutputStream(file)
+      try {
+        val out = new OutputStreamWriter(fout, "UTF-8")
+        f(new IndentWriter(out))
+        out.flush()
+      }
+      finally {
+        fout.close()
+      }
   }
 
   implicit def identToString(ident: Ident): String = ident.name
