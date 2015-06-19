@@ -38,7 +38,11 @@ private object IdlParser extends RegexParsers {
 
   def importFile: Parser[File] = "@import \"" ~> filePath <~ "\"" ^^ {
     x => {
-      val newPath = fileStack.top.getParent() + "/" + x
+      val parent: Option[String] = Option(fileStack.top.getParent())
+      val newPath = parent match {
+        case Some(_) => parent + "/" + x
+        case None => x
+      }
       new File(newPath)
     }
   }
