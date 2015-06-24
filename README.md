@@ -183,20 +183,22 @@ underlying type `NSInteger`, and Java enums.
 Records are data objects. In C++, records contain all their elements by value, including other
 records (so a record cannot contain itself).
 
-#### Data type
-The available data types for a record are:
+#### Data types
+The available data types for a record, argument, or return value are:
 
  - Boolean (`bool`)
  - Primitives (`i8`, `i16`, `i32`, `i64`, `f32`, `f64`).
  - Strings (`string`)
  - Binary (`binary`). This is implemented as `std::vector<uint8_t>` in C++, `byte[]` in Java,
    and `NSData` in Objective-C.
+ - Date (`date`).  This is `chrono::system_clock::time_point` in C++, `Date` in Java, and
+   `NSDate` in Objective-C.
  - List (`list<type>`). This is `vector<T>` in C++, `ArrayList` in Java, and `NSArray`
    in Objective-C. Primitives in a list will be boxed in Java and Objective-C.
- - Set (`set<type>`). This is `set<T>` in C++, `TreeSet` in Java, and `NSSet` in
+ - Set (`set<type>`). This is `unordered_set<T>` in C++, `HashSet` in Java, and `NSSet` in
    Objective-C. Primitives in a set will be boxed in Java and Objective-C.
  - Map (`map<typeA, typeB>`). This is `unordered_map<K, V>` in C++, `HashMap` in Java, and
-  `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
+   `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
  - Enumerations
  - Optionals (`optional<typeA>`). This is `std::experimental::optional<T>` in C++11, object /
    boxed primitive reference in Java (which can be `null`), and object / NSNumber strong
