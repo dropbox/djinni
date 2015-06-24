@@ -18,6 +18,13 @@ base_dir=$(cd "`dirname "$loc"`" && pwd)
 temp_out="$base_dir/djinni-output-temp"
 in="$base_dir/djinni/all.djinni"
 
+# Relative version of in and temp_out are used for Djinni call below so that
+# generated lists of infiles/outfiles are not machine-dependent.  This
+# is an artifact of the test suite, where we want the genereated files
+# to be in git for examination.
+in_relative="djinni/all.djinni"
+temp_out_relative="djinni-output-temp"
+
 cpp_out="$base_dir/generated-src/cpp"
 jni_out="$base_dir/generated-src/jni"
 objc_out="$base_dir/generated-src/objc"
@@ -42,6 +49,8 @@ elif [ $# -eq 1 ]; then
             rm -r "$dir"
         fi
     done
+    rm "$base_dir/generated-src/inFileList.txt"
+    rm "$base_dir/generated-src/outFileList.txt"
     exit
 fi
 
@@ -50,26 +59,26 @@ fi
 [ ! -e "$temp_out" ] || rm -r "$temp_out"
 (cd "$base_dir" && \
 "$base_dir/../src/run-assume-built" \
-    --java-out "$temp_out/java" \
+    --java-out "$temp_out_relative/java" \
     --java-package $java_package \
     --java-nullable-annotation "javax.annotation.CheckForNull" \
     --java-nonnull-annotation "javax.annotation.Nonnull" \
     --ident-java-field mFooBar \
     \
-    --cpp-out "$temp_out/cpp" \
+    --cpp-out "$temp_out_relative/cpp" \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
     --cpp-optional-header "<experimental/optional>" \
     \
-    --jni-out "$temp_out/jni" \
+    --jni-out "$temp_out_relative/jni" \
     --ident-jni-class NativeFooBar \
     --ident-jni-file NativeFooBar \
     \
-    --objc-out "$temp_out/objc" \
-	--objcpp-out "$temp_out/objc" \
+    --objc-out "$temp_out_relative/objc" \
+    --objcpp-out "$temp_out_relative/objc" \
     --objc-type-prefix DB \
     \
-    --idl "$in" \
+    --idl "$in_relative" \
     --list-in-files "./generated-src/inFileList.txt" \
     --list-out-files "./generated-src/outFileList.txt"\
 )
