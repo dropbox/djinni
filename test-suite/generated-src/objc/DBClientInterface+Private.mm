@@ -20,16 +20,16 @@ public:
     ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override
     {
         @autoreleasepool {
-            auto r = [(id<DBClientInterface>)Handle::get() getRecord:(::djinni::I64::fromCpp(record_id))
-                                                          utf8string:(::djinni::String::fromCpp(utf8string))
-                                                                misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(misc))];
+            auto r = [(ObjcType)Handle::get() getRecord:(::djinni::I64::fromCpp(record_id))
+                                             utf8string:(::djinni::String::fromCpp(utf8string))
+                                                   misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(misc))];
             return ::djinni_generated::ClientReturnedRecord::toCpp(r);
         }
     }
     std::string return_str() override
     {
         @autoreleasepool {
-            auto r = [(id<DBClientInterface>)Handle::get() returnStr];
+            auto r = [(ObjcType)Handle::get() returnStr];
             return ::djinni::String::toCpp(r);
         }
     }

@@ -19,7 +19,7 @@ public:
     void update(const ::textsort::ItemList & items) override
     {
         @autoreleasepool {
-            [Handle::get() update:(::djinni_generated::ItemList::fromCpp(items))];
+            [(ObjcType)Handle::get() update:(::djinni_generated::ItemList::fromCpp(items))];
         }
     }
 };

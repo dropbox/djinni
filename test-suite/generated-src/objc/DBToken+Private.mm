@@ -50,7 +50,7 @@ public:
     std::string whoami() override
     {
         @autoreleasepool {
-            auto r = [(id<DBToken>)Handle::get() whoami];
+            auto r = [(ObjcType)Handle::get() whoami];
             return ::djinni::String::toCpp(r);
         }
     }

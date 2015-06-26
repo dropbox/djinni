@@ -178,7 +178,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
                 w.w("@autoreleasepool").braced {
                   val ret = m.ret.fold("")(_ => "auto r = ")
-                  val call = s"[(id<$self>)Handle::get() ${idObjc.method(m.ident)}"
+                  val call = s"[(ObjcType)Handle::get() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, idCpp.local(p.ident))})"))
                   w.wl(";")
                   m.ret.fold()(r => { w.wl(s"return ${objcppMarshal.toCpp(r, "r")};") })
