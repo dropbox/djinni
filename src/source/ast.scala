@@ -52,6 +52,8 @@ case class Ext(java: Boolean, cpp: Boolean, objc: Boolean) {
   }
 }
 
+case class Ext(java: Boolean, cpp: Boolean, objc: Boolean, cx: Boolean)
+
 case class TypeRef(expr: TypeExpr) {
   var resolved: MExpr = null
 }

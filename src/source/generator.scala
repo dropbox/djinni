@@ -73,7 +73,14 @@ package object generatorTools {
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
                    yamlOutFile: Option[String],
-                   yamlPrefix: String)
+                   yamlPrefix: String,
+                   cxOutFolder: Option[File],
+                   cxHeaderExt: String,
+                   cxHeaderOutFolder: Option[File],
+                   cxIncludePrefix: String,
+                   cxNamespace: String,
+                   cxIdentStyle: CxIdentStyle,
+                   cxFileIdentStyle: IdentConverter)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -95,6 +102,10 @@ package object generatorTools {
                             method: IdentConverter, field: IdentConverter, local: IdentConverter,
                             enum: IdentConverter, const: IdentConverter)
 
+  case class CxIdentStyle(ty: IdentConverter, enumType: IdentConverter, typeParam: IdentConverter,
+                           method: IdentConverter, field: IdentConverter, local: IdentConverter,
+                           enum: IdentConverter, const: IdentConverter)
+
   object IdentStyle {
     val camelUpper = (s: String) => s.split('_').map(firstUpper).mkString
     val camelLower = (s: String) => {
@@ -109,6 +120,7 @@ package object generatorTools {
     val javaDefault = JavaIdentStyle(camelUpper, camelUpper, camelLower, camelLower, camelLower, underCaps, underCaps)
     val cppDefault = CppIdentStyle(camelUpper, camelUpper, camelUpper, underLower, underLower, underLower, underCaps, underCaps)
     val objcDefault = ObjcIdentStyle(camelUpper, camelUpper, camelLower, camelLower, camelLower, camelUpper, camelUpper)
+    val cxDefault = CxIdentStyle(camelUpper, camelUpper, camelUpper, underLower, underLower, underLower, underCaps, underCaps)
 
     val styles = Map(
       "FooBar" -> camelUpper,
@@ -253,6 +265,7 @@ abstract class Generator(spec: Spec)
   val idCpp = spec.cppIdentStyle
   val idJava = spec.javaIdentStyle
   val idObjc = spec.objcIdentStyle
+  val idCx = spec.cxIdentStyle
 
   def wrapNamespace(w: IndentWriter, ns: String, f: IndentWriter => Unit) {
     ns match {
