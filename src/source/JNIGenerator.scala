@@ -248,7 +248,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         for (m <- i.methods) {
           val ret = cppMarshal.fqReturnType(m.ret)
-          val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
+          val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
           writeJniTypeParams(w, typeParams)
           w.w(s"$ret $jniSelfWithParams::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").braced {
             w.wl(s"auto jniEnv = ::djinni::jniGetThreadEnv();")
@@ -261,7 +261,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             if(!m.params.isEmpty){
               w.wl(",")
               writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
-                val param = jniMarshal.fromCpp(p.ty, idCpp.local(p.ident))
+                val param = jniMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))
                 s"::djinni::get($param)"
               })
             }

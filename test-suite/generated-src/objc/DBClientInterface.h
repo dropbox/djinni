@@ -12,6 +12,10 @@
                                    utf8string:(nonnull NSString *)utf8string
                                          misc:(nullable NSString *)misc;
 
+- (double)identifierCheck:(nonnull NSData *)data
+                        r:(int32_t)r
+                     jret:(int64_t)jret;
+
 - (nonnull NSString *)returnStr;
 
 @end
