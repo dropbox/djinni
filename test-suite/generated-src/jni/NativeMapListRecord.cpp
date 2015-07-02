@@ -13,7 +13,7 @@ NativeMapListRecord::~NativeMapListRecord() = default;
 auto NativeMapListRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeMapListRecord>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::List<::djinni::Map<::djinni::String, ::djinni::I64>>::fromCpp(jniEnv, c.map_list).get())};
+                                                           ::djinni::get(::djinni::List<::djinni::Map<::djinni::String, ::djinni::I64>>::fromCpp(jniEnv, c.map_list)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

@@ -12,6 +12,14 @@ static NSString *DBNonAscii = @"Non-ASCII / 非 ASCII 字符";
     return [[DBClientReturnedRecord alloc] initWithRecordId:ident content:utf8string misc:misc];
 }
 
+- (double)identifierCheck:(nonnull NSData *)data r:(int32_t)r jret:(int64_t)jret
+{
+	(void)data;
+	(void)r;
+	(void)jret;
+	return 0.0;
+}
+
 - (NSString *)returnStr
 {
     return @"test";

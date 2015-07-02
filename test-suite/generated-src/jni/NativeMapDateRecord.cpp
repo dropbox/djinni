@@ -13,7 +13,7 @@ NativeMapDateRecord::~NativeMapDateRecord() = default;
 auto NativeMapDateRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeMapDateRecord>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::Map<::djinni::String, ::djinni::Date>::fromCpp(jniEnv, c.dates_by_id).get())};
+                                                           ::djinni::get(::djinni::Map<::djinni::String, ::djinni::Date>::fromCpp(jniEnv, c.dates_by_id)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

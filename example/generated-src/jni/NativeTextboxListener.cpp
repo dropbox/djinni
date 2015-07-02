@@ -14,12 +14,12 @@ NativeTextboxListener::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) 
 
 NativeTextboxListener::JavaProxy::~JavaProxy() = default;
 
-void NativeTextboxListener::JavaProxy::update(const ::textsort::ItemList & items) {
+void NativeTextboxListener::JavaProxy::update(const ::textsort::ItemList & c_items) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeTextboxListener>::get();
     jniEnv->CallVoidMethod(getGlobalRef(), data.method_update,
-                           ::djinni_generated::NativeItemList::fromCpp(jniEnv, items).get());
+                           ::djinni::get(::djinni_generated::NativeItemList::fromCpp(jniEnv, c_items)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 

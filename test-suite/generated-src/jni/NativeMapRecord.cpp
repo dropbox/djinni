@@ -13,16 +13,18 @@ NativeMapRecord::~NativeMapRecord() = default;
 auto NativeMapRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeMapRecord>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, c.map).get())};
+                                                           ::djinni::get(::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, c.map)),
+                                                           ::djinni::get(::djinni::Map<::djinni::I32, ::djinni::I32>::fromCpp(jniEnv, c.imap)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
 auto NativeMapRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
-    ::djinni::JniLocalScope jscope(jniEnv, 2);
+    ::djinni::JniLocalScope jscope(jniEnv, 3);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeMapRecord>::get();
-    return {::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mMap))};
+    return {::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mMap)),
+            ::djinni::Map<::djinni::I32, ::djinni::I32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mImap))};
 }
 
 }  // namespace djinni_generated

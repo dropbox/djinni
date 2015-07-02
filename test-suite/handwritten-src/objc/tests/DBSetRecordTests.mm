@@ -11,13 +11,13 @@
 
 - (SetRecord)getCppSetRecord
 {
-    return SetRecord({"StringA", "StringB", "StringC"});
+	return SetRecord({"StringA", "StringB", "StringC"}, {});
 }
 
 - (DBSetRecord *)getObjcSetRecord
 {
     NSSet *set = [[NSSet alloc] initWithObjects:@"StringA", @"StringB", @"StringC", nil];
-    DBSetRecord *objcSetRecord = [[DBSetRecord alloc] initWithSet:set];
+	DBSetRecord *objcSetRecord = [[DBSetRecord alloc] initWithSet:set iset:[NSSet set]];
     return objcSetRecord;
 }
 

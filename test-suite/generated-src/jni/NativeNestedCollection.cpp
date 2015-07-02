@@ -13,7 +13,7 @@ NativeNestedCollection::~NativeNestedCollection() = default;
 auto NativeNestedCollection::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeNestedCollection>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::List<::djinni::Set<::djinni::String>>::fromCpp(jniEnv, c.set_list).get())};
+                                                           ::djinni::get(::djinni::List<::djinni::Set<::djinni::String>>::fromCpp(jniEnv, c.set_list)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
