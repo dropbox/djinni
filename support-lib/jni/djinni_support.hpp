@@ -98,6 +98,18 @@ public:
     operator PointerType() && = delete;
 };
 
+template<class T>
+const T& get(const T& x) noexcept { return x; }
+template<class T>
+typename LocalRef<T>::pointer get(const LocalRef<T>& x) noexcept { return x.get(); }
+
+template<class T>
+const T& release(const T& x) noexcept { return x; }
+template<class T>
+typename LocalRef<T>::pointer release(LocalRef<T>& x) noexcept { return x.release(); }
+template<class T>
+typename LocalRef<T>::pointer release(LocalRef<T>&& x) noexcept { return x.release(); }
+
 /*
  * Exception to indicate that a Java exception is pending in the JVM.
  */

@@ -25,8 +25,9 @@ private:
     friend ::djinni::JniClass<NativeMapRecord>;
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/MapRecord") };
-    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashMap;)V") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashMap;Ljava/util/HashMap;)V") };
     const jfieldID field_mMap { ::djinni::jniGetFieldID(clazz.get(), "mMap", "Ljava/util/HashMap;") };
+    const jfieldID field_mImap { ::djinni::jniGetFieldID(clazz.get(), "mImap", "Ljava/util/HashMap;") };
 };
 
 }  // namespace djinni_generated

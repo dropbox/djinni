@@ -312,7 +312,7 @@ namespace djinni
 			for(const auto& ce : c)
 			{
 				auto je = T::Boxed::fromCpp(jniEnv, ce);
-				jniEnv->CallBooleanMethod(j, data.method_add, je.get());
+				jniEnv->CallBooleanMethod(j, data.method_add, get(je));
 				jniExceptionCheck(jniEnv);
 			}
 			return j;
@@ -373,7 +373,7 @@ namespace djinni
 			for(const auto& ce : c)
 			{
 				auto je = T::fromCpp(jniEnv, ce);
-				jniEnv->CallBooleanMethod(j, data.method_add, je.get());
+				jniEnv->CallBooleanMethod(j, data.method_add, get(je));
 				jniExceptionCheck(jniEnv);
 			}
 			return j;
@@ -452,7 +452,7 @@ namespace djinni
 			{
 				auto jKey = Key::Boxed::fromCpp(jniEnv, ce.first);
 				auto jValue = Value::Boxed::fromCpp(jniEnv, ce.second);
-				jniEnv->CallObjectMethod(j, data.method_put, jKey.get(), jValue.get());
+				jniEnv->CallObjectMethod(j, data.method_put, get(jKey), get(jValue));
 				jniExceptionCheck(jniEnv);
 			}
 			return j;

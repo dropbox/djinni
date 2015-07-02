@@ -32,7 +32,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getSetRecord
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_set_record();
-        return ::djinni_generated::NativeSetRecord::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeSetRecord::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -41,7 +41,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkSetRec
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_set_record(::djinni_generated::NativeSetRecord::toCpp(jniEnv, j_rec));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -50,7 +50,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getPrimitive
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_primitive_list();
-        return ::djinni_generated::NativePrimitiveList::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativePrimitiveList::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -59,7 +59,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkPrimit
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_primitive_list(::djinni_generated::NativePrimitiveList::toCpp(jniEnv, j_pl));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -68,7 +68,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getNestedCol
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_nested_collection();
-        return ::djinni_generated::NativeNestedCollection::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeNestedCollection::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -77,7 +77,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkNested
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_nested_collection(::djinni_generated::NativeNestedCollection::toCpp(jniEnv, j_nc));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -86,7 +86,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMap(JNIEn
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_map();
-        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -95,7 +95,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMap(JN
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(jniEnv, j_m));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -104,7 +104,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getEmptyMap(
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_empty_map();
-        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -113,7 +113,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEmptyM
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(jniEnv, j_m));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -122,7 +122,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMapListRe
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::get_map_list_record();
-        return ::djinni_generated::NativeMapListRecord::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeMapListRecord::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -131,7 +131,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMapLis
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::check_map_list_record(::djinni_generated::NativeMapListRecord::toCpp(jniEnv, j_m));
-        return ::djinni::Bool::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -172,7 +172,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIE
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::token_id(::djinni_generated::NativeToken::toCpp(jniEnv, j_t));
-        return ::djinni_generated::NativeToken::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeToken::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -181,7 +181,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppTok
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::create_cpp_token();
-        return ::djinni_generated::NativeToken::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeToken::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -198,7 +198,7 @@ CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNI
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::cpp_token_id(::djinni_generated::NativeToken::toCpp(jniEnv, j_t));
-        return ::djinni::I64::fromCpp(jniEnv, r);
+        return ::djinni::release(::djinni::I64::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -216,7 +216,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::return_none();
-        return ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -225,7 +225,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedPrim
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::assorted_primitives_id(::djinni_generated::NativeAssortedPrimitives::toCpp(jniEnv, j_i));
-        return ::djinni_generated::NativeAssortedPrimitives::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni_generated::NativeAssortedPrimitives::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -234,7 +234,7 @@ CJNIEXPORT jbyteArray JNICALL Java_com_dropbox_djinni_test_TestHelpers_idBinary(
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::id_binary(::djinni::Binary::toCpp(jniEnv, j_b));
-        return ::djinni::Binary::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni::Binary::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 

@@ -13,9 +13,9 @@ NativeClientReturnedRecord::~NativeClientReturnedRecord() = default;
 auto NativeClientReturnedRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeClientReturnedRecord>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::I64::fromCpp(jniEnv, c.record_id),
-                                                           ::djinni::String::fromCpp(jniEnv, c.content).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, c.misc).get())};
+                                                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c.record_id)),
+                                                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c.content)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, c.misc)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

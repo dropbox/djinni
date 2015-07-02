@@ -135,8 +135,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           w.wl(",")
           writeAlignedCall(w, " " * call.length(), r.fields, ")}", f => {
             val name = idCpp.field(f.ident)
-            val get = if(jniMarshal.isJavaHeapObject(f.ty)) ".get()" else ""
-            jniMarshal.fromCpp(f.ty, s"c.$name") + get
+            val param = jniMarshal.fromCpp(f.ty, s"c.$name")
+            s"::djinni::get($param)"
           })
         }
         else
@@ -261,8 +261,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             if(!m.params.isEmpty){
               w.wl(",")
               writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
-                val get = if(jniMarshal.isJavaHeapObject(p.ty)) ".get()" else ""
-                jniMarshal.fromCpp(p.ty, idCpp.local(p.ident)) + get
+                val param = jniMarshal.fromCpp(p.ty, idCpp.local(p.ident))
+                s"::djinni::get($param)"
               })
             }
             else
@@ -315,7 +315,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             val call = if (m.static) s"$cppSelf::$methodName(" else s"ref->$methodName("
             writeAlignedCall(w, ret + call, m.params, ")", p => jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident)))
             w.wl(";")
-            m.ret.fold()(r => w.wl(s"return ${jniMarshal.fromCpp(r, "r")}" + (if(jniMarshal.isJavaHeapObject(r)) ".release();" else ";")))
+            m.ret.fold()(r => w.wl(s"return ::djinni::release(${jniMarshal.fromCpp(r, "r")});"))
           })
         }
       }

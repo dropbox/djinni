@@ -13,8 +13,8 @@ NativeRecordWithDerivings::~NativeRecordWithDerivings() = default;
 auto NativeRecordWithDerivings::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeRecordWithDerivings>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::I32::fromCpp(jniEnv, c.key1),
-                                                           ::djinni::String::fromCpp(jniEnv, c.key2).get())};
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.key1)),
+                                                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c.key2)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

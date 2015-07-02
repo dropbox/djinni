@@ -13,8 +13,8 @@ NativeConstants::~NativeConstants() = default;
 auto NativeConstants::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeConstants>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::I32::fromCpp(jniEnv, c.some_integer),
-                                                           ::djinni::String::fromCpp(jniEnv, c.some_string).get())};
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.some_integer)),
+                                                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c.some_string)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

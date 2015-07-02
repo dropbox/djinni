@@ -9,7 +9,7 @@ SetRecord TestHelpers::get_set_record() {
         "StringA",
         "StringB",
         "StringC"
-    } };
+	}, {} };
 }
 
 bool TestHelpers::check_set_record(const SetRecord & rec) {

@@ -13,7 +13,7 @@ NativeDateRecord::~NativeDateRecord() = default;
 auto NativeDateRecord::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeDateRecord>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::Date::fromCpp(jniEnv, c.created_at).get())};
+                                                           ::djinni::get(::djinni::Date::fromCpp(jniEnv, c.created_at)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

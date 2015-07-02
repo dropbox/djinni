@@ -13,20 +13,20 @@ NativeAssortedPrimitives::~NativeAssortedPrimitives() = default;
 auto NativeAssortedPrimitives::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeAssortedPrimitives>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::Bool::fromCpp(jniEnv, c.b),
-                                                           ::djinni::I8::fromCpp(jniEnv, c.eight),
-                                                           ::djinni::I16::fromCpp(jniEnv, c.sixteen),
-                                                           ::djinni::I32::fromCpp(jniEnv, c.thirtytwo),
-                                                           ::djinni::I64::fromCpp(jniEnv, c.sixtyfour),
-                                                           ::djinni::F32::fromCpp(jniEnv, c.fthirtytwo),
-                                                           ::djinni::F64::fromCpp(jniEnv, c.fsixtyfour),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::Bool>::fromCpp(jniEnv, c.o_b).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::I8>::fromCpp(jniEnv, c.o_eight).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::I16>::fromCpp(jniEnv, c.o_sixteen).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(jniEnv, c.o_thirtytwo).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::I64>::fromCpp(jniEnv, c.o_sixtyfour).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::F32>::fromCpp(jniEnv, c.o_fthirtytwo).get(),
-                                                           ::djinni::Optional<std::experimental::optional, ::djinni::F64>::fromCpp(jniEnv, c.o_fsixtyfour).get())};
+                                                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c.b)),
+                                                           ::djinni::get(::djinni::I8::fromCpp(jniEnv, c.eight)),
+                                                           ::djinni::get(::djinni::I16::fromCpp(jniEnv, c.sixteen)),
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.thirtytwo)),
+                                                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c.sixtyfour)),
+                                                           ::djinni::get(::djinni::F32::fromCpp(jniEnv, c.fthirtytwo)),
+                                                           ::djinni::get(::djinni::F64::fromCpp(jniEnv, c.fsixtyfour)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::Bool>::fromCpp(jniEnv, c.o_b)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::I8>::fromCpp(jniEnv, c.o_eight)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::I16>::fromCpp(jniEnv, c.o_sixteen)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(jniEnv, c.o_thirtytwo)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::I64>::fromCpp(jniEnv, c.o_sixtyfour)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::F32>::fromCpp(jniEnv, c.o_fthirtytwo)),
+                                                           ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::F64>::fromCpp(jniEnv, c.o_fsixtyfour)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
