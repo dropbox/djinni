@@ -20,9 +20,9 @@ NativeClientInterface::JavaProxy::~JavaProxy() = default;
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
     auto jret = jniEnv->CallObjectMethod(getGlobalRef(), data.method_getRecord,
-                                         ::djinni::I64::fromCpp(jniEnv, record_id),
-                                         ::djinni::String::fromCpp(jniEnv, utf8string).get(),
-                                         ::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, misc).get());
+                                         ::djinni::get(::djinni::I64::fromCpp(jniEnv, record_id)),
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, utf8string)),
+                                         ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, misc)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeClientReturnedRecord::toCpp(jniEnv, jret);
 }

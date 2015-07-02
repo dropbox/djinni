@@ -17,10 +17,11 @@ public class SetRecordTest extends TestCase {
 
     public void testJavaSetToCppSet() {
         HashSet<String> jSet = new HashSet<String>();
+		HashSet<Integer> iSet = new HashSet<Integer>();
         jSet.add("StringA");
         jSet.add("StringB");
         jSet.add("StringC");
-        SetRecord jSetRecord = new SetRecord(jSet);
+        SetRecord jSetRecord = new SetRecord(jSet, iSet);
         assertTrue("checkSetRecord", TestHelpers.checkSetRecord(jSetRecord));
     }
 }

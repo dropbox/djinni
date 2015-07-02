@@ -7,9 +7,11 @@
 @implementation DBSetRecord
 
 - (id)initWithSet:(nonnull NSSet *)set
+             iset:(nonnull NSSet *)iset
 {
     if (self = [super init]) {
         _set = set;
+        _iset = iset;
     }
     return self;
 }

@@ -12,13 +12,22 @@ public final class SetRecord {
 
     /*package*/ final HashSet<String> mSet;
 
+    /*package*/ final HashSet<Integer> mIset;
+
     public SetRecord(
-            @Nonnull HashSet<String> set) {
+            @Nonnull HashSet<String> set,
+            @Nonnull HashSet<Integer> iset) {
         this.mSet = set;
+        this.mIset = iset;
     }
 
     @Nonnull
     public HashSet<String> getSet() {
         return mSet;
+    }
+
+    @Nonnull
+    public HashSet<Integer> getIset() {
+        return mIset;
     }
 }
