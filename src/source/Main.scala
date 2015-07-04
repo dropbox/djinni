@@ -342,21 +342,19 @@ object Main {
       objcppIncludeObjcPrefix,
       objcppNamespace,
       objcBaseLibIncludePrefix,
-<<<<<<< HEAD
       outFileListWriter,
       skipGeneration,
       yamlOutFolder,
       yamlOutFile,
-      yamlPrefix)
-=======
+      yamlPrefix,
       cxOutFolder,
-      cxNamespace,
-      cxFileIdentStyle,
-      cxHeaderOutFolderOptional,
-      cxIncludePrefix,
       cxExt,
-      cxHeaderExt)
->>>>>>> 3e64732... Closer to compilation!
+      cxHeaderExt,
+      cxHeaderOutFolder,
+      cxIncludePrefix,
+      cxNamespace,
+      cxIdentStyle,
+      cxFileIdentStyle)
 
 
     try {

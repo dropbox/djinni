@@ -75,6 +75,7 @@ package object generatorTools {
                    yamlOutFile: Option[String],
                    yamlPrefix: String,
                    cxOutFolder: Option[File],
+                   cxExt: String,
                    cxHeaderExt: String,
                    cxHeaderOutFolder: Option[File],
                    cxIncludePrefix: String,

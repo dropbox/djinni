@@ -40,6 +40,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     case MString => List(ImportRef("<string>"))
     case MDate => List(ImportRef("<chrono>"))
     case MBinary => List(ImportRef("<vector>"), ImportRef("<cstdint>"))
+    case MOptional => List()
     case MList => List(ImportRef("<vector>"))
     case MSet => List(ImportRef("<unordered_set>"))
     case MMap => List(ImportRef("<unordered_map>"))
@@ -67,6 +68,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
       case MString => "std::string"
       case MDate => "std::chrono::system_clock::time_point"
       case MBinary => "std::vector<uint8_t>"
+      case MOptional => ""
       case MList => "std::vector"
       case MSet => "std::unordered_set"
       case MMap => "std::unordered_map"
