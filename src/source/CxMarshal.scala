@@ -29,9 +29,6 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   override def fieldType(tm: MExpr): String = typename(tm)
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)
 
-  override def toCx(tm: MExpr, expr: String): String = throw new AssertionError("cx to cx conversion")
-  override def fromCx(tm: MExpr, expr: String): String = throw new AssertionError("cx to cx conversion")
-
   def references(m: Meta, exclude: String): Seq[SymbolReference] = m match {
     case p: MPrimitive => p.idlName match {
       case "i8" | "i16" | "i32" | "i64" => List(ImportRef("<cstdint>"))
