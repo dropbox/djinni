@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-//  This header can only be imported to Objective-C++ source code!
+//  This header can only be imported to C++/Cx source code!
 
 #include <memory>
 #include <mutex>
@@ -33,20 +33,20 @@ public:
     }
 
     template <typename AllocFunc>
-    id get(const std::shared_ptr<T> & cppRef, const AllocFunc & alloc) {
+    Platform::Object^ get(const std::shared_ptr<T> & cppRef, const AllocFunc & alloc) {
         std::unique_lock<std::mutex> lock(m_mutex);
         T* ptr = cppRef.get();
         auto got = m_mapping.find(ptr);
-        id ret;
+		Platform::Object^ ret;
         if (got != m_mapping.end()) {
-            ret = got->second;
-            if (ret == nil) {
+			ret = reinterpret_cast<Platform::Object^>(got->second);
+            if (ret == nullptr) {
                 ret = alloc(cppRef);
-                m_mapping[ptr] = ret;
+                m_mapping[ptr] = Platform::WeakReference(ret);
             }
         } else {
             ret = alloc(cppRef);
-            m_mapping[ptr] = ret;
+			m_mapping[ptr] = Platform::WeakReference(ret);
         }
         return ret;
     }
@@ -54,7 +54,7 @@ public:
     void remove(const std::shared_ptr<T> & cppRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
         T* ptr = cppRef.get();
-        if (m_mapping[ptr] == nil) {
+        if (m_mapping[ptr] == nullptr) {
             m_mapping.erase(ptr);
         }
     }
@@ -68,7 +68,7 @@ public:
             }
         }
         void assign(const std::shared_ptr<T>& ptr) { _ptr = ptr; }
-        const std::shared_ptr<T>& get() const noexcept { return _ptr; }
+        const std::shared_ptr<T>& get() const { return _ptr; }
 
     private:
         const std::shared_ptr<CppWrapperCache> _cache = getInstance();
@@ -76,7 +76,7 @@ public:
     };
 
 private:
-    std::unordered_map<T*, __weak id> m_mapping;
+    std::unordered_map<T*, Platform::WeakReference> m_mapping;
     std::mutex m_mutex;
 
     CppWrapperCache() {}

@@ -17,6 +17,8 @@
 #include <vector>
 #include <cassert>
 
+#include <collection.h>
+
 namespace djinni {
 
 	struct Bool {
@@ -180,36 +182,31 @@ namespace djinni {
 	//        }
 	//    };
 	//
-	//    template<class T>
-	//    class List {
-	//        using ECppType = typename T::CppType;
-	//        using ECxType = typename T::Boxed::CxType;
-	//
-	//    public:
-	//        using CppType = std::vector<ECppType>;
-	//        using CxType = NSArray*;
-	//
-	//        using Boxed = List;
-	//
-	//        static CppType toCpp(CxType array) {
-	//            assert(array);
-	//            auto v = CppType();
-	//            v.reserve(array.count);
-	//            for(ECxType value in array) {
-	//                v.push_back(T::Boxed::toCpp(value));
-	//            }
-	//            return v;
-	//        }
-	//
-	//        static CxType fromCpp(const CppType& v) {
-	//            assert(v.size() <= std::numeric_limits<NSUInteger>::max());
-	//            auto array = [NSMutableArray arrayWithCapacity:static_cast<NSUInteger>(v.size())];
-	//            for(const auto& value : v) {
-	//                [array addObject:T::Boxed::fromCpp(value)];
-	//            }
-	//            return array;
-	//        }
-	//    };
+       template<class T>
+       class List {
+           using ECppType = typename T::CppType;
+           using ECxType = typename T::Boxed::CxType;
+
+       public:
+           using CppType = std::vector<ECppType>;
+		   using CxType = Windows::Foundation::Collections::IVector<ECxType^>;
+
+           using Boxed = List;
+
+           static CppType toCpp(CxType^ v) {
+               assert(v);
+               std::vector<int> nv;
+               for(int val : v)
+               {
+                   nv.push_back(val);
+               }
+               return nv;
+           }
+
+           static CxType^ fromCpp(const CppType& v) {
+               return ref new Platform::Collections::Vector<int>(std::move(v));
+           }
+       };
 	//
 	//    template<class T>
 	//    class Set {
