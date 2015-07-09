@@ -195,17 +195,23 @@ namespace djinni {
 
            static CppType toCpp(CxType^ v) {
                assert(v);
-               std::vector<int> nv;
-               for(int val : v)
+               CppType nv;
+               for(ECxType val : v)
                {
-                   nv.push_back(val);
+                   nv.push_back(T::Boxed::toCpp(val));
                }
                return nv;
            }
 
            static CxType^ fromCpp(const CppType& v) {
-               return ref new Platform::Collections::Vector<int>(std::move(v));
+			   Platform::Collections::Vector<ECxType^>^ nv;
+			   for (ECppType val : v)
+			   {
+				   nv->Append(T::Boxed::fromCpp(val));
+			   }
+			   return nv;
            }
+		   //We ought to specialize this for types C++/Cx knows how to convert for us.
        };
 	//
 	//    template<class T>
