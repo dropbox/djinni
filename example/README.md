@@ -80,3 +80,55 @@ This file must contain the `ndk.dir=<path-to-ndk>` setting. A
 [`local.properties.sample`](local.properties.sample) file is included with this
 example. In order to use it, you have to rename it to `local.properties` and
 replace `<path-to-ndk>` with the real path to your NDK installation.
+
+### Android build fails &mdash; Ambiguous method overloading for method java.io.File\#\<init\>.
+
+If you're getting this error when running `make example_android`:
+
+```
+Ambiguous method overloading for method java.io.File#<init>.
+Cannot resolve which method to invoke for [null, class java.lang.String] due to overlapping prototypes between:
+      [class java.lang.String, class java.lang.String]
+      [class java.io.File, class java.lang.String]
+```
+
+Adding the ANDROID_HOME environment variable may fix this error, as mentioned in the following issue: [https://github.com/dropbox/djinni/issues/44](https://github.com/dropbox/djinni/issues/44)
+
+Try adding the following line to `~/.bash_profile` (below is the homebrew SDK path, your path may be different):
+
+    export ANDROID_HOME=/usr/local/Cellar/android-sdk/24.3.2
+
+    
+### Android Studio project fails to load &mdash; Gradle DSL method not found: 'runProguard'
+
+If you're getting this error when you open the Android project in Android Studio:
+
+```
+Error:(16, 0) Gradle DSL method not found: 'runProguard()'
+Possible causes:
+* The project 'android' may be using a version of Gradle that does not contain the method. *Gradle settings*
+* The build file may be missing a Gradle plugin. *Apply Gradle plugin*
+```
+
+Try replacing line 16 of `djinni_root_dir/example/android/app/build.gradle` with the following:
+
+```
+minifyEnabled false
+```
+
+More details in this SO answer: [http://stackoverflow.com/a/27266373/2490989](http://stackoverflow.com/a/27266373/2490989)
+
+
+### Android Studio project fails to load &mdash; No such property: ndkFolder
+
+If you're getting this error when you open the Android project in Android Studio:
+
+> Error:(36, 0) No such property: ndkFolder for class:com.android.build.gradle.AppPlugin
+
+Try replacing line 36 of `djinni_root_dir/example/android/app/build.gradle` with the following:
+
+```
+File ndkDir = project.getPlugins().getPlugin('android').sdkHandler.getNdkFolder()
+```
+
+More details in this SO answer: [http://stackoverflow.com/a/28700250/2490989](http://stackoverflow.com/a/28700250/2490989)
