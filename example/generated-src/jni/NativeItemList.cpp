@@ -13,7 +13,7 @@ NativeItemList::~NativeItemList() = default;
 auto NativeItemList::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeItemList>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::List<::djinni::String>::fromCpp(jniEnv, c.items).get())};
+                                                           ::djinni::get(::djinni::List<::djinni::String>::fromCpp(jniEnv, c.items)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

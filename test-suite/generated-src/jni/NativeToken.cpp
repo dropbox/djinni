@@ -37,7 +37,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_Token_00024CppProxy_nati
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::CppProxyHandle<::Token>::get(nativeRef);
         auto r = ref->whoami();
-        return ::djinni::String::fromCpp(jniEnv, r).release();
+        return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 

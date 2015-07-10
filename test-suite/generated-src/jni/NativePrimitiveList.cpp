@@ -13,7 +13,7 @@ NativePrimitiveList::~NativePrimitiveList() = default;
 auto NativePrimitiveList::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativePrimitiveList>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::List<::djinni::I64>::fromCpp(jniEnv, c.list).get())};
+                                                           ::djinni::get(::djinni::List<::djinni::I64>::fromCpp(jniEnv, c.list)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

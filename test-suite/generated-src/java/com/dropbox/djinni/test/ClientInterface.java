@@ -11,6 +11,8 @@ public abstract class ClientInterface {
     @Nonnull
     public abstract ClientReturnedRecord getRecord(long recordId, @Nonnull String utf8string, @CheckForNull String misc);
 
+    public abstract double identifierCheck(@Nonnull byte[] data, int r, long jret);
+
     @Nonnull
     public abstract String returnStr();
 }

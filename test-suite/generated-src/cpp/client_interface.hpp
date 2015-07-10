@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <experimental/optional>
 #include <string>
+#include <vector>
 
 class ClientInterface {
 public:
@@ -14,6 +15,8 @@ public:
 
     /** Returns record of given string */
     virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) = 0;
+
+    virtual double identifier_check(const std::vector<uint8_t> & data, int32_t r, int64_t jret) = 0;
 
     virtual std::string return_str() = 0;
 };

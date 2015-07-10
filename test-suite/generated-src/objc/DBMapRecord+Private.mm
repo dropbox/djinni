@@ -10,12 +10,14 @@ namespace djinni_generated {
 auto MapRecord::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    return {::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(obj.map)};
+    return {::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(obj.map),
+            ::djinni::Map<::djinni::I32, ::djinni::I32>::toCpp(obj.imap)};
 }
 
 auto MapRecord::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return [[DBMapRecord alloc] initWithMap:(::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(cpp.map))];
+    return [[DBMapRecord alloc] initWithMap:(::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(cpp.map))
+                                       imap:(::djinni::Map<::djinni::I32, ::djinni::I32>::fromCpp(cpp.imap))];
 }
 
 }  // namespace djinni_generated

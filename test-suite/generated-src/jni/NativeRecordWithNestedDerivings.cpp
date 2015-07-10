@@ -14,8 +14,8 @@ NativeRecordWithNestedDerivings::~NativeRecordWithNestedDerivings() = default;
 auto NativeRecordWithNestedDerivings::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeRecordWithNestedDerivings>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
-                                                           ::djinni::I32::fromCpp(jniEnv, c.key),
-                                                           ::djinni_generated::NativeRecordWithDerivings::fromCpp(jniEnv, c.rec).get())};
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.key)),
+                                                           ::djinni::get(::djinni_generated::NativeRecordWithDerivings::fromCpp(jniEnv, c.rec)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }

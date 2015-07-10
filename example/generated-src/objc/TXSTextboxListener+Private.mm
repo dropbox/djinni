@@ -16,10 +16,10 @@ class TextboxListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    void update(const ::textsort::ItemList & items) override
+    void update(const ::textsort::ItemList & c_items) override
     {
         @autoreleasepool {
-            [Handle::get() update:(::djinni_generated::ItemList::fromCpp(items))];
+            [(id<TXSTextboxListener>)Handle::get() update:(::djinni_generated::ItemList::fromCpp(c_items))];
         }
     }
 };

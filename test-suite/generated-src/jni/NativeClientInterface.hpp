@@ -31,7 +31,8 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override;
+        ::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override;
+        double identifier_check(const std::vector<uint8_t> & c_data, int32_t c_r, int64_t c_jret) override;
         std::string return_str() override;
 
     private:
@@ -42,6 +43,7 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
     const jmethodID method_getRecord { ::djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
+    const jmethodID method_identifierCheck { ::djinni::jniGetMethodID(clazz.get(), "identifierCheck", "([BIJ)D") };
     const jmethodID method_returnStr { ::djinni::jniGetMethodID(clazz.get(), "returnStr", "()Ljava/lang/String;") };
 };
 
