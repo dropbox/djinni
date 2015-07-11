@@ -15,6 +15,7 @@
 //
 
 //  This header can only be imported to C++/Cx source code!
+#pragma once
 
 #include <memory>
 #include <mutex>
@@ -39,7 +40,7 @@ public:
         auto got = m_mapping.find(ptr);
 		Platform::Object^ ret;
         if (got != m_mapping.end()) {
-			ret = reinterpret_cast<Platform::Object^>(got->second);
+			ret = got->second.Resolve<Platform::Object>();
             if (ret == nullptr) {
                 ret = alloc(cppRef);
                 m_mapping[ptr] = Platform::WeakReference(ret);
