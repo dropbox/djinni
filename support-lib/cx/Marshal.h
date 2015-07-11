@@ -204,7 +204,7 @@ namespace djinni {
            }
 
            static CxType^ fromCpp(const CppType& v) {
-			   Platform::Collections::Vector<ECxType^>^ nv;
+			   Platform::Collections::Vector<ECxType^>^ nv = ref new Platform::Collections::Vector<ECxType^>;
 			   for (ECppType val : v)
 			   {
 				   nv->Append(T::Boxed::fromCpp(val));
