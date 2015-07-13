@@ -43,6 +43,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
         val objcName = d.name + (if (r.ext.objc) "_base" else "")
         List(ImportRef(q(spec.objcppIncludePrefix + privateHeaderName(objcName))))
     }
+    case e: MExtern => List(ImportRef(e.objcpp.header))
     case p: MParam => List()
   }
 
@@ -56,6 +57,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${objcMarshal.fqTypename(tm)}>")
       case _ => withNs(Some(spec.objcppNamespace), helperClass(d.name))
     }
+    case e: MExtern => e.objcpp.translator
     case o => withNs(Some("djinni"), o match {
       case p: MPrimitive => p.idlName match {
         case "i8" => "I8"
@@ -74,6 +76,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case MSet => "Set"
       case MMap => "Map"
       case d: MDef => throw new AssertionError("unreachable")
+      case e: MExtern => throw new AssertionError("unreachable")
       case p: MParam => throw new AssertionError("not applicable")
     })
   }

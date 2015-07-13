@@ -16,15 +16,22 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   def fqTypename(name: String, ty: TypeDef): String = typename(name, ty)
 
   def nullability(tm: MExpr): Option[String] = {
+    val nonnull = Some("nonnull")
+    val nullable = Some("nullable")
     tm.base match {
-      case MOptional => Some("nullable")
+      case MOptional => nullable
       case MPrimitive(_,_,_,_,_,_,_,_) => None
       case d: MDef => d.defType match {
         case DEnum => None
-        case DInterface => Some("nullable")
-        case DRecord => Some("nonnull")
+        case DInterface => nullable
+        case DRecord => nonnull
       }
-      case _ => Some("nonnull")
+      case e: MExtern => e.defType match {
+        case DEnum => None
+        case DInterface => nullable
+        case DRecord => if(e.objc.pointer) nonnull else None
+      }
+      case _ => nonnull
     }
   }
 
@@ -61,6 +68,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
         val prefix = if (r.ext.objc) "../" else ""
         List(ImportRef(q(spec.objcIncludePrefix + prefix + headerName(d.name))))
     }
+    case e: MExtern => List(ImportRef(e.objc.header))
     case p: MParam => List()
   }
 
@@ -100,6 +108,10 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
                   (idObjc.ty(d.name), true)
                 else
                   (s"id<${idObjc.ty(d.name)}>", false)
+            }
+            case e: MExtern => e.body match {
+              case i: Interface => if(i.ext.objc) (s"id<${e.objc.typename}>", false) else (e.objc.typename, true)
+              case _ => if(needRef) (e.objc.boxed, true) else (e.objc.typename, e.objc.pointer)
             }
             case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
           }

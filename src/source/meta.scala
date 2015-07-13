@@ -30,6 +30,43 @@ abstract sealed class Meta
 
 case class MParam(name: String) extends Meta { val numParams = 0 }
 case class MDef(name: String, override val numParams: Int, defType: DefType, body: TypeDef) extends Meta
+case class MExtern(name: String, override val numParams: Int, defType: DefType, body: TypeDef, cpp: MExtern.Cpp, objc: MExtern.Objc, objcpp: MExtern.Objcpp, java: MExtern.Java, jni: MExtern.Jni) extends Meta
+object MExtern {
+  // These hold the information marshals need to interface with existing types correctly
+  // All include paths are complete including quotation marks "a/b/c" or angle brackets <a/b/c>.
+  // All typenames are fully qualified in their respective language.
+  // TODO: names of enum values and record fields as written in code for use in constants (do not use IdentStyle)
+  case class Cpp(
+    typename: String,
+    header: String,
+    byValue: Boolean // Whether to pass struct by value in C++ (e.g. std::chrono::duration). Only used for "record" types.
+  )
+  case class Objc(
+    typename: String,
+    header: String,
+    boxed: String, // Fully qualified Objective-C typename, must be an object. Only used for "record" types.
+    pointer: Boolean, // True to construct pointer types and make it eligible for "nonnull" qualifier. Only used for "record" types.
+    hash: String // A well-formed expression to get the hash value. Must be a format string with a single "%s" placeholder. Only used for "record" types with "eq" deriving when needed.
+  )
+  case class Objcpp(
+    translator: String, // C++ typename containing toCpp/fromCpp methods
+    header: String // Where to find the translator class
+  )
+  case class Java(
+    typename: String,
+    boxed: String, // Java typename used if boxing is required, must be an object.
+    reference: Boolean, // True if the unboxed type is an object reference and qualifies for any kind of "nonnull" annotation in Java. Only used for "record" types.
+    generic: Boolean, // Set to false to exclude type arguments from the Java class. Useful if template arguments are only used in C++.
+    hash: String // A well-formed expression to get the hash value. Must be a format string with a single "%s" placeholder. Only used for "record" types types with "eq" deriving when needed.
+  )
+  case class Jni(
+    translator: String, // C++ typename containing toCpp/fromCpp methods
+    header: String, // Where to find the translator class
+    typename: String, // The JNI type to use (e.g. jobject, jstring)
+    typeSignature: String // The mangled Java type signature (e.g. "Ljava/lang/String;")
+  )
+}
+
 abstract sealed class MOpaque extends Meta { val idlName: String }
 
 abstract sealed class DefType

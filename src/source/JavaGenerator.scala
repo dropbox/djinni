@@ -285,6 +285,15 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                     case DEnum => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
                     case _ => throw new AssertionError("Unreachable")
                   }
+                  case e: MExtern => e.defType match {
+                    case DRecord => if(e.java.reference) {
+                      w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                    } else {
+                      w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
+                    }
+                    case DEnum => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
+                    case _ => throw new AssertionError("Unreachable")
+                  }
                   case _ => throw new AssertionError("Unreachable")
                 }
               }
@@ -317,6 +326,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                   case "boolean" => s"(${idJava.field(f.ident)} ? 1 : 0)"
                   case _ => throw new AssertionError("Unreachable")
                 }
+                case e: MExtern => e.defType match {
+                  case DRecord => "(" + e.java.hash.format(idJava.field(f.ident)) + ")"
+                  case DEnum => s"${idJava.field(f.ident)}.hashCode()"
+                  case _ => throw new AssertionError("Unreachable")
+                }
                 case _ => throw new AssertionError("Unreachable")
               }
               w.wl(s"hashCode = hashCode * $multiplier + $fieldHashCode;")
@@ -327,6 +341,18 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
 
         if (r.derivingTypes.contains(DerivingType.Ord)) {
+          def primitiveCompare(ident: Ident) {
+            w.wl(s"if (this.${idJava.field(ident)} < other.${idJava.field(ident)}) {").nested {
+              w.wl(s"tempResult = -1;")
+            }
+            w.wl(s"} else if (this.${idJava.field(ident)} > other.${idJava.field(ident)}) {").nested {
+              w.wl(s"tempResult = 1;")
+            }
+            w.wl(s"} else {").nested {
+              w.wl(s"tempResult = 0;")
+            }
+            w.wl("}")
+          }
           w.wl
           w.wl("@Override")
           val nonnullAnnotation = javaNonnullAnnotation.map(_ + " ").getOrElse("")
@@ -335,19 +361,14 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             for (f <- r.fields) {
               f.ty.resolved.base match {
                 case MString => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
-                case t: MPrimitive =>
-                  w.wl(s"if (this.${idJava.field(f.ident)} < other.${idJava.field(f.ident)}) {").nested {
-                    w.wl(s"tempResult = -1;")
-                  }
-                  w.wl(s"} else if (this.${idJava.field(f.ident)} > other.${idJava.field(f.ident)}) {").nested {
-                    w.wl(s"tempResult = 1;")
-                  }
-                  w.wl(s"} else {").nested {
-                    w.wl(s"tempResult = 0;")
-                  }
-                  w.wl("}")
+                case t: MPrimitive => primitiveCompare(f.ident)
                 case df: MDef => df.defType match {
                   case DRecord => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                  case DEnum => w.w(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case e: MExtern => e.defType match {
+                  case DRecord => if(e.java.reference) w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});") else primitiveCompare(f.ident)
                   case DEnum => w.w(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
                   case _ => throw new AssertionError("Unreachable")
                 }

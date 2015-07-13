@@ -58,8 +58,14 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           List(ImportRef("<memory>"))
         }
     }
+    case e: MExtern => e.defType match {
+      // Do not forward declare extern types, they might be in arbitrary namespaces.
+      // This isn't a problem as extern types cannot cause dependency cycles with types being generated here
+      case DInterface => List(ImportRef("<memory>"), ImportRef(e.cpp.header))
+      case _ => List(ImportRef(e.cpp.header))
+    }
     case p: MParam => List()
- }
+  }
 
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
@@ -78,6 +84,10 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           case DRecord => withNs(namespace, idCpp.ty(d.name))
           case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
         }
+      case e: MExtern => e.defType match {
+        case DInterface => s"std::shared_ptr<${e.cpp.typename}>"
+        case _ => e.cpp.typename
+      }
       case p: MParam => idCpp.typeParam(p.name)
     }
     def expr(tm: MExpr): String = {
@@ -98,6 +108,11 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case d: MDef => d.defType match {
         case DEnum => valueType
         case _  => refType
+      }
+      case e: MExtern => e.defType match {
+        case DInterface => refType
+        case DEnum => valueType
+        case DRecord => if(e.cpp.byValue) valueType else refType
       }
       case MOptional => toType(expr.args.head)
       case _ => refType
