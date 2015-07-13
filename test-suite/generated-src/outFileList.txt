@@ -1,4 +1,5 @@
 djinni-output-temp/cpp/date_record.hpp
+djinni-output-temp/cpp/date_record.cpp
 djinni-output-temp/cpp/map_date_record.hpp
 djinni-output-temp/cpp/constants.hpp
 djinni-output-temp/cpp/constants.cpp

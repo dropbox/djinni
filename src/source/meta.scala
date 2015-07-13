@@ -56,7 +56,7 @@ object MExtern {
     typename: String,
     boxed: String, // Java typename used if boxing is required, must be an object.
     reference: Boolean, // True if the unboxed type is an object reference and qualifies for any kind of "nonnull" annotation in Java. Only used for "record" types.
-    generic: Boolean, // Set to false to exclude type arguments from the Java class. Useful if template arguments are only used in C++.
+    generic: Boolean, // Set to false to exclude type arguments from the Java class. This is should be true by default. Useful if template arguments are only used in C++.
     hash: String // A well-formed expression to get the hash value. Must be a format string with a single "%s" placeholder. Only used for "record" types types with "eq" deriving when needed.
   )
   case class Jni(
