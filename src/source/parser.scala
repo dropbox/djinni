@@ -36,13 +36,19 @@ private object IdlParser extends RegexParsers {
 
   def idlFile(origin: String): Parser[IdlFile] = rep(importFile) ~ rep(typeDecl(origin)) ^^ { case imp~types => IdlFile(imp, types) }
 
-  def importFile: Parser[File] = "@import \"" ~> filePath <~ "\"" ^^ {
-    x => {
+  def importFile: Parser[FileRef] = ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
+    case "import" ~ x =>
       val newPath = fileStack.top.getParent() + "/" + x
-      new File(newPath)
-    }
+      new IdlFileRef(new File(newPath))
+    case "extern" ~ x =>
+      val newPath = fileStack.top.getParent() + "/" + x
+      new ExternFileRef(new File(newPath))
   }
   def filePath = "[^\"]*".r
+
+  def directive = importDirective | externDirective
+  def importDirective = "import".r
+  def externDirective = "extern".r
 
   def typeDecl(origin: String): Parser[TypeDecl] = doc ~ ident ~ typeList(ident ^^ TypeParam) ~ "=" ~ typeDef ^^ {
     case doc~ident~typeParams~_~body => TypeDecl(ident, typeParams, body, doc, origin)
@@ -222,11 +228,16 @@ def parseFile(idlFile: File, inFileListWriter: Option[Writer]): Seq[TypeDecl] = 
       case Right(idl) => {
         var types = idl.typeDecls
         idl.imports.foreach(x => {
-          if (fileStack.contains(x)) {
+          if (fileStack.contains(x.file)) {
             throw new AssertionError("Circular import detected!")
           }
-          if (!visitedFiles.contains(x)) {
-            types = parseFile(x, inFileListWriter) ++ types
+          if (!visitedFiles.contains(x.file)) {
+            x match {
+              case IdlFileRef(file) =>
+                types = parseFile(file, inFileListWriter) ++ types
+              case ExternFileRef(file) =>
+                types
+            }
           }
         })
         types

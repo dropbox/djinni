@@ -21,7 +21,13 @@ import djinni.ast.Record.DerivingType.DerivingType
 import djinni.meta.MExpr
 import djinni.syntax.Loc
 
-case class IdlFile(imports: Seq[File], typeDecls: Seq[TypeDecl])
+case class IdlFile(imports: Seq[FileRef], typeDecls: Seq[TypeDecl])
+
+abstract sealed class FileRef {
+  val file: File
+}
+case class IdlFileRef(override val file: File) extends FileRef
+case class ExternFileRef(override val file: File) extends FileRef
 
 case class Ident(name: String, file: File, loc: Loc)
 class ConstRef(ident: Ident) extends Ident(ident.name, ident.file, ident.loc)
