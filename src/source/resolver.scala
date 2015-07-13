@@ -53,7 +53,7 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
       }
       topScope = topScope.updated(typeDecl.ident.name, typeDecl match {
         case td: InternTypeDecl => MDef(typeDecl.ident.name, typeDecl.params.length, defType, typeDecl.body)
-        case td: ExternTypeDecl => throw new AssertionError("not implemented")
+        case td: ExternTypeDecl => YamlGenerator.metaFromYaml(td)
       })
     }
 

@@ -89,6 +89,28 @@ fi
     --idl "$in_relative" \
 )
 
+# Make sure we can parse back our own generated YAML file
+cp "$base_dir/djinni/yaml-test.djinni" "$temp_out/yaml"
+"$base_dir/../src/run-assume-built" \
+    --java-out "$temp_out/java" \
+    --java-package $java_package \
+    --ident-java-field mFooBar \
+    \
+    --cpp-out "$temp_out/cpp" \
+    --ident-cpp-enum-type foo_bar \
+    --cpp-optional-template "std::experimental::optional" \
+    --cpp-optional-header "<experimental/optional>" \
+    \
+    --jni-out "$temp_out/jni" \
+    --ident-jni-class NativeFooBar \
+    --ident-jni-file NativeFooBar \
+    \
+    --objc-out "$temp_out/objc" \
+    --objcpp-out "$temp_out/objc" \
+    --objc-type-prefix DB \
+    \
+    --idl "$temp_out/yaml/yaml-test.djinni"
+
 # Copy changes from "$temp_output" to final dir.
 
 mirror() {

@@ -58,6 +58,17 @@
 		B52DA56B1B103F75005CE75F /* DBAssortedPrimitives+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52DA5671B103F6D005CE75F /* DBAssortedPrimitives+Private.mm */; };
 		B52DA56E1B103FC5005CE75F /* assorted_primitives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B52DA56C1B103FBE005CE75F /* assorted_primitives.cpp */; };
 		B52DA5701B104025005CE75F /* DBPrimitivesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B52DA56F1B104025005CE75F /* DBPrimitivesTests.m */; };
+		CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9CE1B15105100BF2DF8 /* extern_record_with_derivings.cpp */; };
+		CFC5D9D11B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9CE1B15105100BF2DF8 /* extern_record_with_derivings.cpp */; };
+		CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9D31B15106400BF2DF8 /* DBExternRecordWithDerivings.mm */; };
+		CFC5D9D71B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9D31B15106400BF2DF8 /* DBExternRecordWithDerivings.mm */; };
+		CFC5D9D81B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9D51B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm */; };
+		CFC5D9D91B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9D51B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm */; };
+		CFC5D9E81B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E41B1513E800BF2DF8 /* DBExternInterface1+Private.mm */; };
+		CFC5D9E91B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E41B1513E800BF2DF8 /* DBExternInterface1+Private.mm */; };
+		CFC5D9EA1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */; };
+		CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */; };
+		CFEFA65D1B25D1BD008EE2D0 /* DBDateRecordTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */; };
 		CFFD588B1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */; };
 		CFFD588D1B019E79001E10B6 /* DBCppException+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */; };
 		CFFD588E1B019E79001E10B6 /* DBCppException+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */; };
@@ -204,6 +215,21 @@
 		B52DA56C1B103FBE005CE75F /* assorted_primitives.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = assorted_primitives.cpp; sourceTree = "<group>"; };
 		B52DA56D1B103FBE005CE75F /* assorted_primitives.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = assorted_primitives.hpp; sourceTree = "<group>"; };
 		B52DA56F1B104025005CE75F /* DBPrimitivesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBPrimitivesTests.m; sourceTree = "<group>"; };
+		CFC5D9CE1B15105100BF2DF8 /* extern_record_with_derivings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = extern_record_with_derivings.cpp; sourceTree = "<group>"; };
+		CFC5D9CF1B15105100BF2DF8 /* extern_record_with_derivings.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extern_record_with_derivings.hpp; sourceTree = "<group>"; };
+		CFC5D9D21B15106400BF2DF8 /* DBExternRecordWithDerivings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBExternRecordWithDerivings.h; sourceTree = "<group>"; };
+		CFC5D9D31B15106400BF2DF8 /* DBExternRecordWithDerivings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBExternRecordWithDerivings.mm; sourceTree = "<group>"; };
+		CFC5D9D41B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBExternRecordWithDerivings+Private.h"; sourceTree = "<group>"; };
+		CFC5D9D51B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBExternRecordWithDerivings+Private.mm"; sourceTree = "<group>"; };
+		CFC5D9E01B1513D800BF2DF8 /* extern_interface_1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extern_interface_1.hpp; sourceTree = "<group>"; };
+		CFC5D9E11B1513D800BF2DF8 /* extern_interface_2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extern_interface_2.hpp; sourceTree = "<group>"; };
+		CFC5D9E21B1513E800BF2DF8 /* DBExternInterface1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBExternInterface1.h; sourceTree = "<group>"; };
+		CFC5D9E31B1513E800BF2DF8 /* DBExternInterface1+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBExternInterface1+Private.h"; sourceTree = "<group>"; };
+		CFC5D9E41B1513E800BF2DF8 /* DBExternInterface1+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBExternInterface1+Private.mm"; sourceTree = "<group>"; };
+		CFC5D9E51B1513E800BF2DF8 /* DBExternInterface2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBExternInterface2.h; sourceTree = "<group>"; };
+		CFC5D9E61B1513E800BF2DF8 /* DBExternInterface2+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBExternInterface2+Private.h"; sourceTree = "<group>"; };
+		CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBExternInterface2+Private.mm"; sourceTree = "<group>"; };
+		CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBDateRecordTests.mm; sourceTree = "<group>"; };
 		CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBClientInterface+Private.mm"; sourceTree = "<group>"; };
 		CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBCppException+Private.mm"; sourceTree = "<group>"; };
 		CFFD58891B019E79001E10B6 /* DBTestHelpers+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBTestHelpers+Private.mm"; sourceTree = "<group>"; };
@@ -278,19 +304,20 @@
 		6536CD7919A6C99800DD7715 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				A200940E1B0697D300EF8D9B /* DBTokenTests.mm */,
 				6536CD7A19A6C99800DD7715 /* DBClientInterfaceTests.mm */,
+				6D66A8A81A3B09F000B312E8 /* DBConstantTests.mm */,
 				6536CD7B19A6C99800DD7715 /* DBCppExceptionTests.mm */,
+				CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */,
 				6536CD7C19A6C99800DD7715 /* DBMapRecordTests.mm */,
 				6536CD7D19A6C99800DD7715 /* DBNestedCollectionTests.mm */,
 				6536CD7E19A6C99800DD7715 /* DBPrimitiveListTests.mm */,
+				B52DA56F1B104025005CE75F /* DBPrimitivesTests.m */,
 				6536CD7F19A6C99800DD7715 /* DBRecordWithDerivingsCppTests.mm */,
 				6536CD8019A6C99800DD7715 /* DBRecordWithDerivingsObjcTests.mm */,
 				6536CD8119A6C99800DD7715 /* DBSetRecordTests.mm */,
-				6D66A8A81A3B09F000B312E8 /* DBConstantTests.mm */,
-				6536CD8219A6C99800DD7715 /* InfoPlist.strings */,
+				A200940E1B0697D300EF8D9B /* DBTokenTests.mm */,
 				6536CD8419A6C99800DD7715 /* DjinniObjcTestTests-Info.plist */,
-				B52DA56F1B104025005CE75F /* DBPrimitivesTests.m */,
+				6536CD8219A6C99800DD7715 /* InfoPlist.strings */,
 			);
 			name = Tests;
 			path = "../handwritten-src/objc/tests";
@@ -359,6 +386,16 @@
 				A248501D1AF96EBC00AFE907 /* DBDateRecord.mm */,
 				A242492B1AF192E0003BF8F0 /* DBDateRecord+Private.h */,
 				A238CA7A1AF84B7100CDDCE5 /* DBDateRecord+Private.mm */,
+				CFC5D9E21B1513E800BF2DF8 /* DBExternInterface1.h */,
+				CFC5D9E31B1513E800BF2DF8 /* DBExternInterface1+Private.h */,
+				CFC5D9E41B1513E800BF2DF8 /* DBExternInterface1+Private.mm */,
+				CFC5D9E51B1513E800BF2DF8 /* DBExternInterface2.h */,
+				CFC5D9E61B1513E800BF2DF8 /* DBExternInterface2+Private.h */,
+				CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */,
+				CFC5D9D21B15106400BF2DF8 /* DBExternRecordWithDerivings.h */,
+				CFC5D9D31B15106400BF2DF8 /* DBExternRecordWithDerivings.mm */,
+				CFC5D9D41B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.h */,
+				CFC5D9D51B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm */,
 				A242492F1AF192E0003BF8F0 /* DBMapDateRecord.h */,
 				A248501E1AF96EBC00AFE907 /* DBMapDateRecord.mm */,
 				A242492E1AF192E0003BF8F0 /* DBMapDateRecord+Private.h */,
@@ -416,6 +453,10 @@
 				A24249641AF192FC003BF8F0 /* constants.hpp */,
 				A24249651AF192FC003BF8F0 /* cpp_exception.hpp */,
 				A24249661AF192FC003BF8F0 /* date_record.hpp */,
+				CFC5D9E01B1513D800BF2DF8 /* extern_interface_1.hpp */,
+				CFC5D9E11B1513D800BF2DF8 /* extern_interface_2.hpp */,
+				CFC5D9CE1B15105100BF2DF8 /* extern_record_with_derivings.cpp */,
+				CFC5D9CF1B15105100BF2DF8 /* extern_record_with_derivings.hpp */,
 				A24249671AF192FC003BF8F0 /* map_date_record.hpp */,
 				A24249681AF192FC003BF8F0 /* map_list_record.hpp */,
 				A24249691AF192FC003BF8F0 /* map_record.hpp */,
@@ -515,9 +556,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A238CA981AF84B7100CDDCE5 /* DBMapRecord+Private.mm in Sources */,
+				CFC5D9E81B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				A24850311AF96EBC00AFE907 /* DBSetRecord.mm in Sources */,
 				6536CD6F19A6C82200DD7715 /* DJIWeakPtrWrapper.mm in Sources */,
 				A24850271AF96EBC00AFE907 /* DBClientReturnedRecord.mm in Sources */,
+				CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				A238CA941AF84B7100CDDCE5 /* DBMapDateRecord+Private.mm in Sources */,
 				CFFD588F1B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
 				A24850291AF96EBC00AFE907 /* DBDateRecord.mm in Sources */,
@@ -545,10 +588,13 @@
 				A238CA9C1AF84B7100CDDCE5 /* DBPrimitiveList+Private.mm in Sources */,
 				A24249761AF192FC003BF8F0 /* record_with_nested_derivings.cpp in Sources */,
 				A248502D1AF96EBC00AFE907 /* DBNestedCollection.mm in Sources */,
+				CFC5D9D81B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,
 				A238CAA21AF84B7100CDDCE5 /* DBSetRecord+Private.mm in Sources */,
 				A238CA9E1AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm in Sources */,
 				A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */,
+				CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
 				A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */,
+				CFC5D9EA1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
 				A248502A1AF96EBC00AFE907 /* DBMapDateRecord.mm in Sources */,
 				A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */,
 				B52DA56B1B103F75005CE75F /* DBAssortedPrimitives+Private.mm in Sources */,
@@ -561,10 +607,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFC5D9D11B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
 				6D66A8A91A3B09F000B312E8 /* DBConstantTests.mm in Sources */,
 				6536CD9219A6C9A800DD7715 /* DBRecordWithDerivingsCppTests.mm in Sources */,
 				6536CD9119A6C9A800DD7715 /* DBPrimitiveListTests.mm in Sources */,
+				CFC5D9D71B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				6536CD8D19A6C9A800DD7715 /* DBClientInterfaceTests.mm in Sources */,
+				CFEFA65D1B25D1BD008EE2D0 /* DBDateRecordTests.mm in Sources */,
 				CFFD58B81B041BFD001E10B6 /* constants_interface.cpp in Sources */,
 				6536CD8E19A6C9A800DD7715 /* DBCppExceptionTests.mm in Sources */,
 				B52DA5681B103F72005CE75F /* DBAssortedPrimitives.mm in Sources */,
@@ -579,7 +628,10 @@
 				A20094101B06982F00EF8D9B /* DBTokenTests.mm in Sources */,
 				B52DA5701B104025005CE75F /* DBPrimitivesTests.m in Sources */,
 				6536CD8F19A6C9A800DD7715 /* DBMapRecordTests.mm in Sources */,
+				CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
+				CFC5D9E91B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				6536CD9419A6C9A800DD7715 /* DBSetRecordTests.mm in Sources */,
+				CFC5D9D91B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

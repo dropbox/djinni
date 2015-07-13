@@ -179,3 +179,46 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
   	// unused
   }
 }
+
+object YamlGenerator {
+  def metaFromYaml(td: ExternTypeDecl) = MExtern(
+    td.ident.name.stripPrefix(td.properties("prefix").toString), // Make sure the generator uses this type with its original name for all intents and purposes
+  	td.params.size,
+  	defType(td),
+  	td.body,
+    MExtern.Cpp(
+      nested(td, "cpp")("typename").toString,
+      nested(td, "cpp")("header").toString,
+      nested(td, "cpp")("byValue").asInstanceOf[Boolean]),
+    MExtern.Objc(
+      nested(td, "objc")("typename").toString,
+      nested(td, "objc")("header").toString,
+      nested(td, "objc")("boxed").toString,
+      nested(td, "objc")("pointer").asInstanceOf[Boolean],
+      nested(td, "objc")("hash").toString),
+    MExtern.Objcpp(
+      nested(td, "objcpp")("translator").toString,
+      nested(td, "objcpp")("header").toString),
+    MExtern.Java(
+      nested(td, "java")("typename").toString,
+      nested(td, "java")("boxed").toString,
+      nested(td, "java")("reference").asInstanceOf[Boolean],
+      nested(td, "java")("generic").asInstanceOf[Boolean],
+      nested(td, "java")("hash").toString),
+    MExtern.Jni(
+      nested(td, "jni")("translator").toString,
+      nested(td, "jni")("header").toString,
+      nested(td, "jni")("typename").toString,
+      nested(td, "jni")("typeSignature").toString)
+  )
+
+  private def nested(td: ExternTypeDecl, key: String) = {
+  	td.properties.get(key).collect { case m: JMap[_, _] => m.collect { case (k: String, v: Any) => (k, v) } } getOrElse(Map[String, Any]())
+  }
+
+  private def defType(td: ExternTypeDecl) = td.body match {
+  	case i: Interface => DInterface
+  	case r: Record => DRecord
+  	case e: Enum => DEnum
+  }
+}
