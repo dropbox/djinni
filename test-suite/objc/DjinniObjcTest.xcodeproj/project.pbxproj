@@ -69,6 +69,17 @@
 		CFC5D9EA1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */; };
 		CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */; };
 		CFEFA65D1B25D1BD008EE2D0 /* DBDateRecordTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */; };
+		CFC5D9F31B15276900BF2DF8 /* DBDurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9F11B15276900BF2DF8 /* DBDurationTests.m */; };
+		CFC5D9FC1B152E4300BF2DF8 /* TranslateDuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */; };
+		CFC5D9FD1B152E4300BF2DF8 /* TranslateDuration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */; };
+		CFC5DA011B15318B00BF2DF8 /* DBTestDuration+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA001B15318B00BF2DF8 /* DBTestDuration+Private.mm */; };
+		CFC5DA021B15318B00BF2DF8 /* DBTestDuration+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA001B15318B00BF2DF8 /* DBTestDuration+Private.mm */; };
+		CFC5DA081B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA051B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm */; };
+		CFC5DA091B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA051B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm */; };
+		CFC5DA0A1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA071B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm */; };
+		CFC5DA0B1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA071B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm */; };
+		CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */; };
+		CFC5DA0F1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */; };
 		CFFD588B1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */; };
 		CFFD588D1B019E79001E10B6 /* DBCppException+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */; };
 		CFFD588E1B019E79001E10B6 /* DBCppException+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */; };
@@ -230,6 +241,20 @@
 		CFC5D9E61B1513E800BF2DF8 /* DBExternInterface2+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBExternInterface2+Private.h"; sourceTree = "<group>"; };
 		CFC5D9E71B1513E800BF2DF8 /* DBExternInterface2+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBExternInterface2+Private.mm"; sourceTree = "<group>"; };
 		CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBDateRecordTests.mm; sourceTree = "<group>"; };
+		CFC5D9F11B15276900BF2DF8 /* DBDurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBDurationTests.m; sourceTree = "<group>"; };
+		CFC5D9FA1B152D4400BF2DF8 /* Duration-objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "Duration-objc.hpp"; sourceTree = "<group>"; };
+		CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TranslateDuration.cpp; sourceTree = "<group>"; };
+		CFC5D9FE1B15318B00BF2DF8 /* DBTestDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBTestDuration.h; sourceTree = "<group>"; };
+		CFC5D9FF1B15318B00BF2DF8 /* DBTestDuration+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBTestDuration+Private.h"; sourceTree = "<group>"; };
+		CFC5DA001B15318B00BF2DF8 /* DBTestDuration+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBTestDuration+Private.mm"; sourceTree = "<group>"; };
+		CFC5DA031B15319600BF2DF8 /* test_duration.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = test_duration.hpp; sourceTree = "<group>"; };
+		CFC5DA041B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBRecordWithDurationAndDerivings.h; sourceTree = "<group>"; };
+		CFC5DA051B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBRecordWithDurationAndDerivings.mm; sourceTree = "<group>"; };
+		CFC5DA061B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBRecordWithDurationAndDerivings+Private.h"; sourceTree = "<group>"; };
+		CFC5DA071B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBRecordWithDurationAndDerivings+Private.mm"; sourceTree = "<group>"; };
+		CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = record_with_duration_and_derivings.cpp; sourceTree = "<group>"; };
+		CFC5DA0D1B15330000BF2DF8 /* record_with_duration_and_derivings.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = record_with_duration_and_derivings.hpp; sourceTree = "<group>"; };
+		CFC5DA101B15B5FB00BF2DF8 /* Duration-jni.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "Duration-jni.hpp"; sourceTree = "<group>"; };
 		CFFD58871B019E79001E10B6 /* DBClientInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBClientInterface+Private.mm"; sourceTree = "<group>"; };
 		CFFD58881B019E79001E10B6 /* DBCppException+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBCppException+Private.mm"; sourceTree = "<group>"; };
 		CFFD58891B019E79001E10B6 /* DBTestHelpers+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBTestHelpers+Private.mm"; sourceTree = "<group>"; };
@@ -293,9 +318,12 @@
 		6536CD7519A6C98800DD7715 /* handwritten-cpp */ = {
 			isa = PBXGroup;
 			children = (
-				A278D45219BA3601006FD937 /* test_helpers.cpp */,
 				6536CD7619A6C98800DD7715 /* cpp_exception_impl.cpp */,
 				6536CD7719A6C98800DD7715 /* cpp_exception_impl.hpp */,
+				CFC5DA101B15B5FB00BF2DF8 /* Duration-jni.hpp */,
+				CFC5D9FA1B152D4400BF2DF8 /* Duration-objc.hpp */,
+				A278D45219BA3601006FD937 /* test_helpers.cpp */,
+				CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */,
 			);
 			name = "handwritten-cpp";
 			path = "../handwritten-src/cpp";
@@ -308,6 +336,7 @@
 				6D66A8A81A3B09F000B312E8 /* DBConstantTests.mm */,
 				6536CD7B19A6C99800DD7715 /* DBCppExceptionTests.mm */,
 				CFEFA65B1B25CFEA008EE2D0 /* DBDateRecordTests.mm */,
+				CFC5D9F11B15276900BF2DF8 /* DBDurationTests.m */,
 				6536CD7C19A6C99800DD7715 /* DBMapRecordTests.mm */,
 				6536CD7D19A6C99800DD7715 /* DBNestedCollectionTests.mm */,
 				6536CD7E19A6C99800DD7715 /* DBPrimitiveListTests.mm */,
@@ -420,6 +449,10 @@
 				A24850231AF96EBC00AFE907 /* DBRecordWithDerivings.mm */,
 				A242493D1AF192E0003BF8F0 /* DBRecordWithDerivings+Private.h */,
 				A238CA861AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm */,
+				CFC5DA041B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.h */,
+				CFC5DA051B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm */,
+				CFC5DA061B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.h */,
+				CFC5DA071B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm */,
 				A24249411AF192E0003BF8F0 /* DBRecordWithNestedDerivings.h */,
 				A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */,
 				A24249401AF192E0003BF8F0 /* DBRecordWithNestedDerivings+Private.h */,
@@ -428,6 +461,9 @@
 				A24850251AF96EBC00AFE907 /* DBSetRecord.mm */,
 				A24249431AF192E0003BF8F0 /* DBSetRecord+Private.h */,
 				A238CA8A1AF84B7100CDDCE5 /* DBSetRecord+Private.mm */,
+				CFC5D9FE1B15318B00BF2DF8 /* DBTestDuration.h */,
+				CFC5D9FF1B15318B00BF2DF8 /* DBTestDuration+Private.h */,
+				CFC5DA001B15318B00BF2DF8 /* DBTestDuration+Private.mm */,
 				A24249471AF192E0003BF8F0 /* DBTestHelpers.h */,
 				A24249461AF192E0003BF8F0 /* DBTestHelpers+Private.h */,
 				CFFD58891B019E79001E10B6 /* DBTestHelpers+Private.mm */,
@@ -464,9 +500,12 @@
 				A242496B1AF192FC003BF8F0 /* primitive_list.hpp */,
 				A242496C1AF192FC003BF8F0 /* record_with_derivings.cpp */,
 				A242496D1AF192FC003BF8F0 /* record_with_derivings.hpp */,
+				CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */,
+				CFC5DA0D1B15330000BF2DF8 /* record_with_duration_and_derivings.hpp */,
 				A242496E1AF192FC003BF8F0 /* record_with_nested_derivings.cpp */,
 				A242496F1AF192FC003BF8F0 /* record_with_nested_derivings.hpp */,
 				A24249701AF192FC003BF8F0 /* set_record.hpp */,
+				CFC5DA031B15319600BF2DF8 /* test_duration.hpp */,
 				A24249711AF192FC003BF8F0 /* test_helpers.hpp */,
 				A24249721AF192FC003BF8F0 /* token.hpp */,
 			);
@@ -561,6 +600,7 @@
 				6536CD6F19A6C82200DD7715 /* DJIWeakPtrWrapper.mm in Sources */,
 				A24850271AF96EBC00AFE907 /* DBClientReturnedRecord.mm in Sources */,
 				CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
+				CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,
 				A238CA941AF84B7100CDDCE5 /* DBMapDateRecord+Private.mm in Sources */,
 				CFFD588F1B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
 				A24850291AF96EBC00AFE907 /* DBDateRecord.mm in Sources */,
@@ -575,6 +615,7 @@
 				CFFD58B11B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */,
 				B52DA56E1B103FC5005CE75F /* assorted_primitives.cpp in Sources */,
 				CFFD58B31B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
+				CFC5D9FC1B152E4300BF2DF8 /* TranslateDuration.cpp in Sources */,
 				A248502F1AF96EBC00AFE907 /* DBRecordWithDerivings.mm in Sources */,
 				A24249741AF192FC003BF8F0 /* constants.cpp in Sources */,
 				CFFD588B1B019E79001E10B6 /* DBClientInterface+Private.mm in Sources */,
@@ -587,6 +628,7 @@
 				A238CA961AF84B7100CDDCE5 /* DBMapListRecord+Private.mm in Sources */,
 				A238CA9C1AF84B7100CDDCE5 /* DBPrimitiveList+Private.mm in Sources */,
 				A24249761AF192FC003BF8F0 /* record_with_nested_derivings.cpp in Sources */,
+				CFC5DA081B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm in Sources */,
 				A248502D1AF96EBC00AFE907 /* DBNestedCollection.mm in Sources */,
 				CFC5D9D81B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,
 				A238CAA21AF84B7100CDDCE5 /* DBSetRecord+Private.mm in Sources */,
@@ -595,11 +637,13 @@
 				CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
 				A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */,
 				CFC5D9EA1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
+				CFC5DA011B15318B00BF2DF8 /* DBTestDuration+Private.mm in Sources */,
 				A248502A1AF96EBC00AFE907 /* DBMapDateRecord.mm in Sources */,
 				A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */,
 				B52DA56B1B103F75005CE75F /* DBAssortedPrimitives+Private.mm in Sources */,
 				A248502E1AF96EBC00AFE907 /* DBPrimitiveList.mm in Sources */,
 				A238CAA01AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm in Sources */,
+				CFC5DA0A1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +654,7 @@
 				CFC5D9D11B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
 				6D66A8A91A3B09F000B312E8 /* DBConstantTests.mm in Sources */,
 				6536CD9219A6C9A800DD7715 /* DBRecordWithDerivingsCppTests.mm in Sources */,
+				CFC5DA0F1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,
 				6536CD9119A6C9A800DD7715 /* DBPrimitiveListTests.mm in Sources */,
 				CFC5D9D71B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				6536CD8D19A6C9A800DD7715 /* DBClientInterfaceTests.mm in Sources */,
@@ -617,7 +662,9 @@
 				CFFD58B81B041BFD001E10B6 /* constants_interface.cpp in Sources */,
 				6536CD8E19A6C9A800DD7715 /* DBCppExceptionTests.mm in Sources */,
 				B52DA5681B103F72005CE75F /* DBAssortedPrimitives.mm in Sources */,
+				CFC5D9FD1B152E4300BF2DF8 /* TranslateDuration.cpp in Sources */,
 				CFFD588E1B019E79001E10B6 /* DBCppException+Private.mm in Sources */,
+				CFC5DA021B15318B00BF2DF8 /* DBTestDuration+Private.mm in Sources */,
 				CFFD58B41B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
 				CFFD58901B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
 				CFFD58921B019E79001E10B6 /* DBToken+Private.mm in Sources */,
@@ -627,8 +674,11 @@
 				6536CD9019A6C9A800DD7715 /* DBNestedCollectionTests.mm in Sources */,
 				A20094101B06982F00EF8D9B /* DBTokenTests.mm in Sources */,
 				B52DA5701B104025005CE75F /* DBPrimitivesTests.m in Sources */,
+				CFC5DA091B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings.mm in Sources */,
 				6536CD8F19A6C9A800DD7715 /* DBMapRecordTests.mm in Sources */,
+				CFC5D9F31B15276900BF2DF8 /* DBDurationTests.m in Sources */,
 				CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
+				CFC5DA0B1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
 				CFC5D9E91B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				6536CD9419A6C9A800DD7715 /* DBSetRecordTests.mm in Sources */,
 				CFC5D9D91B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,

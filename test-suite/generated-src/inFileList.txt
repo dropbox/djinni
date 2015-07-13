@@ -13,3 +13,5 @@ djinni/primtypes.djinni
 djinni/constants.djinni
 djinni/date.djinni
 djinni/date.yaml
+djinni/duration.djinni
+djinni/duration.yaml

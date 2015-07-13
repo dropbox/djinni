@@ -11,3 +11,4 @@
 @import "primtypes.djinni"
 @import "constants.djinni"
 @import "date.djinni"
+@import "duration.djinni"
