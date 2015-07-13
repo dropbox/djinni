@@ -58,6 +58,12 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     }
   }
 
+  def isReference(td: TypeDecl) = td.body match {
+    case i: Interface => true
+    case r: Record => true
+    case e: Enum =>  true
+  }
+
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
     def args(tm: MExpr) = if (tm.args.isEmpty) "" else tm.args.map(f(_, true)).mkString("<", ", ", ">")
     def f(tm: MExpr, needRef: Boolean): String = {

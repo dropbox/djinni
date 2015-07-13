@@ -54,7 +54,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
       List(ImportRef("<Foundation/Foundation.h>"))
     case d: MDef => d.defType match {
       case DEnum =>
-        List(ImportRef(q(spec.objcIncludePrefix + headerName(d.name))))
+        List(ImportRef(include(d.name)))
       case DInterface =>
         val ext = d.body.asInstanceOf[Interface].ext
         if (ext.cpp && !ext.objc) {
@@ -72,7 +72,20 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
     case p: MParam => List()
   }
 
-  def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
+  def headerName(ident: String) = idObjc.ty(ident) + "." + spec.objcHeaderExt
+  def include(ident: String) = q(spec.objcIncludePrefix + headerName(ident))
+
+  def isPointer(td: TypeDecl) = td.body match {
+    case i: Interface => true
+    case r: Record => true
+    case e: Enum => false
+  }
+
+  def boxedTypename(td: TypeDecl) = td.body match {
+    case i: Interface => typename(td.ident, i)
+    case r: Record => typename(td.ident, r)
+    case e: Enum => "NSNumber"
+  }
 
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)

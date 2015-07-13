@@ -29,6 +29,7 @@ cpp_out="$base_dir/generated-src/cpp"
 jni_out="$base_dir/generated-src/jni"
 objc_out="$base_dir/generated-src/objc"
 java_out="$base_dir/generated-src/java/com/dropbox/djinni/test"
+yaml_out="$base_dir/generated-src/yaml"
 
 java_package="com.dropbox.djinni.test"
 
@@ -78,9 +79,14 @@ fi
     --objcpp-out "$temp_out_relative/objc" \
     --objc-type-prefix DB \
     \
-    --idl "$in_relative" \
     --list-in-files "./generated-src/inFileList.txt" \
     --list-out-files "./generated-src/outFileList.txt"\
+    \
+    --yaml-out "$temp_out_relative/yaml" \
+    --yaml-out-file "yaml-test.yaml" \
+    --yaml-prefix "test_" \
+    \
+    --idl "$in_relative" \
 )
 
 # Copy changes from "$temp_output" to final dir.

@@ -139,3 +139,4 @@ djinni-output-temp/objc/DBRecordWithNestedDerivings+Private.h
 djinni-output-temp/objc/DBRecordWithNestedDerivings+Private.mm
 djinni-output-temp/objc/DBSetRecord+Private.h
 djinni-output-temp/objc/DBSetRecord+Private.mm
+djinni-output-temp/yaml/yaml-test.yaml
