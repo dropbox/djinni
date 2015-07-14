@@ -6,20 +6,20 @@
 
 @implementation DBAssortedPrimitives
 
-- (id)initWithB:(BOOL)b
-          eight:(int8_t)eight
-        sixteen:(int16_t)sixteen
-      thirtytwo:(int32_t)thirtytwo
-      sixtyfour:(int64_t)sixtyfour
-     fthirtytwo:(float)fthirtytwo
-     fsixtyfour:(double)fsixtyfour
-             oB:(nullable NSNumber *)oB
-         oEight:(nullable NSNumber *)oEight
-       oSixteen:(nullable NSNumber *)oSixteen
-     oThirtytwo:(nullable NSNumber *)oThirtytwo
-     oSixtyfour:(nullable NSNumber *)oSixtyfour
-    oFthirtytwo:(nullable NSNumber *)oFthirtytwo
-    oFsixtyfour:(nullable NSNumber *)oFsixtyfour
+- (nonnull instancetype)initWithB:(BOOL)b
+                            eight:(int8_t)eight
+                          sixteen:(int16_t)sixteen
+                        thirtytwo:(int32_t)thirtytwo
+                        sixtyfour:(int64_t)sixtyfour
+                       fthirtytwo:(float)fthirtytwo
+                       fsixtyfour:(double)fsixtyfour
+                               oB:(nullable NSNumber *)oB
+                           oEight:(nullable NSNumber *)oEight
+                         oSixteen:(nullable NSNumber *)oSixteen
+                       oThirtytwo:(nullable NSNumber *)oThirtytwo
+                       oSixtyfour:(nullable NSNumber *)oSixtyfour
+                      oFthirtytwo:(nullable NSNumber *)oFthirtytwo
+                      oFsixtyfour:(nullable NSNumber *)oFsixtyfour
 {
     if (self = [super init]) {
         _b = b;
@@ -38,6 +38,37 @@
         _oFsixtyfour = oFsixtyfour;
     }
     return self;
+}
+
++ (nonnull instancetype)assortedPrimitivesWithB:(BOOL)b
+                                          eight:(int8_t)eight
+                                        sixteen:(int16_t)sixteen
+                                      thirtytwo:(int32_t)thirtytwo
+                                      sixtyfour:(int64_t)sixtyfour
+                                     fthirtytwo:(float)fthirtytwo
+                                     fsixtyfour:(double)fsixtyfour
+                                             oB:(nullable NSNumber *)oB
+                                         oEight:(nullable NSNumber *)oEight
+                                       oSixteen:(nullable NSNumber *)oSixteen
+                                     oThirtytwo:(nullable NSNumber *)oThirtytwo
+                                     oSixtyfour:(nullable NSNumber *)oSixtyfour
+                                    oFthirtytwo:(nullable NSNumber *)oFthirtytwo
+                                    oFsixtyfour:(nullable NSNumber *)oFsixtyfour
+{
+    return [[self alloc] initWithB:b
+                             eight:eight
+                           sixteen:sixteen
+                         thirtytwo:thirtytwo
+                         sixtyfour:sixtyfour
+                        fthirtytwo:fthirtytwo
+                        fsixtyfour:fsixtyfour
+                                oB:oB
+                            oEight:oEight
+                          oSixteen:oSixteen
+                        oThirtytwo:oThirtytwo
+                        oSixtyfour:oSixtyfour
+                       oFthirtytwo:oFthirtytwo
+                       oFsixtyfour:oFsixtyfour];
 }
 
 - (BOOL)isEqual:(id)other

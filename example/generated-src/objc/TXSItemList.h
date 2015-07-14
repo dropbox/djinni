@@ -4,7 +4,8 @@
 #import <Foundation/Foundation.h>
 
 @interface TXSItemList : NSObject
-- (nonnull id)initWithItems:(nonnull NSArray *)items;
+- (nonnull instancetype)initWithItems:(nonnull NSArray *)items;
++ (nonnull instancetype)itemListWithItems:(nonnull NSArray *)items;
 
 @property (nonatomic, readonly, nonnull) NSArray * items;
 

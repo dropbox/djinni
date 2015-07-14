@@ -5,8 +5,10 @@
 #import <Foundation/Foundation.h>
 
 @interface DBConstants : NSObject
-- (nonnull id)initWithSomeInteger:(int32_t)someInteger
-                       someString:(nonnull NSString *)someString;
+- (nonnull instancetype)initWithSomeInteger:(int32_t)someInteger
+                                 someString:(nonnull NSString *)someString;
++ (nonnull instancetype)constantsWithSomeInteger:(int32_t)someInteger
+                                      someString:(nonnull NSString *)someString;
 
 @property (nonatomic, readonly) int32_t someInteger;
 

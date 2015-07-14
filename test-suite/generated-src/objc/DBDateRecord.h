@@ -4,7 +4,8 @@
 #import <Foundation/Foundation.h>
 
 @interface DBDateRecord : NSObject
-- (nonnull id)initWithCreatedAt:(nonnull NSDate *)createdAt;
+- (nonnull instancetype)initWithCreatedAt:(nonnull NSDate *)createdAt;
++ (nonnull instancetype)dateRecordWithCreatedAt:(nonnull NSDate *)createdAt;
 
 @property (nonatomic, readonly, nonnull) NSDate * createdAt;
 

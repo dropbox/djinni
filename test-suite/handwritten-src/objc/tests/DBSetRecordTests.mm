@@ -16,8 +16,8 @@
 
 - (DBSetRecord *)getObjcSetRecord
 {
-    NSSet *set = [[NSSet alloc] initWithObjects:@"StringA", @"StringB", @"StringC", nil];
-	DBSetRecord *objcSetRecord = [[DBSetRecord alloc] initWithSet:set iset:[NSSet set]];
+    NSSet *set = [NSSet setWithObjects:@"StringA", @"StringB", @"StringC", nil];
+	DBSetRecord *objcSetRecord = [DBSetRecord setRecordWithSet:set iset:[NSSet set]];
     return objcSetRecord;
 }
 

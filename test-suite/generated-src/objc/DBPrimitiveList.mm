@@ -6,12 +6,17 @@
 
 @implementation DBPrimitiveList
 
-- (id)initWithList:(nonnull NSArray *)list
+- (nonnull instancetype)initWithList:(nonnull NSArray *)list
 {
     if (self = [super init]) {
         _list = list;
     }
     return self;
+}
+
++ (nonnull instancetype)primitiveListWithList:(nonnull NSArray *)list
+{
+    return [[self alloc] initWithList:list];
 }
 
 @end

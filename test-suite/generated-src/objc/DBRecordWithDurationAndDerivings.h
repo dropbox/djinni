@@ -4,7 +4,8 @@
 #import <Foundation/Foundation.h>
 
 @interface DBRecordWithDurationAndDerivings : NSObject
-- (nonnull id)initWithDt:(NSTimeInterval)dt;
+- (nonnull instancetype)initWithDt:(NSTimeInterval)dt;
++ (nonnull instancetype)recordWithDurationAndDerivingsWithDt:(NSTimeInterval)dt;
 
 @property (nonatomic, readonly) NSTimeInterval dt;
 

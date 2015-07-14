@@ -191,18 +191,20 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       case _ => false
     }
 
+    val firstInitializerArg = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
+
     writeObjcFile(marshal.headerName(objcName), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"@interface $self : NSObject")
 
-      if (!r.fields.isEmpty) {
-        val head = r.fields.head
-        val skipFirst = SkipFirst()
-        val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
-        val decl = s"- (nonnull id)init$first"
+      def writeInitializer(sign: String, prefix: String) {
+        val decl = s"$sign (nonnull instancetype)$prefix$firstInitializerArg"
         writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl(";")
       }
+
+      writeInitializer("-", "init")
+      if (!r.ext.objc) writeInitializer("+", IdentStyle.camelLower(objcName))
 
       for (f <- r.fields) {
         w.wl
@@ -234,22 +236,31 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"@implementation $self")
       w.wl
       // Constructor from all fields (not copying)
-      if (!r.fields.isEmpty) {
-        val head = r.fields.head
-        val skipFirst = SkipFirst()
-        val decl = s"- (id)${idObjc.method("init_with_" + head.ident.name)}"
+      val init = s"- (nonnull instancetype)init$firstInitializerArg"
+      writeAlignedObjcCall(w, init, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
+      w.wl
+      w.braced {
+        w.w("if (self = [super init])").braced {
+          for (f <- r.fields) {
+            if (checkMutable(f.ty.resolved))
+              w.wl(s"_${idObjc.field(f.ident)} = [${idObjc.local(f.ident)} copy];")
+            else
+              w.wl(s"_${idObjc.field(f.ident)} = ${idObjc.local(f.ident)};")
+          }
+        }
+        w.wl("return self;")
+      }
+      w.wl
+
+      // Convenience initializer
+      if(!r.ext.objc) {
+        val decl = s"+ (nonnull instancetype)${IdentStyle.camelLower(objcName)}$firstInitializerArg"
         writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl
         w.braced {
-          w.w("if (self = [super init])").braced {
-            for (f <- r.fields) {
-              if (checkMutable(f.ty.resolved))
-                w.wl(s"_${idObjc.field(f.ident)} = [${idObjc.local(f.ident)} copy];")
-              else
-                w.wl(s"_${idObjc.field(f.ident)} = ${idObjc.local(f.ident)};")
-            }
-          }
-          w.wl("return self;")
+          val call = s"return [[self alloc] init$firstInitializerArg"
+          writeAlignedObjcCall(w, call, r.fields, "", f => (idObjc.field(f.ident), s"${idObjc.local(f.ident)}"))
+          w.wl("];")
         }
         w.wl
       }

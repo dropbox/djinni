@@ -4,7 +4,8 @@
 #import <Foundation/Foundation.h>
 
 @interface DBNestedCollection : NSObject
-- (nonnull id)initWithSetList:(nonnull NSArray *)setList;
+- (nonnull instancetype)initWithSetList:(nonnull NSArray *)setList;
++ (nonnull instancetype)nestedCollectionWithSetList:(nonnull NSArray *)setList;
 
 @property (nonatomic, readonly, nonnull) NSArray * setList;
 

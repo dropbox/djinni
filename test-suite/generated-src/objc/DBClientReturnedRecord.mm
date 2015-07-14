@@ -6,9 +6,9 @@
 
 @implementation DBClientReturnedRecord
 
-- (id)initWithRecordId:(int64_t)recordId
-               content:(nonnull NSString *)content
-                  misc:(nullable NSString *)misc
+- (nonnull instancetype)initWithRecordId:(int64_t)recordId
+                                 content:(nonnull NSString *)content
+                                    misc:(nullable NSString *)misc
 {
     if (self = [super init]) {
         _recordId = recordId;
@@ -16,6 +16,15 @@
         _misc = [misc copy];
     }
     return self;
+}
+
++ (nonnull instancetype)clientReturnedRecordWithRecordId:(int64_t)recordId
+                                                 content:(nonnull NSString *)content
+                                                    misc:(nullable NSString *)misc
+{
+    return [[self alloc] initWithRecordId:recordId
+                                  content:content
+                                     misc:misc];
 }
 
 @end

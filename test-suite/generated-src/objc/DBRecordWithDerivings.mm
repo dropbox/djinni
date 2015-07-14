@@ -6,14 +6,21 @@
 
 @implementation DBRecordWithDerivings
 
-- (id)initWithKey1:(int32_t)key1
-              key2:(nonnull NSString *)key2
+- (nonnull instancetype)initWithKey1:(int32_t)key1
+                                key2:(nonnull NSString *)key2
 {
     if (self = [super init]) {
         _key1 = key1;
         _key2 = [key2 copy];
     }
     return self;
+}
+
++ (nonnull instancetype)recordWithDerivingsWithKey1:(int32_t)key1
+                                               key2:(nonnull NSString *)key2
+{
+    return [[self alloc] initWithKey1:key1
+                                 key2:key2];
 }
 
 - (BOOL)isEqual:(id)other

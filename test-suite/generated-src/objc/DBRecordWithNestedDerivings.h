@@ -5,8 +5,10 @@
 #import <Foundation/Foundation.h>
 
 @interface DBRecordWithNestedDerivings : NSObject
-- (nonnull id)initWithKey:(int32_t)key
-                      rec:(nonnull DBRecordWithDerivings *)rec;
+- (nonnull instancetype)initWithKey:(int32_t)key
+                                rec:(nonnull DBRecordWithDerivings *)rec;
++ (nonnull instancetype)recordWithNestedDerivingsWithKey:(int32_t)key
+                                                     rec:(nonnull DBRecordWithDerivings *)rec;
 
 @property (nonatomic, readonly) int32_t key;
 

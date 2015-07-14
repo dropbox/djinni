@@ -11,6 +11,7 @@ djinni-output-temp/cpp/constants_interface.cpp
 djinni-output-temp/cpp/assorted_primitives.hpp
 djinni-output-temp/cpp/assorted_primitives.cpp
 djinni-output-temp/cpp/test_helpers.hpp
+djinni-output-temp/cpp/empty_record.hpp
 djinni-output-temp/cpp/token.hpp
 djinni-output-temp/cpp/color.hpp
 djinni-output-temp/cpp/client_returned_record.hpp
@@ -33,6 +34,7 @@ djinni-output-temp/java/Constants.java
 djinni-output-temp/java/ConstantsInterface.java
 djinni-output-temp/java/AssortedPrimitives.java
 djinni-output-temp/java/TestHelpers.java
+djinni-output-temp/java/EmptyRecord.java
 djinni-output-temp/java/Token.java
 djinni-output-temp/java/Color.java
 djinni-output-temp/java/ClientReturnedRecord.java
@@ -61,6 +63,8 @@ djinni-output-temp/jni/NativeAssortedPrimitives.hpp
 djinni-output-temp/jni/NativeAssortedPrimitives.cpp
 djinni-output-temp/jni/NativeTestHelpers.hpp
 djinni-output-temp/jni/NativeTestHelpers.cpp
+djinni-output-temp/jni/NativeEmptyRecord.hpp
+djinni-output-temp/jni/NativeEmptyRecord.cpp
 djinni-output-temp/jni/NativeToken.hpp
 djinni-output-temp/jni/NativeToken.cpp
 djinni-output-temp/jni/NativeColor.hpp
@@ -98,6 +102,8 @@ djinni-output-temp/objc/DBConstantsInterface.mm
 djinni-output-temp/objc/DBAssortedPrimitives.h
 djinni-output-temp/objc/DBAssortedPrimitives.mm
 djinni-output-temp/objc/DBTestHelpers.h
+djinni-output-temp/objc/DBEmptyRecord.h
+djinni-output-temp/objc/DBEmptyRecord.mm
 djinni-output-temp/objc/DBToken.h
 djinni-output-temp/objc/DBColor.h
 djinni-output-temp/objc/DBClientReturnedRecord.h
@@ -134,6 +140,8 @@ djinni-output-temp/objc/DBAssortedPrimitives+Private.h
 djinni-output-temp/objc/DBAssortedPrimitives+Private.mm
 djinni-output-temp/objc/DBTestHelpers+Private.h
 djinni-output-temp/objc/DBTestHelpers+Private.mm
+djinni-output-temp/objc/DBEmptyRecord+Private.h
+djinni-output-temp/objc/DBEmptyRecord+Private.mm
 djinni-output-temp/objc/DBToken+Private.h
 djinni-output-temp/objc/DBToken+Private.mm
 djinni-output-temp/objc/DBClientReturnedRecord+Private.h

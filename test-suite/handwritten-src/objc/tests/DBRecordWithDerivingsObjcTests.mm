@@ -3,14 +3,14 @@
 
 #import <XCTest/XCTest.h>
 
-static DBRecordWithDerivings *record1 = [[DBRecordWithDerivings alloc] initWithKey1:1 key2:@"String1"];
-static DBRecordWithDerivings *record1A = [[DBRecordWithDerivings alloc] initWithKey1:1 key2:@"String1"];
-static DBRecordWithDerivings *record2 = [[DBRecordWithDerivings alloc] initWithKey1:1 key2:@"String2"];
-static DBRecordWithDerivings *record3 = [[DBRecordWithDerivings alloc] initWithKey1:2 key2:@"String1"];
+static DBRecordWithDerivings *record1 = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String1"];
+static DBRecordWithDerivings *record1A = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String1"];
+static DBRecordWithDerivings *record2 = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String2"];
+static DBRecordWithDerivings *record3 = [DBRecordWithDerivings recordWithDerivingsWithKey1:2 key2:@"String1"];
 
-static DBRecordWithNestedDerivings *nestedRecord1 = [[DBRecordWithNestedDerivings alloc] initWithKey:1 rec:record1];
-static DBRecordWithNestedDerivings *nestedRecord1A = [[DBRecordWithNestedDerivings alloc] initWithKey:1 rec:record1A];
-static DBRecordWithNestedDerivings *nestedRecord2 = [[DBRecordWithNestedDerivings alloc] initWithKey:1 rec:record2];
+static DBRecordWithNestedDerivings *nestedRecord1 = [DBRecordWithNestedDerivings recordWithNestedDerivingsWithKey:1 rec:record1];
+static DBRecordWithNestedDerivings *nestedRecord1A = [DBRecordWithNestedDerivings recordWithNestedDerivingsWithKey:1 rec:record1A];
+static DBRecordWithNestedDerivings *nestedRecord2 = [DBRecordWithNestedDerivings recordWithNestedDerivingsWithKey:1 rec:record2];
 
 @interface DBRecordWithDerivingsObjcTests : XCTestCase
 

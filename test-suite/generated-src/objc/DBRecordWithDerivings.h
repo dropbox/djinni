@@ -4,8 +4,10 @@
 #import <Foundation/Foundation.h>
 
 @interface DBRecordWithDerivings : NSObject
-- (nonnull id)initWithKey1:(int32_t)key1
-                      key2:(nonnull NSString *)key2;
+- (nonnull instancetype)initWithKey1:(int32_t)key1
+                                key2:(nonnull NSString *)key2;
++ (nonnull instancetype)recordWithDerivingsWithKey1:(int32_t)key1
+                                               key2:(nonnull NSString *)key2;
 
 @property (nonatomic, readonly) int32_t key1;
 

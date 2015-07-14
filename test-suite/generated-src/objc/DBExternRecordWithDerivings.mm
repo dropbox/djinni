@@ -6,14 +6,21 @@
 
 @implementation DBExternRecordWithDerivings
 
-- (id)initWithMember:(nonnull DBRecordWithDerivings *)member
-                   e:(DBColor)e
+- (nonnull instancetype)initWithMember:(nonnull DBRecordWithDerivings *)member
+                                     e:(DBColor)e
 {
     if (self = [super init]) {
         _member = member;
         _e = e;
     }
     return self;
+}
+
++ (nonnull instancetype)externRecordWithDerivingsWithMember:(nonnull DBRecordWithDerivings *)member
+                                                          e:(DBColor)e
+{
+    return [[self alloc] initWithMember:member
+                                      e:e];
 }
 
 - (BOOL)isEqual:(id)other

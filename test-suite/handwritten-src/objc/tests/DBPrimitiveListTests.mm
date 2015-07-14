@@ -4,11 +4,7 @@
 #import <XCTest/XCTest.h>
 
 static PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
-static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithList:
-                                             [[NSArray alloc] initWithObjects:[NSNumber numberWithLongLong:1],
-                                                                                     [NSNumber numberWithLongLong:2],
-                                                                                     [NSNumber numberWithLongLong:3],
-                                                                                     nil]];
+static DBPrimitiveList *objcPrimitiveList = [DBPrimitiveList primitiveListWithList:@[@1, @2, @3]];
 
 @interface DBPrimitiveListTests : XCTestCase
 
