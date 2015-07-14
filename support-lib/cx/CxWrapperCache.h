@@ -35,7 +35,7 @@ public:
     std::shared_ptr<T> get(Platform::Object^ cxRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
         std::shared_ptr<T> ret;
-        auto it = m_mapping.find(reinterpret_cast<IInspectable*>(cxRef));
+		auto it = m_mapping.find(reinterpret_cast<IInspectable*>(cxRef));
         if (it != m_mapping.end()) {
             ret = std::static_pointer_cast<T>(it->second.lock());
             if (ret == nullptr) {
@@ -47,9 +47,9 @@ public:
         return ret;
     }
 
-    void remove(const Platform::Object^ cxRef) {
+    void remove(Platform::Object^ cxRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_mapping.erase(reinterpret_cast<const IInspectable*>(cxRef));
+        m_mapping.erase(reinterpret_cast<IInspectable*>(cxRef));
     }
 
     class Handle {
@@ -60,20 +60,20 @@ public:
                 _cache->remove(_cx);
             }
         }
-        const Platform::Object^ get() const { return _cx; }
+        Platform::Object^ get() const { return _cx; }
 
     private:
         const std::shared_ptr<CxWrapperCache> _cache = getInstance();
-        const Platform::Object^ _cx;
+        Platform::Object^ _cx;
     };
 
 
 private:
-    std::unordered_map<IInspectable*, std::weak_ptr<IInspectable>> m_mapping;
+    std::unordered_map<IInspectable*, std::weak_ptr<void>> m_mapping;
     std::mutex m_mutex;
 
-    std::shared_ptr<T> new_wrapper(Platform::Object^ cxRef) {
-        std::shared_ptr<T> ret = std::make_shared<T>(reinterpret_cast<IInspectable*>(cxRef));
+	std::shared_ptr<T> new_wrapper(Platform::Object^ cxRef) {
+		auto ret = std::shared_ptr<T>(new T(cxRef));
         std::weak_ptr<void> ptr(std::static_pointer_cast<void>(ret));
         m_mapping[reinterpret_cast<IInspectable*>(cxRef)] = ptr;
         return ret;
