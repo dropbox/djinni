@@ -119,7 +119,6 @@ namespace djinni {
 		static CxType^ fromCpp(const CppType& string) {
 			//TODO this doesn't seem to work. assert(string.size() <= std::numeric_limits<int64_t>::max());
 			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
 			return ref new Platform::String(converter.from_bytes(string).c_str());
 		}
 	};

@@ -47,9 +47,9 @@ public:
         return ret;
     }
 
-    void remove(Platform::Object^ cxRef) {
+    void remove(const Platform::Object^ cxRef) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_mapping.erase(reinterpret_cast<IInspectable*>(cxRef));
+        m_mapping.erase(reinterpret_cast<const IInspectable*>(cxRef));
     }
 
     class Handle {
@@ -60,7 +60,7 @@ public:
                 _cache->remove(_cx);
             }
         }
-        Platform::Object^ get() const noexcept { return _cx; }
+        const Platform::Object^ get() const { return _cx; }
 
     private:
         const std::shared_ptr<CxWrapperCache> _cache = getInstance();
