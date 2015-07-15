@@ -6,7 +6,7 @@ view, and when the button "Sort" is hit, sorts the lines in that view.
 Interface Stucture
 ------------------
 Two interfaces are defined: SortItems and TextboxListener. SortItems is implemented in C++; its
-method sort() takes a list of strings (wrapped in a record), sort it, and passes the sorted list to
+method sort() takes a list of strings (wrapped in a record), sorts it, and passes the sorted list to
 TextboxListener.update() . TextboxListener is implemented in Java / Objective-C, and will update the
 text area on the UI when update() is called. You can check the source tree for implemetation
 details.
@@ -46,7 +46,7 @@ iOS Version
 -----------
 The iOS project is in objc/ . Note that the interface layout is only tested under 4-inch iPhone.
 The main handwritten logic is at TXSViewController.mm. Please open TextSort.**xcworkspace** (not the
-xcodeproj file) This program can be built using default setting in Xcode. Or more simply:
+xcodeproj file) This program can be built using the default settings in Xcode. Or more simply:
 ```
 cd djinni_root_rit/example;
 xcodebuild -workspace objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphoneos
@@ -71,7 +71,7 @@ then gradle can not find your NDK installation. First make sure that you've
 installed the NDK. On Mac OS X, you can install easily via
 [homebrew](http://brew.sh/): `brew install android-ndk`
 
-After that, you have to tell gradle where the location of the NDK location.
+After that, you have to tell gradle the location of the NDK.
 This can happen by either setting the `ANDROID_NDK_HOME` environment variable
 to the path where the NDK was installed, or by creating a `local.properties`
 file in the project directory.
