@@ -34,7 +34,7 @@ if [ $# -eq 0 ]; then
 elif [ $# -eq 1 ]; then
     command="$1"; shift
     if [ "$command" != "clean" ]; then
-        echo "Unexpected arguemnt: \"$command\"." 1>&2
+        echo "Unexpected argument: \"$command\"." 1>&2
         exit 1
     fi
     for dir in "$temp_out" "$cpp_out" "$jni_out" "$java_out"; do

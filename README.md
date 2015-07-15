@@ -21,7 +21,7 @@ We announced Djinni at CppCon 2014. Access the slides from https://bit.ly/djinni
 
 ### Types
 Djinni generates code based on interface definitions in an IDL file. An IDL file can contain
-three kinds of declaration: enums, records, and interfaces.
+three kinds of declarations: enums, records, and interfaces.
 
 * Enums become C++ enum classes, Java enums, or ObjC `NS_ENUM`s.
 * Records are pure-data value objects.
@@ -158,7 +158,7 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 #### Objective-C / C++ Project
 
 ##### Includes & Build Target
-Generated file for Objective-C / C++ is as follows (assuming prefix is `DB`):
+Generated files for Objective-C / C++ are as follows (assuming prefix is `DB`):
 
 | Type      | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
 |-----------|------------------------|----------------------------|--------------------------|-----------------------------|
@@ -235,7 +235,7 @@ will be translated as well.
 
 ### Constants
 Constants can be defined within interfaces and records. In Java and C++ they are part of the
-generated class; and in Objective-C, constant names are globals with name of the
+generated class; and in Objective-C, constant names are globals with the name of the
 interface/record prefixed. Example:
 
    record_with_const = record +c +j +o {
