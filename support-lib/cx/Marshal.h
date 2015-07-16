@@ -87,22 +87,22 @@ namespace djinni {
 		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
 	};
 
-	//
-	//    template<class CppEnum, class CxEnum>
-	//    struct Enum {
-	//        using CppType = CppEnum;
-	//        using CxType = CxEnum;
-	//
-	//        static CppType toCpp(CxType e) noexcept { return static_cast<CppType>(e); }
-	//        static CxType fromCpp(CppType e) noexcept { return static_cast<CxType>(e); }
-	//
-	//        struct Boxed {
-	//            using CxType = NSNumber*;
-	//            static CppType toCpp(CxType x) noexcept { return Enum::toCpp(static_cast<Enum::CxType>([x integerValue])); }
-	//            static CxType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
-	//        };
-	//    };
-	//
+
+//	template<class CppEnum, class CxEnum>
+//	struct Enum {
+//	    using CppType = CppEnum;
+//	    using CxType = CxEnum;
+//
+//	    static CppType toCpp(CxType e) { return static_cast<CppType>(e); }
+//	    static CxType fromCpp(CppType e) { return static_cast<CxType>(e); }
+//
+//	    struct Boxed {
+//	    //yeah, I just don't know about these two lines. So...weird? How _do_ you box an enum?
+//	        static CppType toCpp(CxType x) { return Enum::toCpp(static_cast<Enum::CxType>(static_cast<int64_t>(x))); }
+//	        static CxType fromCpp(CppType x) { return Enum::toCx(static_cast<Enum::CppType>(static_cast<int64_t>(x))); }
+//	    };
+//	};
+
 	struct String {
 		using CppType = std::string;
 		using CxType = Platform::String;
@@ -122,28 +122,42 @@ namespace djinni {
 			return ref new Platform::String(converter.from_bytes(string).c_str());
 		}
 	};
-	//
-	//    struct Date {
-	//        using CppType = std::chrono::system_clock::time_point;
-	//        using CxType = NSDate*;
-	//
-	//        using Boxed = Date;
-	//
-	//        static CppType toCpp(CxType date) {
-	//            using namespace std::chrono;
-	//            static const auto POSIX_EPOCH = system_clock::from_time_t(0);
-	//            auto timeIntervalSince1970 = duration<double>([date timeIntervalSince1970]);
-	//            return POSIX_EPOCH + duration_cast<system_clock::duration>(timeIntervalSince1970);
-	//        }
-	//
-	//        static CxType fromCpp(const CppType& date) {
-	//            using namespace std::chrono;
-	//            static const auto POSIX_EPOCH = system_clock::from_time_t(0);
-	//            return [NSDate dateWithTimeIntervalSince1970:duration_cast<duration<double>>(date - POSIX_EPOCH).count()];
-	//
-	//        }
-	//    };
-	//
+
+//	    struct Date {
+//	        using CppType = std::chrono::system_clock::time_point;
+//	        using CxType = Windows::Foundation::DateTime;
+//
+//	        using Boxed = Date;
+//
+//	        static CppType toCpp(CxType date) {
+//	        	// date is "A 64-bit signed integer that represents a point in time as the number of 100-nanosecond
+//	        	// intervals prior to or after midnight on January 1, 1601 (according to the Gregorian Calendar)."
+//	        	// So helpful
+//	            using namespace std::chrono;
+//	            static const auto POSIX_EPOCH = system_clock::from_time_t(0);
+//
+//				// rather than calculate by hand the difference in time offsets between POSIX epoch and 1601, let's use a helper
+//	            Windows::Globalization::Calendar^ calendar = ref new Windows::Globalization::Calendar();
+//	            calendar.year = 1970;
+//	            calendar.month = 1;
+//	            calendar.day = 1;
+//	            calendar.hour = 0;
+//	            calendar.minute = 0;
+//	            calendar.second = 0;
+//	            calendar.nanosecond = 0;
+//	            uint64_t epochDate = (date.UniversalTime - calendar.GetDateTime().UniversalTime) / 10000;
+//	            auto timeIntervalSince1970 = duration<double>(epochDate);
+//	            return POSIX_EPOCH + duration_cast<system_clock::duration>(timeIntervalSince1970);
+//	        }
+//
+//	        static CxType fromCpp(const CppType& date) {
+//	            using namespace std::chrono;
+//	            static const auto POSIX_EPOCH = system_clock::from_time_t(0);
+//	            return [NSDate dateWithTimeIntervalSince1970:duration_cast<duration<double>>(date - POSIX_EPOCH).count()];
+//
+//	        }
+//	    };
+
 	//    struct Binary {
 	//        using CppType = std::vector<uint8_t>;
 	//        using CxType = NSData*;
