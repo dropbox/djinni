@@ -75,14 +75,25 @@ object Main {
     var yamlOutFile: Option[String] = None
     var yamlPrefix: String = ""
     var cxOutFolder: Option[File] = None
-    var cxNamespace: String = "djinni_generated"
-    var cxIdentStyle = IdentStyle.cxDefault
-    var cxTypeEnumIdentStyle: IdentConverter = null
-    var cxFileIdentStyle: IdentConverter = IdentStyle.underLower
+    var cxcppOutFolder: Option[File] = None
     var cxHeaderOutFolderOptional: Option[File] = None
+    var cxcppHeaderOutFolderOptional: Option[File] = None
     var cxIncludePrefix: String = ""
-    var cxExt: String = "cx"
-    var cxHeaderExt: String = "hpp"
+    var cxcppIncludePrefix: String = ""
+    var cxcppIncludeCppPrefix: String = ""
+    var cxcppIncludeCxPrefix: String = ""
+    var cxIdentStyle: CxIdentStyle = IdentStyle.cxDefault
+    var cxFileIdentStyle: IdentConverter = IdentStyle.camelUpper
+    var cxExt: String = "cpp"
+    var cxHeaderExt: String = "h"
+    var cxcppExt: String = "cpp"
+    var cxcppHeaderExt: String = "h"
+    var cxNamespace: String = "djinni"
+    var cxcppNamespace: String = "djinni_generated"
+    var cxBaseLibIncludePrefix: String = ""
+    var inFileListPath: Option[File] = None
+    var outFileListPath: Option[File] = None
+    var skipGeneration: Boolean = false
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -174,7 +185,6 @@ object Main {
         .text("The namespace name to use for generated Objective-C++ classes.")
       opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
         .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
-<<<<<<< HEAD
       note("")
       opt[File]("yaml-out").valueName("<out-folder>").foreach(x => yamlOutFolder = Some(x))
         .text("The output folder for YAML files (Generator disabled if unspecified).")
@@ -189,21 +199,37 @@ object Main {
         .text("Optional file in which to write the list of output files produced.")
       opt[Boolean]("skip-generation").valueName("<true/false>").foreach(x => skipGeneration = x)
         .text("Way of specifying if file generation should be skipped (default: false)")
-=======
       opt[File]("cx-out").valueName("<out-folder>").foreach(x => cxOutFolder = Some(x))
-        .text("The output folder for Cx files (Generator disabled if unspecified).")
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[File]("cxcpp-out").valueName("<out-folder>").foreach(x => cxcppOutFolder = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
       opt[File]("cx-header-out").valueName("<out-folder>").foreach(x => cxHeaderOutFolderOptional = Some(x))
-        .text("The output folder for Cx header files (default: the same as --cx-out).")
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[File]("cxcpp-header-out").valueName("<out-folder>").foreach(x => cxcppHeaderOutFolderOptional = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
       opt[String]("cx-include-prefix").valueName("<prefix>").foreach(cxIncludePrefix = _)
-        .text("The prefix for #includes of header files from Cx files.")
-      opt[String]("cx-namespace").valueName("...").foreach(x => cxNamespace = x)
-        .text("The namespace name to use for generated Cx classes.")
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-prefix").valueName("<prefix>").foreach(cxcppIncludePrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-cpp-prefix").valueName("<prefix>").foreach(cxcppIncludeCppPrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-cx-prefix").valueName("<prefix>").foreach(cxcppIncludeCxPrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
       opt[String]("cx-ext").valueName("<ext>").foreach(cxExt = _)
-        .text("The filename extension for Cx files (default: \"cpp\").")
-      opt[String]("hpp-ext").valueName("<ext>").foreach(cxHeaderExt = _)
-        .text("The filename extension for Cx header files (default: \"hpp\").")
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-h-ext").valueName("<ext>").foreach(cxHeaderExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-ext").valueName("<ext>").foreach(cxcppExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-h-ext").valueName("<ext>").foreach(cxcppHeaderExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-namespace").valueName("<prefix>").foreach(cxNamespace = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-namespace").valueName("<prefix>").foreach(cxcppNamespace = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-base-lib-include-prefix").valueName("...").foreach(x => cxBaseLibIncludePrefix = x)
+        .text("The C++/Cx base library's include path, relative to the C++/Cx classes.")
 
->>>>>>> 3e64732... Closer to compilation!
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -229,7 +255,6 @@ object Main {
       identStyle("ident-cx-field",      c => { cxIdentStyle = cxIdentStyle.copy(field = c) })
       identStyle("ident-cx-method",     c => { cxIdentStyle = cxIdentStyle.copy(method = c) })
       identStyle("ident-cx-type",       c => { cxIdentStyle = cxIdentStyle.copy(ty = c) })
-      identStyle("ident-cx-enum-type",  c => { cppTypeEnumIdentStyle = c })
       identStyle("ident-cx-type-param", c => { cxIdentStyle = cxIdentStyle.copy(typeParam = c) })
       identStyle("ident-cx-local",      c => { cxIdentStyle = cxIdentStyle.copy(local = c) })
       identStyle("ident-cx-file",       c => { cxFileIdentStyle = c })
@@ -248,6 +273,7 @@ object Main {
     var objcFileIdentStyle = objcFileIdentStyleOptional.getOrElse(objcIdentStyle.ty)
     val objcppIncludeObjcPrefix = objcppIncludeObjcPrefixOptional.getOrElse(objcppIncludePrefix)
     val cxHeaderOutFolder = if (cxHeaderOutFolderOptional.isDefined) cxHeaderOutFolderOptional else cxOutFolder
+    val cxcppHeaderOutFolder = if (cxcppHeaderOutFolderOptional.isDefined) cxcppHeaderOutFolderOptional else cxcppOutFolder
 
     // Add ObjC prefix to identstyle
     objcIdentStyle = objcIdentStyle.copy(ty = IdentStyle.prefix(objcTypePrefix,objcIdentStyle.ty))
@@ -257,9 +283,9 @@ object Main {
       cppIdentStyle = cppIdentStyle.copy(enumType = cppTypeEnumIdentStyle)
     }
 
-    if (cxTypeEnumIdentStyle != null) {
-      cxIdentStyle = cxIdentStyle.copy(enumType = cxTypeEnumIdentStyle)
-    }
+//    if (cxTypeEnumIdentStyle != null) {
+//      cxIdentStyle = cxIdentStyle.copy(enumType = cxTypeEnumIdentStyle)
+//    }
 
     // Parse IDL file.
     System.out.println("Parsing...")
@@ -348,13 +374,24 @@ object Main {
       yamlOutFile,
       yamlPrefix,
       cxOutFolder,
+      cxcppOutFolder,
+      cxHeaderOutFolder,
+      cxcppHeaderOutFolder,
+      cxIncludePrefix,
+      cxcppIncludePrefix,
+      cxcppIncludeCppPrefix,
+      cxcppIncludeCxPrefix,
+      cxIdentStyle,
+      cxFileIdentStyle,
       cxExt,
       cxHeaderExt,
-      cxHeaderOutFolder,
-      cxIncludePrefix,
+      cxcppExt,
+      cxcppHeaderExt,
       cxNamespace,
-      cxIdentStyle,
-      cxFileIdentStyle)
+      cxcppNamespace,
+      cxBaseLibIncludePrefix,
+      outFileListWriter,
+      skipGeneration)
 
 
     try {

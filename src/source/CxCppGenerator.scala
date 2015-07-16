@@ -1,18 +1,18 @@
 /**
-  * Copyright 2014 Dropbox, Inc.
-  *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *    http://www.apache.org/licenses/LICENSE-2.0
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  */
+ * Copyright 2014 Dropbox, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package djinni
 
@@ -24,74 +24,111 @@ import djinni.writer.IndentWriter
 
 import scala.collection.mutable
 
-class CxGenerator(spec: Spec) extends Generator(spec) {
+class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
-  val marshal = new CxMarshal(spec)
+  val cxcppMarshal = new CxCppMarshal(spec)
+  val cxMarshal = new CxMarshal(spec)
 
-  val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix) _
-  def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
-    writeHppFileGeneric(spec.cxHeaderOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle)(name, origin, includes, fwds, f, f2)
-
-  class CxRefs(name: String) {
-    var hpp = mutable.TreeSet[String]()
-    var hppFwds = mutable.TreeSet[String]()
-    var cx = mutable.TreeSet[String]()
+  class CxRefs() {
+    var body = mutable.TreeSet[String]()
+    var privHeader = mutable.TreeSet[String]()
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
       tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = for(r <- marshal.references(m, name)) r match {
-      case ImportRef(arg) => hpp.add("#include " + arg)
-      case DeclRef(decl, Some(spec.cxNamespace)) => hppFwds.add(decl)
+    def find(m: Meta) = for(r <- cxcppMarshal.references(m)) r match {
+      case ImportRef(arg) => body.add("#import " + arg)
+      case _ =>
+    }
+  }
+
+  val writeCxCppFile = writeCppFileGeneric(spec.cxcppOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppIncludePrefix) _
+  def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
+    writeHppFileGeneric(spec.cxcppHeaderOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
+
+  class CxCppRefs(name: String) {
+    var hx = mutable.TreeSet[String]()
+    var hxFwds = mutable.TreeSet[String]()
+    var cxcpp = mutable.TreeSet[String]()
+
+    def find(ty: TypeRef) { find(ty.resolved) }
+    def find(tm: MExpr) {
+      tm.args.foreach(find)
+      find(tm.base)
+    }
+    def find(m: Meta) = for(r <- cxcppMarshal.references(m)) r match {
+      case ImportRef(arg) => hx.add("#include " + arg)
+      case DeclRef(decl, Some(spec.cxcppNamespace)) => hxFwds.add(decl)
       case DeclRef(_, _) =>
     }
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    val refs = new CxRefs(ident.name)
-    val self = marshal.typename(ident, e)
+    val refs = new CxCppRefs(ident.name)
+    val self = cxcppMarshal.typename(ident, e)
 
-    writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
+    if (spec.cppEnumHashWorkaround) {
+      refs.hx.add("#include <functional>") // needed for std::hash
+    }
+
+    writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
       w.w(s"enum class $self : int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
-          w.wl(idCx.enum(o.ident.name) + ",")
+          w.wl(idCpp.enum(o.ident.name) + ",")
         }
       }
-    })
+    },
+      w => {
+        // std::hash specialization has to go *outside* of the wrapNs
+        if (spec.cppEnumHashWorkaround) {
+          val fqSelf = cxcppMarshal.fqTypename(ident, e)
+          w.wl
+          wrapNamespace(w, "std",
+            (w: IndentWriter) => {
+              w.wl("template <>")
+              w.w(s"struct hash<$fqSelf>").bracedSemi {
+                w.w(s"size_t operator()($fqSelf type) const").braced {
+                  w.wl("return std::hash<int>()(static_cast<int>(type));")
+                }
+              }
+            }
+          )
+        }
+      })
   }
 
-  def generateHppConstants(w: IndentWriter, consts: Seq[Const]) = {
+  def generateHxConstants(w: IndentWriter, consts: Seq[Const]) = {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static ${marshal.fieldType(c.ty)} const ${idCx.const(c.ident)};")
+      w.wl(s"static ${cxcppMarshal.fieldType(c.ty)} const ${idCpp.const(c.ident)};")
     }
   }
 
-  def generateCxConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
-    def writeCxConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+  def generateCxCppConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
+    def writeCxCppConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
-      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
+      case d: Double if cxcppMarshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => w.w(marshal.typename(ty) + "::" + idCx.enum(e.ty.name + "_" + e.name))
-      case v: ConstRef => w.w(selfName + "::" + idCx.const(v))
+      case e: EnumValue => w.w(cxcppMarshal.typename(ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
+      case v: ConstRef => w.w(selfName + "::" + idCpp.const(v))
       case z: Map[_, _] => { // Value is record
-        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(marshal.typename(ty) + "(")
+        w.wl(cxcppMarshal.typename(ty) + "(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
         for (f <- record.fields) {
           skipFirst {w.wl(",")}
-          writeCxConst(w, f.ty, vMap.apply(f.ident.name))
-          w.w(" /* " + idCx.field(f.ident) + " */ ")
+          writeCxCppConst(w, f.ty, vMap.apply(f.ident.name))
+          w.w(" /* " + idCpp.field(f.ident) + " */ ")
         }
         w.w(")")
         w.decrease()
@@ -101,138 +138,77 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCx.const(c.ident)} = ")
-      writeCxConst(w, c.ty, c.value)
+      w.w(s"${cxcppMarshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
+      writeCxCppConst(w, c.ty, c.value)
       w.wl(";")
     }
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
-    val refs = new CxRefs(ident.name)
-    r.fields.foreach(f => refs.find(f.ty))
-    r.consts.foreach(c => refs.find(c.ty))
-    refs.hpp.add("#include <utility>") // Add for std::move
+    val refs = new CxRefs()
+    for (c <- r.consts)
+      refs.find(c.ty)
+    for (f <- r.fields)
+      refs.find(f.ty)
 
-    val self = marshal.typename(ident, r)
-    val (cxName, cxFinal) = if (r.ext.cx) (ident.name + "_base", "") else (ident.name, " final")
-    val actualSelf = marshal.typename(cxName, r)
+    val cxName = ident.name + (if (r.ext.cx) "_base" else "")
+    val cxSelf = cxMarshal.fqTypename(ident, r)
+    val cppSelf = cxcppMarshal.fqTypename(ident, r)
 
-    // Requiring the extended class
-    if (r.ext.cx) {
-      refs.hpp.add(s"class $self; // Requiring extended class")
-      refs.cx.add("#include "+q("../" + spec.cxFileIdentStyle(ident) + "." + spec.cxHeaderExt))
+    refs.privHeader.add("!#include " + q(spec.cxcppIncludeCxPrefix + (if(r.ext.cx) "../" else "") + cxcppMarshal.headerName(ident)))
+    refs.privHeader.add("!#include " + q(spec.cxcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+
+    refs.body.add("#include <cassert>")
+    refs.body.add("!#import " + q(spec.cxcppIncludePrefix + cxcppMarshal.headerName(cxName)))
+
+    def checkMutable(tm: MExpr): Boolean = tm.base match {
+      case MOptional => checkMutable(tm.args.head)
+      case MString => true
+      case MBinary => true
+      case _ => false
     }
 
-    // C++ Header
-    def writeCxPrototype(w: IndentWriter) {
-      writeDoc(w, doc)
-      writeCxTypeParams(w, params)
-      w.w("struct " + actualSelf + cxFinal).bracedSemi {
-        generateHppConstants(w, r.consts)
-        // Field definitions.
-        for (f <- r.fields) {
-          writeDoc(w, f.doc)
-          w.wl(marshal.fieldType(f.ty) + " " + idCx.field(f.ident) + ";")
-        }
+    val helperClass = cxcppMarshal.helperClass(ident)
 
-        if (r.derivingTypes.contains(DerivingType.Eq)) {
+    writeCxCppFile(cxcppMarshal.headerName(cxName), origin, refs.privHeader, w => {
+      w.wl
+      wrapNamespace(w, spec.cxcppNamespace, w => {
+        w.wl(s"struct $helperClass")
+        w.bracedSemi {
+          w.wl(s"using CppType = $cppSelf;")
+          w.wl(s"using CxType = $cxSelf^;");
           w.wl
-          w.wl(s"friend bool operator==(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs);")
-        }
-        if (r.derivingTypes.contains(DerivingType.Ord)) {
+          w.wl(s"using Boxed = $helperClass;")
           w.wl
-          w.wl(s"friend bool operator<(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator>(const $actualSelf& lhs, const $actualSelf& rhs);")
-        }
-        if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl
-          w.wl(s"friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
-        }
-
-        // Constructor.
-        if(r.fields.nonEmpty) {
-          w.wl
-          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCx.local(f.ident))
-          w.wl
-          val init = (f: Field) => idCx.field(f.ident) + "(std::move(" + idCx.local(f.ident) + "))"
-          w.wl(": " + init(r.fields.head))
-          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
-          w.wl("{}")
-        }
-
-        if (r.ext.cx) {
-          w.wl
-          w.wl(s"virtual ~$actualSelf() = default;")
-          w.wl
-          // Defining the dtor disables implicit copy/move operation generation, so re-enable them
-          // Make them protected to avoid slicing
-          w.wlOutdent("protected:")
-          w.wl(s"$actualSelf(const $actualSelf&) = default;")
-          w.wl(s"$actualSelf($actualSelf&&) = default;")
-          w.wl(s"$actualSelf& operator=(const $actualSelf&) = default;")
-          w.wl(s"$actualSelf& operator=($actualSelf&&) = default;")
-        }
-      }
-    }
-
-    writeHppFile(cxName, origin, refs.hpp, refs.hppFwds, writeCxPrototype)
-
-    if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
-      writeCxFile(cxName, origin, refs.cx, w => {
-        generateCxConstants(w, r.consts, actualSelf)
-
-        if (r.derivingTypes.contains(DerivingType.Eq)) {
-          w.wl
-          w.w(s"bool operator==(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            if(!r.fields.isEmpty) {
-              writeAlignedCall(w, "return ", r.fields, " &&", "", f => s"lhs.${idCx.field(f.ident)} == rhs.${idCx.field(f.ident)}")
-              w.wl(";")
-            } else {
-             w.wl("return true;")
-           }
-          }
-          w.wl
-          w.w(s"bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            w.wl("return !(lhs == rhs);")
-          }
-        }
-        if (r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl
-          w.w(s"bool operator<(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            for(f <- r.fields) {
-              w.w(s"if (lhs.${idCx.field(f.ident)} < rhs.${idCx.field(f.ident)})").braced {
-                w.wl("return true;")
-              }
-              w.w(s"if (rhs.${idCx.field(f.ident)} < lhs.${idCx.field(f.ident)})").braced {
-                w.wl("return false;")
-              }
-            }
-            w.wl("return false;")
-          }
-          w.wl
-          w.w(s"bool operator>(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            w.wl("return rhs < lhs;")
-          }
-        }
-        if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl
-          w.w(s"bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            w.wl("return !(rhs < lhs);")
-          }
-          w.wl
-          w.w(s"bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
-            w.wl("return !(lhs < rhs);")
-          }
+          w.wl(s"static CppType toCpp(CxType cxc);")
+          w.wl(s"static CxType fromCpp(const CppType& cpp);")
         }
       })
-    }
+    })
 
+    writeCxCppFile(cxName, origin, refs.body, w => {
+      wrapNamespace(w, spec.cxcppNamespace, w => {
+        w.wl(s"auto $helperClass::toCpp(CxType obj) -> CppType")
+        w.braced {
+          w.wl("assert(obj);")
+          if(r.fields.isEmpty) w.wl("(void)obj; // Suppress warnings in relase builds for empty records")
+          writeAlignedCall(w, "return {", r.fields, "}", f => cxcppMarshal.toCpp(f.ty, "cx->" + idCx.field(f.ident)))
+          w.wl(";")
+        }
+        w.wl
+        w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> CxType")
+        w.braced {
+          if(r.fields.isEmpty) w.wl("(void)cpp; // Suppress warnings in relase builds for empty records")
+          val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
+          writeAlignedCall(w, "return ref new CxType(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
+          w.wl(";")
+        }
+      })
+    })
   }
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
-    val refs = new CxRefs(ident.name)
+    val refs = new CxCppRefs(ident.name)
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
@@ -241,45 +217,45 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = marshal.typename(ident, i)
+    val self = cxcppMarshal.typename(ident, i)
 
-    writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
+    writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
       writeDoc(w, doc)
-      writeCxTypeParams(w, typeParams)
+      writeCxCppTypeParams(w, typeParams)
       w.w(s"class $self").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
         w.wl(s"virtual ~$self() {}")
         // Constants
-        generateHppConstants(w, i.consts)
+        generateHxConstants(w, i.consts)
         // Methods
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          val ret = cxcppMarshal.returnType(m.ret)
+          val params = m.params.map(p => cxcppMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
           if (m.static) {
-            w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
+            w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
             val constFlag = if (m.const) " const" else ""
-            w.wl(s"virtual $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
+            w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
           }
         }
       }
     })
 
-    // Cx only generated in need of Constants
+    // CxCpp only generated in need of Constants
     if (i.consts.nonEmpty) {
-      writeCxFile(ident, origin, refs.cx, w => {
-        generateCxConstants(w, i.consts, self)
+      writeCxCppFile(ident, origin, refs.cxcpp, w => {
+        generateCxCppConstants(w, i.consts, self)
       })
     }
 
   }
 
-  def writeCxTypeParams(w: IndentWriter, params: Seq[TypeParam]) {
+  def writeCxCppTypeParams(w: IndentWriter, params: Seq[TypeParam]) {
     if (params.isEmpty) return
-    w.wl("template " + params.map(p => "typename " + idCx.typeParam(p.ident)).mkString("<", ", ", ">"))
+    w.wl("template " + params.map(p => "typename " + idCpp.typeParam(p.ident)).mkString("<", ", ", ">"))
   }
 
 }

@@ -75,13 +75,24 @@ package object generatorTools {
                    yamlOutFile: Option[String],
                    yamlPrefix: String,
                    cxOutFolder: Option[File],
+                   cxcppOutFolder: Option[File],
+                   cxHeaderOutFolder: Option[File],
+                   cxcppHeaderOutFolder: Option[File],
+                   cxIncludePrefix: String,
+                   cxcppIncludePrefix: String,
+                   cxcppIncludeCppPrefix: String,
+                   cxcppIncludeCxPrefix: String,
+                   cxIdentStyle: CxIdentStyle,
+                   cxFileIdentStyle: IdentConverter,
                    cxExt: String,
                    cxHeaderExt: String,
-                   cxHeaderOutFolder: Option[File],
-                   cxIncludePrefix: String,
+                   cxcppExt: String,
+                   cxcppHeaderExt: String,
                    cxNamespace: String,
-                   cxIdentStyle: CxIdentStyle,
-                   cxFileIdentStyle: IdentConverter)
+                   cxcppNamespace: String,
+                   cxBaseLibIncludePrefix: String,
+                   outFileListWriter: Option[Writer],
+                   skipGeneration: Boolean)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -121,7 +132,7 @@ package object generatorTools {
     val javaDefault = JavaIdentStyle(camelUpper, camelUpper, camelLower, camelLower, camelLower, underCaps, underCaps)
     val cppDefault = CppIdentStyle(camelUpper, camelUpper, camelUpper, underLower, underLower, underLower, underCaps, underCaps)
     val objcDefault = ObjcIdentStyle(camelUpper, camelUpper, camelLower, camelLower, camelLower, camelUpper, camelUpper)
-    val cxDefault = CxIdentStyle(camelUpper, camelUpper, camelUpper, underLower, underLower, underLower, underCaps, underCaps)
+    val cxDefault = CxIdentStyle(camelUpper, camelUpper, camelUpper, camelUpper, underLower, underLower, camelUpper, underCaps)
 
     val styles = Map(
       "FooBar" -> camelUpper,
