@@ -138,7 +138,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     r.consts.foreach(c => refs.find(c.ty))
 
     val self = cxMarshal.typename(ident, r)
-    val (cxName, cxFinal) = if (r.ext.cx) (ident.name + "_base", "") else (ident.name, " final")
+    val (cxName, cxFinal) = if (r.ext.cx) (ident.name + "_base", "") else (ident.name, " sealed")
     val actualSelf = cxMarshal.typename(cxName, r)
 
     // Requiring the extended class
@@ -156,18 +156,17 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         // Field definitions.
         for (f <- r.fields) {
           writeDoc(w, f.doc)
-          w.wl(cxMarshal.fieldType(f.ty) + " " + idCx.field(f.ident) + ";")
+          w.wl("property " + cxMarshal.fieldType(f.ty) + " " + idCx.field(f.ident) + ";")
         }
 
         // Constructor.
         if (r.fields.nonEmpty) {
           w.wl
-          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => cxMarshal.fieldType(f.ty) + " " + idCx.local(f.ident))
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => cxMarshal.fieldType(f.ty) + " " + idCx.local("new_"+f.ident.name))
           w.wl
-          val init = (f: Field) => idCx.field(f.ident) + "(" + idCx.local(f.ident) + ")"
-          w.wl(": " + init(r.fields.head))
-          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
-          w.wl("{}")
+          w.braced {
+            r.fields.map(f => w.wl(s"${idCx.local(f.ident)} = ${idCx.local("new_"+f.ident.name)};") )
+          }
         }
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {

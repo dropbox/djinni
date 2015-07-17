@@ -230,7 +230,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
       //only interface classes have proxy objects
       if (i.ext.cx) {
-        w.wl(s"class $helperClass final : public $cppSelf, public ::djinni::CxWrapperCache<CxProxy>::Handle").braced {
+        w.wl(s"class $helperClass sealed : public $cppSelf, public ::djinni::CxWrapperCache<CxProxy>::Handle").braced {
           w.wlOutdent("public:")
           w.wl("using Handle::Handle;")
           w.wl(s"using CxType = $cxSelf")
