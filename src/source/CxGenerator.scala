@@ -213,7 +213,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
                   w.wl("}")
                 case df: MDef => df.defType match {
                   case DRecord => w.wl(s"tempResult = this->${idCx.field(f.ident)}->CompareTo(rhs->${idCx.field(f.ident)});")
-                  case DEnum => w.w(s"tempResult = this->${idCx.field(f.ident)}->CompareTo(rhs->${idJava.field(f.ident)});")
+                  case DEnum => w.w(s"tempResult = this->${idCx.field(f.ident)}->CompareTo(rhs->${idCx.field(f.ident)});")
                   case _ => throw new AssertionError("Unreachable")
                 }
                 case _ => throw new AssertionError("Unreachable")

@@ -70,7 +70,11 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
         d.defType match {
           case DEnum => withNs(namespace, idCx.enumType(d.name))
           case DRecord => s"${withNs(namespace, idCx.ty(d.name))}^"
-          case DInterface => s"${withNs(namespace, idCx.ty(d.name))}^"
+          case DInterface => d.body match {
+            case e: Enum => s"${withNs(namespace, idCx.ty(d.name))}^"
+            case i: Interface => if(i.ext.cx) s"I${withNs(namespace, idCx.ty(d.name))}^" else s"${withNs(namespace, idCx.ty(d.name))}^"
+            case r: Record => s"${withNs(namespace, idCx.ty(d.name))}^"
+          }
         }
       case p: MParam => idCx.typeParam(p.name)
     }
