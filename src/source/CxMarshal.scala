@@ -9,7 +9,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   override def typename(tm: MExpr): String = toCxType(tm, None)
   def typename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => idCx.enumType(name)
-    case i: Interface => idCx.ty(name)
+    case i: Interface => if(i.ext.cx) s"I${idCx.ty(name)}" else idCx.ty(name)
     case r: Record => idCx.ty(name)
   }
 

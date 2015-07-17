@@ -27,6 +27,7 @@ import scala.collection.mutable
 class CxGenerator(spec: Spec) extends Generator(spec) {
 
   val marshal = new CxMarshal(spec)
+  val cppMarshal = new CppMarshal(spec)
 
   val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix, spec.cxExt, spec.cxHeaderExt) _
   def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
@@ -235,11 +236,12 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = marshal.typename(ident, i)
+    val cppSelf = cppMarshal.fqTypename(ident, i)
 
     writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
       writeDoc(w, doc)
       writeCxTypeParams(w, typeParams)
-      if (i.ext.cx) w.wl(s"public interface class I$self").bracedSemi {
+      if (i.ext.cx) w.wl(s"public interface class $self").bracedSemi {
         // Constants
         generateHxConstants(w, i.consts)
         // Methods
@@ -276,16 +278,21 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         //private members
         w.wlOutdent("internal:")
         //construct from a cpp ref
-
+        w.wl(s"$self(const std::shared_ptr<$cppSelf>& cppRef);")
+        w.wl(s"::djinni::CppWrapperCache<$cppSelf>::Handle cppRef;")
       }
     })
 
     // Cx only generated in need of Constants
-    if (i.consts.nonEmpty) {
-      writeCxFile(ident, origin, refs.cx, w => {
+    writeCxFile(ident, origin, refs.cx, w => {
+      if (i.consts.nonEmpty) {
         generateCxConstants(w, i.consts, self)
-      })
-    }
+      }
+
+      if (! i.ext.cx) {
+        w.wl("HAHHAH")
+      }
+    })
 
   }
 
