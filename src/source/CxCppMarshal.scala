@@ -57,8 +57,8 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
   def helperClass(name: String) = idCpp.ty(name)
   private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
-  def headerName(ident: String): String = idCx.ty(ident) + "_convert." + spec.cxcppHeaderExt
-  def bodyName(ident: String): String = idCx.ty(ident) + "_convert." + spec.cxcppExt
+  def headerName(ident: String): String = idCx.ty(ident) + "_convert"
+  def bodyName(ident: String): String = idCx.ty(ident) + "_convert"
 
   private def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {

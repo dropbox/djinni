@@ -29,24 +29,9 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
   val cxcppMarshal = new CxCppMarshal(spec)
   val cxMarshal = new CxMarshal(spec)
 
-  class CxRefs() {
-    var body = mutable.TreeSet[String]()
-    var privHeader = mutable.TreeSet[String]()
-
-    def find(ty: TypeRef) { find(ty.resolved) }
-    def find(tm: MExpr) {
-      tm.args.foreach(find)
-      find(tm.base)
-    }
-    def find(m: Meta) = for(r <- cxcppMarshal.references(m)) r match {
-      case ImportRef(arg) => body.add("#import " + arg)
-      case _ =>
-    }
-  }
-
   val writeCxCppFile = writeCppFileGeneric(spec.cxcppOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppIncludePrefix, spec.cxcppExt, spec.cxcppHeaderExt) _
   def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
-    writeHppFileGeneric(spec.cxcppHeaderOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppExt)(name, origin, includes, fwds, f, f2)
+    writeHppFileGeneric(spec.cxcppHeaderOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppHeaderExt)(name, origin, includes, fwds, f, f2)
 
   class CxCppRefs(name: String) {
     var hx = mutable.TreeSet[String]()
@@ -145,7 +130,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
-    val refs = new CxRefs()
+    val refs = new CxCppRefs(ident.name)
     for (c <- r.consts)
       refs.find(c.ty)
     for (f <- r.fields)
@@ -155,11 +140,11 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
     val cxSelf = cxMarshal.fqTypename(ident, r)
     val cppSelf = cxcppMarshal.fqTypename(ident, r)
 
-    refs.privHeader.add("!#include " + q(spec.cxcppIncludeCxPrefix + (if(r.ext.cx) "../" else "") + cxcppMarshal.headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.cxcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.hx.add("!#include " + q(spec.cxcppIncludeCxPrefix + (if(r.ext.cx) "../" else "") + cxcppMarshal.headerName(ident)))
+    refs.hx.add("!#include " + q(spec.cxcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
-    refs.body.add("#include <cassert>")
-    refs.body.add("!#import " + q(spec.cxcppIncludePrefix + cxcppMarshal.headerName(cxName)))
+    refs.cxcpp.add("#include <cassert>")
+    refs.cxcpp.add("!#import " + q(spec.cxcppIncludePrefix + cxcppMarshal.headerName(cxName)))
 
     def checkMutable(tm: MExpr): Boolean = tm.base match {
       case MOptional => checkMutable(tm.args.head)
@@ -170,7 +155,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     val helperClass = cxcppMarshal.helperClass(ident)
 
-    writeCxCppFile(cxcppMarshal.headerName(cxName), origin, refs.privHeader, w => {
+    writeHxFile(cxcppMarshal.headerName(cxName), origin, refs.hx, refs.hxFwds, w => {
       w.wl
       wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"struct $helperClass")
@@ -186,7 +171,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       })
     })
 
-    writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.body, w => {
+    writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.cxcpp, w => {
       wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"auto $helperClass::toCpp(CxType obj) -> CppType")
         w.braced {
@@ -219,7 +204,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     val self = cxcppMarshal.typename(ident, i)
 
-    writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
+    writeHxFile(cxcppMarshal.headerName(ident.name), origin, refs.hx, refs.hxFwds, w => {
       writeDoc(w, doc)
       writeCxCppTypeParams(w, typeParams)
       w.w(s"class $self").bracedSemi {
@@ -246,7 +231,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     // CxCpp only generated in need of Constants
     if (i.consts.nonEmpty) {
-      writeCxCppFile(ident, origin, refs.cxcpp, w => {
+      writeCxCppFile(cxcppMarshal.bodyName(ident.name), origin, refs.cxcpp, w => {
         generateCxCppConstants(w, i.consts, self)
       })
     }
