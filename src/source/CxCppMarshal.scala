@@ -54,7 +54,7 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
     case p: MParam => List()
   }
 
-  def helperClass(name: String) = idCpp.ty(name)
+  def helperClass(name: String) = s"${idCpp.ty(name)}Proxy"
   private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
   def headerName(ident: String): String = idCx.ty(ident) + "_convert"

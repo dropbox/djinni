@@ -28,6 +28,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
   val cxcppMarshal = new CxCppMarshal(spec)
   val cxMarshal = new CxMarshal(spec)
+  val cppMarshal = new CppMarshal(spec)
 
   val writeCxCppFile = writeCppFileGeneric(spec.cxcppOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppIncludePrefix, spec.cxcppExt, spec.cxcppHeaderExt) _
   def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
@@ -157,34 +158,34 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHxFile(cxcppMarshal.headerName(cxName), origin, refs.hx, refs.hxFwds, w => {
       w.wl
-        w.wl(s"struct $helperClass")
-        w.bracedSemi {
-          w.wl(s"using CppType = $cppSelf;")
-          w.wl(s"using CxType = $cxSelf^;");
-          w.wl
-          w.wl(s"using Boxed = $helperClass;")
-          w.wl
-          w.wl(s"static CppType toCpp(CxType cxc);")
-          w.wl(s"static CxType fromCpp(const CppType& cpp);")
-        }
+      w.wl(s"struct $helperClass")
+      w.bracedSemi {
+        w.wl(s"using CppType = $cppSelf;")
+        w.wl(s"using CxType = $cxSelf^;");
+        w.wl
+        w.wl(s"using Boxed = $helperClass;")
+        w.wl
+        w.wl(s"static CppType toCpp(CxType cxc);")
+        w.wl(s"static CxType fromCpp(const CppType& cpp);")
+      }
     })
 
     writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.cxcpp, w => {
-        w.wl(s"auto $helperClass::toCpp(CxType cx) -> CppType")
-        w.braced {
-          w.wl("assert(cx);")
-          if(r.fields.isEmpty) w.wl("(void)cx; // Suppress warnings in relase builds for empty records")
-          writeAlignedCall(w, "return {", r.fields, "}", f => cxcppMarshal.toCpp(f.ty, "cx->" + idCx.field(f.ident)))
-          w.wl(";")
-        }
-        w.wl
-        w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> CxType")
-        w.braced {
-          if(r.fields.isEmpty) w.wl("(void)cpp; // Suppress warnings in relase builds for empty records")
-          val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
-          writeAlignedCall(w, "return ref new CxType(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
-          w.wl(";")
-        }
+      w.wl(s"auto $helperClass::toCpp(CxType cx) -> CppType")
+      w.braced {
+        w.wl("assert(cx);")
+        if(r.fields.isEmpty) w.wl("(void)cx; // Suppress warnings in relase builds for empty records")
+        writeAlignedCall(w, "return {", r.fields, "}", f => cxcppMarshal.toCpp(f.ty, "cx->" + idCx.field(f.ident)))
+        w.wl(";")
+      }
+      w.wl
+      w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> CxType")
+      w.braced {
+        if(r.fields.isEmpty) w.wl("(void)cpp; // Suppress warnings in relase builds for empty records")
+        val first = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
+        writeAlignedCall(w, "return ref new CxType(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
+        w.wl(";")
+      }
     })
   }
 
@@ -205,26 +206,84 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHxFile(cxcppMarshal.headerName(ident.name), origin, refs.hx, refs.hxFwds, w => {
       w.wl
-        w.wl(s"struct $helperClass")
-        w.bracedSemi {
-          w.wl(s"using CppType = $cppSelf;")
-          w.wl(s"using CxType = $cxSelf^;");
+      w.wl(s"class $self")
+      w.bracedSemi {
+        w.wlOutdent("public:")
+        w.wl(s"using CppType = $cppSelf;")
+        w.wl(s"using CxType = $cxSelf^;");
+        w.wl
+        w.wl(s"using Boxed = $self;")
+        w.wl
+        w.wl(s"static CppType toCpp(CxType cxc);")
+        w.wl(s"static CxType fromCpp(const CppType& cpp);")
+        if (i.ext.cx) {
           w.wl
-          w.wl(s"using Boxed = $helperClass;")
-          w.wl
-          w.wl(s"static CppType toCpp(CxType cxc);")
-          w.wl(s"static CxType fromCpp(const CppType& cpp);")
+          w.wlOutdent("private:")
+          w.wl(s"class CxProxy;")
         }
+
+      }
+
     })
 
-    // CxCpp only generated in need of Constants
-    if (i.consts.nonEmpty) {
-      writeCxCppFile(cxcppMarshal.bodyName(ident.name), origin, refs.cxcpp, w => {
-        generateCxCppConstants(w, i.consts, self)
-      })
-    }
+    writeCxCppFile(cxcppMarshal.bodyName(ident.name), origin, refs.cxcpp, w => {
 
+      //only interface classes have proxy objects
+      if (i.ext.cx) {
+        w.wl(s"class $helperClass final : public $cppSelf, public ::djinni::CxWrapperCache<CxProxy>::Handle").braced {
+          w.wlOutdent("public:")
+          w.wl("using Handle::Handle;")
+          w.wl(s"using CxType = $cxSelf")
+          w.wl
+          w.wl("CxProxy(Platform::Object^ cx) : ::djinni::CxWrapperCache<CxProxy>::Handle{ cx } {}")
+          w.wl
+          //methods
+          for (m <- i.methods) {
+            w.wl
+            writeDoc(w, m.doc)
+            val ret = cppMarshal.returnType(m.ret)
+            val params = m.params.map(p => cppMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
+            if (m.static) {
+              w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override")
+            } else {
+              val constFlag = if (m.const) " const" else ""
+              w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag override")
+            }
+            w.braced {
+              val call = (if (!m.static) "auto r = static_cast<CxType^>(Handle::get())->" else cppSelf + "::") + idCpp.method(m.ident) + "("
+              writeAlignedCall(w, call, m.params, ")", p => cxcppMarshal.fromCpp(p.ty, idCpp.local(p.ident.name)))
+              w.wl(";")
+              m.ret.fold()(r => w.wl(s"return ${cxcppMarshal.toCpp(r, "r")};"))
+            }
+          }
+        }
+        w.wl
+      }
+
+      if (i.consts.nonEmpty) {
+        generateCxCppConstants(w, i.consts, self)
+        w.wl
+      }
+      w.wl(s"auto $self::toCpp(CxType^ cx) -> CppType")
+      w.braced {
+        w.wl("if (!cx)").braced {
+          w.wl("return nullptr;")
+        }
+        w.wl("return ::djinni::CxWrapperCache<CxProxy>::getInstance()->get(cx);")
+      }
+      w.wl
+      w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType^")
+      w.braced {
+        w.braced {
+          w.wl("if (!cpp)").braced {
+            w.wl("return nullptr;")
+          }
+          w.wl("return static_cast<CxType^>(dynamic_cast<CxProxy &>(*cpp).Handle::get());")
+        }
+      }
+    })
   }
+
 
   def writeCxCppTypeParams(w: IndentWriter, params: Seq[TypeParam]) {
     if (params.isEmpty) return
