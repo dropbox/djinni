@@ -59,9 +59,9 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   private def toCxType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {
       case p: MPrimitive => p.cName
-      case MString => "Platform::String"
-      case MDate => "Windows::Foundation::DateTime"
-      case MBinary => "Platform::Array<int8_t>" //no uint8_t in Cx
+      case MString => "Platform::String^"
+      case MDate => "Windows::Foundation::DateTime^"
+      case MBinary => "Platform::Array<uint16_t>^" //no uint8_t in Cx
       case MOptional => ""
       case MList => "Platform::Collections::Vector"
       case MSet => "Platform::Collections::Map" //no set in C++/Cx
@@ -69,13 +69,13 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
       case d: MDef =>
         d.defType match {
           case DEnum => withNs(namespace, idCx.enumType(d.name))
-          case DRecord => withNs(namespace, idCx.ty(d.name))
-          case DInterface => withNs(namespace, s"I${idCx.ty(d.name)}")
+          case DRecord => s"${withNs(namespace, idCx.ty(d.name))}^"
+          case DInterface => s"${withNs(namespace, idCx.ty(d.name))}^"
         }
       case p: MParam => idCx.typeParam(p.name)
     }
     def expr(tm: MExpr): String = {
-      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
+      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">^")
       base(tm.base) + args
     }
     expr(tm)
