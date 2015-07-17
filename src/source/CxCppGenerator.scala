@@ -157,7 +157,6 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHxFile(cxcppMarshal.headerName(cxName), origin, refs.hx, refs.hxFwds, w => {
       w.wl
-      wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"struct $helperClass")
         w.bracedSemi {
           w.wl(s"using CppType = $cppSelf;")
@@ -168,15 +167,13 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"static CppType toCpp(CxType cxc);")
           w.wl(s"static CxType fromCpp(const CppType& cpp);")
         }
-      })
     })
 
     writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.cxcpp, w => {
-      wrapNamespace(w, spec.cxcppNamespace, w => {
-        w.wl(s"auto $helperClass::toCpp(CxType obj) -> CppType")
+        w.wl(s"auto $helperClass::toCpp(CxType cx) -> CppType")
         w.braced {
-          w.wl("assert(obj);")
-          if(r.fields.isEmpty) w.wl("(void)obj; // Suppress warnings in relase builds for empty records")
+          w.wl("assert(cx);")
+          if(r.fields.isEmpty) w.wl("(void)cx; // Suppress warnings in relase builds for empty records")
           writeAlignedCall(w, "return {", r.fields, "}", f => cxcppMarshal.toCpp(f.ty, "cx->" + idCx.field(f.ident)))
           w.wl(";")
         }
@@ -188,7 +185,6 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
           writeAlignedCall(w, "return ref new CxType(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
           w.wl(";")
         }
-      })
     })
   }
 
@@ -203,30 +199,22 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = cxcppMarshal.typename(ident, i)
+    val cxSelf = cxMarshal.fqTypename(ident, i)
+    val cppSelf = cxcppMarshal.fqTypename(ident, i)
+    val helperClass = cxcppMarshal.helperClass(ident)
 
     writeHxFile(cxcppMarshal.headerName(ident.name), origin, refs.hx, refs.hxFwds, w => {
-      writeDoc(w, doc)
-      writeCxCppTypeParams(w, typeParams)
-      w.w(s"class $self").bracedSemi {
-        w.wlOutdent("public:")
-        // Destructor
-        w.wl(s"virtual ~$self() {}")
-        // Constants
-        generateHxConstants(w, i.consts)
-        // Methods
-        for (m <- i.methods) {
+      w.wl
+        w.wl(s"struct $helperClass")
+        w.bracedSemi {
+          w.wl(s"using CppType = $cppSelf;")
+          w.wl(s"using CxType = $cxSelf^;");
           w.wl
-          writeDoc(w, m.doc)
-          val ret = cxcppMarshal.returnType(m.ret)
-          val params = m.params.map(p => cxcppMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
-          if (m.static) {
-            w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
-          } else {
-            val constFlag = if (m.const) " const" else ""
-            w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
-          }
+          w.wl(s"using Boxed = $helperClass;")
+          w.wl
+          w.wl(s"static CppType toCpp(CxType cxc);")
+          w.wl(s"static CxType fromCpp(const CppType& cpp);")
         }
-      }
     })
 
     // CxCpp only generated in need of Constants
