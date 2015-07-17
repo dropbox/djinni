@@ -1,0 +1,19 @@
+@extern "yaml-test.yaml"
+
+# This file tests YAML dumped by Djinni can be parsed back in
+
+extern_record_with_derivings = record
+{
+	member: test_record_with_derivings;
+	e: test_color;
+} deriving(eq, ord)
+
+extern_interface_1 = interface +c
+{
+	foo(i: test_client_interface): test_client_returned_record;
+}
+
+extern_interface_2 = interface +j +o
+{
+	foo(i: test_test_helpers): extern_record_with_derivings;
+}

@@ -37,13 +37,22 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case DEnum =>
         List(ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")))
       case DInterface =>
-        List(ImportRef(q(spec.objcppIncludePrefix + privateHeaderName(d.name))))
+        List(ImportRef(include(m)))
       case DRecord =>
         val r = d.body.asInstanceOf[Record]
         val objcName = d.name + (if (r.ext.objc) "_base" else "")
         List(ImportRef(q(spec.objcppIncludePrefix + privateHeaderName(objcName))))
     }
+    case e: MExtern => List(ImportRef(e.objcpp.header))
     case p: MParam => List()
+  }
+
+  def include(m: Meta) = m match {
+    case d: MDef => d.defType match {
+      case DEnum => q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")
+      case _ => q(spec.objcppIncludePrefix + privateHeaderName(d.name))
+    }
+    case _ => throw new AssertionError("not applicable")
   }
 
   def helperClass(name: String) = idCpp.ty(name)
@@ -51,11 +60,12 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
 
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
 
-  private def helperName(tm: MExpr): String = tm.base match {
+  def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
       case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${objcMarshal.fqTypename(tm)}>")
       case _ => withNs(Some(spec.objcppNamespace), helperClass(d.name))
     }
+    case e: MExtern => e.objcpp.translator
     case o => withNs(Some("djinni"), o match {
       case p: MPrimitive => p.idlName match {
         case "i8" => "I8"
@@ -74,6 +84,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case MSet => "Set"
       case MMap => "Map"
       case d: MDef => throw new AssertionError("unreachable")
+      case e: MExtern => throw new AssertionError("unreachable")
       case p: MParam => throw new AssertionError("not applicable")
     })
   }

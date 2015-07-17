@@ -17,6 +17,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(EnumTest.class);
         mySuite.addTestSuite(PrimitivesTest.class);
         mySuite.addTestSuite(TokenTest.class);
+		mySuite.addTestSuite(DurationTest.class);
         return mySuite;
     }
 

@@ -1,0 +1,71 @@
+# This is an example YAML file for being imported in other projects.
+# It holds all necessary information for Djinni to integrate foreign types into the generated code.
+# All fields are mandatory.
+---
+# The name to refer to this type in other .djinni files.
+# It must be unique in the entire Djinni run, so you should pick a unique prefix for your framework/library.
+name: mylib_record1
+# Specifies what kind of type this is.
+# Supports the same syntax as is used to declare types in .djinni files.
+# Examples: 'interface +c', 'record deriving(eq, or)', 'enum', 'interface +j +o'
+# This determines how Djinni integrates this type into function parameters, fields or return types and operators.
+typedef: 'record +c deriving(eq, ord)'
+# The (potentially empty) list of required type parameters.
+params: [type_param1, type_param2]
+# This string is stripped from the value specified under "name" to ensure Djinni is referencing the correct typename in code.
+# May be an empty string if you don't have a prefix (bad!)
+prefix: 'mylib'
+cpp:
+  # The name of this type in C++ (without template arguments). Should be fully qualified.
+  typename: '::mylib::Record1'
+  # The header required in C++ to use your type. Must include "" or <>.
+  header: '"MyLib/Record1.hpp"'
+  # Only used for "record" types: determines whether it should be passed by-value in C++.
+  # If this is false it is always passed as const&
+  byValue: false
+objc:
+  # The name of this type in Objective-C.
+  typename: 'MLBRecord1'
+  # The header required in Objective-C to use your type.
+  header: '"MLB/MLBRecord1.h"'
+  # Only used for "record" types: determines the type used when boxing the record is required.
+  # Should not contain the pointer asterisk "*", protocols are not supported.
+  # This fiels is the same as "typename" most of the time as records are typically NSObjects and require no special boxing.
+  # However, some may not, for example NSTimeInterval is boxed to NSNumber.
+  boxed: 'MLBRecord1'
+  # Specifies whether the unboxed type is a pointer.
+  pointer: true
+  # If the type is a "record" and has "eq" deriving then this string must not be empty.
+  # It declares a well-formed expression with a single "%s" format placeholder replaced with the variable for which the hash code is needed
+  hash: '%s.hash'
+objcpp:
+  # The fully qualified name of the class containing the toCpp/fromCpp methods.
+  translator: '::mylib::djinni::objc::Record1'
+  # Where to find the translator class.
+  header: '"mylib/djinni/objc/Record1.hpp"'
+java:
+  # The name of the (fully qualified) Java type to be used.
+  typename: 'com.example.mylib.Record1'
+  # Only used for "record" types: determines the type used when boxing the record is required.
+  # This field is the same as "typename" most of the time as records are typically Objects and require no special boxing.
+  # However maybe your record has a dedicated boxed type and this field allows you to control that.
+  boxed: 'com.example.mylib.Record1'
+  # If this is true "typename" is an Object reference (and not a builtin).
+  reference: true
+  # Controls whether the type parameters as specified in "params" are forwarded as generics to Java.
+  # This is useful when templates are only used in C++ (e.g. std::chrono::duration<rep, period> versus java.time.Duration)
+  # This should be true by default (even if your type has no parameters) and only set to false if required
+  generic: true
+  # If the type is a "record" and has "eq" deriving then this string must not be empty.
+  # It declares a well-formed expression with a single "%s" format placeholder replaced with the variable for which the hash code is needed
+  hash: '%s.hashCode()'
+jni:
+  # The fully qualified name of the class containing the toCpp/fromCpp methods.
+  translator: '::mylib::djinni::jni::Record1'
+  # Where to find the translator class.
+  header: '"mylib/djinni/jni/Record1.hpp"'
+  # The type used for representations in JNI (jobject, jint, jbyteArray, etc)
+  typename: jobject
+  # The mangled type signature of your type to be found by JNI.
+  # See the JNI docs for its format
+  typeSignature: 'Lcom/example/mylib/Record1;'

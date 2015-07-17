@@ -8,7 +8,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
 
   // For JNI typename() is always fully qualified and describes the mangled Java type to be used in field/method signatures
   override def typename(tm: MExpr): String = javaTypeSignature(tm)
-  def typename(name: String, ty: TypeDef): String = throw new AssertionError("not applicable")
+  def typename(name: String, ty: TypeDef) = s"L${undecoratedTypename(name, ty)};"
 
   override def fqTypename(tm: MExpr): String = typename(tm)
   def fqTypename(name: String, ty: TypeDef): String = typename(name, ty)
@@ -35,9 +35,12 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
     case o: MOpaque => List(ImportRef(q(spec.jniBaseLibIncludePrefix + "Marshal.hpp")))
-    case d: MDef => List(ImportRef(q(spec.jniIncludePrefix + spec.jniFileIdentStyle(d.name) + "." + spec.cppHeaderExt)))
+    case d: MDef => List(ImportRef(include(d.name)))
+    case e: MExtern => List(ImportRef(e.jni.header))
     case _ => List()
   }
+
+  def include(ident: String) = q(spec.jniIncludePrefix + spec.jniFileIdentStyle(ident) + "." + spec.cppHeaderExt)
 
   def toJniType(ty: TypeRef): String = toJniType(ty.resolved, false)
   def toJniType(m: MExpr, needRef: Boolean): String = m.base match {
@@ -46,6 +49,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
     case MOptional => toJniType(m.args.head, true)
     case MBinary => "jbyteArray"
     case tp: MParam => helperClass(tp.name) + "::JniType"
+    case e: MExtern => helperClass(m) + (if(needRef) "::Boxed" else "") + "::JniType"
     case _ => "jobject"
   }
 
@@ -70,6 +74,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
       case MSet => "Ljava/util/HashSet;"
       case MMap => "Ljava/util/HashMap;"
     }
+    case e: MExtern => e.jni.typeSignature
     case MParam(_) => "Ljava/lang/Object;"
     case d: MDef => s"L${undecoratedTypename(d.name, d.body)};"
   }
@@ -78,8 +83,9 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
     params.map(f => typename(f.ty)).mkString("(", "", ")") + ret.fold("V")(typename)
   }
 
-  private def helperName(tm: MExpr): String = tm.base match {
+  def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => withNs(Some(spec.jniNamespace), helperClass(d.name))
+    case e: MExtern => e.jni.translator
     case o => withNs(Some("djinni"), o match {
       case p: MPrimitive => p.idlName match {
         case "i8" => "I8"
@@ -98,6 +104,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
       case MSet => "Set"
       case MMap => "Map"
       case d: MDef => throw new AssertionError("unreachable")
+      case e: MExtern => throw new AssertionError("unreachable")
       case p: MParam => throw new AssertionError("not applicable")
     })
   }

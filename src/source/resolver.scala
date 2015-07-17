@@ -42,7 +42,7 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
     for (typeDecl <- idl) {
       topLevelDupeChecker.check(typeDecl.ident)
 
-      val defType = typeDecl.body match {
+      def defType = typeDecl.body match {
         case e: Enum =>
           if (!typeDecl.params.isEmpty) {
             throw Error(typeDecl.ident.loc, "enums can't have type parameters").toException
@@ -51,8 +51,10 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
         case r: Record => DRecord
         case i: Interface => DInterface
       }
-      val mdef = MDef(typeDecl.ident.name, typeDecl.params.length, defType, typeDecl.body)
-      topScope = topScope.updated(typeDecl.ident.name, mdef)
+      topScope = topScope.updated(typeDecl.ident.name, typeDecl match {
+        case td: InternTypeDecl => MDef(typeDecl.ident.name, typeDecl.params.length, defType, typeDecl.body)
+        case td: ExternTypeDecl => YamlGenerator.metaFromYaml(td)
+      })
     }
 
     // Resolve everything
@@ -201,6 +203,7 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
           throw new AssertionError(s"Const type mismatch: enum ${d.name} does not have option ${opt.name}")
       }
     }
+    case e: MExtern => throw new AssertionError("Extern type not allowed for constant")
     case _ => throw new AssertionError("Const type cannot be resolved")
   }
 }
@@ -237,6 +240,15 @@ private def resolveRecord(scope: Scope, r: Record) {
           throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
         case DRecord =>
           val record = df.body.asInstanceOf[Record]
+          if (!r.derivingTypes.subsetOf(record.derivingTypes))
+            throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
+        case DEnum =>
+      }
+      case e: MExtern => e.defType match {
+        case DInterface =>
+          throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
+        case DRecord =>
+          val record = e.body.asInstanceOf[Record]
           if (!r.derivingTypes.subsetOf(record.derivingTypes))
             throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
         case DEnum =>

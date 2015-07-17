@@ -285,6 +285,15 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                   case DEnum => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
                   case _ => throw new AssertionError("Unreachable")
                 }
+                case e: MExtern => e.defType match {
+                  case DRecord => if(e.objc.pointer) {
+                      w.w(s"[self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]")
+                    } else {
+                      w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
+                    }
+                  case DEnum => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
+                  case _ => throw new AssertionError("Unreachable")
+                }
                 case _ => throw new AssertionError("Unreachable")
               }
             }
@@ -310,6 +319,11 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 case df: MDef => df.defType match {
                   case DEnum => w.w(s"(NSUInteger)self.${idObjc.field(f.ident)}")
                   case _ => w.w(s"self.${idObjc.field(f.ident)}.hash")
+                }
+                case e: MExtern => e.defType match {
+                  case DEnum => w.w(s"(NSUInteger)self.${idObjc.field(f.ident)}")
+                  case DRecord => w.w("(" + e.objc.hash.format("self." + idObjc.field(f.ident)) + ")")
+                  case _ => throw new AssertionError("Unreachable")
                 }
                 case _ => w.w(s"self.${idObjc.field(f.ident)}.hash")
               }
@@ -345,6 +359,11 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 case DEnum => generatePrimitiveOrder(f.ident, w)
                 case _ => throw new AssertionError("Unreachable")
               }
+              case e: MExtern => e.defType match {
+                case DRecord => if(e.objc.pointer) w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];") else generatePrimitiveOrder(f.ident, w)
+                case DEnum => generatePrimitiveOrder(f.ident, w)
+                case _ => throw new AssertionError("Unreachable")
+              }
               case _ => throw new AssertionError("Unreachable")
             }
             w.w("if (tempResult != NSOrderedSame)").braced {
@@ -374,6 +393,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
+  // TODO: this should be in ObjcMarshal
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)
@@ -406,6 +426,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 val ext = d.body.asInstanceOf[Interface].ext
                 if (ext.cpp) (s"${idObjc.ty(d.name)}*", false) else (s"id<${idObjc.ty(d.name)}>", false)
             }
+            case e: MExtern => if(needRef) (e.objc.boxed, true) else (e.objc.typename, e.objc.pointer)
             case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
           }
           base
@@ -414,6 +435,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     f(tm, needRef)
   }
 
+  // TODO: this should be in ObjcMarshal
   def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)
   def toObjcTypeDef(ty: TypeRef, needRef: Boolean): String = toObjcTypeDef(ty.resolved, needRef)
   def toObjcTypeDef(tm: MExpr): String = toObjcTypeDef(tm, false)

@@ -68,6 +68,9 @@ object Main {
     var inFileListPath: Option[File] = None
     var outFileListPath: Option[File] = None
     var skipGeneration: Boolean = false
+    var yamlOutFolder: Option[File] = None
+    var yamlOutFile: Option[String] = None
+    var yamlPrefix: String = ""
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -153,6 +156,14 @@ object Main {
         .text("The namespace name to use for generated Objective-C++ classes.")
       opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
         .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
+      note("")
+      opt[File]("yaml-out").valueName("<out-folder>").foreach(x => yamlOutFolder = Some(x))
+        .text("The output folder for YAML files (Generator disabled if unspecified).")
+      opt[String]("yaml-out-file").valueName("<out-file>").foreach(x => yamlOutFile = Some(x))
+        .text("If specified all types are merged into a single YAML file instead of generating one file per type (relative to --yaml-out).")
+      opt[String]("yaml-prefix").valueName("<pre>").foreach(yamlPrefix = _)
+        .text("The prefix to add to type names stored in YAML files (default: \"\").")
+      note("")
       opt[File]("list-in-files").valueName("<list-in-files>").foreach(x => inFileListPath = Some(x))
         .text("Optional file in which to write the list of input files parsed.")
       opt[File]("list-out-files").valueName("<list-out-files>").foreach(x => outFileListPath = Some(x))
@@ -282,7 +293,10 @@ object Main {
       objcppNamespace,
       objcBaseLibIncludePrefix,
       outFileListWriter,
-      skipGeneration)
+      skipGeneration,
+      yamlOutFolder,
+      yamlOutFile,
+      yamlPrefix)
 
 
     try {

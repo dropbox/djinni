@@ -1,0 +1,31 @@
+@extern "duration.yaml"
+
+test_duration = interface +c {
+	static hoursString(dt: duration<i32, h>): string;
+	static minutesString(dt: duration<i32, min>): string;
+	static secondsString(dt: duration<i32, s>): string;
+	static millisString(dt: duration<i32, ms>): string;
+	static microsString(dt: duration<i32, us>): string;
+	static nanosString(dt: duration<i32, ns>): string;
+
+	static hours(count: i32): duration<i32, h>;
+	static minutes(count: i32): duration<i32, min>;
+	static seconds(count: i32): duration<i32, s>;
+	static millis(count: i32): duration<i32, ms>;
+	static micros(count: i32): duration<i32, us>;
+	static nanos(count: i32): duration<i32, ns>;
+
+	static hoursf(count: f64): duration<f64, h>;
+	static minutesf(count: f64): duration<f64, min>;
+	static secondsf(count: f64): duration<f64, s>;
+	static millisf(count: f64): duration<f64, ms>;
+	static microsf(count: f64): duration<f64, us>;
+	static nanosf(count: f64): duration<f64, ns>;
+
+	static box(count: i64): optional<duration<i64, s>>;
+	static unbox(dt: optional<duration<i64, s>>): i64;
+}
+
+record_with_duration_and_derivings = record {
+	dt: duration<f64, ns>;
+} deriving(eq, ord)

@@ -1,7 +1,9 @@
+@extern "date.yaml"
+
 date_record = record {
-    created_at: date;
-}
+    created_at: extern_date;
+} deriving(eq, ord)
 
 map_date_record = record {
-    dates_by_id: map<string, date>;
+    dates_by_id: map<string, extern_date>;
 }

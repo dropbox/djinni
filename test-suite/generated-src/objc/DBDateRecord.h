@@ -8,4 +8,6 @@
 
 @property (nonatomic, readonly, nonnull) NSDate * createdAt;
 
+- (NSComparisonResult)compare:(nonnull DBDateRecord *)other;
+
 @end

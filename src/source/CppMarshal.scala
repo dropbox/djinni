@@ -47,7 +47,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case d: MDef => d.defType match {
       case DEnum | DRecord =>
         if (d.name != exclude) {
-          List(ImportRef(q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt)))
+          List(ImportRef(include(d.name)))
         } else {
           List()
         }
@@ -58,8 +58,16 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           List(ImportRef("<memory>"))
         }
     }
+    case e: MExtern => e.defType match {
+      // Do not forward declare extern types, they might be in arbitrary namespaces.
+      // This isn't a problem as extern types cannot cause dependency cycles with types being generated here
+      case DInterface => List(ImportRef("<memory>"), ImportRef(e.cpp.header))
+      case _ => List(ImportRef(e.cpp.header))
+    }
     case p: MParam => List()
- }
+  }
+
+  def include(ident: String): String = q(spec.cppIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt)
 
   private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
   private def toCppType(tm: MExpr, namespace: Option[String]): String = {
@@ -78,6 +86,10 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           case DRecord => withNs(namespace, idCpp.ty(d.name))
           case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
         }
+      case e: MExtern => e.defType match {
+        case DInterface => s"std::shared_ptr<${e.cpp.typename}>"
+        case _ => e.cpp.typename
+      }
       case p: MParam => idCpp.typeParam(p.name)
     }
     def expr(tm: MExpr): String = {
@@ -87,21 +99,32 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     expr(tm)
   }
 
+  def byValue(tm: MExpr): Boolean = tm.base match {
+    case p: MPrimitive => true
+    case d: MDef => d.defType match {
+      case DEnum => true
+      case _  => false
+    }
+    case e: MExtern => e.defType match {
+      case DInterface => false
+      case DEnum => true
+      case DRecord => e.cpp.byValue
+    }
+    case MOptional => byValue(tm.args.head)
+    case _ => false
+  }
+
+  def byValue(td: TypeDecl): Boolean = td.body match {
+    case i: Interface => false
+    case r: Record => false
+    case e: Enum => true
+  }
+
   // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
   private def toCppParamType(tm: MExpr, namespace: Option[String] = None): String = {
     val cppType = toCppType(tm, namespace)
     val refType = "const " + cppType + " &"
     val valueType = cppType
-
-    def toType(expr: MExpr): String = expr.base match {
-      case p: MPrimitive => valueType
-      case d: MDef => d.defType match {
-        case DEnum => valueType
-        case _  => refType
-      }
-      case MOptional => toType(expr.args.head)
-      case _ => refType
-    }
-    toType(tm)
+    if(byValue(tm)) valueType else refType
   }
 }

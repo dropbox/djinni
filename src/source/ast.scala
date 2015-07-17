@@ -21,7 +21,13 @@ import djinni.ast.Record.DerivingType.DerivingType
 import djinni.meta.MExpr
 import djinni.syntax.Loc
 
-case class IdlFile(imports: Seq[File], typeDecls: Seq[TypeDecl])
+case class IdlFile(imports: Seq[FileRef], typeDecls: Seq[TypeDecl])
+
+abstract sealed class FileRef {
+  val file: File
+}
+case class IdlFileRef(override val file: File) extends FileRef
+case class ExternFileRef(override val file: File) extends FileRef
 
 case class Ident(name: String, file: File, loc: Loc)
 class ConstRef(ident: Ident) extends Ident(ident.name, ident.file, ident.loc)
@@ -31,7 +37,14 @@ case class TypeParam(ident: Ident)
 
 case class Doc(lines: Seq[String])
 
-case class TypeDecl(ident: Ident, params: Seq[TypeParam], body: TypeDef, doc: Doc, origin: String)
+sealed abstract class TypeDecl {
+  val ident: Ident
+  val params: Seq[TypeParam]
+  val body: TypeDef
+  val origin: String
+}
+case class InternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, doc: Doc, override val origin: String) extends TypeDecl
+case class ExternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, properties: Map[String, Any], override val origin: String) extends TypeDecl
 
 case class Ext(java: Boolean, cpp: Boolean, objc: Boolean) {
   def any(): Boolean = {

@@ -44,17 +44,28 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     ty.resolved.base match {
       case MOptional => javaNullableAnnotation
       case p: MPrimitive => None
-      case m: MDef =>
-        m.defType match {
+      case m: MDef => m.defType match {
           case DInterface => javaNullableAnnotation
           case DEnum => javaNonnullAnnotation
           case DRecord => javaNonnullAnnotation
         }
+      case e: MExtern => e.defType match {
+        case DInterface => javaNullableAnnotation
+        case DRecord => if(e.java.reference) javaNonnullAnnotation else None
+        case DEnum => javaNonnullAnnotation
+      }
       case _ => javaNonnullAnnotation
     }
   }
 
+  def isReference(td: TypeDecl) = td.body match {
+    case i: Interface => true
+    case r: Record => true
+    case e: Enum =>  true
+  }
+
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
+    def args(tm: MExpr) = if (tm.args.isEmpty) "" else tm.args.map(f(_, true)).mkString("<", ", ", ">")
     def f(tm: MExpr, needRef: Boolean): String = {
       tm.base match {
         case MOptional =>
@@ -66,8 +77,8 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
             case MOptional => throw new AssertionError("nested optional?")
             case m => f(arg, true)
           }
+        case e: MExtern => (if(needRef) e.java.boxed else e.java.typename) + (if(e.java.generic) args(tm) else "")
         case o =>
-          val args = if (tm.args.isEmpty) "" else tm.args.map(f(_, true)).mkString("<", ", ", ">")
           val base = o match {
             case p: MPrimitive => if (needRef) p.jBoxed else p.jName
             case MString => "String"
@@ -78,9 +89,10 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
             case MSet => "HashSet"
             case MMap => "HashMap"
             case d: MDef => withPackage(packageName, idJava.ty(d.name))
+            case e: MExtern => throw new AssertionError("unreachable")
             case p: MParam => idJava.typeParam(p.name)
           }
-          base + args
+          base + args(tm)
       }
     }
     f(tm, false)
