@@ -64,7 +64,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
       case MBinary => "Platform::Array<uint16_t>^" //no uint8_t in Cx
       case MOptional => ""
       case MList => "Platform::Collections::Vector"
-      case MSet => "Platform::Collections::Map" //no set in C++/Cx
+      case MSet => "Platform::Collections::Map" //no set in C++/Cx FOr now this shit is broken until I can figure out how to make something map onto itself.
       case MMap => "Platform::Collections::Map"
       case d: MDef =>
         d.defType match {
@@ -90,8 +90,8 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     def toType(expr: MExpr): String = expr.base match {
       case p: MPrimitive => valueType
       case d: MDef => d.defType match {
-        case DEnum => valueType + "^"
-        case _  => refType + "^"
+        case DEnum => valueType
+        case _  => refType
       }
       case MOptional => toType(expr.args.head)
       case _ => refType

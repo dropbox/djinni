@@ -239,7 +239,24 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
       writeDoc(w, doc)
       writeCxTypeParams(w, typeParams)
-      w.w(s"public interface class I$self").bracedSemi {
+      if (i.ext.cx) w.wl(s"public interface class I$self").bracedSemi {
+        // Constants
+        generateHxConstants(w, i.consts)
+        // Methods
+        for (m <- i.methods) {
+          w.wl
+          writeDoc(w, m.doc)
+          val ret = marshal.returnType(m.ret)
+          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          if (m.static) {
+            w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
+          } else {
+            val constFlag = if (m.const) " const" else ""
+            w.wl(s"$ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag;")
+          }
+        }
+      }
+      else w.wl(s"public ref class $self sealed : public Platform::Object").bracedSemi {
         w.wlOutdent("public:")
         // Constants
         generateHxConstants(w, i.consts)
@@ -256,6 +273,10 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"$ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag;")
           }
         }
+        //private members
+        w.wlOutdent("internal:")
+        //construct from a cpp ref
+
       }
     })
 
