@@ -26,7 +26,7 @@ import scala.collection.mutable
 
 class CxGenerator(spec: Spec) extends Generator(spec) {
 
-  val marshal = new CxMarshal(spec)
+  val cxMarshal = new CxMarshal(spec)
   val cppMarshal = new CppMarshal(spec)
 
   val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix, spec.cxExt, spec.cxHeaderExt) _
@@ -43,16 +43,23 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = for(r <- marshal.references(m, name)) r match {
+    def find(m: Meta) = for(r <- cxMarshal.references(m, name)) r match {
       case ImportRef(arg) => hx.add("#include " + arg)
       case DeclRef(decl, Some(spec.cxNamespace)) => hxFwds.add(decl)
       case DeclRef(_, _) =>
     }
   }
 
+  def writeCxFuncDecl(method: Interface.Method, w: IndentWriter) {
+    val label = if (method.static) "static " else ""
+    val ret = cxMarshal.fqReturnType(method.ret)
+    val decl = s"$label ($ret)${idObjc.method(method.ident)}"
+    writeAlignedCall(w, decl, method.params, "X", p => s"(${cxMarshal.paramType(p.ty)})${idObjc.local(p.ident)}")
+  }
+
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new CxRefs(ident.name)
-    val self = marshal.typename(ident, e)
+    val self = cxMarshal.typename(ident, e)
 
     writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
       w.w(s"enum class $self : int").bracedSemi {
@@ -65,7 +72,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       w => {
         // std::hash specialization has to go *outside* of the wrapNs
         if (spec.cppEnumHashWorkaround) {
-          val fqSelf = marshal.fqTypename(ident, e)
+          val fqSelf = cxMarshal.fqTypename(ident, e)
           w.wl
           wrapNamespace(w, "std",
             (w: IndentWriter) => {
@@ -85,24 +92,24 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static ${marshal.fieldType(c.ty)} const ${idCx.const(c.ident)};")
+      w.wl(s"static ${cxMarshal.fieldType(c.ty)} const ${idCx.const(c.ident)};")
     }
   }
 
   def generateCxConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
     def writeCxConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
-      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
+      case d: Double if cxMarshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => w.w(marshal.typename(ty) + "::" + idCx.enum(e.ty.name + "_" + e.name))
+      case e: EnumValue => w.w(cxMarshal.typename(ty) + "::" + idCx.enum(e.ty.name + "_" + e.name))
       case v: ConstRef => w.w(selfName + "::" + idCx.const(v))
       case z: Map[_, _] => { // Value is record
       val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(marshal.typename(ty) + "(")
+        w.wl(cxMarshal.typename(ty) + "(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
@@ -119,7 +126,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCx.const(c.ident)} = ")
+      w.w(s"${cxMarshal.fieldType(c.ty)} const $selfName::${idCx.const(c.ident)} = ")
       writeCxConst(w, c.ty, c.value)
       w.wl(";")
     }
@@ -130,9 +137,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     r.fields.foreach(f => refs.find(f.ty))
     r.consts.foreach(c => refs.find(c.ty))
 
-    val self = marshal.typename(ident, r)
+    val self = cxMarshal.typename(ident, r)
     val (cxName, cxFinal) = if (r.ext.cx) (ident.name + "_base", "") else (ident.name, " final")
-    val actualSelf = marshal.typename(cxName, r)
+    val actualSelf = cxMarshal.typename(cxName, r)
 
     // Requiring the extended class
     if (r.ext.cx) {
@@ -149,13 +156,13 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         // Field definitions.
         for (f <- r.fields) {
           writeDoc(w, f.doc)
-          w.wl(marshal.fieldType(f.ty) + " " + idCx.field(f.ident) + ";")
+          w.wl(cxMarshal.fieldType(f.ty) + " " + idCx.field(f.ident) + ";")
         }
 
         // Constructor.
         if (r.fields.nonEmpty) {
           w.wl
-          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCx.local(f.ident))
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => cxMarshal.fieldType(f.ty) + " " + idCx.local(f.ident))
           w.wl
           val init = (f: Field) => idCx.field(f.ident) + "(" + idCx.local(f.ident) + ")"
           w.wl(": " + init(r.fields.head))
@@ -235,7 +242,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = marshal.typename(ident, i)
+    val self = cxMarshal.typename(ident, i)
     val cppSelf = cppMarshal.fqTypename(ident, i)
 
     writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
@@ -248,8 +255,8 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          val ret = cxMarshal.returnType(m.ret)
+          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
@@ -266,8 +273,8 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          val ret = cxMarshal.returnType(m.ret)
+          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
@@ -278,7 +285,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
         //private members
         w.wlOutdent("internal:")
         //construct from a cpp ref
-        w.wl(s"$self(const std::shared_ptr<$cppSelf>& cppRef);")
+        w.wl(s"$self(const std::shared_ptr<$cppSelf>& m_cppRef);")
         w.wl(s"::djinni::CppWrapperCache<$cppSelf>::Handle cppRef;")
       }
     })
@@ -290,7 +297,27 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       }
 
       if (! i.ext.cx) {
-        w.wl("HAHHAH")
+        //constructor
+        w.wl(s"$self::$self(const std::shared_ptr<$cppSelf>&)cppRef)")
+        w.braced {
+          w.w("if (self = [super init])").braced {
+            w.wl("m_cppRef.assign(cppRef);")
+          }
+        }
+        //methods
+        for (m <- i.methods) {
+          w.wl
+          writeCxFuncDecl(m, w)
+          w.braced {
+//           w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
+            val ret = m.ret.fold("")(_ => "auto r = ")
+            val call = ret + (if (!m.static) "m_cppRef.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
+            writeAlignedCall(w, call, m.params, ")", p => cxMarshal.toCpp(p.ty, idCx.local(p.ident.name)))
+            w.wl(";")
+            m.ret.fold()(r => w.wl(s"return ${cxMarshal.fromCpp(r, "r")};"))
+            //            }
+          }
+        }
       }
     })
 
