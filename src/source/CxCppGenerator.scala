@@ -170,7 +170,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     val helperClass = cxcppMarshal.helperClass(ident)
 
-    writeCxCppFile(cxName, origin, refs.privHeader, w => {
+    writeCxCppFile(cxcppMarshal.headerName(cxName), origin, refs.privHeader, w => {
       w.wl
       wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"struct $helperClass")
@@ -186,7 +186,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       })
     })
 
-    writeCxCppFile(cxName, origin, refs.body, w => {
+    writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.body, w => {
       wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"auto $helperClass::toCpp(CxType obj) -> CppType")
         w.braced {
