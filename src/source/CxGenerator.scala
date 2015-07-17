@@ -28,9 +28,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
 
   val marshal = new CxMarshal(spec)
 
-  val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix) _
+  val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix, spec.cxExt, spec.cxHeaderExt) _
   def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
-    writeHppFileGeneric(spec.cxHeaderOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle)(name, origin, includes, fwds, f, f2)
+    writeHppFileGeneric(spec.cxHeaderOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxHeaderExt)(name, origin, includes, fwds, f, f2)
 
   class CxRefs(name: String) {
     var hx = mutable.TreeSet[String]()

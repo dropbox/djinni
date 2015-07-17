@@ -44,9 +44,9 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  val writeCxCppFile = writeCppFileGeneric(spec.cxcppOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppIncludePrefix) _
+  val writeCxCppFile = writeCppFileGeneric(spec.cxcppOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppIncludePrefix, spec.cxcppExt, spec.cxcppHeaderExt) _
   def writeHxFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
-    writeHppFileGeneric(spec.cxcppHeaderOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
+    writeHppFileGeneric(spec.cxcppHeaderOutFolder.get, spec.cxcppNamespace, spec.cppFileIdentStyle, spec.cxcppExt)(name, origin, includes, fwds, f, f2)
 
   class CxCppRefs(name: String) {
     var hx = mutable.TreeSet[String]()
@@ -186,7 +186,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       })
     })
 
-    writeCxCppFile(cxName, origin, refs.body, w => {
+    writeCxCppFile(cxcppMarshal.bodyName(cxName), origin, refs.body, w => {
       wrapNamespace(w, spec.cxcppNamespace, w => {
         w.wl(s"auto $helperClass::toCpp(CxType obj) -> CppType")
         w.braced {

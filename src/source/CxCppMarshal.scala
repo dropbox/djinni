@@ -8,20 +8,28 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
   private val cppMarshal = new CppMarshal(spec)
   private val cxMarshal = new CxMarshal(spec)
 
-  override def typename(tm: MExpr): String = throw new AssertionError("not applicable")
-  def typename(name: String, ty: TypeDef): String = throw new AssertionError("not applicable")
+  override def typename(tm: MExpr): String = toCxCppType(tm, None)
+  def typename(name: String, ty: TypeDef): String = ty match {
+    case e: Enum => idCx.enumType(name)
+    case i: Interface => idCx.ty(name)
+    case r: Record => idCx.ty(name)
+  }
 
-  override def fqTypename(tm: MExpr): String = throw new AssertionError("not applicable")
-  def fqTypename(name: String, ty: TypeDef): String = throw new AssertionError("not applicable")
+  override def fqTypename(tm: MExpr): String = toCxCppType(tm, Some(spec.cxNamespace))
+  def fqTypename(name: String, ty: TypeDef): String = ty match {
+    case e: Enum => withNs(Some(spec.cxNamespace), idCx.enumType(name))
+    case i: Interface => withNs(Some(spec.cxNamespace), idCx.ty(name))
+    case r: Record => withNs(Some(spec.cxNamespace), idCx.ty(name))
+  }
 
-  override def paramType(tm: MExpr): String = throw new AssertionError("not applicable")
-  override def fqParamType(tm: MExpr): String = throw new AssertionError("not applicable")
+  override def paramType(tm: MExpr): String = toCxCppParamType(tm)
+  override def fqParamType(tm: MExpr): String = toCxCppParamType(tm, Some(spec.cxNamespace))
 
-  override def returnType(ret: Option[TypeRef]): String = throw new AssertionError("not applicable")
-  override def fqReturnType(ret: Option[TypeRef]): String = throw new AssertionError("not applicable")
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCxCppType(_, None))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCxCppType(_, Some(spec.cxNamespace)))
 
-  override def fieldType(tm: MExpr): String = throw new AssertionError("not applicable")
-  override def fqFieldType(tm: MExpr): String = throw new AssertionError("not applicable")
+  override def fieldType(tm: MExpr): String = typename(tm)
+  override def fqFieldType(tm: MExpr): String = fqTypename(tm)
 
   override def toCpp(tm: MExpr, expr: String): String = {
     s"${helperClass(tm)}::toCpp($expr)"
@@ -49,7 +57,8 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
   def helperClass(name: String) = idCpp.ty(name)
   private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
-  def headerName(ident: String): String = idCx.ty(ident) + "_convert." + spec.cxHeaderExt
+  def headerName(ident: String): String = idCx.ty(ident) + "_convert." + spec.cxcppHeaderExt
+  def bodyName(ident: String): String = idCx.ty(ident) + "_convert." + spec.cxcppExt
 
   private def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
@@ -93,5 +102,49 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
         f
       case _ => f
     }
+  }
+
+  private def toCxCppType(ty: TypeRef, namespace: Option[String] = None): String = toCxCppType(ty.resolved, namespace)
+  private def toCxCppType(tm: MExpr, namespace: Option[String]): String = {
+    def base(m: Meta): String = m match {
+      case p: MPrimitive => p.cName
+      case MString => "std::string"
+      case MDate => "std::chrono::system_clock::time_point"
+      case MBinary => "std::vector<uint8_t>"
+      case MOptional => spec.cppOptionalTemplate
+      case MList => "std::vector"
+      case MSet => "std::unordered_set"
+      case MMap => "std::unordered_map"
+      case d: MDef =>
+        d.defType match {
+          case DEnum => withNs(namespace, idCpp.enumType(d.name))
+          case DRecord => withNs(namespace, idCpp.ty(d.name))
+          case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
+        }
+      case p: MParam => idCpp.typeParam(p.name)
+    }
+    def expr(tm: MExpr): String = {
+      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
+      base(tm.base) + args
+    }
+    expr(tm)
+  }
+
+  // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
+  private def toCxCppParamType(tm: MExpr, namespace: Option[String] = None): String = {
+    val cppType = toCxCppType(tm, namespace)
+    val refType = "const " + cppType + " &"
+    val valueType = cppType
+
+    def toType(expr: MExpr): String = expr.base match {
+      case p: MPrimitive => valueType
+      case d: MDef => d.defType match {
+        case DEnum => valueType
+        case _  => refType
+      }
+      case MOptional => toType(expr.args.head)
+      case _ => refType
+    }
+    toType(tm)
   }
 }
