@@ -139,7 +139,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
     val cxName = ident.name + (if (r.ext.cx) "_base" else "")
     val cxSelf = cxMarshal.fqTypename(ident, r)
-    val cppSelf = cxcppMarshal.fqTypename(ident, r)
+    val cppSelf = cppMarshal.fqTypename(ident, r)
 
     refs.hx.add("!#include " + q(spec.cxcppIncludeCxPrefix + (if(r.ext.cx) "../" else "") + cxcppMarshal.headerName(ident)))
     refs.hx.add("!#include " + q(spec.cxcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
@@ -161,11 +161,11 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"struct $helperClass")
       w.bracedSemi {
         w.wl(s"using CppType = $cppSelf;")
-        w.wl(s"using CxType = $cxSelf^;");
+        w.wl(s"using CxType = $cxSelf;");
         w.wl
         w.wl(s"using Boxed = $helperClass;")
         w.wl
-        w.wl(s"static CppType toCpp(CxType cxc);")
+        w.wl(s"static CppType toCpp(CxType^ cx);")
         w.wl(s"static CxType fromCpp(const CppType& cpp);")
       }
     })
@@ -191,6 +191,8 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new CxCppRefs(ident.name)
+    refs.hx.add("#include \""+spec.cppIncludePrefix + spec.cppFileIdentStyle(ident.name) + "." + spec.cppHeaderExt+"\"")
+    refs.hx.add("#include \""+spec.cxIncludePrefix + spec.cxFileIdentStyle(ident.name) + "." + spec.cxHeaderExt+"\"")
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
@@ -200,8 +202,8 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = cxcppMarshal.typename(ident, i)
-    val cxSelf = cxMarshal.fqTypename(ident, i)
-    val cppSelf = cxcppMarshal.fqTypename(ident, i)
+    val cxSelf = if(i.ext.cx) cxMarshal.fqTypename(ident, i)
+    val cppSelf = cppMarshal.fqTypename(ident, i)
     val helperClass = cxcppMarshal.helperClass(ident)
 
     writeHxFile(cxcppMarshal.headerName(ident.name), origin, refs.hx, refs.hxFwds, w => {
@@ -210,12 +212,12 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       w.bracedSemi {
         w.wlOutdent("public:")
         w.wl(s"using CppType = $cppSelf;")
-        w.wl(s"using CxType = $cxSelf^;");
+        w.wl(s"using CxType = $cxSelf;");
         w.wl
         w.wl(s"using Boxed = $self;")
         w.wl
-        w.wl(s"static CppType toCpp(CxType cxc);")
-        w.wl(s"static CxType fromCpp(const CppType& cpp);")
+        w.wl(s"static CppType toCpp(CxType^ cx);")
+        w.wl(s"static CxType^ fromCpp(const CppType& cpp);")
         if (i.ext.cx) {
           w.wl
           w.wlOutdent("private:")
