@@ -100,7 +100,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
         }
       case DInterface =>
         if (d.name != exclude) {
-          List(DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cxNamespace)))
+          List(ImportRef(q(spec.cxIncludePrefix + spec.cxFileIdentStyle(d.name) + "." + spec.cxHeaderExt)))
         } else {
           List()
         }
@@ -111,7 +111,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   private def toCxType(ty: TypeRef, namespace: Option[String] = None): String = toCxType(ty.resolved, namespace)
   private def toCxType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {
-      case p: MPrimitive => p.cName
+      case p: MPrimitive => p.cxName
       case MString => "Platform::String^"
       case MDate => "Windows::Foundation::DateTime^"
       case MBinary => "Platform::Array<uint16_t>^" //no uint8_t in Cx
@@ -141,7 +141,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
   private def toCxParamType(tm: MExpr, namespace: Option[String] = None): String = {
     val cxType = toCxType(tm, namespace)
-    val refType = "const " + cxType
+    val refType = cxType
     val valueType = cxType
 
     def toType(expr: MExpr): String = expr.base match {

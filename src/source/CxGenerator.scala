@@ -92,7 +92,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static ${cxMarshal.fieldType(c.ty)} const ${idCx.const(c.ident)};")
+      w.wl(s"static const ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)};")
     }
   }
 
@@ -233,6 +233,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new CxRefs(ident.name)
+    refs.hx.add("#include <memory>")
+    refs.hx.add("#include <CppWrapperCache.h>")
+    refs.hx.add("#include \""+spec.cppIncludePrefix + spec.cppFileIdentStyle(ident.name) + "." + spec.cppHeaderExt+"\"")
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
@@ -249,10 +252,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       writeCxTypeParams(w, typeParams)
       if (i.ext.cx) w.wl(s"public interface class $self").bracedSemi {
         // Constants
-        generateHxConstants(w, i.consts)
+//        generateHxConstants(w, i.consts) //TODO no can do! Not gonna happen. Nuuh. We can make this a property with no setter and agetter that reaches into C++ land tho
         // Methods
         for (m <- i.methods) {
-          w.wl
           writeDoc(w, m.doc)
           val ret = cxMarshal.returnType(m.ret)
           val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
@@ -291,11 +293,10 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
 
     // Cx only generated in need of Constants
     writeCxFile(ident, origin, refs.cx, w => {
-      if (i.consts.nonEmpty) {
-        generateCxConstants(w, i.consts, self)
-      }
-
       if (! i.ext.cx) {
+        if (i.consts.nonEmpty) {
+          generateCxConstants(w, i.consts, self)
+        }
         //constructor
         w.wl(s"$self::$self(const std::shared_ptr<$cppSelf>&)cppRef)")
         w.braced {
