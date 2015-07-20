@@ -32,10 +32,10 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)
 
   override def toCpp(tm: MExpr, expr: String): String = {
-    s"${helperClass(tm)}::toCpp($expr)"
+    s"${ownClass(tm)}::toCpp($expr)"
   }
   override def fromCpp(tm: MExpr, expr: String): String = {
-    s"${helperClass(tm)}::fromCpp($expr)"
+    s"${ownClass(tm)}::fromCpp($expr)"
   }
 
   def references(m: Meta): Seq[SymbolReference] = m match {
@@ -45,16 +45,63 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
       case DEnum =>
         List(ImportRef(q(spec.cxBaseLibIncludePrefix + "Marshal.h")))
       case DInterface =>
-        List(ImportRef(q(spec.cxcppIncludePrefix + headerName(d.name))))
+        List(ImportRef(q(spec.cxcppIncludePrefix + headerName(d.name) + "." + spec.cxcppHeaderExt)))
       case DRecord =>
         val r = d.body.asInstanceOf[Record]
         val cxName = d.name + (if (r.ext.cx) "_base" else "")
-        List(ImportRef(q(spec.cxcppIncludePrefix + headerName(cxName))))
+        List(ImportRef(q(spec.cxcppIncludePrefix + headerName(cxName) + "." + spec.cxcppHeaderExt)))
     }
     case p: MParam => List()
   }
 
-  def helperClass(name: String) = s"${idCpp.ty(name)}Proxy"
+  def ownClass(name: String) = s"${idCpp.ty(name)}"
+  private def ownClass(tm: MExpr): String = ownName(tm) + ownTemplates(tm)
+
+  private def ownName(tm: MExpr): String = tm.base match {
+    case d: MDef => d.defType match {
+      case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${cxMarshal.fqTypename(tm)}>")
+      case _ => withNs(Some(spec.cxcppNamespace), ownClass(d.name))
+    }
+    case o => withNs(Some("djinni"), o match {
+      case p: MPrimitive => p.idlName match {
+        case "i8" => "I8"
+        case "i16" => "I16"
+        case "i32" => "I32"
+        case "i64" => "I64"
+        case "f32" => "F32"
+        case "f64" => "F64"
+        case "bool" => "Bool"
+      }
+      case MOptional => "Optional"
+      case MBinary => "Binary"
+      case MDate => "Date"
+      case MString => "String"
+      case MList => "List"
+      case MSet => "Set"
+      case MMap => "Map"
+      case d: MDef => throw new AssertionError("unreachable")
+      case p: MParam => throw new AssertionError("not applicable")
+    })
+  }
+
+  private def ownTemplates(tm: MExpr): String = {
+    def f() = if(tm.args.isEmpty) "" else tm.args.map(ownClass).mkString("<", ", ", ">")
+    tm.base match {
+      case MOptional =>
+        assert(tm.args.size == 1)
+        val argHelperClass = ownClass(tm.args.head)
+        s"<${spec.cppOptionalTemplate}, $argHelperClass>"
+      case MList | MSet =>
+        assert(tm.args.size == 1)
+        f
+      case MMap =>
+        assert(tm.args.size == 2)
+        f
+      case _ => f
+    }
+  }
+
+  def helperClass(name: String) = s"${idCpp.ty(name)}::CxProxy"
   private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
   def headerName(ident: String): String = idCx.ty(ident) + "_convert"

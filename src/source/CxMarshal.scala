@@ -108,6 +108,29 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     case p: MParam => List()
   }
 
+  def convertReferences(m: Meta, exclude: String): Seq[SymbolReference] = m match {
+    case p: MPrimitive => p.idlName match {
+      case "i8" | "i16" | "i32" | "i64" => List()
+      case _ => List()
+    }
+    case MString | MDate | MBinary | MOptional | MList | MSet | MMap  => List()
+    case d: MDef => d.defType match {
+      case DEnum | DRecord =>
+        if (d.name != exclude) {
+          List(ImportRef(q(spec.cxcppIncludePrefix + spec.cxFileIdentStyle(d.name) + "_convert." + spec.cxcppHeaderExt)))
+        } else {
+          List()
+        }
+      case DInterface =>
+        if (d.name != exclude) {
+          List(ImportRef(q(spec.cxcppIncludePrefix + spec.cxFileIdentStyle(d.name) + "_convert." + spec.cxcppHeaderExt)))
+        } else {
+          List()
+        }
+    }
+    case p: MParam => List()
+  }
+
   private def toCxType(ty: TypeRef, namespace: Option[String] = None): String = toCxType(ty.resolved, namespace)
   private def toCxType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

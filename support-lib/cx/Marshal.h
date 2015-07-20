@@ -209,7 +209,7 @@ namespace djinni {
            static CppType toCpp(CxType^ v) {
                assert(v);
                CppType nv;
-               for(ECxType val : v)
+               for(ECxType^ val : v)
                {
                    nv.push_back(T::Boxed::toCpp(val));
                }

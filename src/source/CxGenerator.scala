@@ -27,6 +27,7 @@ import scala.collection.mutable
 class CxGenerator(spec: Spec) extends Generator(spec) {
 
   val cxMarshal = new CxMarshal(spec)
+  val cxcppMarshal = new CxCppMarshal(spec)
   val cppMarshal = new CppMarshal(spec)
 
   val writeCxFile = writeCppFileGeneric(spec.cxOutFolder.get, spec.cxNamespace, spec.cxFileIdentStyle, spec.cxIncludePrefix, spec.cxExt, spec.cxHeaderExt) _
@@ -48,13 +49,22 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       case DeclRef(decl, Some(spec.cxNamespace)) => hxFwds.add(decl)
       case DeclRef(_, _) =>
     }
+
+    def findConvert(ty: TypeRef) { findConvert(ty.resolved) }
+    def findConvert(tm: MExpr) {
+      tm.args.foreach(find)
+      findConvert(tm.base)
+    }
+    def findConvert(m: Meta) = for(r <- cxMarshal.convertReferences(m, name)) r match {
+      case ImportRef(arg) => cx.add("#include " + arg)
+    }
   }
 
-  def writeCxFuncDecl(method: Interface.Method, w: IndentWriter) {
-    val label = if (method.static) "static " else ""
-    val ret = cxMarshal.fqReturnType(method.ret)
-    val decl = s"$label ($ret)${idObjc.method(method.ident)}"
-    writeAlignedCall(w, decl, method.params, "X", p => s"(${cxMarshal.paramType(p.ty)})${idObjc.local(p.ident)}")
+  def writeCxFuncDecl(klass: String, method: Interface.Method, w: IndentWriter) {
+    val ret = cxMarshal.returnType(method.ret)
+    val params = method.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
+    val constFlag = if (method.const) " const" else ""
+    w.wl(s"$ret $klass::${idCx.method(method.ident)}${params.mkString("(", ", ", ")")}")
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
@@ -234,7 +244,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new CxRefs(ident.name)
     refs.hx.add("#include <memory>")
-    refs.hx.add("#include <CppWrapperCache.h>")
+    refs.hx.add("#include \"CppWrapperCache.h\"")
     refs.hx.add("#include \""+spec.cppIncludePrefix + spec.cppFileIdentStyle(ident.name) + "." + spec.cppHeaderExt+"\"")
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
@@ -243,6 +253,14 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
+
+    refs.cx = refs.hx.clone()
+    i.methods.map(m => {
+      m.params.map(p => refs.findConvert(p.ty))
+      m.ret.foreach(refs.findConvert)
+    })
+    refs.cx.add("#include \"Marshal.h\"")
+    refs.cx.add("#include \""+ cxcppMarshal.headerName(ident.name) + "." + spec.cxcppHeaderExt + "\"")
 
     val self = cxMarshal.typename(ident, i)
     val cppSelf = cppMarshal.fqTypename(ident, i)
@@ -255,14 +273,15 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
 //        generateHxConstants(w, i.consts) //TODO no can do! Not gonna happen. Nuuh. We can make this a property with no setter and agetter that reaches into C++ land tho
         // Methods
         for (m <- i.methods) {
+          w.wl
           writeDoc(w, m.doc)
           val ret = cxMarshal.returnType(m.ret)
-          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
             val constFlag = if (m.const) " const" else ""
-            w.wl(s"$ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag;")
+            w.wl(s"virtual $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")} = 0;")
           }
         }
       }
@@ -275,19 +294,19 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           writeDoc(w, m.doc)
           val ret = cxMarshal.returnType(m.ret)
-          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCx.local(p.ident))
+          val params = m.params.map(p => cxMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
             val constFlag = if (m.const) " const" else ""
-            w.wl(s"$ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag;")
+            w.wl(s"$ret ${idCx.method(m.ident)}${params.mkString("(", ", ", ")")};")
           }
         }
         //private members
         w.wlOutdent("internal:")
         //construct from a cpp ref
-        w.wl(s"$self(const std::shared_ptr<$cppSelf>& m_cppRef);")
-        w.wl(s"::djinni::CppWrapperCache<$cppSelf>::Handle cppRef;")
+        w.wl(s"$self(const std::shared_ptr<$cppSelf>& cppRef);")
+        w.wl(s"::djinni::CppWrapperCache<$cppSelf>::Handle m_cppRef;")
       }
     })
 
@@ -298,16 +317,14 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
           generateCxConstants(w, i.consts, self)
         }
         //constructor
-        w.wl(s"$self::$self(const std::shared_ptr<$cppSelf>&)cppRef)")
+        w.wl(s"$self::$self(const std::shared_ptr<$cppSelf>& cppRef)")
         w.braced {
-          w.w("if (self = [super init])").braced {
-            w.wl("m_cppRef.assign(cppRef);")
-          }
+          w.wl("m_cppRef.assign(cppRef);")
         }
         //methods
         for (m <- i.methods) {
           w.wl
-          writeCxFuncDecl(m, w)
+          writeCxFuncDecl(self, m, w)
           w.braced {
 //           w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
             val ret = m.ret.fold("")(_ => "auto r = ")
