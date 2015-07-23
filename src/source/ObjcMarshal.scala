@@ -21,7 +21,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
     val interfaceNullity = if (spec.cppNnType.nonEmpty) nonnull else nullable
     tm.base match {
       case MOptional => nullable
-      case MPrimitive(_,_,_,_,_,_,_,_) => None
+      case MPrimitive(_,_,_,_,_,_,_,_,_,_) => None
       case d: MDef => d.defType match {
         case DEnum => None
         case DInterface => interfaceNullity

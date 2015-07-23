@@ -237,6 +237,13 @@ package object generatorTools {
         }
         new CxCppGenerator(spec).generate(idl)
       }
+
+      if (spec.yamlOutFolder.isDefined) {
+        if (!spec.skipGeneration) {
+          createFolder("YAML", spec.yamlOutFolder.get)
+          new YamlGenerator(spec).generate(idl)
+        }
+      }
       None
     }
     catch {
