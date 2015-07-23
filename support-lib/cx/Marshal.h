@@ -44,47 +44,47 @@ namespace djinni {
 		static CxType fromCpp(CppType x) { return x; }
 
 		struct Boxed {
-			using CxType = Platform::Object^;
-			static CppType toCpp(CxType x) { assert(x); return static_cast<CppType>(Self::unbox(x)); }
-			static CxType fromCpp(CppType x) { return Self::box(x); }
+			using CxType = Platform::Object;
+			static CppType toCpp(CxType^ x) { assert(x); return Self::unbox(x); }
+			static CxType^ fromCpp(CppType x) { return Self::box(x); }
 		};
 	};
 
 	//stupid C++/Cx doesn't have int8_t; we'll pass it up as a uint8_t instead, and pray.
-	class I8 : public Primitive<I8, int8_t> {
-		friend Primitive<I8, int8_t>;
-		static int8_t unbox(Boxed::CxType x)  { return safe_cast<uint8_t>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = (uint8_t)x;  return cx; }
+	class I8 : public Primitive<I8, int16> {
+		friend Primitive<I8, int16>;
+		static int16 unbox(Boxed::CxType^ x)  { return (uint8)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = (uint8)x;  return cx; }
 	};
 
-	class I16 : public Primitive<I16, int16_t> {
-		friend Primitive<I16, int16_t>;
-		static uint16_t unbox(Boxed::CxType x)  { return safe_cast<int16_t>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
+	class I16 : public Primitive<I16, int16> {
+		friend Primitive<I16, int16>;
+		static int16 unbox(Boxed::CxType^ x)  { return (int16)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = x; return cx; }
 	};
 
-	class I32 : public Primitive<I32, int32_t> {
-		friend Primitive<I32, int32_t>;
-		static int32_t unbox(Boxed::CxType x)  { return safe_cast<int32_t>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
+	class I32 : public Primitive<I32, int32> {
+		friend Primitive<I32, int32>;
+		static int32 unbox(Boxed::CxType^ x)  { return (int32)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = x; return cx; }
 	};
 
-	class I64 : public Primitive<I64, int64_t> {
-		friend Primitive<I64, int64_t>;
-		static int64_t unbox(Boxed::CxType x)  { return safe_cast<int64_t>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
+	class I64 : public Primitive<I64, int64> {
+		friend Primitive<I64, int64>;
+		static int64 unbox(Boxed::CxType^ x)  { return (int64)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = x; return cx; }
 	};
 
 	class F32 : public Primitive<F32, float> {
 		friend Primitive<F32, float>;
-		static float unbox(Boxed::CxType x)  { return safe_cast<float>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
+		static float unbox(Boxed::CxType^ x)  { return (float)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = x; return cx; }
 	};
 
 	class F64 : public Primitive<F64, double> {
 		friend Primitive<F64, float>;
-		static double unbox(Boxed::CxType x)  { return safe_cast<double>(x); }
-		static Boxed::CxType box(CppType x)  { Platform::Object^ cx = x; return cx; }
+		static double unbox(Boxed::CxType^ x)  { return (double)x; }
+		static Boxed::CxType^ box(CppType x)  { Boxed::CxType^ cx = x; return cx; }
 	};
 
 
