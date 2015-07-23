@@ -88,7 +88,7 @@ namespace djinni {
 	};
 
 
-//	template<class CppEnum, class CxEnum>
+//	template<class Cppo, class CxEnum>
 //	struct Enum {
 //	    using CppType = CppEnum;
 //	    using CxType = CxEnum;
@@ -178,23 +178,23 @@ namespace djinni {
 	//        }
 	//    };
 	//
-	//    template<template<class> class OptionalType, class T>
-	//    class Optional {
-	//    public:
-	//        using CppType = OptionalType<typename T::CppType>;
-	//        using CxType = typename T::Boxed::CxType;
-	//
-	//        using Boxed = Optional;
-	//
-	//        static CppType toCpp(CxType obj) {
-	//            return obj ? CppType(T::Boxed::toCpp(obj)) : CppType();
-	//        }
-	//
-	//        static CxType fromCpp(const CppType& opt) {
-	//            return opt ? T::Boxed::fromCpp(*opt) : nil;
-	//        }
-	//    };
-	//
+	    template<template<class> class OptionalType, class T>
+	    class Optional {
+	    public:
+	        using CppType = OptionalType<typename T::CppType>;
+	        using CxType = typename T::Boxed::CxType;
+
+	        using Boxed = Optional;
+
+	        static CppType toCpp(CxType cx) {
+	            return obj ? CppType(T::Boxed::toCpp(cx)) : CppType();
+	        }
+
+	        static CxType fromCpp(const CppType& opt) {
+	            return opt ? T::Boxed::fromCpp(*opt) : nil;
+	        }
+	    };
+
        template<class T>
        class List {
            using ECppType = typename T::CppType;
