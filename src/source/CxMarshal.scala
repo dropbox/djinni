@@ -8,14 +8,14 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
   private val cppMarshal = new CppMarshal(spec)
 
-  override def typename(tm: MExpr): String = toCxType(tm, None)
+  override def typename(tm: MExpr): String = toCxType(tm, None)._1
   def typename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => idCx.enumType(name)
     case i: Interface => if(i.ext.cx) s"I${idCx.ty(name)}" else idCx.ty(name)
     case r: Record => idCx.ty(name)
   }
 
-  override def fqTypename(tm: MExpr): String = toCxType(tm, Some(spec.cxNamespace))
+  override def fqTypename(tm: MExpr): String = toCxType(tm, Some(spec.cxNamespace))._1
   def fqTypename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => withNs(Some(spec.cxNamespace), idCx.enumType(name))
     case i: Interface => if(i.ext.cx) withNs(Some(spec.cxNamespace), s"I${idCx.ty(name)}") else withNs(Some(spec.cxNamespace), idCx.ty(name))
@@ -25,8 +25,8 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   override def paramType(tm: MExpr): String = toCxParamType(tm)
   override def fqParamType(tm: MExpr): String = toCxParamType(tm, Some(spec.cxNamespace))
 
-  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCxType(_, None))
-  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCxType(_, Some(spec.cxNamespace)))
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")((t: TypeRef) => toCxParamType(t.resolved))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")((t: TypeRef) => toCxParamType(t.resolved, Some(spec.cxNamespace)))
 
   override def fieldType(tm: MExpr): String = typename(tm)
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)
@@ -44,7 +44,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   private def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
       case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${fqTypename(tm)}>")
-      case _ => withNs(Some(spec.objcppNamespace), helperClass(d.name))
+      case _ => withNs(Some(spec.cxcppNamespace), helperClass(d.name))
     }
     case o => withNs(Some("djinni"), o match {
       case p: MPrimitive => p.idlName match {
@@ -131,51 +131,74 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     case p: MParam => List()
   }
 
-  private def toCxType(ty: TypeRef, namespace: Option[String] = None): String = toCxType(ty.resolved, namespace)
-  private def toCxType(tm: MExpr, namespace: Option[String]): String = {
-    def base(m: Meta): String = m match {
-      case p: MPrimitive => p.cxName
-      case MString => "Platform::String^"
-      case MDate => "Windows::Foundation::DateTime^"
-      case MBinary => "Platform::Array<uint16_t>^" //no uint8_t in Cx
-      case MOptional => ""
-      case MList => "Windows::Foundation::Collections::IVector"
-      case MSet => "Windows::Foundation::Collections::IMap" //no set in C++/Cx FOr now this shit is broken until I can figure out how to make something map onto itself.
-      case MMap => "Windows::Foundation::Collections::IMap"
-      case d: MDef =>
-        d.defType match {
-          case DEnum => withNs(namespace, idCx.enumType(d.name))
-          case DRecord => s"${withNs(namespace, idCx.ty(d.name))}^"
-          case DInterface => d.body match {
-            case e: Enum => s"${withNs(namespace, idCx.ty(d.name))}^"
-            case i: Interface => if(i.ext.cx) s"I${withNs(namespace, idCx.ty(d.name))}^" else s"${withNs(namespace, idCx.ty(d.name))}^"
-            case r: Record => s"${withNs(namespace, idCx.ty(d.name))}^"
+  def headerName(ident: String) = idCx.ty(ident) + "." + spec.cxHeaderExt
+  def include(ident: String) = q(spec.cxIncludePrefix + headerName(ident))
+
+
+  def isReference(td: TypeDecl) = td.body match {
+    case i: Interface => true
+    case r: Record => true
+    case e: Enum => true
+  }
+
+  def boxedTypename(td: TypeDecl) = td.body match {
+    case i: Interface => typename(td.ident, i)
+    case r: Record => typename(td.ident, r)
+    case e: Enum => "Platform::Object"
+  }
+
+
+  // Return value: (Type_Name, Is_Class_Or_Not)
+  def toCxType(ty: TypeRef, namespace: Option[String] = None): (String, Boolean) = toCxType(ty.resolved, namespace, false)
+  def toCxType(ty: TypeRef, namespace: Option[String], needRef: Boolean): (String, Boolean) = toCxType(ty.resolved, namespace, needRef)
+  def toCxType(tm: MExpr, namespace: Option[String]): (String, Boolean) = toCxType(tm, namespace, false)
+  def toCxType(tm: MExpr, namespace: Option[String], needRef: Boolean): (String, Boolean) = {
+    def f(tm: MExpr, needRef: Boolean): (String, Boolean) = {
+      tm.base match {
+        case MOptional =>
+          // We use "nil" for the empty optional.
+          assert(tm.args.size == 1)
+          val arg = tm.args.head
+          arg.base match {
+            case MOptional => throw new AssertionError("nested optional?")
+            case m => f(arg, true)
           }
-        }
-      case p: MParam => idCx.typeParam(p.name)
+        case o =>
+          val base = o match {
+            case p: MPrimitive => if (needRef) (p.cxBoxed, true) else (p.cxName, false)
+            case MString => ("Platform::String", true)
+            case MDate => ("Windows::Foundation::DateTime", true)
+            case MBinary => ("Platform::Array<uint16_t>", true)
+            case MOptional => throw new AssertionError("optional should have been special cased")
+            case MList => ("Windows::Foundation::Collections::IVector", true)
+            case MSet => ("Windows::Foundation::Collections::IMap", true) //no set in C++/Cx FOr now this shit is broken until I can figure out how to make something map onto itself.
+            case MMap => ("Windows::Foundation::Collections::IMap", true)
+            case d: MDef => d.defType match {
+              case DEnum => (idCx.ty(d.name), true)
+              case DRecord => (idCx.ty(d.name), true)
+              case DInterface =>
+                val ext = d.body.asInstanceOf[Interface].ext
+                if (ext.cpp && !ext.cx)
+                  (idCx.ty(d.name), true)
+                else
+                  (s"I${withNs(namespace, idCx.ty(d.name))}", true)
+            }
+            case e: MExtern => e.body match {
+              case i: Interface => if(i.ext.cx) (s"I${e.cx.typename}", true) else (e.cx.typename, true)
+              case _ => if(needRef) (e.cx.boxed, true) else (e.cx.typename, e.cx.reference)
+            }
+            case p: MParam => throw new AssertionError("Parameter should not happen at Cx top level")
+          }
+          base
+      }
     }
-    def expr(tm: MExpr): String = {
-      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">^")
-      base(tm.base) + args
-    }
-    expr(tm)
+    f(tm, needRef)
   }
 
   // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
   private def toCxParamType(tm: MExpr, namespace: Option[String] = None): String = {
-    val cxType = toCxType(tm, namespace)
-    val refType = cxType
-    val valueType = cxType
-
-    def toType(expr: MExpr): String = expr.base match {
-      case p: MPrimitive => valueType
-      case d: MDef => d.defType match {
-        case DEnum => valueType
-        case _  => refType
-      }
-      case MOptional => toType(expr.args.head)
-      case _ => refType
-    }
-    toType(tm)
+    val (name, needRef) = toCxType(tm, namespace)
+    name + (if(needRef) "^" else "")
   }
+
 }

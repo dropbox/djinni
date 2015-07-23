@@ -151,6 +151,30 @@ class CxCppMarshal(spec: Spec) extends Marshal(spec) {
     }
   }
 
+  def include(ident: String): String = q(spec.cxcppIncludePrefix + spec.cxFileIdentStyle(ident) + "." + spec.cxcppHeaderExt)
+
+
+  def byValue(tm: MExpr): Boolean = tm.base match {
+    case p: MPrimitive => true
+    case d: MDef => d.defType match {
+      case DEnum => true
+      case _  => false
+    }
+    case e: MExtern => e.defType match {
+      case DInterface => false
+      case DEnum => true
+      case DRecord => e.cxcpp.byValue
+    }
+    case MOptional => byValue(tm.args.head)
+    case _ => false
+  }
+
+  def byValue(td: TypeDecl): Boolean = td.body match {
+    case i: Interface => false
+    case r: Record => false
+    case e: Enum => true
+  }
+
   private def toCxCppType(ty: TypeRef, namespace: Option[String] = None): String = toCxCppType(ty.resolved, namespace)
   private def toCxCppType(tm: MExpr, namespace: Option[String]): String = {
     def base(m: Meta): String = m match {

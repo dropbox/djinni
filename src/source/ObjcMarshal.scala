@@ -45,9 +45,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fqReturnType(ret: Option[TypeRef]): String = returnType(ret)
 
   override def fieldType(tm: MExpr): String = toObjcParamType(tm)
+  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fqFieldType(tm: MExpr): String = toObjcParamType(tm)
 
-  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
