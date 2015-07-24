@@ -8,7 +8,13 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
   private val cppMarshal = new CppMarshal(spec)
 
-  override def typename(tm: MExpr): String = toCxType(tm, None)._1
+//  override def typename(tm: MExpr): String = toCxType(tm, None)._1
+  override def typename(tm: MExpr): String = {
+    val (name, needRef) = toCxType(tm, None)
+    val result = if(needRef) (s"${name}^") else (s"${name}")
+    result
+  }
+
   def typename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => idCx.enumType(name)
     case i: Interface => if(i.ext.cx) s"I${idCx.ty(name)}" else idCx.ty(name)
