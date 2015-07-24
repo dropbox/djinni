@@ -51,7 +51,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
   private def ownName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
-      case DEnum => withNs(Some("djinni"), s"Enum<${fqTypename(tm)}, ${fqTypename(tm)}>")
+//      case DEnum => withNs(Some("djinni"), s"Enum<${fqTypename(tm)}, ${fqTypename(tm)}>")
       case _ => withNs(Some(spec.cxcppNamespace), ownClass(d.name))
     }
     case o => withNs(Some("djinni"), o match {
@@ -99,6 +99,12 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
   private def helperName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
       case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${fqTypename(tm)}>")
+      case DInterface =>
+        val ext = d.body.asInstanceOf[Interface].ext
+        if (ext.cpp && !ext.cx)
+          withNs(Some(spec.cxcppNamespace), helperClass(d.name))
+        else
+          s"I${withNs(Some(spec.cxcppNamespace), helperClass(d.name))}"
       case _ => withNs(Some(spec.cxcppNamespace), helperClass(d.name))
     }
     case o => withNs(Some("djinni"), o match {
@@ -262,7 +268,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     def toCxType(tm: MExpr, namespace: Option[String]): (String, Boolean) = toCxType(tm, namespace, false)
     def toCxType(tm: MExpr, namespace: Option[String], needRef: Boolean): (String, Boolean) = {
     def base(m: MExpr, namespace: Option[String], needRef: Boolean): (String, Boolean) = m.base match {
-      case p: MPrimitive => (p.cName, false)
+      case p: MPrimitive => (p.cxName, false)
       case MString => ("Platform::String", true)
       case MDate => ("Windows::Foundation::DateTime", true)
       case MBinary => ("Platform::Array<uint16_t>", true)

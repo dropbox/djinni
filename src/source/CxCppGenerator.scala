@@ -201,7 +201,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
-
+    refs.cxcpp = refs.hx.clone()
     refs.cxcpp.add("#include \"CxWrapperCache.h\"")
 
     val self = cxcppMarshal.typename(ident, i)
@@ -246,8 +246,8 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
           for (m <- i.methods) {
             w.wl
             writeDoc(w, m.doc)
-            val ret = cppMarshal.returnType(m.ret)
-            val params = m.params.map(p => cppMarshal.paramType(p.ty) + " " + idCpp.local(p.ident))
+            val ret = cppMarshal.fqReturnType(m.ret)
+            val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
             if (m.static) {
               w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override")
             } else {
