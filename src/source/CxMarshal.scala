@@ -309,7 +309,8 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
       val args = tm.base match {
         case MOptional => ""
-        case MMap => if (tm.args.size == 1) (tm.args :+ tm.args(-1)).map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">") else tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
+        case MSet => if (tm.args.size == 1) (tm.args :+ tm.args(0)).map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">") else tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
+        case MMap => tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
         case d => if (tm.args.isEmpty) "" else tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
       }
       val (ret, ref) = base(tm, namespace, needRef)

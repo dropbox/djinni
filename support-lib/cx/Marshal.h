@@ -226,36 +226,37 @@ namespace djinni {
            }
 		   //We ought to specialize this for types C++/Cx knows how to convert for us.
        };
-	//
-	//    template<class T>
-	//    class Set {
-	//        using ECppType = typename T::CppType;
-	//        using ECxType = typename T::Boxed::CxType;
-	//
-	//    public:
-	//        using CppType = std::unordered_set<ECppType>;
-	//        using CxType = NSSet*;
-	//
-	//        using Boxed = Set;
-	//
-	//        static CppType toCpp(CxType set) {
-	//            assert(set);
-	//            auto s = CppType();
-	//            for(ECxType value in set) {
-	//                s.insert(T::Boxed::toCpp(value));
-	//            }
-	//            return s;
-	//        }
-	//
-	//        static CxType fromCpp(const CppType& s) {
-	//            assert(s.size() <= std::numeric_limits<NSUInteger>::max());
-	//            auto set = [NSMutableSet setWithCapacity:static_cast<NSUInteger>(s.size())];
-	//            for(const auto& value : s) {
-	//                [set addObject:T::Boxed::fromCpp(value)];
-	//            }
-	//            return set;
-	//        }
-	//    };
+
+	    template<class T>
+	    class Set {
+	        using ECppType = typename T::CppType;
+	        using ECxType = typename T::CxType;
+
+	    public:
+	        using CppType = std::unordered_set<ECppType>;
+	        using CxType = Windows::Foundation::Collections::IMap<ECxType, ECxType>^; //no sets. Seriously. So we'll just map objects to themselves
+
+	        using Boxed = Set;
+
+	        static CppType toCpp(CxType set) {
+				assert(set);
+				auto s = CppType();
+				std::for_each(begin(set), end(set), [&s](Windows::Foundation::Collections::IKeyValuePair<ECxType, ECxType>^ pair)
+				{
+					s.insert(T::toCpp(pair->Key));
+				});
+
+				return s;
+	        }
+
+	        static CxType fromCpp(const CppType& s) {
+				auto set = ref new Platform::Collections::Map<ECxType, ECxType>;
+				for (const auto& val : s) {
+					set->Insert(T::fromCpp(val), T::fromCpp(val));
+				}
+				return set;
+	        }
+	    };
 
 	    template<class Key, class Value>
 	    class Map {
@@ -275,9 +276,9 @@ namespace djinni {
 	            auto m = CppType();
 	            m.reserve(map.count);
 
-				std::for_each(begin(map), end(map), [](Windows::Foundation::Collections::IKeyValuePair<CxKeyType, CxValueType>^ pair)
+				std::for_each(begin(map), end(map), [&m](Windows::Foundation::Collections::IKeyValuePair<CxKeyType, CxValueType>^ pair)
 				{
-					m.emplace(Key::toCpp(pair->Key), Value::toCpp(pair->Value)):
+					m.emplace(Key::toCpp(pair->Key), Value::toCpp(pair->Value));
 				});
 
 	            return m;
@@ -285,10 +286,9 @@ namespace djinni {
 
 	        static CxType fromCpp(const CppType& m) {
 	            //assert(m.size() <= std::numeric_limits<int64_t>::max());
-				auto map = ref new Platform::Collections::Map<CxKeyType, CxValueType>;//[NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
+				auto map = ref new Platform::Collections::Map<CxKeyType, CxValueType>;
 	            for(const auto& kvp : m) {
 					map->Insert(Value::fromCpp(kvp.first), Key::fromCpp(kvp.second));
-//	                [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
 	            }
 	            return map;
 	        }
