@@ -51,8 +51,8 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
   private def ownName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
-//      case DEnum => withNs(Some("djinni"), s"Enum<${fqTypename(tm)}, ${fqTypename(tm)}>")
-      case _ => withNs(Some(spec.cxcppNamespace), ownClass(d.name))
+      case DEnum => withNs(Some("djinni"), s"Enum<${fqTypename(tm)}, ${fqTypename(tm)}>")
+      case _ => withNs(Some(spec.cxcppNamespace), s"${ownClass(d.name)}")
     }
     case o => withNs(Some("djinni"), o match {
       case p: MPrimitive => p.idlName match {
@@ -82,7 +82,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
       case MOptional =>
         assert(tm.args.size == 1)
         val argHelperClass = ownClass(tm.args.head)
-        s"<${spec.cppOptionalTemplate}, $argHelperClass>"
+        s"<${spec.cppOptionalTemplate}, $argHelperClass>" //TODO THIS IS VERY WRONG!
       case MList | MSet =>
         assert(tm.args.size == 1)
         f
@@ -176,7 +176,8 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     }
     case MString | MDate | MBinary | MOptional | MList | MSet | MMap  => List()
     case d: MDef => d.defType match {
-      case DEnum | DRecord =>
+      case DEnum => List() //no headers to import for enums
+      case DRecord => //DEnum | DRecord =>
         if (d.name != exclude) {
           List(ImportRef(q(spec.cxcppIncludePrefix + spec.cxFileIdentStyle(d.name) + "_convert." + spec.cxcppHeaderExt)))
         } else {
@@ -285,7 +286,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
       case MMap => ("Windows::Foundation::Collections::IMap", true)
       case d: MDef =>
         d.defType match {
-          case DEnum => (withNs(namespace, idCx.enumType(d.name)), true)
+          case DEnum => (withNs(namespace, idCx.enumType(d.name)), false)
           case DRecord => (withNs(namespace, idCx.ty(d.name)), true)
           case DInterface =>
             val ext = d.body.asInstanceOf[Interface].ext

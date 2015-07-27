@@ -52,38 +52,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    val refs = new CxCppRefs(ident.name)
-    val self = cxcppMarshal.typename(ident, e)
-
-    if (spec.cppEnumHashWorkaround) {
-      refs.hx.add("#include <functional>") // needed for std::hash
-    }
-
-    writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
-      w.w(s"enum class $self : int").bracedSemi {
-        for (o <- e.options) {
-          writeDoc(w, o.doc)
-          w.wl(idCpp.enum(o.ident.name) + ",")
-        }
-      }
-    },
-      w => {
-        // std::hash specialization has to go *outside* of the wrapNs
-        if (spec.cppEnumHashWorkaround) {
-          val fqSelf = cxcppMarshal.fqTypename(ident, e)
-          w.wl
-          wrapNamespace(w, "std",
-            (w: IndentWriter) => {
-              w.wl("template <>")
-              w.w(s"struct hash<$fqSelf>").bracedSemi {
-                w.w(s"size_t operator()($fqSelf type) const").braced {
-                  w.wl("return std::hash<int>()(static_cast<int>(type));")
-                }
-              }
-            }
-          )
-        }
-      })
+    //nothing required?
   }
 
   def generateHxConstants(w: IndentWriter, consts: Seq[Const]) = {
@@ -162,17 +131,17 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       w.wl(s"struct $self")
       w.bracedSemi {
         w.wl(s"using CppType = $cppSelf;")
-        w.wl(s"using CxType = $cxSelf;");
+        w.wl(s"using CxType = $cxSelf^;");
         w.wl
         w.wl(s"using Boxed = $self;")
         w.wl
-        w.wl(s"static CppType toCpp(CxType^ cx);")
-        w.wl(s"static CxType^ fromCpp(const CppType& cpp);")
+        w.wl(s"static CppType toCpp(CxType cx);")
+        w.wl(s"static CxType fromCpp(const CppType& cpp);")
       }
     })
 
     writeCxCppFile(cxcppMarshal.bodyName(self), origin, refs.cxcpp, w => {
-      w.wl(s"auto $self::toCpp(CxType^ cx) -> CppType")
+      w.wl(s"auto $self::toCpp(CxType cx) -> CppType")
       w.braced {
         w.wl("assert(cx);")
         if(r.fields.isEmpty) w.wl("(void)cx; // Suppress warnings in relase builds for empty records")
@@ -180,10 +149,10 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(";")
       }
       w.wl
-      w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType^")
+      w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType")
       w.braced {
         if(r.fields.isEmpty) w.wl("(void)cpp; // Suppress warnings in relase builds for empty records")
-        writeAlignedCall(w, "return ref new CxType(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
+        writeAlignedCall(w, s"return ref new $cxSelf(", r.fields, ")", f=> cxcppMarshal.fromCpp(f.ty, "cpp." + idCpp.field(f.ident)))
         w.wl(";")
       }
     })
@@ -215,12 +184,12 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
       w.bracedSemi {
         w.wlOutdent("public:")
         w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
-        w.wl(s"using CxType = $cxSelf;");
+        w.wl(s"using CxType = $cxSelf^;");
         w.wl
         w.wl(s"using Boxed = $self;")
         w.wl
-        w.wl(s"static CppType toCpp(CxType^ cx);")
-        w.wl(s"static CxType^ fromCpp(const CppType& cpp);")
+        w.wl(s"static CppType toCpp(CxType cx);")
+        w.wl(s"static CxType fromCpp(const CppType& cpp);")
         if (i.ext.cx) {
           w.wl
           w.wlOutdent("private:")
@@ -238,7 +207,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"class $helperClass final : public $cppSelf, public ::djinni::CxWrapperCache<CxProxy>::Handle").bracedSemi {
           w.wlOutdent("public:")
           w.wl("using Handle::Handle;")
-          w.wl(s"using CxType = $cxSelf;")
+          w.wl(s"using CxType = $cxSelf^;")
           w.wl
           w.wl("CxProxy(Platform::Object^ cx) : ::djinni::CxWrapperCache<CxProxy>::Handle{ cx } {}")
           w.wl
@@ -255,7 +224,8 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag override")
             }
             w.braced {
-              val call = (if (!m.static) "auto r = static_cast<CxType^>(Handle::get())->" else cppSelf + "::") + idCx.method(m.ident) + "("
+              val retCall = if(m.ret == None) "" else "auto r = "
+              val call = retCall + (if (!m.static) s"static_cast<CxType>(Handle::get())->" else cppSelf + "::") + idCx.method(m.ident) + "("
               writeAlignedCall(w, call, m.params, ")", p => cxcppMarshal.fromCpp(p.ty, idCpp.local(p.ident.name)))
               w.wl(";")
               m.ret.fold()(r => w.wl(s"return ${cxcppMarshal.toCpp(r, "r")};"))
@@ -263,7 +233,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         w.wl
-        w.wl(s"auto $self::toCpp(CxType^ cx) -> CppType")
+        w.wl(s"auto $self::toCpp(CxType cx) -> CppType")
         w.braced {
           w.wl("if (!cx)").braced {
             w.wl("return nullptr;")
@@ -271,24 +241,24 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
           w.wl("return ::djinni::CxWrapperCache<CxProxy>::getInstance()->get(cx);")
         }
         w.wl
-        w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType^")
+        w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType")
         w.braced {
           w.braced {
             w.wl("if (!cpp)").braced {
               w.wl("return nullptr;")
             }
-            w.wl("return static_cast<CxType^>(dynamic_cast<CxProxy &>(*cpp).Handle::get());")
+            w.wl("return static_cast<CxType>(dynamic_cast<CxProxy &>(*cpp).Handle::get());")
           }
         }
       } else {
-        w.wl(s"auto $self::toCpp(CxType^ cx) -> CppType")
+        w.wl(s"auto $self::toCpp(CxType cx) -> CppType")
         w.braced {
           w.wl("return cx->m_cppRef.get();")
         }
         w.wl
-        w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType^")
+        w.wl(s"auto $self::fromCpp(const CppType& cpp) -> CxType")
         w.braced {
-          w.wl(s"return (CxType^)::djinni::CppWrapperCache<$cppSelf>::getInstance()->get(cpp, [](const std::shared_ptr<$cppSelf>& p)").bracedEnd(");") {
+          w.wl(s"return (CxType)::djinni::CppWrapperCache<$cppSelf>::getInstance()->get(cpp, [](const std::shared_ptr<$cppSelf>& p)").bracedEnd(");") {
             w.wl(s"return ref new $cxSelf(p);")
           }
 

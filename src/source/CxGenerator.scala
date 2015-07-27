@@ -72,30 +72,13 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     val self = cxMarshal.typename(ident, e)
 
     writeHxFile(ident, origin, refs.hx, refs.hxFwds, w => {
-      w.w(s"enum class $self : int").bracedSemi {
+      w.w(s"public enum class $self").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idCx.enum(o.ident.name) + ",")
         }
       }
-    },
-      w => {
-        // std::hash specialization has to go *outside* of the wrapNs
-        if (spec.cppEnumHashWorkaround) {
-          val fqSelf = cxMarshal.fqTypename(ident, e)
-          w.wl
-          wrapNamespace(w, "std",
-            (w: IndentWriter) => {
-              w.wl("template <>")
-              w.w(s"struct hash<$fqSelf>").bracedSemi {
-                w.w(s"size_t operator()($fqSelf type) const").braced {
-                  w.wl("return std::hash<int>()(static_cast<int>(type));")
-                }
-              }
-            }
-          )
-        }
-      })
+    })
   }
 
   def generateHxConstants(w: IndentWriter, consts: Seq[Const]) = {
