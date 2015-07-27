@@ -284,11 +284,12 @@ namespace djinni {
 	        }
 
 	        static CxType fromCpp(const CppType& m) {
-//	            assert(m.size() <= std::numeric_limits<NSUInteger>::max());
+	            //assert(m.size() <= std::numeric_limits<int64_t>::max());
 				auto map = ref new Platform::Collections::Map<CxKeyType, CxValueType>;//[NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
-//	            for(const auto& kvp : m) {
+	            for(const auto& kvp : m) {
+					map->Insert(Value::fromCpp(kvp.first), Key::fromCpp(kvp.second));
 //	                [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
-//	            }
+	            }
 	            return map;
 	        }
 	    };
