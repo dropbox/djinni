@@ -4,7 +4,8 @@
 #import <Foundation/Foundation.h>
 
 @interface DBMapDateRecord : NSObject
-- (nonnull id)initWithDatesById:(nonnull NSDictionary *)datesById;
+- (nonnull instancetype)initWithDatesById:(nonnull NSDictionary *)datesById;
++ (nonnull instancetype)mapDateRecordWithDatesById:(nonnull NSDictionary *)datesById;
 
 @property (nonatomic, readonly, nonnull) NSDictionary * datesById;
 

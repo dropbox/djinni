@@ -4,7 +4,7 @@
 #include "nested_collection.hpp"
 
 static NestedCollection cppNestedCollection { { {u8"String1", u8"String2"}, {u8"StringA", u8"StringB"} } };
-static DBNestedCollection *objcNestedCollection = [[DBNestedCollection alloc] initWithSetList:@[
+static DBNestedCollection *objcNestedCollection = [DBNestedCollection nestedCollectionWithSetList:@[
             [NSSet setWithArray:@[ @"String1", @"String2" ]],
             [NSSet setWithArray:@[ @"StringA", @"StringB" ]],
         ]];

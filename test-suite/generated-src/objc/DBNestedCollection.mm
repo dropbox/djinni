@@ -6,12 +6,17 @@
 
 @implementation DBNestedCollection
 
-- (id)initWithSetList:(nonnull NSArray *)setList
+- (nonnull instancetype)initWithSetList:(nonnull NSArray *)setList
 {
     if (self = [super init]) {
         _setList = setList;
     }
     return self;
+}
+
++ (nonnull instancetype)nestedCollectionWithSetList:(nonnull NSArray *)setList
+{
+    return [[self alloc] initWithSetList:setList];
 }
 
 @end

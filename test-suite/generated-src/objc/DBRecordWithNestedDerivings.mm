@@ -6,14 +6,21 @@
 
 @implementation DBRecordWithNestedDerivings
 
-- (id)initWithKey:(int32_t)key
-              rec:(nonnull DBRecordWithDerivings *)rec
+- (nonnull instancetype)initWithKey:(int32_t)key
+                                rec:(nonnull DBRecordWithDerivings *)rec
 {
     if (self = [super init]) {
         _key = key;
         _rec = rec;
     }
     return self;
+}
+
++ (nonnull instancetype)recordWithNestedDerivingsWithKey:(int32_t)key
+                                                     rec:(nonnull DBRecordWithDerivings *)rec
+{
+    return [[self alloc] initWithKey:key
+                                 rec:rec];
 }
 
 - (BOOL)isEqual:(id)other

@@ -7,8 +7,10 @@
 
 /** This file tests YAML dumped by Djinni can be parsed back in */
 @interface DBExternRecordWithDerivings : NSObject
-- (nonnull id)initWithMember:(nonnull DBRecordWithDerivings *)member
-                           e:(DBColor)e;
+- (nonnull instancetype)initWithMember:(nonnull DBRecordWithDerivings *)member
+                                     e:(DBColor)e;
++ (nonnull instancetype)externRecordWithDerivingsWithMember:(nonnull DBRecordWithDerivings *)member
+                                                          e:(DBColor)e;
 
 @property (nonatomic, readonly, nonnull) DBRecordWithDerivings * member;
 

@@ -6,12 +6,17 @@
 
 @implementation DBRecordWithDurationAndDerivings
 
-- (id)initWithDt:(NSTimeInterval)dt
+- (nonnull instancetype)initWithDt:(NSTimeInterval)dt
 {
     if (self = [super init]) {
         _dt = dt;
     }
     return self;
+}
+
++ (nonnull instancetype)recordWithDurationAndDerivingsWithDt:(NSTimeInterval)dt
+{
+    return [[self alloc] initWithDt:dt];
 }
 
 - (BOOL)isEqual:(id)other

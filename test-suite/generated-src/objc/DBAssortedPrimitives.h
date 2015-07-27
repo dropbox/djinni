@@ -4,20 +4,34 @@
 #import <Foundation/Foundation.h>
 
 @interface DBAssortedPrimitives : NSObject
-- (nonnull id)initWithB:(BOOL)b
-                  eight:(int8_t)eight
-                sixteen:(int16_t)sixteen
-              thirtytwo:(int32_t)thirtytwo
-              sixtyfour:(int64_t)sixtyfour
-             fthirtytwo:(float)fthirtytwo
-             fsixtyfour:(double)fsixtyfour
-                     oB:(nullable NSNumber *)oB
-                 oEight:(nullable NSNumber *)oEight
-               oSixteen:(nullable NSNumber *)oSixteen
-             oThirtytwo:(nullable NSNumber *)oThirtytwo
-             oSixtyfour:(nullable NSNumber *)oSixtyfour
-            oFthirtytwo:(nullable NSNumber *)oFthirtytwo
-            oFsixtyfour:(nullable NSNumber *)oFsixtyfour;
+- (nonnull instancetype)initWithB:(BOOL)b
+                            eight:(int8_t)eight
+                          sixteen:(int16_t)sixteen
+                        thirtytwo:(int32_t)thirtytwo
+                        sixtyfour:(int64_t)sixtyfour
+                       fthirtytwo:(float)fthirtytwo
+                       fsixtyfour:(double)fsixtyfour
+                               oB:(nullable NSNumber *)oB
+                           oEight:(nullable NSNumber *)oEight
+                         oSixteen:(nullable NSNumber *)oSixteen
+                       oThirtytwo:(nullable NSNumber *)oThirtytwo
+                       oSixtyfour:(nullable NSNumber *)oSixtyfour
+                      oFthirtytwo:(nullable NSNumber *)oFthirtytwo
+                      oFsixtyfour:(nullable NSNumber *)oFsixtyfour;
++ (nonnull instancetype)assortedPrimitivesWithB:(BOOL)b
+                                          eight:(int8_t)eight
+                                        sixteen:(int16_t)sixteen
+                                      thirtytwo:(int32_t)thirtytwo
+                                      sixtyfour:(int64_t)sixtyfour
+                                     fthirtytwo:(float)fthirtytwo
+                                     fsixtyfour:(double)fsixtyfour
+                                             oB:(nullable NSNumber *)oB
+                                         oEight:(nullable NSNumber *)oEight
+                                       oSixteen:(nullable NSNumber *)oSixteen
+                                     oThirtytwo:(nullable NSNumber *)oThirtytwo
+                                     oSixtyfour:(nullable NSNumber *)oSixtyfour
+                                    oFthirtytwo:(nullable NSNumber *)oFthirtytwo
+                                    oFsixtyfour:(nullable NSNumber *)oFsixtyfour;
 
 @property (nonatomic, readonly) BOOL b;
 

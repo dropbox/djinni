@@ -6,12 +6,17 @@
 
 @implementation DBMapDateRecord
 
-- (id)initWithDatesById:(nonnull NSDictionary *)datesById
+- (nonnull instancetype)initWithDatesById:(nonnull NSDictionary *)datesById
 {
     if (self = [super init]) {
         _datesById = datesById;
     }
     return self;
+}
+
++ (nonnull instancetype)mapDateRecordWithDatesById:(nonnull NSDictionary *)datesById
+{
+    return [[self alloc] initWithDatesById:datesById];
 }
 
 @end

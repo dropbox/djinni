@@ -34,3 +34,7 @@ test_helpers = interface +c {
 
     static id_binary(b: binary): binary;
 }
+
+empty_record = record {
+    
+}

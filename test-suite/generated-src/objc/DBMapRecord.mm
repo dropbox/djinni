@@ -6,14 +6,21 @@
 
 @implementation DBMapRecord
 
-- (id)initWithMap:(nonnull NSDictionary *)map
-             imap:(nonnull NSDictionary *)imap
+- (nonnull instancetype)initWithMap:(nonnull NSDictionary *)map
+                               imap:(nonnull NSDictionary *)imap
 {
     if (self = [super init]) {
         _map = map;
         _imap = imap;
     }
     return self;
+}
+
++ (nonnull instancetype)mapRecordWithMap:(nonnull NSDictionary *)map
+                                    imap:(nonnull NSDictionary *)imap
+{
+    return [[self alloc] initWithMap:map
+                                imap:imap];
 }
 
 @end

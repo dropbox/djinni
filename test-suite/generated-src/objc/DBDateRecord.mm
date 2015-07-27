@@ -6,12 +6,17 @@
 
 @implementation DBDateRecord
 
-- (id)initWithCreatedAt:(nonnull NSDate *)createdAt
+- (nonnull instancetype)initWithCreatedAt:(nonnull NSDate *)createdAt
 {
     if (self = [super init]) {
         _createdAt = createdAt;
     }
     return self;
+}
+
++ (nonnull instancetype)dateRecordWithCreatedAt:(nonnull NSDate *)createdAt
+{
+    return [[self alloc] initWithCreatedAt:createdAt];
 }
 
 - (BOOL)isEqual:(id)other
