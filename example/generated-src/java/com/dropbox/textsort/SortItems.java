@@ -13,7 +13,7 @@ public abstract class SortItems {
     @CheckForNull
     public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
 
-    public static final class CppProxy extends SortItems
+    private static final class CppProxy extends SortItems
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

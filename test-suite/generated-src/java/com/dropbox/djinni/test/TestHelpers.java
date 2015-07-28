@@ -69,7 +69,7 @@ public abstract class TestHelpers {
     @Nonnull
     public static native byte[] idBinary(@Nonnull byte[] b);
 
-    public static final class CppProxy extends TestHelpers
+    private static final class CppProxy extends TestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

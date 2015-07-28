@@ -11,7 +11,7 @@ public abstract class Token {
     @Nonnull
     public abstract String whoami();
 
-    public static final class CppProxy extends Token
+    private static final class CppProxy extends Token
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
