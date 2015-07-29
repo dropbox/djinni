@@ -43,4 +43,4 @@ example_android: GypAndroid.mk
 test:
 	make -C test-suite
 
-.PHONY: example_android example_ios test clean all
+.PHONY: example_android example_ios test djinni clean all
