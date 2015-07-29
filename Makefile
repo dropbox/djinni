@@ -1,4 +1,4 @@
-all: example_ios example_android test
+all: djinni example_ios example_android test
 
 clean:
 	-ndk-build -C example/android/app/ clean
@@ -14,6 +14,9 @@ clean:
 ./deps/gyp:
 	git clone https://chromium.googlesource.com/external/gyp.git ./deps/gyp
 	cd deps/gyp && git checkout -q 0bb67471bca068996e15b56738fa4824dfa19de0
+
+djinni:
+	cd src && ./build
 
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
@@ -40,4 +43,4 @@ example_android: GypAndroid.mk
 test:
 	make -C test-suite
 
-.PHONY: example_android example_ios test clean all
+.PHONY: example_android example_ios test djinni clean all
