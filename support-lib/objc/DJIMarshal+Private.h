@@ -203,7 +203,7 @@ public:
         for(const auto& value : v) {
             [array addObject:T::Boxed::fromCpp(value)];
         }
-        return array;
+        return [array copy];
     }
 };
 
@@ -233,7 +233,7 @@ public:
         for(const auto& value : s) {
             [set addObject:T::Boxed::fromCpp(value)];
         }
-        return set;
+        return [set copy];
     }
 };
 
@@ -266,7 +266,7 @@ public:
         for(const auto& kvp : m) {
             [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
         }
-        return map;
+        return [map copy];
     }
 };
 
