@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithSetList:(nonnull NSArray *)setList
 {
     if (self = [super init]) {
-        _setList = setList;
+        _setList = [setList copy];
     }
     return self;
 }
