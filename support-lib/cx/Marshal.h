@@ -191,7 +191,7 @@ namespace djinni {
 	        }
 
 	        static CxType fromCpp(const CppType& opt) {
-	            return opt ? T::Boxed::fromCpp(*opt) : nil;
+	            return opt ? T::Boxed::fromCpp(*opt) : nullptr;
 	        }
 	    };
 
