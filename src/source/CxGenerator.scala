@@ -75,7 +75,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"public enum class $self").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
-          w.wl(idCx.enum(o.ident.name) + ",")
+          w.wl(idCx.enum(o.ident.name) + (if(o == e.options.last) "" else ","))
         }
       }
     })

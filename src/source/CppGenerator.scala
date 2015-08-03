@@ -61,7 +61,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"enum class $self : int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
-          w.wl(idCpp.enum(o.ident.name) + ",")
+          w.wl(idCpp.enum(o.ident.name) + (if(o == e.options.last) "" else ","))
         }
       }
     },
