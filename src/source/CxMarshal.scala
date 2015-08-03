@@ -308,7 +308,14 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
     def expr(tm: MExpr, namespace: Option[String], needRef: Boolean): (String, Boolean) = {
 
       val args = tm.base match {
-        case MOptional => ""
+        case MOptional =>
+          assert(tm.args.size == 1)
+          val arg = tm.args.head
+          arg.base match {
+            case MOptional => throw new AssertionError("nested optional?")
+            case p: MPrimitive => (p.cxBoxed, true)
+            case m => exprWithReference(arg, namespace, needRef)
+          }
         case MSet => if (tm.args.size == 1) (tm.args :+ tm.args(0)).map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">") else tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
         case MMap => tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
         case d => if (tm.args.isEmpty) "" else tm.args.map(arg => exprWithReference(arg, namespace, needRef)).mkString("<", ", ", ">")
