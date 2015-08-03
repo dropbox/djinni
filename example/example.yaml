@@ -7,7 +7,7 @@
 name: mylib_record1
 # Specifies what kind of type this is.
 # Supports the same syntax as is used to declare types in .djinni files.
-# Examples: 'interface +c', 'record deriving(eq, or)', 'enum', 'interface +j +o'
+# Examples: 'interface +c', 'record deriving(eq, or)', 'enum', 'flags', 'interface +j +o'
 # This determines how Djinni integrates this type into function parameters, fields or return types and operators.
 typedef: 'record +c deriving(eq, ord)'
 # The (potentially empty) list of required type parameters.

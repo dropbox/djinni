@@ -109,7 +109,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
       w.w(s"public enum ${marshal.typename(ident, e)}").braced {
-        for (o <- e.options) {
+        for (o <- normalEnumOptions(e)) {
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
         }
@@ -238,7 +238,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           for (f <- r.fields) {
             skipFirst { w.wl(",") }
             marshal.nullityAnnotation(f.ty).map(annotation => w.w(annotation + " "))
-            w.w(marshal.typename(f.ty) + " " + idJava.local(f.ident))
+            w.w(marshal.paramType(f.ty) + " " + idJava.local(f.ident))
           }
           w.wl(") {")
         }
@@ -254,7 +254,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           writeDoc(w, f.doc)
           marshal.nullityAnnotation(f.ty).foreach(w.wl)
-          w.w("public " + marshal.typename(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
+          w.w("public " + marshal.returnType(Some(f.ty)) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
             w.wl("return " + idJava.field(f.ident) + ";")
           }
         }
