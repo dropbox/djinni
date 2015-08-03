@@ -360,6 +360,33 @@ abstract class Generator(spec: Spec)
     w.w(end)
   }
 
+  def normalEnumOptions(e: Enum) = e.options.filter(_.specialFlag == None)
+
+  def writeEnumOptionNone(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.None))) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + " = 0,")
+    }
+  }
+
+  def writeEnumOptions(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    var shift = 0
+    for (o <- normalEnumOptions(e)) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + (if(e.flags) s" = 1 << $shift" else "") + ",")
+      shift += 1
+    }
+  }
+
+  def writeEnumOptionAll(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.All))) {
+      writeDoc(w, o.doc)
+      w.w(ident(o.ident.name) + " = ")
+      w.w(normalEnumOptions(e).map(o => ident(o.ident.name)).fold("0")((acc, o) => acc + " | " + o))
+      w.wl(",")
+    }
+  }
+
   // --------------------------------------------------------------------------
 
   def writeDoc(w: IndentWriter, doc: Doc) {
