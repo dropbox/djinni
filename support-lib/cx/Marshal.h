@@ -187,7 +187,7 @@ namespace djinni {
 	        using Boxed = Optional;
 
 	        static CppType toCpp(CxType cx) {
-	            return obj ? CppType(T::Boxed::toCpp(cx)) : CppType();
+	            return cx ? CppType(T::Boxed::toCpp(cx)) : CppType();
 	        }
 
 	        static CxType fromCpp(const CppType& opt) {
