@@ -243,7 +243,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       m.ret.foreach(refs.findConvert)
     })
     refs.cx.add("#include \"Marshal.h\"")
-    refs.cx.add("#include \""+ cxcppMarshal.headerName(ident.name) + "." + spec.cxcppHeaderExt + "\"")
+    refs.cx.add("#include \""+ spec.cxcppIncludePrefix + cxcppMarshal.headerName(ident.name) + "." + spec.cxcppHeaderExt + "\"")
 
     val self = cxMarshal.typename(ident, i)
     val cppSelf = cppMarshal.fqTypename(ident, i)
