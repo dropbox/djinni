@@ -2,10 +2,6 @@
 
 **/.idea/workspace.xml
 **/.idea/tasks.xml
-**/.idea/libraries/
-**/.idea/dictionaries/
-**/.idea/runConfigurations/
-**/.idea/scopes/
 
 # android makefiles
 GypAndroid.mk
@@ -28,6 +24,7 @@ build_ios/
 project.xcworkspace
 *.xccheckout
 DerivedData
+*.xcuserdatad/
 
 # djinni output directories
 djinni-output-temp/

@@ -1,0 +1,207 @@
+# This is an example YAML file providing an interface to a chrono::duration based type with customizable representation and period mapped to NSTimeInterval and java.time.Duration.
+# Example usage:
+# duration<i32, s> maps to std::chrono::duration<int32_t, std::ratio<1>>
+# duration<f64, min> maps to std::chrono::duration<double, std::ratio<60>>
+---
+name: duration
+typedef: 'record deriving(eq, ord)'
+params: [rep, period]
+prefix: ''
+cpp:
+  typename: 'std::chrono::duration'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: '(NSUInteger)%s'
+objcpp:
+  translator: '::djinni::Duration'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: '%s.hashCode()'
+jni:
+  translator: '::djinni::Duration'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: h
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::ratio<3600>'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_h'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_h'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: min
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::ratio<60>'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_min'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_min'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: s
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::ratio<1>'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_s'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_s'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: ms
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::milli'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_ms'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_ms'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: us
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::micro'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_us'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_us'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'
+---
+name: ns
+typedef: 'record'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::nano'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSTimeInterval'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSNumber'
+  pointer: false
+  hash: ''
+objcpp:
+  translator: '::djinni::Duration_ns'
+  header: '"Duration-objc.hpp"'
+java:
+  typename: 'java.time.Duration'
+  boxed: 'java.time.Duration'
+  reference: true
+  generic: false
+  hash: ''
+jni:
+  translator: '::djinni::Duration_ns'
+  header: '"Duration-jni.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/time/Duration;'

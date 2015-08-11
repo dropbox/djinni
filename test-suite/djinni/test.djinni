@@ -19,14 +19,22 @@ test_helpers = interface +c {
     static check_client_interface_nonascii(i: client_interface);
 
     static check_enum_map(m: map<color, string>);
+    static check_enum(c: color);
 
     static token_id(t: token): token;
     static create_cpp_token(): token;
     static check_cpp_token(t: token);
     static cpp_token_id(t: token): i64;
+    static check_token_type(t: token, type: string);
 
     static return_none(): optional<i32>;
 
     # Ensures that we generate integer translation code
-    static assorted_integers_id(i: assorted_integers): assorted_integers;
+    static assorted_primitives_id(i: assorted_primitives): assorted_primitives;
+
+    static id_binary(b: binary): binary;
+}
+
+empty_record = record {
+    
 }

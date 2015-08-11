@@ -3,11 +3,10 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBMapListRecord : NSObject
-- (id)initWithMapListRecord:(DBMapListRecord *)mapListRecord;
-- (id)initWithMapList:(NSArray *)mapList;
+- (nonnull instancetype)initWithMapList:(nonnull NSArray *)mapList;
++ (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray *)mapList;
 
-@property (nonatomic, readonly) NSArray *mapList;
+@property (nonatomic, readonly, nonnull) NSArray * mapList;
 
 @end

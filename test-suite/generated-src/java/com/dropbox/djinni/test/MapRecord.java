@@ -4,18 +4,30 @@
 package com.dropbox.djinni.test;
 
 import java.util.HashMap;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public final class MapRecord {
 
 
     /*package*/ final HashMap<String, Long> mMap;
 
+    /*package*/ final HashMap<Integer, Integer> mImap;
+
     public MapRecord(
-            HashMap<String, Long> map) {
+            @Nonnull HashMap<String, Long> map,
+            @Nonnull HashMap<Integer, Integer> imap) {
         this.mMap = map;
+        this.mImap = imap;
     }
 
+    @Nonnull
     public HashMap<String, Long> getMap() {
         return mMap;
+    }
+
+    @Nonnull
+    public HashMap<Integer, Integer> getImap() {
+        return mImap;
     }
 }

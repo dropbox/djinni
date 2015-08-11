@@ -16,7 +16,7 @@
 
 package djinni
 
-import java.io.{IOException, FileInputStream, InputStreamReader, File}
+import java.io.{IOException, FileInputStream, InputStreamReader, File, BufferedWriter, FileWriter}
 
 import djinni.generatorTools._
 
@@ -25,7 +25,7 @@ object Main {
   def main(args: Array[String]) {
     var idlFile: File = null
     var cppOutFolder: Option[File] = None
-    var cppNamespace: Option[String] = None
+    var cppNamespace: String = ""
     var cppIncludePrefix: String = ""
     var cppFileIdentStyle: IdentConverter = IdentStyle.underLower
     var cppOptionalTemplate: String = "std::optional"
@@ -37,9 +37,8 @@ object Main {
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
     var javaAnnotation: Option[String] = None
-    var javaEitherClass: Option[String] = None
-    var javaEitherPackage: Option[String] = None
-    var objcOutFolder: Option[File] = None
+    var javaNullableAnnotation: Option[String] = None
+    var javaNonnullAnnotation: Option[String] = None
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
     var jniNamespace: String = "djinni_generated"
@@ -55,16 +54,25 @@ object Main {
     var javaIdentStyle = IdentStyle.javaDefault
     var cppIdentStyle = IdentStyle.cppDefault
     var cppTypeEnumIdentStyle: IdentConverter = null
-    var objcExt: String = "mm"
+    var objcOutFolder: Option[File] = None
+    var objcppOutFolder: Option[File] = None
+    var objcppExt: String = "mm"
     var objcHeaderExt: String = "h"
     var objcIdentStyle = IdentStyle.objcDefault
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
-    var objcIncludeCppPrefix: String = ""
+    var objcppIncludePrefix: String = ""
+    var objcppIncludeCppPrefix: String = ""
+    var objcppIncludeObjcPrefixOptional: Option[String] = None
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
-    var objcEitherClass: Option[String] = None
-    var objcEitherHeader: Option[String] = None
-    var objcppNamespace: String = "djinni"
+    var objcppNamespace: String = "djinni_generated"
+    var objcBaseLibIncludePrefix: String = ""
+    var inFileListPath: Option[File] = None
+    var outFileListPath: Option[File] = None
+    var skipGeneration: Boolean = false
+    var yamlOutFolder: Option[File] = None
+    var yamlOutFile: Option[String] = None
+    var yamlPrefix: String = ""
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -90,10 +98,10 @@ object Main {
         .text("The type for translated C++ exceptions in Java (default: java.lang.RuntimeException that is not checked)")
       opt[String]("java-annotation").valueName("<annotation-class>").foreach(x => javaAnnotation = Some(x))
         .text("Java annotation (@Foo) to place on all generated Java classes")
-      opt[String]("java-either-class").valueName("<class>").foreach(x => javaEitherClass = Some(x))
-        .text("The Java class to use for either values")
-      opt[String]("java-either-package").valueName("<package>").foreach(x => javaEitherPackage = Some(x))
-        .text("The package containing the Java class for either values")
+      opt[String]("java-nullable-annotation").valueName("<nullable-annotation-class>").foreach(x => javaNullableAnnotation = Some(x))
+        .text("Java annotation (@Nullable) to place on all fields and return values that are optional")
+      opt[String]("java-nonnull-annotation").valueName("<nonnull-annotation-class>").foreach(x => javaNonnullAnnotation = Some(x))
+        .text("Java annotation (@Nonnull) to place on all fields and return values that are not optional")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
         .text("The output folder for C++ files (Generator disabled if unspecified).")
@@ -101,7 +109,7 @@ object Main {
         .text("The output folder for C++ header files (default: the same as --cpp-out).")
       opt[String]("cpp-include-prefix").valueName("<prefix>").foreach(cppIncludePrefix = _)
         .text("The prefix for #includes of header files from C++ files.")
-      opt[String]("cpp-namespace").valueName("...").foreach(x => cppNamespace = Some(x))
+      opt[String]("cpp-namespace").valueName("...").foreach(x => cppNamespace = x)
         .text("The namespace name to use for generated C++ classes.")
       opt[String]("cpp-ext").valueName("<ext>").foreach(cppExt = _)
         .text("The filename extension for C++ files (default: \"cpp\").")
@@ -133,22 +141,41 @@ object Main {
       note("")
       opt[File]("objc-out").valueName("<out-folder>").foreach(x => objcOutFolder = Some(x))
         .text("The output folder for Objective-C files (Generator disabled if unspecified).")
-      opt[String]("objc-ext").valueName("<ext>").foreach(objcExt = _)
-        .text("The filename extension for Objective-C files (default: \"mm\")")
       opt[String]("objc-h-ext").valueName("<ext>").foreach(objcHeaderExt = _)
-        .text("The filename extension for Objective-C header files (default: \"h\")")
+        .text("The filename extension for Objective-C[++] header files (default: \"h\")")
       opt[String]("objc-type-prefix").valueName("<pre>").foreach(objcTypePrefix = _)
         .text("The prefix for Objective-C data types (usually two or three letters)")
       opt[String]("objc-include-prefix").valueName("<prefix>").foreach(objcIncludePrefix = _)
         .text("The prefix for #import of header files from Objective-C files.")
-      opt[String]("objc-include-cpp-prefix").valueName("<prefix>").foreach(objcIncludeCppPrefix = _)
-        .text("The prefix for #include of the main header files from Objective-C files.")
-      opt[String]("objc-either-class").valueName("<class>").foreach(x => objcEitherClass = Some(x))
-        .text("The class for Objective-C either values")
-      opt[String]("objc-either-header").valueName("<header>").foreach(x => objcEitherHeader = Some(x))
-        .text("The header for the Objective-C either value class")
+      note("")
+      opt[File]("objcpp-out").valueName("<out-folder>").foreach(x => objcppOutFolder = Some(x))
+        .text("The output folder for private Objective-C++ files (Generator disabled if unspecified).")
+      opt[String]("objcpp-ext").valueName("<ext>").foreach(objcppExt = _)
+        .text("The filename extension for Objective-C++ files (default: \"mm\")")
+      opt[String]("objcpp-include-prefix").valueName("<prefix>").foreach(objcppIncludePrefix = _)
+        .text("The prefix for #import of Objective-C++ header files from Objective-C++ files.")
+      opt[String]("objcpp-include-cpp-prefix").valueName("<prefix>").foreach(objcppIncludeCppPrefix = _)
+        .text("The prefix for #include of the main C++ header files from Objective-C++ files.")
+      opt[String]("objcpp-include-objc-prefix").valueName("<prefix>").foreach(x => objcppIncludeObjcPrefixOptional = Some(x))
+        .text("The prefix for #import of the Objective-C header files from Objective-C++ files (default: the same as --objcpp-include-prefix)")
       opt[String]("objcpp-namespace").valueName("<prefix>").foreach(objcppNamespace = _)
-        .text("Namespace for C++ objects defined in Objective-C++, such as wrapper caches")
+        .text("The namespace name to use for generated Objective-C++ classes.")
+      opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
+        .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
+      note("")
+      opt[File]("yaml-out").valueName("<out-folder>").foreach(x => yamlOutFolder = Some(x))
+        .text("The output folder for YAML files (Generator disabled if unspecified).")
+      opt[String]("yaml-out-file").valueName("<out-file>").foreach(x => yamlOutFile = Some(x))
+        .text("If specified all types are merged into a single YAML file instead of generating one file per type (relative to --yaml-out).")
+      opt[String]("yaml-prefix").valueName("<pre>").foreach(yamlPrefix = _)
+        .text("The prefix to add to type names stored in YAML files (default: \"\").")
+      note("")
+      opt[File]("list-in-files").valueName("<list-in-files>").foreach(x => inFileListPath = Some(x))
+        .text("Optional file in which to write the list of input files parsed.")
+      opt[File]("list-out-files").valueName("<list-out-files>").foreach(x => outFileListPath = Some(x))
+        .text("Optional file in which to write the list of output files produced.")
+      opt[Boolean]("skip-generation").valueName("<true/false>").foreach(x => skipGeneration = x)
+        .text("Way of specifying if file generation should be skipped (default: false)")
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -183,6 +210,7 @@ object Main {
     val jniBaseLibClassIdentStyle = jniBaseLibClassIdentStyleOptional.getOrElse(jniClassIdentStyle)
     val jniFileIdentStyle = jniFileIdentStyleOptional.getOrElse(cppFileIdentStyle)
     var objcFileIdentStyle = objcFileIdentStyleOptional.getOrElse(objcIdentStyle.ty)
+    val objcppIncludeObjcPrefix = objcppIncludeObjcPrefixOptional.getOrElse(objcppIncludePrefix)
 
     // Add ObjC prefix to identstyle
     objcIdentStyle = objcIdentStyle.copy(ty = IdentStyle.prefix(objcTypePrefix,objcIdentStyle.ty))
@@ -194,13 +222,24 @@ object Main {
 
     // Parse IDL file.
     System.out.println("Parsing...")
+    val inFileListWriter = if (inFileListPath.isDefined) {
+      createFolder("input file list", inFileListPath.get.getParentFile)
+      Some(new BufferedWriter(new FileWriter(inFileListPath.get)))
+    } else {
+      None
+    }
     val idl = try {
-      (new Parser).parseFile(idlFile)
+      (new Parser).parseFile(idlFile, inFileListWriter)
     }
     catch {
       case ex: IOException =>
         System.err.println("Error reading from --idl file: " + ex.getMessage)
         System.exit(1); return
+    }
+    finally {
+      if (inFileListWriter.isDefined) {
+        inFileListWriter.get.close()
+      }
     }
 
     // Resolve names in IDL file, check types.
@@ -212,14 +251,22 @@ object Main {
       case _ =>
     }
 
+    System.out.println("Generating...")
+    val outFileListWriter = if (outFileListPath.isDefined) {
+      createFolder("output file list", outFileListPath.get.getParentFile)
+      Some(new BufferedWriter(new FileWriter(outFileListPath.get)))
+    } else {
+      None
+    }
+
     val outSpec = Spec(
       javaOutFolder,
       javaPackage,
       javaIdentStyle,
       javaCppException,
       javaAnnotation,
-      javaEitherClass,
-      javaEitherPackage,
+      javaNullableAnnotation,
+      javaNonnullAnnotation,
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,
@@ -242,18 +289,32 @@ object Main {
       cppExt,
       cppHeaderExt,
       objcOutFolder,
+      objcppOutFolder,
       objcIdentStyle,
       objcFileIdentStyle,
-      objcExt,
+      objcppExt,
       objcHeaderExt,
       objcIncludePrefix,
-      objcIncludeCppPrefix,
-      objcEitherClass,
-      objcEitherHeader,
-      objcppNamespace)
+      objcppIncludePrefix,
+      objcppIncludeCppPrefix,
+      objcppIncludeObjcPrefix,
+      objcppNamespace,
+      objcBaseLibIncludePrefix,
+      outFileListWriter,
+      skipGeneration,
+      yamlOutFolder,
+      yamlOutFile,
+      yamlPrefix)
 
-    System.out.println("Generating...")
-    val r = generate(idl, outSpec)
-    r.foreach(e => System.err.println("Error generating output: " + e))
+
+    try {
+      val r = generate(idl, outSpec)
+      r.foreach(e => System.err.println("Error generating output: " + e))
+    }
+    finally {
+      if (outFileListWriter.isDefined) {
+        outFileListWriter.get.close()
+      }
+    }
   }
 }

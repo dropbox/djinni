@@ -26,35 +26,25 @@ import scala.collection.mutable
 
 class JavaGenerator(spec: Spec) extends Generator(spec) {
 
-  var javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaNonnullAnnotation = spec.javaNonnullAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
     var java = mutable.TreeSet[String]()
 
     spec.javaAnnotation.foreach(pkg => java.add(pkg))
+    spec.javaNullableAnnotation.foreach(pkg => java.add(pkg))
+    spec.javaNonnullAnnotation.foreach(pkg => java.add(pkg))
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ", ", ">")
+      tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = m match {
-      case o: MOpaque =>
-        o match {
-          case MDate =>
-            java.add("java.util.Date")
-          case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
-            case (p, Some(c)) => java.add(withPackage(p, c))
-            case _ => throw GenerateException("No Java class specified for 'either'")
-          }
-          case MList =>
-            java.add("java.util.ArrayList")
-          case MSet =>
-            java.add("java.util.HashSet")
-          case MMap =>
-            java.add("java.util.HashMap")
-          case _ =>
-        }
+    def find(m: Meta) = for(r <- marshal.references(m)) r match {
+      case ImportRef(arg) => java.add(arg)
       case _ =>
     }
   }
@@ -77,19 +67,17 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
     def writeJavaConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
+      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => {
-        val enumMdef = ty.resolved.base.asInstanceOf[MDef]
-        w.w(s"${idJava.ty(enumMdef.name)}.${idJava.enum(e)}")
-      }
+      case e: EnumValue =>  w.w(s"${marshal.typename(ty)}.${idJava.enum(e)}")
       case v: ConstRef => w.w(idJava.const(v))
       case z: Map[_, _] => { // Value is record
-      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(s"new ${idJava.ty(recordMdef.name)}(")
+        w.wl(s"new ${marshal.typename(ty)}(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
@@ -106,7 +94,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public static final ${toJavaType(c.ty)} ${idJava.const(c.ident)} = ")
+      marshal.nullityAnnotation(c.ty).foreach(w.wl)
+      w.w(s"public static final ${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl
@@ -119,7 +108,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(ident, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public enum ${idJava.ty(ident)}").braced {
+      w.w(s"public enum ${marshal.typename(ident, e)}").braced {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
@@ -144,7 +133,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     }
 
     writeJavaFile(ident, origin, refs.java, w => {
-      val javaClass = idJava.ty(ident)
+      val javaClass = marshal.typename(ident, i)
       val typeParamList = javaTypeParams(typeParams)
       writeDoc(w, doc)
 
@@ -157,21 +146,29 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods if !m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toJavaType(_))
-          val params = m.params.map(p => toJavaType(p.ty) + " " + idJava.local(p.ident))
+          val ret = marshal.returnType(m.ret)
+          val params = m.params.map(p => {
+            val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+            nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+          })
+          marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toJavaType(_))
-          val params = m.params.map(p => toJavaType(p.ty) + " " + idJava.local(p.ident))
+          val ret = marshal.returnType(m.ret)
+          val params = m.params.map(p => {
+            val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+            nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+          })
+          marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          w.wl(s"public static final class CppProxy$typeParamList extends $javaClass$typeParamList").braced {
+          w.wl(s"private static final class CppProxy$typeParamList extends $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl
@@ -190,9 +187,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("super.finalize();")
             }
             for (m <- i.methods if !m.static) { // Static methods not in CppProxy
-            val ret = m.ret.fold("void")(toJavaType(_))
+            val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
-              val params = m.params.map(p => toJavaType(p.ty)+" "+idJava.local(p.ident)).mkString(", ")
+              val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
               val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")
               val meth = idJava.method(m.ident)
               w.wl
@@ -217,34 +214,31 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
+      val self = marshal.typename(javaName, r)
 
-      // HACK: Use generic base class to correctly implement Comparable interface
       val comparableFlag =
         if (r.derivingTypes.contains(DerivingType.Ord)) {
-          if (r.ext.java) {
-            s"<E extends ${idJava.ty(javaName)}> implements Comparable<E>"
-          } else {
-            s" implements Comparable<${idJava.ty(javaName)}>"
-          }
+          s" implements Comparable<$self>"
         } else {
           ""
         }
-      w.w(s"public$javaFinal class ${idJava.ty(javaName) + javaTypeParams(params)}$comparableFlag").braced {
+      w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
           w.wl
-          w.wl(s"/*package*/ final ${toJavaType(f.ty)} ${idJava.field(f.ident)};")
+          w.wl(s"/*package*/ final ${marshal.fieldType(f.ty)} ${idJava.field(f.ident)};")
         }
 
         // Constructor.
         w.wl
-        w.wl(s"public ${idJava.ty(javaName)}(").nestedN(2) {
+        w.wl(s"public $self(").nestedN(2) {
           val skipFirst = SkipFirst()
           for (f <- r.fields) {
             skipFirst { w.wl(",") }
-            w.w(toJavaType(f.ty) + " " + idJava.local(f.ident))
+            marshal.nullityAnnotation(f.ty).map(annotation => w.w(annotation + " "))
+            w.w(marshal.typename(f.ty) + " " + idJava.local(f.ident))
           }
           w.wl(") {")
         }
@@ -259,7 +253,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         for (f <- r.fields) {
           w.wl
           writeDoc(w, f.doc)
-          w.w("public " + toJavaType(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
+          marshal.nullityAnnotation(f.ty).foreach(w.wl)
+          w.w("public " + marshal.typename(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
             w.wl("return " + idJava.field(f.ident) + ";")
           }
         }
@@ -267,11 +262,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
           w.wl("@Override")
-          w.w("public boolean equals(Object obj)").braced {
-            w.w(s"if (!(obj instanceof ${idJava.ty(javaName)}))").braced {
-              w.wl("return false;");
+          val nullableAnnotation = javaNullableAnnotation.map(_ + " ").getOrElse("")
+          w.w(s"public boolean equals(${nullableAnnotation}Object obj)").braced {
+            w.w(s"if (!(obj instanceof $self))").braced {
+              w.wl("return false;")
             }
-            w.wl(s"${idJava.ty(javaName)} other = (${idJava.ty(javaName)}) obj;")
+            w.wl(s"$self other = ($self) obj;")
             w.w(s"return ").nestedN(2) {
               val skipFirst = SkipFirst()
               for (f <- r.fields) {
@@ -289,36 +285,90 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                     case DEnum => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
                     case _ => throw new AssertionError("Unreachable")
                   }
+                  case e: MExtern => e.defType match {
+                    case DRecord => if(e.java.reference) {
+                      w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                    } else {
+                      w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
+                    }
+                    case DEnum => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
+                    case _ => throw new AssertionError("Unreachable")
+                  }
                   case _ => throw new AssertionError("Unreachable")
                 }
               }
             }
             w.wl(";")
           }
+          // Also generate a hashCode function, since you shouldn't override one without the other.
+          // This hashcode implementation is based off of the apache commons-lang implementation of
+          // HashCodeBuilder (excluding support for Java arrays) which is in turn based off of the
+          // the recommendataions made in Effective Java.
+          w.wl
+          w.wl("@Override")
+          w.w("public int hashCode()").braced {
+            w.wl("// Pick an arbitrary non-zero starting value")
+            w.wl("int hashCode = 17;")
+            // Also pick an arbitrary prime to use as the multiplier.
+            val multiplier = "31"
+            for (f <- r.fields) {
+              val fieldHashCode = f.ty.resolved.base match {
+                case MBinary => s"java.util.Arrays.hashCode(${idJava.field(f.ident)})"
+                case MList | MSet | MMap | MString | MDate => s"${idJava.field(f.ident)}.hashCode()"
+                // Need to repeat this case for MDef
+                case df: MDef => s"${idJava.field(f.ident)}.hashCode()"
+                case MOptional => s"(${idJava.field(f.ident)} == null ? 0 : ${idJava.field(f.ident)}.hashCode())"
+                case t: MPrimitive => t.jName match {
+                  case "byte" | "short" | "int" => idJava.field(f.ident)
+                  case "long" => s"((int) (${idJava.field(f.ident)} ^ (${idJava.field(f.ident)} >>> 32)))"
+                  case "float" => s"Float.floatToIntBits(${idJava.field(f.ident)})"
+                  case "double" => s"((int) (Double.doubleToLongBits(${idJava.field(f.ident)}) ^ (Double.doubleToLongBits(${idJava.field(f.ident)}) >>> 32)))"
+                  case "boolean" => s"(${idJava.field(f.ident)} ? 1 : 0)"
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case e: MExtern => e.defType match {
+                  case DRecord => "(" + e.java.hash.format(idJava.field(f.ident)) + ")"
+                  case DEnum => s"${idJava.field(f.ident)}.hashCode()"
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case _ => throw new AssertionError("Unreachable")
+              }
+              w.wl(s"hashCode = hashCode * $multiplier + $fieldHashCode;")
+            }
+            w.wl(s"return hashCode;")
+          }
+
         }
 
         if (r.derivingTypes.contains(DerivingType.Ord)) {
+          def primitiveCompare(ident: Ident) {
+            w.wl(s"if (this.${idJava.field(ident)} < other.${idJava.field(ident)}) {").nested {
+              w.wl(s"tempResult = -1;")
+            }
+            w.wl(s"} else if (this.${idJava.field(ident)} > other.${idJava.field(ident)}) {").nested {
+              w.wl(s"tempResult = 1;")
+            }
+            w.wl(s"} else {").nested {
+              w.wl(s"tempResult = 0;")
+            }
+            w.wl("}")
+          }
           w.wl
           w.wl("@Override")
-          val tyName = if (r.ext.java) "E" else idJava.ty(javaName)
-          w.w(s"public int compareTo($tyName other) ").braced {
+          val nonnullAnnotation = javaNonnullAnnotation.map(_ + " ").getOrElse("")
+          w.w(s"public int compareTo($nonnullAnnotation$self other) ").braced {
             w.wl("int tempResult;")
             for (f <- r.fields) {
               f.ty.resolved.base match {
                 case MString => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
-                case t: MPrimitive =>
-                  w.wl(s"if (this.${idJava.field(f.ident)} < other.${idJava.field(f.ident)}) {").nested {
-                    w.wl(s"tempResult = -1;")
-                  }
-                  w.wl(s"} else if (this.${idJava.field(f.ident)} > other.${idJava.field(f.ident)}) {").nested {
-                    w.wl(s"tempResult = 1;")
-                  }
-                  w.wl(s"} else {").nested {
-                    w.wl(s"tempResult = 0;")
-                  }
-                  w.wl("}")
+                case t: MPrimitive => primitiveCompare(f.ident)
                 case df: MDef => df.defType match {
                   case DRecord => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                  case DEnum => w.w(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case e: MExtern => e.defType match {
+                  case DRecord => if(e.java.reference) w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});") else primitiveCompare(f.ident)
                   case DEnum => w.w(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
                   case _ => throw new AssertionError("Unreachable")
                 }
@@ -334,43 +384,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
       }
     })
-  }
-
-  def toJavaType(ty: TypeRef, packageName: Option[String] = None): String = toJavaType(ty.resolved, packageName)
-  def toJavaType(tm: MExpr, packageName: Option[String]): String = {
-    def f(tm: MExpr, needRef: Boolean): String = {
-      tm.base match {
-        case MOptional =>
-          // HACK: We use "null" for the empty optional in Java.
-          assert(tm.args.size == 1)
-          val arg = tm.args.head
-          arg.base match {
-            case p: MPrimitive => p.jBoxed
-            case MOptional => throw new AssertionError("nested optional?")
-            case m => f(arg, true)
-          }
-        case o =>
-          val args = if (tm.args.isEmpty) "" else tm.args.map(f(_, true)).mkString("<", ", ", ">")
-          val base = o match {
-            case p: MPrimitive => if (needRef) p.jBoxed else p.jName
-            case MString => "String"
-            case MBinary => "byte[]"
-            case MDate => "Date"
-            case MOptional => throw new AssertionError("optional should have been special cased")
-            case MEither => spec.javaEitherClass match {
-              case None => throw GenerateException("No Java class specified for 'either'")
-              case Some(c) => c
-            }
-            case MList => "ArrayList"
-            case MSet => "HashSet"
-            case MMap => "HashMap"
-            case d: MDef => withPackage(packageName, idJava.ty(d.name))
-            case p: MParam => idJava.typeParam(p.name)
-          }
-          base + args
-      }
-    }
-    f(tm, false)
   }
 
   def javaTypeParams(params: Seq[TypeParam]): String =

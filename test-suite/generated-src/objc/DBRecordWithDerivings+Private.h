@@ -3,11 +3,22 @@
 
 #import "DBRecordWithDerivings.h"
 #include "record_with_derivings.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBRecordWithDerivings ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppRecordWithDerivings:(const RecordWithDerivings &)recordWithDerivings;
-- (RecordWithDerivings)cppRecordWithDerivings;
+@class DBRecordWithDerivings;
 
-@end
+namespace djinni_generated {
+
+struct RecordWithDerivings
+{
+    using CppType = ::RecordWithDerivings;
+    using ObjcType = DBRecordWithDerivings*;
+
+    using Boxed = RecordWithDerivings;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

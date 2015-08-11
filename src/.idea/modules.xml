@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/src.iml" filepath="$PROJECT_DIR$/.idea/modules/src.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/src-build.iml" filepath="$PROJECT_DIR$/.idea/modules/src-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../support-lib/support-lib.iml" filepath="$PROJECT_DIR$/../support-lib/support-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test-suite/test-suite.iml" filepath="$PROJECT_DIR$/../test-suite/test-suite.iml" />
     </modules>
   </component>
 </project>
-

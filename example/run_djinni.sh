@@ -13,7 +13,7 @@ while [ -h "$loc" ]; do
         loc="`dirname "$loc"`/$link"  # Relative link
     fi
 done
-base_dir=$(cd `dirname "$loc"` && pwd)
+base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 temp_out="$base_dir/djinni-output-temp"
 
@@ -34,7 +34,7 @@ if [ $# -eq 0 ]; then
 elif [ $# -eq 1 ]; then
     command="$1"; shift
     if [ "$command" != "clean" ]; then
-        echo "Unexpected arguemnt: \"$command\"." 1>&2
+        echo "Unexpected argument: \"$command\"." 1>&2
         exit 1
     fi
     for dir in "$temp_out" "$cpp_out" "$jni_out" "$java_out"; do
@@ -50,9 +50,11 @@ fi
 "$base_dir/../src/build"
 
 [ ! -e "$temp_out" ] || rm -r "$temp_out"
-$base_dir/../src/run-assume-built \
+"$base_dir/../src/run-assume-built" \
     --java-out "$temp_out/java" \
     --java-package $java_package \
+    --java-nullable-annotation "javax.annotation.CheckForNull" \
+    --java-nonnull-annotation "javax.annotation.Nonnull" \
     --ident-java-field mFooBar \
     \
     --cpp-out "$temp_out/cpp" \
@@ -63,8 +65,8 @@ $base_dir/../src/run-assume-built \
     --ident-jni-class NativeFooBar \
     --ident-jni-file NativeFooBar \
     \
-    --objc-out "$temp_out/objc" \
-    --objcpp-namespace djinni_generated \
+	--objc-out "$temp_out/objc" \
+	--objcpp-out "$temp_out/objc" \
     --objc-type-prefix TXS \
     \
     --idl "$in"

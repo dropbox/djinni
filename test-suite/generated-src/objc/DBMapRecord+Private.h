@@ -3,11 +3,22 @@
 
 #import "DBMapRecord.h"
 #include "map_record.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBMapRecord ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppMapRecord:(const MapRecord &)mapRecord;
-- (MapRecord)cppMapRecord;
+@class DBMapRecord;
 
-@end
+namespace djinni_generated {
+
+struct MapRecord
+{
+    using CppType = ::MapRecord;
+    using ObjcType = DBMapRecord*;
+
+    using Boxed = MapRecord;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

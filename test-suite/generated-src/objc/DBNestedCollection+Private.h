@@ -3,11 +3,22 @@
 
 #import "DBNestedCollection.h"
 #include "nested_collection.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBNestedCollection ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppNestedCollection:(const NestedCollection &)nestedCollection;
-- (NestedCollection)cppNestedCollection;
+@class DBNestedCollection;
 
-@end
+namespace djinni_generated {
+
+struct NestedCollection
+{
+    using CppType = ::NestedCollection;
+    using ObjcType = DBNestedCollection*;
+
+    using Boxed = NestedCollection;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

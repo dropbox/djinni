@@ -8,31 +8,43 @@
 
 namespace djinni_generated {
 
-class NativeClientInterface final : djinni::JniInterface<ClientInterface, NativeClientInterface> {
+class NativeClientInterface final : ::djinni::JniInterface<::ClientInterface, NativeClientInterface> {
 public:
-    using CppType = std::shared_ptr<ClientInterface>;
+    using CppType = std::shared_ptr<::ClientInterface>;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, std::shared_ptr<ClientInterface> c) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._toJava(jniEnv, c); }
-    static std::shared_ptr<ClientInterface> fromJava(JNIEnv* jniEnv, jobject j) { return djinni::JniClass<::djinni_generated::NativeClientInterface>::get()._fromJava(jniEnv, j); }
+    using Boxed = NativeClientInterface;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
-    const jmethodID method_getRecord { djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
+    ~NativeClientInterface();
 
-    class JavaProxy final : djinni::JavaProxyCacheEntry, public ClientInterface {
-    public:
-        JavaProxy(jobject obj);
-        virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string) override;
-
-    private:
-        using djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend class djinni::JniInterface<ClientInterface, ::djinni_generated::NativeClientInterface>;
-        friend class djinni::JavaProxyCache<JavaProxy>;
-    };
+    static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeClientInterface>::get()._fromJava(jniEnv, j); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeClientInterface>::get()._toJava(jniEnv, c)}; }
 
 private:
     NativeClientInterface();
-    friend class djinni::JniClass<::djinni_generated::NativeClientInterface>;
+    friend ::djinni::JniClass<NativeClientInterface>;
+    friend ::djinni::JniInterface<::ClientInterface, NativeClientInterface>;
+
+    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::ClientInterface
+    {
+    public:
+        JavaProxy(JniType j);
+        ~JavaProxy();
+
+        ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override;
+        double identifier_check(const std::vector<uint8_t> & data, int32_t r, int64_t jret) override;
+        std::string return_str() override;
+
+    private:
+        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
+        friend ::djinni::JniInterface<::ClientInterface, ::djinni_generated::NativeClientInterface>;
+        friend ::djinni::JavaProxyCache<JavaProxy>;
+    };
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };
+    const jmethodID method_getRecord { ::djinni::jniGetMethodID(clazz.get(), "getRecord", "(JLjava/lang/String;Ljava/lang/String;)Lcom/dropbox/djinni/test/ClientReturnedRecord;") };
+    const jmethodID method_identifierCheck { ::djinni::jniGetMethodID(clazz.get(), "identifierCheck", "([BIJ)D") };
+    const jmethodID method_returnStr { ::djinni::jniGetMethodID(clazz.get(), "returnStr", "()Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

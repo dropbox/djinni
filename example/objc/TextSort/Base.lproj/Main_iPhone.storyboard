@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,16 +18,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Type the lines to sort" translatesAutoresizingMaskIntoConstraints="NO" id="GOB-Ok-Z2R">
-                                <rect key="frame" x="21" y="58" width="278" height="429"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Type the lines to sort" translatesAutoresizingMaskIntoConstraints="NO" id="GOB-Ok-Z2R">
+                                <rect key="frame" x="16" y="28" width="288" height="482"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A93-rB-AZ4">
-                                <rect key="frame" x="41" y="495" width="238" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A93-rB-AZ4">
+                                <rect key="frame" x="54" y="518" width="60" height="30"/>
                                 <state key="normal" title="Sort">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -33,8 +33,38 @@
                                     <action selector="sort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="JmD-7I-e8t"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="81n-2H-7fH">
+                                <rect key="frame" x="104" y="518" width="113" height="30"/>
+                                <state key="normal" title="Reverse Sort">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="reverseSort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3ph-FD-T7F"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cv7-dA-P8a">
+                                <rect key="frame" x="225" y="518" width="60" height="30"/>
+                                <state key="normal" title="Random">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="randomSort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Qm2-PQ-ghk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cv7-dA-P8a" firstAttribute="leading" secondItem="81n-2H-7fH" secondAttribute="trailing" constant="8" id="6k6-kS-Uv4"/>
+                            <constraint firstItem="81n-2H-7fH" firstAttribute="baseline" secondItem="cv7-dA-P8a" secondAttribute="baseline" id="EDF-c5-6UY"/>
+                            <constraint firstItem="GOB-Ok-Z2R" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="FcW-gp-TKr"/>
+                            <constraint firstItem="cv7-dA-P8a" firstAttribute="top" secondItem="GOB-Ok-Z2R" secondAttribute="bottom" constant="8" id="LWK-fr-cJv"/>
+                            <constraint firstItem="81n-2H-7fH" firstAttribute="leading" secondItem="A93-rB-AZ4" secondAttribute="trailing" constant="8" id="M4F-4D-BXj"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="81n-2H-7fH" secondAttribute="bottom" constant="20" id="Skf-gJ-Pvn"/>
+                            <constraint firstAttribute="centerX" secondItem="81n-2H-7fH" secondAttribute="centerX" id="dPr-yc-eNh"/>
+                            <constraint firstItem="GOB-Ok-Z2R" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="r9O-jI-RXe"/>
+                            <constraint firstItem="81n-2H-7fH" firstAttribute="baseline" secondItem="A93-rB-AZ4" secondAttribute="baseline" id="sDL-eI-t03"/>
+                            <constraint firstItem="GOB-Ok-Z2R" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ykx-tI-cFm"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="LTz-Tk-BIg"/>
                     <connections>

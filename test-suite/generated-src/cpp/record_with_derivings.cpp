@@ -4,39 +4,39 @@
 #include "record_with_derivings.hpp"  // my header
 
 
-bool RecordWithDerivings::operator==(const RecordWithDerivings & other) const {
-    return key1 == other.key1 &&
-        key2 == other.key2;
+bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    return lhs.key1 == rhs.key1 &&
+           lhs.key2 == rhs.key2;
 }
 
-bool RecordWithDerivings::operator!=(const RecordWithDerivings & other) const {
-    return !(*this == other);
+bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    return !(lhs == rhs);
 }
 
-bool RecordWithDerivings::operator<(const RecordWithDerivings & other) const {
-    if (key1 < other.key1) {
+bool operator<(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    if (lhs.key1 < rhs.key1) {
         return true;
     }
-    if (other.key1 < key1) {
+    if (rhs.key1 < lhs.key1) {
         return false;
     }
-    if (key2 < other.key2) {
+    if (lhs.key2 < rhs.key2) {
         return true;
     }
-    if (other.key2 < key2) {
+    if (rhs.key2 < lhs.key2) {
         return false;
     }
     return false;
 }
 
-bool RecordWithDerivings::operator>(const RecordWithDerivings & other) const {
-    return other < *this;
+bool operator>(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    return rhs < lhs;
 }
 
-bool RecordWithDerivings::operator<=(const RecordWithDerivings & other) const {
-    return (*this < other || *this == other);
+bool operator<=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    return !(rhs < lhs);
 }
 
-bool RecordWithDerivings::operator>=(const RecordWithDerivings & other) const {
-    return other <= *this;
+bool operator>=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
+    return !(lhs < rhs);
 }

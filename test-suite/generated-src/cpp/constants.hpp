@@ -10,33 +10,31 @@
 
 struct Constants final {
 
-    static const bool BOOL_CONSTANT;
+    static bool const BOOL_CONSTANT;
 
-    static const int8_t I8_CONSTANT;
+    static int8_t const I8_CONSTANT;
 
-    static const int16_t I16_CONSTANT;
+    static int16_t const I16_CONSTANT;
 
-    static const int32_t I32_CONSTANT;
+    static int32_t const I32_CONSTANT;
 
-    static const int64_t I64_CONSTANT;
+    static int64_t const I64_CONSTANT;
 
-    static const double F64_CONSTANT;
+    static float const F32_CONSTANT;
 
-    static const std::string STRING_CONSTANT;
+    static double const F64_CONSTANT;
 
-    static const std::experimental::optional<int32_t> OPTIONAL_INTEGER_CONSTANT;
+    static std::string const STRING_CONSTANT;
 
-    static const Constants OBJECT_CONSTANT;
+    static std::experimental::optional<int32_t> const OPTIONAL_INTEGER_CONSTANT;
 
+    static Constants const OBJECT_CONSTANT;
     int32_t some_integer;
-
     std::string some_string;
 
-
-    Constants(
-            int32_t some_integer,
-            std::string some_string) :
-                some_integer(std::move(some_integer)),
-                some_string(std::move(some_string)) {
-    }
+    Constants(int32_t some_integer,
+              std::string some_string)
+    : some_integer(std::move(some_integer))
+    , some_string(std::move(some_string))
+    {}
 };

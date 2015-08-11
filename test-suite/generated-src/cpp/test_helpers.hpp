@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "assorted_integers.hpp"
+#include "assorted_primitives.hpp"
 #include "color.hpp"
 #include "map_list_record.hpp"
 #include "nested_collection.hpp"
@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class ClientInterface;
 class Token;
@@ -52,6 +53,8 @@ public:
 
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
 
+    static void check_enum(color c);
+
     static std::shared_ptr<Token> token_id(const std::shared_ptr<Token> & t);
 
     static std::shared_ptr<Token> create_cpp_token();
@@ -60,8 +63,12 @@ public:
 
     static int64_t cpp_token_id(const std::shared_ptr<Token> & t);
 
+    static void check_token_type(const std::shared_ptr<Token> & t, const std::string & type);
+
     static std::experimental::optional<int32_t> return_none();
 
     /** Ensures that we generate integer translation code */
-    static AssortedIntegers assorted_integers_id(const AssortedIntegers & i);
+    static AssortedPrimitives assorted_primitives_id(const AssortedPrimitives & i);
+
+    static std::vector<uint8_t> id_binary(const std::vector<uint8_t> & b);
 };

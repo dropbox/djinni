@@ -3,6 +3,9 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public final class RecordWithDerivings implements Comparable<RecordWithDerivings> {
 
 
@@ -12,7 +15,7 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
 
     public RecordWithDerivings(
             int key1,
-            String key2) {
+            @Nonnull String key2) {
         this.mKey1 = key1;
         this.mKey2 = key2;
     }
@@ -21,12 +24,13 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
         return mKey1;
     }
 
+    @Nonnull
     public String getKey2() {
         return mKey2;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@CheckForNull Object obj) {
         if (!(obj instanceof RecordWithDerivings)) {
             return false;
         }
@@ -36,7 +40,16 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
     }
 
     @Override
-    public int compareTo(RecordWithDerivings other)  {
+    public int hashCode() {
+        // Pick an arbitrary non-zero starting value
+        int hashCode = 17;
+        hashCode = hashCode * 31 + mKey1;
+        hashCode = hashCode * 31 + mKey2.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public int compareTo(@Nonnull RecordWithDerivings other)  {
         int tempResult;
         if (this.mKey1 < other.mKey1) {
             tempResult = -1;

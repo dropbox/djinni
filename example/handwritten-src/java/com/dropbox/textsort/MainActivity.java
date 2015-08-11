@@ -8,7 +8,6 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class MainActivity extends Activity {
 
     private EditText text;

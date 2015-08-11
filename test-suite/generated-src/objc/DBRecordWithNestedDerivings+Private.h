@@ -3,11 +3,22 @@
 
 #import "DBRecordWithNestedDerivings.h"
 #include "record_with_nested_derivings.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBRecordWithNestedDerivings ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppRecordWithNestedDerivings:(const RecordWithNestedDerivings &)recordWithNestedDerivings;
-- (RecordWithNestedDerivings)cppRecordWithNestedDerivings;
+@class DBRecordWithNestedDerivings;
 
-@end
+namespace djinni_generated {
+
+struct RecordWithNestedDerivings
+{
+    using CppType = ::RecordWithNestedDerivings;
+    using ObjcType = DBRecordWithNestedDerivings*;
+
+    using Boxed = RecordWithNestedDerivings;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

@@ -21,7 +21,7 @@ We announced Djinni at CppCon 2014. Access the slides from https://bit.ly/djinni
 
 ### Types
 Djinni generates code based on interface definitions in an IDL file. An IDL file can contain
-three kinds of declaration: enums, records, and interfaces.
+three kinds of declarations: enums, records, and interfaces.
 
 * Enums become C++ enum classes, Java enums, or ObjC `NS_ENUM`s.
 * Records are pure-data value objects.
@@ -105,6 +105,8 @@ When the Djinni file(s) are ready, from the command line or a bash script you ca
        --objc-out OBJC_OUTPUT_FOLDER \
        --objc-type-prefix DB \ # Apple suggests Objective-C classes have a prefix for each defined type.
        \
+       --objcpp-out OBJC_OUTPUT_FOLDER \
+       \
        --idl MY_PROJECT.djinni
 
 Some other options are also available, such as `--cpp-namespace` that put generated C++ code into the namespace specified. For a list of all options, run
@@ -156,23 +158,21 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 #### Objective-C / C++ Project
 
 ##### Includes & Build Target
-Generated file for Objective-C / C++ is as follows (assuming prefix is `DB`):
+Generated files for Objective-C / C++ are as follows (assuming prefix is `DB`):
 
-| Type           | C++ header             | C++ source                 | Objective-C header               | Objective-C source        |
-|----------------|------------------------|----------------------------|----------------------------------|---------------------------|
-| Enum           | my\_enum.hpp           |                            | DBMyEnum.h                       | DBMyEnumTranslator.mm     |
-|                |                        |                            | DBMyEnumTranslator+Private.h     |                           |
-| Record         | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h               | DBMyRecord[Base].mm       |
-|                |                        |                            | DBMyRecord[Base]+Private.h       |                           |
-| Interface `+c` | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h                  | DBMyInterfaceCppProxy.mm  |
-|                |                        |                            | DBMyInterfaceCppProxy+Private.h  |                           |
-| Interface `+o` | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h                  | DBMyInterfaceObjcProxy.mm |
-|                |                        |                            | DBMyInterfaceObjcProxy+Private.h |                           |
+| Type      | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
+|-----------|------------------------|----------------------------|--------------------------|-----------------------------|
+| Enum      | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
+| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
+|           |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
+| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
+|           |                        |                            |                          | DBMyInterface+Private.mm    |
 
 (+) Generated only for types that contain constants.
+(++) Generated only for types with derived operations and/or constants. These have `.mm` extensions to allow non-trivial constants.
 
 Add all generated files to your build target, as well as the contents of `support-lib/objc`.
-Note that `+Private` headers can only be used with ObjC++ source (other headers are pure ObjC).
+Note that `+Private` files can only be used with ObjC++ source (other headers are pure ObjC) and are not required by Objective-C users of your interface.
 
 ## Details of Generated Types
 ### Enum
@@ -183,20 +183,22 @@ underlying type `NSInteger`, and Java enums.
 Records are data objects. In C++, records contain all their elements by value, including other
 records (so a record cannot contain itself).
 
-#### Data type
-The available data types for a record are:
+#### Data types
+The available data types for a record, argument, or return value are:
 
  - Boolean (`bool`)
- - Primitives (`i8`, `i16`, `i32`, `i64`, `f64`).
+ - Primitives (`i8`, `i16`, `i32`, `i64`, `f32`, `f64`).
  - Strings (`string`)
  - Binary (`binary`). This is implemented as `std::vector<uint8_t>` in C++, `byte[]` in Java,
    and `NSData` in Objective-C.
- - List (`list<type>`). This is `vector<T>` in C++, `ArrayList` in Java, and `NSMutableArray`
+ - Date (`date`).  This is `chrono::system_clock::time_point` in C++, `Date` in Java, and
+   `NSDate` in Objective-C.
+ - List (`list<type>`). This is `vector<T>` in C++, `ArrayList` in Java, and `NSArray`
    in Objective-C. Primitives in a list will be boxed in Java and Objective-C.
- - Set (`set<type>`). This is `set<T>` in C++, `TreeSet` in Java, and `NSMutableSet` in
+ - Set (`set<type>`). This is `unordered_set<T>` in C++, `HashSet` in Java, and `NSSet` in
    Objective-C. Primitives in a set will be boxed in Java and Objective-C.
  - Map (`map<typeA, typeB>`). This is `unordered_map<K, V>` in C++, `HashMap` in Java, and
-  `NSMutableDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
+   `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
  - Enumerations
  - Optionals (`optional<typeA>`). This is `std::experimental::optional<T>` in C++11, object /
    boxed primitive reference in Java (which can be `null`), and object / NSNumber strong
@@ -233,7 +235,7 @@ will be translated as well.
 
 ### Constants
 Constants can be defined within interfaces and records. In Java and C++ they are part of the
-generated class; and in Objective-C, constant names are globals with name of the
+generated class; and in Objective-C, constant names are globals with the name of the
 interface/record prefixed. Example:
 
    record_with_const = record +c +j +o {
@@ -242,6 +244,141 @@ interface/record prefixed. Example:
 
 will be `RecordWithConst::CONST_VALUE` in C++, `RecordWithConst.CONST_VALUE` in Java, and
 `RecordWithConstConstValue` in Objective-C.
+
+## Modularization and Library Support
+When generating the interface for your project and wish to make it available to other users
+in all of C++/Objective-C/Java you can tell Djinni to generate a special YAML file as part
+of the code generation process. This file then contains all the information Djinni requires
+to include your types in a different project. Instructing Djinni to create these YAML files
+is controlled by the follwoing arguments:
+- `--yaml-out`: The output folder for YAML files (Generator disabled if unspecified).
+- `--yaml-out-file`: If specified all types are merged into a single YAML file instead of generating one file per type (relative to `--yaml-out`).
+- `--yaml-prefix`: The prefix to add to type names stored in YAML files (default: `""`).
+
+Such a YAML file looks as follows:
+```yml
+---
+name: mylib_record1
+typedef: 'record +c deriving(eq, ord)'
+params: []
+prefix: 'mylib'
+cpp:
+    typename: '::mylib::Record1'
+    header: '"MyLib/Record1.hpp"'
+    byValue: false
+objc:
+    typename: 'MLBRecord1'
+    header: '"MLB/MLBRecord1.h"'
+    boxed: 'MLBRecord1'
+    pointer: true
+    hash: '%s.hash'
+objcpp:
+    translator: '::mylib::djinni::objc::Record1'
+    header: '"mylib/djinni/objc/Record1.hpp"'
+java:
+    typename: 'com.example.mylib.Record1'
+    boxed: 'com.example.mylib.Record1'
+    reference: true
+    generic: true
+    hash: '%s.hashCode()'
+jni:
+    translator: '::mylib::djinni::jni::Record1'
+    header: '"Duration-jni.hpp"'
+    typename: jobject
+    typeSignature: 'Lcom/example/mylib/Record1;'
+---
+name: mylib_interface1
+typedef: 'interface +j +o'
+    (...)
+---
+name: mylib_enum1
+typedef: 'enum'
+    (...)
+
+```
+Each document in the YAML file describes one extern type.
+A full documentation of all fields is available in `example/example.yaml`. You can also check
+the files `test-suite/djinni/date.yaml` and `test-suite/djinni/duration.yaml` for some
+real working examples of what you can do with it.
+
+To use a library type in your project simply include it in your IDL file and refer to it using
+its name identifier:
+```
+@extern "mylib.yaml"
+
+client_interface = interface +c {
+  foo(): mylib_record1;
+}
+```
+
+These files can be created by hand as long as you follow the required format. This allows you
+to support types not generated by Djinni. See `test-suite/djinni/duration.yaml` and the
+accompanying translators in `test-suite/handwritten-src/cpp/Duration-objc.hpp` and 
+`test-suite/handwritten-src/cpp/Duration-jni.hpp` for an advanced example. Handwritten
+translators implement the following concept:
+```cpp
+// For C++ <-> Objective-C
+struct Record1
+{
+    using CppType = ::mylib::Record1;
+    using ObjcType = MLBRecord1*;
+
+    static CppType toCpp(ObjcType o) { return /* your magic here */; }
+    static ObjcType fromCpp(CppType c) { return /* your magic here */; }
+
+    // Option 1: use this if no boxing is required
+    using Boxed = Record1;
+    // Option 2: or this if you do need dedicated boxing behavior
+    struct Boxed
+    {
+        using ObjcType = MLBRecord1Special*;
+        static CppType toCpp(ObjcType o) { return /* your magic here */; }
+        static ObjcType fromCpp(CppType c) { return /* your magic here */; }
+    }
+};
+```
+```cpp
+// For C++ <-> JNI
+#include "djinni_support.hpp"
+struct Record1
+{
+    using CppType = ::mylib::Record1;
+    using JniType = jobject;
+
+    static CppType toCpp(JniType j) { return /* your magic here */; }
+    // The return type *must* be LocalRef<T> if T is not a primitive!
+    static ::djinni::LocalRef<jobject> JniType fromCpp(CppType c) { return /* your magic here */; }
+
+    using Boxed = Record1;
+};
+```
+For `interface` classes the `CppType` alias is expected to be a `std::shared_ptr<T>`.
+
+Be sure to put the translators into representative and distinct namespaces.
+
+If your type is generic the translator takes the same number of template parameters.
+At usage each is instantiated with the translators of the respective type argument.
+```cpp
+template<class A, class B>
+struct Record1
+{
+    using CppType = ::mylib::Record1<typename A::CppType, typename B::CppType>;
+    using ObjcType = MLBRecord1*;
+
+    static CppType toCpp(ObjcType o)
+    {
+        // Use A::toCpp() and B::toCpp() if necessary
+        return /* your magic here */;
+    }
+    static ObjcType fromCpp(CppType c)
+    {
+        // Use A::fromCpp() and B::fromCpp() if necessary
+        return /* your magic here */;
+    }
+
+    using Boxed = Record1;
+};
+```
 
 ## Miscellaneous
 ### Record constructors / initializers
@@ -263,7 +400,7 @@ and Objective-C `NSInteger` are not used because their length varies by architec
 integers are not included because they are not available in Java.
 
 ## Test Suite
-Run `make` in the `test-suite` directory to invoke the test suite.
+Run `make test` to invoke the test suite, found in the test-suite subdirectory.
 
 ## Authors
 - Kannan Goundan

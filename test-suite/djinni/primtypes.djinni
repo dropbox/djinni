@@ -1,0 +1,17 @@
+assorted_primitives = record {
+    b: bool;
+    eight: i8;
+    sixteen: i16;
+    thirtytwo: i32;
+    sixtyfour: i64;
+    fthirtytwo: f32;
+    fsixtyfour: f64;
+
+    o_b: optional<bool>;
+    o_eight: optional<i8>;
+    o_sixteen: optional<i16>;
+    o_thirtytwo: optional<i32>;
+    o_sixtyfour: optional<i64>;
+    o_fthirtytwo: optional<f32>;
+    o_fsixtyfour: optional<f64>;
+} deriving (eq)

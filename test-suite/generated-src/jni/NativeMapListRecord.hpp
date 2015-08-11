@@ -10,19 +10,23 @@ namespace djinni_generated {
 
 class NativeMapListRecord final {
 public:
-    using CppType = MapListRecord;
+    using CppType = ::MapListRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, MapListRecord);
-    static MapListRecord fromJava(JNIEnv*, jobject);
+    using Boxed = NativeMapListRecord;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/MapListRecord") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
-    const jfieldID field_mMapList { djinni::jniGetFieldID(clazz.get(), "mMapList", "Ljava/util/ArrayList;") };
+    ~NativeMapListRecord();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);
 
 private:
-    NativeMapListRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeMapListRecord>;
+    NativeMapListRecord();
+    friend ::djinni::JniClass<NativeMapListRecord>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/MapListRecord") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/ArrayList;)V") };
+    const jfieldID field_mMapList { ::djinni::jniGetFieldID(clazz.get(), "mMapList", "Ljava/util/ArrayList;") };
 };
 
 }  // namespace djinni_generated

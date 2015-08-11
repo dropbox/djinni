@@ -8,5 +8,4 @@ typedef NS_ENUM(NSInteger, TXSSortOrder)
     TXSSortOrderAscending,
     TXSSortOrderDescending,
     TXSSortOrderRandom,
-    TXSSortOrderCount,
 };

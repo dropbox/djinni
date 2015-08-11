@@ -3,11 +3,22 @@
 
 #import "DBPrimitiveList.h"
 #include "primitive_list.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBPrimitiveList ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppPrimitiveList:(const PrimitiveList &)primitiveList;
-- (PrimitiveList)cppPrimitiveList;
+@class DBPrimitiveList;
 
-@end
+namespace djinni_generated {
+
+struct PrimitiveList
+{
+    using CppType = ::PrimitiveList;
+    using ObjcType = DBPrimitiveList*;
+
+    using Boxed = PrimitiveList;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

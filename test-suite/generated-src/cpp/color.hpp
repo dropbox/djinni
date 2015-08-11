@@ -23,8 +23,8 @@ enum class color : int {
 namespace std {
 
 template <>
-struct hash<color> {
-    size_t operator()(color type) const {
+struct hash<::color> {
+    size_t operator()(::color type) const {
         return std::hash<int>()(static_cast<int>(type));
     }
 };

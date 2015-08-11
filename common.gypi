@@ -1,7 +1,7 @@
 {
   "target_defaults": {
     "default_configuration": "Debug",
-    # enable andoird short names (not full path) for linking libraries
+    # enable android short names (not full paths) for linking libraries
     "android_unmangled_name": 1,
     'cflags':    [ '-gdwarf-2', '-Werror', '-Wall', '-Wextra', '-Wno-missing-field-initializers' ],
     'cflags_cc': [ '-std=c++11', '-frtti', '-fexceptions', '-Wno-literal-suffix' ],

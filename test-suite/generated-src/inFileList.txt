@@ -1,0 +1,17 @@
+djinni/all.djinni
+djinni/set.djinni
+djinni/derivings.djinni
+djinni/nested_collection.djinni
+djinni/map.djinni
+djinni/primitive_list.djinni
+djinni/exception.djinni
+djinni/client_interface.djinni
+djinni/enum.djinni
+djinni/token.djinni
+djinni/test.djinni
+djinni/primtypes.djinni
+djinni/constants.djinni
+djinni/date.djinni
+djinni/date.yaml
+djinni/duration.djinni
+djinni/duration.yaml

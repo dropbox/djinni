@@ -8,17 +8,19 @@
 
 namespace djinni_generated {
 
-class NativeColor final : djinni::JniEnum {
+class NativeColor final : ::djinni::JniEnum {
 public:
-    using CppType = color;
+    using CppType = ::color;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv* jniEnv, color c) { return djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<int>(c)).release(); }
-    static color fromJava(JNIEnv* jniEnv, jobject j) { return static_cast<color>(djinni::JniClass<NativeColor>::get().ordinal(jniEnv, j)); }
+    using Boxed = NativeColor;
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<NativeColor>::get().ordinal(jniEnv, j)); }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<NativeColor>::get().create(jniEnv, static_cast<jint>(c)); }
 
 private:
     NativeColor() : JniEnum("com/dropbox/djinni/test/Color") {}
-    friend class djinni::JniClass<NativeColor>;
+    friend ::djinni::JniClass<NativeColor>;
 };
 
 }  // namespace djinni_generated

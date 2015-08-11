@@ -12,7 +12,7 @@ while [ -h "$loc" ]; do
         loc="`dirname "$loc"`/$link"  # Relative link
     fi
 done
-base_dir=$(cd `dirname "$loc"` && pwd)
+base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 need_to_build=0
 dependencies=("build.sbt" "project/plugins.sbt" "source")

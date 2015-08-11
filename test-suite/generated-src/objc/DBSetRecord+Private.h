@@ -3,11 +3,22 @@
 
 #import "DBSetRecord.h"
 #include "set_record.hpp"
-#import <Foundation/Foundation.h>
 
-@interface DBSetRecord ()
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-- (id)initWithCppSetRecord:(const SetRecord &)setRecord;
-- (SetRecord)cppSetRecord;
+@class DBSetRecord;
 
-@end
+namespace djinni_generated {
+
+struct SetRecord
+{
+    using CppType = ::SetRecord;
+    using ObjcType = DBSetRecord*;
+
+    using Boxed = SetRecord;
+
+    static CppType toCpp(ObjcType objc);
+    static ObjcType fromCpp(const CppType& cpp);
+};
+
+}  // namespace djinni_generated

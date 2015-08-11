@@ -3,7 +3,16 @@
 
 package com.dropbox.djinni.test;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 public abstract class ClientInterface {
     /** Returns record of given string */
-    public abstract ClientReturnedRecord getRecord(long recordId, String utf8string);
+    @Nonnull
+    public abstract ClientReturnedRecord getRecord(long recordId, @Nonnull String utf8string, @CheckForNull String misc);
+
+    public abstract double identifierCheck(@Nonnull byte[] data, int r, long jret);
+
+    @Nonnull
+    public abstract String returnStr();
 }

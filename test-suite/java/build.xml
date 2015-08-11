@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
 <project name="Djinni-test" default="test">
     <target name="test" description="blah">
-        <exec executable="make">
+        <exec executable="make" failonerror="true">
             <arg value="-j12"/>
             <arg value="libDjinniTestNative.dylib"/>
         </exec>
         <mkdir dir="classes"/>
         <javac destdir="classes">
-            <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar"/>
+            <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar:jsr305-3.0.0.jar"/>
             <src path="../generated-src"/>
             <src path="../handwritten-src"/>
         </javac>
-        <java classname="org.junit.runner.JUnitCore">
+        <java classname="org.junit.runner.JUnitCore" fork="true" failonerror="true">
             <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar:classes"/>
+            <jvmarg value="-Xcheck:jni"/>
             <arg value="com.dropbox.djinni.test.AllTests"/>
         </java>
     </target>
     <target name="clean">
         <delete dir="classes"/>
-        <exec executable="make">
+        <exec executable="make" failonerror="true">
             <arg value="clean"/>
         </exec>
     </target>

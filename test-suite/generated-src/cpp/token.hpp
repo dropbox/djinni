@@ -3,7 +3,11 @@
 
 #pragma once
 
+#include <string>
+
 class Token {
 public:
     virtual ~Token() {}
+
+    virtual std::string whoami() = 0;
 };

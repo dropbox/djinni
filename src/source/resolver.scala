@@ -42,7 +42,7 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
     for (typeDecl <- idl) {
       topLevelDupeChecker.check(typeDecl.ident)
 
-      val defType = typeDecl.body match {
+      def defType = typeDecl.body match {
         case e: Enum =>
           if (!typeDecl.params.isEmpty) {
             throw Error(typeDecl.ident.loc, "enums can't have type parameters").toException
@@ -51,8 +51,10 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
         case r: Record => DRecord
         case i: Interface => DInterface
       }
-      val mdef = MDef(typeDecl.ident.name, typeDecl.params.length, defType, typeDecl.body)
-      topScope = topScope.updated(typeDecl.ident.name, mdef)
+      topScope = topScope.updated(typeDecl.ident.name, typeDecl match {
+        case td: InternTypeDecl => MDef(typeDecl.ident.name, typeDecl.params.length, defType, typeDecl.body)
+        case td: ExternTypeDecl => YamlGenerator.metaFromYaml(td)
+      })
     }
 
     // Resolve everything
@@ -147,22 +149,26 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
         if (!value.isInstanceOf[Boolean])
           throw new AssertionError("Const type mismatch: bool")
       case "i8" =>
-        try { value.asInstanceOf[Long].toByte } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i8")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i8")
+        assert(value.asInstanceOf[Long].toByte == value, "Const value not a valid i8")
       case "i16" =>
-        try { value.asInstanceOf[Long].toShort } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i16")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i16")
+        assert(value.asInstanceOf[Long].toShort == value, "Const value not a valid i16")
       case "i32" =>
-        try { value.asInstanceOf[Long].toInt } catch {
-          case e: Exception => throw new AssertionError("Const type mismatch: i32")
-        }
+        assert(value.isInstanceOf[Long], "Const type mismatch: i32")
+        assert(value.asInstanceOf[Long].toInt == value, "Const value not a valid i32")
       case "i64" =>
-        if (!value.isInstanceOf[Long])
-          throw new AssertionError("Const type mismatch: i64")
+        assert(value.isInstanceOf[Long], "Const type mismatch: i64")
+      case "f32" => value match {
+        case i: Long =>
+          assert(i.toFloat == value, "Const value not a valid f32")
+        case f: Double =>
+          assert(f.toFloat == value, "Const value not a valid f32")
+        case _ => throw new AssertionError("Const type mismatch: f32")
+      }
       case "f64" => value match {
         case i: Long =>
+          assert(i.toDouble == value, "Const value not a valid f64")
         case f: Double =>
         case _ => throw new AssertionError("Const type mismatch: f64")
       }
@@ -197,6 +203,7 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
           throw new AssertionError(s"Const type mismatch: enum ${d.name} does not have option ${opt.name}")
       }
     }
+    case e: MExtern => throw new AssertionError("Extern type not allowed for constant")
     case _ => throw new AssertionError("Const type cannot be resolved")
   }
 }
@@ -207,11 +214,18 @@ private def resolveRecord(scope: Scope, r: Record) {
     dupeChecker.check(f.ident)
     resolveRef(scope, f.ty)
     // Deriving Type Check
+    if (r.ext.any())
+      if (r.derivingTypes.contains(DerivingType.Ord)) {
+        throw new Error(f.ident.loc, "Cannot safely implement Ord on a record that may be extended").toException
+      } else if (r.derivingTypes.contains(DerivingType.Eq)) {
+        throw new Error(f.ident.loc, "Cannot safely implement Eq on a record that may be extended").toException
+      }
     f.ty.resolved.base match {
       case MBinary | MList | MSet | MMap =>
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare collections in Ord deriving (Java limitation)").toException
-      case MDate | MString =>
+      case MString =>
+      case MDate =>
       case MOptional =>
         if (r.derivingTypes.contains(DerivingType.Ord))
           throw new Error(f.ident.loc, "Cannot compare optional in Ord deriving").toException
@@ -226,6 +240,15 @@ private def resolveRecord(scope: Scope, r: Record) {
           throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
         case DRecord =>
           val record = df.body.asInstanceOf[Record]
+          if (!r.derivingTypes.subsetOf(record.derivingTypes))
+            throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
+        case DEnum =>
+      }
+      case e: MExtern => e.defType match {
+        case DInterface =>
+          throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
+        case DRecord =>
+          val record = e.body.asInstanceOf[Record]
           if (!r.derivingTypes.subsetOf(record.derivingTypes))
             throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
         case DEnum =>

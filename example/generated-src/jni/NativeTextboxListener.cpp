@@ -6,17 +6,21 @@
 
 namespace djinni_generated {
 
-NativeTextboxListener::NativeTextboxListener() : djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>() {}
+NativeTextboxListener::NativeTextboxListener() : ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>() {}
 
-NativeTextboxListener::JavaProxy::JavaProxy(jobject obj) : JavaProxyCacheEntry(obj) {}
+NativeTextboxListener::~NativeTextboxListener() = default;
 
-void NativeTextboxListener::JavaProxy::JavaProxy::update(const ::textsort::ItemList & c_items) {
-    JNIEnv * const jniEnv = djinni::jniGetThreadEnv();
-    djinni::JniLocalScope jscope(jniEnv, 10);
-    djinni::LocalRef<jobject> j_items(jniEnv, NativeItemList::toJava(jniEnv, c_items));
-    const auto & data = djinni::JniClass<::djinni_generated::NativeTextboxListener>::get();
-    jniEnv->CallVoidMethod(getGlobalRef(), data.method_update, j_items.get());
-    djinni::jniExceptionCheck(jniEnv);
-};
+NativeTextboxListener::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }
+
+NativeTextboxListener::JavaProxy::~JavaProxy() = default;
+
+void NativeTextboxListener::JavaProxy::update(const ::textsort::ItemList & c_items) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeTextboxListener>::get();
+    jniEnv->CallVoidMethod(getGlobalRef(), data.method_update,
+                           ::djinni::get(::djinni_generated::NativeItemList::fromCpp(jniEnv, c_items)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 
 }  // namespace djinni_generated

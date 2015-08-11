@@ -3,13 +3,18 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface DBClientReturnedRecord : NSObject
-- (id)initWithClientReturnedRecord:(DBClientReturnedRecord *)clientReturnedRecord;
-- (id)initWithRecordId:(int64_t)recordId content:(NSString *)content;
+- (nonnull instancetype)initWithRecordId:(int64_t)recordId
+                                 content:(nonnull NSString *)content
+                                    misc:(nullable NSString *)misc;
++ (nonnull instancetype)clientReturnedRecordWithRecordId:(int64_t)recordId
+                                                 content:(nonnull NSString *)content
+                                                    misc:(nullable NSString *)misc;
 
 @property (nonatomic, readonly) int64_t recordId;
 
-@property (nonatomic, readonly) NSString *content;
+@property (nonatomic, readonly, nonnull) NSString * content;
+
+@property (nonatomic, readonly, nullable) NSString * misc;
 
 @end

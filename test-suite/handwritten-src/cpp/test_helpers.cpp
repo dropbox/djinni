@@ -9,7 +9,7 @@ SetRecord TestHelpers::get_set_record() {
         "StringA",
         "StringB",
         "StringC"
-    } };
+	}, {} };
 }
 
 bool TestHelpers::check_set_record(const SetRecord & rec) {
@@ -71,7 +71,7 @@ static const std::string HELLO_WORLD = "Hello World!";
 static const std::string NON_ASCII = "Non-ASCII / 非 ASCII 字符";
 
 void TestHelpers::check_client_interface_ascii(const std::shared_ptr<ClientInterface> & i) {
-    ClientReturnedRecord cReturnedRecord = i->get_record(5, HELLO_WORLD);
+    ClientReturnedRecord cReturnedRecord = i->get_record(5, HELLO_WORLD, {});
     if (cReturnedRecord.content != HELLO_WORLD) {
         std::string error_msg = "Expected String: " + HELLO_WORLD + " Actual: " + cReturnedRecord.content;
         throw std::invalid_argument(error_msg);
@@ -79,7 +79,7 @@ void TestHelpers::check_client_interface_ascii(const std::shared_ptr<ClientInter
 }
 
 void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i) {
-    ClientReturnedRecord cReturnedRecord = i->get_record(5, NON_ASCII);
+    ClientReturnedRecord cReturnedRecord = i->get_record(5, NON_ASCII, {});
     if (cReturnedRecord.content != NON_ASCII) {
         std::string error_msg = "Expected String: " + NON_ASCII + " Actual: " + cReturnedRecord.content;
         throw std::invalid_argument(error_msg);
@@ -90,7 +90,9 @@ std::shared_ptr<Token> TestHelpers::token_id(const std::shared_ptr<Token> & in) 
     return in;
 }
 
-class CppToken : public Token {};
+class CppToken : public Token {
+    std::string whoami() { return "C++"; }
+};
 
 std::shared_ptr<Token> TestHelpers::create_cpp_token() {
     return std::make_shared<CppToken>();
@@ -103,6 +105,12 @@ void TestHelpers::check_cpp_token(const std::shared_ptr<Token> & in) {
 
 int64_t TestHelpers::cpp_token_id(const std::shared_ptr<Token> & in) {
     return reinterpret_cast<int64_t>(in.get());
+}
+
+void TestHelpers::check_token_type(const std::shared_ptr<Token> &t, const std::string & type) {
+    if (t->whoami() != type) {
+        throw std::invalid_argument("wrong token type");
+    }
 }
 
 std::experimental::optional<int32_t> TestHelpers::return_none() {
@@ -125,6 +133,12 @@ void TestHelpers::check_enum_map(const std::unordered_map<color, std::string> & 
     }
 }
 
-AssortedIntegers TestHelpers::assorted_integers_id(const AssortedIntegers & i) {
-    return i;
+void TestHelpers::check_enum(color) {} // stub
+
+AssortedPrimitives TestHelpers::assorted_primitives_id(const AssortedPrimitives & p) {
+    return p;
+}
+
+std::vector<uint8_t> TestHelpers::id_binary(const std::vector<uint8_t> & v) {
+    return v;
 }

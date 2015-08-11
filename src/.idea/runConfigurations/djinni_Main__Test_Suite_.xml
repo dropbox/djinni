@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="djinni.Main (Test Suite)" type="Application" factoryName="Application">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <pattern>
+        <option name="PATTERN" value="djinni.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="MAIN_CLASS_NAME" value="djinni.Main" />
+    <option name="VM_PARAMETERS" value="" />
+    <option name="PROGRAM_PARAMETERS" value="--java-out ../test-suite/djinni-output-temp/java --java-package com.dropbox.djinni.test --ident-java-field mFooBar --cpp-out ../test-suite/djinni-output-temp/cpp --ident-cpp-enum-type foo_bar --cpp-optional-template std::experimental::optional --cpp-optional-header &lt;experimental/optional&gt; --jni-out ../test-suite/djinni-output-temp/jni --ident-jni-class NativeFooBar --ident-jni-file NativeFooBar --objc-out ../test-suite/djinni-output-temp/objc --objcpp-out ../test-suite/djinni-output-temp/objc --objc-type-prefix DB --idl ../test-suite/djinni/all.djinni --list-out-files ../test-suite/generated-src/outFileList.txt --list-in-files ../test-suite/generated-src/inFileList.txt" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="ENABLE_SWING_INSPECTOR" value="false" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <module name="src" />
+    <envs />
+    <method />
+  </configuration>
+</component>

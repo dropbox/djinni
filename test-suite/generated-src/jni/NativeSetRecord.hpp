@@ -10,19 +10,24 @@ namespace djinni_generated {
 
 class NativeSetRecord final {
 public:
-    using CppType = SetRecord;
+    using CppType = ::SetRecord;
     using JniType = jobject;
 
-    static jobject toJava(JNIEnv*, SetRecord);
-    static SetRecord fromJava(JNIEnv*, jobject);
+    using Boxed = NativeSetRecord;
 
-    const djinni::GlobalRef<jclass> clazz { djinni::jniFindClass("com/dropbox/djinni/test/SetRecord") };
-    const jmethodID jconstructor { djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashSet;)V") };
-    const jfieldID field_mSet { djinni::jniGetFieldID(clazz.get(), "mSet", "Ljava/util/HashSet;") };
+    ~NativeSetRecord();
+
+    static CppType toCpp(JNIEnv* jniEnv, JniType j);
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);
 
 private:
-    NativeSetRecord() {}
-    friend class djinni::JniClass<::djinni_generated::NativeSetRecord>;
+    NativeSetRecord();
+    friend ::djinni::JniClass<NativeSetRecord>;
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/SetRecord") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashSet;Ljava/util/HashSet;)V") };
+    const jfieldID field_mSet { ::djinni::jniGetFieldID(clazz.get(), "mSet", "Ljava/util/HashSet;") };
+    const jfieldID field_mIset { ::djinni::jniGetFieldID(clazz.get(), "mIset", "Ljava/util/HashSet;") };
 };
 
 }  // namespace djinni_generated

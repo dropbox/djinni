@@ -4,10 +4,14 @@
 package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class Token {
+    @Nonnull
+    public abstract String whoami();
 
-    public static final class CppProxy extends Token
+    private static final class CppProxy extends Token
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -29,5 +33,13 @@ public abstract class Token {
             destroy();
             super.finalize();
         }
+
+        @Override
+        public String whoami()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_whoami(this.nativeRef);
+        }
+        private native String native_whoami(long _nativeRef);
     }
 }

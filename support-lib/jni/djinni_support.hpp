@@ -25,6 +25,12 @@
 
 #include <jni.h>
 
+// work-around for missing noexcept and constexpr support in MSVC prior to 2015
+#if (defined _MSC_VER) && (_MSC_VER < 1900)
+#  define noexcept _NOEXCEPT
+#  define constexpr
+#endif
+
 /*
  * Djinni support library
  */
@@ -46,30 +52,6 @@ void jniShutdown();
 JNIEnv * jniGetThreadEnv();
 
 /*
- * Exception to indicate that a Java exception is pending in the JVM.
- */
-class jni_exception_pending : public std::exception {};
-
-/*
- * Throw jni_exception_pending if any Java exception is pending in the JVM.
- */
-void jniExceptionCheck(JNIEnv * env);
-/*
- * Set an AssertionError in env with message message, and then throw jni_exception_pending.
- */
-__attribute__((noreturn))
-void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
-
-#define DJINNI_ASSERT(check, env) \
-    do { \
-        djinni::jniExceptionCheck(env); \
-        const bool check__res = bool(check); \
-        djinni::jniExceptionCheck(env); \
-        if (!check__res) { \
-            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, #check); \
-        } \
-    } while(false)
-/*
  * Global and local reference guard objects.
  *
  * A GlobalRef<T> is constructed with a local reference; the constructor upgrades the local
@@ -85,10 +67,14 @@ class GlobalRef : public std::unique_ptr<typename std::remove_pointer<PointerTyp
                                          GlobalRefDeleter> {
 public:
     GlobalRef() {}
+    GlobalRef(GlobalRef && obj)
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::GlobalRefDeleter>(
+            std::move(obj)
+        ) {}
     GlobalRef(JNIEnv * env, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, GlobalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::GlobalRefDeleter>(
             static_cast<PointerType>(env->NewGlobalRef(localRef)),
-            GlobalRefDeleter{}
+            ::djinni::GlobalRefDeleter{}
         ) {}
 };
 
@@ -100,15 +86,94 @@ class LocalRef : public std::unique_ptr<typename std::remove_pointer<PointerType
 public:
     LocalRef() {}
     LocalRef(JNIEnv * /*env*/, PointerType localRef)
-        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
+        : std::unique_ptr<typename std::remove_pointer<PointerType>::type, ::djinni::LocalRefDeleter>(
             localRef) {}
     explicit LocalRef(PointerType localRef)
         : std::unique_ptr<typename std::remove_pointer<PointerType>::type, LocalRefDeleter>(
             localRef) {}
+    // Allow implicit conversion to PointerType so it can be passed
+    // as argument to JNI functions expecting PointerType.
+    // All functions creating new local references should return LocalRef instead of PointerType
+    operator PointerType() const & { return this->get(); }
+    operator PointerType() && = delete;
+};
+
+template<class T>
+const T& get(const T& x) noexcept { return x; }
+template<class T>
+typename LocalRef<T>::pointer get(const LocalRef<T>& x) noexcept { return x.get(); }
+
+template<class T>
+const T& release(const T& x) noexcept { return x; }
+template<class T>
+typename LocalRef<T>::pointer release(LocalRef<T>& x) noexcept { return x.release(); }
+template<class T>
+typename LocalRef<T>::pointer release(LocalRef<T>&& x) noexcept { return x.release(); }
+
+/*
+ * Exception to indicate that a Java exception is pending in the JVM.
+ */
+class jni_exception : public std::exception {
+    GlobalRef<jthrowable> m_java_exception;
+public:
+    jni_exception(JNIEnv * env, jthrowable java_exception)
+        : m_java_exception(env, java_exception) {
+        assert(java_exception);
+    }
+    jthrowable java_exception() const { return m_java_exception.get(); }
+
+    /*
+     * Sets the pending JNI exception using this Java exception.
+     */
+    void set_as_pending(JNIEnv * env) const noexcept;
 };
 
 /*
- * Helper for JniClassInitializer. Copied from Oxygen.
+ * Throw if any Java exception is pending in the JVM.
+ *
+ * If an exception is pending, this function will clear the
+ * pending state, and pass the exception to
+ * jniThrowCppFromJavaException().
+ */
+void jniExceptionCheck(JNIEnv * env);
+
+/*
+ * Throws a C++ exception based on the given Java exception.
+ *
+ * java_exception is a local reference to a Java throwable, which
+ * must not be null, and should no longer set as "pending" in the JVM.
+ * This is called to handle errors in other JNI processing, including
+ * by jniExceptionCheck().
+ *
+ * The default implementation is defined with __attribute__((weak)) so you
+ * can replace it by defining your own version.  The default implementation
+ * will throw a jni_exception containing the given jthrowable.
+ */
+__attribute__((noreturn))
+void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception);
+
+/*
+ * Set an AssertionError in env with message message, and then throw via jniExceptionCheck.
+ */
+#ifdef _MSC_VER
+  __declspec(noreturn)
+#else
+  __attribute__((noreturn))
+#endif
+void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
+
+#define DJINNI_ASSERT(check, env) \
+    do { \
+        djinni::jniExceptionCheck(env); \
+        const bool check__res = bool(check); \
+        djinni::jniExceptionCheck(env); \
+        if (!check__res) { \
+            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, #check); \
+        } \
+    } while(false)
+
+/*
+ * Helper for JniClassInitializer.
  */
 template <class Key, class T>
 class static_registration {
@@ -184,7 +249,7 @@ private:
 };
 
 template <class C>
-const JniClassInitializer JniClass<C>::s_initializer { allocate };
+const JniClassInitializer JniClass<C>::s_initializer ( allocate );
 
 template <class C>
 std::unique_ptr<C> JniClass<C>::s_singleton;
@@ -363,7 +428,11 @@ public:
     }
 
     static const std::shared_ptr<T> & get(jlong handle) {
-        return reinterpret_cast<const CppProxyHandle<T> *>(handle)->m_obj;
+        assert(handle);
+        assert(handle > 4096);
+        const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->m_obj;
+        assert(ret);
+        return ret;
     }
 
 private:
@@ -563,8 +632,34 @@ private:
 #define DJINNI_FUNCTION_PROLOGUE0(env_)
 #define DJINNI_FUNCTION_PROLOGUE1(env_, arg1_)
 
-// Helper for JNI_TRANSLATE_EXCEPTIONS_RETURN. Do not call directly.
+/*
+ * Helper for JNI_TRANSLATE_EXCEPTIONS_RETURN.
+ *
+ * Must be called in a catch block.  Responsible for setting the pending
+ * exception in JNI based on the current C++ exception.
+ *
+ * The default implementation is defined with __attribute__((weak)) so you
+ * can replace it by defining your own version.  The default implementation
+ * will call jniDefaultSetPendingFromCurrent(), which will propagate a
+ * jni_exception directly into Java, or throw a RuntimeException for any
+ * other std::exception.
+ */
 void jniSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept;
+
+/*
+ * Helper for JNI_TRANSLATE_EXCEPTIONS_RETURN.
+ *
+ * Must be called in a catch block.  Responsible for setting the pending
+ * exception in JNI based on the current C++ exception.
+ *
+ * This will call jniSetPendingFrom(env, jni_exception) if the current exception
+ * is a jni_exception, or otherwise will set a RuntimeException from any
+ * other std::exception.  Any non-std::exception will result in a call
+ * to terminate().
+ *
+ * This is called by the default implementation of jniSetPendingFromCurrent.
+ */
+void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept;
 
 /* Catch C++ exceptions and translate them to Java exceptions.
  *
@@ -582,6 +677,25 @@ void jniSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept;
 #define JNI_TRANSLATE_EXCEPTIONS_RETURN(env, ret) \
     catch (const std::exception &) { \
         ::djinni::jniSetPendingFromCurrent(env, __func__); \
+        return ret; \
+    }
+
+/* Catch jni_exception and translate it back to a Java exception, without catching
+ * any other C++ exceptions.  Can be used to wrap code which might cause JNI
+ * exceptions like so:
+ *
+ * try {
+ *     ...
+ * } JNI_TRANSLATE_JAVA_EXCEPTIONS_RETURN(env, 0)
+ * ... or JNI_TRANSLATE_JAVA_EXCEPTIONS_RETURN(env, ) for functions returning void
+ *
+ * The second parameter is a default return value to be used if an exception is caught and
+ * converted. (For JNI outer-layer calls, this result will always be ignored by JNI, so
+ * it can safely be 0 for any function with a non-void return value.)
+ */
+#define JNI_TRANSLATE_JNI_EXCEPTIONS_RETURN(env, ret) \
+    catch (const ::djinni::jni_exception & e) { \
+        e.set_as_pending(env); \
         return ret; \
     }
 

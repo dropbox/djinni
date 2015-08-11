@@ -1,6 +1,6 @@
 #import "DBClientInterfaceImpl.h"
-#import "DBClientInterfaceObjcProxy+Private.h"
-#import "DBTestHelpersCppProxy.h"
+#import "DBClientInterface+Private.h"
+#import "DBTestHelpers.h"
 #import <XCTest/XCTest.h>
 
 @interface DBClientInterfaceTests : XCTestCase
@@ -21,12 +21,12 @@
 
 - (void)testCppString
 {
-    [DBTestHelpersCppProxy checkClientInterfaceAscii:[[DBClientInterfaceImpl alloc] init]];
+    [DBTestHelpers checkClientInterfaceAscii:[[DBClientInterfaceImpl alloc] init]];
 }
 
 - (void)testCppUTF8String
 {
-    [DBTestHelpersCppProxy checkClientInterfaceNonascii:[[DBClientInterfaceImpl alloc] init]];
+    [DBTestHelpers checkClientInterfaceNonascii:[[DBClientInterfaceImpl alloc] init]];
 }
 
 - (void)testObjcInterfaceWrapper
@@ -37,8 +37,8 @@
         @autoreleasepool {
             id <DBClientInterface> objcClientInterface = [[DBClientInterfaceImpl alloc] init];
             objcClientInterfaceWeak = objcClientInterface;
-            cppClientInterface1 = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(objcClientInterface);
-            cppClientInterface2 = ::djinni_generated::ClientInterfaceObjcProxy::client_interface_with_objc(objcClientInterface);
+            cppClientInterface1 = ::djinni_generated::ClientInterface::toCpp(objcClientInterface);
+            cppClientInterface2 = ::djinni_generated::ClientInterface::toCpp(objcClientInterface);
             XCTAssertEqual(cppClientInterface1, cppClientInterface2);
         }
         XCTAssertNotNil(objcClientInterfaceWeak);

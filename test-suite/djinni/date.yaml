@@ -1,0 +1,30 @@
+# This is an example YAML file mimicking the builtin "date" type as external type
+---
+name: extern_date
+typedef: 'record deriving(eq, ord)'
+params: []
+prefix: ''
+cpp:
+  typename: 'std::chrono::system_clock::time_point'
+  header: '<chrono>'
+  byValue: true
+objc:
+  typename: 'NSDate'
+  header: '<Foundation/Foundation.h>'
+  boxed: 'NSDate'
+  pointer: true
+  hash: '(NSUInteger)%s.timeIntervalSinceReferenceDate'
+objcpp:
+  translator: '::djinni::Date'
+  header: '"DJIMarshal+Private.h"'
+java:
+  typename: 'java.util.Date'
+  boxed: 'java.util.Date'
+  reference: true
+  generic: true
+  hash: '%s.hashCode()'
+jni:
+  translator: '::djinni::Date'
+  header: '"Marshal.hpp"'
+  typename: jobject
+  typeSignature: 'Ljava/util/Date;'

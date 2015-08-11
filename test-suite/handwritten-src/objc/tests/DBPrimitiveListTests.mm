@@ -4,11 +4,7 @@
 #import <XCTest/XCTest.h>
 
 static PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
-static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithList:
-                                             [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithLongLong:1],
-                                                                                     [NSNumber numberWithLongLong:2],
-                                                                                     [NSNumber numberWithLongLong:3],
-                                                                                     nil]];
+static DBPrimitiveList *objcPrimitiveList = [DBPrimitiveList primitiveListWithList:@[@1, @2, @3]];
 
 @interface DBPrimitiveListTests : XCTestCase
 
@@ -26,22 +22,15 @@ static DBPrimitiveList *objcPrimitiveList = [[DBPrimitiveList alloc] initWithLis
     [super tearDown];
 }
 
-- (void)testObjcCopyConstructor
-{
-    DBPrimitiveList *copy = [[DBPrimitiveList alloc] initWithPrimitiveList:objcPrimitiveList];
-    XCTAssertNotEqual(copy.list, objcPrimitiveList.list, @"The two NSMutableArray should not be the same object.");
-    XCTAssertEqualObjects(copy.list, objcPrimitiveList.list, @"The two NSMutableArray should have the same content.");
-}
-
 - (void)testObjcToCppConverter
 {
-    PrimitiveList convert = [objcPrimitiveList cppPrimitiveList];
+    PrimitiveList convert = djinni_generated::PrimitiveList::toCpp(objcPrimitiveList);
     XCTAssertEqual(convert.list, cppPrimitiveList.list, @"C++ converted list should be the same.");
 }
 
 - (void)testCppToObjcConverter
 {
-    DBPrimitiveList *convert = [[DBPrimitiveList alloc] initWithCppPrimitiveList:cppPrimitiveList];
+    DBPrimitiveList *convert = djinni_generated::PrimitiveList::fromCpp(cppPrimitiveList);
     XCTAssertEqualObjects(convert.list, objcPrimitiveList.list, @"Objective-C converted list should be the same.");
 }
 

@@ -26,6 +26,8 @@ import scala.collection.mutable
 
 class CppGenerator(spec: Spec) extends Generator(spec) {
 
+  val marshal = new CppMarshal(spec)
+
   val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
   def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
     writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
@@ -37,58 +39,19 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
-      tm.args.map(find).mkString("<", ", ", ">")
+      tm.args.foreach(find)
       find(tm.base)
     }
-    def find(m: Meta) = m match {
-      case o: MOpaque =>
-        o match {
-          case p: MPrimitive =>
-            val n = p.idlName
-            if (n == "i8" || n == "i16" || n == "i32" || n == "i64") {
-              hpp.add("#include <cstdint>")
-            }
-          case MString =>
-            hpp.add("#include <string>")
-          case MBinary =>
-            hpp.add("#include <vector>")
-            hpp.add("#include <cstdint>")
-          case MDate =>
-            hpp.add("#include <cstdint>")
-          case MOptional =>
-            hpp.add("#include " + spec.cppOptionalHeader)
-          case MEither => spec.cppEitherHeader match {
-            case None => throw GenerateException("No header file specified for 'either'")
-            case Some(h) => hpp.add("#include " + h)
-          }
-          case MList =>
-            hpp.add("#include <vector>")
-          case MSet =>
-            hpp.add("#include <unordered_set>")
-          case MMap =>
-            hpp.add("#include <unordered_map>")
-        }
-      case d: MDef =>
-        d.defType match {
-          case DEnum
-             | DRecord =>
-            if (d.name != name) {
-              hpp.add("#include " + q(spec.cppIncludePrefix + spec.cppFileIdentStyle(d.name) + "." + spec.cppHeaderExt))
-            }
-          case DInterface =>
-            hpp.add("#include <memory>")
-            if (d.name != name) {
-              hppFwds.add(s"class ${idCpp.ty(d.name)};")
-            }
-        }
-      case p: MParam =>
+    def find(m: Meta) = for(r <- marshal.references(m, name)) r match {
+      case ImportRef(arg) => hpp.add("#include " + arg)
+      case DeclRef(decl, Some(spec.cppNamespace)) => hppFwds.add(decl)
+      case DeclRef(_, _) =>
     }
-
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new CppRefs(ident.name)
-    val self = idCpp.enumType(ident)
+    val self = marshal.typename(ident, e)
 
     if (spec.cppEnumHashWorkaround) {
       refs.hpp.add("#include <functional>") // needed for std::hash
@@ -105,9 +68,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     w => {
       // std::hash specialization has to go *outside* of the wrapNs
       if (spec.cppEnumHashWorkaround) {
-        val fqSelf = withNs(spec.cppNamespace, self)
+        val fqSelf = marshal.fqTypename(ident, e)
         w.wl
-        wrapNamespace(w, Some("std"),
+        wrapNamespace(w, "std",
           (w: IndentWriter) => {
             w.wl("template <>")
             w.w(s"struct hash<$fqSelf>").bracedSemi {
@@ -125,23 +88,24 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static const ${toCppType(c.ty)} ${idCpp.const(c.ident)};")
+      w.wl(s"static ${marshal.fieldType(c.ty)} const ${idCpp.const(c.ident)};")
     }
   }
 
   def generateCppConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
     def writeCppConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
+      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
-      case e: EnumValue => w.w(idCpp.enumType(e.ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
+      case e: EnumValue => w.w(marshal.typename(ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
       case v: ConstRef => w.w(selfName + "::" + idCpp.const(v))
       case z: Map[_, _] => { // Value is record
-      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
         val vMap = z.asInstanceOf[Map[String, Any]]
-        w.wl(idCpp.ty(recordMdef.name) + "(")
+        w.wl(marshal.typename(ty) + "(")
         w.increase()
         // Use exact sequence
         val skipFirst = SkipFirst()
@@ -158,7 +122,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val skipFirst = SkipFirst()
     for (c <- consts) {
       skipFirst{ w.wl }
-      w.w(s"const ${toCppType(c.ty)} $selfName::${idCpp.const(c.ident)} = ")
+      w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
       writeCppConst(w, c.ty, c.value)
       w.wl(";")
     }
@@ -170,9 +134,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     r.consts.foreach(c => refs.find(c.ty))
     refs.hpp.add("#include <utility>") // Add for std::move
 
-    val self = idCpp.ty(ident)
+    val self = marshal.typename(ident, r)
     val (cppName, cppFinal) = if (r.ext.cpp) (ident.name + "_base", "") else (ident.name, " final")
-    val actualSelf = idCpp.ty(cppName)
+    val actualSelf = marshal.typename(cppName, r)
 
     // Requiring the extended class
     if (r.ext.cpp) {
@@ -188,52 +152,48 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
-          w.wl
           writeDoc(w, f.doc)
-          w.wl(toCppType(f.ty) + " " + idCpp.field(f.ident) + ";")
+          w.wl(marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
 
-        w.wl
         if (r.derivingTypes.contains(DerivingType.Eq)) {
-          w.wl(s"bool operator==(const $actualSelf & other) const;")
-          w.wl(s"bool operator!=(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator==(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl(s"bool operator<(const $actualSelf & other) const;")
-          w.wl(s"bool operator>(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator<(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator>(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
-          w.wl(s"bool operator<=(const $actualSelf & other) const;")
-          w.wl(s"bool operator>=(const $actualSelf & other) const;")
+          w.wl
+          w.wl(s"friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
 
         // Constructor.
-        w.wl
-        if (r.fields.nonEmpty) {
-          w.wl(actualSelf + "(").nestedN(2) {
-            val skipFirst = SkipFirst()
-            for (f <- r.fields) {
-              skipFirst { w.wl(",") }
-              w.w(toCppType(f.ty) + " " + idCpp.local(f.ident))
-            }
-            w.wl(") :")
-            w.nested {
-              val skipFirst = SkipFirst()
-              for (f <- r.fields) {
-                skipFirst { w.wl(",") }
-                w.w(idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "))")
-              }
-              w.wl(" {")
-            }
-          }
-          w.wl("}")
-        } else {
-          w.wl(actualSelf + "() {};")
+        if(r.fields.nonEmpty) {
+          w.wl
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident))
+          w.wl
+          val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "))"
+          w.wl(": " + init(r.fields.head))
+          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
+          w.wl("{}")
         }
 
         if (r.ext.cpp) {
           w.wl
-          w.wl(s"virtual ~$actualSelf() {}")
+          w.wl(s"virtual ~$actualSelf() = default;")
+          w.wl
+          // Defining the dtor disables implicit copy/move operation generation, so re-enable them
+          // Make them protected to avoid slicing
+          w.wlOutdent("protected:")
+          w.wl(s"$actualSelf(const $actualSelf&) = default;")
+          w.wl(s"$actualSelf($actualSelf&&) = default;")
+          w.wl(s"$actualSelf& operator=(const $actualSelf&) = default;")
+          w.wl(s"$actualSelf& operator=($actualSelf&&) = default;")
         }
       }
     }
@@ -246,47 +206,45 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
-          w.w(s"bool $actualSelf::operator==(const $actualSelf & other) const").braced {
-            w.w("return ").nested {
-              val skipFirst = SkipFirst()
-              for (f <- r.fields) {
-                skipFirst { w.wl(" &&") }
-                w.w(s"${idCpp.field(f.ident)} == other.${idCpp.field(f.ident)}")
-              }
+          w.w(s"bool operator==(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            if(!r.fields.isEmpty) {
+              writeAlignedCall(w, "return ", r.fields, " &&", "", f => s"lhs.${idCpp.field(f.ident)} == rhs.${idCpp.field(f.ident)}")
               w.wl(";")
-            }
+            } else {
+             w.wl("return true;")
+           }
           }
           w.wl
-          w.w(s"bool $actualSelf::operator!=(const $actualSelf & other) const").braced {
-            w.wl("return !(*this == other);")
+          w.w(s"bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(lhs == rhs);")
           }
         }
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.w(s"bool $actualSelf::operator<(const $actualSelf & other) const").braced {
-            for (f <- r.fields) {
-              w.w(s"if (${idCpp.field(f.ident)} < other.${idCpp.field(f.ident)})").braced {
+          w.w(s"bool operator<(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            for(f <- r.fields) {
+              w.w(s"if (lhs.${idCpp.field(f.ident)} < rhs.${idCpp.field(f.ident)})").braced {
                 w.wl("return true;")
               }
-              w.w(s"if (other.${idCpp.field(f.ident)} < ${idCpp.field(f.ident)})").braced {
+              w.w(s"if (rhs.${idCpp.field(f.ident)} < lhs.${idCpp.field(f.ident)})").braced {
                 w.wl("return false;")
               }
             }
             w.wl("return false;")
           }
           w.wl
-          w.w(s"bool $actualSelf::operator>(const $actualSelf & other) const").braced {
-            w.wl("return other < *this;")
+          w.w(s"bool operator>(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return rhs < lhs;")
           }
         }
         if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.w(s"bool $actualSelf::operator<=(const $actualSelf & other) const").braced {
-            w.wl("return (*this < other || *this == other);")
+          w.w(s"bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(rhs < lhs);")
           }
           w.wl
-          w.w(s"bool $actualSelf::operator>=(const $actualSelf & other) const").braced {
-            w.wl("return other <= *this;")
+          w.w(s"bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
+            w.wl("return !(lhs < rhs);")
           }
         }
       })
@@ -304,7 +262,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty)
     })
 
-    val self = idCpp.ty(ident)
+    val self = marshal.typename(ident, i)
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
@@ -312,15 +270,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"class $self").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
-        w.wl("virtual ~" + idCpp.ty(ident) + "() {}")
+        w.wl(s"virtual ~$self() {}")
         // Constants
         generateHppConstants(w, i.consts)
         // Methods
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = m.ret.fold("void")(toCppType(_))
-          val params = m.params.map(toCppParamType)
+          val ret = marshal.returnType(m.ret)
+          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCpp.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {

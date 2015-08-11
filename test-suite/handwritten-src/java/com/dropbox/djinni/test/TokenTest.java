@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 public class TokenTest extends TestCase {
 
     private class JavaToken extends Token {
+        public String whoami() { return "Java"; }
     }
 
     @Override
@@ -27,6 +28,25 @@ public class TokenTest extends TestCase {
         ct = null;
         System.gc();
         System.runFinalization();
+    }
+
+    public void testTokenType() {
+        TestHelpers.checkTokenType(new JavaToken(), "Java");
+        TestHelpers.checkTokenType(TestHelpers.createCppToken(), "C++");
+        boolean threw = false;
+        try {
+            TestHelpers.checkTokenType(new JavaToken(), "foo");
+        } catch (RuntimeException e) {
+            threw = true;
+        }
+        assertTrue(threw);
+        threw = false;
+        try {
+            TestHelpers.checkTokenType(TestHelpers.createCppToken(), "foo");
+        } catch (RuntimeException e) {
+            threw = true;
+        }
+        assertTrue(threw);
     }
 
     public void testNotCppToken() {

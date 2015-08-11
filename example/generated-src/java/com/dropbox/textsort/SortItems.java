@@ -4,13 +4,16 @@
 package com.dropbox.textsort;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public abstract class SortItems {
-    public abstract void sort(SortOrder order, ItemList items);
+    public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
-    public static native SortItems createWithListener(TextboxListener listener);
+    @CheckForNull
+    public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
 
-    public static final class CppProxy extends SortItems
+    private static final class CppProxy extends SortItems
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
