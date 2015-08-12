@@ -52,7 +52,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
     case MEither => spec.objcEitherHeader match {
       case None => throw new AssertionError("either header unspecified")
-      case Some(h) => List(ImportRef(h))
+      case Some(h) => List(ImportRef(q(h)))
     }
     case o: MOpaque =>
       List(ImportRef("<Foundation/Foundation.h>"))

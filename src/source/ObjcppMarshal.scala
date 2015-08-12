@@ -31,8 +31,16 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   def references(m: Meta): Seq[SymbolReference] = m match {
-    case o: MOpaque =>
-      List(ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")))
+    case o: MOpaque => {
+      val marshalImport = ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
+      o match {
+        case MEither => spec.objcEitherClass match {
+          case None => throw new AssertionError("either class unspecified")
+          case Some(c) => List(DeclRef(s"#define DB_EITHER_OBJC_CLASSNAME $c", null), marshalImport)
+        }
+        case _ => List(marshalImport)
+      }
+    }
     case d: MDef => d.defType match {
       case DEnum =>
         List(ImportRef(q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h")))
@@ -97,6 +105,14 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
         assert(tm.args.size == 1)
         val argHelperClass = helperClass(tm.args.head)
         s"<${spec.cppOptionalTemplate}, $argHelperClass>"
+      case MEither => spec.cppEitherTemplate match {
+        case None => throw new AssertionError("either class unspecified")
+        case Some(t) => {
+          assert(tm.args.size == 2)
+          val (argHelperL, argHelperR) = (helperClass(tm.args(0)), helperClass(tm.args(1)))
+          s"<$t, $argHelperL, $argHelperR>"
+        }
+      }
       case MList | MSet =>
         assert(tm.args.size == 1)
         f

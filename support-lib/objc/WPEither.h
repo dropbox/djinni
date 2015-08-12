@@ -2,10 +2,12 @@
 
 @interface WPEither : NSObject
 
-@property (nonatomic, readonly) id left;
-@property (nonatomic, readonly) id right;
+@property (nonatomic, readonly) BOOL isLeft;
+@property (nonatomic, readonly) BOOL isRight;
+@property (nonatomic, readonly, nullable) id left;
+@property (nonatomic, readonly, nullable) id right;
 
-- (instancetype)initWithLeft:(id)left;
-- (instancetype)initWithRight:(id)right;
+- (nonnull instancetype)initWithLeft:(nonnull id)left;
+- (nonnull instancetype)initWithRight:(nonnull id)right;
 
 @end

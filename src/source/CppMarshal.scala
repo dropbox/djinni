@@ -41,9 +41,10 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case MDate => List(ImportRef("<chrono>"))
     case MBinary => List(ImportRef("<vector>"), ImportRef("<cstdint>"))
     case MOptional => List(ImportRef(spec.cppOptionalHeader))
-    case MEither => spec.cppEitherHeader match {
-      case None => throw new AssertionError("no either header specified")
-      case Some(h) => List(ImportRef(h))
+    case MEither => (spec.cppEitherHeader, spec.objcEitherClass) match {
+      case (Some(h), Some(c)) => List(DeclRef(s"#define DB_EITHER_OBJC_CLASSNAME $c", null), ImportRef(h))
+      case (None, _) => throw new AssertionError("no C++ either header specified")
+      case _ => throw new AssertionError("no Objective-C either class specified")
     }
     case MList => List(ImportRef("<vector>"))
     case MSet => List(ImportRef("<unordered_set>"))
