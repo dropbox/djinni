@@ -34,6 +34,10 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
         case MSet => List(ImportRef("java.util.HashSet"))
         case MMap => List(ImportRef("java.util.HashMap"))
         case MDate => List(ImportRef("java.util.Date"))
+        case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+          case (Some(p), Some(c)) => List(ImportRef(p + "." + c))
+          case _ => throw new AssertionError("either class unspecified")
+        }
         case _ => List()
       }
     case _ => List()
@@ -85,6 +89,10 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
             case MDate => "Date"
             case MBinary => "byte[]"
             case MOptional => throw new AssertionError("optional should have been special cased")
+            case MEither => spec.javaEitherClass match {
+              case None => throw new AssertionError("either class unspecified")
+              case Some(c) => c
+            }
             case MList => "ArrayList"
             case MSet => "HashSet"
             case MMap => "HashMap"

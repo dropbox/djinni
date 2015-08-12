@@ -135,7 +135,7 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
     throw new AssertionError(s"Const ${ref.name} does not exist")
   }
   ty.base match {
-    case MEither | MBinary | MDate | MList | MSet | MMap =>
+    case MEither | MBinary | MList | MSet | MMap =>
       throw new AssertionError("Type not allowed for constant")
     case MString =>
       if (!value.isInstanceOf[String] ||

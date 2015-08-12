@@ -39,6 +39,8 @@ object Main {
     var javaAnnotation: Option[String] = None
     var javaNullableAnnotation: Option[String] = None
     var javaNonnullAnnotation: Option[String] = None
+    var javaEitherClass: Option[String] = None
+    var javaEitherPackage: Option[String] = None
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
     var jniNamespace: String = "djinni_generated"
@@ -67,6 +69,8 @@ object Main {
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
     var objcppNamespace: String = "djinni_generated"
     var objcBaseLibIncludePrefix: String = ""
+    var objcEitherClass: Option[String] = None
+    var objcEitherHeader: Option[String] = None
     var inFileListPath: Option[File] = None
     var outFileListPath: Option[File] = None
     var skipGeneration: Boolean = false
@@ -102,6 +106,14 @@ object Main {
         .text("Java annotation (@Nullable) to place on all fields and return values that are optional")
       opt[String]("java-nonnull-annotation").valueName("<nonnull-annotation-class>").foreach(x => javaNonnullAnnotation = Some(x))
         .text("Java annotation (@Nonnull) to place on all fields and return values that are not optional")
+      opt[String]("java-either-class").valueName("<class>").foreach(x => {
+          var n = x.lastIndexOf('.')
+          if (n < 0) {
+            throw new AssertionError("Java either class must be fully qualified")
+          }
+          javaEitherPackage = Some(x take (n-1))
+          javaEitherClass = Some(x drop n)
+        }).text("The fully qualified Java class to use for either values")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
         .text("The output folder for C++ files (Generator disabled if unspecified).")
@@ -162,6 +174,10 @@ object Main {
         .text("The namespace name to use for generated Objective-C++ classes.")
       opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
         .text("The Objective-C++ base library's include path, relative to the Objective-C++ classes.")
+      opt[String]("objc-either-class").valueName("<class>").foreach(x => objcEitherClass = Some(x))
+        .text("The class for Objective-C either values")
+      opt[String]("objc-either-header").valueName("<header>").foreach(x => objcEitherHeader = Some(x))
+        .text("The header for the Objective-C either value class")
       note("")
       opt[File]("yaml-out").valueName("<out-folder>").foreach(x => yamlOutFolder = Some(x))
         .text("The output folder for YAML files (Generator disabled if unspecified).")
@@ -267,6 +283,8 @@ object Main {
       javaAnnotation,
       javaNullableAnnotation,
       javaNonnullAnnotation,
+      javaEitherClass,
+      javaEitherPackage,
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,
@@ -300,6 +318,8 @@ object Main {
       objcppIncludeObjcPrefix,
       objcppNamespace,
       objcBaseLibIncludePrefix,
+      objcEitherClass,
+      objcEitherHeader,
       outFileListWriter,
       skipGeneration,
       yamlOutFolder,

@@ -21,6 +21,14 @@ public class Either<Left, Right> {
 
     private Either () {}
 
+    public boolean isLeft() {
+        return mLeft != null;
+    }
+
+    public boolean isRight() {
+        return mRight != null;
+    }
+
     public Left left() {
         return mLeft;
     }

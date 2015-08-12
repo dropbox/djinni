@@ -278,7 +278,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
               skipFirst { w.wl(" &&") }
               f.ty.resolved.base match {
                 case MBinary => w.w(s"[self.${idObjc.field(f.ident)} isEqualToData:typedOther.${idObjc.field(f.ident)}]")
-                case MDate => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDate:typedOther.${idObjc.field(f.ident)}]")
                 case MList => w.w(s"[self.${idObjc.field(f.ident)} isEqualToArray:typedOther.${idObjc.field(f.ident)}]")
                 case MSet => w.w(s"[self.${idObjc.field(f.ident)} isEqualToSet:typedOther.${idObjc.field(f.ident)}]")
                 case MMap => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDictionary:typedOther.${idObjc.field(f.ident)}]")
@@ -427,7 +426,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case MString => ("NSString", true)
             case MDate => ("NSDate", true)
             case MBinary => ("NSData", true)
-            case MDate => ("NSDate", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MEither => spec.objcEitherClass match {
               case None => throw GenerateException("No Objective-C class specified for 'either'")

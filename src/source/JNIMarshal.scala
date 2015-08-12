@@ -34,7 +34,19 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
   private def helperClass(tm: MExpr) = helperName(tm) + helperTemplates(tm)
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
-    case o: MOpaque => List(ImportRef(q(spec.jniBaseLibIncludePrefix + "Marshal.hpp")))
+    case o: MOpaque => {
+      val marshalImport = ImportRef(q(spec.jniBaseLibIncludePrefix + "Marshal.hpp"))
+      o match {
+        case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+          case (Some(p), Some(c)) => {
+            val fqName = p.replaceAllLiterally(".", "/") + "/" + c
+            List(DeclRef(s"#define DB_EITHER_JCLASSNAME ${q(fqName)}", null), marshalImport)
+          }
+          case _ => throw new AssertionError("either class unspecified")
+        }
+        case _ => List(marshalImport)
+      }
+    }
     case d: MDef => List(ImportRef(include(d.name)))
     case e: MExtern => List(ImportRef(e.jni.header))
     case _ => List()
@@ -70,6 +82,10 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
         case MOptional => throw new AssertionError("nested optional?")
         case m => javaTypeSignature(tm.args.head)
       }
+      case MEither => (spec.javaEitherPackage, spec.javaEitherClass) match {
+        case (Some(p), Some(c)) => "L" + (p+c).replaceAllLiterally(".", "/") + ";"
+        case _ => throw new AssertionError("either class unspecified")
+      }
       case MList => "Ljava/util/ArrayList;"
       case MSet => "Ljava/util/HashSet;"
       case MMap => "Ljava/util/HashMap;"
@@ -97,6 +113,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
         case "bool" => "Bool"
       }
       case MOptional => "Optional"
+      case MEither => "Either"
       case MBinary => "Binary"
       case MString => "String"
       case MDate => "Date"

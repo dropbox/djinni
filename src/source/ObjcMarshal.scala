@@ -50,6 +50,10 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {
+    case MEither => spec.objcEitherHeader match {
+      case None => throw new AssertionError("either header unspecified")
+      case Some(h) => List(ImportRef(h))
+    }
     case o: MOpaque =>
       List(ImportRef("<Foundation/Foundation.h>"))
     case d: MDef => d.defType match {
@@ -109,6 +113,10 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
             case MDate => ("NSDate", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
+            case MEither => spec.objcEitherClass match {
+              case None => throw new AssertionError("either class unspecified")
+              case Some(c) => (c, true)
+            }
             case MList => ("NSArray", true)
             case MSet => ("NSSet", true)
             case MMap => ("NSDictionary", true)

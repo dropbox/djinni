@@ -77,6 +77,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
         case "bool" => "Bool"
       }
       case MOptional => "Optional"
+      case MEither => "Either"
       case MBinary => "Binary"
       case MDate => "Date"
       case MString => "String"
@@ -99,7 +100,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case MList | MSet =>
         assert(tm.args.size == 1)
         f
-      case MMap =>
+      case MEither | MMap =>
         assert(tm.args.size == 2)
         f
       case _ => f
