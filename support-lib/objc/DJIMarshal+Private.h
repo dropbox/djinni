@@ -199,11 +199,17 @@ public:
 
     static ObjcType fromCpp(const CppType& v) {
         assert(v.size() <= std::numeric_limits<NSUInteger>::max());
-        auto array = [NSMutableArray arrayWithCapacity:static_cast<NSUInteger>(v.size())];
+        EObjcType __strong *const array = (EObjcType __strong *const)calloc(v.size(), sizeof(EObjcType));
+        assert(array);
+        if (!array) return nil;
+
+        NSUInteger idx = 0;
         for(const auto& value : v) {
-            [array addObject:T::Boxed::fromCpp(value)];
+            array[idx++] = T::Boxed::fromCpp(value);
         }
-        return array;
+        NSArray *arrayObject = [NSArray arrayWithObjects:array count:v.size()];
+        free(array);
+        return arrayObject;
     }
 };
 
@@ -229,11 +235,17 @@ public:
 
     static ObjcType fromCpp(const CppType& s) {
         assert(s.size() <= std::numeric_limits<NSUInteger>::max());
-        auto set = [NSMutableSet setWithCapacity:static_cast<NSUInteger>(s.size())];
+        id __strong *const set = (id __strong *const)calloc(s.size(), sizeof(id));
+        assert(set);
+        if (!set) return nil;
+
+        NSUInteger idx = 0;
         for(const auto& value : s) {
-            [set addObject:T::Boxed::fromCpp(value)];
+            set[idx++] = T::Boxed::fromCpp(value);
         }
-        return set;
+        NSSet *setObject = [NSSet setWithObjects:set count:s.size()];
+        free(set);
+        return setObject;
     }
 };
 
@@ -262,11 +274,19 @@ public:
 
     static ObjcType fromCpp(const CppType& m) {
         assert(m.size() <= std::numeric_limits<NSUInteger>::max());
-        auto map = [NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
+        NSUInteger const count = static_cast<NSUInteger>(m.size());
+        id __strong *const keyObjs = (id __strong *const)calloc(count*2, sizeof(id));
+        assert(keyObjs);
+        if (!keyObjs) return nil;
+
         for(const auto& kvp : m) {
-            [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
+            NSUInteger idx = 0;
+            keyObjs[idx] = Key::Boxed::fromCpp(kvp.first);
+            keyObjs[count + idx++] = Value::Boxed::fromCpp(kvp.second);
         }
-        return map;
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:keyObjs+count forKeys:keyObjs count:count];
+        free(keyObjs);
+        return dictionary;
     }
 };
 

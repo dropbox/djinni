@@ -187,6 +187,9 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     def checkMutable(tm: MExpr): Boolean = tm.base match {
       case MOptional => checkMutable(tm.args.head)
       case MString => true
+      case MList => true
+      case MSet => true
+      case MMap => true
       case MBinary => true
       case _ => false
     }
