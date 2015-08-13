@@ -199,11 +199,14 @@ public:
 
     static ObjcType fromCpp(const CppType& v) {
         assert(v.size() <= std::numeric_limits<NSUInteger>::max());
-        auto array = [NSMutableArray arrayWithCapacity:static_cast<NSUInteger>(v.size())];
+
+        NSUInteger const count = static_cast<NSUInteger>(v.size());
+        NSUInteger idx = 0;
+        EObjcType __strong array[count];
         for(const auto& value : v) {
-            [array addObject:T::Boxed::fromCpp(value)];
+            array[idx++] = T::Boxed::fromCpp(value);
         }
-        return array;
+        return [NSArray arrayWithObjects:array count:count];
     }
 };
 
@@ -229,11 +232,13 @@ public:
 
     static ObjcType fromCpp(const CppType& s) {
         assert(s.size() <= std::numeric_limits<NSUInteger>::max());
-        auto set = [NSMutableSet setWithCapacity:static_cast<NSUInteger>(s.size())];
+        NSUInteger const count = static_cast<NSUInteger>(s.size());
+        NSUInteger idx = 0;
+        EObjcType __strong set[count];
         for(const auto& value : s) {
-            [set addObject:T::Boxed::fromCpp(value)];
+            set[idx++] = T::Boxed::fromCpp(value);
         }
-        return set;
+        return [NSSet setWithObjects:set count:count];;
     }
 };
 
@@ -262,11 +267,15 @@ public:
 
     static ObjcType fromCpp(const CppType& m) {
         assert(m.size() <= std::numeric_limits<NSUInteger>::max());
-        auto map = [NSMutableDictionary dictionaryWithCapacity:static_cast<NSUInteger>(m.size())];
+        NSUInteger const count = static_cast<NSUInteger>(m.size());
+        NSUInteger idx = 0;
+        ObjcKeyType __strong keys[count];
+        ObjcValueType __strong objects[count];
         for(const auto& kvp : m) {
-            [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
+            keys[idx] = Key::Boxed::fromCpp(kvp.first);
+            objects[idx++] = Value::Boxed::fromCpp(kvp.second);
         }
-        return map;
+        return [NSDictionary dictionaryWithObjects:objects forKeys:keys count:count];
     }
 };
 
