@@ -199,14 +199,13 @@ public:
 
     static ObjcType fromCpp(const CppType& v) {
         assert(v.size() <= std::numeric_limits<NSUInteger>::max());
-
         NSUInteger const count = static_cast<NSUInteger>(v.size());
-        NSUInteger idx = 0;
-        EObjcType __strong array[count];
+        std::vector<EObjcType> array;
+        array.reserve(count);
         for(const auto& value : v) {
-            array[idx++] = T::Boxed::fromCpp(value);
+            array.push_back(T::Boxed::fromCpp(value));
         }
-        return [NSArray arrayWithObjects:array count:count];
+        return [NSArray arrayWithObjects:array.data() count:count];
     }
 };
 
@@ -233,12 +232,12 @@ public:
     static ObjcType fromCpp(const CppType& s) {
         assert(s.size() <= std::numeric_limits<NSUInteger>::max());
         NSUInteger const count = static_cast<NSUInteger>(s.size());
-        NSUInteger idx = 0;
-        EObjcType __strong set[count];
+        std::vector<EObjcType> set;
+        set.reserve(count);
         for(const auto& value : s) {
-            set[idx++] = T::Boxed::fromCpp(value);
+            set.push_back(T::Boxed::fromCpp(value));
         }
-        return [NSSet setWithObjects:set count:count];;
+        return [NSSet setWithObjects:set.data() count:count];
     }
 };
 
@@ -268,14 +267,15 @@ public:
     static ObjcType fromCpp(const CppType& m) {
         assert(m.size() <= std::numeric_limits<NSUInteger>::max());
         NSUInteger const count = static_cast<NSUInteger>(m.size());
-        NSUInteger idx = 0;
-        ObjcKeyType __strong keys[count];
-        ObjcValueType __strong objects[count];
+        std::vector<ObjcKeyType> keys;
+        keys.reserve(count);
+        std::vector<ObjcValueType> objects;
+        objects.reserve(count);
         for(const auto& kvp : m) {
-            keys[idx] = Key::Boxed::fromCpp(kvp.first);
-            objects[idx++] = Value::Boxed::fromCpp(kvp.second);
+            keys.push_back(Key::Boxed::fromCpp(kvp.first));
+            objects.push_back(Value::Boxed::fromCpp(kvp.second));
         }
-        return [NSDictionary dictionaryWithObjects:objects forKeys:keys count:count];
+        return [NSDictionary dictionaryWithObjects:objects.data() forKeys:keys.data() count:count];
     }
 };
 
