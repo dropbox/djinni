@@ -14,8 +14,8 @@ namespace testsuite {
 struct MapListRecord final {
     std::vector<std::unordered_map<std::string, int64_t>> map_list;
 
-    MapListRecord(std::vector<std::unordered_map<std::string, int64_t>> map_list)
-    : map_list(std::move(map_list))
+    MapListRecord(std::vector<std::unordered_map<std::string, int64_t>> map_list_)
+    : map_list(std::move(map_list_))
     {}
 };
 
