@@ -6,8 +6,8 @@
 
 @implementation DBSetRecord
 
-- (nonnull instancetype)initWithSet:(nonnull NSSet *)set
-                               iset:(nonnull NSSet *)iset
+- (nonnull instancetype)initWithSet:(nonnull NSSet<NSString *> *)set
+                               iset:(nonnull NSSet<NSNumber *> *)iset
 {
     if (self = [super init]) {
         _set = set;
@@ -16,8 +16,8 @@
     return self;
 }
 
-+ (nonnull instancetype)setRecordWithSet:(nonnull NSSet *)set
-                                    iset:(nonnull NSSet *)iset
++ (nonnull instancetype)setRecordWithSet:(nonnull NSSet<NSString *> *)set
+                                    iset:(nonnull NSSet<NSNumber *> *)iset
 {
     return [[self alloc] initWithSet:set
                                 iset:iset];

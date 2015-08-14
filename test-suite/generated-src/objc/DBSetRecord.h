@@ -4,13 +4,13 @@
 #import <Foundation/Foundation.h>
 
 @interface DBSetRecord : NSObject
-- (nonnull instancetype)initWithSet:(nonnull NSSet *)set
-                               iset:(nonnull NSSet *)iset;
-+ (nonnull instancetype)setRecordWithSet:(nonnull NSSet *)set
-                                    iset:(nonnull NSSet *)iset;
+- (nonnull instancetype)initWithSet:(nonnull NSSet<NSString *> *)set
+                               iset:(nonnull NSSet<NSNumber *> *)iset;
++ (nonnull instancetype)setRecordWithSet:(nonnull NSSet<NSString *> *)set
+                                    iset:(nonnull NSSet<NSNumber *> *)iset;
 
-@property (nonatomic, readonly, nonnull) NSSet * set;
+@property (nonatomic, readonly, nonnull) NSSet<NSString *> * set;
 
-@property (nonatomic, readonly, nonnull) NSSet * iset;
+@property (nonatomic, readonly, nonnull) NSSet<NSNumber *> * iset;
 
 @end
