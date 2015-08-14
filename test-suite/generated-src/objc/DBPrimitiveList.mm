@@ -19,4 +19,9 @@
     return [[self alloc] initWithList:list];
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p list:%@>", self.class, self, self.list];
+}
+
 @end
