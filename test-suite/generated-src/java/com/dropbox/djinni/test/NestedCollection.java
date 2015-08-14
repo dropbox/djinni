@@ -22,4 +22,12 @@ public final class NestedCollection {
     public ArrayList<HashSet<String>> getSetList() {
         return mSetList;
     }
+
+    @Override
+    public String toString() {
+        return "NestedCollection{" +
+                "mSetList=" + mSetList +
+        "}";
+    }
+
 }

@@ -39,6 +39,14 @@ public final class DateRecord implements Comparable<DateRecord> {
     }
 
     @Override
+    public String toString() {
+        return "DateRecord{" +
+                "mCreatedAt=" + mCreatedAt +
+        "}";
+    }
+
+
+    @Override
     public int compareTo(@Nonnull DateRecord other)  {
         int tempResult;
         tempResult = this.mCreatedAt.compareTo(other.mCreatedAt);

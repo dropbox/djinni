@@ -39,6 +39,14 @@ public final class RecordWithDurationAndDerivings implements Comparable<RecordWi
     }
 
     @Override
+    public String toString() {
+        return "RecordWithDurationAndDerivings{" +
+                "mDt=" + mDt +
+        "}";
+    }
+
+
+    @Override
     public int compareTo(@Nonnull RecordWithDurationAndDerivings other)  {
         int tempResult;
         tempResult = this.mDt.compareTo(other.mDt);

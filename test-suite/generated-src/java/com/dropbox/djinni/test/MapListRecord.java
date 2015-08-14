@@ -22,4 +22,12 @@ public final class MapListRecord {
     public ArrayList<HashMap<String, Long>> getMapList() {
         return mMapList;
     }
+
+    @Override
+    public String toString() {
+        return "MapListRecord{" +
+                "mMapList=" + mMapList +
+        "}";
+    }
+
 }

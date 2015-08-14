@@ -38,4 +38,14 @@ public final class ClientReturnedRecord {
     public String getMisc() {
         return mMisc;
     }
+
+    @Override
+    public String toString() {
+        return "ClientReturnedRecord{" +
+                "mRecordId=" + mRecordId +
+                "," + "mContent=" + mContent +
+                "," + "mMisc=" + mMisc +
+        "}";
+    }
+
 }
