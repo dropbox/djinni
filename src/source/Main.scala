@@ -111,8 +111,8 @@ object Main {
           if (n < 0) {
             throw new AssertionError("Java either class must be fully qualified")
           }
-          javaEitherPackage = Some(x take (n-1))
-          javaEitherClass = Some(x drop n)
+          javaEitherPackage = Some(x take n)
+          javaEitherClass = Some(x drop (n+1))
         }).text("The fully qualified Java class to use for either values")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
