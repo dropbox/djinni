@@ -133,15 +133,14 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
         assert(tm.args.size == 1)
         val argHelperClass = helperClass(tm.args.head)
         s"<${spec.cppOptionalTemplate}, $argHelperClass>"
-      case MEither =>
-        spec.cppEitherTemplate match {
-            case None => throw new AssertionError("either class unspecified")
-            case Some(t) => {
-                assert(tm.args.size == 2)
-                val (argHelperL, argHelperR) = (helperClass(tm.args(0)), helperClass(tm.args(1)))
-                s"<$t, $argHelperL, $argHelperR>"
-            }
-        }
+      case MEither => spec.cppEitherTemplate match {
+          case None => throw new AssertionError("either class unspecified")
+          case Some(t) => {
+              assert(tm.args.size == 2)
+              val (argHelperL, argHelperR) = (helperClass(tm.args(0)), helperClass(tm.args(1)))
+              s"<$t, $argHelperL, $argHelperR>"
+          }
+      }
       case MList | MSet =>
         assert(tm.args.size == 1)
         f
