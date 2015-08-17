@@ -43,7 +43,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     }
     def find(m: Meta) = for(r <- objcppMarshal.references(m)) r match {
       case ImportRef(arg) => body.add("#import " + arg)
-      case _ =>
+      case DeclRef(decl, _) => body.add(decl)
     }
   }
 

@@ -427,6 +427,10 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
             case MDate => ("NSDate", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
+            case MEither => spec.objcEitherClass match {
+              case None => throw GenerateException("No Objective-C class specified for 'either'")
+              case Some(c) => (c, true)
+            }
             case MList => ("NSArray", true)
             case MSet => ("NSSet", true)
             case MMap => ("NSDictionary", true)

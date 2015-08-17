@@ -263,6 +263,72 @@ namespace djinni
 			return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
 		}
 	};
+
+#ifdef DB_EITHER_JCLASSNAME
+	struct EitherJniInfo
+	{
+		const GlobalRef<jclass> clazz { jniFindClass(DB_EITHER_JCLASSNAME) };
+		const jmethodID method_asLeft { jniGetStaticMethodID(clazz.get(), "asLeft", "(Ljava/lang/Object;)L" DB_EITHER_JCLASSNAME ";") };
+		const jmethodID method_asRight { jniGetStaticMethodID(clazz.get(), "asRight", "(Ljava/lang/Object;)L" DB_EITHER_JCLASSNAME ";") };
+		const jmethodID method_isLeft { jniGetMethodID(clazz.get(), "isLeft", "()Z") };
+		const jmethodID method_isRight { jniGetMethodID(clazz.get(), "isRight", "()Z") };
+		const jmethodID method_getLeft { jniGetMethodID(clazz.get(), "left", "()Ljava/lang/Object;") };
+		const jmethodID method_getRight { jniGetMethodID(clazz.get(), "right", "()Ljava/lang/Object;") };
+	};
+
+	template <template <class, class> class EitherType, class L, class R>
+	struct Either
+	{
+		using CppType = EitherType<typename L::CppType, typename R::CppType>;
+		using JniType = jobject;
+		using Boxed = Either;
+		using LJniType = typename L::Boxed::JniType;
+		using RJniType = typename R::Boxed::JniType;
+
+		static CppType toCpp(JNIEnv* jniEnv, JniType j)
+		{
+			assert(j != nullptr);
+			const auto & data = JniClass<EitherJniInfo>::get();
+			assert(jniEnv->isInstanceOf(j, data.clazz.get()));
+			auto isLeft = jniEnv->CallBooleanMethod(j, data.method_isLeft);
+			auto isRight = jniEnv->CallBooleanMethod(j, data.method_isRight);
+			assert(isLeft || isRight);
+			if (isLeft)
+			{
+				auto jleft = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(j, data.method_getLeft));
+				jniExceptionCheck(jniEnv);
+				return CppType(L::Boxed::toCpp(jniEnv, static_cast<LJniType>(jleft.get())));
+			}
+			else
+			{
+				auto jright = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(j, data.method_getRight));
+				jniExceptionCheck(jniEnv);
+				return CppType(R::Boxed::toCpp(jniEnv, static_cast<RJniType>(jright.get())));
+			}
+		}
+
+		static LocalRef<jobject> fromCpp(JNIEnv *jniEnv, const CppType & c)
+		{
+			const auto & data = JniClass<EitherJniInfo>::get();
+			LocalRef<LJniType> left;
+			LocalRef<RJniType> right;
+			if (c.isLeft())
+			{
+				left = L::Boxed::fromCpp(jniEnv, c.left());
+				LocalRef<jobject> j(jniEnv, jniEnv->NewObject(data.clazz.get(), data.method_asLeft, &left));
+				jniExceptionCheck(jniEnv);
+				return j;
+			}
+			else
+			{
+				right = R::Boxed::fromCpp(jniEnv, c.right());
+				LocalRef<jobject> j(jniEnv, jniEnv->NewObject(data.clazz.get(), data.method_asRight, &right));
+				jniExceptionCheck(jniEnv);
+				return j;
+			}
+		}
+	};
+#endif
 	
 	struct ListJniInfo
 	{

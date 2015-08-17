@@ -49,7 +49,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     }
     def find(m: Meta) = for(r <- jniMarshal.references(m, name)) r match {
       case ImportRef(arg) => jniCpp.add("#include " + arg)
-      case _ =>
+      case DeclRef(decl, _) => jniCpp.add(decl)
     }
   }
 

@@ -176,6 +176,26 @@ public:
     }
 };
 
+#ifdef DB_EITHER_OBJC_CLASSNAME
+template<template<class, class> class EitherType, class L, class R>
+class Either {
+public:
+    using CppType = EitherType<typename L::CppType, typename R::CppType>;
+    using ObjcType = DB_EITHER_OBJC_CLASSNAME*;
+
+    using Boxed = Either;
+
+    static CppType toCpp(ObjcType either) {
+        return either.isLeft ? CppType(L::Boxed::toCpp(either.left)) : CppType(R::Boxed::toCpp(either.right));
+    }
+
+    static ObjcType fromCpp(const CppType& either) {
+        ObjcType retval = [DB_EITHER_OBJC_CLASSNAME alloc];
+        return either.isLeft() ? [retval initWithLeft:L::Boxed::fromCpp(either.left())] : [retval initWithRight:R::Boxed::fromCpp(either.right())];
+    }
+};
+#endif
+
 template<class T>
 class List {
     using ECppType = typename T::CppType;
