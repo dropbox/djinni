@@ -4,7 +4,8 @@
             "target_name": "djinni_jni",
             "type": "static_library",
             "sources": [
-              "jni/djinni_support.cpp",
+                "<!@(ls jni/*)" ,
+                #"jni/djinni_support.cpp",
             ],
             "include_dirs": [
               "jni",
@@ -22,8 +23,10 @@
               "CLANG_ENABLE_OBJC_ARC": "YES",
             },
             "sources": [
-              "objc/DJIWeakPtrWrapper.mm",
-              "objc/DJIError.mm",
+              "<!@(dir=('objc'); \
+              pattern=('*.h' '*.hpp' '*.cpp' '*.mm' '*.m'); \
+              echo ${pattern[@]} | xargs -n 1 find ${dir[@]} -iname \
+              )", 
             ],
             "include_dirs": [
               "objc",
