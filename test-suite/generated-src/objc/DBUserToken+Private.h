@@ -13,7 +13,7 @@ namespace djinni_generated {
 class UserToken
 {
 public:
-    using CppType = std::shared_ptr<::UserToken>;
+    using CppType = std::shared_ptr<::testsuite::UserToken>;
     using ObjcType = id<DBUserToken>;
 
     using Boxed = UserToken;

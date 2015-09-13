@@ -15,7 +15,7 @@ NativeExternInterface2::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j)
 
 NativeExternInterface2::JavaProxy::~JavaProxy() = default;
 
-::ExternRecordWithDerivings NativeExternInterface2::JavaProxy::foo(const std::shared_ptr<::TestHelpers> & c_i) {
+::ExternRecordWithDerivings NativeExternInterface2::JavaProxy::foo(const std::shared_ptr<::testsuite::TestHelpers> & c_i) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeExternInterface2>::get();

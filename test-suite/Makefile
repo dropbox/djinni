@@ -8,4 +8,4 @@ objc:
 	cd objc; xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test
 
 java:
-	cd java; ant test
+	cd java && ant test

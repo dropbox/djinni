@@ -12,13 +12,13 @@ auto ExternRecordWithDerivings::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
     return {::djinni_generated::RecordWithDerivings::toCpp(obj.member),
-            ::djinni::Enum<::color, DBColor>::toCpp(obj.e)};
+            ::djinni::Enum<::testsuite::color, DBColor>::toCpp(obj.e)};
 }
 
 auto ExternRecordWithDerivings::fromCpp(const CppType& cpp) -> ObjcType
 {
     return [[DBExternRecordWithDerivings alloc] initWithMember:(::djinni_generated::RecordWithDerivings::fromCpp(cpp.member))
-                                                             e:(::djinni::Enum<::color, DBColor>::fromCpp(cpp.e))];
+                                                             e:(::djinni::Enum<::testsuite::color, DBColor>::fromCpp(cpp.e))];
 }
 
 }  // namespace djinni_generated

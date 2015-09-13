@@ -4,6 +4,8 @@
 #include "user_token.hpp"
 #include <exception>
 
+namespace testsuite {
+
 SetRecord TestHelpers::get_set_record() {
     return SetRecord { {
         "StringA",
@@ -142,3 +144,5 @@ AssortedPrimitives TestHelpers::assorted_primitives_id(const AssortedPrimitives 
 std::vector<uint8_t> TestHelpers::id_binary(const std::vector<uint8_t> & v) {
     return v;
 }
+
+} // namespace testsuite

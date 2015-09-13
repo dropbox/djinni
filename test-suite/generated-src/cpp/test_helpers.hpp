@@ -16,6 +16,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace testsuite {
+
 class ClientInterface;
 class UserToken;
 
@@ -83,3 +85,5 @@ public:
 
     static std::vector<uint8_t> id_binary(const std::vector<uint8_t> & b);
 };
+
+}  // namespace testsuite

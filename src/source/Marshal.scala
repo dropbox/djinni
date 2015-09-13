@@ -46,4 +46,6 @@ abstract class Marshal(spec: Spec) {
       case Some("") => "::" + t
       case Some(s) => "::" + s + "::" + t
     }
+
+  protected def withCppNs(t: String) = withNs(Some(spec.cppNamespace), t)
 }

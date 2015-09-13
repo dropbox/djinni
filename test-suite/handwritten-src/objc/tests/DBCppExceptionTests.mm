@@ -4,6 +4,8 @@
 
 #include "cpp_exception_impl.hpp"
 
+using namespace testsuite;
+
 @interface DBCppExceptionTests : XCTestCase
 
 @end

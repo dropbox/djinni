@@ -8,6 +8,8 @@
 #include <string>
 #include <utility>
 
+namespace testsuite {
+
 /** Record containing constants */
 struct Constants final {
 
@@ -45,3 +47,5 @@ struct Constants final {
     , some_string(std::move(some_string))
     {}
 };
+
+}  // namespace testsuite

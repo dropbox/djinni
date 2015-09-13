@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeUserToken final : ::djinni::JniInterface<::UserToken, NativeUserToken> {
+class NativeUserToken final : ::djinni::JniInterface<::testsuite::UserToken, NativeUserToken> {
 public:
-    using CppType = std::shared_ptr<::UserToken>;
+    using CppType = std::shared_ptr<::testsuite::UserToken>;
     using JniType = jobject;
 
     using Boxed = NativeUserToken;
@@ -23,9 +23,9 @@ public:
 private:
     NativeUserToken();
     friend ::djinni::JniClass<NativeUserToken>;
-    friend ::djinni::JniInterface<::UserToken, NativeUserToken>;
+    friend ::djinni::JniInterface<::testsuite::UserToken, NativeUserToken>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::UserToken
+    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::testsuite::UserToken
     {
     public:
         JavaProxy(JniType j);
@@ -35,7 +35,7 @@ private:
 
     private:
         using ::djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend ::djinni::JniInterface<::UserToken, ::djinni_generated::NativeUserToken>;
+        friend ::djinni::JniInterface<::testsuite::UserToken, ::djinni_generated::NativeUserToken>;
         friend ::djinni::JavaProxyCache<JavaProxy>;
     };
 

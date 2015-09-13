@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+namespace testsuite {
+
 struct MapListRecord final {
     std::vector<std::unordered_map<std::string, int64_t>> map_list;
 
@@ -16,3 +18,5 @@ struct MapListRecord final {
     : map_list(std::move(map_list))
     {}
 };
+
+}  // namespace testsuite

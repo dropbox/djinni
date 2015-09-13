@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativePrimitiveList final {
 public:
-    using CppType = ::PrimitiveList;
+    using CppType = ::testsuite::PrimitiveList;
     using JniType = jobject;
 
     using Boxed = NativePrimitiveList;

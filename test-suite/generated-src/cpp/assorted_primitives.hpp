@@ -7,6 +7,8 @@
 #include <experimental/optional>
 #include <utility>
 
+namespace testsuite {
+
 struct AssortedPrimitives final {
     bool b;
     int8_t eight;
@@ -56,3 +58,5 @@ struct AssortedPrimitives final {
     , o_fsixtyfour(std::move(o_fsixtyfour))
     {}
 };
+
+}  // namespace testsuite

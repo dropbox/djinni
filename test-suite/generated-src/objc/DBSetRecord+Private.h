@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct SetRecord
 {
-    using CppType = ::SetRecord;
+    using CppType = ::testsuite::SetRecord;
     using ObjcType = DBSetRecord*;
 
     using Boxed = SetRecord;

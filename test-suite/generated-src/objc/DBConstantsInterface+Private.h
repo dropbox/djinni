@@ -13,7 +13,7 @@ namespace djinni_generated {
 class ConstantsInterface
 {
 public:
-    using CppType = std::shared_ptr<::ConstantsInterface>;
+    using CppType = std::shared_ptr<::testsuite::ConstantsInterface>;
     using ObjcType = DBConstantsInterface*;
 
     using Boxed = ConstantsInterface;

@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeMapDateRecord final {
 public:
-    using CppType = ::MapDateRecord;
+    using CppType = ::testsuite::MapDateRecord;
     using JniType = jobject;
 
     using Boxed = NativeMapDateRecord;

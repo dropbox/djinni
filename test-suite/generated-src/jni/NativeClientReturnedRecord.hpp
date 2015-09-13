@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeClientReturnedRecord final {
 public:
-    using CppType = ::ClientReturnedRecord;
+    using CppType = ::testsuite::ClientReturnedRecord;
     using JniType = jobject;
 
     using Boxed = NativeClientReturnedRecord;

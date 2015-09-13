@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeConstantsInterface final : ::djinni::JniInterface<::ConstantsInterface, NativeConstantsInterface> {
+class NativeConstantsInterface final : ::djinni::JniInterface<::testsuite::ConstantsInterface, NativeConstantsInterface> {
 public:
-    using CppType = std::shared_ptr<::ConstantsInterface>;
+    using CppType = std::shared_ptr<::testsuite::ConstantsInterface>;
     using JniType = jobject;
 
     using Boxed = NativeConstantsInterface;
@@ -23,7 +23,7 @@ public:
 private:
     NativeConstantsInterface();
     friend ::djinni::JniClass<NativeConstantsInterface>;
-    friend ::djinni::JniInterface<::ConstantsInterface, NativeConstantsInterface>;
+    friend ::djinni::JniInterface<::testsuite::ConstantsInterface, NativeConstantsInterface>;
 
 };
 

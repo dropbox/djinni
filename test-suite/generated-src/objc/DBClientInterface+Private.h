@@ -13,7 +13,7 @@ namespace djinni_generated {
 class ClientInterface
 {
 public:
-    using CppType = std::shared_ptr<::ClientInterface>;
+    using CppType = std::shared_ptr<::testsuite::ClientInterface>;
     using ObjcType = id<DBClientInterface>;
 
     using Boxed = ClientInterface;

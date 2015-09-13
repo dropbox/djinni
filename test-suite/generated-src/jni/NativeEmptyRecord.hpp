@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeEmptyRecord final {
 public:
-    using CppType = ::EmptyRecord;
+    using CppType = ::testsuite::EmptyRecord;
     using JniType = jobject;
 
     using Boxed = NativeEmptyRecord;

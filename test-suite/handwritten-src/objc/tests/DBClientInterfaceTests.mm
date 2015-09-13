@@ -3,6 +3,8 @@
 #import "DBTestHelpers.h"
 #import <XCTest/XCTest.h>
 
+using namespace testsuite;
+
 @interface DBClientInterfaceTests : XCTestCase
 
 @end

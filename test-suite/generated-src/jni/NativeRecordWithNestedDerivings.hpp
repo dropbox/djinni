@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeRecordWithNestedDerivings final {
 public:
-    using CppType = ::RecordWithNestedDerivings;
+    using CppType = ::testsuite::RecordWithNestedDerivings;
     using JniType = jobject;
 
     using Boxed = NativeRecordWithNestedDerivings;

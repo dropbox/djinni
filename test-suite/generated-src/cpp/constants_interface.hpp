@@ -5,6 +5,8 @@
 
 #include <cstdint>
 
+namespace testsuite {
+
 /** Interface containing constants */
 class ConstantsInterface {
 public:
@@ -32,3 +34,5 @@ public:
 
     virtual void dummy() = 0;
 };
+
+}  // namespace testsuite

@@ -12,12 +12,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 namespace djinni_generated {
 
 class ClientInterface::ObjcProxy final
-: public ::ClientInterface
+: public ::testsuite::ClientInterface
 , public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
 {
 public:
     using Handle::Handle;
-    ::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
+    ::testsuite::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
     {
         @autoreleasepool {
             auto r = [(ObjcType)Handle::get() getRecord:(::djinni::I64::fromCpp(c_record_id))

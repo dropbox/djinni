@@ -7,6 +7,8 @@
 #include <string>
 #include <utility>
 
+namespace testsuite {
+
 struct RecordWithDerivings final {
     int32_t key1;
     std::string key2;
@@ -26,3 +28,5 @@ struct RecordWithDerivings final {
     , key2(std::move(key2))
     {}
 };
+
+}  // namespace testsuite

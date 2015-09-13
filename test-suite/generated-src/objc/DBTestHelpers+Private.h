@@ -13,7 +13,7 @@ namespace djinni_generated {
 class TestHelpers
 {
 public:
-    using CppType = std::shared_ptr<::TestHelpers>;
+    using CppType = std::shared_ptr<::testsuite::TestHelpers>;
     using ObjcType = DBTestHelpers*;
 
     using Boxed = TestHelpers;

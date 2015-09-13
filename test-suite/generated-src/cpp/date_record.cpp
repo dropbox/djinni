@@ -3,6 +3,8 @@
 
 #include "date_record.hpp"  // my header
 
+namespace testsuite {
+
 
 bool operator==(const DateRecord& lhs, const DateRecord& rhs) {
     return lhs.created_at == rhs.created_at;
@@ -33,3 +35,5 @@ bool operator<=(const DateRecord& lhs, const DateRecord& rhs) {
 bool operator>=(const DateRecord& lhs, const DateRecord& rhs) {
     return !(lhs < rhs);
 }
+
+}  // namespace testsuite

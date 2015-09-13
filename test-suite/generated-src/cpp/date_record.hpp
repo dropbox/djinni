@@ -6,6 +6,8 @@
 #include <chrono>
 #include <utility>
 
+namespace testsuite {
+
 struct DateRecord final {
     std::chrono::system_clock::time_point created_at;
 
@@ -22,3 +24,5 @@ struct DateRecord final {
     : created_at(std::move(created_at))
     {}
 };
+
+}  // namespace testsuite

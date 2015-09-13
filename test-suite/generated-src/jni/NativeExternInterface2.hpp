@@ -31,7 +31,7 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        ::ExternRecordWithDerivings foo(const std::shared_ptr<::TestHelpers> & i) override;
+        ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & i) override;
 
     private:
         using ::djinni::JavaProxyCacheEntry::getGlobalRef;

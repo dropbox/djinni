@@ -3,6 +3,8 @@
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
 
+using namespace testsuite;
+
 static PrimitiveList cppPrimitiveList { { 1, 2, 3 } };
 static DBPrimitiveList *objcPrimitiveList = [DBPrimitiveList primitiveListWithList:@[@1, @2, @3]];
 

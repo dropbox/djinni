@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeSetRecord final {
 public:
-    using CppType = ::SetRecord;
+    using CppType = ::testsuite::SetRecord;
     using JniType = jobject;
 
     using Boxed = NativeSetRecord;

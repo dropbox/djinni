@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-NativeClientInterface::NativeClientInterface() : ::djinni::JniInterface<::ClientInterface, NativeClientInterface>() {}
+NativeClientInterface::NativeClientInterface() : ::djinni::JniInterface<::testsuite::ClientInterface, NativeClientInterface>() {}
 
 NativeClientInterface::~NativeClientInterface() = default;
 
@@ -15,7 +15,7 @@ NativeClientInterface::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) 
 
 NativeClientInterface::JavaProxy::~JavaProxy() = default;
 
-::ClientReturnedRecord NativeClientInterface::JavaProxy::get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) {
+::testsuite::ClientReturnedRecord NativeClientInterface::JavaProxy::get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();

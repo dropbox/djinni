@@ -5,9 +5,13 @@
 
 #include <string>
 
+namespace testsuite {
+
 class UserToken {
 public:
     virtual ~UserToken() {}
 
     virtual std::string whoami() = 0;
 };
+
+}  // namespace testsuite

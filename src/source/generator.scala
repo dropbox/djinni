@@ -331,6 +331,8 @@ abstract class Generator(spec: Spec)
       case Some(s) => "::" + s + "::" + t
     }
 
+  def withCppNs(t: String) = withNs(Some(spec.cppNamespace), t)
+
   def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], delim: String, end: String, f: Field => String): IndentWriter = {
     w.w(call)
     val skipFirst = new SkipFirst

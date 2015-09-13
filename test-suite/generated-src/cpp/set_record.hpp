@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <utility>
 
+namespace testsuite {
+
 struct SetRecord final {
     std::unordered_set<std::string> set;
     std::unordered_set<int32_t> iset;
@@ -18,3 +20,5 @@ struct SetRecord final {
     , iset(std::move(iset))
     {}
 };
+
+}  // namespace testsuite

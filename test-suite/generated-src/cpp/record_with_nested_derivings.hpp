@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <utility>
 
+namespace testsuite {
+
 struct RecordWithNestedDerivings final {
     int32_t key;
     RecordWithDerivings rec;
@@ -26,3 +28,5 @@ struct RecordWithNestedDerivings final {
     , rec(std::move(rec))
     {}
 };
+
+}  // namespace testsuite

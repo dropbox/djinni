@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <utility>
 
+namespace testsuite {
+
 struct MapRecord final {
     std::unordered_map<std::string, int64_t> map;
     std::unordered_map<int32_t, int32_t> imap;
@@ -18,3 +20,5 @@ struct MapRecord final {
     , imap(std::move(imap))
     {}
 };
+
+}  // namespace testsuite

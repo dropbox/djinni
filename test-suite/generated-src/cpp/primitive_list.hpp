@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+namespace testsuite {
+
 struct PrimitiveList final {
     std::vector<int64_t> list;
 
@@ -14,3 +16,5 @@ struct PrimitiveList final {
     : list(std::move(list))
     {}
 };
+
+}  // namespace testsuite

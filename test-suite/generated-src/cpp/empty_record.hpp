@@ -5,6 +5,8 @@
 
 #include <utility>
 
+namespace testsuite {
+
 /**
  * Empty record
  * (Second line of multi-line documentation.
@@ -12,3 +14,5 @@
  */
 struct EmptyRecord final {
 };
+
+}  // namespace testsuite

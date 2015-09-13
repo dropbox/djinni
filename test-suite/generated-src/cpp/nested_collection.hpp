@@ -8,6 +8,8 @@
 #include <utility>
 #include <vector>
 
+namespace testsuite {
+
 struct NestedCollection final {
     std::vector<std::unordered_set<std::string>> set_list;
 
@@ -15,3 +17,5 @@ struct NestedCollection final {
     : set_list(std::move(set_list))
     {}
 };
+
+}  // namespace testsuite

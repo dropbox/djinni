@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeCppException final : ::djinni::JniInterface<::CppException, NativeCppException> {
+class NativeCppException final : ::djinni::JniInterface<::testsuite::CppException, NativeCppException> {
 public:
-    using CppType = std::shared_ptr<::CppException>;
+    using CppType = std::shared_ptr<::testsuite::CppException>;
     using JniType = jobject;
 
     using Boxed = NativeCppException;
@@ -23,7 +23,7 @@ public:
 private:
     NativeCppException();
     friend ::djinni::JniClass<NativeCppException>;
-    friend ::djinni::JniInterface<::CppException, NativeCppException>;
+    friend ::djinni::JniInterface<::testsuite::CppException, NativeCppException>;
 
 };
 

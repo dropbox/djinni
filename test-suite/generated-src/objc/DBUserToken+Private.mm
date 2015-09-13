@@ -14,15 +14,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBUserTokenCppProxy : NSObject<DBUserToken>
 
-- (id)initWithCpp:(const std::shared_ptr<::UserToken>&)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<::testsuite::UserToken>&)cppRef;
 
 @end
 
 @implementation DBUserTokenCppProxy {
-    ::djinni::DbxCppWrapperCache<::UserToken>::Handle _cppRefHandle;
+    ::djinni::DbxCppWrapperCache<::testsuite::UserToken>::Handle _cppRefHandle;
 }
 
-- (id)initWithCpp:(const std::shared_ptr<::UserToken>&)cppRef
+- (id)initWithCpp:(const std::shared_ptr<::testsuite::UserToken>&)cppRef
 {
     if (self = [super init]) {
         _cppRefHandle.assign(cppRef);
@@ -40,7 +40,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 namespace djinni_generated {
 
 class UserToken::ObjcProxy final
-: public ::UserToken
+: public ::testsuite::UserToken
 , public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
 {
 public:
@@ -77,7 +77,7 @@ auto UserToken::fromCpp(const CppType& cpp) -> ObjcType
     if (auto cppPtr = dynamic_cast<ObjcProxy*>(cpp.get())) {
         return cppPtr->Handle::get();
     }
-    return ::djinni::DbxCppWrapperCache<::UserToken>::getInstance()->get(cpp, [] (const CppType& p) {
+    return ::djinni::DbxCppWrapperCache<::testsuite::UserToken>::getInstance()->get(cpp, [] (const CppType& p) {
         return [[DBUserTokenCppProxy alloc] initWithCpp:p];
     });
 }

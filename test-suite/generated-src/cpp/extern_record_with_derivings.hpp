@@ -9,8 +9,8 @@
 
 /** This file tests YAML dumped by Djinni can be parsed back in */
 struct ExternRecordWithDerivings final {
-    ::RecordWithDerivings member;
-    ::color e;
+    ::testsuite::RecordWithDerivings member;
+    ::testsuite::color e;
 
     friend bool operator==(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
     friend bool operator!=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
@@ -21,8 +21,8 @@ struct ExternRecordWithDerivings final {
     friend bool operator<=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
     friend bool operator>=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
 
-    ExternRecordWithDerivings(::RecordWithDerivings member,
-                              ::color e)
+    ExternRecordWithDerivings(::testsuite::RecordWithDerivings member,
+                              ::testsuite::color e)
     : member(std::move(member))
     , e(std::move(e))
     {}

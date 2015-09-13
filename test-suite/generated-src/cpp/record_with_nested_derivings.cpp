@@ -3,6 +3,8 @@
 
 #include "record_with_nested_derivings.hpp"  // my header
 
+namespace testsuite {
+
 
 bool operator==(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs) {
     return lhs.key == rhs.key &&
@@ -40,3 +42,5 @@ bool operator<=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDeri
 bool operator>=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs) {
     return !(lhs < rhs);
 }
+
+}  // namespace testsuite

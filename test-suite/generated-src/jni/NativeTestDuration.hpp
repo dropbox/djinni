@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeTestDuration final : ::djinni::JniInterface<::TestDuration, NativeTestDuration> {
+class NativeTestDuration final : ::djinni::JniInterface<::testsuite::TestDuration, NativeTestDuration> {
 public:
-    using CppType = std::shared_ptr<::TestDuration>;
+    using CppType = std::shared_ptr<::testsuite::TestDuration>;
     using JniType = jobject;
 
     using Boxed = NativeTestDuration;
@@ -23,7 +23,7 @@ public:
 private:
     NativeTestDuration();
     friend ::djinni::JniClass<NativeTestDuration>;
-    friend ::djinni::JniInterface<::TestDuration, NativeTestDuration>;
+    friend ::djinni::JniInterface<::testsuite::TestDuration, NativeTestDuration>;
 
 };
 

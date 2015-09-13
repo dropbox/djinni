@@ -17,7 +17,7 @@ class ExternInterface2::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    ::ExternRecordWithDerivings foo(const std::shared_ptr<::TestHelpers> & c_i) override
+    ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & c_i) override
     {
         @autoreleasepool {
             auto r = [(ObjcType)Handle::get() foo:(::djinni_generated::TestHelpers::fromCpp(c_i))];

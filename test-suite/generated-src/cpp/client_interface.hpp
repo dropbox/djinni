@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+namespace testsuite {
+
 /** Client interface */
 class ClientInterface {
 public:
@@ -21,3 +23,5 @@ public:
 
     virtual std::string return_str() = 0;
 };
+
+}  // namespace testsuite
