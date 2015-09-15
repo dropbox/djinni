@@ -187,7 +187,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("super.finalize();")
             }
             for (m <- i.methods if !m.static) { // Static methods not in CppProxy
-            val ret = marshal.returnType(m.ret)
+              val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
               val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")

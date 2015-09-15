@@ -131,7 +131,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"const auto& data = ::djinni::JniClass<$jniHelper>::get();")
         val call = "auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject("
         w.w(call + "data.clazz.get(), data.jconstructor")
-        if(!r.fields.isEmpty) {
+        if(r.fields.nonEmpty) {
           w.wl(",")
           writeAlignedCall(w, " " * call.length(), r.fields, ")}", f => {
             val name = idCpp.field(f.ident)
@@ -167,11 +167,11 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new JNIRefs(ident.name)
-    i.methods.map(m => {
-      m.params.map(p => refs.find(p.ty))
+    i.methods.foreach(m => {
+      m.params.foreach(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
     })
-    i.consts.map(c => {
+    i.consts.foreach(c => {
       refs.find(c.ty)
     })
 
@@ -258,7 +258,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.w(call)
             val javaMethodName = idJava.method(m.ident)
             w.w(s"getGlobalRef(), data.method_$javaMethodName")
-            if(!m.params.isEmpty){
+            if(m.params.nonEmpty){
               w.wl(",")
               writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
                 val param = jniMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))
