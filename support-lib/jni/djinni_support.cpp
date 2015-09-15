@@ -174,7 +174,6 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
     env->ExceptionClear();
 
     env->DeleteLocalRef(cassert);
-    env->DeleteLocalRef(e);
 
     jniThrowCppFromJavaException(env, e);
 }

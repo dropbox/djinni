@@ -6,6 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Record containing constants */
 public final class Constants {
 
     /** bool_constant has documentation. */

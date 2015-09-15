@@ -1,3 +1,4 @@
+# Record containing constants
 constants = record {
     some_integer: i32;
     some_string: string;

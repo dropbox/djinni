@@ -4,6 +4,7 @@
 #import "DBConstants.h"
 #import <Foundation/Foundation.h>
 
+/** Record containing constants */
 @interface DBConstants : NSObject
 - (nonnull instancetype)initWithSomeInteger:(int32_t)someInteger
                                  someString:(nonnull NSString *)someString;

@@ -20,11 +20,9 @@ import djinni.ast.Record.DerivingType
 import djinni.ast._
 import djinni.generatorTools._
 import djinni.meta._
-import djinni.syntax.Error
 import djinni.writer.IndentWriter
 
 import scala.collection.mutable
-import scala.collection.parallel.immutable
 
 class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
@@ -229,7 +227,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
               val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
-              w.w(s"if (auto cppPtr = dynamic_cast<${objcExtSelf}*>(cpp.get()))").braced {
+              w.w(s"if (auto cppPtr = dynamic_cast<$objcExtSelf*>(cpp.get()))").braced {
                 w.wl("return cppPtr->Handle::get();")
               }
             }
@@ -277,7 +275,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"struct $helperClass")
         w.bracedSemi {
           w.wl(s"using CppType = $cppSelf;")
-          w.wl(s"using ObjcType = $noBaseSelf*;");
+          w.wl(s"using ObjcType = $noBaseSelf*;")
           w.wl
           w.wl(s"using Boxed = $helperClass;")
           w.wl

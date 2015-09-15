@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 
+/** Record containing constants */
 struct Constants final {
 
     /** bool_constant has documentation. */
