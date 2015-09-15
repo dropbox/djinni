@@ -48,16 +48,16 @@ public abstract class TestHelpers {
     public static native void checkEnum(@Nonnull Color c);
 
     @CheckForNull
-    public static native Token tokenId(@CheckForNull Token t);
+    public static native UserToken tokenId(@CheckForNull UserToken t);
 
     @CheckForNull
-    public static native Token createCppToken();
+    public static native UserToken createCppToken();
 
-    public static native void checkCppToken(@CheckForNull Token t);
+    public static native void checkCppToken(@CheckForNull UserToken t);
 
-    public static native long cppTokenId(@CheckForNull Token t);
+    public static native long cppTokenId(@CheckForNull UserToken t);
 
-    public static native void checkTokenType(@CheckForNull Token t, @Nonnull String type);
+    public static native void checkTokenType(@CheckForNull UserToken t, @Nonnull String type);
 
     @CheckForNull
     public static native Integer returnNone();

@@ -9,7 +9,7 @@
 #import "DBNestedCollection+Private.h"
 #import "DBPrimitiveList+Private.h"
 #import "DBSetRecord+Private.h"
-#import "DBToken+Private.h"
+#import "DBUserToken+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
@@ -144,37 +144,37 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nullable id<DBToken>)tokenId:(nullable id<DBToken>)t {
++ (nullable id<DBUserToken>)tokenId:(nullable id<DBUserToken>)t {
     try {
-        auto r = ::TestHelpers::token_id(::djinni_generated::Token::toCpp(t));
-        return ::djinni_generated::Token::fromCpp(r);
+        auto r = ::TestHelpers::token_id(::djinni_generated::UserToken::toCpp(t));
+        return ::djinni_generated::UserToken::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nullable id<DBToken>)createCppToken {
++ (nullable id<DBUserToken>)createCppToken {
     try {
         auto r = ::TestHelpers::create_cpp_token();
-        return ::djinni_generated::Token::fromCpp(r);
+        return ::djinni_generated::UserToken::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkCppToken:(nullable id<DBToken>)t {
++ (void)checkCppToken:(nullable id<DBUserToken>)t {
     try {
-        ::TestHelpers::check_cpp_token(::djinni_generated::Token::toCpp(t));
+        ::TestHelpers::check_cpp_token(::djinni_generated::UserToken::toCpp(t));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (int64_t)cppTokenId:(nullable id<DBToken>)t {
++ (int64_t)cppTokenId:(nullable id<DBUserToken>)t {
     try {
-        auto r = ::TestHelpers::cpp_token_id(::djinni_generated::Token::toCpp(t));
+        auto r = ::TestHelpers::cpp_token_id(::djinni_generated::UserToken::toCpp(t));
         return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkTokenType:(nullable id<DBToken>)t
++ (void)checkTokenType:(nullable id<DBUserToken>)t
                   type:(nonnull NSString *)type {
     try {
-        ::TestHelpers::check_token_type(::djinni_generated::Token::toCpp(t),
+        ::TestHelpers::check_token_type(::djinni_generated::UserToken::toCpp(t),
                                         ::djinni::String::toCpp(type));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

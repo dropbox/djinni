@@ -1,7 +1,7 @@
 #include "test_helpers.hpp"
 #include "client_returned_record.hpp"
 #include "client_interface.hpp"
-#include "token.hpp"
+#include "user_token.hpp"
 #include <exception>
 
 SetRecord TestHelpers::get_set_record() {
@@ -86,28 +86,28 @@ void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientIn
     }
 }
 
-std::shared_ptr<Token> TestHelpers::token_id(const std::shared_ptr<Token> & in) {
+std::shared_ptr<UserToken> TestHelpers::token_id(const std::shared_ptr<UserToken> & in) {
     return in;
 }
 
-class CppToken : public Token {
+class CppToken : public UserToken {
     std::string whoami() { return "C++"; }
 };
 
-std::shared_ptr<Token> TestHelpers::create_cpp_token() {
+std::shared_ptr<UserToken> TestHelpers::create_cpp_token() {
     return std::make_shared<CppToken>();
 }
 
-void TestHelpers::check_cpp_token(const std::shared_ptr<Token> & in) {
+void TestHelpers::check_cpp_token(const std::shared_ptr<UserToken> & in) {
     // Throws bad_cast if type is wrong
     (void)dynamic_cast<CppToken &>(*in);
 }
 
-int64_t TestHelpers::cpp_token_id(const std::shared_ptr<Token> & in) {
+int64_t TestHelpers::cpp_token_id(const std::shared_ptr<UserToken> & in) {
     return reinterpret_cast<int64_t>(in.get());
 }
 
-void TestHelpers::check_token_type(const std::shared_ptr<Token> &t, const std::string & type) {
+void TestHelpers::check_token_type(const std::shared_ptr<UserToken> &t, const std::string & type) {
     if (t->whoami() != type) {
         throw std::invalid_argument("wrong token type");
     }

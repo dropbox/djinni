@@ -1,12 +1,12 @@
 #import "DBTestHelpers.h"
-#import "DBToken.h"
+#import "DBUserToken.h"
 #import <XCTest/XCTest.h>
 
 @interface DBTokenTests : XCTestCase
 
 @end
 
-@interface DBObjcToken : NSObject<DBToken>
+@interface DBObjcToken : NSObject<DBUserToken>
 - (NSString *)whoami;
 @end
 @implementation DBObjcToken
@@ -29,7 +29,7 @@
 
 - (void)testTokens
 {
-    id<DBToken> t = [[DBObjcToken alloc] init];
+    id<DBUserToken> t = [[DBObjcToken alloc] init];
     XCTAssertEqual([DBTestHelpers tokenId:t], t);
 }
 
@@ -48,7 +48,7 @@
 
 - (void)testCppToken
 {
-    id<DBToken> ct = [DBTestHelpers createCppToken];
+    id<DBUserToken> ct = [DBTestHelpers createCppToken];
     XCTAssertEqual([DBTestHelpers tokenId:ct], ct);
     [DBTestHelpers checkCppToken:ct];
     ct = nil;

@@ -6,7 +6,7 @@
 @import "exception.djinni"
 @import "client_interface.djinni"
 @import "enum.djinni"
-@import "token.djinni"
+@import "user_token.djinni"
 @import "test.djinni"
 @import "primtypes.djinni"
 @import "constants.djinni"

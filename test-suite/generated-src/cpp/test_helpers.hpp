@@ -17,7 +17,7 @@
 #include <vector>
 
 class ClientInterface;
-class Token;
+class UserToken;
 
 class TestHelpers {
 public:
@@ -55,15 +55,15 @@ public:
 
     static void check_enum(color c);
 
-    static std::shared_ptr<Token> token_id(const std::shared_ptr<Token> & t);
+    static std::shared_ptr<UserToken> token_id(const std::shared_ptr<UserToken> & t);
 
-    static std::shared_ptr<Token> create_cpp_token();
+    static std::shared_ptr<UserToken> create_cpp_token();
 
-    static void check_cpp_token(const std::shared_ptr<Token> & t);
+    static void check_cpp_token(const std::shared_ptr<UserToken> & t);
 
-    static int64_t cpp_token_id(const std::shared_ptr<Token> & t);
+    static int64_t cpp_token_id(const std::shared_ptr<UserToken> & t);
 
-    static void check_token_type(const std::shared_ptr<Token> & t, const std::string & type);
+    static void check_token_type(const std::shared_ptr<UserToken> & t, const std::string & type);
 
     static std::experimental::optional<int32_t> return_none();
 

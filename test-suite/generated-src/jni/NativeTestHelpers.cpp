@@ -10,7 +10,7 @@
 #include "NativeNestedCollection.hpp"
 #include "NativePrimitiveList.hpp"
 #include "NativeSetRecord.hpp"
-#include "NativeToken.hpp"
+#include "NativeUserToken.hpp"
 
 namespace djinni_generated {
 
@@ -171,8 +171,8 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIE
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestHelpers::token_id(::djinni_generated::NativeToken::toCpp(jniEnv, j_t));
-        return ::djinni::release(::djinni_generated::NativeToken::fromCpp(jniEnv, r));
+        auto r = ::TestHelpers::token_id(::djinni_generated::NativeUserToken::toCpp(jniEnv, j_t));
+        return ::djinni::release(::djinni_generated::NativeUserToken::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -181,7 +181,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppTok
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::TestHelpers::create_cpp_token();
-        return ::djinni::release(::djinni_generated::NativeToken::fromCpp(jniEnv, r));
+        return ::djinni::release(::djinni_generated::NativeUserToken::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -189,7 +189,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkCppToken(J
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        ::TestHelpers::check_cpp_token(::djinni_generated::NativeToken::toCpp(jniEnv, j_t));
+        ::TestHelpers::check_cpp_token(::djinni_generated::NativeUserToken::toCpp(jniEnv, j_t));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -197,7 +197,7 @@ CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestHelpers::cpp_token_id(::djinni_generated::NativeToken::toCpp(jniEnv, j_t));
+        auto r = ::TestHelpers::cpp_token_id(::djinni_generated::NativeUserToken::toCpp(jniEnv, j_t));
         return ::djinni::release(::djinni::I64::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -206,7 +206,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkTokenType(
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        ::TestHelpers::check_token_type(::djinni_generated::NativeToken::toCpp(jniEnv, j_t),
+        ::TestHelpers::check_token_type(::djinni_generated::NativeUserToken::toCpp(jniEnv, j_t),
                                         ::djinni::String::toCpp(jniEnv, j_type));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }

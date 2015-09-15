@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class TokenTest extends TestCase {
 
-    private class JavaToken extends Token {
+    private class JavaToken extends UserToken {
         public String whoami() { return "Java"; }
     }
 
@@ -13,7 +13,7 @@ public class TokenTest extends TestCase {
     }
 
     public void testTokens() {
-        Token jt = new JavaToken();
+        UserToken jt = new JavaToken();
         assertSame(TestHelpers.tokenId(jt), jt);
     }
 
@@ -22,7 +22,7 @@ public class TokenTest extends TestCase {
     }
 
     public void testCppToken() {
-        Token ct = TestHelpers.createCppToken();
+        UserToken ct = TestHelpers.createCppToken();
         assertSame(TestHelpers.tokenId(ct), ct);
         TestHelpers.checkCppToken(ct);
         ct = null;
