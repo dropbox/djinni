@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 public final class Constants {
 
+    /** bool_constant has documentation. */
     public static final boolean BOOL_CONSTANT = true;
 
     public static final byte I8_CONSTANT = 1;
@@ -20,6 +21,11 @@ public final class Constants {
 
     public static final float F32_CONSTANT = 5.0f;
 
+    /**
+     * f64_constant has long documentation.
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     public static final double F64_CONSTANT = 5.0;
 
     @Nonnull

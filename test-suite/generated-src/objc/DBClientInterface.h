@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
+/** Client interface */
 @protocol DBClientInterface
 
 /** Returns record of given string */

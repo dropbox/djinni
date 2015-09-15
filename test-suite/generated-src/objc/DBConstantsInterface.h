@@ -6,11 +6,18 @@
 extern BOOL const DBConstantsInterfaceBoolConstant;
 extern int8_t const DBConstantsInterfaceI8Constant;
 extern int16_t const DBConstantsInterfaceI16Constant;
+/** i32_constant has documentation. */
 extern int32_t const DBConstantsInterfaceI32Constant;
+/**
+ * i64_constant has long documentation.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 extern int64_t const DBConstantsInterfaceI64Constant;
 extern float const DBConstantsInterfaceF32Constant;
 extern double const DBConstantsInterfaceF64Constant;
 
+/** Interface containing constants */
 @interface DBConstantsInterface : NSObject
 
 - (void)dummy;

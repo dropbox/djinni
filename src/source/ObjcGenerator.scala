@@ -139,7 +139,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     }
 
     writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
-      writeDoc(w, doc)
       for (c <- i.consts) {
         writeDoc(w, c.doc)
         w.w(s"extern ")
@@ -147,6 +146,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s";")
       }
       w.wl
+      writeDoc(w, doc)
       if (i.ext.objc) w.wl(s"@protocol $self") else w.wl(s"@interface $self : NSObject")
       for (m <- i.methods) {
         w.wl

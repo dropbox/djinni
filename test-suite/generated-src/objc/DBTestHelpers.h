@@ -12,10 +12,21 @@
 @protocol DBUserToken;
 
 
+/**
+ * Helper methods used by various different tests.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 @interface DBTestHelpers : NSObject
 
+/** Method with documentation */
 + (nonnull DBSetRecord *)getSetRecord;
 
+/**
+ * Method with long documentation
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 + (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec;
 
 + (nonnull DBPrimitiveList *)getPrimitiveList;

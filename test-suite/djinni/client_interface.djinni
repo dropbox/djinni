@@ -1,9 +1,11 @@
+# Record returned by a client
 client_returned_record = record {
     record_id: i64;
     content: string;
     misc: optional<string>;
 }
 
+# Client interface
 client_interface = interface +j +o {
     # Returns record of given string
     get_record(record_id: i64, utf8string: string, misc: optional<string>): client_returned_record;

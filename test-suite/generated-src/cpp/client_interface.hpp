@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+/** Client interface */
 class ClientInterface {
 public:
     virtual ~ClientInterface() {}

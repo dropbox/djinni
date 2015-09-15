@@ -6,6 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Record returned by a client */
 public final class ClientReturnedRecord {
 
 

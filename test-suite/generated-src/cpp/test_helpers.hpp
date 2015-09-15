@@ -19,12 +19,23 @@
 class ClientInterface;
 class UserToken;
 
+/**
+ * Helper methods used by various different tests.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 class TestHelpers {
 public:
     virtual ~TestHelpers() {}
 
+    /** Method with documentation */
     static SetRecord get_set_record();
 
+    /**
+     * Method with long documentation
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     static bool check_set_record(const SetRecord & rec);
 
     static PrimitiveList get_primitive_list();

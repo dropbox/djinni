@@ -8,10 +8,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/**
+ * Helper methods used by various different tests.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 public abstract class TestHelpers {
+    /** Method with documentation */
     @Nonnull
     public static native SetRecord getSetRecord();
 
+    /**
+     * Method with long documentation
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     public static native boolean checkSetRecord(@Nonnull SetRecord rec);
 
     @Nonnull

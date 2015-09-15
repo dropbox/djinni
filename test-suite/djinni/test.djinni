@@ -1,5 +1,12 @@
+# Helper methods used by various different tests.
+# (Second line of multi-line documentation.
+#   Indented third line of multi-line documentation.)
 test_helpers = interface +c {
+    # Method with documentation
     static get_set_record(): set_record;
+    # Method with long documentation
+    # (Second line of multi-line documentation.
+    #   Indented third line of multi-line documentation.)
     static check_set_record(rec: set_record): bool;
 
     static get_primitive_list(): primitive_list;
@@ -35,6 +42,9 @@ test_helpers = interface +c {
     static id_binary(b: binary): binary;
 }
 
+# Empty record
+# (Second line of multi-line documentation.
+#   Indented third line of multi-line documentation.)
 empty_record = record {
     
 }

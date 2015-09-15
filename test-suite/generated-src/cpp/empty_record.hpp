@@ -5,5 +5,10 @@
 
 #include <utility>
 
+/**
+ * Empty record
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 struct EmptyRecord final {
 };
