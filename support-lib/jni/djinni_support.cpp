@@ -15,6 +15,7 @@
 //
 
 #include "djinni_support.hpp"
+#include "../proxy_cache_impl.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -464,48 +465,7 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcep
     // exceptions which aren't std::exception subclasses).
 }
 
-struct JavaProxyCacheState {
-    std::mutex mtx;
-    std::unordered_map<jobject, std::weak_ptr<void>, JavaIdentityHash, JavaIdentityEquals> m;
-    int counter = 0;
-
-    static JavaProxyCacheState & get() {
-        static JavaProxyCacheState st;
-        return st;
-    }
-};
-
-JavaProxyCacheEntry::JavaProxyCacheEntry(jobject localRef, JNIEnv * env)
-    : m_globalRef(env, localRef) {
-    DJINNI_ASSERT(m_globalRef, env);
-}
-
-JavaProxyCacheEntry::JavaProxyCacheEntry(jobject localRef)
-    : JavaProxyCacheEntry(localRef, jniGetThreadEnv()) {}
-
-JavaProxyCacheEntry::~JavaProxyCacheEntry() noexcept {
-    JavaProxyCacheState & st = JavaProxyCacheState::get();
-    const std::lock_guard<std::mutex> lock(st.mtx);
-    st.m.erase(m_globalRef.get());
-}
-
-std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_ptr<void>, jobject>(*factory)(jobject)) {
-    JavaProxyCacheState & st = JavaProxyCacheState::get();
-    const std::lock_guard<std::mutex> lock(st.mtx);
-
-    const auto it = st.m.find(obj);
-    if (it != st.m.end()) {
-        std::shared_ptr<void> ptr = it->second.lock();
-        if (ptr) {
-            return ptr;
-        }
-    }
-
-    // Otherwise, construct a new T, save it, and return it.
-    std::pair<std::shared_ptr<void>, jobject> ret = factory(obj);
-    st.m[ret.second] = ret.first;
-    return ret.first;
-}
+template class ProxyCache<JavaProxyCacheTraits>;
 
 CppProxyClassInfo::CppProxyClassInfo(const char * className)
     : clazz(jniFindClass(className)),
@@ -544,11 +504,13 @@ private:
 
 public:
     // Constructor
+    JavaWeakRef(jobject obj) : JavaWeakRef(jniGetThreadEnv(), obj) {}
     JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(jniEnv, create(jniEnv, obj)) {}
 
     // Get the object pointed to if it's still strongly reachable or, return null if not.
     // (Analogous to weak_ptr::lock.) Returns a local reference.
-    jobject get(JNIEnv * jniEnv) {
+    jobject lock() const {
+        const auto & jniEnv = jniGetThreadEnv();
         const JniInfo & weakRefClass = JniClass<JniInfo>::get();
         jobject javaObj = jniEnv->CallObjectMethod(m_weakRef.get(), weakRefClass.method_get);
         jniExceptionCheck(jniEnv);
@@ -559,47 +521,6 @@ private:
     GlobalRef<jobject> m_weakRef;
 };
 
-struct CppProxyCacheState {
-    std::mutex mtx;
-    std::unordered_map<void *, JavaWeakRef> m;
-
-    static CppProxyCacheState & get() {
-        static CppProxyCacheState st;
-        return st;
-    }
-};
-
-/*static*/ void JniCppProxyCache::erase(void * key) {
-    CppProxyCacheState & st = CppProxyCacheState::get();
-    const std::lock_guard<std::mutex> lock(st.mtx);
-    st.m.erase(key);
-}
-
-/*static*/ jobject JniCppProxyCache::get(const std::shared_ptr<void> & cppObj,
-                                         JNIEnv * jniEnv,
-                                         const CppProxyClassInfo & proxyClass,
-                                         jobject (*factory)(const std::shared_ptr<void> &,
-                                                            JNIEnv *,
-                                                            const CppProxyClassInfo &)) {
-    CppProxyCacheState & st = CppProxyCacheState::get();
-    const std::lock_guard<std::mutex> lock(st.mtx);
-
-    auto it = st.m.find(cppObj.get());
-    if (it != st.m.end()) {
-        // It's in the map. See if the WeakReference still points to an object.
-        if (jobject javaObj = it->second.get(jniEnv)) {
-            return javaObj;
-        } else {
-            // The WeakReference is expired, so prune it from the map eagerly.
-            st.m.erase(it);
-        }
-    }
-
-    jobject wrapper = factory(cppObj, jniEnv, proxyClass);
-
-    /* Make a Java WeakRef object */
-    st.m.emplace(cppObj.get(), JavaWeakRef(jniEnv, wrapper));
-    return wrapper;
-}
+template class ProxyCache<JniCppProxyCacheTraits>;
 
 } // namespace djinni

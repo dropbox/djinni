@@ -34,9 +34,7 @@ private:
         ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & i) override;
 
     private:
-        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
         friend ::djinni::JniInterface<::ExternInterface2, ::djinni_generated::NativeExternInterface2>;
-        friend ::djinni::JavaProxyCache<JavaProxy>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ExternInterface2") };

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6536CD6F19A6C82200DD7715 /* DJIWeakPtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD6C19A6C82200DD7715 /* DJIWeakPtrWrapper.mm */; };
 		6536CD7419A6C96C00DD7715 /* DBClientInterfaceImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD7219A6C96C00DD7715 /* DBClientInterfaceImpl.mm */; };
 		6536CD7819A6C98800DD7715 /* cpp_exception_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD7619A6C98800DD7715 /* cpp_exception_impl.cpp */; };
 		6536CD8D19A6C9A800DD7715 /* DBClientInterfaceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD7A19A6C99800DD7715 /* DBClientInterfaceTests.mm */; };
@@ -122,8 +121,7 @@
 
 /* Begin PBXFileReference section */
 		6536CD6A19A6C82200DD7715 /* DJIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIError.h; sourceTree = "<group>"; };
-		6536CD6B19A6C82200DD7715 /* DJIWeakPtrWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIWeakPtrWrapper+Private.h"; sourceTree = "<group>"; };
-		6536CD6C19A6C82200DD7715 /* DJIWeakPtrWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIWeakPtrWrapper.mm; sourceTree = "<group>"; };
+		6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIProxyCaches.mm; sourceTree = "<group>"; };
 		6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJICppWrapperCache+Private.h"; sourceTree = "<group>"; };
 		6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIObjcWrapperCache+Private.h"; sourceTree = "<group>"; };
 		6536CD7119A6C96C00DD7715 /* DBClientInterfaceImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBClientInterfaceImpl.h; sourceTree = "<group>"; };
@@ -305,8 +303,7 @@
 				A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */,
 				A2CB54B319BA6E6000A9E600 /* DJIError.mm */,
 				6536CD6A19A6C82200DD7715 /* DJIError.h */,
-				6536CD6B19A6C82200DD7715 /* DJIWeakPtrWrapper+Private.h */,
-				6536CD6C19A6C82200DD7715 /* DJIWeakPtrWrapper.mm */,
+				6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */,
 				6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */,
 				6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */,
 			);
@@ -613,7 +610,7 @@
 				CFC5D9E81B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				A24850311AF96EBC00AFE907 /* DBSetRecord.mm in Sources */,
 				CFAED8761B54291900E3B8A3 /* DBEmptyRecord+Private.mm in Sources */,
-				6536CD6F19A6C82200DD7715 /* DJIWeakPtrWrapper.mm in Sources */,
+				6536CD6F19A6C82200DD7715 /* DJIProxyCaches.mm in Sources */,
 				A24850271AF96EBC00AFE907 /* DBClientReturnedRecord.mm in Sources */,
 				CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,

@@ -12,14 +12,14 @@ namespace djinni_generated {
 
 class TextboxListener::ObjcProxy final
 : public ::textsort::TextboxListener
-, public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
+, public ::djinni::ObjcProxyCache::Handle<ObjcType>
 {
 public:
     using Handle::Handle;
     void update(const ::textsort::ItemList & c_items) override
     {
         @autoreleasepool {
-            [(ObjcType)Handle::get() update:(::djinni_generated::ItemList::fromCpp(c_items))];
+            [Handle::get() update:(::djinni_generated::ItemList::fromCpp(c_items))];
         }
     }
 };
@@ -33,7 +33,7 @@ auto TextboxListener::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc);
+    return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
 auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType

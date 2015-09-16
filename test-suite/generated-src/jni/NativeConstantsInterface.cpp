@@ -23,7 +23,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_ConstantsInterface_00024Cpp
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::testsuite::ConstantsInterface>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::ConstantsInterface>(nativeRef);
         ref->dummy();
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }

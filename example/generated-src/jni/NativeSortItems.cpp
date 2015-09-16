@@ -26,7 +26,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_native
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::textsort::SortItems>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::textsort::SortItems>(nativeRef);
         ref->sort(::djinni_generated::NativeSortOrder::toCpp(jniEnv, j_order),
                   ::djinni_generated::NativeItemList::toCpp(jniEnv, j_items));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )

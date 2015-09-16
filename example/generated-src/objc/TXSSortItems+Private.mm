@@ -21,7 +21,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 @end
 
 @implementation TXSSortItems {
-    ::djinni::DbxCppWrapperCache<::textsort::SortItems>::Handle _cppRefHandle;
+    ::djinni::CppProxyCache::Handle<std::shared_ptr<::textsort::SortItems>> _cppRefHandle;
 }
 
 - (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems>&)cppRef
@@ -62,9 +62,7 @@ auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return ::djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance()->get(cpp, [] (const CppType& p) {
-        return [[TXSSortItems alloc] initWithCpp:p];
-    });
+    return ::djinni::get_cpp_proxy<TXSSortItems>(cpp);
 }
 
 }  // namespace djinni_generated

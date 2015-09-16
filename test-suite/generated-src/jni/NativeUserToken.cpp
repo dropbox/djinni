@@ -10,7 +10,7 @@ NativeUserToken::NativeUserToken() : ::djinni::JniInterface<::testsuite::UserTok
 
 NativeUserToken::~NativeUserToken() = default;
 
-NativeUserToken::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }
+NativeUserToken::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetThreadEnv(), j) { }
 
 NativeUserToken::JavaProxy::~JavaProxy() = default;
 
@@ -18,7 +18,7 @@ std::string NativeUserToken::JavaProxy::whoami() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeUserToken>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(getGlobalRef(), data.method_whoami);
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_whoami);
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }
@@ -35,7 +35,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_UserToken_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::testsuite::UserToken>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::UserToken>(nativeRef);
         auto r = ref->whoami();
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)

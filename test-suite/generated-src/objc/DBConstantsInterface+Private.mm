@@ -18,7 +18,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 @end
 
 @implementation DBConstantsInterface {
-    ::djinni::DbxCppWrapperCache<::testsuite::ConstantsInterface>::Handle _cppRefHandle;
+    ::djinni::CppProxyCache::Handle<std::shared_ptr<::testsuite::ConstantsInterface>> _cppRefHandle;
 }
 
 - (id)initWithCpp:(const std::shared_ptr<::testsuite::ConstantsInterface>&)cppRef
@@ -50,9 +50,7 @@ auto ConstantsInterface::fromCpp(const CppType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return ::djinni::DbxCppWrapperCache<::testsuite::ConstantsInterface>::getInstance()->get(cpp, [] (const CppType& p) {
-        return [[DBConstantsInterface alloc] initWithCpp:p];
-    });
+    return ::djinni::get_cpp_proxy<DBConstantsInterface>(cpp);
 }
 
 }  // namespace djinni_generated

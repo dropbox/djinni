@@ -1,5 +1,5 @@
 //
-// Copyright 2014 Dropbox, Inc.
+// Copyright 2015 Dropbox, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,19 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-#include <memory>
+#include "../proxy_cache_impl.hpp"
+#include "DJIObjcWrapperCache+Private.h"
+#include "DJICppWrapperCache+Private.h"
 
-/*
- * Helper class for DbxObjcWrapperCache to store C++ weak_ptr in Objective-C NSMapTable.
- */
+namespace djinni {
 
-@interface DBWeakPtrWrapper : NSObject
+std::size_t unretained_id_hash::operator()(__unsafe_unretained id ptr) const {
+    return std::hash<void*>()((__bridge void*)ptr);
+}
 
-@property (nonatomic, readonly) std::weak_ptr<void> ptr;
+template class ProxyCache<ObjcProxyCacheTraits>;
+template class ProxyCache<CppProxyCacheTraits>;
 
-- (id)initWithWeakPtr:(std::weak_ptr<void>)ptr;
-
-@end
+} // namespace djinni

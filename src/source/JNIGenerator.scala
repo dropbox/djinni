@@ -214,9 +214,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             }
             w.wl
             w.wlOutdent(s"private:")
-            w.wl(s"using ::djinni::JavaProxyCacheEntry::getGlobalRef;")
             w.wl(s"friend ::djinni::JniInterface<$cppSelf, ${withNs(Some(spec.jniNamespace), jniSelf)}>;")
-            w.wl(s"friend ::djinni::JavaProxyCache<JavaProxy>;")
           }
           w.wl
           w.wl(s"const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass(${q(classLookup)}) };")
@@ -241,7 +239,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       if (i.ext.java) {
         writeJniTypeParams(w, typeParams)
-        w.wl(s"$jniSelfWithParams::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }")
+        w.wl(s"$jniSelfWithParams::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetThreadEnv(), j) { }")
         w.wl
         writeJniTypeParams(w, typeParams)
         w.wl(s"$jniSelfWithParams::JavaProxy::~JavaProxy() = default;")
@@ -258,7 +256,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             val call = m.ret.fold("jniEnv->CallVoidMethod(")(r => "auto jret = " + toJniCall(r, (jt: String) => s"jniEnv->Call${jt}Method("))
             w.w(call)
             val javaMethodName = idJava.method(m.ident)
-            w.w(s"getGlobalRef(), data.method_$javaMethodName")
+            w.w(s"Handle::get().get(), data.method_$javaMethodName")
             if(m.params.nonEmpty){
               w.wl(",")
               writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
@@ -321,7 +319,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           val nativeAddon = if (m.static) "" else "native_"
           nativeHook(nativeAddon + idJava.method(m.ident), m.static, m.params, m.ret, {
             //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
-            if (!m.static) w.wl(s"const auto& ref = ::djinni::CppProxyHandle<$cppSelf>::get(nativeRef);")
+            if (!m.static) w.wl(s"const auto& ref = ::djinni::objectFromHandleAddress<$cppSelf>(nativeRef);")
             m.params.foreach(p => {
               if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
                 // We have a non-optional interface in nn mode, assert that we're getting a non-null value

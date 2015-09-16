@@ -11,7 +11,7 @@ NativeExternInterface2::NativeExternInterface2() : ::djinni::JniInterface<::Exte
 
 NativeExternInterface2::~NativeExternInterface2() = default;
 
-NativeExternInterface2::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }
+NativeExternInterface2::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetThreadEnv(), j) { }
 
 NativeExternInterface2::JavaProxy::~JavaProxy() = default;
 
@@ -19,7 +19,7 @@ NativeExternInterface2::JavaProxy::~JavaProxy() = default;
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeExternInterface2>::get();
-    auto jret = jniEnv->CallObjectMethod(getGlobalRef(), data.method_foo,
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_foo,
                                          ::djinni::get(::djinni_generated::NativeTestHelpers::fromCpp(jniEnv, c_i)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeExternRecordWithDerivings::toCpp(jniEnv, jret);

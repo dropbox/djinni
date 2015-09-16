@@ -34,9 +34,7 @@ private:
         void update(const ::textsort::ItemList & items) override;
 
     private:
-        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
         friend ::djinni::JniInterface<::textsort::TextboxListener, ::djinni_generated::NativeTextboxListener>;
-        friend ::djinni::JavaProxyCache<JavaProxy>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/textsort/TextboxListener") };

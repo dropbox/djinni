@@ -134,7 +134,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl("@end")
         w.wl
         w.wl(s"@implementation $objcSelf {")
-        w.wl(s"    ::djinni::DbxCppWrapperCache<$cppSelf>::Handle _cppRefHandle;")
+        w.wl(s"    ::djinni::CppProxyCache::Handle<std::shared_ptr<$cppSelf>> _cppRefHandle;")
         w.wl("}")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef")
@@ -185,7 +185,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"class $helperClass::ObjcProxy final")
           w.wl(s": public $cppSelf")
-          w.wl(s", public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle") // Use base class to avoid name conflicts with user-defined methods having the same name as this new data member
+          w.wl(s", public ::djinni::ObjcProxyCache::Handle<ObjcType>") // Use base class to avoid name conflicts with user-defined methods having the same name as this new data member
           w.bracedSemi {
             w.wlOutdent("public:")
             w.wl("using Handle::Handle;")
@@ -195,7 +195,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
                 w.w("@autoreleasepool").braced {
                   val ret = m.ret.fold("")(_ => "auto r = ")
-                  val call = s"[(ObjcType)Handle::get() ${idObjc.method(m.ident)}"
+                  val call = s"[Handle::get() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
                   w.wl(";")
                   m.ret.fold()(ty => (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
@@ -242,7 +242,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"return (($objcSelf*)objc)->_cppRefHandle.get();")
               }
             }
-            w.wl(s"return ::djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objc);")
+            w.wl(s"return ::djinni::get_objc_proxy<$objcExtSelf>(objc);")
           }
         }
         w.wl
@@ -265,9 +265,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl("return cppPtr->Handle::get();")
               }
             }
-            w.w(s"return ::djinni::DbxCppWrapperCache<$cppSelf>::getInstance()->get(cpp, [] (const CppType& p)").bracedEnd(");") {
-              w.wl(s"return [[$objcSelf alloc] initWithCpp:p];")
-            }
+            w.wl(s"return ::djinni::get_cpp_proxy<$objcSelf>(cpp);")
           }
         }
       })

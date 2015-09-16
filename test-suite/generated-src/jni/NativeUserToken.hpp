@@ -34,9 +34,7 @@ private:
         std::string whoami() override;
 
     private:
-        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
         friend ::djinni::JniInterface<::testsuite::UserToken, ::djinni_generated::NativeUserToken>;
-        friend ::djinni::JavaProxyCache<JavaProxy>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/UserToken") };

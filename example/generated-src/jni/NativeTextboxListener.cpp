@@ -10,7 +10,7 @@ NativeTextboxListener::NativeTextboxListener() : ::djinni::JniInterface<::textso
 
 NativeTextboxListener::~NativeTextboxListener() = default;
 
-NativeTextboxListener::JavaProxy::JavaProxy(JniType j) : JavaProxyCacheEntry(j) { }
+NativeTextboxListener::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetThreadEnv(), j) { }
 
 NativeTextboxListener::JavaProxy::~JavaProxy() = default;
 
@@ -18,7 +18,7 @@ void NativeTextboxListener::JavaProxy::update(const ::textsort::ItemList & c_ite
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeTextboxListener>::get();
-    jniEnv->CallVoidMethod(getGlobalRef(), data.method_update,
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_update,
                            ::djinni::get(::djinni_generated::NativeItemList::fromCpp(jniEnv, c_items)));
     ::djinni::jniExceptionCheck(jniEnv);
 }

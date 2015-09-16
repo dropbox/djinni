@@ -24,7 +24,7 @@ CJNIEXPORT jint JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::testsuite::CppException>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::CppException>(nativeRef);
         auto r = ref->throw_an_exception();
         return ::djinni::release(::djinni::I32::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
