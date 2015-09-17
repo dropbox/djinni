@@ -63,6 +63,8 @@ public:
     class Handle {
     public:
         Handle() = default;
+        Handle(const Handle &) = delete;
+        Handle & operator=(const Handle &) = delete;
         ~Handle() {
             if (_ptr) {
                 _cache->remove(_ptr);

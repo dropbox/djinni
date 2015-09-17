@@ -55,7 +55,9 @@ public:
 
     class Handle {
     public:
-        Handle(id obj) : _obj(obj) { };
+        Handle(id obj) : _obj(obj) { }
+        Handle(const Handle &) = delete;
+        Handle & operator=(const Handle &) = delete;
         ~Handle() {
             if (_obj) {
                 _cache->remove(_obj);

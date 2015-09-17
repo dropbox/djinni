@@ -128,18 +128,18 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         else
           w.wl(s"@interface $objcSelf ()")
         w.wl
-        w.wl(s"@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<$cppSelf>::Handle cppRef;")
-        w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef;")
         w.wl
         w.wl("@end")
         w.wl
-        w.wl(s"@implementation $objcSelf")
+        w.wl(s"@implementation $objcSelf {")
+        w.wl(s"    ::djinni::DbxCppWrapperCache<$cppSelf>::Handle _cppRefHandle;")
+        w.wl("}")
         w.wl
         w.wl(s"- (id)initWithCpp:(const std::shared_ptr<$cppSelf>&)cppRef")
         w.braced {
           w.w("if (self = [super init])").braced {
-            w.wl("_cppRef.assign(cppRef);")
+            w.wl("_cppRefHandle.assign(cppRef);")
           }
           w.wl("return self;")
         }
@@ -149,15 +149,13 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.braced {
             w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
               val ret = m.ret.fold("")(_ => "auto r = ")
-              val call = ret + (if (!m.static) "_cppRef.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
+              val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
               writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
               w.wl(";")
               m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
             }
           }
         }
-        w.wl
-        w.wl("@end")
       }
 
       if (i.ext.objc) {
@@ -198,14 +196,14 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           if (i.ext.cpp && !i.ext.objc) {
             // C++ only. In this case we generate a class instead of a protocol, so
             // we don't have to do any casting at all, just access cppRef directly.
-            w.wl(s"return objc.cppRef.get();")
+            w.wl(s"return objc->_cppRefHandle.get();")
           } else {
             // ObjC only, or ObjC and C++.
             val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
               w.w(s"if ([(id)objc isKindOfClass:[$objcSelf class]])").braced {
-                w.wl(s"return (($objcSelf*)objc).cppRef.get();")
+                w.wl(s"return (($objcSelf*)objc)->_cppRefHandle.get();")
               }
             }
             w.wl(s"return ::djinni::DbxObjcWrapperCache<$objcExtSelf>::getInstance()->get(objc);")
@@ -237,6 +235,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
         }
       })
+
+      if (i.ext.cpp) {
+        w.wl
+        w.wl("@end")
+      }
     })
   }
 

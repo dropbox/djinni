@@ -20,18 +20,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBTestHelpers ()
 
-@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::TestHelpers>::Handle cppRef;
-
 - (id)initWithCpp:(const std::shared_ptr<::TestHelpers>&)cppRef;
 
 @end
 
-@implementation DBTestHelpers
+@implementation DBTestHelpers {
+    ::djinni::DbxCppWrapperCache<::TestHelpers>::Handle _cppRefHandle;
+}
 
 - (id)initWithCpp:(const std::shared_ptr<::TestHelpers>&)cppRef
 {
     if (self = [super init]) {
-        _cppRef.assign(cppRef);
+        _cppRefHandle.assign(cppRef);
     }
     return self;
 }
@@ -200,8 +200,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-@end
-
 namespace djinni_generated {
 
 auto TestHelpers::toCpp(ObjcType objc) -> CppType
@@ -209,7 +207,7 @@ auto TestHelpers::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc.cppRef.get();
+    return objc->_cppRefHandle.get();
 }
 
 auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
@@ -223,3 +221,5 @@ auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 }  // namespace djinni_generated
+
+@end

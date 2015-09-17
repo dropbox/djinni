@@ -14,30 +14,28 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBExternInterface1 ()
 
-@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::ExternInterface1>::Handle cppRef;
-
 - (id)initWithCpp:(const std::shared_ptr<::ExternInterface1>&)cppRef;
 
 @end
 
-@implementation DBExternInterface1
+@implementation DBExternInterface1 {
+    ::djinni::DbxCppWrapperCache<::ExternInterface1>::Handle _cppRefHandle;
+}
 
 - (id)initWithCpp:(const std::shared_ptr<::ExternInterface1>&)cppRef
 {
     if (self = [super init]) {
-        _cppRef.assign(cppRef);
+        _cppRefHandle.assign(cppRef);
     }
     return self;
 }
 
 - (nonnull DBClientReturnedRecord *)foo:(nullable id<DBClientInterface>)i {
     try {
-        auto r = _cppRef.get()->foo(::djinni_generated::ClientInterface::toCpp(i));
+        auto r = _cppRefHandle.get()->foo(::djinni_generated::ClientInterface::toCpp(i));
         return ::djinni_generated::ClientReturnedRecord::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
-
-@end
 
 namespace djinni_generated {
 
@@ -46,7 +44,7 @@ auto ExternInterface1::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc.cppRef.get();
+    return objc->_cppRefHandle.get();
 }
 
 auto ExternInterface1::fromCpp(const CppType& cpp) -> ObjcType
@@ -60,3 +58,5 @@ auto ExternInterface1::fromCpp(const CppType& cpp) -> ObjcType
 }
 
 }  // namespace djinni_generated
+
+@end
