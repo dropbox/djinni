@@ -218,7 +218,7 @@ class CxCppGenerator(spec: Spec) extends Generator(spec) {
             val ret = cppMarshal.fqReturnType(m.ret)
             val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
             if (m.static) {
-              w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override")
+              w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}")
             } else {
               val constFlag = if (m.const) " const" else ""
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag override")
