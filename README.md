@@ -1,12 +1,12 @@
 # Djinni
 
 Djinni is a tool for generating cross-language type declarations and interface bindings. It's
-designed to connect C++ with either Java or Objective-C.
+designed to connect C++ with either Java or Objective-C. Python support is available in an experimental version on the `python` branch.
 
 We at Dropbox use Djinni to interface cross-platform C++ library code with platform-specific
 Java and Objective-C on Android and iOS.
 
-We announced Djinni at CppCon 2014. Access the slides from https://bit.ly/djinnitalk and video from https://www.youtube.com/watch?v=ZcBtF-JWJhM
+We announced Djinni at CppCon 2014. You can see the [slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo).  For more info about Djinni and how others are using it, check out the community links at the end of this document.
 
 ## Main Features
 - Generates parallel C++, Java and Objective-C type definitions from a single interface
@@ -400,7 +400,16 @@ and Objective-C `NSInteger` are not used because their length varies by architec
 integers are not included because they are not available in Java.
 
 ## Test Suite
-Run `make test` to invoke the test suite, found in the test-suite subdirectory.
+Run `make test` to invoke the test suite, found in the test-suite subdirectory. It will build and run Java code on a local JVMy, plus Objective-C on an iOS simulator.  The latter will only work on a Mac with Xcode.
+
+## Community Links
+
+* Join the discussion with other developers at the [Mobile C++ Slack Community](https://mobilecpp.herokuapp.com/)
+* There are a set of [tutorials](http://mobilecpptutorials.com/) for building a cross-platform app using Djinni.
+* [mx3](https://github.com/libmx3/mx3) is an example project demonstrating use of Djinni and other tools.
+* [Slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo) from the CppCon 2014 talk where we introduced Djinni.
+* You can see a [CppCon 2014 talk](https://www.youtube.com/watch?v=5AZMEm3rZ2Y) by app developers at Dropbox about their cross-platform experiences.
+
 
 ## Authors
 - Kannan Goundan
