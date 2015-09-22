@@ -53,7 +53,11 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
         }
       case DInterface =>
         if (d.name != exclude) {
-          List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
+          val base = List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
+          spec.cppNnHeader match {
+            case Some(nnHdr) => ImportRef(nnHdr) :: base
+            case _ => base
+          }
         } else {
           List(ImportRef("<memory>"))
         }
@@ -93,8 +97,38 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case p: MParam => idCpp.typeParam(p.name)
     }
     def expr(tm: MExpr): String = {
-      val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
-      base(tm.base) + args
+      spec.cppNnType match {
+        case Some(nnType) => {
+          // if we're using non-nullable pointers for interfaces, then special-case
+          // both optional and non-optional interface types
+          val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
+          tm.base match {
+            case d: MDef =>
+              d.defType match {
+                case DInterface => s"${nnType}<${withNs(namespace, idCpp.ty(d.name))}>"
+                case _ => base(tm.base) + args
+              }
+            case MOptional =>
+              tm.args.head.base match {
+                case d: MDef =>
+                  d.defType match {
+                    case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
+                    case _ => base(tm.base) + args
+                  }
+                case _ => base(tm.base) + args
+              }
+            case _ => base(tm.base) + args
+          }
+        }
+      case None =>
+        if (isOptionalInterface(tm)) {
+          // otherwise, interfaces are always plain old shared_ptr
+          expr(tm.args.head)
+        } else {
+          val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
+          base(tm.base) + args
+        }
+      }
     }
     expr(tm)
   }

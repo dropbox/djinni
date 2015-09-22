@@ -98,4 +98,15 @@ val defaults: Map[String,MOpaque] = immutable.HashMap(
   ("list", MList),
   ("set", MSet),
   ("map", MMap))
+
+def isInterface(ty: MExpr): Boolean = {
+  ty.base match {
+    case d: MDef => d.defType == DInterface
+    case _ => false
+  }
+}
+
+def isOptionalInterface(ty: MExpr): Boolean = {
+  ty.base == MOptional && ty.args.length == 1 && isInterface(ty.args.head)
+}
 }

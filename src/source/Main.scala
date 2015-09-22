@@ -31,6 +31,9 @@ object Main {
     var cppOptionalTemplate: String = "std::optional"
     var cppOptionalHeader: String = "<optional>"
     var cppEnumHashWorkaround : Boolean = true
+    var cppNnHeader: Option[String] = None
+    var cppNnType: Option[String] = None
+    var cppNnCheckExpression: Option[String] = None
     var javaOutFolder: Option[File] = None
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
@@ -119,6 +122,12 @@ object Main {
         .text("The header to use for optional values (default: \"<optional>\")")
       opt[Boolean]("cpp-enum-hash-workaround").valueName("<true/false>").foreach(x => cppEnumHashWorkaround = x)
         .text("Work around LWG-2148 by generating std::hash specializations for C++ enums (default: true)")
+      opt[String]("cpp-nn-header").valueName("<header>").foreach(x => cppNnHeader = Some(x))
+        .text("The header to use for non-nullable pointers")
+      opt[String]("cpp-nn-type").valueName("<header>").foreach(x => cppNnType = Some(x))
+        .text("The type to use for non-nullable pointers (as a substitute for std::shared_ptr)")
+      opt[String]("cpp-nn-check-expression").valueName("<header>").foreach(x => cppNnCheckExpression = Some(x))
+        .text("The expression to use for building non-nullable pointers")
       note("")
       opt[File]("jni-out").valueName("<out-folder>").foreach(x => jniOutFolder = Some(x))
         .text("The folder for the JNI C++ output files (Generator disabled if unspecified).")
@@ -270,6 +279,9 @@ object Main {
       cppOptionalTemplate,
       cppOptionalHeader,
       cppEnumHashWorkaround,
+      cppNnHeader,
+      cppNnType,
+      cppNnCheckExpression,
       jniOutFolder,
       jniHeaderOutFolder,
       jniIncludePrefix,

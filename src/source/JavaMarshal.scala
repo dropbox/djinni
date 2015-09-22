@@ -39,18 +39,20 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     case _ => List()
   }
 
+  val interfaceNullityAnnotation = if (spec.cppNnType.nonEmpty) javaNonnullAnnotation else javaNullableAnnotation
+
   def nullityAnnotation(ty: Option[TypeRef]): Option[String] = ty.map(nullityAnnotation).getOrElse(None)
   def nullityAnnotation(ty: TypeRef): Option[String] = {
     ty.resolved.base match {
       case MOptional => javaNullableAnnotation
       case p: MPrimitive => None
       case m: MDef => m.defType match {
-          case DInterface => javaNullableAnnotation
+          case DInterface => interfaceNullityAnnotation
           case DEnum => javaNonnullAnnotation
           case DRecord => javaNonnullAnnotation
         }
       case e: MExtern => e.defType match {
-        case DInterface => javaNullableAnnotation
+        case DInterface => interfaceNullityAnnotation
         case DRecord => if(e.java.reference) javaNonnullAnnotation else None
         case DEnum => javaNonnullAnnotation
       }

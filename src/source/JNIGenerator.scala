@@ -250,7 +250,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           val ret = cppMarshal.fqReturnType(m.ret)
           val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
           writeJniTypeParams(w, typeParams)
-          w.w(s"$ret $jniSelfWithParams::JavaProxy::${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}").braced {
+          val methodNameAndSignature: String = s"${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}"
+          w.w(s"$ret $jniSelfWithParams::JavaProxy::$methodNameAndSignature").braced {
             w.wl(s"auto jniEnv = ::djinni::jniGetThreadEnv();")
             w.wl(s"::djinni::JniLocalScope jscope(jniEnv, 10);")
             w.wl(s"const auto& data = ::djinni::JniClass<${withNs(Some(spec.jniNamespace), jniSelf)}>::get();")
@@ -269,7 +270,18 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               w.w(")")
             w.wl(";")
             w.wl(s"::djinni::jniExceptionCheck(jniEnv);")
-            m.ret.fold()(r => w.wl(s"return ${jniMarshal.toCpp(r, "jret")};"))
+            m.ret.fold()(ty => (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
+              case (Some(check), true) => {
+                // We have a non-optional interface, assert that we're getting a non-null value
+                val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
+                val javaParamsString: String = javaParams.mkString("(", ",", ")")
+                val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
+                w.wl(s"""DJINNI_ASSERT_MSG(jret, jniEnv, "Got unexpected null return value from function $functionString");""")
+                w.wl(s"return ${check}(${jniMarshal.toCpp(ty, "jret")});")
+              }
+              case _ =>
+                w.wl(s"return ${jniMarshal.toCpp(ty, "jret")};")
+            })
           }
         }
       }
@@ -310,10 +322,27 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           nativeHook(nativeAddon + idJava.method(m.ident), m.static, m.params, m.ret, {
             //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
             if (!m.static) w.wl(s"const auto& ref = ::djinni::CppProxyHandle<$cppSelf>::get(nativeRef);")
+            m.params.foreach(p => {
+              if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
+                // We have a non-optional interface in nn mode, assert that we're getting a non-null value
+                val paramName = idJava.local(p.ident)
+                val javaMethodName = idJava.method(m.ident)
+                val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
+                val javaParamsString: String = javaParams.mkString("(", ", ", ")")
+                val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
+                w.wl( s"""DJINNI_ASSERT_MSG(j_$paramName, jniEnv, "Got unexpected null parameter '$paramName' to function $functionString");""")
+              }
+            })
             val methodName = idCpp.method(m.ident)
             val ret = m.ret.fold("")(r => "auto r = ")
             val call = if (m.static) s"$cppSelf::$methodName(" else s"ref->$methodName("
-            writeAlignedCall(w, ret + call, m.params, ")", p => jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident)))
+            writeAlignedCall(w, ret + call, m.params, ")", p => {
+                val v = jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident))
+                (spec.cppNnCheckExpression, isInterface(p.ty.resolved)) match {
+                  case (Some(check), true) => s"$check($v)"
+                  case _ => v
+                }
+            })
             w.wl(";")
             m.ret.fold()(r => w.wl(s"return ::djinni::release(${jniMarshal.fromCpp(r, "r")});"))
           })

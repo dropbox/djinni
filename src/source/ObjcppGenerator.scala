@@ -16,7 +16,8 @@
 
 package djinni
 
-import djinni.ast.Record.DerivingType
+import java.io.StringWriter
+
 import djinni.ast._
 import djinni.generatorTools._
 import djinni.meta._
@@ -148,9 +149,29 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           writeObjcFuncDecl(m, w)
           w.braced {
             w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
+              m.params.foreach(p => {
+                if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
+                  // We have a non-optional interface, assert that we're getting a non-null value
+                  val paramName = idObjc.local(p.ident)
+                  val stringWriter = new StringWriter()
+                  writeObjcFuncDecl(m, new IndentWriter(stringWriter))
+                  val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
+                  val exceptionReason = s"Got unexpected null parameter '$paramName' to function $objcSelf $singleLineFunctionDecl"
+                  w.w(s"if ($paramName == nil)").braced {
+                    w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
+                  }
+                }
+              })
               val ret = m.ret.fold("")(_ => "auto r = ")
               val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
-              writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
+              writeAlignedCall(w, call, m.params, ")", p => {
+                val v = objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name))
+                (spec.cppNnCheckExpression, isInterface(p.ty.resolved)) match {
+                  case (Some(check), true) => s"$check($v)"
+                  case _ => v
+                }
+              })
+
               w.wl(";")
               m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
             }
@@ -177,7 +198,22 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   val call = s"[(ObjcType)Handle::get() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
                   w.wl(";")
-                  m.ret.fold()(r => { w.wl(s"return ${objcppMarshal.toCpp(r, "r")};") })
+                  m.ret.fold()(ty => (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
+                  case (Some(check), true) => {
+                      // We have a non-optional interface, assert that we're getting a non-null value
+                      // and put it into a non-null pointer
+                      val stringWriter = new StringWriter()
+                      writeObjcFuncDecl(m, new IndentWriter(stringWriter))
+                      val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
+                      val exceptionReason = s"Got unexpected null return value from function $objcSelf $singleLineFunctionDecl"
+                      w.w(s"if (r == nil)").braced {
+                        w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
+                      }
+                      w.wl(s"return ${check}(${objcppMarshal.toCpp(ty, "r")});")
+                    }
+                  case _ =>
+                      w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
+                  })
                 }
               }
             }

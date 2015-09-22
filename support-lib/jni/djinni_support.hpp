@@ -162,15 +162,16 @@ void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception);
 #endif
 void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
 
-#define DJINNI_ASSERT(check, env) \
+#define DJINNI_ASSERT_MSG(check, env, message) \
     do { \
         djinni::jniExceptionCheck(env); \
         const bool check__res = bool(check); \
         djinni::jniExceptionCheck(env); \
         if (!check__res) { \
-            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, #check); \
+            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, message); \
         } \
     } while(false)
+#define DJINNI_ASSERT(check, env) DJINNI_ASSERT_MSG(check, env, #check)
 
 /*
  * Helper for JniClassInitializer.
