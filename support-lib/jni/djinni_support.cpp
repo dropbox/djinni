@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+#include "../djinni_common.hpp"
 #include "djinni_support.hpp"
 #include "../proxy_cache_impl.hpp"
 #include <cassert>
@@ -21,12 +22,6 @@
 #include <cstring>
 
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
-
-#ifdef _MSC_VER // weak attribute not supported by MSVC
-#define DJINNI_WEAK_DEFINITION
-#else
-#define DJINNI_WEAK_DEFINITION __attribute__((weak))
-#endif
 
 namespace djinni {
 

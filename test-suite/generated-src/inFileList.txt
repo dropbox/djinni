@@ -1,4 +1,5 @@
 djinni/all.djinni
+djinni/common.djinni
 djinni/set.djinni
 djinni/derivings.djinni
 djinni/nested_collection.djinni

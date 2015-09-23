@@ -4,7 +4,10 @@
             "target_name": "djinni_jni",
             "type": "static_library",
             "sources": [
+              "djinni_common.hpp",
               "jni/djinni_support.cpp",
+              "jni/djinni_support.hpp",
+              "jni/Marshal.hpp",
             ],
             "include_dirs": [
               "jni",
