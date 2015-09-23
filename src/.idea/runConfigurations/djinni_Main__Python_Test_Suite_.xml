@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="djinni.Main (Python Test Suite)" type="Application" factoryName="Application">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <option name="MAIN_CLASS_NAME" value="djinni.Main" />
+    <option name="VM_PARAMETERS" value="" />
+    <option name="PROGRAM_PARAMETERS" value="--py-out ../test-suite/djinni-output-temp/python --py-package-name DefaultPy --pycffi-package-name PyCFFIlib --pycffi-dynamic-lib-list mylib --pycffi-out ../test-suite/djinni-output-temp/cffi --c-wrapper-out ../test-suite/djinni-output-temp/cwrapper --cpp-out ../test-suite/djinni-output-temp/pycpp --ident-cpp-enum-type foo_bar --cpp-optional-template std::experimental::optional --cpp-optional-header &lt;experimental/optional&gt; --idl ../test-suite/djinni/py_all.djinni" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="ENABLE_SWING_INSPECTOR" value="false" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <module name="src" />
+    <envs />
+    <method />
+  </configuration>
+</component>

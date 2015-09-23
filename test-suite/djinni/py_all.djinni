@@ -1,0 +1,12 @@
+@import "common.djinni"
+
+@import "foo_interface.djinni"
+@import "foo_primitives.djinni"
+@import "foo_static.djinni"
+@import "foo_listener.djinni"
+@import "foo_receiver.djinni"
+@import "foo_listener_bf.djinni"
+@import "foo_client_interface.djinni"
+@import "foo_containers.djinni"
+@import "foo_constants.djinni"
+@import "foo_enum_interface.djinni"

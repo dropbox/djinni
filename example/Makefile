@@ -1,4 +1,4 @@
-all: android ios
+all: android ios py
 
 android: example.djinni
 	@make -C .. GypAndroid.mk
@@ -6,4 +6,7 @@ android: example.djinni
 ios: example.djinni
 	@make -C .. ./build_ios/example/libtextsort.xcodeproj
 
-.PHONY: android ios
+py: example.djinni
+	@make -C .. ./build_py/Makefile
+
+.PHONY: android ios py

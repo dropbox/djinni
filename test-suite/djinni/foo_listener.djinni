@@ -1,0 +1,15 @@
+foo_listener = interface +p {
+    on_string_change(private_string: string): string;
+    get_private_int(): i32;
+    on_changes_string_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): string;
+    on_changes_binary_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): binary;
+    on_changes_date_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): date;
+    on_changes_int_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): i32;
+    on_changes_record_returned(n1: i32, n2: i32): foo_some_other_record;
+
+    on_changes_string_optional_returned(i: optional<i32>, f: f32, s: optional<string>, binar: binary, b: i32, d: date): optional<string>;
+    on_changes_int_optional_returned(i: optional<i32>, f: f32, s: optional<string>, binar: binary, b: i32, d: date): optional<i32>;
+    
+    cause_py_exception(exception_arg: string);
+    cause_zero_division_error();
+}

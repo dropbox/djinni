@@ -1,0 +1,42 @@
+
+foo_receiver = interface +c {
+    set_private_string(private_string: string): string;
+    get_private_string(): string;
+
+    cause_changes_string_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): string;
+    cause_changes_binary_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): binary;
+    cause_changes_date_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): date;
+    cause_changes_int_returned(i: i32, f: f32, s: string, binar: binary, b: bool, d: date): i32;
+    cause_changes_record_returned(n1: i32, n2: i32): foo_some_other_record;
+
+    cause_changes_string_optional_returned(i: optional<i32>, f: f32, s: optional<string>, binar: binary, b: bool, d: date): optional<string>;
+    cause_changes_int_optional_returned(i: optional<i32>, f: f32, s: optional<string>, binar: binary, b: bool, d: date): optional<i32>;
+
+    cause_cpp_exception(exception_arg: string);
+    cause_py_exception(exception_arg: string);
+    cause_zero_division_error();
+
+    add_listener(listener: foo_listener);
+    add_optional_listener(listener: optional<foo_listener>);
+    get_optional_listener(): optional<foo_listener>;
+
+
+    # For testing proxying during bidirectional callbacks
+    set_private_bf_string(private_string: string): string;
+    add_listener_bf(listener: foo_listener_bf);
+
+    get_foo_listener_bf(): foo_listener_bf;
+    get_listener_bf_string(): string;
+
+    set_listener_bf_in_listener_bf(listener: foo_listener_bf);
+    get_listener_bf_in_listener_bf(): foo_listener_bf;
+    set_binary_in_listener_bf_in_listener_bf(b: binary);
+    get_binary_in_listener_bf_in_listener_bf(): binary;
+
+    send_return(fl_bf: foo_listener_bf): foo_listener_bf;
+    in_listener_bf_send_return(fl_bf: foo_listener_bf): foo_listener_bf;
+
+
+    static create(): foo_receiver;
+}
+

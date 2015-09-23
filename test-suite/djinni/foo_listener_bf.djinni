@@ -1,0 +1,15 @@
+foo_listener_bf = interface +p +c {
+    on_string_change(private_string: string): string;
+    get_string(): string;
+
+    static create(): foo_listener_bf;
+
+    set_listener_bf(listener: foo_listener_bf);
+    get_listener_bf(): foo_listener_bf;
+    set_binary(b: binary);
+    get_binary(): binary;
+
+    send_return(fl_bf: foo_listener_bf): foo_listener_bf;
+
+    delete_fl_in_fl();
+}

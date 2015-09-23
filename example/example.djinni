@@ -13,6 +13,6 @@ sort_items = interface +c {
     static create_with_listener(listener: textbox_listener): sort_items;
 }
 
-textbox_listener = interface +j +o {
+textbox_listener = interface +j +o +p {
     update(items: item_list);
 }

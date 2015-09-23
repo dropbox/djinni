@@ -1,0 +1,30 @@
+foo_extensible_record = record +p +c {
+    number1: i32;
+    string1: string;
+}
+
+foo_some_other_record = record {
+    number1: i64;
+    number2: i32;
+} deriving (eq, ord)
+
+foo_client_returned_record = record {
+    record_id: i64;
+    content: string;
+
+    some_record: foo_some_other_record;
+}  deriving (eq, ord)
+
+foo_client_interface = interface +c {
+    # Returns record of given string
+    set_record(rec: foo_client_returned_record);
+    get_record(): foo_client_returned_record;
+
+    set_extensible_record(rec: foo_extensible_record);
+    get_extensible_record(): foo_extensible_record;
+
+    get_extensible_record_number2(): i32;
+    get_extensible_record_string2(): string;
+
+    static create(): foo_client_interface;
+}

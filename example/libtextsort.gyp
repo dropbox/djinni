@@ -38,5 +38,22 @@
               "handwritten-src/cpp",
             ],
         },
+        {
+            "target_name": "libtextsort_py",
+            "type": "shared_library",
+            "dependencies": [
+              "../support-lib/support_lib.gyp:djinni_cwrapper",
+            ],
+            "sources": [
+              "<!@(python glob.py generated-src/cwrapper '*.cpp')",
+              "<!@(python glob.py generated-src/cpp      '*.cpp')",
+              "<!@(python glob.py handwritten-src/cpp    '*.cpp')",
+            ],
+            "include_dirs": [
+              "generated-src/cwrapper",
+              "generated-src/cpp",
+              "handwritten-src/cpp",
+            ],
+        },
     ],
 }

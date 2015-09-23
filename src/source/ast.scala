@@ -46,9 +46,9 @@ sealed abstract class TypeDecl {
 case class InternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, doc: Doc, override val origin: String) extends TypeDecl
 case class ExternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, properties: Map[String, Any], override val origin: String) extends TypeDecl
 
-case class Ext(java: Boolean, cpp: Boolean, objc: Boolean) {
+case class Ext(java: Boolean, cpp: Boolean, objc: Boolean, py: Boolean) {
   def any(): Boolean = {
-    java || cpp || objc
+    java || cpp || objc || py
   }
 }
 
