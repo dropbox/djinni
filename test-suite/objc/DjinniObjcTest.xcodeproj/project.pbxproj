@@ -50,6 +50,7 @@
 		A24850301AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */; };
 		A24850311AF96EBC00AFE907 /* DBSetRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = A24850251AF96EBC00AFE907 /* DBSetRecord.mm */; };
 		A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A278D45219BA3601006FD937 /* test_helpers.cpp */; };
+		A2AE38491BB3074800B7A0C9 /* DJIProxyCaches.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */; };
 		A2CB54B419BA6E6000A9E600 /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2CB54B319BA6E6000A9E600 /* DJIError.mm */; };
 		B52DA5681B103F72005CE75F /* DBAssortedPrimitives.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52DA5651B103F6D005CE75F /* DBAssortedPrimitives.mm */; };
 		B52DA5691B103F72005CE75F /* DBAssortedPrimitives.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52DA5651B103F6D005CE75F /* DBAssortedPrimitives.mm */; };
@@ -610,7 +611,6 @@
 				CFC5D9E81B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				A24850311AF96EBC00AFE907 /* DBSetRecord.mm in Sources */,
 				CFAED8761B54291900E3B8A3 /* DBEmptyRecord+Private.mm in Sources */,
-				6536CD6F19A6C82200DD7715 /* DJIProxyCaches.mm in Sources */,
 				A24850271AF96EBC00AFE907 /* DBClientReturnedRecord.mm in Sources */,
 				CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,
@@ -647,6 +647,7 @@
 				A248502D1AF96EBC00AFE907 /* DBNestedCollection.mm in Sources */,
 				CFC5D9D81B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,
 				A238CAA21AF84B7100CDDCE5 /* DBSetRecord+Private.mm in Sources */,
+				A2AE38491BB3074800B7A0C9 /* DJIProxyCaches.mm in Sources */,
 				A238CA9E1AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm in Sources */,
 				A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */,
 				CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
