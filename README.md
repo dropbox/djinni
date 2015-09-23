@@ -417,6 +417,8 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Derek He
 - Steven Kabbes
 - Jacob Potter
+- Iulia Tamas
+- Andrew Twyman
 
 ## Contacts
 Jacob Potter - `j4cbo@dropbox.com`
