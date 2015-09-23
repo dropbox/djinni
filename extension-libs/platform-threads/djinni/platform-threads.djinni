@@ -1,0 +1,20 @@
+# Platform service providing pluggable access to thread functionality
+# which may vary by platform.  Some language runtimes don't interact
+# well with threads they didn't create, so this interface can be used
+# as a factory for threads which can freely call across languages
+# without issues.
+platform_threads = interface +o +j +c {
+    # Creates and starts a new thread which will call the given function.
+    create_thread(name: string, func: thread_func);
+
+    # Determines whether the calling thread is the main UI thread of the
+    # app.  Some platforms do not have a notion of a main thread, in which
+    # case this method returns null.
+    is_main_thread(): optional<bool>;
+}
+
+# Function to call on a thread created by platform interface.
+thread_func = interface +c {
+    # Will be run on thread start.  The thread will exit when this returns.
+    run();
+}
