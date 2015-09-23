@@ -517,6 +517,13 @@ public:
         return javaObj;
     }
 
+    // Java WeakReference objects don't have a way to check whether they're expired except
+    // by upgrading them to a strong ref.
+    bool expired() const {
+        LocalRef<jobject> javaObj { lock() };
+        return !javaObj;
+    }
+
 private:
     GlobalRef<jobject> m_weakRef;
 };

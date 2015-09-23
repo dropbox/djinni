@@ -39,6 +39,8 @@ namespace djinni {
 // See comment on `get_unowning()` in proxy_cache_interface.hpp.
 template <typename T> static inline auto upgrade_weak(const T & ptr) { return ptr.lock(); }
 template <typename T> static inline T * upgrade_weak(T* ptr) { return ptr; }
+template <typename T> static inline bool is_expired(const T & ptr) { return ptr.expired(); }
+template <typename T> static inline bool is_expired(T* ptr) { return !ptr; }
 
 /*
  * Generic proxy cache.
@@ -94,7 +96,21 @@ public:
      */
     void remove(const UnowningImplPointer & impl_unowning) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_mapping.erase(impl_unowning);
+        auto it = m_mapping.find(impl_unowning);
+        if (it != m_mapping.end()) {
+            // The entry in the map should already be expired: this is called from Handle's
+            // destructor, so the proxy must already be gone. However, remove() does not
+            // happen atomically with the proxy object becoming weakly reachable. It's
+            // possible that during the window between when the weak-ref holding this proxy
+            // expires and when we enter remove() and take m_mutex, another thread could have
+            // created a new proxy for the same original object and added it to the map. In
+            // that case, `it->second` will contain a live pointer to a different proxy object,
+            // not an expired weak pointer to the Handle currently being destructed. We only
+            // remove the map entry if its pointer is already expired.
+            if (is_expired(it->second)) {
+                m_mapping.erase(it);
+            }
+        }
     }
 
 private:
