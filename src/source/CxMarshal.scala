@@ -51,7 +51,7 @@ class CxMarshal(spec: Spec) extends Marshal(spec) {
 
   private def ownName(tm: MExpr): String = tm.base match {
     case d: MDef => d.defType match {
-      case DEnum => withNs(Some("djinni"), s"Enum<${fqTypename(tm)}, ${fqTypename(tm)}>")
+      case DEnum => withNs(Some("djinni"), s"Enum<${cppMarshal.fqTypename(tm)}, ${fqTypename(tm)}>")
       case _ => withNs(Some(spec.cxcppNamespace), s"${ownClass(d.name)}")
     }
     case o => withNs(Some("djinni"), o match {
