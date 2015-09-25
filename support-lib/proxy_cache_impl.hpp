@@ -37,7 +37,9 @@
 namespace djinni {
 
 // See comment on `get_unowning()` in proxy_cache_interface.hpp.
-template <typename T> static inline auto upgrade_weak(const T & ptr) { return ptr.lock(); }
+template <typename T> static inline auto upgrade_weak(const T & ptr) -> decltype(ptr.lock()) {
+    return ptr.lock();
+}
 template <typename T> static inline T * upgrade_weak(T* ptr) { return ptr; }
 template <typename T> static inline bool is_expired(const T & ptr) { return ptr.expired(); }
 template <typename T> static inline bool is_expired(T* ptr) { return !ptr; }
