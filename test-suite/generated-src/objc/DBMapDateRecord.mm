@@ -19,4 +19,9 @@
     return [[self alloc] initWithDatesById:datesById];
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p datesById:%@>", self.class, self, self.datesById];
+}
+
 @end

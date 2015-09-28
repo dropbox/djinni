@@ -112,4 +112,9 @@
             self.oFsixtyfour.hash;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p b:%@ eight:%@ sixteen:%@ thirtytwo:%@ sixtyfour:%@ fthirtytwo:%@ fsixtyfour:%@ oB:%@ oEight:%@ oSixteen:%@ oThirtytwo:%@ oSixtyfour:%@ oFthirtytwo:%@ oFsixtyfour:%@>", self.class, self, @(self.b), @(self.eight), @(self.sixteen), @(self.thirtytwo), @(self.sixtyfour), @(self.fthirtytwo), @(self.fsixtyfour), self.oB, self.oEight, self.oSixteen, self.oThirtytwo, self.oSixtyfour, self.oFthirtytwo, self.oFsixtyfour];
+}
+
 @end
