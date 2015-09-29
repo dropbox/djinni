@@ -397,12 +397,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           for (f <- r.fields) {
             w.w(", ")
             f.ty.resolved.base match {
-              case MOptional =>
-                f.ty.resolved.args.head.base match {
-                  case df: MDef if df.defType == DEnum =>
-                    w.w(s"@(self.${idObjc.field(f.ident)})")
-                  case _ => w.w(s"self.${idObjc.field(f.ident)}")
-                }
+              case MOptional => w.w(s"self.${idObjc.field(f.ident)}")
               case t: MPrimitive => w.w(s"@(self.${idObjc.field(f.ident)})")
               case df: MDef => df.defType match {
                 case DEnum => w.w(s"@(self.${idObjc.field(f.ident)})")
