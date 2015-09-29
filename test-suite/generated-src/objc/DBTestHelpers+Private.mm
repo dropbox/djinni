@@ -78,28 +78,28 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nonnull NSDictionary *)getMap {
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getMap {
     try {
         auto r = ::testsuite::TestHelpers::get_map();
         return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkMap:(nonnull NSDictionary *)m {
++ (BOOL)checkMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m {
     try {
         auto r = ::testsuite::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nonnull NSDictionary *)getEmptyMap {
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getEmptyMap {
     try {
         auto r = ::testsuite::TestHelpers::get_empty_map();
         return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkEmptyMap:(nonnull NSDictionary *)m {
++ (BOOL)checkEmptyMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m {
     try {
         auto r = ::testsuite::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
         return ::djinni::Bool::fromCpp(r);
@@ -132,7 +132,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (void)checkEnumMap:(nonnull NSDictionary *)m {
++ (void)checkEnumMap:(nonnull NSDictionary<NSNumber *, NSString *> *)m {
     try {
         ::testsuite::TestHelpers::check_enum_map(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::String>::toCpp(m));
     } DJINNI_TRANSLATE_EXCEPTIONS()

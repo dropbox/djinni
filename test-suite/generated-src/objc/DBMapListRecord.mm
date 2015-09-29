@@ -6,7 +6,7 @@
 
 @implementation DBMapListRecord
 
-- (nonnull instancetype)initWithMapList:(nonnull NSArray *)mapList
+- (nonnull instancetype)initWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList
 {
     if (self = [super init]) {
         _mapList = mapList;
@@ -14,7 +14,7 @@
     return self;
 }
 
-+ (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray *)mapList
++ (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList
 {
     return [[self alloc] initWithMapList:mapList];
 }

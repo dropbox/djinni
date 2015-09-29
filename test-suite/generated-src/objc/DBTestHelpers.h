@@ -37,13 +37,13 @@
 
 + (BOOL)checkNestedCollection:(nonnull DBNestedCollection *)nc;
 
-+ (nonnull NSDictionary *)getMap;
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getMap;
 
-+ (BOOL)checkMap:(nonnull NSDictionary *)m;
++ (BOOL)checkMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m;
 
-+ (nonnull NSDictionary *)getEmptyMap;
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getEmptyMap;
 
-+ (BOOL)checkEmptyMap:(nonnull NSDictionary *)m;
++ (BOOL)checkEmptyMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m;
 
 + (nonnull DBMapListRecord *)getMapListRecord;
 
@@ -53,7 +53,7 @@
 
 + (void)checkClientInterfaceNonascii:(nullable id<DBClientInterface>)i;
 
-+ (void)checkEnumMap:(nonnull NSDictionary *)m;
++ (void)checkEnumMap:(nonnull NSDictionary<NSNumber *, NSString *> *)m;
 
 + (void)checkEnum:(DBColor)c;
 

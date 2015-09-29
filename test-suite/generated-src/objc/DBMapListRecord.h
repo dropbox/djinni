@@ -4,9 +4,9 @@
 #import <Foundation/Foundation.h>
 
 @interface DBMapListRecord : NSObject
-- (nonnull instancetype)initWithMapList:(nonnull NSArray *)mapList;
-+ (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray *)mapList;
+- (nonnull instancetype)initWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList;
++ (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList;
 
-@property (nonatomic, readonly, nonnull) NSArray * mapList;
+@property (nonatomic, readonly, nonnull) NSArray<NSDictionary<NSString *, NSNumber *> *> * mapList;
 
 @end
