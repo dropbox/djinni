@@ -13,8 +13,8 @@ namespace testsuite {
 struct NestedCollection final {
     std::vector<std::unordered_set<std::string>> set_list;
 
-    NestedCollection(std::vector<std::unordered_set<std::string>> set_list)
-    : set_list(std::move(set_list))
+    NestedCollection(std::vector<std::unordered_set<std::string>> set_list_)
+    : set_list(std::move(set_list_))
     {}
 };
 

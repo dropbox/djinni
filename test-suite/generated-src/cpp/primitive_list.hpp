@@ -12,8 +12,8 @@ namespace testsuite {
 struct PrimitiveList final {
     std::vector<int64_t> list;
 
-    PrimitiveList(std::vector<int64_t> list)
-    : list(std::move(list))
+    PrimitiveList(std::vector<int64_t> list_)
+    : list(std::move(list_))
     {}
 };
 

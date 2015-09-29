@@ -16,12 +16,12 @@ struct ClientReturnedRecord final {
     std::string content;
     std::experimental::optional<std::string> misc;
 
-    ClientReturnedRecord(int64_t record_id,
-                         std::string content,
-                         std::experimental::optional<std::string> misc)
-    : record_id(std::move(record_id))
-    , content(std::move(content))
-    , misc(std::move(misc))
+    ClientReturnedRecord(int64_t record_id_,
+                         std::string content_,
+                         std::experimental::optional<std::string> misc_)
+    : record_id(std::move(record_id_))
+    , content(std::move(content_))
+    , misc(std::move(misc_))
     {}
 };
 
