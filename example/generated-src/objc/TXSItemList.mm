@@ -19,4 +19,9 @@
     return [[self alloc] initWithItems:items];
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p items:%@>", self.class, self, self.items];
+}
+
 @end

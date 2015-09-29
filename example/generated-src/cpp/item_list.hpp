@@ -12,8 +12,8 @@ namespace textsort {
 struct ItemList final {
     std::vector<std::string> items;
 
-    ItemList(std::vector<std::string> items)
-    : items(std::move(items))
+    ItemList(std::vector<std::string> items_)
+    : items(std::move(items_))
     {}
 };
 
