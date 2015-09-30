@@ -41,4 +41,13 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_createWithListene
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
+CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_runSort(JNIEnv* jniEnv, jobject /*this*/, jobject j_items)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        auto r = ::textsort::SortItems::run_sort(::djinni_generated::NativeItemList::toCpp(jniEnv, j_items));
+        return ::djinni::release(::djinni_generated::NativeItemList::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 }  // namespace djinni_generated

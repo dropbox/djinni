@@ -6,7 +6,7 @@
 
 @implementation TXSItemList
 
-- (nonnull instancetype)initWithItems:(nonnull NSArray *)items
+- (nonnull instancetype)initWithItems:(nonnull NSArray<NSString *> *)items
 {
     if (self = [super init]) {
         _items = items;
@@ -14,7 +14,7 @@
     return self;
 }
 
-+ (nonnull instancetype)itemListWithItems:(nonnull NSArray *)items
++ (nonnull instancetype)itemListWithItems:(nonnull NSArray<NSString *> *)items
 {
     return [[self alloc] initWithItems:items];
 }
