@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project>
+  <target name="compile">
+    <mkdir dir="build"/>
+    <mkdir dir="build/local"/>
+    <exec executable="cmake" failonerror="true" dir="build">
+      <!-- Verbose helps make debugging compiler issues easier -->
+      <arg value="-DCMAKE_VERBOSE_MAKEFILE=ON"/>
+      <!-- Make CMake configure Makefile install target to install locall
+           (to ./build/local) to make the shared library easier to reference
+           in java -->
+      <arg value="-DCMAKE_INSTALL_PREFIX:PATH=${basedir}/build/local"/>
+      <arg value=".."/>
+    </exec>
+    <exec executable="make" failonerror="true" dir="build">
+      <arg value="-j12"/>
+    </exec>
+    <exec executable="make" failonerror="true" dir="build">
+      <arg value="install"/>
+    </exec>
+    <mkdir dir="build/classes"/>
+	<javac destdir="build/classes" includeantruntime="false" encoding="UTF-8" debug="on"
+	       classpath="../../deps/java/jsr305-3.0.0.jar"
+		   srcdir="../../support-lib/java/:../generated-src:./handwritten-src/java" />
+  </target>
+  <target name="jar">
+    <jar destfile="build/jar/DjinniTextSort.jar" basedir="build/classes">
+      <manifest>
+        <attribute name="Main-Class" value="com.dropbox.textsort.SortTest"/>
+      </manifest>
+	  <!-- Copy the native lib(s) to the canonical jar path resources/djinni_native_libs
+	       so that com.dropbox.djinni.NativeLibLoader will find them on startup -->
+      <zipfileset dir="${basedir}/build/local/lib" prefix="resources/djinni_native_libs">
+        <include name="lib*"/>
+      </zipfileset>
+      <zipgroupfileset dir="${basedir}" includes="*.jar" />
+    </jar>
+  </target>
+  <target name="run">
+    <java jar="build/jar/DjinniTextSort.jar" fork="true"/>
+  </target>
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+</project>
+

@@ -150,6 +150,10 @@ somewhere in your code:
     System.loadLibrary("YourLibraryName");
     // The name is specified in Android.mk / build.gradle / Makefile, depending on your build system.
 
+If you package your native library in a jar, you can also use `com.dropbox.djinni.NativeLibLoader` 
+to help unpack and load your lib(s).  See the [Localhost README](example/localhost/README.md)
+for details.
+
 When a native library is called, JNI calls a special function called `JNI_OnLoad`. If you use
 Djinni for all JNI interface code, include `support_lib/jni/djinni_main.cpp`; if not,
 you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. See

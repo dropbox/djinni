@@ -47,6 +47,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
++ (nonnull TXSItemList *)runSort:(nonnull TXSItemList *)items {
+    try {
+        auto r = ::textsort::SortItems::run_sort(::djinni_generated::ItemList::toCpp(items));
+        return ::djinni_generated::ItemList::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 namespace djinni_generated {
 
 auto SortItems::toCpp(ObjcType objc) -> CppType
