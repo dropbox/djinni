@@ -85,7 +85,21 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static const ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)};")
+      w.wl(s"static property ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)};")
+      w.braced {
+        w.wl(s"${cxMarshal.fieldType(c.ty)} get()")
+        w.braced {
+          w.wl(s"return ${idCx.const(c.ident)}_;")
+        }
+      }
+    }
+  }
+
+  def generateHxPrivateConstants(w: IndentWriter, consts: Seq[Const]) = {
+    for (c <- consts) {
+      w.wl
+      writeDoc(w, c.doc)
+      w.wl(s"static ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)}_;")
     }
   }
 
@@ -286,6 +300,8 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         //private members
+        w.wlOutdent("private:")
+        generateHxPrivateConstants(w, i.consts)
         w.wlOutdent("internal:")
         //construct from a cpp ref
         w.wl(s"$self(const std::shared_ptr<$cppSelf>& cppRef);")
