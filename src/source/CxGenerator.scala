@@ -85,7 +85,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     for (c <- consts) {
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static property ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)};")
+      w.wl(s"static property ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)}")
       w.braced {
         w.wl(s"${cxMarshal.fieldType(c.ty)} get()")
         w.braced {
