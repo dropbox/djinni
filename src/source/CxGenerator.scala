@@ -185,6 +185,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"int32 CompareTo($actualSelf^ rhs);")
         }
 
+        w.wlOutdent("private:")
+        generateHxPrivateConstants(w, r.consts)
+
       }
     }
 
