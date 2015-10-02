@@ -96,14 +96,6 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
   }
 
   def generateHxPrivateConstants(w: IndentWriter, consts: Seq[Const]) = {
-    for (c <- consts) {
-      w.wl
-      writeDoc(w, c.doc)
-      w.wl(s"static ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)}_;")
-    }
-  }
-
-  def generateCxConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
     def writeCxConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long => w.w(l.toString)
       case d: Double if cxMarshal.fieldType(ty) == "float" => w.w(d.toString + "f")
@@ -111,7 +103,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
       case e: EnumValue => w.w(cxMarshal.typename(ty) + "::" + idCx.enum(e.ty.name + "_" + e.name))
-      case v: ConstRef => w.w(selfName + "::" + idCx.const(v))
+      case v: ConstRef => w.w(idCx.const(v))
       case z: Map[_, _] => { // Value is record
       val recordMdef = ty.resolved.base.asInstanceOf[MDef]
         val record = recordMdef.body.asInstanceOf[Record]
@@ -130,14 +122,50 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    val skipFirst = SkipFirst()
     for (c <- consts) {
-      skipFirst{ w.wl }
-      w.w(s"${cxMarshal.fieldType(c.ty)} const $selfName::${idCx.const(c.ident)} = ")
+      w.wl
+      writeDoc(w, c.doc)
+      w.w(s"static const ${cxMarshal.fieldType(c.ty)} ${idCx.const(c.ident)}_ = ")
       writeCxConst(w, c.ty, c.value)
       w.wl(";")
     }
   }
+
+//  def generateCxConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
+//    def writeCxConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+//      case l: Long => w.w(l.toString)
+//      case d: Double if cxMarshal.fieldType(ty) == "float" => w.w(d.toString + "f")
+//      case d: Double => w.w(d.toString)
+//      case b: Boolean => w.w(if (b) "true" else "false")
+//      case s: String => w.w(s)
+//      case e: EnumValue => w.w(cxMarshal.typename(ty) + "::" + idCx.enum(e.ty.name + "_" + e.name))
+//      case v: ConstRef => w.w(selfName + "::" + idCx.const(v))
+//      case z: Map[_, _] => { // Value is record
+//      val recordMdef = ty.resolved.base.asInstanceOf[MDef]
+//        val record = recordMdef.body.asInstanceOf[Record]
+//        val vMap = z.asInstanceOf[Map[String, Any]]
+//        w.wl(cxMarshal.typename(ty) + "(")
+//        w.increase()
+//        // Use exact sequence
+//        val skipFirst = SkipFirst()
+//        for (f <- record.fields) {
+//          skipFirst {w.wl(",")}
+//          writeCxConst(w, f.ty, vMap.apply(f.ident.name))
+//          w.w(" /* " + idCx.field(f.ident) + " */ ")
+//        }
+//        w.w(")")
+//        w.decrease()
+//      }
+//    }
+//
+//    val skipFirst = SkipFirst()
+//    for (c <- consts) {
+//      skipFirst{ w.wl }
+//      w.w(s"${cxMarshal.fieldType(c.ty)} const $selfName::${idCx.const(c.ident)} = ")
+//      writeCxConst(w, c.ty, c.value)
+//      w.wl(";")
+//    }
+//  }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new CxRefs(ident.name)
@@ -195,7 +223,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
 
     if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
       writeCxFile(cxName, origin, refs.cx, w => {
-        generateCxConstants(w, r.consts, actualSelf)
+//        generateCxConstants(w, r.consts, actualSelf)
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
@@ -270,7 +298,7 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
       writeCxTypeParams(w, typeParams)
       if (i.ext.cx) w.wl(s"public interface class $self").bracedSemi {
         // Constants
-//        generateHxConstants(w, i.consts) //TODO no can do! Not gonna happen. Nuuh. We can make this a property with no setter and agetter that reaches into C++ land tho
+        generateHxConstants(w, i.consts)
         // Methods
         for (m <- i.methods) {
           w.wl
@@ -315,9 +343,9 @@ class CxGenerator(spec: Spec) extends Generator(spec) {
     // Cx only generated in need of Constants
     writeCxFile(ident, origin, refs.cx, w => {
       if (! i.ext.cx) {
-        if (i.consts.nonEmpty) {
-          generateCxConstants(w, i.consts, self)
-        }
+//        if (i.consts.nonEmpty) {
+//          generateCxConstants(w, i.consts, self)
+//        }
         //constructor
         w.wl(s"$self::$self(const std::shared_ptr<$cppSelf>& cppRef)")
         w.braced {
