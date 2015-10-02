@@ -7,7 +7,7 @@ clean:
 	-rm -rf obj/
 	-rm -rf build/
 	-rm -rf build_ios/
-	-rm GypAndroid.mk
+	-rm -f GypAndroid.mk
 
 # rule to lazily clone gyp
 # freeze gyp at the last version with android support
