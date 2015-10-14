@@ -4,7 +4,7 @@ This folder contains an example project using djinni. The application contains a
 view, and when the button "Sort" is hit, sorts the lines in that view.  There is also a
 command-line version of the demo.
 
-Interface Stucture
+Interface Structure
 ------------------
 Two interfaces are defined: SortItems and TextboxListener. SortItems is implemented in C++; its
 method sort() takes a list of strings (wrapped in a record), sorts it, and passes the sorted list to
