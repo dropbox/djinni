@@ -110,10 +110,14 @@ namespace djinni {
 		using Boxed = String;
 
 		static CppType toCpp(CxType string) {
-			assert(string);
-			std::wstring wstring{ string->Data() };
-			std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-			return converter.to_bytes(wstring);
+			//Empty strings are null.
+			if(string)
+			{
+				std::wstring wstring{ string->Data() };
+				std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+				return converter.to_bytes(wstring);
+			}
+			return {""};
 		}
 
 		static CxType fromCpp(const CppType& string) {
