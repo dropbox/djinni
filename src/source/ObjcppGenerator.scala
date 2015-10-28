@@ -55,6 +55,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
   def privateBodyName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcppExt
 
+  def nnCheck(expr: String): String = spec.cppNnCheckExpression.fold(expr)(check => s"$check($expr)")
+
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
@@ -89,13 +91,24 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       wrapNamespace(w, spec.objcppNamespace, w => {
         w.wl(s"class $helperClass").bracedSemi {
           w.wlOutdent("public:")
-          w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+          spec.cppNnType match {
+            case Some(nnPtr) =>
+              w.wl(s"using CppType = ${nnPtr}<$cppSelf>;")
+              w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
+            case _ =>
+              w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+          }
           w.wl("using ObjcType = " + (if(i.ext.objc) s"id<$self>" else s"$self*") + ";");
           w.wl
           w.wl(s"using Boxed = $helperClass;")
           w.wl
           w.wl(s"static CppType toCpp(ObjcType objc);")
-          w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
+          if (spec.cppNnType.nonEmpty) {
+            w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
+            w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
+          } else {
+            w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
+          }
           w.wl
           w.wlOutdent("private:")
           w.wl("class ObjcProxy;")
@@ -164,13 +177,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               })
               val ret = m.ret.fold("")(_ => "auto r = ")
               val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
-              writeAlignedCall(w, call, m.params, ")", p => {
-                val v = objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name))
-                (spec.cppNnCheckExpression, isInterface(p.ty.resolved)) match {
-                  case (Some(check), true) => s"$check($v)"
-                  case _ => v
-                }
-              })
+              writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
 
               w.wl(";")
               m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
@@ -198,10 +205,10 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                   val call = s"[Handle::get() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
                   w.wl(";")
-                  m.ret.fold()(ty => (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
-                  case (Some(check), true) => {
-                      // We have a non-optional interface, assert that we're getting a non-null value
-                      // and put it into a non-null pointer
+                  m.ret.fold()(ty => {
+                    if (spec.cppNnCheckExpression.nonEmpty && isInterface(ty.resolved)) {
+                      // We have a non-optional interface, so assert that we're getting a non-null value
+                      // before putting it into a non-null pointer
                       val stringWriter = new StringWriter()
                       writeObjcFuncDecl(m, new IndentWriter(stringWriter))
                       val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
@@ -209,10 +216,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                       w.w(s"if (r == nil)").braced {
                         w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
                       }
-                      w.wl(s"return ${check}(${objcppMarshal.toCpp(ty, "r")});")
                     }
-                  case _ =>
-                      w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
+                    w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
                   })
                 }
               }
@@ -227,26 +232,35 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"auto $helperClass::toCpp(ObjcType objc) -> CppType").braced {
           // Handle null
           w.w("if (!objc)").braced {
-            w.wl("return nullptr;")
+            if (spec.cppNnType.isEmpty) {
+              w.wl("return nullptr;")
+            } else {
+              w.wl(s"""throw std::invalid_argument("$helperClass::toCpp requires non-nil object");""")
+            }
           }
           if (i.ext.cpp && !i.ext.objc) {
             // C++ only. In this case we generate a class instead of a protocol, so
             // we don't have to do any casting at all, just access cppRef directly.
-            w.wl(s"return objc->_cppRefHandle.get();")
+            w.wl("return " + nnCheck("objc->_cppRefHandle.get()") + ";")
+            //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
           } else {
             // ObjC only, or ObjC and C++.
             val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
               w.w(s"if ([(id)objc isKindOfClass:[$objcSelf class]])").braced {
-                w.wl(s"return (($objcSelf*)objc)->_cppRefHandle.get();")
+                val getProxyExpr = s"(($objcSelf*)objc)->_cppRefHandle.get()"
+                w.wl(s"return ${nnCheck(getProxyExpr)};")
               }
             }
-            w.wl(s"return ::djinni::get_objc_proxy<$objcExtSelf>(objc);")
+            val getProxyExpr = s"::djinni::get_objc_proxy<$objcExtSelf>(objc)"
+            w.wl(s"return ${nnCheck(getProxyExpr)};")
           }
         }
         w.wl
-        w.wl(s"auto $helperClass::fromCpp(const CppType& cpp) -> ObjcType").braced {
+        val fromCppFunc = if (spec.cppNnType.isEmpty) "fromCpp(const CppType& cpp)"
+						 else "fromCppOpt(const CppOptType& cpp)"
+        w.wl(s"auto $helperClass::$fromCppFunc -> ObjcType").braced {
           // Handle null
           w.w("if (!cpp)").braced {
             w.wl("return nil;")

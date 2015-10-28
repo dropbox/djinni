@@ -248,7 +248,14 @@ namespace djinni
 	template <template <class> class OptionalType, class T>
 	struct Optional
 	{
-		using CppType = OptionalType<typename T::CppType>;
+        // SFINAE helper: if C::CppOptType exists, opt_type<T>(nullptr) will return
+        // that type. If not, it returns OptionalType<C::CppType>. This is necessary
+        // because we special-case optional interfaces to be represented as a nullable
+        // std::shared_ptr<T>, not optional<shared_ptr<T>> or optional<nn<shared_ptr<T>>>.
+        template <typename C> static OptionalType<typename C::CppType> opt_type(...);
+        template <typename C> static typename C::CppOptType opt_type(typename C::CppOptType *);
+        using CppType = decltype(opt_type<T>(nullptr));
+
 		using JniType = typename T::Boxed::JniType;
 		
 		using Boxed = Optional;
@@ -258,10 +265,16 @@ namespace djinni
 			return j ? CppType(T::Boxed::toCpp(jniEnv, j)) : CppType();
 		}
 		
-		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
+		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
 		{
 			return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
 		}
+
+        // fromCpp used for nullable shared_ptr
+        template <typename C = T>
+        static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const typename C::CppOptType & cppOpt) {
+            return T::Boxed::fromCppOpt(jniEnv, cppOpt);
+        }
 	};
 	
 	struct ListJniInfo
