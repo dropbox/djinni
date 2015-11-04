@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct RecordWithDurationAndDerivings
 {
-    using CppType = ::RecordWithDurationAndDerivings;
+    using CppType = ::testsuite::RecordWithDurationAndDerivings;
     using ObjcType = DBRecordWithDurationAndDerivings*;
 
     using Boxed = RecordWithDurationAndDerivings;

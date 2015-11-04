@@ -6,6 +6,8 @@
 
 #include "map_record.hpp"
 
+using namespace testsuite;
+
 @interface DBMapRecordTests : XCTestCase
 
 @end

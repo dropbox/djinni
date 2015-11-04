@@ -11,5 +11,5 @@ class ExternInterface1 {
 public:
     virtual ~ExternInterface1() {}
 
-    virtual ::ClientReturnedRecord foo(const std::shared_ptr<::ClientInterface> & i) = 0;
+    virtual ::testsuite::ClientReturnedRecord foo(const std::shared_ptr<::testsuite::ClientInterface> & i) = 0;
 };

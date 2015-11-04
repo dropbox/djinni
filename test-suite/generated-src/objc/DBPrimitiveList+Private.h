@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct PrimitiveList
 {
-    using CppType = ::PrimitiveList;
+    using CppType = ::testsuite::PrimitiveList;
     using ObjcType = DBPrimitiveList*;
 
     using Boxed = PrimitiveList;

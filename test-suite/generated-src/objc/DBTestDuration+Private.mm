@@ -14,163 +14,161 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface DBTestDuration ()
 
-@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::TestDuration>::Handle cppRef;
-
-- (id)initWithCpp:(const std::shared_ptr<::TestDuration>&)cppRef;
+- (id)initWithCpp:(const std::shared_ptr<::testsuite::TestDuration>&)cppRef;
 
 @end
 
-@implementation DBTestDuration
+@implementation DBTestDuration {
+    ::djinni::CppProxyCache::Handle<std::shared_ptr<::testsuite::TestDuration>> _cppRefHandle;
+}
 
-- (id)initWithCpp:(const std::shared_ptr<::TestDuration>&)cppRef
+- (id)initWithCpp:(const std::shared_ptr<::testsuite::TestDuration>&)cppRef
 {
     if (self = [super init]) {
-        _cppRef.assign(cppRef);
+        _cppRefHandle.assign(cppRef);
     }
     return self;
 }
 
 + (nonnull NSString *)hoursString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::hoursString(::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::hoursString(::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)minutesString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::minutesString(::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::minutesString(::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)secondsString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::secondsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::secondsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)millisString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::millisString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::millisString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)microsString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::microsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::microsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)nanosString:(NSTimeInterval)dt {
     try {
-        auto r = ::TestDuration::nanosString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::nanosString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::toCpp(dt));
         return ::djinni::String::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)hours:(int32_t)count {
     try {
-        auto r = ::TestDuration::hours(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::hours(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)minutes:(int32_t)count {
     try {
-        auto r = ::TestDuration::minutes(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::minutes(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)seconds:(int32_t)count {
     try {
-        auto r = ::TestDuration::seconds(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::seconds(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)millis:(int32_t)count {
     try {
-        auto r = ::TestDuration::millis(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::millis(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)micros:(int32_t)count {
     try {
-        auto r = ::TestDuration::micros(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::micros(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)nanos:(int32_t)count {
     try {
-        auto r = ::TestDuration::nanos(::djinni::I32::toCpp(count));
+        auto r = ::testsuite::TestDuration::nanos(::djinni::I32::toCpp(count));
         return ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)hoursf:(double)count {
     try {
-        auto r = ::TestDuration::hoursf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::hoursf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)minutesf:(double)count {
     try {
-        auto r = ::TestDuration::minutesf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::minutesf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)secondsf:(double)count {
     try {
-        auto r = ::TestDuration::secondsf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::secondsf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)millisf:(double)count {
     try {
-        auto r = ::TestDuration::millisf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::millisf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)microsf:(double)count {
     try {
-        auto r = ::TestDuration::microsf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::microsf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (NSTimeInterval)nanosf:(double)count {
     try {
-        auto r = ::TestDuration::nanosf(::djinni::F64::toCpp(count));
+        auto r = ::testsuite::TestDuration::nanosf(::djinni::F64::toCpp(count));
         return ::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nullable NSNumber *)box:(int64_t)count {
     try {
-        auto r = ::TestDuration::box(::djinni::I64::toCpp(count));
+        auto r = ::testsuite::TestDuration::box(::djinni::I64::toCpp(count));
         return ::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (int64_t)unbox:(nullable NSNumber *)dt {
     try {
-        auto r = ::TestDuration::unbox(::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::toCpp(dt));
+        auto r = ::testsuite::TestDuration::unbox(::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::toCpp(dt));
         return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
-
-@end
 
 namespace djinni_generated {
 
@@ -179,7 +177,7 @@ auto TestDuration::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc.cppRef.get();
+    return objc->_cppRefHandle.get();
 }
 
 auto TestDuration::fromCpp(const CppType& cpp) -> ObjcType
@@ -187,9 +185,9 @@ auto TestDuration::fromCpp(const CppType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return ::djinni::DbxCppWrapperCache<::TestDuration>::getInstance()->get(cpp, [] (const CppType& p) {
-        return [[DBTestDuration alloc] initWithCpp:p];
-    });
+    return ::djinni::get_cpp_proxy<DBTestDuration>(cpp);
 }
 
 }  // namespace djinni_generated
+
+@end

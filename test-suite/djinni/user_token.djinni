@@ -1,0 +1,3 @@
+user_token = interface +c +j +o {
+  whoami() : string;
+}

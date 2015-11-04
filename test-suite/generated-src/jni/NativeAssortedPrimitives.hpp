@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeAssortedPrimitives final {
 public:
-    using CppType = ::AssortedPrimitives;
+    using CppType = ::testsuite::AssortedPrimitives;
     using JniType = jobject;
 
     using Boxed = NativeAssortedPrimitives;

@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeRecordWithDurationAndDerivings final {
 public:
-    using CppType = ::RecordWithDurationAndDerivings;
+    using CppType = ::testsuite::RecordWithDurationAndDerivings;
     using JniType = jobject;
 
     using Boxed = NativeRecordWithDurationAndDerivings;

@@ -6,6 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Record returned by a client */
 public final class ClientReturnedRecord {
 
 
@@ -37,4 +38,14 @@ public final class ClientReturnedRecord {
     public String getMisc() {
         return mMisc;
     }
+
+    @Override
+    public String toString() {
+        return "ClientReturnedRecord{" +
+                "mRecordId=" + mRecordId +
+                "," + "mContent=" + mContent +
+                "," + "mMisc=" + mMisc +
+        "}";
+    }
+
 }

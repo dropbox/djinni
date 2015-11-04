@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeDateRecord final {
 public:
-    using CppType = ::DateRecord;
+    using CppType = ::testsuite::DateRecord;
     using JniType = jobject;
 
     using Boxed = NativeDateRecord;

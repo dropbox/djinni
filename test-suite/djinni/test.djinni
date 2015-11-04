@@ -1,5 +1,12 @@
+# Helper methods used by various different tests.
+# (Second line of multi-line documentation.
+#   Indented third line of multi-line documentation.)
 test_helpers = interface +c {
+    # Method with documentation
     static get_set_record(): set_record;
+    # Method with long documentation
+    # (Second line of multi-line documentation.
+    #   Indented third line of multi-line documentation.)
     static check_set_record(rec: set_record): bool;
 
     static get_primitive_list(): primitive_list;
@@ -21,11 +28,11 @@ test_helpers = interface +c {
     static check_enum_map(m: map<color, string>);
     static check_enum(c: color);
 
-    static token_id(t: token): token;
-    static create_cpp_token(): token;
-    static check_cpp_token(t: token);
-    static cpp_token_id(t: token): i64;
-    static check_token_type(t: token, type: string);
+    static token_id(t: user_token): user_token;
+    static create_cpp_token(): user_token;
+    static check_cpp_token(t: user_token);
+    static cpp_token_id(t: user_token): i64;
+    static check_token_type(t: user_token, type: string);
 
     static return_none(): optional<i32>;
 
@@ -35,6 +42,9 @@ test_helpers = interface +c {
     static id_binary(b: binary): binary;
 }
 
+# Empty record
+# (Second line of multi-line documentation.
+#   Indented third line of multi-line documentation.)
 empty_record = record {
     
 }

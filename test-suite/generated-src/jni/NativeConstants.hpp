@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeConstants final {
 public:
-    using CppType = ::Constants;
+    using CppType = ::testsuite::Constants;
     using JniType = jobject;
 
     using Boxed = NativeConstants;

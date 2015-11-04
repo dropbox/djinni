@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct MapListRecord
 {
-    using CppType = ::MapListRecord;
+    using CppType = ::testsuite::MapListRecord;
     using ObjcType = DBMapListRecord*;
 
     using Boxed = MapListRecord;

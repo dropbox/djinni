@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeClientInterface final : ::djinni::JniInterface<::ClientInterface, NativeClientInterface> {
+class NativeClientInterface final : ::djinni::JniInterface<::testsuite::ClientInterface, NativeClientInterface> {
 public:
-    using CppType = std::shared_ptr<::ClientInterface>;
+    using CppType = std::shared_ptr<::testsuite::ClientInterface>;
     using JniType = jobject;
 
     using Boxed = NativeClientInterface;
@@ -23,22 +23,20 @@ public:
 private:
     NativeClientInterface();
     friend ::djinni::JniClass<NativeClientInterface>;
-    friend ::djinni::JniInterface<::ClientInterface, NativeClientInterface>;
+    friend ::djinni::JniInterface<::testsuite::ClientInterface, NativeClientInterface>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::ClientInterface
+    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::testsuite::ClientInterface
     {
     public:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        ::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override;
+        ::testsuite::ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) override;
         double identifier_check(const std::vector<uint8_t> & data, int32_t r, int64_t jret) override;
         std::string return_str() override;
 
     private:
-        using ::djinni::JavaProxyCacheEntry::getGlobalRef;
-        friend ::djinni::JniInterface<::ClientInterface, ::djinni_generated::NativeClientInterface>;
-        friend ::djinni::JavaProxyCache<JavaProxy>;
+        friend ::djinni::JniInterface<::testsuite::ClientInterface, ::djinni_generated::NativeClientInterface>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ClientInterface") };

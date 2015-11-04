@@ -44,6 +44,9 @@ package object generatorTools {
                    cppOptionalTemplate: String,
                    cppOptionalHeader: String,
                    cppEnumHashWorkaround: Boolean,
+                   cppNnHeader: Option[String],
+                   cppNnType: Option[String],
+                   cppNnCheckExpression: Option[String],
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
@@ -331,6 +334,8 @@ abstract class Generator(spec: Spec)
       case Some(s) => "::" + s + "::" + t
     }
 
+  def withCppNs(t: String) = withNs(Some(spec.cppNamespace), t)
+
   def writeAlignedCall(w: IndentWriter, call: String, params: Seq[Field], delim: String, end: String, f: Field => String): IndentWriter = {
     w.w(call)
     val skipFirst = new SkipFirst
@@ -353,6 +358,33 @@ abstract class Generator(spec: Spec)
       w.w(":" + value)
     })
     w.w(end)
+  }
+
+  def normalEnumOptions(e: Enum) = e.options.filter(_.specialFlag == None)
+
+  def writeEnumOptionNone(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.None))) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + " = 0,")
+    }
+  }
+
+  def writeEnumOptions(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    var shift = 0
+    for (o <- normalEnumOptions(e)) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + (if(e.flags) s" = 1 << $shift" else "") + ",")
+      shift += 1
+    }
+  }
+
+  def writeEnumOptionAll(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.All))) {
+      writeDoc(w, o.doc)
+      w.w(ident(o.ident.name) + " = ")
+      w.w(normalEnumOptions(e).map(o => ident(o.ident.name)).fold("0")((acc, o) => acc + " | " + o))
+      w.wl(",")
+    }
   }
 
   // --------------------------------------------------------------------------

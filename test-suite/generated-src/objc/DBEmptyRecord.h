@@ -3,6 +3,11 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Empty record
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 @interface DBEmptyRecord : NSObject
 - (nonnull instancetype)init;
 + (nonnull instancetype)emptyRecord;

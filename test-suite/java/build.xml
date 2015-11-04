@@ -1,26 +1,62 @@
 <?xml version="1.0"?>
-<project name="Djinni-test" default="test">
-    <target name="test" description="blah">
-        <exec executable="make" failonerror="true">
-            <arg value="-j12"/>
-            <arg value="libDjinniTestNative.dylib"/>
-        </exec>
-        <mkdir dir="classes"/>
-        <javac destdir="classes">
-            <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar:jsr305-3.0.0.jar"/>
-            <src path="../generated-src"/>
-            <src path="../handwritten-src"/>
-        </javac>
-        <java classname="org.junit.runner.JUnitCore" fork="true" failonerror="true">
-            <classpath path="hamcrest-core-1.3.jar:junit-4.11.jar:classes"/>
-            <jvmarg value="-Xcheck:jni"/>
-            <arg value="com.dropbox.djinni.test.AllTests"/>
-        </java>
-    </target>
-    <target name="clean">
-        <delete dir="classes"/>
-        <exec executable="make" failonerror="true">
-            <arg value="clean"/>
-        </exec>
-    </target>
+<project name="Djinni-test">
+  <target name="compile">
+    <mkdir dir="build"/>
+	<mkdir dir="build/local"/>
+    <exec executable="cmake" failonerror="true" dir="build">
+      <!-- Verbose helps make debugging compiler issues easier -->
+      <arg value="-DCMAKE_VERBOSE_MAKEFILE=ON"/>
+	  <!-- Make CMake configure Makefile install target to install locall
+	       (to ./build/local) to make the shared library easier to reference
+		   in java -->
+	  <arg value="-DCMAKE_INSTALL_PREFIX:PATH=${basedir}/build/local"/>
+      <arg value=".."/>
+    </exec>
+    <exec executable="make" failonerror="true" dir="build">
+      <arg value="-j12"/>
+    </exec>
+	<exec executable="make" failonerror="true" dir="build">
+	  <arg value="install"/>
+	</exec>
+    <mkdir dir="build/classes"/>
+    <javac destdir="build/classes" includeantruntime="false" encoding="UTF-8" debug="on">
+      <classpath>
+        <fileset dir="../../deps/java/"><include name="*.jar"/></fileset>
+        <fileset dir="../../deps/java/test"><include name="*.jar"/></fileset>
+      </classpath>
+      <src path="../../support-lib/java/"/>
+      <src path="../generated-src"/>
+      <src path="../handwritten-src"/>
+    </javac>
+  </target>
+  <target name="test">
+    <java classname="com.dropbox.djinni.test.AllTests" fork="true" failonerror="true">
+      <classpath>
+        <fileset dir="../../deps/java/"><include name="*.jar"/></fileset>
+        <fileset dir="../../deps/java/test"><include name="*.jar"/></fileset>
+        <pathelement path="${basedir}/build/classes"/>
+      </classpath>
+      <jvmarg value="-Xcheck:jni"/>
+	  <sysproperty key="djinni.native_libs_dirs" value="${basedir}/build/local/lib"/>
+    </java>
+  </target>
+  <target name="jar">
+    <jar destfile="build/jar/DjinniTestSuite.jar" basedir="build/classes">
+      <manifest>
+        <attribute name="Main-Class" value="com.dropbox.djinni.test.AllTests"/>
+      </manifest>
+      <zipfileset dir="${basedir}/build/local/lib" prefix="resources/djinni_native_libs">
+	    <include name="lib*"/>
+	  </zipfileset>
+	  <zipgroupfileset dir="../../deps/java" includes="*.jar" />
+	  <zipgroupfileset dir="../../deps/java/test" includes="*.jar" />
+    </jar>
+  </target>
+  <target name="run-jar">
+    <java jar="build/jar/DjinniTestSuite.jar" fork="true"/>
+  </target>
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
 </project>
+

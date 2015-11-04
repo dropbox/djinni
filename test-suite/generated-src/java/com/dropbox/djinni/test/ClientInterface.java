@@ -6,6 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Client interface */
 public abstract class ClientInterface {
     /** Returns record of given string */
     @Nonnull

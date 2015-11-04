@@ -4,6 +4,7 @@
 #import "DBConstants.h"
 #import <Foundation/Foundation.h>
 
+/** Record containing constants */
 @interface DBConstants : NSObject
 - (nonnull instancetype)initWithSomeInteger:(int32_t)someInteger
                                  someString:(nonnull NSString *)someString;
@@ -16,12 +17,18 @@
 
 @end
 
+/** bool_constant has documentation. */
 extern BOOL const DBConstantsBoolConstant;
 extern int8_t const DBConstantsI8Constant;
 extern int16_t const DBConstantsI16Constant;
 extern int32_t const DBConstantsI32Constant;
 extern int64_t const DBConstantsI64Constant;
 extern float const DBConstantsF32Constant;
+/**
+ * f64_constant has long documentation.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 extern double const DBConstantsF64Constant;
 extern NSString * __nonnull const DBConstantsStringConstant;
 extern NSNumber * __nullable const DBConstantsOptionalIntegerConstant;

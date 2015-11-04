@@ -3,6 +3,8 @@
 
 #include "constants.hpp"  // my header
 
+namespace testsuite {
+
 bool const Constants::BOOL_CONSTANT = true;
 
 int8_t const Constants::I8_CONSTANT = 1;
@@ -24,3 +26,5 @@ std::experimental::optional<int32_t> const Constants::OPTIONAL_INTEGER_CONSTANT 
 Constants const Constants::OBJECT_CONSTANT = Constants(
     Constants::I32_CONSTANT /* some_integer */ ,
     Constants::STRING_CONSTANT /* some_string */ );
+
+}  // namespace testsuite

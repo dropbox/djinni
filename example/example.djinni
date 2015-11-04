@@ -9,8 +9,12 @@ sort_order = enum {
 }
 
 sort_items = interface +c {
+    # For the iOS / Android demo
     sort(order: sort_order, items: item_list);
     static create_with_listener(listener: textbox_listener): sort_items;
+
+    # For the localhost / command-line demo
+    static run_sort(items: item_list): item_list;
 }
 
 textbox_listener = interface +j +o {

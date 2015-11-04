@@ -1,4 +1,5 @@
 djinni/all.djinni
+djinni/common.djinni
 djinni/set.djinni
 djinni/derivings.djinni
 djinni/nested_collection.djinni
@@ -7,7 +8,7 @@ djinni/primitive_list.djinni
 djinni/exception.djinni
 djinni/client_interface.djinni
 djinni/enum.djinni
-djinni/token.djinni
+djinni/user_token.djinni
 djinni/test.djinni
 djinni/primtypes.djinni
 djinni/constants.djinni

@@ -18,17 +18,18 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   def nullability(tm: MExpr): Option[String] = {
     val nonnull = Some("nonnull")
     val nullable = Some("nullable")
+    val interfaceNullity = if (spec.cppNnType.nonEmpty) nonnull else nullable
     tm.base match {
       case MOptional => nullable
       case MPrimitive(_,_,_,_,_,_,_,_) => None
       case d: MDef => d.defType match {
         case DEnum => None
-        case DInterface => nullable
+        case DInterface => interfaceNullity
         case DRecord => nonnull
       }
       case e: MExtern => e.defType match {
         case DEnum => None
-        case DInterface => nullable
+        case DInterface => interfaceNullity
         case DRecord => if(e.objc.pointer) nonnull else None
       }
       case _ => nonnull
@@ -92,6 +93,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)
   def toObjcType(tm: MExpr): (String, Boolean) = toObjcType(tm, false)
   def toObjcType(tm: MExpr, needRef: Boolean): (String, Boolean) = {
+    def args(tm: MExpr) = if (tm.args.isEmpty) "" else tm.args.map(toBoxedParamType).mkString("<", ", ", ">")
     def f(tm: MExpr, needRef: Boolean): (String, Boolean) = {
       tm.base match {
         case MOptional =>
@@ -109,9 +111,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
             case MDate => ("NSDate", true)
             case MBinary => ("NSData", true)
             case MOptional => throw new AssertionError("optional should have been special cased")
-            case MList => ("NSArray", true)
-            case MSet => ("NSSet", true)
-            case MMap => ("NSDictionary", true)
+            case MList => ("NSArray" + args(tm), true)
+            case MSet => ("NSSet" + args(tm), true)
+            case MMap => ("NSDictionary" + args(tm), true)
             case d: MDef => d.defType match {
               case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
               case DRecord => (idObjc.ty(d.name), true)
@@ -132,6 +134,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
       }
     }
     f(tm, needRef)
+  }
+
+  def toBoxedParamType(tm: MExpr): String = {
+    val (name, needRef) = toObjcType(tm, true)
+    name + (if(needRef) " *" else "")
   }
 
   def toObjcParamType(tm: MExpr): String = {

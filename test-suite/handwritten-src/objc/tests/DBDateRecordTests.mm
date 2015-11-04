@@ -4,6 +4,8 @@
 #include "date_record.hpp"
 #import <XCTest/XCTest.h>
 
+using namespace testsuite;
+
 @interface DBDateRecordTests : XCTestCase
 
 @end

@@ -5,6 +5,8 @@
 
 #include <functional>
 
+namespace testsuite {
+
 enum class color : int {
     RED,
     ORANGE,
@@ -20,11 +22,13 @@ enum class color : int {
     VIOLET,
 };
 
+}  // namespace testsuite
+
 namespace std {
 
 template <>
-struct hash<::color> {
-    size_t operator()(::color type) const {
+struct hash<::testsuite::color> {
+    size_t operator()(::testsuite::color type) const {
         return std::hash<int>()(static_cast<int>(type));
     }
 };

@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-NativeCppException::NativeCppException() : ::djinni::JniInterface<::CppException, NativeCppException>("com/dropbox/djinni/test/CppException$CppProxy") {}
+NativeCppException::NativeCppException() : ::djinni::JniInterface<::testsuite::CppException, NativeCppException>("com/dropbox/djinni/test/CppException$CppProxy") {}
 
 NativeCppException::~NativeCppException() = default;
 
@@ -16,7 +16,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::CppException>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::CppException>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -24,7 +24,7 @@ CJNIEXPORT jint JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::CppException>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::CppException>(nativeRef);
         auto r = ref->throw_an_exception();
         return ::djinni::release(::djinni::I32::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
@@ -34,7 +34,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_CppException_get(JNIEnv*
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::CppException::get();
+        auto r = ::testsuite::CppException::get();
         return ::djinni::release(::djinni_generated::NativeCppException::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }

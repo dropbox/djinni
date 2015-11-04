@@ -1,5 +1,7 @@
 #include "test_duration.hpp"
 
+namespace testsuite {
+
 std::string TestDuration::hoursString(std::chrono::duration<int32_t, std::ratio<3600>> dt)
 {
 	return std::to_string(dt.count());
@@ -101,3 +103,5 @@ int64_t TestDuration::unbox(std::experimental::optional<std::chrono::duration<in
 {
 	return dt ? dt->count() : -1;
 }
+
+} // namespace testsuite

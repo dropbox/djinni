@@ -3,6 +3,8 @@
 
 #include "record_with_derivings.hpp"  // my header
 
+namespace testsuite {
+
 
 bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
     return lhs.key1 == rhs.key1 &&
@@ -40,3 +42,5 @@ bool operator<=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) 
 bool operator>=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
     return !(lhs < rhs);
 }
+
+}  // namespace testsuite

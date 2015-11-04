@@ -67,6 +67,7 @@ fi
     --ident-java-field mFooBar \
     \
     --cpp-out "$temp_out_relative/cpp" \
+    --cpp-namespace testsuite \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
     --cpp-optional-header "<experimental/optional>" \

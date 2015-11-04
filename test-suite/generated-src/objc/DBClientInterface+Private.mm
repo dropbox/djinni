@@ -12,33 +12,33 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 namespace djinni_generated {
 
 class ClientInterface::ObjcProxy final
-: public ::ClientInterface
-, public ::djinni::DbxObjcWrapperCache<ObjcProxy>::Handle
+: public ::testsuite::ClientInterface
+, public ::djinni::ObjcProxyCache::Handle<ObjcType>
 {
 public:
     using Handle::Handle;
-    ::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
+    ::testsuite::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
     {
         @autoreleasepool {
-            auto r = [(ObjcType)Handle::get() getRecord:(::djinni::I64::fromCpp(c_record_id))
-                                             utf8string:(::djinni::String::fromCpp(c_utf8string))
-                                                   misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(c_misc))];
+            auto r = [Handle::get() getRecord:(::djinni::I64::fromCpp(c_record_id))
+                                   utf8string:(::djinni::String::fromCpp(c_utf8string))
+                                         misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(c_misc))];
             return ::djinni_generated::ClientReturnedRecord::toCpp(r);
         }
     }
     double identifier_check(const std::vector<uint8_t> & c_data, int32_t c_r, int64_t c_jret) override
     {
         @autoreleasepool {
-            auto r = [(ObjcType)Handle::get() identifierCheck:(::djinni::Binary::fromCpp(c_data))
-                                                            r:(::djinni::I32::fromCpp(c_r))
-                                                         jret:(::djinni::I64::fromCpp(c_jret))];
+            auto r = [Handle::get() identifierCheck:(::djinni::Binary::fromCpp(c_data))
+                                                  r:(::djinni::I32::fromCpp(c_r))
+                                               jret:(::djinni::I64::fromCpp(c_jret))];
             return ::djinni::F64::toCpp(r);
         }
     }
     std::string return_str() override
     {
         @autoreleasepool {
-            auto r = [(ObjcType)Handle::get() returnStr];
+            auto r = [Handle::get() returnStr];
             return ::djinni::String::toCpp(r);
         }
     }
@@ -53,7 +53,7 @@ auto ClientInterface::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return ::djinni::DbxObjcWrapperCache<ObjcProxy>::getInstance()->get(objc);
+    return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
 auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType

@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct ClientReturnedRecord
 {
-    using CppType = ::ClientReturnedRecord;
+    using CppType = ::testsuite::ClientReturnedRecord;
     using ObjcType = DBClientReturnedRecord*;
 
     using Boxed = ClientReturnedRecord;

@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct EmptyRecord
 {
-    using CppType = ::EmptyRecord;
+    using CppType = ::testsuite::EmptyRecord;
     using ObjcType = DBEmptyRecord*;
 
     using Boxed = EmptyRecord;

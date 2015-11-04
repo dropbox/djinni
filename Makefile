@@ -7,7 +7,7 @@ clean:
 	-rm -rf obj/
 	-rm -rf build/
 	-rm -rf build_ios/
-	-rm GypAndroid.mk
+	-rm -f GypAndroid.mk
 
 # rule to lazily clone gyp
 # freeze gyp at the last version with android support
@@ -40,7 +40,10 @@ example_android: GypAndroid.mk
 	@echo "Apks produced at:"
 	@python example/glob.py example/ '*.apk'
 
-test:
+example_localhost: ./deps/java
+	cd example && make localhost
+
+test: ./deps/java
 	make -C test-suite
 
-.PHONY: example_android example_ios test djinni clean all
+.PHONY: example_android example_ios example_localhost test djinni clean all

@@ -48,4 +48,9 @@ DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] i
                                   someString:someString];
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p someInteger:%@ someString:%@>", self.class, self, @(self.someInteger), self.someString];
+}
+
 @end

@@ -6,8 +6,10 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Record containing constants */
 public final class Constants {
 
+    /** bool_constant has documentation. */
     public static final boolean BOOL_CONSTANT = true;
 
     public static final byte I8_CONSTANT = 1;
@@ -20,6 +22,11 @@ public final class Constants {
 
     public static final float F32_CONSTANT = 5.0f;
 
+    /**
+     * f64_constant has long documentation.
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     public static final double F64_CONSTANT = 5.0;
 
     @Nonnull
@@ -53,4 +60,13 @@ public final class Constants {
     public String getSomeString() {
         return mSomeString;
     }
+
+    @Override
+    public String toString() {
+        return "Constants{" +
+                "mSomeInteger=" + mSomeInteger +
+                "," + "mSomeString=" + mSomeString +
+        "}";
+    }
+
 }

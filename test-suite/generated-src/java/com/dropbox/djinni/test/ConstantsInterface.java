@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/** Interface containing constants */
 public abstract class ConstantsInterface {
     public static final boolean BOOL_CONSTANT = true;
 
@@ -14,8 +15,14 @@ public abstract class ConstantsInterface {
 
     public static final short I16_CONSTANT = 2;
 
+    /** i32_constant has documentation. */
     public static final int I32_CONSTANT = 3;
 
+    /**
+     * i64_constant has long documentation.
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     public static final long I64_CONSTANT = 4;
 
     public static final float F32_CONSTANT = 5.0f;

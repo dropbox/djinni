@@ -6,6 +6,8 @@
 #include <chrono>
 #include <utility>
 
+namespace testsuite {
+
 struct DateRecord final {
     std::chrono::system_clock::time_point created_at;
 
@@ -18,7 +20,9 @@ struct DateRecord final {
     friend bool operator<=(const DateRecord& lhs, const DateRecord& rhs);
     friend bool operator>=(const DateRecord& lhs, const DateRecord& rhs);
 
-    DateRecord(std::chrono::system_clock::time_point created_at)
-    : created_at(std::move(created_at))
+    DateRecord(std::chrono::system_clock::time_point created_at_)
+    : created_at(std::move(created_at_))
     {}
 };
+
+}  // namespace testsuite

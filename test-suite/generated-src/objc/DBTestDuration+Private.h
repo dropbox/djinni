@@ -13,7 +13,7 @@ namespace djinni_generated {
 class TestDuration
 {
 public:
-    using CppType = std::shared_ptr<::TestDuration>;
+    using CppType = std::shared_ptr<::testsuite::TestDuration>;
     using ObjcType = DBTestDuration*;
 
     using Boxed = TestDuration;

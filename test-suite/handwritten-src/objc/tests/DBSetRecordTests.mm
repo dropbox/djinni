@@ -3,6 +3,8 @@
 
 #include "set_record.hpp"
 
+using namespace testsuite;
+
 @interface DBSetRecordTests : XCTestCase
 
 @end

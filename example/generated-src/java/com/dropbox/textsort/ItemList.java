@@ -21,4 +21,12 @@ public final class ItemList {
     public ArrayList<String> getItems() {
         return mItems;
     }
+
+    @Override
+    public String toString() {
+        return "ItemList{" +
+                "mItems=" + mItems +
+        "}";
+    }
+
 }

@@ -23,6 +23,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "../proxy_cache_interface.hpp"
 #include <jni.h>
 
 // work-around for missing noexcept and constexpr support in MSVC prior to 2015
@@ -162,15 +163,16 @@ void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception);
 #endif
 void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
 
-#define DJINNI_ASSERT(check, env) \
+#define DJINNI_ASSERT_MSG(check, env, message) \
     do { \
         djinni::jniExceptionCheck(env); \
         const bool check__res = bool(check); \
         djinni::jniExceptionCheck(env); \
         if (!check__res) { \
-            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, #check); \
+            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, message); \
         } \
     } while(false)
+#define DJINNI_ASSERT(check, env) DJINNI_ASSERT_MSG(check, env, #check)
 
 /*
  * Helper for JniClassInitializer.
@@ -267,10 +269,10 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  *
  * This is used for automatically wrapping a Java object that exposes some interface
  * with a C++ object that calls back into the JVM, such as a listener. Calling
- * JavaProxyCache<T>::get(jobj, ...) the first time will construct a T and return a
- * shared_ptr to it, and also save a weak_ptr to the new object internally. The constructed
- * T contains a strong GlobalRef to jobj. As long as something in C++ maintains a strong
- * reference to the wrapper, future calls to get(jobj) will return the *same* wrapper object.
+ * get_java_proxy<T>(obj) the first time will construct a T and return a shared_ptr to it, and
+ * also save a weak_ptr to the new object internally. The constructed T contains a strong
+ * GlobalRef to jobj. As long as something in C++ maintains a strong reference to the wrapper,
+ * future calls to get(jobj) will return the *same* wrapper object.
  *
  *        Java            |           C++
  *                        |        ________________________                ___________
@@ -282,8 +284,7 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  *                        |                 ^             ______________________
  *                        |                 \            |                      |
  *                        |                  - - - - - - |    JavaProxyCache    |
- *                        |                   weak_ptr   | <JniImplFooListener> |
- *                        |                              |______________________|
+ *                        |                   weak_ptr   |______________________|
  *
  * As long as the C++ FooListener has references, the Java FooListener is kept alive.
  *
@@ -292,60 +293,21 @@ jfieldID jniGetFieldID(jclass clazz, const char * name, const char * sig);
  * we must have some other GlobalRef keeping it alive. To ensure safety, the Entry
  * destructor removes *itself* from the map - destruction order guarantees that this
  * will happen before the contained global reference becomes invalid (by destruction of
- * the GlobalRefGuard).
+ * the GlobalRef).
  */
-
-/*
- * Look up an entry in the global JNI wrapper cache. If none is found, create one with factory,
- * save it, and return it.
- *
- * The contract of `factory` is: The parameter to factory is a local ref. The factory returns
- * a shared_ptr to the object (JniImplFooListener, in the diagram above), as well as the
- * jobject *global* ref contained inside.
- */
-std::shared_ptr<void> javaProxyCacheLookup(jobject obj, std::pair<std::shared_ptr<void>,
-                                                                  jobject>(*factory)(jobject));
-
-class JavaProxyCacheEntry {
-public:
-    jobject getGlobalRef() {
-        return m_globalRef.get();
-    }
-
-protected:
-    JavaProxyCacheEntry(jobject localRef, JNIEnv * env); // env used only for construction
-    JavaProxyCacheEntry(jobject localRef);
-
-    virtual ~JavaProxyCacheEntry() noexcept;
-
-    JavaProxyCacheEntry(const JavaProxyCacheEntry & other) = delete;
-    JavaProxyCacheEntry & operator=(const JavaProxyCacheEntry & other) = delete;
-
-private:
-    const GlobalRef<jobject> m_globalRef;
+struct JavaIdentityHash;
+struct JavaIdentityEquals;
+struct JavaProxyCacheTraits {
+    using UnowningImplPointer = jobject;
+    using OwningImplPointer = jobject;
+    using OwningProxyPointer = std::shared_ptr<void>;
+    using WeakProxyPointer = std::weak_ptr<void>;
+    using UnowningImplPointerHash = JavaIdentityHash;
+    using UnowningImplPointerEqual = JavaIdentityEquals;
 };
-
-template <class T>
-class JavaProxyCache {
-public:
-    using Entry = JavaProxyCacheEntry;
-
-    static std::pair<std::shared_ptr<void>, jobject> factory(jobject obj) {
-        std::shared_ptr<T> ret = std::make_shared<T>(obj);
-        return { ret, ret->getGlobalRef() };
-    }
-
-    /*
-     * Check whether a wrapped T exists for obj. If one is found, return it; if not,
-     * construct a new one with obj, save it, and return it.
-     */
-    static std::shared_ptr<T> get(jobject obj) {
-        static_assert(std::is_base_of<JavaProxyCacheEntry, T>::value,
-            "JavaProxyCache can only be used with T if T derives from Entry<T>");
-
-        return std::static_pointer_cast<T>(javaProxyCacheLookup(obj, &factory));
-    }
-};
+extern template class ProxyCache<JavaProxyCacheTraits>;
+using JavaProxyCache = ProxyCache<JavaProxyCacheTraits>;
+using JavaProxyCacheEntry = JavaProxyCache::Handle<GlobalRef<jobject>>;
 
 /*
  * Cache for CppProxy objects. This is the inverse of the JavaProxyCache mechanism above,
@@ -370,6 +332,27 @@ public:
  * WeakGlobalRef can still be upgraded to a strong reference even during finalization, which
  * leads to use-after-free. Java WeakRefs provide the right lifetime guarantee.
  */
+class JavaWeakRef;
+struct JniCppProxyCacheTraits {
+    using UnowningImplPointer = void *;
+    using OwningImplPointer = std::shared_ptr<void>;
+    using OwningProxyPointer = jobject;
+    using WeakProxyPointer = JavaWeakRef;
+    using UnowningImplPointerHash = std::hash<void *>;
+    using UnowningImplPointerEqual = std::equal_to<void *>;
+};
+extern template class ProxyCache<JniCppProxyCacheTraits>;
+using JniCppProxyCache = ProxyCache<JniCppProxyCacheTraits>;
+template <class T> using CppProxyHandle = JniCppProxyCache::Handle<std::shared_ptr<T>>;
+
+template <class T>
+static const std::shared_ptr<T> & objectFromHandleAddress(jlong handle) {
+    assert(handle);
+    assert(handle > 4096);
+    const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->get();
+    assert(ret);
+    return ret;
+}
 
 /*
  * Information needed to use a CppProxy class.
@@ -389,54 +372,6 @@ struct CppProxyClassInfo {
 
     // Validity check
     explicit operator bool() const { return bool(clazz); }
-};
-
-/*
- * Proxy cache implementation. These functions are used by CppProxyHandle::~CppProxyHandle()
- * and JniInterface::_toJava, respectively. They're declared in a separate class to avoid
- * having to templatize them. This way, all the map lookup code is only generated once,
- * rather than once for each T, saving substantially on binary size. (We do something simiar
- * in the other direction too; see javaProxyCacheLookup() above.)
- *
- * The data used by this class is declared only in djinni_support.cpp, since it's global and
- * opaque to all other code.
- */
-class JniCppProxyCache {
-private:
-    template <class T> friend class CppProxyHandle;
-    static void erase(void * key);
-
-    template <class I, class Self> friend class JniInterface;
-    static jobject get(const std::shared_ptr<void> & cppObj,
-                       JNIEnv * jniEnv,
-                       const CppProxyClassInfo & proxyClass,
-                       jobject (*factory)(const std::shared_ptr<void> &,
-                                          JNIEnv *,
-                                          const CppProxyClassInfo &));
-
-    /* This "class" is basically a namespace, to make clear that get() and erase() should only
-     * be used by the helper infrastructure below. */
-    JniCppProxyCache() = delete;
-};
-
-template <class T>
-class CppProxyHandle {
-public:
-    CppProxyHandle(std::shared_ptr<T> obj) : m_obj(move(obj)) {}
-    ~CppProxyHandle() {
-        JniCppProxyCache::erase(m_obj.get());
-    }
-
-    static const std::shared_ptr<T> & get(jlong handle) {
-        assert(handle);
-        assert(handle > 4096);
-        const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->m_obj;
-        assert(ret);
-        return ret;
-    }
-
-private:
-    const std::shared_ptr<T> m_obj;
 };
 
 /*
@@ -470,7 +405,8 @@ public:
 
         // Cases 3 and 4.
         assert(m_cppProxyClass);
-        return JniCppProxyCache::get(c, jniEnv, m_cppProxyClass, &newCppProxy);
+        return JniCppProxyCache::get(c, &newCppProxy);
+
     }
 
     /*
@@ -492,7 +428,7 @@ public:
                 && jniEnv->IsSameObject(jniEnv->GetObjectClass(j), m_cppProxyClass.clazz.get())) {
             jlong handle = jniEnv->GetLongField(j, m_cppProxyClass.idField);
             jniExceptionCheck(jniEnv);
-            return CppProxyHandle<I>::get(handle);
+            return objectFromHandleAddress<I>(handle);
         }
 
         // Cases 3 and 4 - see _getJavaProxy helper below. JavaProxyCache is responsible for
@@ -514,7 +450,7 @@ private:
     template <typename S, typename = typename S::JavaProxy>
     jobject _unwrapJavaProxy(const std::shared_ptr<I> * c) const {
         if (auto proxy = dynamic_cast<typename S::JavaProxy *>(c->get())) {
-            return proxy->getGlobalRef();
+            return proxy->JavaProxyCacheEntry::get().get();
         } else {
             return nullptr;
         }
@@ -530,18 +466,18 @@ private:
      * it. This is actually called by jniCppProxyCacheGet, which holds a lock on the global
      * C++-to-Java proxy map object.
      */
-    static jobject newCppProxy(const std::shared_ptr<void> & cppObj,
-                               JNIEnv * jniEnv,
-                               const CppProxyClassInfo & proxyClass) {
+    static std::pair<jobject, void*> newCppProxy(const std::shared_ptr<void> & cppObj) {
+        const auto & data = JniClass<Self>::get();
+        const auto & jniEnv = jniGetThreadEnv();
         std::unique_ptr<CppProxyHandle<I>> to_encapsulate(
                 new CppProxyHandle<I>(std::static_pointer_cast<I>(cppObj)));
         jlong handle = static_cast<jlong>(reinterpret_cast<uintptr_t>(to_encapsulate.get()));
-        jobject cppProxy = jniEnv->NewObject(proxyClass.clazz.get(),
-                                             proxyClass.constructor,
+        jobject cppProxy = jniEnv->NewObject(data.m_cppProxyClass.clazz.get(),
+                                             data.m_cppProxyClass.constructor,
                                              handle);
         jniExceptionCheck(jniEnv);
         to_encapsulate.release();
-        return cppProxy;
+        return { cppProxy, cppObj.get() };
     }
 
     /*
@@ -550,7 +486,16 @@ private:
      */
     template <typename S, typename = typename S::JavaProxy>
     std::shared_ptr<I> _getJavaProxy(jobject j) const {
-        return JavaProxyCache<typename S::JavaProxy>::get(j);
+        static_assert(std::is_base_of<JavaProxyCacheEntry, typename S::JavaProxy>::value,
+            "JavaProxy must derive from JavaProxyCacheEntry");
+
+        return std::static_pointer_cast<typename S::JavaProxy>(JavaProxyCache::get(
+            j,
+            [] (const jobject & obj) -> std::pair<std::shared_ptr<void>, jobject> {
+                auto ret = std::make_shared<typename S::JavaProxy>(obj);
+                return { ret, ret->JavaProxyCacheEntry::get().get() };
+            }
+        ));
     }
 
     template <typename S>
@@ -622,11 +567,43 @@ public:
 
 protected:
     JniEnum(const std::string & name);
+    jclass enumClass() const { return m_clazz.get(); }
 
 private:
     const GlobalRef<jclass> m_clazz;
     const jmethodID m_staticmethValues;
     const jmethodID m_methOrdinal;
+};
+
+class JniFlags : public JniEnum {
+public:
+    /*
+     * Given a Java EnumSet convert it to the corresponding bit pattern
+     * which can then be static_cast<> to the actual enum.
+     */
+     unsigned flags(JNIEnv * env, jobject obj) const;
+
+    /*
+     * Create a Java EnumSet of the specified flags considering the given number of active bits.
+     */
+    LocalRef<jobject> create(JNIEnv * env, unsigned flags, int bits) const;
+
+    using JniEnum::create;
+
+protected:
+    JniFlags(const std::string & name);
+
+private:
+    const GlobalRef<jclass> m_clazz { jniFindClass("java/util/EnumSet") };
+    const jmethodID m_methNoneOf { jniGetStaticMethodID(m_clazz.get(), "noneOf", "(Ljava/lang/Class;)Ljava/util/EnumSet;") };
+    const jmethodID m_methAdd { jniGetMethodID(m_clazz.get(), "add", "(Ljava/lang/Object;)Z") };
+    const jmethodID m_methIterator { jniGetMethodID(m_clazz.get(), "iterator", "()Ljava/util/Iterator;") };
+    const jmethodID m_methSize { jniGetMethodID(m_clazz.get(), "size", "()I") };
+
+    struct {
+        const GlobalRef<jclass> clazz { jniFindClass("java/util/Iterator") };
+        const jmethodID methNext { jniGetMethodID(clazz.get(), "next", "()Ljava/lang/Object;") };
+    } m_iterator;
 };
 
 #define DJINNI_FUNCTION_PROLOGUE0(env_)

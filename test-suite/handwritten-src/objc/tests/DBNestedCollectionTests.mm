@@ -3,6 +3,8 @@
 
 #include "nested_collection.hpp"
 
+using namespace testsuite;
+
 static NestedCollection cppNestedCollection { { {u8"String1", u8"String2"}, {u8"StringA", u8"StringB"} } };
 static DBNestedCollection *objcNestedCollection = [DBNestedCollection nestedCollectionWithSetList:@[
             [NSSet setWithArray:@[ @"String1", @"String2" ]],

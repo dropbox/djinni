@@ -24,7 +24,7 @@ CJNIEXPORT ::djinni_generated::NativeClientReturnedRecord::JniType JNICALL Java_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::CppProxyHandle<::ExternInterface1>::get(nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::ExternInterface1>(nativeRef);
         auto r = ref->foo(::djinni_generated::NativeClientInterface::toCpp(jniEnv, j_i));
         return ::djinni::release(::djinni_generated::NativeClientReturnedRecord::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)

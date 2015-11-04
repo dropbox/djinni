@@ -21,4 +21,12 @@ public final class MapDateRecord {
     public HashMap<String, java.util.Date> getDatesById() {
         return mDatesById;
     }
+
+    @Override
+    public String toString() {
+        return "MapDateRecord{" +
+                "mDatesById=" + mDatesById +
+        "}";
+    }
+
 }

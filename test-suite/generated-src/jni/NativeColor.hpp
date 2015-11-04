@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeColor final : ::djinni::JniEnum {
 public:
-    using CppType = ::color;
+    using CppType = ::testsuite::color;
     using JniType = jobject;
 
     using Boxed = NativeColor;

@@ -18,69 +18,44 @@
 
 #import <Foundation/Foundation.h>
 #include <memory>
-#include <mutex>
-#include <unordered_map>
+
+#include "../proxy_cache_interface.hpp"
 
 namespace djinni {
 
-template <class T>
-class DbxCppWrapperCache {
-public:
-    static const std::shared_ptr<DbxCppWrapperCache> & getInstance() {
-        static const std::shared_ptr<DbxCppWrapperCache> instance(new DbxCppWrapperCache);
-        // Return by const-ref. This is safe to call any time except during static destruction.
-        // Returning by reference lets us avoid touching the refcount unless needed.
-        return instance;
-    }
-
-    template <typename AllocFunc>
-    id get(const std::shared_ptr<T> & cppRef, const AllocFunc & alloc) {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        T* ptr = cppRef.get();
-        auto got = m_mapping.find(ptr);
-        id ret;
-        if (got != m_mapping.end()) {
-            ret = got->second;
-            if (ret == nil) {
-                ret = alloc(cppRef);
-                m_mapping[ptr] = ret;
-            }
-        } else {
-            ret = alloc(cppRef);
-            m_mapping[ptr] = ret;
-        }
-        return ret;
-    }
-
-    void remove(const std::shared_ptr<T> & cppRef) {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        T* ptr = cppRef.get();
-        if (m_mapping[ptr] == nil) {
-            m_mapping.erase(ptr);
-        }
-    }
-
-    class Handle {
-    public:
-        Handle() = default;
-        ~Handle() {
-            if (_ptr) {
-                _cache->remove(_ptr);
-            }
-        }
-        void assign(const std::shared_ptr<T>& ptr) { _ptr = ptr; }
-        const std::shared_ptr<T>& get() const noexcept { return _ptr; }
-
-    private:
-        const std::shared_ptr<DbxCppWrapperCache> _cache = getInstance();
-        std::shared_ptr<T> _ptr;
-    };
-
-private:
-    std::unordered_map<T*, __weak id> m_mapping;
-    std::mutex m_mutex;
-
-    DbxCppWrapperCache() {}
+struct CppProxyCacheTraits {
+    using UnowningImplPointer = void *;
+    using OwningImplPointer = std::shared_ptr<void>;
+    using OwningProxyPointer = __strong id;
+    using WeakProxyPointer = __weak id;
+    using UnowningImplPointerHash = std::hash<void *>;
+    using UnowningImplPointerEqual = std::equal_to<void *>;
 };
+
+// This declares that GenericProxyCache will be instantiated separately. The actual
+// explicit instantiations are in DJIProxyCaches.mm.
+extern template class ProxyCache<CppProxyCacheTraits>;
+using CppProxyCache = ProxyCache<CppProxyCacheTraits>;
+
+// Helper for get_cpp_proxy_impl that takes a std::shared_ptr.
+template <typename ObjcType, typename CppType>
+ObjcType * get_cpp_proxy_impl(const std::shared_ptr<CppType> & cppRef) {
+    return CppProxyCache::get(
+        cppRef,
+        [] (const std::shared_ptr<void> & cppRef) -> std::pair<id, void *> {
+            return {
+                [[ObjcType alloc] initWithCpp:std::static_pointer_cast<CppType>(cppRef)],
+                cppRef.get()
+            };
+        }
+    );
+}
+
+// get_cpp_proxy takes any smart pointer type, as long as it can be implicitly cast
+// to std::shared_ptr. This means get_cpp_proxy can also be passed non-nullable pointers.
+template <typename ObjcType, typename CppPtrType>
+ObjcType * get_cpp_proxy(const CppPtrType & cppRef) {
+    return get_cpp_proxy_impl<ObjcType, typename std::remove_reference<decltype(*cppRef)>::type>(cppRef);
+}
 
 } // namespace djinni

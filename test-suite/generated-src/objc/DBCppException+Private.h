@@ -13,7 +13,7 @@ namespace djinni_generated {
 class CppException
 {
 public:
-    using CppType = std::shared_ptr<::CppException>;
+    using CppType = std::shared_ptr<::testsuite::CppException>;
     using ObjcType = DBCppException*;
 
     using Boxed = CppException;

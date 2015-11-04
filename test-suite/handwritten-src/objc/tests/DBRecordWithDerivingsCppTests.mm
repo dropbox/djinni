@@ -3,6 +3,8 @@
 
 #import <XCTest/XCTest.h>
 
+using namespace testsuite;
+
 static RecordWithDerivings record1(1, "String1");
 static RecordWithDerivings record1A(1, "String1");
 static RecordWithDerivings record2(1, "String2");

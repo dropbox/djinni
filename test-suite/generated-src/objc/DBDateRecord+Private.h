@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct DateRecord
 {
-    using CppType = ::DateRecord;
+    using CppType = ::testsuite::DateRecord;
     using ObjcType = DBDateRecord*;
 
     using Boxed = DateRecord;

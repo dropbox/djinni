@@ -16,18 +16,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 @interface TXSSortItems ()
 
-@property (nonatomic, readonly) ::djinni::DbxCppWrapperCache<::textsort::SortItems>::Handle cppRef;
-
 - (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems>&)cppRef;
 
 @end
 
-@implementation TXSSortItems
+@implementation TXSSortItems {
+    ::djinni::CppProxyCache::Handle<std::shared_ptr<::textsort::SortItems>> _cppRefHandle;
+}
 
 - (id)initWithCpp:(const std::shared_ptr<::textsort::SortItems>&)cppRef
 {
     if (self = [super init]) {
-        _cppRef.assign(cppRef);
+        _cppRefHandle.assign(cppRef);
     }
     return self;
 }
@@ -35,8 +35,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (void)sort:(TXSSortOrder)order
        items:(nonnull TXSItemList *)items {
     try {
-        _cppRef.get()->sort(::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order),
-                            ::djinni_generated::ItemList::toCpp(items));
+        _cppRefHandle.get()->sort(::djinni::Enum<::textsort::sort_order, TXSSortOrder>::toCpp(order),
+                                  ::djinni_generated::ItemList::toCpp(items));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -47,7 +47,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-@end
++ (nonnull TXSItemList *)runSort:(nonnull TXSItemList *)items {
+    try {
+        auto r = ::textsort::SortItems::run_sort(::djinni_generated::ItemList::toCpp(items));
+        return ::djinni_generated::ItemList::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
 
 namespace djinni_generated {
 
@@ -56,7 +61,7 @@ auto SortItems::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc.cppRef.get();
+    return objc->_cppRefHandle.get();
 }
 
 auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
@@ -64,9 +69,9 @@ auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return ::djinni::DbxCppWrapperCache<::textsort::SortItems>::getInstance()->get(cpp, [] (const CppType& p) {
-        return [[TXSSortItems alloc] initWithCpp:p];
-    });
+    return ::djinni::get_cpp_proxy<TXSSortItems>(cpp);
 }
 
 }  // namespace djinni_generated
+
+@end

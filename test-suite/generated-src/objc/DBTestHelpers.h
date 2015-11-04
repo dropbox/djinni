@@ -9,13 +9,24 @@
 #import "DBSetRecord.h"
 #import <Foundation/Foundation.h>
 @protocol DBClientInterface;
-@protocol DBToken;
+@protocol DBUserToken;
 
 
+/**
+ * Helper methods used by various different tests.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 @interface DBTestHelpers : NSObject
 
+/** Method with documentation */
 + (nonnull DBSetRecord *)getSetRecord;
 
+/**
+ * Method with long documentation
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 + (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec;
 
 + (nonnull DBPrimitiveList *)getPrimitiveList;
@@ -26,13 +37,13 @@
 
 + (BOOL)checkNestedCollection:(nonnull DBNestedCollection *)nc;
 
-+ (nonnull NSDictionary *)getMap;
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getMap;
 
-+ (BOOL)checkMap:(nonnull NSDictionary *)m;
++ (BOOL)checkMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m;
 
-+ (nonnull NSDictionary *)getEmptyMap;
++ (nonnull NSDictionary<NSString *, NSNumber *> *)getEmptyMap;
 
-+ (BOOL)checkEmptyMap:(nonnull NSDictionary *)m;
++ (BOOL)checkEmptyMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m;
 
 + (nonnull DBMapListRecord *)getMapListRecord;
 
@@ -42,19 +53,19 @@
 
 + (void)checkClientInterfaceNonascii:(nullable id<DBClientInterface>)i;
 
-+ (void)checkEnumMap:(nonnull NSDictionary *)m;
++ (void)checkEnumMap:(nonnull NSDictionary<NSNumber *, NSString *> *)m;
 
 + (void)checkEnum:(DBColor)c;
 
-+ (nullable id<DBToken>)tokenId:(nullable id<DBToken>)t;
++ (nullable id<DBUserToken>)tokenId:(nullable id<DBUserToken>)t;
 
-+ (nullable id<DBToken>)createCppToken;
++ (nullable id<DBUserToken>)createCppToken;
 
-+ (void)checkCppToken:(nullable id<DBToken>)t;
++ (void)checkCppToken:(nullable id<DBUserToken>)t;
 
-+ (int64_t)cppTokenId:(nullable id<DBToken>)t;
++ (int64_t)cppTokenId:(nullable id<DBUserToken>)t;
 
-+ (void)checkTokenType:(nullable id<DBToken>)t
++ (void)checkTokenType:(nullable id<DBUserToken>)t
                   type:(nonnull NSString *)type;
 
 + (nullable NSNumber *)returnNone;

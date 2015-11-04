@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct RecordWithNestedDerivings
 {
-    using CppType = ::RecordWithNestedDerivings;
+    using CppType = ::testsuite::RecordWithNestedDerivings;
     using ObjcType = DBRecordWithNestedDerivings*;
 
     using Boxed = RecordWithNestedDerivings;

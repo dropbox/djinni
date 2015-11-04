@@ -49,6 +49,15 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
     }
 
     @Override
+    public String toString() {
+        return "RecordWithDerivings{" +
+                "mKey1=" + mKey1 +
+                "," + "mKey2=" + mKey2 +
+        "}";
+    }
+
+
+    @Override
     public int compareTo(@Nonnull RecordWithDerivings other)  {
         int tempResult;
         if (this.mKey1 < other.mKey1) {

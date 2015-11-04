@@ -11,6 +11,7 @@
 #include <chrono>
 #include <cstdint>
 #include <string>
+#include <type_traits>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -94,8 +95,17 @@ struct Enum {
 
     struct Boxed {
         using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
+        static CppType toCpp(ObjcType x) noexcept { return toCpp(x, Tag<typename std::underlying_type<CppType>::type>()); }
+        static ObjcType fromCpp(CppType x) noexcept { return fromCpp(x, Tag<typename std::underlying_type<CppType>::type>()); }
+
+    private:
+        template<class T> struct Tag { };
+
+        static CppType toCpp(ObjcType x, Tag<int>) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
+        static ObjcType fromCpp(CppType x, Tag<int>) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
+
+        static CppType toCpp(ObjcType x, Tag<unsigned>) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x unsignedIntegerValue])); }
+        static ObjcType fromCpp(CppType x, Tag<unsigned>) noexcept { return [NSNumber numberWithUnsignedInteger:static_cast<NSUInteger>(Enum::fromCpp(x))]; }
     };
 };
 
@@ -161,18 +171,36 @@ struct Binary {
 
 template<template<class> class OptionalType, class T>
 class Optional {
+    // SFINAE helper: if C::CppOptType exists, opt_type<T>(nullptr) will return
+    // that type. If not, it returns OptionalType<C::CppType>. This is necessary
+    // because we special-case optional interfaces to be represented as a nullable
+    // std::shared_ptr<T>, not optional<shared_ptr<T>> or optional<nn<shared_ptr<T>>>.
+    template <typename C> static OptionalType<typename C::CppType> opt_type(...);
+    template <typename C> static typename C::CppOptType opt_type(typename C::CppOptType *);
+
 public:
-    using CppType = OptionalType<typename T::CppType>;
+    using CppType = decltype(opt_type<T>(nullptr));
     using ObjcType = typename T::Boxed::ObjcType;
 
     using Boxed = Optional;
 
     static CppType toCpp(ObjcType obj) {
-        return obj ? CppType(T::Boxed::toCpp(obj)) : CppType();
+        if (obj) {
+            return T::Boxed::toCpp(obj);
+        } else {
+            return CppType();
+        }
     }
 
-    static ObjcType fromCpp(const CppType& opt) {
+    // fromCpp used for normal optionals
+    static ObjcType fromCpp(const OptionalType<typename T::CppType>& opt) {
         return opt ? T::Boxed::fromCpp(*opt) : nil;
+    }
+
+    // fromCpp used for nullable shared_ptr
+    template <typename C = T>
+    static ObjcType fromCpp(const typename C::CppOptType & cppOpt) {
+        return T::Boxed::fromCppOpt(cppOpt);
     }
 };
 
@@ -203,7 +231,7 @@ public:
         for(const auto& value : v) {
             [array addObject:T::Boxed::fromCpp(value)];
         }
-        return array;
+        return [array copy];
     }
 };
 
@@ -233,7 +261,7 @@ public:
         for(const auto& value : s) {
             [set addObject:T::Boxed::fromCpp(value)];
         }
-        return set;
+        return [set copy];
     }
 };
 
@@ -266,7 +294,7 @@ public:
         for(const auto& kvp : m) {
             [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
         }
-        return map;
+        return [map copy];
     }
 };
 

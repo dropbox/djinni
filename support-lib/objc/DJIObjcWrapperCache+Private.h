@@ -18,68 +18,38 @@
 
 #import <Foundation/Foundation.h>
 #include <memory>
-#include <mutex>
-#include <unordered_map>
+
+#include "../proxy_cache_interface.hpp"
 
 namespace djinni {
 
-template <class T>
-class DbxObjcWrapperCache {
-public:
-    static const std::shared_ptr<DbxObjcWrapperCache> & getInstance() {
-        static const std::shared_ptr<DbxObjcWrapperCache> instance(new DbxObjcWrapperCache);
-        // Return by const-ref. This is safe to call any time except during static destruction.
-        // Returning by reference lets us avoid touching the refcount unless needed.
-        return instance;
-    }
+struct unretained_id_hash { std::size_t operator()(__unsafe_unretained id ptr) const; };
 
-    std::shared_ptr<T> get(id objcRef) {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        std::shared_ptr<T> ret;
-        auto it = m_mapping.find((__bridge void*)objcRef);
-        if (it != m_mapping.end()) {
-            ret = std::static_pointer_cast<T>(it->second.lock());
-            if (ret == nullptr) {
-                ret = new_wrapper(objcRef);
-            }
-        } else {
-            ret = new_wrapper(objcRef);
-        }
-        return ret;
-    }
-
-    void remove(id objcRef) {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_mapping.erase((__bridge void*)objcRef);
-    }
-
-    class Handle {
-    public:
-        Handle(id obj) : _obj(obj) { };
-        ~Handle() {
-            if (_obj) {
-                _cache->remove(_obj);
-            }
-        }
-        id get() const noexcept { return _obj; }
-
-    private:
-        const std::shared_ptr<DbxObjcWrapperCache> _cache = getInstance();
-        const id _obj;
-    };
-
-
-private:
-    std::unordered_map<void*, std::weak_ptr<void>> m_mapping;
-    std::mutex m_mutex;
-
-    std::shared_ptr<T> new_wrapper(id objcRef) {
-        std::shared_ptr<T> ret = std::make_shared<T>(objcRef);
-        std::weak_ptr<void> ptr(std::static_pointer_cast<void>(ret));
-        m_mapping[(__bridge void*)objcRef] = ptr;
-        return ret;
-    }
-
+struct ObjcProxyCacheTraits {
+    using UnowningImplPointer = __unsafe_unretained id;
+    using OwningImplPointer = __strong id;
+    using OwningProxyPointer = std::shared_ptr<void>;
+    using WeakProxyPointer = std::weak_ptr<void>;
+    using UnowningImplPointerHash = unretained_id_hash;
+    using UnowningImplPointerEqual = std::equal_to<__unsafe_unretained id>;
 };
+
+// This declares that GenericProxyCache will be instantiated separately. The actual
+// explicit instantiations are in DJIProxyCaches.mm.
+extern template class ProxyCache<ObjcProxyCacheTraits>;
+using ObjcProxyCache = ProxyCache<ObjcProxyCacheTraits>;
+
+template <typename CppType, typename ObjcType>
+static std::shared_ptr<CppType> get_objc_proxy(ObjcType * objcRef) {
+    return std::static_pointer_cast<CppType>(ObjcProxyCache::get(
+        objcRef,
+        [] (const __strong id & objcRef) -> std::pair<std::shared_ptr<void>, __unsafe_unretained id> {
+            return {
+                std::make_shared<CppType>(objcRef),
+                objcRef
+            };
+        }
+    ));
+}
 
 } // namespace djinni

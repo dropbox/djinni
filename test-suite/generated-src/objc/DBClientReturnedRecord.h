@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+/** Record returned by a client */
 @interface DBClientReturnedRecord : NSObject
 - (nonnull instancetype)initWithRecordId:(int64_t)recordId
                                  content:(nonnull NSString *)content

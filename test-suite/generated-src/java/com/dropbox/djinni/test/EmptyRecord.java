@@ -6,10 +6,22 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/**
+ * Empty record
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
 public final class EmptyRecord {
 
 
     public EmptyRecord(
             ) {
     }
+
+    @Override
+    public String toString() {
+        return "EmptyRecord{" +
+        "}";
+    }
+
 }

@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct Constants
 {
-    using CppType = ::Constants;
+    using CppType = ::testsuite::Constants;
     using ObjcType = DBConstants*;
 
     using Boxed = Constants;

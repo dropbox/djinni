@@ -8,9 +8,9 @@
 
 namespace djinni_generated {
 
-class NativeTestHelpers final : ::djinni::JniInterface<::TestHelpers, NativeTestHelpers> {
+class NativeTestHelpers final : ::djinni::JniInterface<::testsuite::TestHelpers, NativeTestHelpers> {
 public:
-    using CppType = std::shared_ptr<::TestHelpers>;
+    using CppType = std::shared_ptr<::testsuite::TestHelpers>;
     using JniType = jobject;
 
     using Boxed = NativeTestHelpers;
@@ -23,7 +23,7 @@ public:
 private:
     NativeTestHelpers();
     friend ::djinni::JniClass<NativeTestHelpers>;
-    friend ::djinni::JniInterface<::TestHelpers, NativeTestHelpers>;
+    friend ::djinni::JniInterface<::testsuite::TestHelpers, NativeTestHelpers>;
 
 };
 

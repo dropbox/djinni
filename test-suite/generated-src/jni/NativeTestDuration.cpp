@@ -7,7 +7,7 @@
 
 namespace djinni_generated {
 
-NativeTestDuration::NativeTestDuration() : ::djinni::JniInterface<::TestDuration, NativeTestDuration>("com/dropbox/djinni/test/TestDuration$CppProxy") {}
+NativeTestDuration::NativeTestDuration() : ::djinni::JniInterface<::testsuite::TestDuration, NativeTestDuration>("com/dropbox/djinni/test/TestDuration$CppProxy") {}
 
 NativeTestDuration::~NativeTestDuration() = default;
 
@@ -16,7 +16,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::TestDuration>*>(nativeRef);
+        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::TestDuration>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -24,7 +24,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_hoursString
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::hoursString(::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::hoursString(::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -33,7 +33,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_minutesStri
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::minutesString(::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::minutesString(::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -42,7 +42,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_secondsStri
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::secondsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::secondsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -51,7 +51,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_millisStrin
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::millisString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::millisString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -60,7 +60,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_microsStrin
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::microsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::microsString(::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -69,7 +69,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_nanosString
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::nanosString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::nanosString(::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -78,7 +78,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType JNIC
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::hours(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::hours(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -87,7 +87,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType JN
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::minutes(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::minutes(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -96,7 +96,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType JNIC
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::seconds(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::seconds(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -105,7 +105,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::millis(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::millis(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -114,7 +114,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::micros(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::micros(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -123,7 +123,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::nanos(::djinni::I32::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::nanos(::djinni::I32::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -132,7 +132,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::JniType JNIC
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::hoursf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::hoursf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -141,7 +141,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::JniType JN
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::minutesf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::minutesf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -150,7 +150,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::JniType JNIC
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::secondsf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::secondsf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -159,7 +159,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::millisf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::millisf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -168,7 +168,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::microsf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::microsf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -177,7 +177,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::JniType JNI
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::nanosf(::djinni::F64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::nanosf(::djinni::F64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -186,7 +186,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniTy
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::box(::djinni::I64::toCpp(jniEnv, j_count));
+        auto r = ::testsuite::TestDuration::box(::djinni::I64::toCpp(jniEnv, j_count));
         return ::djinni::release(::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
@@ -195,7 +195,7 @@ CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestDuration_unbox(JNIEnv*
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::TestDuration::unbox(::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::toCpp(jniEnv, j_dt));
+        auto r = ::testsuite::TestDuration::unbox(::djinni::Optional<std::experimental::optional, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>>::toCpp(jniEnv, j_dt));
         return ::djinni::release(::djinni::I64::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }

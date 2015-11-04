@@ -10,7 +10,7 @@ namespace djinni_generated {
 
 class NativeNestedCollection final {
 public:
-    using CppType = ::NestedCollection;
+    using CppType = ::testsuite::NestedCollection;
     using JniType = jobject;
 
     using Boxed = NativeNestedCollection;

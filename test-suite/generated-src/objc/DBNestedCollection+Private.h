@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct NestedCollection
 {
-    using CppType = ::NestedCollection;
+    using CppType = ::testsuite::NestedCollection;
     using ObjcType = DBNestedCollection*;
 
     using Boxed = NestedCollection;

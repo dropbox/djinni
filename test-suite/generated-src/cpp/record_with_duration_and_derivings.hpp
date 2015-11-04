@@ -6,6 +6,8 @@
 #include <chrono>
 #include <utility>
 
+namespace testsuite {
+
 struct RecordWithDurationAndDerivings final {
     std::chrono::duration<double, std::nano> dt;
 
@@ -18,7 +20,9 @@ struct RecordWithDurationAndDerivings final {
     friend bool operator<=(const RecordWithDurationAndDerivings& lhs, const RecordWithDurationAndDerivings& rhs);
     friend bool operator>=(const RecordWithDurationAndDerivings& lhs, const RecordWithDurationAndDerivings& rhs);
 
-    RecordWithDurationAndDerivings(std::chrono::duration<double, std::nano> dt)
-    : dt(std::move(dt))
+    RecordWithDurationAndDerivings(std::chrono::duration<double, std::nano> dt_)
+    : dt(std::move(dt_))
     {}
 };
+
+}  // namespace testsuite

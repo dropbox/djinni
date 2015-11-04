@@ -22,5 +22,6 @@
     <orderEntry type="library" name="SBT: com.github.scopt:scopt_2.11:3.2.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.11.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-parser-combinators_2.11:1.0.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.yaml:snakeyaml:1.15:jar" level="project" />
   </component>
 </module>

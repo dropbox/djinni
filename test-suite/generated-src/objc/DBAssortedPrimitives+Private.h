@@ -12,7 +12,7 @@ namespace djinni_generated {
 
 struct AssortedPrimitives
 {
-    using CppType = ::AssortedPrimitives;
+    using CppType = ::testsuite::AssortedPrimitives;
     using ObjcType = DBAssortedPrimitives*;
 
     using Boxed = AssortedPrimitives;

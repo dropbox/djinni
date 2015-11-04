@@ -8,10 +8,14 @@
 #include <unordered_map>
 #include <utility>
 
+namespace testsuite {
+
 struct MapDateRecord final {
     std::unordered_map<std::string, std::chrono::system_clock::time_point> dates_by_id;
 
-    MapDateRecord(std::unordered_map<std::string, std::chrono::system_clock::time_point> dates_by_id)
-    : dates_by_id(std::move(dates_by_id))
+    MapDateRecord(std::unordered_map<std::string, std::chrono::system_clock::time_point> dates_by_id_)
+    : dates_by_id(std::move(dates_by_id_))
     {}
 };
+
+}  // namespace testsuite

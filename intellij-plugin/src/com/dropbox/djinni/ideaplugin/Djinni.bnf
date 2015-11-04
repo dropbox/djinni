@@ -1,0 +1,175 @@
+/*
+ * Copyright 2015 Dropbox, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+{
+  parserClass="com.dropbox.djinni.ideaplugin.parser.DjinniParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Djinni"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.dropbox.djinni.ideaplugin.psi"
+  psiImplPackage="com.dropbox.djinni.ideaplugin.psi.impl"
+
+  elementTypeHolderClass="com.dropbox.djinni.ideaplugin.psi.DjinniTypes"
+  elementTypeClass="com.dropbox.djinni.ideaplugin.psi.DjinniElementType"
+  tokenTypeClass="com.dropbox.djinni.ideaplugin.psi.DjinniTokenType"
+
+  psiImplUtilClass="com.dropbox.djinni.ideaplugin.psi.impl.DjinniPsiImplUtil"
+  generateTokenAccessors=true
+
+  tokens = [
+    EQ="="
+    COLON=":"
+    SEMICOLON=";"
+    LIST_SEPARATOR=","
+    PLUS="+"
+    LEFT_BLOCK_BRACE="{"
+    RIGHT_BLOCK_BRACE="}"
+    LEFT_GENERICS_BRACE="<"
+    RIGHT_GENERICS_BRACE=">"
+    LEFT_PARAM_BRACE="("
+    RIGHT_PARAM_BRACE=")"
+    AT="@"
+
+    space="regexp:\s+"
+    comment="regexp:#.*"
+    string_literal="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\\'|\\)*\")"
+    number_literal="regexp:-?(\d+(\.\d*)?)|(\.\d+)"
+    identifier="regexp:\p{Alpha}\w*"
+    text="regexp:\w+"
+  ]
+}
+
+djinniFile ::= item_*
+
+private item_ ::= importStatement | externStatement | typeDefinition
+
+
+typeDefinition ::= identifier EQ typeDescription {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniNamedElementImpl"
+  implements="com.dropbox.djinni.ideaplugin.psi.DjinniNamedElement"
+  methods=[getTypeName getDjinniType getName setName getNameIdentifier getPresentation]
+}
+
+private typeDescription ::= enumDescription | recordDescription | interfaceDescription
+
+generator ::= (PLUS 'c') | (PLUS 'j') | (PLUS 'o')
+
+// enum
+
+private enumDescription ::= enumTypeVariant LEFT_BLOCK_BRACE enumMember* RIGHT_BLOCK_BRACE
+
+enumTypeVariant ::= 'enum'
+
+enumMember ::= enumValue SEMICOLON
+
+enumValue ::= identifier {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniReferenceImpl"
+  implements="com.dropbox.djinni.ideaplugin.psi.DjinniNamedElement"
+  methods=[getName setName getNameIdentifier]
+}
+
+// record
+
+private recordDescription ::= recordTypeVariant LEFT_BLOCK_BRACE recordMember* RIGHT_BLOCK_BRACE ['deriving' LEFT_PARAM_BRACE derivingParamList RIGHT_PARAM_BRACE]
+
+recordTypeVariant ::= 'record' generator*
+
+derivingParamList ::= (derivingParam ',' derivingParamList) | derivingParam
+
+derivingParam ::= 'eq' | 'ord'
+
+recordMember ::= constMember | recordMemberVariable
+
+recordMemberVariable ::= identifier COLON typeReference SEMICOLON
+
+// interface.
+
+private interfaceDescription ::= interfaceTypeVariant LEFT_BLOCK_BRACE interfaceMember* RIGHT_BLOCK_BRACE
+
+interfaceTypeVariant ::= 'interface' generator*
+
+interfaceMember ::= constMember | interfaceMemberFunction
+
+interfaceMemberFunction ::= ['static'] identifier LEFT_PARAM_BRACE interfaceFunctionParamList? RIGHT_PARAM_BRACE [COLON typeReference] SEMICOLON
+
+interfaceFunctionParamList ::=  (interfaceFunctionParam ',' interfaceFunctionParamList) | interfaceFunctionParam
+
+interfaceFunctionParam ::= identifier COLON typeReference
+
+//
+// type references
+//
+typeReference ::= predefinedType | identifier {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniReferenceImpl"
+  implements="com.dropbox.djinni.ideaplugin.psi.DjinniNamedElement"
+  methods=[getName setName getNameIdentifier]
+}
+
+predefinedType ::= basicType | genericBasicType
+
+basicType ::= 'bool' | 'i8' | 'i16' | 'i32' | 'i64' | 'f32' | 'f64' | 'string' | 'binary' | 'date'
+
+genericBasicType ::= genericBasicTypeSingleParameter | genericBasicTypeDualParameter
+
+// The [space] there is not really part of the definition. It just needed to be used somewhere to show up in DjinniTypes.java :-(
+genericBasicTypeSingleParameter ::= (list | set | optional) !space LEFT_GENERICS_BRACE typeReference RIGHT_GENERICS_BRACE
+//genericBasicTypeSingleParameter ::= (list | set | optional) LEFT_GENERICS_BRACE typeReference RIGHT_GENERICS_BRACE
+
+genericBasicTypeDualParameter ::= map LEFT_GENERICS_BRACE typeReference LIST_SEPARATOR typeReference RIGHT_GENERICS_BRACE
+
+//
+// const definitions
+//
+constMember ::= 'const' constNamedValue COLON typeReference EQ constValue SEMICOLON
+
+constNamedValue ::= identifier {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniReferenceImpl"
+  implements="com.dropbox.djinni.ideaplugin.psi.DjinniNamedElement"
+  methods=[getName setName getNameIdentifier]
+}
+
+constValue ::= string_literal | number_literal | constReference | constRecord
+
+constReference ::= identifier {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniReferenceImpl"
+  implements="com.dropbox.djinni.ideaplugin.psi.DjinniNamedElement"
+  methods=[getName setName getNameIdentifier]
+}
+
+private constRecord ::= LEFT_BLOCK_BRACE constRecordMemberList RIGHT_BLOCK_BRACE
+
+private constRecordMemberList ::= (constRecordMemberElement ',' constRecordMemberList) | (constRecordMemberElement [','])
+
+constRecordMemberElement ::= identifier EQ constValue
+
+//
+// import
+//
+importStatement ::= AT'import' string_literal {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniImportStatementBaseImpl"
+  implements="com.intellij.psi.PsiNamedElement"
+  methods=[getName setName getRangeOfPath getPath]
+}
+
+//
+// extern
+//
+externStatement ::= AT'extern' string_literal {
+  mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniImportStatementBaseImpl"
+  implements="com.intellij.psi.PsiNamedElement"
+  methods=[getName setName getRangeOfPath getPath]
+}
