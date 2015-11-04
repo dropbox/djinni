@@ -177,7 +177,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     val self = marshal.typename(objcName, r)
 
     refs.header.add("#import <Foundation/Foundation.h>")
-    refs.body.add("!#import " + q(spec.objcIncludePrefix + (if (r.ext.objc) "../" else "") + marshal.headerName(ident)))
+    // PSPDFKit change - removed ".." to work around https://github.com/dropbox/djinni/issues/51
+    refs.body.add("!#import " + q(spec.objcIncludePrefix + marshal.headerName(ident)))
 
     if (r.ext.objc) {
       refs.header.add(s"@class $noBaseSelf;")
