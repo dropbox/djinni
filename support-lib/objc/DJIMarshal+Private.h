@@ -11,6 +11,7 @@
 #include <chrono>
 #include <cstdint>
 #include <string>
+#include <type_traits>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -94,8 +95,17 @@ struct Enum {
 
     struct Boxed {
         using ObjcType = NSNumber*;
-        static CppType toCpp(ObjcType x) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
-        static ObjcType fromCpp(CppType x) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
+        static CppType toCpp(ObjcType x) noexcept { return toCpp(x, Tag<typename std::underlying_type<CppType>::type>()); }
+        static ObjcType fromCpp(CppType x) noexcept { return fromCpp(x, Tag<typename std::underlying_type<CppType>::type>()); }
+
+    private:
+        template<class T> struct Tag { };
+
+        static CppType toCpp(ObjcType x, Tag<int>) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x integerValue])); }
+        static ObjcType fromCpp(CppType x, Tag<int>) noexcept { return [NSNumber numberWithInteger:static_cast<NSInteger>(Enum::fromCpp(x))]; }
+
+        static CppType toCpp(ObjcType x, Tag<unsigned>) noexcept { return Enum::toCpp(static_cast<Enum::ObjcType>([x unsignedIntegerValue])); }
+        static ObjcType fromCpp(CppType x, Tag<unsigned>) noexcept { return [NSNumber numberWithUnsignedInteger:static_cast<NSUInteger>(Enum::fromCpp(x))]; }
     };
 };
 
@@ -221,7 +231,7 @@ public:
         for(const auto& value : v) {
             [array addObject:T::Boxed::fromCpp(value)];
         }
-        return array;
+        return [array copy];
     }
 };
 
@@ -251,7 +261,7 @@ public:
         for(const auto& value : s) {
             [set addObject:T::Boxed::fromCpp(value)];
         }
-        return set;
+        return [set copy];
     }
 };
 
@@ -284,7 +294,7 @@ public:
         for(const auto& kvp : m) {
             [map setObject:Value::Boxed::fromCpp(kvp.second) forKey:Key::Boxed::fromCpp(kvp.first)];
         }
-        return map;
+        return [map copy];
     }
 };
 

@@ -10,8 +10,8 @@
                                iset:(nonnull NSSet<NSNumber *> *)iset
 {
     if (self = [super init]) {
-        _set = set;
-        _iset = iset;
+        _set = [set copy];
+        _iset = [iset copy];
     }
     return self;
 }

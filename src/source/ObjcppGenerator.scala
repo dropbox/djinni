@@ -303,7 +303,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     val cppSelf = cppMarshal.fqTypename(ident, r)
 
     refs.privHeader.add("!#import " + q(spec.objcppIncludeObjcPrefix + (if(r.ext.objc) "../" else "") + headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    // PSPDFKit change - removed ".." to work around https://github.com/dropbox/djinni/issues/51
+    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     
     refs.body.add("#include <cassert>")
     refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(objcName)))

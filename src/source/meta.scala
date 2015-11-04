@@ -46,7 +46,9 @@ object MExtern {
     header: String,
     boxed: String, // Fully qualified Objective-C typename, must be an object. Only used for "record" types.
     pointer: Boolean, // True to construct pointer types and make it eligible for "nonnull" qualifier. Only used for "record" types.
-    hash: String // A well-formed expression to get the hash value. Must be a format string with a single "%s" placeholder. Only used for "record" types with "eq" deriving when needed.
+    hash: String, // A well-formed expression to get the hash value. Must be a format string with a single "%s" placeholder. Only used for "record" types with "eq" deriving when needed
+    // PSPDFKit: added for description printing
+    printDescription: String // What is needed to print out the description of the type
   )
   case class Objcpp(
     translator: String, // C++ typename containing toCpp/fromCpp methods

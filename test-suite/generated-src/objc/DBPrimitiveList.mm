@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithList:(nonnull NSArray<NSNumber *> *)list
 {
     if (self = [super init]) {
-        _list = list;
+        _list = [list copy];
     }
     return self;
 }
