@@ -122,7 +122,9 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     "header" -> QuotedString(objcMarshal.include(td.ident)),
     "boxed" -> QuotedString(objcMarshal.boxedTypename(td)),
     "pointer" -> objcMarshal.isPointer(td),
-    "hash" -> QuotedString("%s.hash")
+    "hash" -> QuotedString("%s.hash"),
+    // PSPDFKit: print out a generic description printer
+    "printDescription" -> QuotedString("%s")
   )
 
   private def objcpp(td: TypeDecl) = Map[String, Any](
@@ -196,7 +198,9 @@ object YamlGenerator {
       nested(td, "objc")("header").toString,
       nested(td, "objc")("boxed").toString,
       nested(td, "objc")("pointer").asInstanceOf[Boolean],
-      nested(td, "objc")("hash").toString),
+      nested(td, "objc")("hash").toString,
+      // PSPDFKit: printDescription key
+      nested(td, "objc")("printDescription").toString),
     MExtern.Objcpp(
       nested(td, "objcpp")("translator").toString,
       nested(td, "objcpp")("header").toString),
