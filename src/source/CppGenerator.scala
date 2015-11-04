@@ -71,20 +71,31 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       if(e.flags) {
         // Define some operators to make working with "enum class" flags actually practical
         def binaryOp(op: String) {
-          w.w(s"constexpr $self operator$op($self lhs, $self rhs) noexcept").braced {
+          w.w(s"CONSTEXPR $self operator$op($self lhs, $self rhs) noexcept").braced {
             w.wl(s"return static_cast<$self>(static_cast<$flagsType>(lhs) $op static_cast<$flagsType>(rhs));")
           }
-          w.w(s"constexpr $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
+          w.w(s"CONSTEXPR $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
             w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
           }
         }
+
+        // this isn't nice. GCC 4.9 (Android) doesn't support proper constexpr.
+        // if we can't use constexpr, just inline them.
+        w.wl("#if __cpp_constexpr >= 201103L")
+        w.wl("#define CONSTEXPR constexpr")
+        w.wl("#else")
+        w.wl("#define CONSTEXPR inline")
+        w.wl("#endif")
+
         binaryOp("|")
         binaryOp("&")
         binaryOp("^")
 
-        w.w(s"constexpr $self operator~($self x) noexcept").braced {
+        w.w(s"CONSTEXPR $self operator~($self x) noexcept").braced {
           w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
         }
+
+        w.wl("#undef CONSTEXPR")
       }
     },
     w => {
