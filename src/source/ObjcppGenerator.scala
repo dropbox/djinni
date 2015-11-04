@@ -74,6 +74,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     refs.body.add("!#import " + q(spec.objcppIncludeObjcPrefix + headerName(ident)))
 
+    spec.cppNnHeader match {
+      case Some(nnHdr) => refs.privHeader.add("#include " + nnHdr)
+      case _ =>
+    }
+    
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
       val ret = objcMarshal.fqReturnType(method.ret)
