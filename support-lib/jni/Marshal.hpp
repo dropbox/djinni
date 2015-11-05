@@ -262,7 +262,7 @@ namespace djinni
 		
 		static CppType toCpp(JNIEnv* jniEnv, JniType j)
 		{
-			return j ? CppType(T::Boxed::toCpp(jniEnv, j)) : CppType();
+			return j ? T::Boxed::toCpp(jniEnv, j) : CppType();
 		}
 		
 		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
