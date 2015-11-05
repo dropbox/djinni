@@ -425,4 +425,5 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Andrew Twyman
 
 ## Contacts
-Jacob Potter - `j4cbo@dropbox.com`
+- Jacob Potter - `djinni@j4cbo.com`
+- Andrew Twyman - `atwyman@dropbox.com`
