@@ -38,6 +38,10 @@ objc:
   # If the type is a "record" and has "eq" deriving then this string must not be empty.
   # It declares a well-formed expression with a single "%s" format placeholder replaced with the variable for which the hash code is needed
   hash: '%s.hash'
+  # Specifies how a description of this type can be printed.
+  # If the type is NOT a subclass of NSObject, this needs to be modified to return a NSObject.
+  # For example, if the type is a CGRect, use `NSStringFromCGRect(%s)`. If the type is a NSInteger, use `@(%s)`.
+  printDescription: '%s'
 objcpp:
   # The fully qualified name of the class containing the toCpp/fromCpp methods.
   translator: '::mylib::djinni::objc::Record1'
