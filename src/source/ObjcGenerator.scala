@@ -391,32 +391,10 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("- (NSString *)description")
       w.braced {
         w.w(s"return ").nestedN(2) {
-          w.w("[NSString stringWithFormat:@\"<%@ %p")
-
-          for (f <- r.fields) w.w(s" ${idObjc.field(f.ident)}:%@")
-          w.w(">\", self.class, self")
-
-          for (f <- r.fields) {
-            w.w(", ")
-            f.ty.resolved.base match {
-              case MOptional => w.w(s"self.${idObjc.field(f.ident)}")
-
-              case t: MPrimitive => w.w(s"@(self.${idObjc.field(f.ident)})")
-              case df: MDef => df.defType match {
-                case DEnum => w.w(s"@(self.${idObjc.field(f.ident)})")
-                case _ => w.w(s"self.${idObjc.field(f.ident)}")
-              }
-              case e: MExtern =>
-                if (e.objc.pointer) {
-                  w.w(s"self.${idObjc.field(f.ident)}")
-                } else {
-                  w.w(s"@(self.${idObjc.field(f.ident)})")
-                }
-              case _ => w.w(s"self.${idObjc.field(f.ident)}")
-            }
-          }
+          w.w("[NSString stringWithFormat:@\"<%@ %p: dict, %@")
+          w.w(">\", self.class, self, [[self toDict] description]")
+          w.wl("];")
         }
-        w.wl("];")
       }
       w.wl
 
