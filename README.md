@@ -276,6 +276,7 @@ objc:
     boxed: 'MLBRecord1'
     pointer: true
     hash: '%s.hash'
+    printDescription: '%s'
 objcpp:
     translator: '::mylib::djinni::objc::Record1'
     header: '"mylib/djinni/objc/Record1.hpp"'
