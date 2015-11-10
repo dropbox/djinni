@@ -7,6 +7,8 @@
 - (nonnull instancetype)initWithList:(nonnull NSArray<NSNumber *> *)list;
 + (nonnull instancetype)primitiveListWithList:(nonnull NSArray<NSNumber *> *)list;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) NSArray<NSNumber *> * list;
 
 @end

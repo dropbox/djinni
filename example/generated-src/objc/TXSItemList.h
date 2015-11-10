@@ -7,6 +7,8 @@
 - (nonnull instancetype)initWithItems:(nonnull NSArray<NSString *> *)items;
 + (nonnull instancetype)itemListWithItems:(nonnull NSArray<NSString *> *)items;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) NSArray<NSString *> * items;
 
 @end

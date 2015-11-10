@@ -7,6 +7,8 @@
 - (nonnull instancetype)initWithCreatedAt:(nonnull NSDate *)createdAt;
 + (nonnull instancetype)dateRecordWithCreatedAt:(nonnull NSDate *)createdAt;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) NSDate * createdAt;
 
 - (NSComparisonResult)compare:(nonnull DBDateRecord *)other;

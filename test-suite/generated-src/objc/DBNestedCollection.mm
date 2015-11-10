@@ -21,7 +21,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p setList:%@>", self.class, self, self.setList];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"setList": _djinni_hide_null_(self.setList)};
 }
 
 @end

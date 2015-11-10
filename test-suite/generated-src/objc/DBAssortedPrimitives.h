@@ -33,6 +33,8 @@
                                     oFthirtytwo:(nullable NSNumber *)oFthirtytwo
                                     oFsixtyfour:(nullable NSNumber *)oFsixtyfour;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) BOOL b;
 
 @property (nonatomic, readonly) int8_t eight;

@@ -7,6 +7,8 @@
 - (nonnull instancetype)initWithSetList:(nonnull NSArray<NSSet<NSString *> *> *)setList;
 + (nonnull instancetype)nestedCollectionWithSetList:(nonnull NSArray<NSSet<NSString *> *> *)setList;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) NSArray<NSSet<NSString *> *> * setList;
 
 @end

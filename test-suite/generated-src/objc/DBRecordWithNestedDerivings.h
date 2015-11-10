@@ -10,6 +10,8 @@
 + (nonnull instancetype)recordWithNestedDerivingsWithKey:(int32_t)key
                                                      rec:(nonnull DBRecordWithDerivings *)rec;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) int32_t key;
 
 @property (nonatomic, readonly, nonnull) DBRecordWithDerivings * rec;

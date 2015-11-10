@@ -11,6 +11,8 @@
 + (nonnull instancetype)constantsWithSomeInteger:(int32_t)someInteger
                                       someString:(nonnull NSString *)someString;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) int32_t someInteger;
 
 @property (nonatomic, readonly, nonnull) NSString * someString;
