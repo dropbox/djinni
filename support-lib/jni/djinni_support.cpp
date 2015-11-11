@@ -177,7 +177,7 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
 GlobalRef<jclass> jniFindClass(const char * name) {
     JNIEnv * env = jniGetThreadEnv();
     DJINNI_ASSERT(name, env);
-    GlobalRef<jclass> guard(env, env->FindClass(name));
+    GlobalRef<jclass> guard(env, LocalRef<jclass>(env, env->FindClass(name)).get());
     jniExceptionCheck(env);
     if (!guard) {
         jniThrowAssertionError(env, __FILE__, __LINE__, "FindClass returned null");
