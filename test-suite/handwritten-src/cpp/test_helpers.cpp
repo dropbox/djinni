@@ -11,7 +11,7 @@ SetRecord TestHelpers::get_set_record() {
         "StringA",
         "StringB",
         "StringC"
-	}, std::unordered_set<int32_t>{} };
+    }, std::unordered_set<int32_t>{} };
 }
 
 bool TestHelpers::check_set_record(const SetRecord & rec) {

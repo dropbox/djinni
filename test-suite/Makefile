@@ -12,4 +12,3 @@ java:
 
 linux:
 	cd ..; ./test-suite/java/docker/run_dockerized_test.sh
-

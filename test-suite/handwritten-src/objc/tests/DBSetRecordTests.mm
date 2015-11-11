@@ -13,13 +13,13 @@ using namespace testsuite;
 
 - (SetRecord)getCppSetRecord
 {
-	return SetRecord({"StringA", "StringB", "StringC"}, {});
+    return SetRecord({"StringA", "StringB", "StringC"}, {});
 }
 
 - (DBSetRecord *)getObjcSetRecord
 {
     NSSet *set = [NSSet setWithObjects:@"StringA", @"StringB", @"StringC", nil];
-	DBSetRecord *objcSetRecord = [DBSetRecord setRecordWithSet:set iset:[NSSet set]];
+    DBSetRecord *objcSetRecord = [DBSetRecord setRecordWithSet:set iset:[NSSet set]];
     return objcSetRecord;
 }
 
