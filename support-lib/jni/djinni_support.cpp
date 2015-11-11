@@ -245,7 +245,7 @@ LocalRef<jobject> JniEnum::create(JNIEnv * env, jint value) const {
                              env->GetObjectArrayElement(static_cast<jobjectArray>(values.get()),
                                                         value));
     jniExceptionCheck(env);
-    return std::move(result);
+    return result;
 }
 
 JniLocalScope::JniLocalScope(JNIEnv* p_env, jint capacity, bool throwOnError)
