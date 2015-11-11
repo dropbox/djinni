@@ -18,5 +18,8 @@ You may need to have Xcode open for the simulator portion of the objc
 tests to complete successfully.  Try opening the app if you see a
 failure connecting to the simulator.
 
-To test Java generated code in linux environments (via Docker), run `make linux`.
-FMI see [Docker testing instructions](java/docker/README.md).
+Testing in Linux (via Docker)
+-----------------------------
+To test Java generated code in a variety of linux environments (via Docker),
+run `make linux_docker`.  FMI see 
+[Docker-based testing instructions](java/docker/README.md).
