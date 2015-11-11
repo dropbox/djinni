@@ -81,7 +81,7 @@ namespace djinni
 		friend JniClass<Bool>;
 		friend Primitive<Bool, bool, jboolean>;
 		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallBooleanMethod(j, method);
+            auto result = jniEnv->CallBooleanMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -93,7 +93,7 @@ namespace djinni
 		friend JniClass<I8>;
 		friend Primitive<I8, int8_t, jbyte>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallByteMethod(j, method);
+            auto result = jniEnv->CallByteMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -105,7 +105,7 @@ namespace djinni
 		friend JniClass<I16>;
 		friend Primitive<I16, int16_t, jshort>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallShortMethod(j, method);
+            auto result = jniEnv->CallShortMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -117,7 +117,7 @@ namespace djinni
 		friend JniClass<I32>;
 		friend Primitive<I32, int32_t, jint>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallIntMethod(j, method);
+            auto result = jniEnv->CallIntMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -129,7 +129,7 @@ namespace djinni
 		friend JniClass<I64>;
 		friend Primitive<I64, int64_t, jlong>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallLongMethod(j, method);
+            auto result = jniEnv->CallLongMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -141,7 +141,7 @@ namespace djinni
 		friend JniClass<F32>;
 		friend Primitive<F32, float, jfloat>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallFloatMethod(j, method);
+            auto result = jniEnv->CallFloatMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
@@ -153,7 +153,7 @@ namespace djinni
 		friend JniClass<F64>;
 		friend Primitive<F64, double, jdouble>;
         static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) {
-            const auto result = jniEnv->CallDoubleMethod(j, method);
+            auto result = jniEnv->CallDoubleMethod(j, method);
             jniExceptionCheck(jniEnv);
             return result;
         }
