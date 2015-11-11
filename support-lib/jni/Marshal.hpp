@@ -80,7 +80,11 @@ namespace djinni
 		Bool() : Primitive("java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", "booleanValue", "()Z") {}
 		friend JniClass<Bool>;
 		friend Primitive<Bool, bool, jboolean>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallBooleanMethod(j, method); }
+		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallBooleanMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 	
 	class I8 : public Primitive<I8, int8_t, jbyte>
@@ -88,7 +92,11 @@ namespace djinni
 		I8() : Primitive("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", "byteValue", "()B") {}
 		friend JniClass<I8>;
 		friend Primitive<I8, int8_t, jbyte>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallByteMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallByteMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 	
 	class I16 : public Primitive<I16, int16_t, jshort>
@@ -96,7 +104,11 @@ namespace djinni
 		I16() : Primitive("java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", "shortValue", "()S") {}
 		friend JniClass<I16>;
 		friend Primitive<I16, int16_t, jshort>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallShortMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallShortMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 	
 	class I32 : public Primitive<I32, int32_t, jint>
@@ -104,7 +116,11 @@ namespace djinni
 		I32() : Primitive("java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", "intValue", "()I") {}
 		friend JniClass<I32>;
 		friend Primitive<I32, int32_t, jint>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallIntMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallIntMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 	
 	class I64 : public Primitive<I64, int64_t, jlong>
@@ -112,7 +128,11 @@ namespace djinni
 		I64() : Primitive("java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", "longValue", "()J") {}
 		friend JniClass<I64>;
 		friend Primitive<I64, int64_t, jlong>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallLongMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallLongMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 
 	class F32 : public Primitive<F32, float, jfloat>
@@ -120,7 +140,11 @@ namespace djinni
 		F32() : Primitive("java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", "floatValue", "()F") {}
 		friend JniClass<F32>;
 		friend Primitive<F32, float, jfloat>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallFloatMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallFloatMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 
 	class F64 : public Primitive<F64, double, jdouble>
@@ -128,7 +152,11 @@ namespace djinni
 		F64() : Primitive("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", "doubleValue", "()D") {}
 		friend JniClass<F64>;
 		friend Primitive<F64, double, jdouble>;
-		static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept { return jniEnv->CallDoubleMethod(j, method); }
+        static JniType unbox(JNIEnv* jniEnv, jmethodID method, jobject j) noexcept {
+            const auto result = jniEnv->CallDoubleMethod(j, method);
+            jniExceptionCheck(jniEnv);
+            return result;
+        }
 	};
 	
 	struct String
@@ -222,6 +250,7 @@ namespace djinni
 			const auto & data = JniClass<Date>::get();
 			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
 			auto time_millis = jniEnv->CallLongMethod(j, data.method_get_time);
+            jniExceptionCheck(jniEnv);
 			return POSIX_EPOCH + std::chrono::milliseconds{time_millis};
 		}
 		
@@ -304,6 +333,7 @@ namespace djinni
 			const auto& data = JniClass<ListJniInfo>::get();
 			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
 			auto size = jniEnv->CallIntMethod(j, data.method_size);
+            jniExceptionCheck(jniEnv);
 			auto c = CppType();
 			c.reserve(size);
 			for(jint i = 0; i < size; ++i)
@@ -366,8 +396,10 @@ namespace djinni
 			const auto& iteData = JniClass<IteratorJniInfo>::get();
 			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
 			auto size = jniEnv->CallIntMethod(j, data.method_size);
+            jniExceptionCheck(jniEnv);
 			auto c = CppType();
 			auto it = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(j, data.method_iterator));
+            jniExceptionCheck(jniEnv);
 			for(jint i = 0; i < size; ++i)
 			{
 				auto je = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(it, iteData.method_next));
@@ -438,14 +470,19 @@ namespace djinni
 			const auto& iteData = JniClass<IteratorJniInfo>::get();
 			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
 			auto size = jniEnv->CallIntMethod(j, data.method_size);
+            jniExceptionCheck(jniEnv);
 			auto entrySet = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(j, data.method_entrySet));
+            jniExceptionCheck(jniEnv);
 			auto c = CppType();
 			c.reserve(size);
 			auto it = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(entrySet, entrySetData.method_iterator));
+            jniExceptionCheck(jniEnv);
 			for(jint i = 0; i < size; ++i)
 			{
 				auto je = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(it, iteData.method_next));
+                jniExceptionCheck(jniEnv);
 				auto jKey = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(je, entryData.method_getKey));
+                jniExceptionCheck(jniEnv);
 				auto jValue = LocalRef<jobject>(jniEnv, jniEnv->CallObjectMethod(je, entryData.method_getValue));
 				jniExceptionCheck(jniEnv);
 				c.emplace(Key::Boxed::toCpp(jniEnv, static_cast<JniKeyType>(jKey.get())),

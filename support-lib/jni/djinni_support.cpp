@@ -239,8 +239,13 @@ jint JniEnum::ordinal(JNIEnv * env, jobject obj) const {
 
 LocalRef<jobject> JniEnum::create(JNIEnv * env, jint value) const {
     LocalRef<jobject> values(env, env->CallStaticObjectMethod(m_clazz.get(), m_staticmethValues));
+    jniExceptionCheck(env);
     DJINNI_ASSERT(values, env);
-    return LocalRef<jobject>(env, env->GetObjectArrayElement(static_cast<jobjectArray>(values.get()), value));
+    LocalRef<jobject> result(env,
+                             env->GetObjectArrayElement(static_cast<jobjectArray>(values.get()),
+                                                        value));
+    jniExceptionCheck(env);
+    return std::move(result);
 }
 
 JniLocalScope::JniLocalScope(JNIEnv* p_env, jint capacity, bool throwOnError)
@@ -507,9 +512,9 @@ public:
     jobject lock() const {
         const auto & jniEnv = jniGetThreadEnv();
         const JniInfo & weakRefClass = JniClass<JniInfo>::get();
-        jobject javaObj = jniEnv->CallObjectMethod(m_weakRef.get(), weakRefClass.method_get);
+        LocalRef<jobject> javaObj(jniEnv->CallObjectMethod(m_weakRef.get(), weakRefClass.method_get));
         jniExceptionCheck(jniEnv);
-        return javaObj;
+        return javaObj.release();
     }
 
     // Java WeakReference objects don't have a way to check whether they're expired except
