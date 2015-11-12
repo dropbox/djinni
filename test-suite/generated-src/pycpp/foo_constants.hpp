@@ -37,10 +37,10 @@ struct FooConstants final {
     int32_t some_integer;
     std::string some_string;
 
-    FooConstants(int32_t some_integer,
-                 std::string some_string)
-    : some_integer(std::move(some_integer))
-    , some_string(std::move(some_string))
+    FooConstants(int32_t some_integer_,
+                 std::string some_string_)
+    : some_integer(std::move(some_integer_))
+    , some_string(std::move(some_string_))
     {}
 };
 

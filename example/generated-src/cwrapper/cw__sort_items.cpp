@@ -46,3 +46,10 @@ DjinniWrapperSortItems * cw__sort_items_create_with_listener(DjinniWrapperTextbo
         return DjinniWrapperSortItems::wrap(std::move(::textsort::SortItems::create_with_listener(DjinniWrapperTextboxListener::get(std::move(_listener))))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
+
+DjinniRecordHandle * cw__sort_items_run_sort(DjinniRecordHandle * items) {
+    djinni::Handle<DjinniRecordHandle> _items(items, item_list___delete);
+    try { 
+        return DjinniItemList::fromCpp(::textsort::SortItems::run_sort(DjinniItemList::toCpp(std::move(_items)))).release();
+    } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
+}

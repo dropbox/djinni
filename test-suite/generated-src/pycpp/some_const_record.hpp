@@ -12,10 +12,10 @@ struct SomeConstRecord final {
     int16_t number1;
     int16_t number2;
 
-    SomeConstRecord(int16_t number1,
-                    int16_t number2)
-    : number1(std::move(number1))
-    , number2(std::move(number2))
+    SomeConstRecord(int16_t number1_,
+                    int16_t number2_)
+    : number1(std::move(number1_))
+    , number2(std::move(number2_))
     {}
 };
 

@@ -21,10 +21,10 @@ struct FooSomeOtherRecord final {
     friend bool operator<=(const FooSomeOtherRecord& lhs, const FooSomeOtherRecord& rhs);
     friend bool operator>=(const FooSomeOtherRecord& lhs, const FooSomeOtherRecord& rhs);
 
-    FooSomeOtherRecord(int64_t number1,
-                       int32_t number2)
-    : number1(std::move(number1))
-    , number2(std::move(number2))
+    FooSomeOtherRecord(int64_t number1_,
+                       int32_t number2_)
+    : number1(std::move(number1_))
+    , number2(std::move(number2_))
     {}
 };
 

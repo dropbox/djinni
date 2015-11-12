@@ -247,6 +247,7 @@ class TestHelpersCppProxy(TestHelpers):
         _ret_c = lib.cw__test_helpers_token_id(UserTokenHelper.fromPy(t))
         CPyException.toPyCheckAndRaise(_ret_c)
         _ret = UserTokenHelper.toPy(_ret_c)
+        assert _ret is not None
         return _ret
 
     @staticmethod

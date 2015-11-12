@@ -22,6 +22,5 @@ ffi.cdef("typedef _Bool bool;"
  + cdef_headers)
 
 if __name__ == '__main__':
-    print ('CFFI DEPENDENCIES: ', args) # TODO: remove before release
     ffi.compile()
 

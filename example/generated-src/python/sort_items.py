@@ -19,11 +19,16 @@ from djinni import exception # this forces run of __init__.py which gives cpp op
 class SortItems(with_metaclass(ABCMeta)):
     @abstractmethod
     def sort(self, order, items):
+        """ For the iOS / Android demo """
         raise NotImplementedError
 
     @staticmethod
     def create_with_listener(listener):
         return SortItemsCppProxy.create_with_listener(listener)
+    @staticmethod
+    def run_sort(items):
+        """ For the localhost / command-line demo """
+        return SortItemsCppProxy.run_sort(items)
 
 class SortItemsCppProxy(SortItems):
     def __init__(self, proxy):
@@ -43,6 +48,14 @@ class SortItemsCppProxy(SortItems):
         _ret_c = lib.cw__sort_items_create_with_listener(TextboxListenerHelper.fromPy(listener))
         CPyException.toPyCheckAndRaise(_ret_c)
         _ret = SortItemsHelper.toPy(_ret_c)
+        assert _ret is not None
+        return _ret
+
+    @staticmethod
+    def run_sort(items):
+        _ret_c = lib.cw__sort_items_run_sort(CPyRecord.fromPy(ItemList.c_data_set, items))
+        CPyException.toPyCheckAndRaise(_ret_c)
+        _ret = CPyRecord.toPy(ItemList.c_data_set, _ret_c)
         assert _ret is not None
         return _ret
 

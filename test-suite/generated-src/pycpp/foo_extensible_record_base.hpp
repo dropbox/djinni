@@ -14,10 +14,10 @@ struct FooExtensibleRecordBase {
     int32_t number1;
     std::string string1;
 
-    FooExtensibleRecordBase(int32_t number1,
-                            std::string string1)
-    : number1(std::move(number1))
-    , string1(std::move(string1))
+    FooExtensibleRecordBase(int32_t number1_,
+                            std::string string1_)
+    : number1(std::move(number1_))
+    , string1(std::move(string1_))
     {}
 
     virtual ~FooExtensibleRecordBase() = default;

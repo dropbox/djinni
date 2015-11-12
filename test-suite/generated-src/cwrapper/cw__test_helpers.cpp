@@ -202,26 +202,3 @@ DjinniBinary * cw__test_helpers_id_binary(DjinniBinary * b) {
         return DjinniBinary::fromCpp(::testsuite::TestHelpers::id_binary(DjinniBinary::toCpp(std::move(_b)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-<<<<<<< HEAD
-
-DjinniWrapperNullityInterface * cw__test_helpers_get_nullity_interface() {
-    try { 
-        return DjinniWrapperNullityInterface::wrap(std::move(::testsuite::TestHelpers::get_nullity_interface())).release();
-    } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
-}
-
-void cw__test_helpers_check_interface_nullity_parameters(DjinniWrapperNullityInterface * i) {
-    djinni::Handle<DjinniWrapperNullityInterface> _i(i, nullity_interface___wrapper_dec_ref);
-    try { 
-        ::testsuite::TestHelpers::check_interface_nullity_parameters(DjinniWrapperNullityInterface::get(std::move(_i)));
-    } CW_TRANSLATE_EXCEPTIONS_RETURN();
-}
-
-void cw__test_helpers_check_interface_nullity_return(DjinniWrapperNullityInterface * i) {
-    djinni::Handle<DjinniWrapperNullityInterface> _i(i, nullity_interface___wrapper_dec_ref);
-    try { 
-        ::testsuite::TestHelpers::check_interface_nullity_return(DjinniWrapperNullityInterface::get(std::move(_i)));
-    } CW_TRANSLATE_EXCEPTIONS_RETURN();
-}
-=======
->>>>>>> Support `nn_shared_ptr` in Djinni

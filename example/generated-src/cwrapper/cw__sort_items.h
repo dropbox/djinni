@@ -12,3 +12,5 @@ void cw__sort_items_sort(struct DjinniWrapperSortItems * djinni_this, int order,
 
 struct DjinniWrapperSortItems * cw__sort_items_create_with_listener(struct DjinniWrapperTextboxListener * listener);
 
+struct DjinniRecordHandle * cw__sort_items_run_sort(struct DjinniRecordHandle * items);
+

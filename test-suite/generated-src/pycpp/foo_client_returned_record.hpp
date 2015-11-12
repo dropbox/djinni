@@ -24,12 +24,12 @@ struct FooClientReturnedRecord final {
     friend bool operator<=(const FooClientReturnedRecord& lhs, const FooClientReturnedRecord& rhs);
     friend bool operator>=(const FooClientReturnedRecord& lhs, const FooClientReturnedRecord& rhs);
 
-    FooClientReturnedRecord(int64_t record_id,
-                            std::string content,
-                            FooSomeOtherRecord some_record)
-    : record_id(std::move(record_id))
-    , content(std::move(content))
-    , some_record(std::move(some_record))
+    FooClientReturnedRecord(int64_t record_id_,
+                            std::string content_,
+                            FooSomeOtherRecord some_record_)
+    : record_id(std::move(record_id_))
+    , content(std::move(content_))
+    , some_record(std::move(some_record_))
     {}
 };
 
