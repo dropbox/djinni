@@ -6,7 +6,7 @@ namespace support_lib {
 
 /*
  * To conserve resources (pthread_key_create generally uses one of a small number of slots
- * preallocated at the base of the stack), we create a single pthread_key_t for all 
+ * preallocated at the base of the stack), we create a single pthread_key_t for all
  * ThreadLocal data. Each ThreadLocal<T> contains a Tag; we use the address of the Tag as
  * a key in a per-thread map to find the data.
  */
@@ -30,7 +30,7 @@ using data_map = std::map<const Tag *, std::unique_ptr<Deletable>>;
 data_map & get_this_thread_map();
 
 /*
- * Helper for constructors. 
+ * Helper for constructors.
  */
 void assert_tag_unique(const Tag *);
 

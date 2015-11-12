@@ -11,8 +11,8 @@ from foo_containers_interface import FooContainersInterface
 from foo_containers_record import FooContainersRecord
 from foo_some_other_record import FooSomeOtherRecord
 
-def set_get(ci, optional_list_int, list_int, list_binary, list_optional_binary, list_list_string, 
-    list_record, optional_map_string_int, map_string_int, map_string_string, map_optional_string_optional_string, map_int_list_date, 
+def set_get(ci, optional_list_int, list_int, list_binary, list_optional_binary, list_list_string,
+    list_record, optional_map_string_int, map_string_int, map_string_string, map_optional_string_optional_string, map_int_list_date,
     optional_set_string, set_string, set_optional_string, map_int_set_string, map_optional_int_set_string):
 
     set_rec = FooContainersRecord(optional_list_int, list_int, list_binary, list_binary, list_list_string, \
@@ -21,10 +21,10 @@ def set_get(ci, optional_list_int, list_int, list_binary, list_optional_binary, 
 
     ci.set_containers_record(set_rec)
     get_rec = ci.get_containers_record()
-    eq(set_rec, get_rec) 
+    eq(set_rec, get_rec)
 
-def set_get_optional(ci, optional_list_int, list_int, list_binary, list_optional_binary, list_list_string, 
-    list_record, optional_map_string_int, map_string_int, map_string_string, map_optional_string_optional_string, map_int_list_date, 
+def set_get_optional(ci, optional_list_int, list_int, list_binary, list_optional_binary, list_list_string,
+    list_record, optional_map_string_int, map_string_int, map_string_string, map_optional_string_optional_string, map_int_list_date,
     optional_set_string, set_string, set_optional_string, map_int_set_string, map_optional_int_set_string):
 
     set_rec = FooContainersRecord(optional_list_int, list_int, list_binary, list_binary, list_list_string, \
@@ -33,7 +33,7 @@ def set_get_optional(ci, optional_list_int, list_int, list_binary, list_optional
 
     ci.set_optional_containers_record(set_rec)
     get_rec = ci.get_optional_containers_record()
-    eq(set_rec, get_rec)    
+    eq(set_rec, get_rec)
 
 # TODO: add some informative messafe to assert fail
 def eq(set_rec, get_rec):
@@ -45,12 +45,12 @@ def eq(set_rec, get_rec):
     if set_rec.optional_map_string_int is None:
         assert get_rec.optional_map_string_int is None
     else:
-        assert set_rec.optional_map_string_int == get_rec.optional_map_string_int 
+        assert set_rec.optional_map_string_int == get_rec.optional_map_string_int
 
     if set_rec.optional_set_string is None:
         assert get_rec.optional_set_string is None
     else:
-        assert set_rec.optional_set_string == get_rec.optional_set_string 
+        assert set_rec.optional_set_string == get_rec.optional_set_string
 
     assert set_rec.list_int == get_rec.list_int and \
         set_rec.list_binary == get_rec.list_binary and \

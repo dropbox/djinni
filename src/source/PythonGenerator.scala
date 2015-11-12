@@ -215,7 +215,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
 
   def generateContainer(tm: MExpr, isOpt: Boolean, fileName: String, classAsMethodName: String, ident: Ident, origin: String, python: mutable.TreeSet[String]) = {
 //    System.out.println("PYTHON: generating container ", fileName)
-    val helperClass = idPython.className(fileName) + "Helper" 
+    val helperClass = idPython.className(fileName) + "Helper"
     val proxyName = idPython.className(fileName) + "Proxy"
     val next = if(tm.base == MList) ""
     else {
@@ -1038,7 +1038,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       w.wl("class " + recordClassName + "Helper" + ":").nested {
         w.wl("@staticmethod")
-        w.wl("def release(c_ptr): ").nested {
+        w.wl("def release(c_ptr):").nested {
           w.wl("assert c_ptr in c_data_set")
           w.wl("c_data_set.remove(ffi.cast(\"void*\", c_ptr))")
         }

@@ -27,7 +27,7 @@ void foo_constants_interface___wrapper_dec_ref(DjinniWrapperFooConstantsInterfac
     }
 }
 djinni::Handle<DjinniWrapperFooConstantsInterface> DjinniWrapperFooConstantsInterface::wrap(std::shared_ptr<::testsuite::FooConstantsInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooConstantsInterface>(new DjinniWrapperFooConstantsInterface{ std::move(obj) }, foo_constants_interface___wrapper_dec_ref);
     return nullptr;
 }

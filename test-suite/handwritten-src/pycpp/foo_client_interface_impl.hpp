@@ -22,7 +22,7 @@ public:
 
     virtual std::string get_extensible_record_string2() override;
 
-    static std::shared_ptr<FooClientInterface> create(); 
+    static std::shared_ptr<FooClientInterface> create();
 
 private:
     FooClientReturnedRecord m_record;

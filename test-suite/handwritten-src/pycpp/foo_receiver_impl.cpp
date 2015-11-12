@@ -55,9 +55,9 @@ std::shared_ptr<FooListener>  FooReceiverImpl::get_optional_listener() {
 }
 
 std::experimental::optional<int32_t> FooReceiverImpl::cause_changes_int_optional_returned(
-    std::experimental::optional<int32_t> i, 
+    std::experimental::optional<int32_t> i,
     float f,
-    const std::experimental::optional<std::string> & s , 
+    const std::experimental::optional<std::string> & s ,
     const std::vector<uint8_t> & binar,
     bool b, const std::chrono::system_clock::time_point & d) {
 
@@ -65,9 +65,9 @@ std::experimental::optional<int32_t> FooReceiverImpl::cause_changes_int_optional
 }
 
 std::experimental::optional<std::string> FooReceiverImpl::cause_changes_string_optional_returned(
-    std::experimental::optional<int32_t> i, 
+    std::experimental::optional<int32_t> i,
     float f,
-    const std::experimental::optional<std::string> & s , 
+    const std::experimental::optional<std::string> & s ,
     const std::vector<uint8_t> & binar,
     bool b, const std::chrono::system_clock::time_point & d) {
 
@@ -87,7 +87,7 @@ void FooReceiverImpl::cause_py_exception(const std::string & s) {
         m_listener->cause_py_exception(std::move(s));
     } catch (djinni::py_exception & e) {
         throw std::move(e);
-    } 
+    }
 }
 
 void FooReceiverImpl::cause_zero_division_error() {
@@ -95,7 +95,7 @@ void FooReceiverImpl::cause_zero_division_error() {
         m_listener->cause_zero_division_error();
     } catch (djinni::py_exception & e) {
         throw std::move(e);
-    } 
+    }
 }
 
 // Receiver functions where the listener we are calling methods on has been
@@ -145,9 +145,9 @@ std::shared_ptr<FooListenerBf> FooReceiverImpl::in_listener_bf_send_return(const
 }
 
 FooReceiverImpl::~FooReceiverImpl() {
-    // Needed for when we have a foo_listner in a foo_listener, because in our test we use the same foo_listener 
+    // Needed for when we have a foo_listner in a foo_listener, because in our test we use the same foo_listener
     if (m_cpp_listener) {
-        m_cpp_listener->delete_fl_in_fl();    
+        m_cpp_listener->delete_fl_in_fl();
     }
 }
 

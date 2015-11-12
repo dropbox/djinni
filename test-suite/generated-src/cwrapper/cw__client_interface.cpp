@@ -36,7 +36,7 @@ void client_interface___wrapper_dec_ref(DjinniWrapperClientInterface * dh) {
     }
 }
 djinni::Handle<DjinniWrapperClientInterface> DjinniWrapperClientInterface::wrap(std::shared_ptr<::testsuite::ClientInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperClientInterface>(new DjinniWrapperClientInterface{ std::move(obj) }, client_interface___wrapper_dec_ref);
     return nullptr;
 }

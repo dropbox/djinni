@@ -44,7 +44,7 @@ djinni::Handle<DjinniRecordHandle> DjinniRecordWithNestedDerivings::fromCpp(cons
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_record_with_nested_derivings_python_create_record_with_nested_derivings(
             dr.key,
-            _field_rec.release()), 
+            _field_rec.release()),
         record_with_nested_derivings___delete);
     return _aux;
 }

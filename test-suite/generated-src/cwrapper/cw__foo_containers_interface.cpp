@@ -33,84 +33,84 @@ void foo_containers_interface___wrapper_dec_ref(DjinniWrapperFooContainersInterf
     }
 }
 djinni::Handle<DjinniWrapperFooContainersInterface> DjinniWrapperFooContainersInterface::wrap(std::shared_ptr<::testsuite::FooContainersInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooContainersInterface>(new DjinniWrapperFooContainersInterface{ std::move(obj) }, foo_containers_interface___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__foo_containers_interface_set_containers_record(DjinniWrapperFooContainersInterface * djinni_this, DjinniRecordHandle * rec) {
     djinni::Handle<DjinniRecordHandle> _rec(rec, foo_containers_record___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_containers_record(DjinniFooContainersRecord::toCpp(std::move(_rec)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniRecordHandle * cw__foo_containers_interface_get_containers_record(DjinniWrapperFooContainersInterface * djinni_this) {
-    try { 
+    try {
         return DjinniFooContainersRecord::fromCpp(djinni_this->wrapped_obj->get_containers_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_containers_interface_set_optional_containers_record(DjinniWrapperFooContainersInterface * djinni_this, DjinniOptionalRecordHandle * rec) {
     djinni::Handle<DjinniOptionalRecordHandle> _rec(rec, optional_foo_containers_record___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_optional_containers_record(DjinniFooContainersRecord::toCpp(std::move(_rec)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniOptionalRecordHandle * cw__foo_containers_interface_get_optional_containers_record(DjinniWrapperFooContainersInterface * djinni_this) {
-    try { 
+    try {
         return DjinniFooContainersRecord::fromCpp(djinni_this->wrapped_obj->get_optional_containers_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_containers_interface_set_optional_map_string_int(DjinniWrapperFooContainersInterface * djinni_this, DjinniOptionalObjectHandle * m) {
     djinni::Handle<DjinniOptionalObjectHandle> _m(m, optional_map_string_int32_t___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_optional_map_string_int(DjinniMapStringInt32T::toCpp(std::move(_m)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniOptionalObjectHandle * cw__foo_containers_interface_get_optional_map_string_int(DjinniWrapperFooContainersInterface * djinni_this) {
-    try { 
+    try {
         return DjinniMapStringInt32T::fromCpp(djinni_this->wrapped_obj->get_optional_map_string_int()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_containers_interface_set_optional_list_int(DjinniWrapperFooContainersInterface * djinni_this, DjinniOptionalObjectHandle * m) {
     djinni::Handle<DjinniOptionalObjectHandle> _m(m, optional_list_int32_t___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_optional_list_int(DjinniListInt32T::toCpp(std::move(_m)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniOptionalObjectHandle * cw__foo_containers_interface_get_optional_list_int(DjinniWrapperFooContainersInterface * djinni_this) {
-    try { 
+    try {
         return DjinniListInt32T::fromCpp(djinni_this->wrapped_obj->get_optional_list_int()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_containers_interface_set_list_record(DjinniWrapperFooContainersInterface * djinni_this, DjinniObjectHandle * lr) {
     djinni::Handle<DjinniObjectHandle> _lr(lr, list_record_foo_some_other_record___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_list_record(DjinniListRecordFooSomeOtherRecord::toCpp(std::move(_lr)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 void cw__foo_containers_interface_set_list_binary(DjinniWrapperFooContainersInterface * djinni_this, DjinniObjectHandle * lb) {
     djinni::Handle<DjinniObjectHandle> _lb(lb, list_binary___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_list_binary(DjinniListBinary::toCpp(std::move(_lb)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniObjectHandle * cw__foo_containers_interface_get_list_binary(DjinniWrapperFooContainersInterface * djinni_this) {
-    try { 
+    try {
         return DjinniListBinary::fromCpp(djinni_this->wrapped_obj->get_list_binary()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create() {
-    try { 
+    try {
         return DjinniWrapperFooContainersInterface::wrap(std::move(::testsuite::FooContainersInterface::create())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

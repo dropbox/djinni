@@ -43,7 +43,7 @@ djinni::Handle<DjinniRecordHandle> DjinniFooExtensibleRecord::fromCpp(const ::te
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_foo_extensible_record_python_create_foo_extensible_record(
             dr.number1,
-            _field_string1.release()), 
+            _field_string1.release()),
         foo_extensible_record___delete);
     return _aux;
 }

@@ -25,13 +25,13 @@ void user_token___wrapper_dec_ref(DjinniWrapperUserToken * dh) {
     }
 }
 djinni::Handle<DjinniWrapperUserToken> DjinniWrapperUserToken::wrap(std::shared_ptr<::testsuite::UserToken> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperUserToken>(new DjinniWrapperUserToken{ std::move(obj) }, user_token___wrapper_dec_ref);
     return nullptr;
 }
 
 DjinniString * cw__user_token_whoami(DjinniWrapperUserToken * djinni_this) {
-    try { 
+    try {
         return DjinniString::fromCpp(djinni_this->wrapped_obj->whoami()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

@@ -1,5 +1,5 @@
 
-#include <iostream> 
+#include <iostream>
 #include "foo_client_interface_impl.hpp"
 
 namespace testsuite {

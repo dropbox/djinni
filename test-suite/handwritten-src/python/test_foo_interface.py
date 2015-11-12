@@ -48,16 +48,16 @@ def test_strings():
             (u"", not DECODEUtf8),
             (u"my\0text", not DECODEUtf8),
             (u"the best text", not DECODEUtf8),
-            (u"my \b friend", not DECODEUtf8), 
+            (u"my \b friend", not DECODEUtf8),
             #"Non-ASCII / 非 ASCII 字符"
-            (u"Non-ASCII / \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8), 
+            (u"Non-ASCII / \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8),
             (u"Non-ASCII / \u975e ASCII \u5b57\u7b26", not DECODEUtf8)
         ])
     if PYTHON3:
         strs.update({
             chr(40960) + u'abcd' + chr(1972) + u"\0\bhi": not DECODEUtf8, #unicode string
             bytes(chr(40960) + u'abcd' + chr(1972) + u"\0\bhi", 'utf-8'): DECODEUtf8 # bytes utf-8 encoded
-            })      
+            })
     else:
         strs.update({
             unichr(40960) + u'abcd' + unichr(1972) + u"\0\bhi": not DECODEUtf8, #unicode string for python 2
@@ -68,8 +68,8 @@ def test_strings():
 
         sSetUnicode = sSet
         if decode:
-            sSetUnicode = decoded_utf_8(sSet)  
-        sGetUnicode = foo.get_private_string() 
+            sSetUnicode = decoded_utf_8(sSet)
+        sGetUnicode = foo.get_private_string()
 
         # print ("client SetPrs=", sSetUnicode, ".", len(sSetUnicode), List(sSetUnicode) )
         # print ("client GetPrs=", sGetUnicode, ".", len(sGetUnicode), List(sGetUnicode))

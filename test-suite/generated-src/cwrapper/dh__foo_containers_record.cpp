@@ -175,7 +175,7 @@ djinni::Handle<DjinniRecordHandle> DjinniFooContainersRecord::fromCpp(const ::te
             _field_set_string.release(),
             _field_set_optional_string.release(),
             _field_map_int_set_string.release(),
-            _field_map_optional_int_set_string.release()), 
+            _field_map_optional_int_set_string.release()),
         foo_containers_record___delete);
     return _aux;
 }

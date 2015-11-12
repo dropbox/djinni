@@ -28,4 +28,4 @@ class FooListenerImpl:
         print ("Not to be used")
     def on_changes_record_returned(self, n1, n2):
         print ("Not to be used")
-                
+

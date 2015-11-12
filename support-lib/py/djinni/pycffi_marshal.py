@@ -7,12 +7,12 @@ import datetime
 import math
 
 class CPyPrimitive:
-    @staticmethod 
+    @staticmethod
     def toPy(p):
         assert p is not None
         return p
 
-    @staticmethod 
+    @staticmethod
     def fromPy(p):
         assert p is not None
         return p
@@ -24,9 +24,9 @@ class CPyBoxedBase:
 
     def __enter__(self):
         return self
-    
+
     def __exit__(self, ty, value, traceback):
-        self.__del__()  
+        self.__del__()
 
     def __del__(self):
         if self._data:
@@ -40,14 +40,14 @@ class CPyBoxedBase:
         self._data= None
         return dopt
 
-    @staticmethod    
+    @staticmethod
     def toPyOptWithoutTakingOwnership(dopt, get_fn):
         if dopt == ffi.NULL:
             return None
         return get_fn(dopt)
 
     @staticmethod
-    def toPyOpt(dopt, get_fn, cpytype): 
+    def toPyOpt(dopt, get_fn, cpytype):
         with cpytype(dopt) as py_opt:
             return cpytype.toPyOptWithoutTakingOwnership(py_opt._data)
 
@@ -57,7 +57,7 @@ class CPyBoxedBase:
             return cpyoptional(ffi.NULL)
 
         dopt = create_fn(pyopt)
-        return cpyoptional(dopt)   
+        return cpyoptional(dopt)
 
 class CPyBoxedI8(CPyBoxedBase):
     def __init__(self, data):
@@ -76,7 +76,7 @@ class CPyBoxedI8(CPyBoxedBase):
 class CPyBoxedI16(CPyBoxedBase):
     def __init__(self, data):
         CPyBoxedBase.__init__(self, data, lib.delete_djinni_boxed_i16, CPyBoxedI1)
-    
+
     @staticmethod
     def toPyOptWithoutTakingOwnership(dopt):
         return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_i16_data)
@@ -91,7 +91,7 @@ class CPyBoxedI32(CPyBoxedBase):
     def __init__(self, data):
         CPyBoxedBase.__init__(self, data, lib.delete_djinni_boxed_i32, CPyBoxedI32)
 
-    @staticmethod    
+    @staticmethod
     def toPyOptWithoutTakingOwnership(dopt):
         return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_i32_data)
     @staticmethod
@@ -121,7 +121,7 @@ class CPyBoxedF32(CPyBoxedBase):
 
     @staticmethod
     def toPyOptWithoutTakingOwnership(dopt):
-        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_f32_data) 
+        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_f32_data)
     @staticmethod
     def toPyOpt(dopt):
         return CPyBoxedBase.toPyOpt(dopt, lib.get_djinni_boxed_f32_data, CPyBoxedF32)
@@ -135,7 +135,7 @@ class CPyBoxedF64(CPyBoxedBase):
 
     @staticmethod
     def toPyOptWithoutTakingOwnership(dopt):
-        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_f64_data) 
+        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_f64_data)
     @staticmethod
     def toPyOpt(dopt):
         return CPyBoxedBase.toPyOpt(dopt, lib.get_djinni_boxed_f64_data, CPyBoxedF64)
@@ -149,7 +149,7 @@ class CPyBoxedBool(CPyBoxedBase):
 
     @staticmethod
     def toPyOptWithoutTakingOwnership(dopt):
-        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_bool_data) 
+        return CPyBoxedBase.toPyOptWithoutTakingOwnership(dopt, lib.get_djinni_boxed_bool_data)
     @staticmethod
     def toPyOpt(dopt):
         return CPyBoxedBase.toPyOpt(dopt, lib.get_djinni_boxed_bool_data, CPyBoxedBool)
@@ -179,12 +179,12 @@ class CPyBoxedDate(CPyBoxedBase):
     def fromPyOpt(pyopt):
          return CPyBoxedBase.fromPyOpt(pyopt, CPyBoxedDate._create_fn, CPyBoxedDate)
 
-class CPyStringBinaryHelper: 
+class CPyStringBinaryHelper:
     @staticmethod
     def toPyHelper(ds, cpytype):
       with cpytype(ds) as py_ds: # for easy memory release
             return cpytype.toPyWithoutTakingOwnership(ds)
-    
+
     @staticmethod
     def toPy(ds, cpytype):
         assert (ds != ffi.NULL) # not sure if assert(ds) means the same thing because Python..
@@ -234,7 +234,7 @@ class CPyString: # Python RAII for C DjinniString
     @staticmethod
     def toPyHelper(ds):
         return CPyStringBinaryHelper.toPyHelper(ds, CPyString)
-    
+
     @staticmethod
     def toPy(ds):
         return CPyStringBinaryHelper.toPy(ds, CPyString)
@@ -278,7 +278,7 @@ class CPyBinary: # Python RAII for C DjinniBinary
         db = self._djinni_binary
         self._djinni_binary = None
         return db
-    
+
     @staticmethod
     def toPyOptWithoutTakingOwnership(pb):
         return CPyStringBinaryHelper.toPyOptWithoutTakingOwnership(pb, CPyBinary)
@@ -292,7 +292,7 @@ class CPyBinary: # Python RAII for C DjinniBinary
     @staticmethod
     def toPyHelper(ds):
         return CPyStringBinaryHelper.toPyHelper(ds, CPyBinary)
-    
+
     @staticmethod
     def toPy(ds):
         return CPyStringBinaryHelper.toPy(ds, CPyBinary)
@@ -329,7 +329,7 @@ class CPyDate:
     def fromPy(pb):
         return int((pb-CPyDate.epoch).total_seconds() * 1000) # to milliseconds
 
-class CPyStructuredBase: 
+class CPyStructuredBase:
     @staticmethod
     def toPyHelper(c_data_set, c_ptr):
         aux = ffi.from_handle(ffi.cast("void * ",c_ptr))
@@ -337,7 +337,7 @@ class CPyStructuredBase:
             assert c_ptr in c_data_set
             c_data_set.remove(c_ptr)
         return aux
-    
+
     @staticmethod
     def toPy(c_data_set, c_ptr):
         assert c_ptr != ffi.NULL # not sure if assert(c_ptr) means the same thing because Python..
@@ -370,17 +370,17 @@ class CPyRecord(CPyStructuredBase):
     pass
 
 # all containers are passed to and from C as abstract objects (void* pointers with a name)
-class CPyObject(CPyStructuredBase): 
+class CPyObject(CPyStructuredBase):
     pass
 
 # maps and sets have proxies that hold the implementations and state of their iterators
-class CPyObjectProxy(CPyStructuredBase): 
+class CPyObjectProxy(CPyStructuredBase):
     @staticmethod
     def toPyObj(c_data_set, c_ptr):
         aux = CPyStructuredBase.toPy(c_data_set, c_ptr)
         assert aux is not None
         return aux._py_obj
-        
+
     @staticmethod
     def toPyObjOpt(c_data_set, c_ptr):
         aux = CPyStructuredBase.toPyOpt(c_data_set, c_ptr)

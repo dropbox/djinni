@@ -60,8 +60,8 @@ def clean_headers_for(headers, to_ignore):
 
     return cleaned_headers
 
-# match forward declarations of DjinniStructs like: struct DjinniStructureName; 
-# don't match anything that containts a struct DjnniStructName but is not a forward declaration 
+# match forward declarations of DjinniStructs like: struct DjinniStructureName;
+# don't match anything that containts a struct DjnniStructName but is not a forward declaration
 pattern = re.compile("struct Djinni[a-zA-Z0-9]*[^\s)];")
 def sort_by_import_order(lines):
     first_lines = ""

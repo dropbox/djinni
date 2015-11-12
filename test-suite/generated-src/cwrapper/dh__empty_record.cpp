@@ -29,7 +29,7 @@ djinni::Handle<DjinniRecordHandle> DjinniEmptyRecord::fromCpp(const ::testsuite:
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_empty_record_python_create_empty_record(
-        ), 
+        ),
         empty_record___delete);
     return _aux;
 }

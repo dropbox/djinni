@@ -46,7 +46,7 @@ djinni::Handle<DjinniRecordHandle> DjinniSetRecord::fromCpp(const ::testsuite::S
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_set_record_python_create_set_record(
             _field_set.release(),
-            _field_iset.release()), 
+            _field_iset.release()),
         set_record___delete);
     return _aux;
 }

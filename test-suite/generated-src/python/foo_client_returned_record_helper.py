@@ -15,7 +15,7 @@ from foo_client_returned_record import FooClientReturnedRecord
 
 class FooClientReturnedRecordHelper:
     @staticmethod
-    def release(c_ptr): 
+    def release(c_ptr):
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 

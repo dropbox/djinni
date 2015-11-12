@@ -14,7 +14,7 @@ from opt_color_record import OptColorRecord
 
 class OptColorRecordHelper:
     @staticmethod
-    def release(c_ptr): 
+    def release(c_ptr):
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 

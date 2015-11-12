@@ -40,8 +40,8 @@ std::shared_ptr<FooListenerBf> FooListenerBfImpl::send_return(const std::shared_
 }
 
 void FooListenerBfImpl::delete_fl_in_fl() {
-    // std::cout<< "In delete_fl_in_fl " << m_foo_listener_bf.use_count() << std::endl; 
+    // std::cout<< "In delete_fl_in_fl " << m_foo_listener_bf.use_count() << std::endl;
     m_foo_listener_bf = nullptr;
-} 
+}
 
 } // namespace testsuite

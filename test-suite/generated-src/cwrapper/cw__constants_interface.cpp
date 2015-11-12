@@ -25,13 +25,13 @@ void constants_interface___wrapper_dec_ref(DjinniWrapperConstantsInterface * dh)
     }
 }
 djinni::Handle<DjinniWrapperConstantsInterface> DjinniWrapperConstantsInterface::wrap(std::shared_ptr<::testsuite::ConstantsInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperConstantsInterface>(new DjinniWrapperConstantsInterface{ std::move(obj) }, constants_interface___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__constants_interface_dummy(DjinniWrapperConstantsInterface * djinni_this) {
-    try { 
+    try {
         djinni_this->wrapped_obj->dummy();
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }

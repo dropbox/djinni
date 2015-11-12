@@ -40,7 +40,7 @@ public:
     virtual void set_date(const std::chrono::system_clock::time_point & private_date) override;
     virtual std::chrono::system_clock::time_point get_date() override;
 
-    static std::shared_ptr<FooPrimitives> create(); 
+    static std::shared_ptr<FooPrimitives> create();
 
 private:
     int8_t m_pri8 = 0;

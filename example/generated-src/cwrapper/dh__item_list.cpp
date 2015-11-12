@@ -37,7 +37,7 @@ djinni::Handle<DjinniRecordHandle> DjinniItemList::fromCpp(const ::textsort::Ite
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_item_list_python_create_item_list(
-            _field_items.release()), 
+            _field_items.release()),
         item_list___delete);
     return _aux;
 }

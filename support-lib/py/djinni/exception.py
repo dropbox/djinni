@@ -7,7 +7,7 @@ class DjinniException(RuntimeError):
     def __init__(self, error_message):
         self.args = error_message
 
-class ExceptionHelper: 
+class ExceptionHelper:
     # keeping the callback for exceptions alive, and cleaning it up at the end of a process
     # holding c_data_set for exception handles (handles to python exception passed into c/cpp)
     c_data_set = MultiSet()
@@ -27,7 +27,7 @@ class ExceptionHelper:
         ExceptionHelper.c_data_set.remove(c_ptr)
 
 class CPyException:
-    @staticmethod   
+    @staticmethod
     def toPyCheckAndRaise(ret_val):
         c_ptr = lib.djinni_from_python_check_and_clear_exception()
         if c_ptr == ffi.NULL: # no exception was thrown
@@ -42,7 +42,7 @@ class CPyException:
         finally:
             ExceptionHelper.c_data_set.remove(c_ptr)
     @staticmethod
-    def setExceptionFromPy(py_e): 
+    def setExceptionFromPy(py_e):
         bare_c_ptr = ffi.new_handle(py_e)
         ExceptionHelper.c_data_set.add(bare_c_ptr)
         lib.djinni_create_and_set_cpp_from_py_exception(bare_c_ptr)

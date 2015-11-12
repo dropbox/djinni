@@ -18,14 +18,14 @@ public:
 
     virtual void set_private_string(const std::string& prs) override;
     virtual std::string get_private_string() override;
-    
+
     virtual std::string get_set_strings(const std::string& ps1, const std::string & ps2) override;
 
     virtual std::shared_ptr<FooPrimitives> get_foo_primitives() override;
 
     static std::shared_ptr<FooInterface> create();
 private:
-    int32_t m_pri = 0; 
+    int32_t m_pri = 0;
     std::string m_prs;
 
     std::shared_ptr<FooPrimitives> m_foo_primitives;

@@ -7,9 +7,9 @@ def get_set(foo, colorInt, colorString):
     color_enum = Color(colorInt)
     assert color_enum == colorInt and color_enum.value == colorInt and isinstance(color_enum.value, int) and \
         color_enum.name == colorString and isinstance(color_enum.name, str), "test_color failed construction"
-    
+
     foo.set_enum(color_enum)
-    got_enum = foo.get_enum() 
+    got_enum = foo.get_enum()
     assert got_enum == color_enum and got_enum == colorInt and isinstance(got_enum, Color) and\
      isinstance(color_enum, Color), "test_color get/set failed"
 
@@ -23,7 +23,7 @@ def get_set_optional(foo, colorInt, colorString):
     color_enum = Color(colorInt)
     assert color_enum.value == colorInt and \
         color_enum.name == colorString
-    
+
     foo.set_optional_enum(color_enum)
     assert foo.get_optional_enum() == color_enum
 
@@ -42,7 +42,7 @@ def test_color():
     color_green_2 = Color(Green)
     color_set.add(color_green_1)
     color_set.add(color_green_2)
-    assert len(color_set) == 1, "test_color failed" 
+    assert len(color_set) == 1, "test_color failed"
 
     color_set.add(Color(Red))
     assert len(color_set) == 2, "test_color failed"

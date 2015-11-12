@@ -43,7 +43,7 @@ djinni::Handle<DjinniRecordHandle> DjinniFooConstants::fromCpp(const ::testsuite
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_foo_constants_python_create_foo_constants(
             dr.some_integer,
-            _field_some_string.release()), 
+            _field_some_string.release()),
         foo_constants___delete);
     return _aux;
 }

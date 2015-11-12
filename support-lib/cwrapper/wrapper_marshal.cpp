@@ -203,7 +203,7 @@ DjinniString::DjinniString(std::string s) {
     this->cppstr = std::move(s);
 }
 
-DjinniString * create_djinni_string(const char * s, size_t len) { 
+DjinniString * create_djinni_string(const char * s, size_t len) {
     return DjinniString::fromCpp(std::string(s,len)).release();
 }
 

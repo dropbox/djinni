@@ -29,27 +29,27 @@ void sort_items___wrapper_dec_ref(DjinniWrapperSortItems * dh) {
     }
 }
 djinni::Handle<DjinniWrapperSortItems> DjinniWrapperSortItems::wrap(std::shared_ptr<::textsort::SortItems> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperSortItems>(new DjinniWrapperSortItems{ std::move(obj) }, sort_items___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__sort_items_sort(DjinniWrapperSortItems * djinni_this, int order, DjinniRecordHandle * items) {
     djinni::Handle<DjinniRecordHandle> _items(items, item_list___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->sort(static_cast<::textsort::sort_order>(order), DjinniItemList::toCpp(std::move(_items)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 DjinniWrapperSortItems * cw__sort_items_create_with_listener(DjinniWrapperTextboxListener * listener) {
     djinni::Handle<DjinniWrapperTextboxListener> _listener(listener, textbox_listener___wrapper_dec_ref);
-    try { 
+    try {
         return DjinniWrapperSortItems::wrap(std::move(::textsort::SortItems::create_with_listener(DjinniWrapperTextboxListener::get(std::move(_listener))))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniRecordHandle * cw__sort_items_run_sort(DjinniRecordHandle * items) {
     djinni::Handle<DjinniRecordHandle> _items(items, item_list___delete);
-    try { 
+    try {
         return DjinniItemList::fromCpp(::textsort::SortItems::run_sort(DjinniItemList::toCpp(std::move(_items)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

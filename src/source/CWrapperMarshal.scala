@@ -252,7 +252,7 @@ class CWrapperMarshal(spec: Spec) extends Marshal(spec) { // modeled(pretty much
 
   // Get to data from within C structure
   def convertTo(name: String, ty: TypeRef): String =  convertTo(name, ty.resolved)
-    def convertTo(name: String, ty: MExpr): String = { 
+  def convertTo(name: String, ty: MExpr): String = {
     val local = idCpp.local(name)
     ty.base match {
       case MOptional => {

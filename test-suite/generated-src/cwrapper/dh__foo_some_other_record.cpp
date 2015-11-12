@@ -42,7 +42,7 @@ djinni::Handle<DjinniRecordHandle> DjinniFooSomeOtherRecord::fromCpp(const ::tes
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_foo_some_other_record_python_create_foo_some_other_record(
             dr.number1,
-            dr.number2), 
+            dr.number2),
         foo_some_other_record___delete);
     return _aux;
 }

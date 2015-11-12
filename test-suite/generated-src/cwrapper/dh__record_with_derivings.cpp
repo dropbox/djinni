@@ -43,7 +43,7 @@ djinni::Handle<DjinniRecordHandle> DjinniRecordWithDerivings::fromCpp(const ::te
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_record_with_derivings_python_create_record_with_derivings(
             dr.key1,
-            _field_key2.release()), 
+            _field_key2.release()),
         record_with_derivings___delete);
     return _aux;
 }

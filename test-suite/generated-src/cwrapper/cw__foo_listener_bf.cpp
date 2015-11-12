@@ -41,7 +41,7 @@ void foo_listener_bf___wrapper_dec_ref(DjinniWrapperFooListenerBf * dh) {
     }
 }
 djinni::Handle<DjinniWrapperFooListenerBf> DjinniWrapperFooListenerBf::wrap(std::shared_ptr<::testsuite::FooListenerBf> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooListenerBf>(new DjinniWrapperFooListenerBf{ std::move(obj) }, foo_listener_bf___wrapper_dec_ref);
     return nullptr;
 }
@@ -166,57 +166,57 @@ void FooListenerBfPythonProxy::delete_fl_in_fl() {
 }
 DjinniString * cw__foo_listener_bf_on_string_change(DjinniWrapperFooListenerBf * djinni_this, DjinniString * private_string) {
     std::unique_ptr<DjinniString> _private_string(private_string);
-    try { 
+    try {
         return DjinniString::fromCpp(djinni_this->wrapped_obj->on_string_change(DjinniString::toCpp(std::move(_private_string)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniString * cw__foo_listener_bf_get_string(DjinniWrapperFooListenerBf * djinni_this) {
-    try { 
+    try {
         return DjinniString::fromCpp(djinni_this->wrapped_obj->get_string()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_listener_bf_set_listener_bf(DjinniWrapperFooListenerBf * djinni_this, DjinniWrapperFooListenerBf * listener) {
     djinni::Handle<DjinniWrapperFooListenerBf> _listener(listener, foo_listener_bf___wrapper_dec_ref);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_listener_bf(DjinniWrapperFooListenerBf::get(std::move(_listener)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_get_listener_bf(DjinniWrapperFooListenerBf * djinni_this) {
-    try { 
+    try {
         return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->get_listener_bf())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_listener_bf_set_binary(DjinniWrapperFooListenerBf * djinni_this, DjinniBinary * b) {
     std::unique_ptr<DjinniBinary> _b(b);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_binary(DjinniBinary::toCpp(std::move(_b)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniBinary * cw__foo_listener_bf_get_binary(DjinniWrapperFooListenerBf * djinni_this) {
-    try { 
+    try {
         return DjinniBinary::fromCpp(djinni_this->wrapped_obj->get_binary()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_send_return(DjinniWrapperFooListenerBf * djinni_this, DjinniWrapperFooListenerBf * fl_bf) {
     djinni::Handle<DjinniWrapperFooListenerBf> _fl_bf(fl_bf, foo_listener_bf___wrapper_dec_ref);
-    try { 
+    try {
         return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf))))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_listener_bf_delete_fl_in_fl(DjinniWrapperFooListenerBf * djinni_this) {
-    try { 
+    try {
         djinni_this->wrapped_obj->delete_fl_in_fl();
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_create() {
-    try { 
+    try {
         return DjinniWrapperFooListenerBf::wrap(std::move(::testsuite::FooListenerBf::create())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

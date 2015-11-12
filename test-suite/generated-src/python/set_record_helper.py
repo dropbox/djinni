@@ -17,7 +17,7 @@ from set_record import SetRecord
 
 class SetRecordHelper:
     @staticmethod
-    def release(c_ptr): 
+    def release(c_ptr):
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 

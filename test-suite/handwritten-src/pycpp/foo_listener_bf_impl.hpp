@@ -6,7 +6,7 @@ namespace testsuite {
 class FooListenerBfImpl final: public FooListenerBf {
 public:
     ~FooListenerBfImpl() {
-        // std::cout<< "In Destructor of FooListenerBfImpl, internal shared_ptr (fl_in_fl) " << m_foo_listener_bf.use_count() << std::endl; 
+        // std::cout<< "In Destructor of FooListenerBfImpl, internal shared_ptr (fl_in_fl) " << m_foo_listener_bf.use_count() << std::endl;
     }
 
     virtual void delete_fl_in_fl() override;

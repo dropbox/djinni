@@ -28,36 +28,36 @@ void foo_enum_interface___wrapper_dec_ref(DjinniWrapperFooEnumInterface * dh) {
     }
 }
 djinni::Handle<DjinniWrapperFooEnumInterface> DjinniWrapperFooEnumInterface::wrap(std::shared_ptr<::testsuite::FooEnumInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooEnumInterface>(new DjinniWrapperFooEnumInterface{ std::move(obj) }, foo_enum_interface___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__foo_enum_interface_set_enum(DjinniWrapperFooEnumInterface * djinni_this, int some_color) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_enum(static_cast<::testsuite::color>(some_color));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int cw__foo_enum_interface_get_enum(DjinniWrapperFooEnumInterface * djinni_this) {
-    try { 
+    try {
         return int32_from_enum_color(djinni_this->wrapped_obj->get_enum());
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_enum_interface_set_optional_enum(DjinniWrapperFooEnumInterface * djinni_this, int some_color) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_optional_enum(get_boxed_enum_color_from_int32(some_color));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int cw__foo_enum_interface_get_optional_enum(DjinniWrapperFooEnumInterface * djinni_this) {
-    try { 
+    try {
         return int32_from_enum_color(djinni_this->wrapped_obj->get_optional_enum());
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create() {
-    try { 
+    try {
         return DjinniWrapperFooEnumInterface::wrap(std::move(::testsuite::FooEnumInterface::create())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

@@ -37,7 +37,7 @@ djinni::Handle<DjinniRecordHandle> DjinniPrimitiveList::fromCpp(const ::testsuit
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_primitive_list_python_create_primitive_list(
-            _field_list.release()), 
+            _field_list.release()),
         primitive_list___delete);
     return _aux;
 }

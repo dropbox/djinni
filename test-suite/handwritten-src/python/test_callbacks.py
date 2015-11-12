@@ -106,11 +106,11 @@ class FooListenerImpl_FullTest:
         return self._local_pri
     def on_changes_record_returned(self, n1, n2):
         return FooSomeOtherRecord(n1,n2)
-            
+
 def test_simple_callback_indirect():
     fr = FooReceiver.create()
     fl = FooListenerImpl()
-    fr.add_listener(fl)  
+    fr.add_listener(fl)
 
     # indirect check via returned value from receiver
     s = "Hello world!"
@@ -140,7 +140,7 @@ def fr_fl(fr, fl):
     binar = b'binary'
     b = True
     d = datetime.datetime(2007,4,17,1,2,3)
-    
+
     assert fr.cause_changes_string_returned(i32, f32, s, binar, b, d) == s, "test_full_callback failed"
     assert fr.cause_changes_binary_returned(i32, f32, s, binar, b, d) == binar, "test_full_callback failed"
     assert fr.cause_changes_date_returned(i32, f32, s, binar, b, d) == d, "test_full_callback failed"
@@ -172,7 +172,7 @@ def test_full_callback():
     fr_fl(fr,fl)
 
     fr.add_optional_listener(fl_opt)
-    fr_fl(fr,fl_opt)    
+    fr_fl(fr,fl_opt)
 
     fr.add_optional_listener(None)
     assert fr.get_optional_listener() is None, "test_full_callback failed"

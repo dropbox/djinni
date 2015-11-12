@@ -27,134 +27,134 @@ void foo_primitives___wrapper_dec_ref(DjinniWrapperFooPrimitives * dh) {
     }
 }
 djinni::Handle<DjinniWrapperFooPrimitives> DjinniWrapperFooPrimitives::wrap(std::shared_ptr<::testsuite::FooPrimitives> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooPrimitives>(new DjinniWrapperFooPrimitives{ std::move(obj) }, foo_primitives___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__foo_primitives_set_int8(DjinniWrapperFooPrimitives * djinni_this, int8_t private_int) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_int8(private_int);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int8_t cw__foo_primitives_get_int8(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_int8();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_int16(DjinniWrapperFooPrimitives * djinni_this, int16_t private_int) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_int16(private_int);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int16_t cw__foo_primitives_get_int16(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_int16();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_int32(DjinniWrapperFooPrimitives * djinni_this, int32_t private_int) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_int32(private_int);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int32_t cw__foo_primitives_get_int32(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_int32();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_int64(DjinniWrapperFooPrimitives * djinni_this, int64_t private_int) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_int64(private_int);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 int64_t cw__foo_primitives_get_int64(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_int64();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_float(DjinniWrapperFooPrimitives * djinni_this, float private_float) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_float(private_float);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 float cw__foo_primitives_get_float(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_float();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_double(DjinniWrapperFooPrimitives * djinni_this, double private_double) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_double(private_double);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 double cw__foo_primitives_get_double(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_double();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_bool(DjinniWrapperFooPrimitives * djinni_this, bool private_bool) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_bool(private_bool);
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 bool cw__foo_primitives_get_bool(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_bool();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_binary(DjinniWrapperFooPrimitives * djinni_this, DjinniBinary * private_binary) {
     std::unique_ptr<DjinniBinary> _private_binary(private_binary);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_binary(DjinniBinary::toCpp(std::move(_private_binary)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniBinary * cw__foo_primitives_get_binary(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return DjinniBinary::fromCpp(djinni_this->wrapped_obj->get_binary()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_string(DjinniWrapperFooPrimitives * djinni_this, DjinniString * private_string) {
     std::unique_ptr<DjinniString> _private_string(private_string);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_string(DjinniString::toCpp(std::move(_private_string)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniString * cw__foo_primitives_get_string(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return DjinniString::fromCpp(djinni_this->wrapped_obj->get_string()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_primitives_set_date(DjinniWrapperFooPrimitives * djinni_this, uint64_t private_date) {
-    try { 
+    try {
         djinni_this->wrapped_obj->set_date(DjinniDate::toCpp(private_date));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 uint64_t cw__foo_primitives_get_date(DjinniWrapperFooPrimitives * djinni_this) {
-    try { 
+    try {
         return DjinniDate::fromCpp(djinni_this->wrapped_obj->get_date());
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooPrimitives * cw__foo_primitives_create() {
-    try { 
+    try {
         return DjinniWrapperFooPrimitives::wrap(std::move(::testsuite::FooPrimitives::create())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

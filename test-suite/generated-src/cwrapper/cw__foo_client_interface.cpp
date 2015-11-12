@@ -27,50 +27,50 @@ void foo_client_interface___wrapper_dec_ref(DjinniWrapperFooClientInterface * dh
     }
 }
 djinni::Handle<DjinniWrapperFooClientInterface> DjinniWrapperFooClientInterface::wrap(std::shared_ptr<::testsuite::FooClientInterface> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooClientInterface>(new DjinniWrapperFooClientInterface{ std::move(obj) }, foo_client_interface___wrapper_dec_ref);
     return nullptr;
 }
 
 void cw__foo_client_interface_set_record(DjinniWrapperFooClientInterface * djinni_this, DjinniRecordHandle * rec) {
     djinni::Handle<DjinniRecordHandle> _rec(rec, foo_client_returned_record___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_record(DjinniFooClientReturnedRecord::toCpp(std::move(_rec)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniRecordHandle * cw__foo_client_interface_get_record(DjinniWrapperFooClientInterface * djinni_this) {
-    try { 
+    try {
         return DjinniFooClientReturnedRecord::fromCpp(djinni_this->wrapped_obj->get_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 void cw__foo_client_interface_set_extensible_record(DjinniWrapperFooClientInterface * djinni_this, DjinniRecordHandle * rec) {
     djinni::Handle<DjinniRecordHandle> _rec(rec, foo_extensible_record___delete);
-    try { 
+    try {
         djinni_this->wrapped_obj->set_extensible_record(DjinniFooExtensibleRecord::toCpp(std::move(_rec)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
 DjinniRecordHandle * cw__foo_client_interface_get_extensible_record(DjinniWrapperFooClientInterface * djinni_this) {
-    try { 
+    try {
         return DjinniFooExtensibleRecord::fromCpp(djinni_this->wrapped_obj->get_extensible_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 int32_t cw__foo_client_interface_get_extensible_record_number2(DjinniWrapperFooClientInterface * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->get_extensible_record_number2();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniString * cw__foo_client_interface_get_extensible_record_string2(DjinniWrapperFooClientInterface * djinni_this) {
-    try { 
+    try {
         return DjinniString::fromCpp(djinni_this->wrapped_obj->get_extensible_record_string2()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooClientInterface * cw__foo_client_interface_create() {
-    try { 
+    try {
         return DjinniWrapperFooClientInterface::wrap(std::move(::testsuite::FooClientInterface::create())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

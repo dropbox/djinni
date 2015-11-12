@@ -11,7 +11,7 @@ from foo_client_returned_record import FooClientReturnedRecord
 from foo_some_other_record import FooSomeOtherRecord
 from foo_extensible_record import FooExtensibleRecord
 
-# TODO rename this test to something more suggestive 
+# TODO rename this test to something more suggestive
 
 def test_client_returned_record():
     ci = FooClientInterface.create()
@@ -30,7 +30,7 @@ def test_client_returned_record():
     assert set_rec.record_id == record_id and \
            set_rec.content == content and \
            set_rec.some_record.__dict__ == some_record.__dict__
-   
+
     print ("Forcing garbage collection in test_client_interface_py")
     set_rec = None
     get_rec = None
@@ -43,11 +43,11 @@ def test_client_returned_record():
 def eq_neq(rec_1a, rec_1b, rec_1c, rec_less_1, rec_greater_1):
     assert rec_1a == rec_1b and rec_1b == rec_1c and \
             rec_1a != rec_less_1 and rec_less_1 != rec_1a and \
-            rec_1a != rec_greater_1 and rec_greater_1 != rec_1a, "test_client_returned_record_derivings failed" 
+            rec_1a != rec_greater_1 and rec_greater_1 != rec_1a, "test_client_returned_record_derivings failed"
 
 def lt_gt(rec_less_1, rec_1a):
     assert rec_less_1.__lt__(rec_1a) and \
-             rec_1a.__gt__(rec_less_1), "test_client_returned_record_derivings failed" 
+             rec_1a.__gt__(rec_less_1), "test_client_returned_record_derivings failed"
 
 def test_client_returned_record_derivings():
     number1 = 10
@@ -105,14 +105,14 @@ def test_extensible_record():
             set_rec.number2 == number2 and \
             set_rec.string2 == string2, "test_extensible_record failed"
 
-    # Check that we can call method specific to extended record 
+    # Check that we can call method specific to extended record
     assert isinstance(set_rec, FooExtensibleRecord)
     assert isinstance(got_rec, FooExtensibleRecord)
     assert set_rec.ret5() == 5, "test_extensible_record failed"
     assert got_rec.ret5() == 5, "test_extensible_record failed"
 
 
-''' 
+'''
     # more things I could potentially test
 
     some_record_greater_2 = FooSomeOtherRecord(number1, number2 +2)

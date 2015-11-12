@@ -27,58 +27,58 @@ void foo_static___wrapper_dec_ref(DjinniWrapperFooStatic * dh) {
     }
 }
 djinni::Handle<DjinniWrapperFooStatic> DjinniWrapperFooStatic::wrap(std::shared_ptr<::testsuite::FooStatic> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooStatic>(new DjinniWrapperFooStatic{ std::move(obj) }, foo_static___wrapper_dec_ref);
     return nullptr;
 }
 
 DjinniString * cw__foo_static_update_static_messg_to(DjinniString * static_string) {
     std::unique_ptr<DjinniString> _static_string(static_string);
-    try { 
+    try {
         return DjinniString::fromCpp(::testsuite::FooStatic::update_static_messg_to(DjinniString::toCpp(std::move(_static_string)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniString * cw__foo_static_get_static_messg() {
-    try { 
+    try {
         return DjinniString::fromCpp(::testsuite::FooStatic::get_static_messg()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 int32_t cw__foo_static_update_static_counter_by(int32_t plus) {
-    try { 
+    try {
         return ::testsuite::FooStatic::update_static_counter_by(plus);
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 int32_t cw__foo_static_update_static_counter_to(int32_t init) {
-    try { 
+    try {
         return ::testsuite::FooStatic::update_static_counter_to(init);
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 int32_t cw__foo_static_get_static_counter() {
-    try { 
+    try {
         return ::testsuite::FooStatic::get_static_counter();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 uint64_t cw__foo_static_date_id(uint64_t d) {
-    try { 
+    try {
         return DjinniDate::fromCpp(::testsuite::FooStatic::date_id(DjinniDate::toCpp(d)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniBoxedDate * cw__foo_static_opt_date_id(DjinniBoxedDate * od) {
     std::unique_ptr<DjinniBoxedDate> _od(od);
-    try { 
+    try {
         return DjinniBoxedDate::fromCpp(::testsuite::FooStatic::opt_date_id(DjinniBoxedDate::toCpp(std::move(_od)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniBoxedI64 * cw__foo_static_opt_i64_id(DjinniBoxedI64 * od) {
     std::unique_ptr<DjinniBoxedI64> _od(od);
-    try { 
+    try {
         return DjinniBoxedI64::fromCpp(::testsuite::FooStatic::opt_i64_id(DjinniBoxedI64::toCpp(std::move(_od)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

@@ -45,7 +45,7 @@ void foo_listener___wrapper_dec_ref(DjinniWrapperFooListener * dh) {
     }
 }
 djinni::Handle<DjinniWrapperFooListener> DjinniWrapperFooListener::wrap(std::shared_ptr<::testsuite::FooListener> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperFooListener>(new DjinniWrapperFooListener{ std::move(obj) }, foo_listener___wrapper_dec_ref);
     return nullptr;
 }

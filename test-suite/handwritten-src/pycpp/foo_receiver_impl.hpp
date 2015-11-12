@@ -27,20 +27,20 @@ public:
     virtual std::chrono::system_clock::time_point cause_changes_date_returned(int32_t i, float f, const std::string & s, const std::vector<uint8_t> & binar,
                                     bool b, const std::chrono::system_clock::time_point & d) override;
     virtual int cause_changes_int_returned(int32_t i, float f, const std::string & s, const std::vector<uint8_t> & binar,
-                                    bool b, const std::chrono::system_clock::time_point & d) override;                                        
+                                    bool b, const std::chrono::system_clock::time_point & d) override;
     virtual FooSomeOtherRecord cause_changes_record_returned(int32_t n1, int32_t n2) override;
 
     virtual std::experimental::optional<int32_t> cause_changes_int_optional_returned(
-        std::experimental::optional<int32_t>, 
+        std::experimental::optional<int32_t>,
         float,
-        const std::experimental::optional<std::string> &, 
+        const std::experimental::optional<std::string> &,
         const std::vector<uint8_t> &,
         bool, const std::chrono::system_clock::time_point &) override;
 
     virtual std::experimental::optional<std::string> cause_changes_string_optional_returned(
-        std::experimental::optional<int32_t>, 
+        std::experimental::optional<int32_t>,
         float,
-        const std::experimental::optional<std::string> &, 
+        const std::experimental::optional<std::string> &,
         const std::vector<uint8_t> &,
         bool, const std::chrono::system_clock::time_point &) override;
 
@@ -69,9 +69,9 @@ public:
 
 private:
     std::shared_ptr<FooListener> m_listener;
-    std::shared_ptr<FooListenerBf> m_listener_bf; // python or cpp impl 
+    std::shared_ptr<FooListenerBf> m_listener_bf; // python or cpp impl
     std::shared_ptr<FooListenerBf> m_cpp_listener; // access to cpp implementation of listener
-    
+
     int32_t m_pri = 0;
     std::string m_prs;
 };

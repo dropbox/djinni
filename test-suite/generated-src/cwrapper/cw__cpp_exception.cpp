@@ -25,18 +25,18 @@ void cpp_exception___wrapper_dec_ref(DjinniWrapperCppException * dh) {
     }
 }
 djinni::Handle<DjinniWrapperCppException> DjinniWrapperCppException::wrap(std::shared_ptr<::testsuite::CppException> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperCppException>(new DjinniWrapperCppException{ std::move(obj) }, cpp_exception___wrapper_dec_ref);
     return nullptr;
 }
 
 int32_t cw__cpp_exception_throw_an_exception(DjinniWrapperCppException * djinni_this) {
-    try { 
+    try {
         return djinni_this->wrapped_obj->throw_an_exception();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperCppException * cw__cpp_exception_get() {
-    try { 
+    try {
         return DjinniWrapperCppException::wrap(std::move(::testsuite::CppException::get())).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

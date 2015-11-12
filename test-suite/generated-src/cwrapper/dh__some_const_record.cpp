@@ -42,7 +42,7 @@ djinni::Handle<DjinniRecordHandle> DjinniSomeConstRecord::fromCpp(const ::testsu
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_some_const_record_python_create_some_const_record(
             dr.number1,
-            dr.number2), 
+            dr.number2),
         some_const_record___delete);
     return _aux;
 }

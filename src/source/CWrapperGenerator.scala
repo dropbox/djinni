@@ -690,7 +690,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
         }
       }
-    w.wl("), ")
+    w.wl("),")
     w.wl(recordAsMethodName + "___delete" + ");")
     }
     w.wl("return _aux;")
@@ -819,7 +819,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl("}")
 
     w.wl("djinni::Handle" + t(marshal.wrappedName(className)) + " " + marshal.wrappedName(className) +  "::wrap" + p("std::shared_ptr<" + withCppNs(className) + "> obj") + " {").nested {
-      w.wl("if (obj) ").nested {
+      w.wl("if (obj)").nested {
         w.wl("return " + "djinni::Handle" + t(marshal.wrappedName(className)) + p("new "  + marshal.wrappedName(className)  + "{ std::move(obj) }, " +
           idCpp.method(ident.name) + "___wrapper_dec_ref") + ";")
       }
@@ -865,7 +865,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl(ret + " " + cMethodWrapper + "_" + idCpp.method(m.ident.name) + params + " {").nested {
       // take ownership of arguments memory when arguments come from Python
       m.params.foreach(p => declareUniquePointer("_" + p.ident.name, p.ident.name, p.ty.resolved, w))
-      w.wl("try { ").nested {
+      w.wl("try {").nested {
         w.wl(returnStmt)
       }
       val onExceptionReturn = if (m.ret.isDefined) "0" else ""

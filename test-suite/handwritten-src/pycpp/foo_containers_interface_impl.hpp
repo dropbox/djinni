@@ -40,12 +40,12 @@ private:
     std::unordered_map<std::string, int32_t> m_map_string_int;
     std::unordered_map<std::string, std::string> m_map_string_string;
     std::unordered_map<std::experimental::optional<std::string>, std::experimental::optional<std::string>> m_map_optional_string_optional_string;
-    std::unordered_map<int8_t, std::vector<std::chrono::system_clock::time_point>> m_map_int_list_date;   
-    
+    std::unordered_map<int8_t, std::vector<std::chrono::system_clock::time_point>> m_map_int_list_date;
+
     std::unordered_map<int8_t, std::unordered_set<std::string>> m_map_int_set_string;
     std::unordered_map<std::experimental::optional<int32_t>, std::unordered_set<std::string>> m_map_optional_int_set_string;
-    std::experimental::optional<std::unordered_set<std::string>> m_optional_set_string; 
-    std::unordered_set<std::string> m_set_string; 
+    std::experimental::optional<std::unordered_set<std::string>> m_optional_set_string;
+    std::unordered_set<std::string> m_set_string;
     std::unordered_set<std::experimental::optional<std::string>> m_set_optional_string;
     FooContainersRecord m_record;
 

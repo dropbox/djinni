@@ -148,29 +148,29 @@ struct DjinniBoxedI8 : public djinni::optionals::Primitive<int8_t, DjinniBoxedI8
     explicit DjinniBoxedI8(int8_t data): djinni::optionals::Primitive<int8_t, DjinniBoxedI8>(data) {};
 };
 
-struct DjinniBoxedI16 : public djinni::optionals::Primitive<int16_t, DjinniBoxedI16> { 
+struct DjinniBoxedI16 : public djinni::optionals::Primitive<int16_t, DjinniBoxedI16> {
     explicit DjinniBoxedI16(int16_t data): djinni::optionals::Primitive<int16_t, DjinniBoxedI16>(data) {};
 };
 
-struct DjinniBoxedI32 : public djinni::optionals::Primitive<int32_t, DjinniBoxedI32> { 
+struct DjinniBoxedI32 : public djinni::optionals::Primitive<int32_t, DjinniBoxedI32> {
     explicit DjinniBoxedI32(int32_t data): djinni::optionals::Primitive<int32_t, DjinniBoxedI32>(data) {};
 };
 
-struct DjinniBoxedI64 : public djinni::optionals::Primitive<int64_t, DjinniBoxedI64> { 
+struct DjinniBoxedI64 : public djinni::optionals::Primitive<int64_t, DjinniBoxedI64> {
     DjinniBoxedI64(int64_t data): djinni::optionals::Primitive<int64_t, DjinniBoxedI64>(data) {};
 };
 
 // OPTIONAL FLOATING POINTS
-struct DjinniBoxedF32 : public djinni::optionals::Primitive<float, DjinniBoxedF32> { 
+struct DjinniBoxedF32 : public djinni::optionals::Primitive<float, DjinniBoxedF32> {
     DjinniBoxedF32(float data): djinni::optionals::Primitive<float, DjinniBoxedF32>(data) {};
 };
 
-struct DjinniBoxedF64 : public djinni::optionals::Primitive<double, DjinniBoxedF64> { 
+struct DjinniBoxedF64 : public djinni::optionals::Primitive<double, DjinniBoxedF64> {
     DjinniBoxedF64(double data): djinni::optionals::Primitive<double, DjinniBoxedF64>(data) {};
 };
 
 // OPTIONAL BOOL
-struct DjinniBoxedBool : public djinni::optionals::Primitive<bool, DjinniBoxedBool> { 
+struct DjinniBoxedBool : public djinni::optionals::Primitive<bool, DjinniBoxedBool> {
     DjinniBoxedBool(bool data): djinni::optionals::Primitive<bool, DjinniBoxedBool>(data) {};
 };
 

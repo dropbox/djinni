@@ -134,7 +134,7 @@ djinni::Handle<DjinniRecordHandle> DjinniAssortedPrimitives::fromCpp(const ::tes
             _field_o_thirtytwo.release(),
             _field_o_sixtyfour.release(),
             _field_o_fthirtytwo.release(),
-            _field_o_fsixtyfour.release()), 
+            _field_o_fsixtyfour.release()),
         assorted_primitives___delete);
     return _aux;
 }

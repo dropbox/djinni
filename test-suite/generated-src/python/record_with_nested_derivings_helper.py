@@ -15,7 +15,7 @@ from record_with_nested_derivings import RecordWithNestedDerivings
 
 class RecordWithNestedDerivingsHelper:
     @staticmethod
-    def release(c_ptr): 
+    def release(c_ptr):
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 

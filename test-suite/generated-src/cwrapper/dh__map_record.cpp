@@ -46,7 +46,7 @@ djinni::Handle<DjinniRecordHandle> DjinniMapRecord::fromCpp(const ::testsuite::M
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_map_record_python_create_map_record(
             _field_map.release(),
-            _field_imap.release()), 
+            _field_imap.release()),
         map_record___delete);
     return _aux;
 }

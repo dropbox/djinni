@@ -52,7 +52,7 @@ djinni::Handle<DjinniRecordHandle> DjinniFooClientReturnedRecord::fromCpp(const 
         s_py_callback_foo_client_returned_record_python_create_foo_client_returned_record(
             dr.record_id,
             _field_content.release(),
-            _field_some_record.release()), 
+            _field_some_record.release()),
         foo_client_returned_record___delete);
     return _aux;
 }

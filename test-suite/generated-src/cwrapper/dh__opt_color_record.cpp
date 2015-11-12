@@ -38,7 +38,7 @@ djinni::Handle<DjinniRecordHandle> DjinniOptColorRecord::fromCpp(const ::testsui
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_opt_color_record_python_create_opt_color_record(
-            int32_from_enum_color(dr.my_color)), 
+            int32_from_enum_color(dr.my_color)),
         opt_color_record___delete);
     return _aux;
 }

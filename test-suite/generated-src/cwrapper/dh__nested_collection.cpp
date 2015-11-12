@@ -38,7 +38,7 @@ djinni::Handle<DjinniRecordHandle> DjinniNestedCollection::fromCpp(const ::tests
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_nested_collection_python_create_nested_collection(
-            _field_set_list.release()), 
+            _field_set_list.release()),
         nested_collection___delete);
     return _aux;
 }

@@ -1,4 +1,4 @@
-#include <iostream> 
+#include <iostream>
 #include "foo_containers_interface_impl.hpp"
 #include "foo_some_other_record.hpp"
 #include <experimental/optional>
@@ -7,7 +7,7 @@ namespace testsuite {
 
 std::shared_ptr<FooContainersInterface> FooContainersInterface::create() {
     return std::make_shared<FooContainersInterfaceImpl>();
-}    
+}
 
 void FooContainersInterfaceImpl::set_containers_record(const FooContainersRecord & rec) {
     m_record = rec;
@@ -60,19 +60,19 @@ std::vector<std::vector<uint8_t>> FooContainersInterfaceImpl::get_list_binary() 
 }
 
 // void FooContainersInterfaceImpl::set_set_record(const std::unordered_set<FooSomeOtherRecord> & sr) {
-//     m_set_record = sr;   
+//     m_set_record = sr;
 // }
 
 // std::unordered_set<FooSomeOtherRecord> FooContainersInterfaceImpl::get_set_record() {
 //     return m_set_record;
 // }
 
-FooContainersInterfaceImpl::FooContainersInterfaceImpl(): 
+FooContainersInterfaceImpl::FooContainersInterfaceImpl():
     m_record(FooContainersRecord(m_optional_list_int, m_list_int, m_list_binary, m_list_optional_binary,
-        m_list_list_string, m_list_record, m_optional_map_string_int, m_map_string_int, m_map_string_string, m_map_optional_string_optional_string, m_map_int_list_date, 
+        m_list_list_string, m_list_record, m_optional_map_string_int, m_map_string_int, m_map_string_string, m_map_optional_string_optional_string, m_map_int_list_date,
         m_optional_set_string, m_set_string, m_set_optional_string, m_map_int_set_string, m_map_optional_int_set_string)),
     m_optional_record(FooContainersRecord(m_optional_list_int, m_list_int, m_list_binary, m_list_optional_binary,
-        m_list_list_string, m_list_record, m_optional_map_string_int, m_map_string_int, m_map_string_string, m_map_optional_string_optional_string, m_map_int_list_date, 
+        m_list_list_string, m_list_record, m_optional_map_string_int, m_map_string_int, m_map_string_string, m_map_optional_string_optional_string, m_map_int_list_date,
         m_optional_set_string, m_set_string, m_set_optional_string, m_map_int_set_string, m_map_optional_int_set_string))
      {};
 

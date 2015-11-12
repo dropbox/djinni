@@ -32,7 +32,7 @@ void textbox_listener___wrapper_dec_ref(DjinniWrapperTextboxListener * dh) {
     }
 }
 djinni::Handle<DjinniWrapperTextboxListener> DjinniWrapperTextboxListener::wrap(std::shared_ptr<::textsort::TextboxListener> obj) {
-    if (obj) 
+    if (obj)
         return djinni::Handle<DjinniWrapperTextboxListener>(new DjinniWrapperTextboxListener{ std::move(obj) }, textbox_listener___wrapper_dec_ref);
     return nullptr;
 }

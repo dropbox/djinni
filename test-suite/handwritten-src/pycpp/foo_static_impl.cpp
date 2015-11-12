@@ -41,7 +41,7 @@ std::experimental::optional<int64_t> FooStatic::opt_i64_id(std::experimental::op
     return FooStaticImpl::opt_i64_id(oi);
 }
 
-// STATIC methods FooStaticImpl 
+// STATIC methods FooStaticImpl
 
 std::string FooStaticImpl::update_static_messg_to(const std::string & static_string) {
     FooStaticImpl::s_messg = static_string;

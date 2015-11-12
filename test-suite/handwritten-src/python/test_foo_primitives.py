@@ -22,7 +22,7 @@ def test_int8():
     max_i8 = 127
     foo.set_int8(max_i8)
     assert max_i8 == foo.get_int8(), "test_ints failed"
-    
+
     pytest.raises(OverflowError, foo.set_int8, min_i8 - 1)
     pytest.raises(OverflowError, foo.set_int8, max_i8 + 1)
 
@@ -30,10 +30,10 @@ def test_int8():
 def test_int16():
     foo = FooPrimitives.create()
 
-    min_i16 = -32768 
+    min_i16 = -32768
     foo.set_int16(min_i16)
     assert min_i16 == foo.get_int16(), "test_ints failed"
-    max_i16 = 32767 
+    max_i16 = 32767
     foo.set_int16(max_i16)
     assert max_i16 == foo.get_int16(), "test_ints failed"
 
@@ -75,7 +75,7 @@ def test_float():
     max_f32 = lib.max_f32_t()
     foo.set_float(max_f32)
     assert max_f32 == foo.get_float(), "test_float failed"
-   
+
 
 def test_double():
     foo = FooPrimitives.create()
@@ -123,10 +123,10 @@ def test_date():
     for i in range(100): # more reliable
         d = datetime.datetime.now()
         d = d.replace(microsecond = (d.microsecond // 1000) * 1000)  # our precision is millisecond level
-        
+
         foo.set_date(d)
         assert d == foo.get_date(), "test_date failed"
-  
+
 
 # Can set: unicode strings (python 2 and 3), bytes utf-8 encoded (python 3)
 # Will get: utf-8 encoded strings, and utf-8 encoded bytes respectively
@@ -138,16 +138,16 @@ def test_strings():
             (u"", not DECODEUtf8),
             (u"my\0text", not DECODEUtf8),
             (u"the best text", not DECODEUtf8),
-            (u"my \b friend", not DECODEUtf8), 
+            (u"my \b friend", not DECODEUtf8),
             #"Non-ASCII / 非 ASCII 字符"
-            (u"Non-ASCII / \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8), 
+            (u"Non-ASCII / \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8),
             (u"Non-ASCII / \u975e ASCII \u5b57\u7b26", not DECODEUtf8)
         ])
     if PYTHON3:
         strs.update({
             chr(40960) + u'abcd' + chr(1972) + u"\0\bhi": not DECODEUtf8, #unicode string
             bytes(chr(40960) + u'abcd' + chr(1972) + u"\0\bhi", 'utf-8'): DECODEUtf8 # bytes utf-8 encoded
-            })      
+            })
     else:
         strs.update({
             unichr(40960) + u'abcd' + unichr(1972) + u"\0\bhi": not DECODEUtf8, #unicode string for python 2
@@ -158,8 +158,8 @@ def test_strings():
 
         sSetUnicode = sSet
         if decode:
-            sSetUnicode = decoded_utf_8(sSet)  
-        sGetUnicode = foo.get_string() 
+            sSetUnicode = decoded_utf_8(sSet)
+        sGetUnicode = foo.get_string()
 
         # print ("client SetPrs=", sSetUnicode, ".", len(sSetUnicode), List(sSetUnicode) )
         # print ("client GetPrs=", sGetUnicode, ".", len(sGetUnicode), List(sGetUnicode))
