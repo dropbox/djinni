@@ -325,7 +325,7 @@ abstract class Generator(spec: Spec)
   }
 
   protected def createFile(folder: File, fileName: String, f: IndentWriter => Unit): Unit = createFile(folder, fileName, out => new IndentWriter(out), f)
-  
+
   implicit def identToString(ident: Ident): String = ident.name
   val idCpp = spec.cppIdentStyle
   val idJava = spec.javaIdentStyle

@@ -1,7 +1,10 @@
 package com.dropbox.djinni.test;
 
+import com.dropbox.djinni.NativeLibLoader;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.junit.runner.JUnitCore;
 
 public class AllTests extends TestSuite {
 
@@ -21,8 +24,8 @@ public class AllTests extends TestSuite {
         return mySuite;
     }
 
-    static {
-        System.loadLibrary("DjinniTestNative");
+    public static void main(String[] args) throws Exception {
+       NativeLibLoader.loadLibs();
+       JUnitCore.main("com.dropbox.djinni.test.AllTests");
     }
-
 }

@@ -1,0 +1,26 @@
+#! /usr/bin/env bash
+# This script formats sources in Djinni with standard whitespace conventions.
+# Specifically, tabs are converted to spaces (2 for Scala, 4 for other languages),
+# and trailing whitespace is removed.
+# This script is idempotent, so can be safely run on existing code without making changes.
+
+set -eu
+
+# Locate the script file.  Cross symlinks if necessary.
+loc="$0"
+while [ -h "$loc" ]; do
+    ls=`ls -ld "$loc"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        loc="$link"  # Absolute link
+    else
+        loc="`dirname "$loc"`/$link"  # Relative link
+    fi
+done
+djinni_dir=$(cd "`dirname "$loc"`" && cd .. && pwd)
+
+# Format source types with 4-space indentation
+cd "$djinni_dir" && find . '(' -name '*.[chm]' -or -name '*.[ch]pp' -or -name '*.mm' -or -name '*.java' -or -name '*.py' ')' -and -not -path './deps/*' -exec sh -c 'expand -t 4 "{}" | sed "s/ *$//" | tr -d "\r" > _tmp_ && mv _tmp_ "{}"' \;
+
+# Format source types with 2-space indentatino
+cd "$djinni_dir" && find . '(' -name '*.scala' ')' -and -not -path './deps/*' -exec sh -c 'expand -t 2 "{}" | sed "s/ *$//" | tr -d "\r" > _tmp_ && mv _tmp_ "{}"' \;

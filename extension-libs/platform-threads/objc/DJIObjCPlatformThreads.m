@@ -82,7 +82,7 @@
 }
 
 - (nonnull NSNumber *)isMainThread {
-    return [NSNumber numberWithBool:[NSThread isMainThread]];
+    return @(NSThread.isMainThread);
 }
 
 @end

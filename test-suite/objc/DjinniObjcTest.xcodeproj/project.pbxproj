@@ -24,6 +24,8 @@
 		65868B621989FE4200D60EEE /* libDjinniObjcTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65868B4A1989FE4200D60EEE /* libDjinniObjcTest.a */; };
 		6D66A8A91A3B09F000B312E8 /* DBConstantTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D66A8A81A3B09F000B312E8 /* DBConstantTests.mm */; };
 		A20094101B06982F00EF8D9B /* DBTokenTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A200940E1B0697D300EF8D9B /* DBTokenTests.mm */; };
+		A209B5791BBA2A0A0070C310 /* DBOptColorRecord.mm in Sources */ = {isa = PBXBuildFile; fileRef = A209B5761BBA2A0A0070C310 /* DBOptColorRecord.mm */; };
+		A209B57A1BBA2A0A0070C310 /* DBOptColorRecord+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A209B5781BBA2A0A0070C310 /* DBOptColorRecord+Private.mm */; };
 		A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA761AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm */; };
 		A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA781AF84B7100CDDCE5 /* DBConstants+Private.mm */; };
 		A238CA921AF84B7100CDDCE5 /* DBDateRecord+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = A238CA7A1AF84B7100CDDCE5 /* DBDateRecord+Private.mm */; };
@@ -146,6 +148,11 @@
 		65868B5E1989FE4200D60EEE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		6D66A8A81A3B09F000B312E8 /* DBConstantTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBConstantTests.mm; sourceTree = "<group>"; };
 		A200940E1B0697D300EF8D9B /* DBTokenTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBTokenTests.mm; sourceTree = "<group>"; };
+		A209B5751BBA2A0A0070C310 /* DBOptColorRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBOptColorRecord.h; sourceTree = "<group>"; };
+		A209B5761BBA2A0A0070C310 /* DBOptColorRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBOptColorRecord.mm; sourceTree = "<group>"; };
+		A209B5771BBA2A0A0070C310 /* DBOptColorRecord+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBOptColorRecord+Private.h"; sourceTree = "<group>"; };
+		A209B5781BBA2A0A0070C310 /* DBOptColorRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBOptColorRecord+Private.mm"; sourceTree = "<group>"; };
+		A209B57B1BBA2A180070C310 /* opt_color_record.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = opt_color_record.hpp; sourceTree = "<group>"; };
 		A238CA761AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBClientReturnedRecord+Private.mm"; sourceTree = "<group>"; };
 		A238CA781AF84B7100CDDCE5 /* DBConstants+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBConstants+Private.mm"; sourceTree = "<group>"; };
 		A238CA7A1AF84B7100CDDCE5 /* DBDateRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBDateRecord+Private.mm"; sourceTree = "<group>"; };
@@ -395,6 +402,10 @@
 		A24249181AF192E0003BF8F0 /* generated-objc */ = {
 			isa = PBXGroup;
 			children = (
+				A209B5751BBA2A0A0070C310 /* DBOptColorRecord.h */,
+				A209B5761BBA2A0A0070C310 /* DBOptColorRecord.mm */,
+				A209B5771BBA2A0A0070C310 /* DBOptColorRecord+Private.h */,
+				A209B5781BBA2A0A0070C310 /* DBOptColorRecord+Private.mm */,
 				B52DA5641B103F6D005CE75F /* DBAssortedPrimitives.h */,
 				B52DA5651B103F6D005CE75F /* DBAssortedPrimitives.mm */,
 				B52DA5661B103F6D005CE75F /* DBAssortedPrimitives+Private.h */,
@@ -489,6 +500,7 @@
 		A242495D1AF192FC003BF8F0 /* generated-cpp */ = {
 			isa = PBXGroup;
 			children = (
+				A209B57B1BBA2A180070C310 /* opt_color_record.hpp */,
 				B52DA56C1B103FBE005CE75F /* assorted_primitives.cpp */,
 				B52DA56D1B103FBE005CE75F /* assorted_primitives.hpp */,
 				A24249601AF192FC003BF8F0 /* client_interface.hpp */,
@@ -627,6 +639,7 @@
 				CFF89B931B5D2CC7007F6EC2 /* date_record.cpp in Sources */,
 				A24850301AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm in Sources */,
 				CFFD58B11B041BD9001E10B6 /* DBConstantsInterface.mm in Sources */,
+				A209B5791BBA2A0A0070C310 /* DBOptColorRecord.mm in Sources */,
 				B52DA56E1B103FC5005CE75F /* assorted_primitives.cpp in Sources */,
 				CFFD58B31B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */,
 				CFC5D9FC1B152E4300BF2DF8 /* TranslateDuration.cpp in Sources */,
@@ -658,6 +671,7 @@
 				A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */,
 				B52DA56B1B103F75005CE75F /* DBAssortedPrimitives+Private.mm in Sources */,
 				A248502E1AF96EBC00AFE907 /* DBPrimitiveList.mm in Sources */,
+				A209B57A1BBA2A0A0070C310 /* DBOptColorRecord+Private.mm in Sources */,
 				A238CAA01AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm in Sources */,
 				CFC5DA0A1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
 			);

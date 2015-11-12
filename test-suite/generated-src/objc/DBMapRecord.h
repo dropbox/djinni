@@ -4,13 +4,13 @@
 #import <Foundation/Foundation.h>
 
 @interface DBMapRecord : NSObject
-- (nonnull instancetype)initWithMap:(nonnull NSDictionary *)map
-                               imap:(nonnull NSDictionary *)imap;
-+ (nonnull instancetype)mapRecordWithMap:(nonnull NSDictionary *)map
-                                    imap:(nonnull NSDictionary *)imap;
+- (nonnull instancetype)initWithMap:(nonnull NSDictionary<NSString *, NSNumber *> *)map
+                               imap:(nonnull NSDictionary<NSNumber *, NSNumber *> *)imap;
++ (nonnull instancetype)mapRecordWithMap:(nonnull NSDictionary<NSString *, NSNumber *> *)map
+                                    imap:(nonnull NSDictionary<NSNumber *, NSNumber *> *)imap;
 
-@property (nonatomic, readonly, nonnull) NSDictionary * map;
+@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSNumber *> * map;
 
-@property (nonatomic, readonly, nonnull) NSDictionary * imap;
+@property (nonatomic, readonly, nonnull) NSDictionary<NSNumber *, NSNumber *> * imap;
 
 @end

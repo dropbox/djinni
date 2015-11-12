@@ -30,4 +30,13 @@ public final class SetRecord {
     public HashSet<Integer> getIset() {
         return mIset;
     }
+
+    @Override
+    public String toString() {
+        return "SetRecord{" +
+                "mSet=" + mSet +
+                "," + "mIset=" + mIset +
+        "}";
+    }
+
 }

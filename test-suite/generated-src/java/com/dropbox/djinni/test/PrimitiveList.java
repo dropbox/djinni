@@ -21,4 +21,12 @@ public final class PrimitiveList {
     public ArrayList<Long> getList() {
         return mList;
     }
+
+    @Override
+    public String toString() {
+        return "PrimitiveList{" +
+                "mList=" + mList +
+        "}";
+    }
+
 }

@@ -10,7 +10,7 @@ clean:
 	-rm -rf example/build/
 	-rm -rf build_ios/
 	-rm -rf build_by/
-	-rm GypAndroid.mk
+	-rm -f GypAndroid.mk
 
 #
 # Pre-generation rules
@@ -79,11 +79,14 @@ example_python3: ./build_py/cffi/libtextsort_py.dylib
 
 example_python: example_python2 example_python3
 
+example_localhost: ./deps/java
+	cd example && make localhost
+
 #
 # Test-Suite rules
 #
 
-test:
+test: ./deps/java
 	make -C test-suite
 
-.PHONY: run_example_djinni example_android example_ios example_python example_python2 example_python3 test djinni clean all
+.PHONY: run_example_djinni example_android example_ios example_localhost example_python example_python2 example_python3 test djinni clean all

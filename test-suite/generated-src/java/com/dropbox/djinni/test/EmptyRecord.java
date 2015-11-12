@@ -17,4 +17,11 @@ public final class EmptyRecord {
     public EmptyRecord(
             ) {
     }
+
+    @Override
+    public String toString() {
+        return "EmptyRecord{" +
+        "}";
+    }
+
 }

@@ -49,6 +49,15 @@ public final class RecordWithNestedDerivings implements Comparable<RecordWithNes
     }
 
     @Override
+    public String toString() {
+        return "RecordWithNestedDerivings{" +
+                "mKey=" + mKey +
+                "," + "mRec=" + mRec +
+        "}";
+    }
+
+
+    @Override
     public int compareTo(@Nonnull RecordWithNestedDerivings other)  {
         int tempResult;
         if (this.mKey < other.mKey) {

@@ -149,6 +149,10 @@ somewhere in your code:
     System.loadLibrary("YourLibraryName");
     // The name is specified in Android.mk / build.gradle / Makefile, depending on your build system.
 
+If you package your native library in a jar, you can also use `com.dropbox.djinni.NativeLibLoader` 
+to help unpack and load your lib(s).  See the [Localhost README](example/localhost/README.md)
+for details.
+
 When a native library is called, JNI calls a special function called `JNI_OnLoad`. If you use
 Djinni for all JNI interface code, include `support_lib/jni/djinni_main.cpp`; if not,
 you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. See
@@ -407,6 +411,7 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 * There are a set of [tutorials](http://mobilecpptutorials.com/) for building a cross-platform app using Djinni.
 * [mx3](https://github.com/libmx3/mx3) is an example project demonstrating use of Djinni and other tools.
 * [Slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo) from the CppCon 2014 talk where we introduced Djinni.
+* [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 about Djinni implementatino techniques, and the addition of Python.
 * You can see a [CppCon 2014 talk](https://www.youtube.com/watch?v=5AZMEm3rZ2Y) by app developers at Dropbox about their cross-platform experiences.
 
 
@@ -420,4 +425,5 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Andrew Twyman
 
 ## Contacts
-Jacob Potter - `j4cbo@dropbox.com`
+- Jacob Potter - `djinni@j4cbo.com`
+- Andrew Twyman - `atwyman@dropbox.com`

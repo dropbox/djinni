@@ -10,3 +10,7 @@ color = enum {
 	indigo;
 	violet;
 }
+
+opt_color_record = record {
+	my_color: optional<color>;
+}

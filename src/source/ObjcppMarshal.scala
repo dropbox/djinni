@@ -56,13 +56,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   def helperClass(name: String) = idCpp.ty(name)
-  private def helperClass(tm: MExpr): String = {
-    if (isOptionalInterface(tm)) {
-      helperClass(tm.args.head)
-    } else {
-      helperName(tm) + helperTemplates(tm)
-    }
-  }
+  private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
 

@@ -31,7 +31,9 @@ namespace djinni {
  *
  * (The helper for .lock() is only used by proxy_cache_impl.hpp, so it's defined there.)
  */
-template <typename T> static inline auto get_unowning(const T & ptr) { return ptr.get(); }
+template <typename T> static inline auto get_unowning(const T & ptr) -> decltype(ptr.get()) {
+    return ptr.get();
+}
 template <typename T> static inline T * get_unowning(T * ptr) { return ptr; }
 
 /*

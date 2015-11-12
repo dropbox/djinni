@@ -30,4 +30,13 @@ public final class MapRecord {
     public HashMap<Integer, Integer> getImap() {
         return mImap;
     }
+
+    @Override
+    public String toString() {
+        return "MapRecord{" +
+                "mMap=" + mMap +
+                "," + "mImap=" + mImap +
+        "}";
+    }
+
 }

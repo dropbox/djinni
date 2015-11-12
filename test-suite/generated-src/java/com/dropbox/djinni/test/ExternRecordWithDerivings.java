@@ -46,6 +46,15 @@ public final class ExternRecordWithDerivings implements Comparable<ExternRecordW
     }
 
     @Override
+    public String toString() {
+        return "ExternRecordWithDerivings{" +
+                "mMember=" + mMember +
+                "," + "mE=" + mE +
+        "}";
+    }
+
+
+    @Override
     public int compareTo(ExternRecordWithDerivings other)  {
         int tempResult;
         tempResult = this.mMember.compareTo(other.mMember);

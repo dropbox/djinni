@@ -1,9 +1,10 @@
 TextSort
 --------
 This folder contains an example project using djinni. The application contains a multiline text
-view, and when the button "Sort" is hit, sorts the lines in that view.
+view, and when the button "Sort" is hit, sorts the lines in that view.  There is also a
+command-line version of the demo.
 
-Interface Stucture
+Interface Structure
 ------------------
 Two interfaces are defined: SortItems and TextboxListener. SortItems is implemented in C++; its
 method sort() takes a list of strings (wrapped in a record), sorts it, and passes the sorted list to
@@ -23,6 +24,12 @@ make example_android
 ```
 cd djinni_root_dir;
 make example_ios
+```
+
+**Quick Start Command-line**
+```
+cd djinni_root_dir;
+make example_localhost
 ```
 
 **Details**
@@ -51,6 +58,10 @@ xcodeproj file) This program can be built using the default settings in Xcode. O
 cd djinni_root_rit/example;
 xcodebuild -workspace objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphoneos
 ```
+
+Command-line / Localhost Version
+--------------------------------
+See the [Localhost README](localhost/README.md)
 
 Making Changes to Djinni file
 -----------------------------
