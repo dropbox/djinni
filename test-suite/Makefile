@@ -1,8 +1,8 @@
-.PHONY: all objc java linux python python2 python3 clean clean_objc clean_java clean_python
+.PHONY: all objc java linux_docker python python2 python3 clean clean_objc clean_java clean_python
 
 FORCE_DJINNI := $(shell ./run_djinni.sh >&2)
 
-all: objc java linux python
+all: objc java python
 
 objc:
 	cd objc && xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test
@@ -15,8 +15,7 @@ java:
 
 clean_java:
 	cd java && ant clean
-
-linux:
+linux_docker:
 	cd ..; ./test-suite/java/docker/run_dockerized_test.sh
 
 python2:

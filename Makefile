@@ -1,4 +1,4 @@
-all: djinni example_ios example_android example_python example_python2 example_python3 test
+all: djinni example_ios example_android example_localhost example_python test
 
 clean:
 	-ndk-build -C example/android/app/ clean
