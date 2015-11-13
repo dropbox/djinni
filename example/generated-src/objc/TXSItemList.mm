@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithItems:(nonnull NSArray<NSString *> *)items
 {
     if (self = [super init]) {
-        _items = items;
+        _items = [items copy];
     }
     return self;
 }

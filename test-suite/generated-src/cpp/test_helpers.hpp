@@ -3,12 +3,6 @@
 
 #pragma once
 
-#include "assorted_primitives.hpp"
-#include "color.hpp"
-#include "map_list_record.hpp"
-#include "nested_collection.hpp"
-#include "primitive_list.hpp"
-#include "set_record.hpp"
 #include <cstdint>
 #include <experimental/optional>
 #include <memory>
@@ -20,6 +14,12 @@ namespace testsuite {
 
 class ClientInterface;
 class UserToken;
+enum class color;
+struct AssortedPrimitives;
+struct MapListRecord;
+struct NestedCollection;
+struct PrimitiveList;
+struct SetRecord;
 
 /**
  * Helper methods used by various different tests.
