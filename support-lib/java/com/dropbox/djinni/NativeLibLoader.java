@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -30,7 +31,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * Utilities for loading native libraries containing djinni interfaces
@@ -88,14 +88,11 @@ public class NativeLibLoader {
         if (!localFile.exists()) { return; }
         if (localFile.isDirectory()) {
             log.log(Level.FINE, "Loading all libs in " + localFile.getAbsolutePath());
-            Stream<Path> streamPaths = Files.walk(localFile.toPath(), 1);
-            for (Path p : (Iterable<Path>)streamPaths::iterator) {
-                File f = p.toFile();
+            for (File f : localFile.listFiles()) {
                 if (f.isFile()) {
                     loadLibrary(f.getAbsolutePath());
                 }
             }
-            streamPaths.close();
         } else {
             loadLibrary(localFile.getAbsolutePath());
         }
@@ -119,10 +116,16 @@ public class NativeLibLoader {
 
         // Walk the directory and load libs
         FileSystem fs =
-                FileSystems.newFileSystem(libsURL.toURI(), Collections.emptyMap());
+                FileSystems.newFileSystem(libsURL.toURI(), Collections.<String, String>emptyMap());
         Path myPath = fs.getPath(jarPath);
-        for (Path p : (Iterable<Path>)Files.walk(myPath, 1)::iterator) {
-            loadLibFromJarPath(p);
+
+        DirectoryStream<Path> directoryStream = Files.newDirectoryStream(myPath);
+        try {
+            for (Path p : directoryStream) {
+                loadLibFromJarPath(p);
+            }
+        } finally {
+            directoryStream.close();
         }
 
         fs.close();
