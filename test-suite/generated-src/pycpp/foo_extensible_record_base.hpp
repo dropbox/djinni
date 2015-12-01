@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <string>
 #include <utility>
-class FooExtensibleRecord; // Requiring extended class
+struct FooExtensibleRecord; // Requiring extended class
 
 namespace testsuite {
 
