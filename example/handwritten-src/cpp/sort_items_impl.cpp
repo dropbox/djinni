@@ -1,6 +1,10 @@
-#include "sort_items_impl.hpp"
 #include <algorithm>
 #include <random>
+
+#include "item_list.hpp"
+#include "sort_order.hpp"
+
+#include "sort_items_impl.hpp"
 
 namespace textsort {
 
