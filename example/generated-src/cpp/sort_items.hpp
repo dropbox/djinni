@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "item_list.hpp"
-#include "sort_order.hpp"
 #include <memory>
 
 namespace textsort {
 
 class TextboxListener;
+enum class sort_order;
+struct ItemList;
 
 class SortItems {
 public:
