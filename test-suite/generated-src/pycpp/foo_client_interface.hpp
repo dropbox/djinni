@@ -3,13 +3,14 @@
 
 #pragma once
 
-#include "foo_client_returned_record.hpp"
-#include "foo_extensible_record.hpp"
 #include <cstdint>
 #include <memory>
 #include <string>
 
 namespace testsuite {
+
+struct FooClientReturnedRecord;
+struct FooExtensibleRecord;
 
 class FooClientInterface {
 public:

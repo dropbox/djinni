@@ -2,6 +2,12 @@
 #include "client_returned_record.hpp"
 #include "client_interface.hpp"
 #include "user_token.hpp"
+#include "assorted_primitives.hpp"
+#include "color.hpp"
+#include "map_list_record.hpp"
+#include "nested_collection.hpp"
+#include "primitive_list.hpp"
+#include "set_record.hpp"
 #include <exception>
 
 namespace testsuite {

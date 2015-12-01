@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "foo_containers_record.hpp"
-#include "foo_some_other_record.hpp"
 #include <cstdint>
 #include <experimental/optional>
 #include <memory>
@@ -13,6 +11,9 @@
 #include <vector>
 
 namespace testsuite {
+
+struct FooContainersRecord;
+struct FooSomeOtherRecord;
 
 class FooContainersInterface {
 public:

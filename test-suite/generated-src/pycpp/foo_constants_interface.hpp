@@ -3,12 +3,13 @@
 
 #pragma once
 
-#include "foo_constants.hpp"
 #include <cstdint>
 #include <experimental/optional>
 #include <string>
 
 namespace testsuite {
+
+struct FooConstants;
 
 class FooConstantsInterface {
 public:

@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "color.hpp"
 #include <experimental/optional>
 #include <memory>
 
 namespace testsuite {
+
+enum class color;
 
 class FooEnumInterface {
 public:

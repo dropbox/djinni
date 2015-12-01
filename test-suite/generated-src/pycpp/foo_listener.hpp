@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "foo_some_other_record.hpp"
 #include <chrono>
 #include <cstdint>
 #include <experimental/optional>
@@ -11,6 +10,8 @@
 #include <vector>
 
 namespace testsuite {
+
+struct FooSomeOtherRecord;
 
 class FooListener {
 public:
