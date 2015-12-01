@@ -140,7 +140,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     // Requiring the extended class
     if (r.ext.cpp) {
-      refs.hpp.add(s"class $self; // Requiring extended class")
+      refs.hpp.add(s"struct $self; // Requiring extended class")
       refs.cpp.add("#include "+q("../" + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     }
 
