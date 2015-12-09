@@ -1,4 +1,4 @@
-FROM ubuntu:utopic-20150625
+FROM ubuntu:vivid
 
 RUN apt-get update
 RUN apt-get -y install git build-essential clang cmake

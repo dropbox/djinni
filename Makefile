@@ -1,4 +1,4 @@
-all: djinni example_ios example_android test
+all: djinni example_ios example_android example_localhost test
 
 clean:
 	-ndk-build -C example/android/app/ clean
