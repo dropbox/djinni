@@ -57,10 +57,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
 
-    val flagsType = "unsigned"
-    val enumType = "int"
-    val underlyingType = if(e.flags) flagsType else enumType
-
+    val underlyingType = marshal.enumUnderlyingType(e)
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       w.w(s"enum class $self : $underlyingType").bracedSemi {
         writeEnumOptionNone(w, e, idCpp.enum)
@@ -72,7 +69,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         // Define some operators to make working with "enum class" flags actually practical
         def binaryOp(op: String) {
           w.w(s"CONSTEXPR $self operator$op($self lhs, $self rhs) noexcept").braced {
-            w.wl(s"return static_cast<$self>(static_cast<$flagsType>(lhs) $op static_cast<$flagsType>(rhs));")
+            w.wl(s"return static_cast<$self>(static_cast<$underlyingType>(lhs) $op static_cast<$underlyingType>(rhs));")
           }
           w.w(s"CONSTEXPR $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
             w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
@@ -92,7 +89,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         binaryOp("^")
 
         w.w(s"CONSTEXPR $self operator~($self x) noexcept").braced {
-          w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
+          w.wl(s"return static_cast<$self>(~static_cast<$underlyingType>(x));")
         }
 
         w.wl("#undef CONSTEXPR")
