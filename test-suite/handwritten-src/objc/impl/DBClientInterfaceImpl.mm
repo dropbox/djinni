@@ -14,10 +14,10 @@ static NSString *DBNonAscii = @"Non-ASCII / 非 ASCII 字符";
 
 - (double)identifierCheck:(nonnull NSData *)data r:(int32_t)r jret:(int64_t)jret
 {
-	(void)data;
-	(void)r;
-	(void)jret;
-	return 0.0;
+    (void)data;
+    (void)r;
+    (void)jret;
+    return 0.0;
 }
 
 - (NSString *)returnStr

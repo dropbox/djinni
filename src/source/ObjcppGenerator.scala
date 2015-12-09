@@ -38,7 +38,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
       tm.args.foreach(find)
-      find(tm.base) 
+      find(tm.base)
     }
     def find(m: Meta) = for(r <- objcppMarshal.references(m)) r match {
       case ImportRef(arg) => body.add("#import " + arg)
@@ -78,7 +78,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
       case Some(nnHdr) => refs.privHeader.add("#include " + nnHdr)
       case _ =>
     }
-    
+
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
       val ret = objcMarshal.fqReturnType(method.ret)
@@ -264,7 +264,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         }
         w.wl
         val fromCppFunc = if (spec.cppNnType.isEmpty) "fromCpp(const CppType& cpp)"
-						 else "fromCppOpt(const CppOptType& cpp)"
+             else "fromCppOpt(const CppOptType& cpp)"
         w.wl(s"auto $helperClass::$fromCppFunc -> ObjcType").braced {
           // Handle null
           w.w("if (!cpp)").braced {
@@ -309,7 +309,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     refs.privHeader.add("!#import " + q(spec.objcppIncludeObjcPrefix + (if(r.ext.objc) "../" else "") + headerName(ident)))
     refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
-    
+
     refs.body.add("#include <cassert>")
     refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(objcName)))
 
