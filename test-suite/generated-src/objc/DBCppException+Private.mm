@@ -54,7 +54,7 @@ auto CppException::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto CppException::fromCpp(const CppType& cpp) -> ObjcType
+auto CppException::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;
