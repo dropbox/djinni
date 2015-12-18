@@ -4,8 +4,12 @@
 #pragma once
 
 #include <cstdint>
+#include <experimental/optional>
+#include <string>
 
 namespace testsuite {
+
+struct ConstantRecord;
 
 /** Interface containing constants */
 class ConstantsInterface {
@@ -32,6 +36,31 @@ public:
 
     static double const F64_CONSTANT;
 
+    static std::experimental::optional<bool> const OPT_BOOL_CONSTANT;
+
+    static std::experimental::optional<int8_t> const OPT_I8_CONSTANT;
+
+    static std::experimental::optional<int16_t> const OPT_I16_CONSTANT;
+
+    static std::experimental::optional<int32_t> const OPT_I32_CONSTANT;
+
+    static std::experimental::optional<int64_t> const OPT_I64_CONSTANT;
+
+    static std::experimental::optional<float> const OPT_F32_CONSTANT;
+
+    static std::experimental::optional<double> const OPT_F64_CONSTANT;
+
+    static std::string const STRING_CONSTANT;
+
+    static std::experimental::optional<std::string> const OPT_STRING_CONSTANT;
+
+    static ConstantRecord const OBJECT_CONSTANT;
+
+    /**
+     * No support for null optional constants
+     * No support for optional constant records
+     * No support for constant binary, list, set, map
+     */
     virtual void dummy() = 0;
 };
 

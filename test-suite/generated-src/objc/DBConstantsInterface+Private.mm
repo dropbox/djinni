@@ -3,6 +3,7 @@
 
 #import "DBConstantsInterface+Private.h"
 #import "DBConstantsInterface.h"
+#import "DBConstantRecord+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"

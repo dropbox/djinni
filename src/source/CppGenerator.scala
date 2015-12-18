@@ -42,10 +42,16 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       tm.args.foreach((x) => find(x, forwardDeclareOnly))
       find(tm.base, forwardDeclareOnly)
     }
-    def find(m: Meta, forwardDeclareOnly : Boolean) = for(r <- marshal.references(m, name, forwardDeclareOnly)) r match {
-      case ImportRef(arg) => hpp.add("#include " + arg)
-      case DeclRef(decl, Some(spec.cppNamespace)) => hppFwds.add(decl)
-      case DeclRef(_, _) =>
+    def find(m: Meta, forwardDeclareOnly : Boolean) = {
+      for(r <- marshal.hppReferences(m, name, forwardDeclareOnly)) r match {
+        case ImportRef(arg) => hpp.add("#include " + arg)
+        case DeclRef(decl, Some(spec.cppNamespace)) => hppFwds.add(decl)
+        case DeclRef(_, _) =>
+      }
+      for(r <- marshal.cppReferences(m, name, forwardDeclareOnly)) r match {
+        case ImportRef(arg) => cpp.add("#include " + arg)
+        case DeclRef(_, _) =>
+      }
     }
   }
 
@@ -98,7 +104,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
-      case s: String => w.w(s)
+      case s: String => w.w("{" + s + "}")
       case e: EnumValue => w.w(marshal.typename(ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name))
       case v: ConstRef => w.w(selfName + "::" + idCpp.const(v))
       case z: Map[_, _] => { // Value is record

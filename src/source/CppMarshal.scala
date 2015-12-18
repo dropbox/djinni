@@ -32,7 +32,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("cpp to cpp conversion")
 
-  def references(m: Meta, exclude: String, forwardDeclareOnly: Boolean): Seq[SymbolReference] = m match {
+  def hppReferences(m: Meta, exclude: String, forwardDeclareOnly: Boolean): Seq[SymbolReference] = m match {
     case p: MPrimitive => p.idlName match {
       case "i8" | "i16" | "i32" | "i64" => List(ImportRef("<cstdint>"))
       case _ => List()
@@ -83,6 +83,32 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case _ => List(ImportRef(e.cpp.header))
     }
     case p: MParam => List()
+  }
+
+  def cppReferences(m: Meta, exclude: String, forwardDeclareOnly: Boolean): Seq[SymbolReference] = {
+    // Only need to provide full definitions for cpp if forward decls were used in header
+    if (!forwardDeclareOnly) {
+      List()
+    } else {
+      m match {
+        case d: MDef => d.defType match {
+          case DRecord =>
+            if (d.name != exclude) {
+              List(ImportRef(include(d.name)))
+            } else {
+              List()
+            }
+          case DEnum =>
+            if (d.name != exclude) {
+              List(ImportRef(include(d.name)))
+            } else {
+              List()
+            }
+          case _ => List()
+        }
+        case _ => List()
+      }
+    }
   }
 
   def include(ident: String): String = q(spec.cppIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt)
