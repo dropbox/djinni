@@ -35,6 +35,7 @@ public abstract class ConstantsInterface {
     @CheckForNull
     public static final Byte OPT_I8_CONSTANT = 1;
 
+    /** opt_i16_constant has documentation. */
     @CheckForNull
     public static final Short OPT_I16_CONSTANT = 2;
 
@@ -44,6 +45,11 @@ public abstract class ConstantsInterface {
     @CheckForNull
     public static final Long OPT_I64_CONSTANT = 4l;
 
+    /**
+     * opt_f32_constant has long documentation.
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     @CheckForNull
     public static final Float OPT_F32_CONSTANT = 5.0f;
 
