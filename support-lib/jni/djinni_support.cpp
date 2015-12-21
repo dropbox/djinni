@@ -50,6 +50,13 @@ JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+
+    // PSPDFKit change - Attach thread if it's not attached so we can do callbacks from libdispatch.
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThreadAsDaemon(&env, nullptr);
+    }
+    // PSPDFKit change
+
     if (get_res != 0 || !env) {
         // :(
         std::abort();
