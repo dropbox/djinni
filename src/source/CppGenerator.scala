@@ -57,12 +57,42 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
 
+    val underlyingType = marshal.enumUnderlyingType(e)
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
-      w.w(s"enum class $self : int").bracedSemi {
-        for (o <- e.options) {
-          writeDoc(w, o.doc)
-          w.wl(idCpp.enum(o.ident.name) + ",")
+      w.w(s"enum class $self : $underlyingType").bracedSemi {
+        writeEnumOptionNone(w, e, idCpp.enum)
+        writeEnumOptions(w, e, idCpp.enum)
+        writeEnumOptionAll(w, e, idCpp.enum)
+      }
+
+      if(e.flags) {
+        // Define some operators to make working with "enum class" flags actually practical
+        def binaryOp(op: String) {
+          w.w(s"CONSTEXPR $self operator$op($self lhs, $self rhs) noexcept").braced {
+            w.wl(s"return static_cast<$self>(static_cast<$underlyingType>(lhs) $op static_cast<$underlyingType>(rhs));")
+          }
+          w.w(s"CONSTEXPR $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
+            w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
+          }
         }
+
+        // this isn't nice. GCC 4.9 (Android) doesn't support proper constexpr.
+        // if we can't use constexpr, just inline them.
+        w.wl("#if __cpp_constexpr >= 201103L")
+        w.wl("#define CONSTEXPR constexpr")
+        w.wl("#else")
+        w.wl("#define CONSTEXPR inline")
+        w.wl("#endif")
+
+        binaryOp("|")
+        binaryOp("&")
+        binaryOp("^")
+
+        w.w(s"CONSTEXPR $self operator~($self x) noexcept").braced {
+          w.wl(s"return static_cast<$self>(~static_cast<$underlyingType>(x));")
+        }
+
+        w.wl("#undef CONSTEXPR")
       }
     },
     w => {
@@ -75,7 +105,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             w.wl("template <>")
             w.w(s"struct hash<$fqSelf>").bracedSemi {
               w.w(s"size_t operator()($fqSelf type) const").braced {
-                w.wl("return std::hash<int>()(static_cast<int>(type));")
+                w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
               }
             }
           }
@@ -140,7 +170,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     // Requiring the extended class
     if (r.ext.cpp) {
-      refs.hpp.add(s"struct $self; // Requiring extended class")
+      // PSPDFkit TODO: Move into namespace
+      //refs.hpp.add(s"class $self; // Requiring extended class")
       refs.cpp.add("#include "+q("../" + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     }
 

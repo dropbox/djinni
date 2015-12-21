@@ -103,11 +103,12 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
         }.mkString(" deriving(", ", ", ")")
       }
     }
-    td.body match {
-      case i: Interface => "interface" + ext(i.ext)
-      case r: Record => "record" + ext(r.ext) + deriving(r)
-      case e: Enum => "enum"
-    }
+  	td.body match {
+  	  case i: Interface => "interface" + ext(i.ext)
+  	  case r: Record => "record" + ext(r.ext) + deriving(r)
+      case Enum(_, false) => "enum"
+      case Enum(_, true) => "flags"
+  	}
   }
 
   private def cpp(td: TypeDecl) = Map[String, Any](
@@ -121,7 +122,8 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     "header" -> QuotedString(objcMarshal.include(td.ident)),
     "boxed" -> QuotedString(objcMarshal.boxedTypename(td)),
     "pointer" -> objcMarshal.isPointer(td),
-    "hash" -> QuotedString("%s.hash")
+    "hash" -> QuotedString("%s.hash"),
+    "printDescription" -> QuotedString(objcMarshal.printDescription(td))
   )
 
   private def objcpp(td: TypeDecl) = Map[String, Any](
@@ -195,7 +197,8 @@ object YamlGenerator {
       nested(td, "objc")("header").toString,
       nested(td, "objc")("boxed").toString,
       nested(td, "objc")("pointer").asInstanceOf[Boolean],
-      nested(td, "objc")("hash").toString),
+      nested(td, "objc")("hash").toString,
+      nested(td, "objc")("printDescription").toString),
     MExtern.Objcpp(
       nested(td, "objcpp")("translator").toString,
       nested(td, "objcpp")("header").toString),

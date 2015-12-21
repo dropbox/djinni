@@ -50,6 +50,13 @@ JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+
+    // PSPDFKit change - Attach thread if it's not attached so we can do callbacks from libdispatch.
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThreadAsDaemon(&env, nullptr);
+    }
+    // PSPDFKit change
+
     if (get_res != 0 || !env) {
         // :(
         std::abort();
@@ -246,6 +253,37 @@ LocalRef<jobject> JniEnum::create(JNIEnv * env, jint value) const {
                                                         value));
     jniExceptionCheck(env);
     return result;
+}
+
+JniFlags::JniFlags(const std::string & name)
+    : JniEnum { name }
+    {}
+
+unsigned JniFlags::flags(JNIEnv * env, jobject obj) const {
+    DJINNI_ASSERT(obj && env->IsInstanceOf(obj, m_clazz.get()), env);
+    auto size = env->CallIntMethod(obj, m_methSize);
+    unsigned flags = 0;
+    auto it = LocalRef<jobject>(env, env->CallObjectMethod(obj, m_methIterator));
+    for(jint i = 0; i < size; ++i) {
+        auto jf = LocalRef<jobject>(env, env->CallObjectMethod(it, m_iterator.methNext));
+        flags |= (1u << static_cast<unsigned>(ordinal(env, jf)));
+    }
+    return flags;
+}
+
+LocalRef<jobject> JniFlags::create(JNIEnv * env, unsigned flags, int bits) const {
+    auto j = LocalRef<jobject>(env, env->CallStaticObjectMethod(m_clazz.get(), m_methNoneOf, enumClass()));
+    jniExceptionCheck(env);
+    unsigned mask = 1;
+    for(int i = 0; i < bits; ++i, mask <<= 1) {
+        if((flags & mask) != 0) {
+            auto jf = create(env, static_cast<jint>(i));
+            jniExceptionCheck(env);
+            env->CallBooleanMethod(j, m_methAdd, jf.get());
+            jniExceptionCheck(env);
+        }
+    }
+    return j;
 }
 
 JniLocalScope::JniLocalScope(JNIEnv* p_env, jint capacity, bool throwOnError)

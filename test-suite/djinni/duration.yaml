@@ -17,6 +17,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: '(NSUInteger)%s'
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration'
   header: '"Duration-objc.hpp"'
@@ -46,6 +47,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_h'
   header: '"Duration-objc.hpp"'
@@ -75,6 +77,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_min'
   header: '"Duration-objc.hpp"'
@@ -104,6 +107,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_s'
   header: '"Duration-objc.hpp"'
@@ -133,6 +137,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_ms'
   header: '"Duration-objc.hpp"'
@@ -162,6 +167,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_us'
   header: '"Duration-objc.hpp"'
@@ -191,6 +197,7 @@ objc:
   boxed: 'NSNumber'
   pointer: false
   hash: ''
+  printDescription: '@(%s)'
 objcpp:
   translator: '::djinni::Duration_ns'
   header: '"Duration-objc.hpp"'

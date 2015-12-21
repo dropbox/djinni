@@ -7,7 +7,7 @@
 name: mylib_record1
 # Specifies what kind of type this is.
 # Supports the same syntax as is used to declare types in .djinni files.
-# Examples: 'interface +c', 'record deriving(eq, or)', 'enum', 'interface +j +o'
+# Examples: 'interface +c', 'record deriving(eq, or)', 'enum', 'flags', 'interface +j +o'
 # This determines how Djinni integrates this type into function parameters, fields or return types and operators.
 typedef: 'record +c deriving(eq, ord)'
 # The (potentially empty) list of required type parameters.
@@ -38,6 +38,10 @@ objc:
   # If the type is a "record" and has "eq" deriving then this string must not be empty.
   # It declares a well-formed expression with a single "%s" format placeholder replaced with the variable for which the hash code is needed
   hash: '%s.hash'
+  # Specifies how a description of this type can be printed.
+  # If the type is NOT a subclass of NSObject, this needs to be modified to return a NSObject.
+  # For example, if the type is a CGRect, use `NSStringFromCGRect(%s)`. If the type is a NSInteger, use `@(%s)`.
+  printDescription: '%s'
 objcpp:
   # The fully qualified name of the class containing the toCpp/fromCpp methods.
   translator: '::mylib::djinni::objc::Record1'

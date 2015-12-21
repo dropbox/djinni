@@ -285,19 +285,23 @@ namespace djinni
         template <typename C> static typename C::CppOptType opt_type(typename C::CppOptType *);
         using CppType = decltype(opt_type<T>(nullptr));
 
-        using JniType = typename T::Boxed::JniType;
-
-        using Boxed = Optional;
-
-        static CppType toCpp(JNIEnv* jniEnv, JniType j)
-        {
-            return j ? CppType(T::Boxed::toCpp(jniEnv, j)) : CppType();
-        }
-
-        static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
-        {
-            return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
-        }
+		using JniType = typename T::Boxed::JniType;
+		
+		using Boxed = Optional;
+		
+		static CppType toCpp(JNIEnv* jniEnv, JniType j)
+		{
+			if (j) {
+				return T::Boxed::toCpp(jniEnv, j);
+			} else {
+				return CppType();
+			}
+		}
+		
+		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
+		{
+			return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
+		}
 
         // fromCpp used for nullable shared_ptr
         template <typename C = T>
@@ -411,13 +415,14 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            assert(c.size() <= std::numeric_limits<jint>::max());
             const auto& data = JniClass<SetJniInfo>::get();
-            auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor));
+            assert(c.size() <= std::numeric_limits<jint>::max());
+            auto size = static_cast<jint>(c.size());
+            auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor, size));
             jniExceptionCheck(jniEnv);
             for(const auto& ce : c)
             {
-                auto je = T::fromCpp(jniEnv, ce);
+                auto je = T::Boxed::fromCpp(jniEnv, ce);
                 jniEnv->CallBooleanMethod(j, data.method_add, get(je));
                 jniExceptionCheck(jniEnv);
             }
