@@ -411,13 +411,14 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            assert(c.size() <= std::numeric_limits<jint>::max());
             const auto& data = JniClass<SetJniInfo>::get();
-            auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor));
+            assert(c.size() <= std::numeric_limits<jint>::max());
+            auto size = static_cast<jint>(c.size());
+            auto j = LocalRef<jobject>(jniEnv, jniEnv->NewObject(data.clazz.get(), data.constructor, size));
             jniExceptionCheck(jniEnv);
             for(const auto& ce : c)
             {
-                auto je = T::fromCpp(jniEnv, ce);
+                auto je = T::Boxed::fromCpp(jniEnv, ce);
                 jniEnv->CallBooleanMethod(j, data.method_add, get(je));
                 jniExceptionCheck(jniEnv);
             }
