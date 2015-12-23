@@ -1,0 +1,13 @@
+first_listener = interface +o {
+    first();
+}
+
+second_listener = interface +o {
+    second();
+}
+
+listener_caller = interface +c {
+    static init(first_l: first_listener, second_l: second_listener): listener_caller;
+    callFirst();
+    callSecond();
+}
