@@ -27,7 +27,7 @@ private:
     friend ::djinni::JniClass<NativeClientInterface>;
     friend ::djinni::JniInterface<::testsuite::ClientInterface, NativeClientInterface>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::testsuite::ClientInterface
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::testsuite::ClientInterface
     {
     public:
         JavaProxy(JniType j);

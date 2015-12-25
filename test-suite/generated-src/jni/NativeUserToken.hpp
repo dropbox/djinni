@@ -27,7 +27,7 @@ private:
     friend ::djinni::JniClass<NativeUserToken>;
     friend ::djinni::JniInterface<::testsuite::UserToken, NativeUserToken>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::testsuite::UserToken
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::testsuite::UserToken
     {
     public:
         JavaProxy(JniType j);
