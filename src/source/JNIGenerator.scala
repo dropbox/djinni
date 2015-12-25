@@ -288,6 +288,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
               w.w(")")
             w.wl(";")
             w.wl(s"::djinni::jniExceptionCheck(jniEnv);")
+            w.wl(s"::djinni::jniDetachThreadEnv();")
             m.ret.fold()(ty => {
               (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
                 case (Some(check), true) => {

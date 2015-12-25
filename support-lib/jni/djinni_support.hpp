@@ -48,9 +48,14 @@ void jniInit(JavaVM * jvm);
 void jniShutdown();
 
 /*
- * Get the JNIEnv for the invoking thread. Should only be called on Java-created threads.
+ * Get the JNIEnv for the invoking thread.
  */
 JNIEnv * jniGetThreadEnv();
+
+/*
+ * Detach thread if it has been attached before with jniGetThreadEnv
+ */
+void jniDetachThreadEnv();
 
 /*
  * Global and local reference guard objects.
