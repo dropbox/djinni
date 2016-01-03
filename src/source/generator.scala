@@ -44,6 +44,7 @@ package object generatorTools {
                    cppOptionalTemplate: String,
                    cppOptionalHeader: String,
                    cppEnumHashWorkaround: Boolean,
+                   cppUseForwardDeclarations: Boolean,
                    cppNnHeader: Option[String],
                    cppNnType: Option[String],
                    cppNnCheckExpression: Option[String],

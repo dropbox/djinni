@@ -47,7 +47,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case d: MDef => d.defType match {
       case DRecord =>
         if (d.name != exclude) {
-          if (forwardDeclareOnly) {
+          if (forwardDeclareOnly && spec.cppUseForwardDeclarations) {
             List(DeclRef(s"struct ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
           } else {
             List(ImportRef(include(d.name)))
@@ -57,7 +57,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
         }
       case DEnum =>
         if (d.name != exclude) {
-          if (forwardDeclareOnly) {
+          if (forwardDeclareOnly && spec.cppUseForwardDeclarations) {
             List(DeclRef(s"enum class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
           } else {
             List(ImportRef(include(d.name)))
