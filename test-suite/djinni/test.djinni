@@ -24,6 +24,7 @@ test_helpers = interface +c {
 
     static check_client_interface_ascii(i: client_interface);
     static check_client_interface_nonascii(i: client_interface);
+    static check_client_interface_args(i: client_interface);
 
     static check_enum_map(m: map<color, string>);
     static check_enum(c: color);

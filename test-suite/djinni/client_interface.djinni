@@ -11,4 +11,16 @@ client_interface = interface +j +o {
     get_record(record_id: i64, utf8string: string, misc: optional<string>): client_returned_record;
 	identifier_check(data: binary, r: i32, jret: i64): f64;
     return_str(): string;
+
+    meth_taking_interface(i: client_interface): string;
+    meth_taking_optional_interface(i: optional<client_interface>): string;
+}
+
+reverse_client_interface = interface +c {
+    return_str(): string;
+
+    meth_taking_interface(i: reverse_client_interface): string;
+    meth_taking_optional_interface(i: optional<reverse_client_interface>): string;
+
+    static create(): reverse_client_interface;
 }

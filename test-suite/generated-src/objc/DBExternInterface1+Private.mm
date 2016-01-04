@@ -47,7 +47,7 @@ auto ExternInterface1::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto ExternInterface1::fromCpp(const CppType& cpp) -> ObjcType
+auto ExternInterface1::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

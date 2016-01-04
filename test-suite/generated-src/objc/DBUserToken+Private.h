@@ -14,12 +14,14 @@ class UserToken
 {
 public:
     using CppType = std::shared_ptr<::testsuite::UserToken>;
+    using CppOptType = std::shared_ptr<::testsuite::UserToken>;
     using ObjcType = id<DBUserToken>;
 
     using Boxed = UserToken;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

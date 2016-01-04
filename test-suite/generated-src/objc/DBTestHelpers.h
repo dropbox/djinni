@@ -53,6 +53,8 @@
 
 + (void)checkClientInterfaceNonascii:(nullable id<DBClientInterface>)i;
 
++ (void)checkClientInterfaceArgs:(nullable id<DBClientInterface>)i;
+
 + (void)checkEnumMap:(nonnull NSDictionary<NSNumber *, NSString *> *)m;
 
 + (void)checkEnum:(DBColor)c;

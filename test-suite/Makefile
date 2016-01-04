@@ -1,14 +1,15 @@
-.PHONY: all objc java linux_docker
-
-FORCE_DJINNI := $(shell ./run_djinni.sh >&2)
+.PHONY: all djinni objc java linux_docker
 
 all: objc java
 
-objc:
-	cd objc; xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test
+djinni:
+	./run_djinni.sh
 
-java:
+objc: djinni
+	cd objc; xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.2'
+
+java: djinni
 	cd java && ant compile test
 
-linux_docker:
+linux_docker: djinni
 	cd ..; ./test-suite/java/docker/run_dockerized_test.sh

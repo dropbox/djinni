@@ -94,6 +94,20 @@ void TestHelpers::check_client_interface_nonascii(const std::shared_ptr<ClientIn
     }
 }
 
+void TestHelpers::check_client_interface_args(const std::shared_ptr<ClientInterface> & i) {
+    const std::string returned1 = i->meth_taking_interface(i);
+    if ("test" != returned1) {
+        std::string error_msg = "Expected String: 'test' Actual: '" + returned1 + "'";
+        throw std::invalid_argument(error_msg);
+    }
+
+    const std::string returned2 = i->meth_taking_optional_interface(i);
+    if ("test" != returned2) {
+        std::string error_msg = "Expected String: 'test' Actual: '" + returned2 + "'";
+        throw std::invalid_argument(error_msg);
+    }
+}
+
 std::shared_ptr<UserToken> TestHelpers::token_id(const std::shared_ptr<UserToken> & in) {
     return in;
 }
