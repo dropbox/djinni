@@ -12,6 +12,8 @@
 + (nonnull instancetype)externRecordWithDerivingsWithMember:(nonnull DBRecordWithDerivings *)member
                                                           e:(DBColor)e;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) DBRecordWithDerivings * member;
 
 @property (nonatomic, readonly) DBColor e;

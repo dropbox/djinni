@@ -8,6 +8,8 @@
 - (nonnull instancetype)initWithMyColor:(nullable NSNumber *)myColor;
 + (nonnull instancetype)optColorRecordWithMyColor:(nullable NSNumber *)myColor;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nullable) NSNumber * myColor;
 
 @end

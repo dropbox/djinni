@@ -9,6 +9,8 @@
 + (nonnull instancetype)setRecordWithSet:(nonnull NSSet<NSString *> *)set
                                     iset:(nonnull NSSet<NSNumber *> *)iset;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly, nonnull) NSSet<NSString *> * set;
 
 @property (nonatomic, readonly, nonnull) NSSet<NSNumber *> * iset;

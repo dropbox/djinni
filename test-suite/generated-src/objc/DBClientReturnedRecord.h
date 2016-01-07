@@ -12,6 +12,8 @@
                                                  content:(nonnull NSString *)content
                                                     misc:(nullable NSString *)misc;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) int64_t recordId;
 
 @property (nonatomic, readonly, nonnull) NSString * content;

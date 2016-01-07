@@ -12,4 +12,6 @@
 - (nonnull instancetype)init;
 + (nonnull instancetype)emptyRecord;
 
+- (nonnull NSDictionary *) toDict;
+
 @end

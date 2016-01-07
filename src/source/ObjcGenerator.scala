@@ -208,6 +208,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
       writeInitializer("-", "init")
       if (!r.ext.objc) writeInitializer("+", IdentStyle.camelLower(objcName))
+      w.wl(s"");
+      w.wl(s"- (nonnull NSDictionary *) toDict;");
 
       for (f <- r.fields) {
         w.wl
@@ -392,13 +394,28 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.wl("- (NSString *)description")
       w.braced {
         w.w(s"return ").nestedN(2) {
-          w.w("[NSString stringWithFormat:@\"<%@ %p")
+          w.w("[NSString stringWithFormat:@\"<%@ %p: dict, %@")
+          w.w(">\", self.class, self, [[self toDict] description]")
+          w.wl("];")
+        }
+      }
+      w.wl
 
-          for (f <- r.fields) w.w(s" ${idObjc.field(f.ident)}:%@")
-          w.w(">\", self.class, self")
+      w.wl("- (NSDictionary *)toDict")
+      w.braced {
+        w.wl("#define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))")
+        w.wl("")
+        w.w(s"return ").nestedN(2) {
+          w.w("@{")
+          w.w("@\"__class_name__\": [self.class description]")
 
           for (f <- r.fields) {
-            w.w(", ")
+            w.w(", @\"")
+            w.w(idObjc.field(f.ident))
+            w.w("\": ")
+
+            w.w("_djinni_hide_null_(")
+
             f.ty.resolved.base match {
               case MOptional => w.w(s"self.${idObjc.field(f.ident)}")
               case t: MPrimitive => w.w(s"@(self.${idObjc.field(f.ident)})")
@@ -414,9 +431,11 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                 }
               case _ => w.w(s"self.${idObjc.field(f.ident)}")
             }
+
+            w.w(")")
           }
         }
-        w.wl("];")
+        w.wl("};")
       }
       w.wl
 

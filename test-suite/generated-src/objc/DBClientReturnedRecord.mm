@@ -29,7 +29,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p recordId:%@ content:%@ misc:%@>", self.class, self, @(self.recordId), self.content, self.misc];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"recordId": _djinni_hide_null_(@(self.recordId)), @"content": _djinni_hide_null_(self.content), @"misc": _djinni_hide_null_(self.misc)};
 }
 
 @end

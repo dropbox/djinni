@@ -7,6 +7,8 @@
 - (nonnull instancetype)initWithDt:(NSTimeInterval)dt;
 + (nonnull instancetype)recordWithDurationAndDerivingsWithDt:(NSTimeInterval)dt;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) NSTimeInterval dt;
 
 - (NSComparisonResult)compare:(nonnull DBRecordWithDurationAndDerivings *)other;

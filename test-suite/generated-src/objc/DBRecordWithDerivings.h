@@ -9,6 +9,8 @@
 + (nonnull instancetype)recordWithDerivingsWithKey1:(int32_t)key1
                                                key2:(nonnull NSString *)key2;
 
+- (nonnull NSDictionary *) toDict;
+
 @property (nonatomic, readonly) int32_t key1;
 
 @property (nonatomic, readonly, nonnull) NSString * key2;

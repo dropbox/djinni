@@ -50,7 +50,14 @@ DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] i
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p someInteger:%@ someString:%@>", self.class, self, @(self.someInteger), self.someString];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"someInteger": _djinni_hide_null_(@(self.someInteger)), @"someString": _djinni_hide_null_(self.someString)};
 }
 
 @end

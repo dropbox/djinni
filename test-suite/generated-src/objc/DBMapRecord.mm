@@ -25,7 +25,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p map:%@ imap:%@>", self.class, self, self.map, self.imap];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"map": _djinni_hide_null_(self.map), @"imap": _djinni_hide_null_(self.imap)};
 }
 
 @end

@@ -114,7 +114,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p b:%@ eight:%@ sixteen:%@ thirtytwo:%@ sixtyfour:%@ fthirtytwo:%@ fsixtyfour:%@ oB:%@ oEight:%@ oSixteen:%@ oThirtytwo:%@ oSixtyfour:%@ oFthirtytwo:%@ oFsixtyfour:%@>", self.class, self, @(self.b), @(self.eight), @(self.sixteen), @(self.thirtytwo), @(self.sixtyfour), @(self.fthirtytwo), @(self.fsixtyfour), self.oB, self.oEight, self.oSixteen, self.oThirtytwo, self.oSixtyfour, self.oFthirtytwo, self.oFsixtyfour];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"b": _djinni_hide_null_(@(self.b)), @"eight": _djinni_hide_null_(@(self.eight)), @"sixteen": _djinni_hide_null_(@(self.sixteen)), @"thirtytwo": _djinni_hide_null_(@(self.thirtytwo)), @"sixtyfour": _djinni_hide_null_(@(self.sixtyfour)), @"fthirtytwo": _djinni_hide_null_(@(self.fthirtytwo)), @"fsixtyfour": _djinni_hide_null_(@(self.fsixtyfour)), @"oB": _djinni_hide_null_(self.oB), @"oEight": _djinni_hide_null_(self.oEight), @"oSixteen": _djinni_hide_null_(self.oSixteen), @"oThirtytwo": _djinni_hide_null_(self.oThirtytwo), @"oSixtyfour": _djinni_hide_null_(self.oSixtyfour), @"oFthirtytwo": _djinni_hide_null_(self.oFthirtytwo), @"oFsixtyfour": _djinni_hide_null_(self.oFsixtyfour)};
 }
 
 @end

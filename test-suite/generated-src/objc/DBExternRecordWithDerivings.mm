@@ -62,7 +62,14 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p member:%@ e:%@>", self.class, self, self.member, @(self.e)];
+    return [NSString stringWithFormat:@"<%@ %p: dict, %@>", self.class, self, [[self toDict] description]];
+}
+
+- (NSDictionary *)toDict
+{
+    #define _djinni_hide_null_(_o_) ((_o_)?(_o_):([NSNull null]))
+    
+    return @{@"__class_name__": [self.class description], @"member": _djinni_hide_null_(self.member), @"e": _djinni_hide_null_(@(self.e))};
 }
 
 @end
