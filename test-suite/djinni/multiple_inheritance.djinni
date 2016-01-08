@@ -1,7 +1,9 @@
+# Used for ObjC multiple inheritance tests
 first_listener = interface +o {
     first();
 }
 
+# Used for ObjC multiple inheritance tests
 second_listener = interface +o {
     second();
 }
@@ -14,4 +16,17 @@ listener_caller = interface +c {
     static init(first_l: first_listener, second_l: second_listener): listener_caller;
     callFirst();
     callSecond();
+}
+
+
+# Used for C++ multiple inheritance tests
+return_one = interface +c {
+    static get_instance(): return_one;
+    return_one(): i8;
+}
+
+# Used for C++ multiple inheritance tests
+return_two = interface +c {
+    static get_instance(): return_two;
+    return_two(): i8;
 }

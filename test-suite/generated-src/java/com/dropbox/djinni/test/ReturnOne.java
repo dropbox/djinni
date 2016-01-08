@@ -7,21 +7,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/**
- * Tester for the ability to call two interfaces which might be
- * implemented on the same object.  That's not relevant in all
- * languages, due to the details of multiple inheritance and object
- * comparison.
- */
-public abstract class ListenerCaller {
-    public abstract void callFirst();
-
-    public abstract void callSecond();
+/** Used for C++ multiple inheritance tests */
+public abstract class ReturnOne {
+    public abstract byte returnOne();
 
     @CheckForNull
-    public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
+    public static native ReturnOne getInstance();
 
-    private static final class CppProxy extends ListenerCaller
+    private static final class CppProxy extends ReturnOne
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -45,19 +38,11 @@ public abstract class ListenerCaller {
         }
 
         @Override
-        public void callFirst()
+        public byte returnOne()
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_callFirst(this.nativeRef);
+            return native_returnOne(this.nativeRef);
         }
-        private native void native_callFirst(long _nativeRef);
-
-        @Override
-        public void callSecond()
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_callSecond(this.nativeRef);
-        }
-        private native void native_callSecond(long _nativeRef);
+        private native byte native_returnOne(long _nativeRef);
     }
 }

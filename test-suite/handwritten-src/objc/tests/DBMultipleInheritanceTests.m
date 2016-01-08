@@ -3,6 +3,8 @@
 #include "DBFirstListener.h"
 #include "DBSecondListener.h"
 #include "DBListenerCaller.h"
+#include "DBReturnOne.h"
+#include "DBReturnTwo.h"
 
 @interface Listener : NSObject <DBFirstListener, DBSecondListener>
 @property bool firstCalled;
@@ -30,11 +32,11 @@
 
 @end
 
-
-@interface DBListenerCallerTest : XCTestCase
+// test instance of ObjC class implementing two +o interfaces, passed to C++
+@interface DBObjcMultipleInheritanceTest : XCTestCase
 @end
 
-@implementation DBListenerCallerTest {
+@implementation DBObjcMultipleInheritanceTest {
     Listener *listener;
     DBListenerCaller *caller;
 }
@@ -53,6 +55,24 @@
 - (void)testCallSecond {
     [caller callSecond];
     XCTAssert(listener.secondCalled);
+}
+
+@end
+
+// test instance of C++ class implementing two +c interfaces, used in ObjC
+@interface DBCppMultipleInheritanceTest : XCTestCase
+@end
+
+@implementation DBCppMultipleInheritanceTest
+
+- (void)testReturnOne {
+    DBReturnOne *returnOne = [DBReturnOne getInstance];
+    XCTAssertEqual([returnOne returnOne], 1);
+}
+
+- (void)testReturnTwo {
+    DBReturnTwo *returnTwo = [DBReturnTwo getInstance];
+    XCTAssertEqual([returnTwo returnTwo], 2);
 }
 
 @end
