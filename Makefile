@@ -53,7 +53,8 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj/project.pbxproj
 	xcodebuild -workspace example/objc/TextSort.xcworkspace \
            -scheme TextSort \
            -configuration 'Debug' \
-           -sdk iphonesimulator
+           -sdk iphonesimulator \
+	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.2'
 
 #
 # Python example rules

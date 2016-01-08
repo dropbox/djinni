@@ -14,12 +14,14 @@ class CppException
 {
 public:
     using CppType = std::shared_ptr<::testsuite::CppException>;
+    using CppOptType = std::shared_ptr<::testsuite::CppException>;
     using ObjcType = DBCppException*;
 
     using Boxed = CppException;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

@@ -14,12 +14,14 @@ class ClientInterface
 {
 public:
     using CppType = std::shared_ptr<::testsuite::ClientInterface>;
+    using CppOptType = std::shared_ptr<::testsuite::ClientInterface>;
     using ObjcType = id<DBClientInterface>;
 
     using Boxed = ClientInterface;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

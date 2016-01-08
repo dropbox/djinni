@@ -102,18 +102,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
             case _ =>
               w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+              w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
           }
           w.wl("using ObjcType = " + (if(i.ext.objc) s"id<$self>" else s"$self*") + ";");
           w.wl
           w.wl(s"using Boxed = $helperClass;")
           w.wl
           w.wl(s"static CppType toCpp(ObjcType objc);")
-          if (spec.cppNnType.nonEmpty) {
-            w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
-            w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
-          } else {
-            w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
-          }
+          w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
+          w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
           w.wl
           w.wlOutdent("private:")
           w.wl("class ObjcProxy;")
@@ -263,9 +260,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         w.wl
-        val fromCppFunc = if (spec.cppNnType.isEmpty) "fromCpp(const CppType& cpp)"
-             else "fromCppOpt(const CppOptType& cpp)"
-        w.wl(s"auto $helperClass::$fromCppFunc -> ObjcType").braced {
+        w.wl(s"auto $helperClass::fromCppOpt(const CppOptType& cpp) -> ObjcType").braced {
           // Handle null
           w.w("if (!cpp)").braced {
             w.wl("return nil;")

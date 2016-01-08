@@ -7,6 +7,7 @@
 #include "client_interface.hpp"
 
 #include "cw__client_interface.hpp"
+#include "cw__client_interface.hpp"
 #include "dh__client_returned_record.hpp"
 #include <experimental/optional>
 #include <vector>
@@ -14,6 +15,8 @@
 static DjinniRecordHandle *(*s_py_callback_client_interface_get_record)(DjinniObjectHandle * , int64_t, DjinniString *, DjinniString *);
 static double(*s_py_callback_client_interface_identifier_check)(DjinniObjectHandle * , DjinniBinary *, int32_t, int64_t);
 static DjinniString *(*s_py_callback_client_interface_return_str)(DjinniObjectHandle * );
+static DjinniString *(*s_py_callback_client_interface_meth_taking_interface)(DjinniObjectHandle * , DjinniWrapperClientInterface *);
+static DjinniString *(*s_py_callback_client_interface_meth_taking_optional_interface)(DjinniObjectHandle * , DjinniWrapperClientInterface *);
 static void(*s_py_callback_client_interface___delete)(DjinniObjectHandle * );
 
 std::shared_ptr<::testsuite::ClientInterface> DjinniWrapperClientInterface::get(djinni::WrapperRef<DjinniWrapperClientInterface> dw) {
@@ -77,6 +80,14 @@ void client_interface_add_callback_return_str(DjinniString *(* ptr)(DjinniObject
     s_py_callback_client_interface_return_str = ptr;
 }
 
+void client_interface_add_callback_meth_taking_interface(DjinniString *(* ptr)(DjinniObjectHandle * , DjinniWrapperClientInterface *)) {
+    s_py_callback_client_interface_meth_taking_interface = ptr;
+}
+
+void client_interface_add_callback_meth_taking_optional_interface(DjinniString *(* ptr)(DjinniObjectHandle * , DjinniWrapperClientInterface *)) {
+    s_py_callback_client_interface_meth_taking_optional_interface = ptr;
+}
+
 void client_interface_add_callback___delete(void(* ptr)(DjinniObjectHandle * )) {
     s_py_callback_client_interface___delete = ptr;
 }
@@ -98,6 +109,20 @@ double ClientInterfacePythonProxy::identifier_check(const std::vector<uint8_t> &
 
 std::string ClientInterfacePythonProxy::return_str() {
     auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_client_interface_return_str(m_py_obj_handle))));
+    djinni::cw_throw_if_pending();
+    return _ret;
+}
+
+std::string ClientInterfacePythonProxy::meth_taking_interface(const std::shared_ptr<::testsuite::ClientInterface> & i) {
+    auto _i = DjinniWrapperClientInterface::wrap(std::move(i));
+    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_client_interface_meth_taking_interface(m_py_obj_handle, _i.release()))));
+    djinni::cw_throw_if_pending();
+    return _ret;
+}
+
+std::string ClientInterfacePythonProxy::meth_taking_optional_interface(const std::shared_ptr<::testsuite::ClientInterface> & i) {
+    auto _i = DjinniWrapperClientInterface::wrap(std::move(i));
+    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_client_interface_meth_taking_optional_interface(m_py_obj_handle, _i.release()))));
     djinni::cw_throw_if_pending();
     return _ret;
 }

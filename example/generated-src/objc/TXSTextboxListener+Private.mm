@@ -36,7 +36,7 @@ auto TextboxListener::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType
+auto TextboxListener::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

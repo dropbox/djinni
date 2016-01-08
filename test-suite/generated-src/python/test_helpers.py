@@ -86,6 +86,9 @@ class TestHelpers(with_metaclass(ABCMeta)):
     def check_client_interface_nonascii(i):
         TestHelpersCppProxy.check_client_interface_nonascii(i)
     @staticmethod
+    def check_client_interface_args(i):
+        TestHelpersCppProxy.check_client_interface_args(i)
+    @staticmethod
     def check_enum_map(m):
         TestHelpersCppProxy.check_enum_map(m)
     @staticmethod
@@ -230,6 +233,11 @@ class TestHelpersCppProxy(TestHelpers):
     @staticmethod
     def check_client_interface_nonascii(i):
         lib.cw__test_helpers_check_client_interface_nonascii(ClientInterfaceHelper.fromPy(i))
+        CPyException.toPyCheckAndRaise(ffi.NULL)
+
+    @staticmethod
+    def check_client_interface_args(i):
+        lib.cw__test_helpers_check_client_interface_args(ClientInterfaceHelper.fromPy(i))
         CPyException.toPyCheckAndRaise(ffi.NULL)
 
     @staticmethod

@@ -37,6 +37,10 @@ class ClientInterfacePythonProxy final : public ::testsuite::ClientInterface {
 
         std::string return_str();
 
+        std::string meth_taking_interface(const std::shared_ptr<::testsuite::ClientInterface> & i);
+
+        std::string meth_taking_optional_interface(const std::shared_ptr<::testsuite::ClientInterface> & i);
+
     private:
         DjinniObjectHandle * m_py_obj_handle;
 };

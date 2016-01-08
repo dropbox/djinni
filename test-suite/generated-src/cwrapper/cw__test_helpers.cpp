@@ -135,6 +135,13 @@ void cw__test_helpers_check_client_interface_nonascii(DjinniWrapperClientInterfa
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
+void cw__test_helpers_check_client_interface_args(DjinniWrapperClientInterface * i) {
+    djinni::Handle<DjinniWrapperClientInterface> _i(i, client_interface___wrapper_dec_ref);
+    try {
+        ::testsuite::TestHelpers::check_client_interface_args(DjinniWrapperClientInterface::get(std::move(_i)));
+    } CW_TRANSLATE_EXCEPTIONS_RETURN();
+}
+
 void cw__test_helpers_check_enum_map(DjinniObjectHandle * m) {
     djinni::Handle<DjinniObjectHandle> _m(m, map_enum_color_string___delete);
     try {

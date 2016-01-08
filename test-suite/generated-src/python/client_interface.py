@@ -29,6 +29,14 @@ class ClientInterface(with_metaclass(ABCMeta)):
     def return_str(self):
         raise NotImplementedError
 
+    @abstractmethod
+    def meth_taking_interface(self, i):
+        raise NotImplementedError
+
+    @abstractmethod
+    def meth_taking_optional_interface(self, i):
+        raise NotImplementedError
+
 
 class ClientInterfaceCallbacksHelper():
     @ffi.callback("struct DjinniRecordHandle *(struct DjinniObjectHandle * , int64_t, struct DjinniString *, struct DjinniString *)")
@@ -61,6 +69,28 @@ class ClientInterfaceCallbacksHelper():
             CPyException.setExceptionFromPy(_djinni_py_e)
             return ffi.NULL
 
+    @ffi.callback("struct DjinniString *(struct DjinniObjectHandle * , struct DjinniWrapperClientInterface *)")
+    def meth_taking_interface(cself, i):
+        try:
+            with CPyString.fromPy(ClientInterfaceHelper.selfToPy(cself).meth_taking_interface(ClientInterfaceHelper.toPy(i))) as py_obj:
+                _ret = py_obj.release_djinni_string()
+                assert _ret != ffi.NULL
+                return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("struct DjinniString *(struct DjinniObjectHandle * , struct DjinniWrapperClientInterface *)")
+    def meth_taking_optional_interface(cself, i):
+        try:
+            with CPyString.fromPy(ClientInterfaceHelper.selfToPy(cself).meth_taking_optional_interface(ClientInterfaceHelper.toPy(i))) as py_obj:
+                _ret = py_obj.release_djinni_string()
+                assert _ret != ffi.NULL
+                return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
     @ffi.callback("void(struct DjinniObjectHandle * )")
     def __delete(c_ptr):
         assert c_ptr in ClientInterfaceHelper.c_data_set
@@ -71,6 +101,8 @@ class ClientInterfaceCallbacksHelper():
         lib.client_interface_add_callback_get_record(ClientInterfaceCallbacksHelper.get_record)
         lib.client_interface_add_callback_identifier_check(ClientInterfaceCallbacksHelper.identifier_check)
         lib.client_interface_add_callback_return_str(ClientInterfaceCallbacksHelper.return_str)
+        lib.client_interface_add_callback_meth_taking_interface(ClientInterfaceCallbacksHelper.meth_taking_interface)
+        lib.client_interface_add_callback_meth_taking_optional_interface(ClientInterfaceCallbacksHelper.meth_taking_optional_interface)
 
         lib.client_interface_add_callback___delete(ClientInterfaceCallbacksHelper.__delete)
 
@@ -106,6 +138,10 @@ class ClientInterfaceHelper:
         if not hasattr(py_obj, "identifier_check"):
             raise TypeError
         if not hasattr(py_obj, "return_str"):
+            raise TypeError
+        if not hasattr(py_obj, "meth_taking_interface"):
+            raise TypeError
+        if not hasattr(py_obj, "meth_taking_optional_interface"):
             raise TypeError
 
         bare_c_ptr = ffi.new_handle(py_proxy)

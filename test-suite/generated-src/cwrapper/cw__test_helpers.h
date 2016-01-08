@@ -39,6 +39,8 @@ void cw__test_helpers_check_client_interface_ascii(struct DjinniWrapperClientInt
 
 void cw__test_helpers_check_client_interface_nonascii(struct DjinniWrapperClientInterface * i);
 
+void cw__test_helpers_check_client_interface_args(struct DjinniWrapperClientInterface * i);
+
 void cw__test_helpers_check_enum_map(struct DjinniObjectHandle * m);
 
 void cw__test_helpers_check_enum(int c);

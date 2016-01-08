@@ -38,7 +38,7 @@ auto ExternInterface2::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto ExternInterface2::fromCpp(const CppType& cpp) -> ObjcType
+auto ExternInterface2::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

@@ -21,4 +21,8 @@ void client_interface_add_callback_identifier_check(double(* ptr)(struct DjinniO
 
 void client_interface_add_callback_return_str(struct DjinniString *(* ptr)(struct DjinniObjectHandle * ));
 
+void client_interface_add_callback_meth_taking_interface(struct DjinniString *(* ptr)(struct DjinniObjectHandle * , struct DjinniWrapperClientInterface *));
+
+void client_interface_add_callback_meth_taking_optional_interface(struct DjinniString *(* ptr)(struct DjinniObjectHandle * , struct DjinniWrapperClientInterface *));
+
 void client_interface_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));

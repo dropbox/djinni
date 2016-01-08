@@ -64,6 +64,8 @@ public:
 
     static void check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i);
 
+    static void check_client_interface_args(const std::shared_ptr<ClientInterface> & i);
+
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
 
     static void check_enum(color c);

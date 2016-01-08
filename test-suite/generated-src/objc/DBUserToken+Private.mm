@@ -69,7 +69,7 @@ auto UserToken::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto UserToken::fromCpp(const CppType& cpp) -> ObjcType
+auto UserToken::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

@@ -64,7 +64,7 @@ auto SortItems::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto SortItems::fromCpp(const CppType& cpp) -> ObjcType
+auto SortItems::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

@@ -45,7 +45,7 @@ auto ConstantsInterface::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto ConstantsInterface::fromCpp(const CppType& cpp) -> ObjcType
+auto ConstantsInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;
