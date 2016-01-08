@@ -3,7 +3,10 @@
 
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
-from djinni.pycffi_marshal import CPyBoxedI32, CPyPrimitive, CPyRecord, CPyString
+from djinni.pycffi_marshal import CPyBoxedBool, CPyBoxedF32, CPyBoxedF64, CPyBoxedI16, CPyBoxedI32, CPyBoxedI64, CPyBoxedI8, CPyPrimitive, CPyRecord, CPyString
+
+from constant_record import ConstantRecord
+from constant_record_helper import ConstantRecordHelper
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
@@ -21,9 +24,19 @@ class Constants:
         F64_CONSTANT: f64_constant has long documentation.
              (Second line of multi-line documentation.
                Indented third line of multi-line documentation.)
+        OPT_BOOL_CONSTANT
+        OPT_I8_CONSTANT
+        OPT_I16_CONSTANT
+        OPT_I32_CONSTANT
+        OPT_I64_CONSTANT
+        OPT_F32_CONSTANT
+        OPT_F64_CONSTANT
         STRING_CONSTANT
-        OPTIONAL_INTEGER_CONSTANT
+        OPT_STRING_CONSTANT
         OBJECT_CONSTANT
+        DUMMY: No support for null optional constants
+             No support for optional constant records
+             No support for constant binary, list, set, map
     """
 
     c_data_set = MultiSet()
@@ -39,15 +52,21 @@ class Constants:
     I64_CONSTANT = 4
     F32_CONSTANT = 5.0
     F64_CONSTANT = 5.0
+    OPT_BOOL_CONSTANT = True
+    OPT_I8_CONSTANT = 1
+    OPT_I16_CONSTANT = 2
+    OPT_I32_CONSTANT = 3
+    OPT_I64_CONSTANT = 4
+    OPT_F32_CONSTANT = 5.0
+    OPT_F64_CONSTANT = 5.0
     STRING_CONSTANT = "string-constant"
-    OPTIONAL_INTEGER_CONSTANT = 1
+    OPT_STRING_CONSTANT = "string-constant"
+    DUMMY = False
 
 
-    def __init__(self, some_integer, some_string):
-        self.some_integer = some_integer
-        self.some_string = some_string
+    def __init__(self):
 
-Constants.OBJECT_CONSTANT = Constants(
+Constants.OBJECT_CONSTANT = ConstantRecord(
     Constants.I32_CONSTANT,
     Constants.STRING_CONSTANT)
 

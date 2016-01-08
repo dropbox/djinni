@@ -18,7 +18,7 @@ public final class Constants {
 
     public static final int I32_CONSTANT = 3;
 
-    public static final long I64_CONSTANT = 4;
+    public static final long I64_CONSTANT = 4l;
 
     public static final float F32_CONSTANT = 5.0f;
 
@@ -29,43 +29,53 @@ public final class Constants {
      */
     public static final double F64_CONSTANT = 5.0;
 
+    @CheckForNull
+    public static final Boolean OPT_BOOL_CONSTANT = true;
+
+    @CheckForNull
+    public static final Byte OPT_I8_CONSTANT = 1;
+
+    @CheckForNull
+    public static final Short OPT_I16_CONSTANT = 2;
+
+    @CheckForNull
+    public static final Integer OPT_I32_CONSTANT = 3;
+
+    @CheckForNull
+    public static final Long OPT_I64_CONSTANT = 4l;
+
+    @CheckForNull
+    public static final Float OPT_F32_CONSTANT = 5.0f;
+
+    @CheckForNull
+    public static final Double OPT_F64_CONSTANT = 5.0;
+
     @Nonnull
     public static final String STRING_CONSTANT = "string-constant";
 
     @CheckForNull
-    public static final Integer OPTIONAL_INTEGER_CONSTANT = 1;
+    public static final String OPT_STRING_CONSTANT = "string-constant";
 
     @Nonnull
-    public static final Constants OBJECT_CONSTANT = new Constants(
+    public static final ConstantRecord OBJECT_CONSTANT = new ConstantRecord(
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 
+    /**
+     * No support for null optional constants
+     * No support for optional constant records
+     * No support for constant binary, list, set, map
+     */
+    public static final boolean DUMMY = false;
 
-    /*package*/ final int mSomeInteger;
-
-    /*package*/ final String mSomeString;
 
     public Constants(
-            int someInteger,
-            @Nonnull String someString) {
-        this.mSomeInteger = someInteger;
-        this.mSomeString = someString;
-    }
-
-    public int getSomeInteger() {
-        return mSomeInteger;
-    }
-
-    @Nonnull
-    public String getSomeString() {
-        return mSomeString;
+            ) {
     }
 
     @Override
     public String toString() {
         return "Constants{" +
-                "mSomeInteger=" + mSomeInteger +
-                "," + "mSomeString=" + mSomeString +
         "}";
     }
 

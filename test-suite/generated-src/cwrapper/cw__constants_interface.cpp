@@ -7,6 +7,8 @@
 #include "constants_interface.hpp"
 
 #include "cw__constants_interface.hpp"
+#include "dh__constant_record.hpp"
+#include <experimental/optional>
 
 std::shared_ptr<::testsuite::ConstantsInterface> DjinniWrapperConstantsInterface::get(djinni::WrapperRef<DjinniWrapperConstantsInterface> dw) {
     if (dw) {

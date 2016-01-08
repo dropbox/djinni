@@ -19,41 +19,25 @@ void constants___delete(DjinniRecordHandle * drh) {
 void optional_constants___delete(DjinniOptionalRecordHandle * drh) {
     s_py_callback_constants___delete((DjinniRecordHandle *) drh); // can't static cast, find better way
 }
-static int32_t ( * s_py_callback_constants_get_constants_f1)(DjinniRecordHandle *);
+static DjinniRecordHandle * ( * s_py_callback_constants_python_create_constants)();
 
-void constants_add_callback_get_constants_f1(int32_t( * ptr)(DjinniRecordHandle *)) {
-    s_py_callback_constants_get_constants_f1 = ptr;
-}
-
-static DjinniString * ( * s_py_callback_constants_get_constants_f2)(DjinniRecordHandle *);
-
-void constants_add_callback_get_constants_f2(DjinniString *( * ptr)(DjinniRecordHandle *)) {
-    s_py_callback_constants_get_constants_f2 = ptr;
-}
-
-static DjinniRecordHandle * ( * s_py_callback_constants_python_create_constants)(int32_t,DjinniString *);
-
-void constants_add_callback_python_create_constants(DjinniRecordHandle *( * ptr)(int32_t,DjinniString *)) {
+void constants_add_callback_python_create_constants(DjinniRecordHandle *( * ptr)()) {
     s_py_callback_constants_python_create_constants = ptr;
 }
 
 djinni::Handle<DjinniRecordHandle> DjinniConstants::fromCpp(const ::testsuite::Constants& dr) {
-    auto  _field_some_string = DjinniString::fromCpp(dr.some_string);
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_constants_python_create_constants(
-            dr.some_integer,
-            _field_some_string.release()),
+        ),
         constants___delete);
     return _aux;
 }
 
 ::testsuite::Constants DjinniConstants::toCpp(djinni::Handle<DjinniRecordHandle> dh) {
-    std::unique_ptr<DjinniString> _field_some_string(s_py_callback_constants_get_constants_f2(dh.get()));
 
     auto _aux = ::testsuite::Constants(
-        s_py_callback_constants_get_constants_f1(dh.get()),
-        DjinniString::toCpp(std::move( _field_some_string)));
+    );
     return _aux;
 }
 

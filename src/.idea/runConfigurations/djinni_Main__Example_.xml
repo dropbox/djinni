@@ -8,8 +8,8 @@
     </extension>
     <option name="MAIN_CLASS_NAME" value="djinni.Main" />
     <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="--java-out ../example/djinni-output-temp/java --java-package com.dropbox.textsort --ident-java-field mFooBar --cpp-out ../example/djinni-output-temp/cpp --cpp-namespace textsort --ident-cpp-enum-type foo_bar --jni-out ../example/djinni-output-temp/jni --ident-jni-class NativeFooBar --ident-jni-file NativeFooBar --objc-out ../example/djinni-output-temp/objc --objcpp-out ../example/djinni-output-temp/objc --objc-type-prefix TXS --idl ../example/example.djinni" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="PROGRAM_PARAMETERS" value="--java-out djinni-output-temp/java --java-package com.dropbox.textsort --ident-java-field mFooBar --cpp-out djinni-output-temp/cpp --cpp-namespace textsort --ident-cpp-enum-type foo_bar --jni-out djinni-output-temp/jni --ident-jni-class NativeFooBar --ident-jni-file NativeFooBar --objc-out djinni-output-temp/objc --objcpp-out djinni-output-temp/objc --objc-type-prefix TXS --idl example.djinni" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../example" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="ENABLE_SWING_INSPECTOR" value="false" />

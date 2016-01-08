@@ -19,7 +19,7 @@ float const FooConstants::F32_CONSTANT = 5.0f;
 
 double const FooConstants::F64_CONSTANT = 6.0;
 
-std::string const FooConstants::STRING_CONSTANT = "string-constant";
+std::string const FooConstants::STRING_CONSTANT = {"string-constant"};
 
 std::experimental::optional<int32_t> const FooConstants::OPTIONAL_INTEGER_CONSTANT = 1;
 

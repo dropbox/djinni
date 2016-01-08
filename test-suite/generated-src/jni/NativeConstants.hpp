@@ -25,9 +25,7 @@ private:
     friend ::djinni::JniClass<NativeConstants>;
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/Constants") };
-    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
-    const jfieldID field_mSomeInteger { ::djinni::jniGetFieldID(clazz.get(), "mSomeInteger", "I") };
-    const jfieldID field_mSomeString { ::djinni::jniGetFieldID(clazz.get(), "mSomeString", "Ljava/lang/String;") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "()V") };
 };
 
 }  // namespace djinni_generated

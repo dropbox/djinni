@@ -20,37 +20,48 @@ float const DBConstantsF32Constant = 5.0f;
 
 double const DBConstantsF64Constant = 5.0;
 
+NSNumber * __nullable const DBConstantsOptBoolConstant = @YES;
+
+NSNumber * __nullable const DBConstantsOptI8Constant = @1;
+
+NSNumber * __nullable const DBConstantsOptI16Constant = @2;
+
+NSNumber * __nullable const DBConstantsOptI32Constant = @3;
+
+NSNumber * __nullable const DBConstantsOptI64Constant = @4;
+
+NSNumber * __nullable const DBConstantsOptF32Constant = @5.0;
+
+NSNumber * __nullable const DBConstantsOptF64Constant = @5.0;
+
 NSString * __nonnull const DBConstantsStringConstant = @"string-constant";
 
-NSNumber * __nullable const DBConstantsOptionalIntegerConstant = @1;
+NSString * __nullable const DBConstantsOptStringConstant = @"string-constant";
 
-DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] initWithSomeInteger:DBConstantsI32Constant
+DBConstantRecord * __nonnull const DBConstantsObjectConstant = [[DBConstantRecord alloc] initWithSomeInteger:DBConstantsI32Constant
         someString:DBConstantsStringConstant];
+
+BOOL const DBConstantsDummy = NO;
 
 #pragma clang diagnostic pop
 
 @implementation DBConstants
 
-- (nonnull instancetype)initWithSomeInteger:(int32_t)someInteger
-                                 someString:(nonnull NSString *)someString
+- (nonnull instancetype)init
 {
     if (self = [super init]) {
-        _someInteger = someInteger;
-        _someString = [someString copy];
     }
     return self;
 }
 
-+ (nonnull instancetype)constantsWithSomeInteger:(int32_t)someInteger
-                                      someString:(nonnull NSString *)someString
++ (nonnull instancetype)constants
 {
-    return [[self alloc] initWithSomeInteger:someInteger
-                                  someString:someString];
+    return [[self alloc] init];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p someInteger:%@ someString:%@>", self.class, self, @(self.someInteger), self.someString];
+    return [NSString stringWithFormat:@"<%@ %p>", self.class, self];
 }
 
 @end

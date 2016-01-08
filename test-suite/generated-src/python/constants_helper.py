@@ -3,7 +3,10 @@
 
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
-from djinni.pycffi_marshal import CPyBoxedI32, CPyPrimitive, CPyRecord, CPyString
+from djinni.pycffi_marshal import CPyBoxedBool, CPyBoxedF32, CPyBoxedF64, CPyBoxedI16, CPyBoxedI32, CPyBoxedI64, CPyBoxedI8, CPyPrimitive, CPyRecord, CPyString
+
+from constant_record import ConstantRecord
+from constant_record_helper import ConstantRecordHelper
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
@@ -16,31 +19,10 @@ class ConstantsHelper:
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 
-    @ffi.callback("int32_t(struct DjinniRecordHandle *)")
-    def get_constants_f1(cself):
-        try:
-            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).some_integer)
-            return _ret
-        except Exception as _djinni_py_e:
-            CPyException.setExceptionFromPy(_djinni_py_e)
-            return ffi.NULL
-
-    @ffi.callback("struct DjinniString *(struct DjinniRecordHandle *)")
-    def get_constants_f2(cself):
-        try:
-            with CPyString.fromPy(CPyRecord.toPy(None, cself).some_string) as py_obj:
-                _ret = py_obj.release_djinni_string()
-                assert _ret != ffi.NULL
-                return _ret
-        except Exception as _djinni_py_e:
-            CPyException.setExceptionFromPy(_djinni_py_e)
-            return ffi.NULL
-
-    @ffi.callback("struct DjinniRecordHandle *(int32_t,struct DjinniString *)")
-    def python_create_constants(some_integer,some_string):
+    @ffi.callback("struct DjinniRecordHandle *()")
+    def python_create_constants():
         py_rec = Constants(
-            CPyPrimitive.toPy(some_integer),
-            CPyString.toPy(some_string))
+        )
         return CPyRecord.fromPy(Constants.c_data_set, py_rec) #to do: can be optional?
 
     @ffi.callback("void (struct DjinniRecordHandle *)")
@@ -51,11 +33,9 @@ class ConstantsHelper:
     @staticmethod
     def _add_callbacks():
         lib.constants_add_callback_python_create_constants(ConstantsHelper.python_create_constants)
-        lib.constants_add_callback_get_constants_f1(ConstantsHelper.get_constants_f1)
         lib.constants_add_callback___delete(ConstantsHelper.__delete)
-        lib.constants_add_callback_get_constants_f2(ConstantsHelper.get_constants_f2)
 
-Constants.OBJECT_CONSTANT = Constants(
+Constants.OBJECT_CONSTANT = ConstantRecord(
     Constants.I32_CONSTANT,
     Constants.STRING_CONSTANT)
 

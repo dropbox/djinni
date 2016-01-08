@@ -4,12 +4,8 @@
 #pragma once // python_cdef_ignore
 #include <stdbool.h>  // python_cdef_ignore
 
-#include <stdint.h> // python_cdef_ignore
-
 struct DjinniConstants;
 void constants___delete(struct DjinniRecordHandle * );
 void optional_constants___delete(struct DjinniOptionalRecordHandle * );
-void constants_add_callback_get_constants_f1(int32_t( * ptr)(struct DjinniRecordHandle *));
-void constants_add_callback_get_constants_f2(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void constants_add_callback_python_create_constants(struct DjinniRecordHandle *( * ptr)(int32_t,struct DjinniString *));
+void constants_add_callback_python_create_constants(struct DjinniRecordHandle *( * ptr)());
 void constants_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));
