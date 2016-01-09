@@ -1008,7 +1008,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
           })
         }
         w.wl
-        if( ! r.consts.isEmpty) {
+        if (! r.consts.isEmpty) {
           generateNonRecursiveConstants(w, r.consts, recordClassName, false)
           w.wl
         }
@@ -1023,11 +1023,12 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
         // Constructor
         w.wl("def __init__" + getRecordArguments(r, "self").mkString("(", ", ", ")") + ":" ).nested {
           r.fields.foreach( f => w.wl("self." + idPython.local(f.ident.name) + " = " + idPython.local(f.ident.name)))
+          if (r.fields.isEmpty) { w.wl("pass") }
         }
       }
       w.wl
       // Const record object of type equal to current record type must be defined after class definition
-      if( r.consts.nonEmpty) {
+      if (r.consts.nonEmpty) {
         generateRecursiveConstants(w, r.consts, recordClassName)
         w.wl
       }

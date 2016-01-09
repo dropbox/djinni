@@ -67,6 +67,7 @@ class Constants:
 
 
     def __init__(self):
+        pass
 
 Constants.OBJECT_CONSTANT = ConstantRecord(
     Constants.I32_CONSTANT,
