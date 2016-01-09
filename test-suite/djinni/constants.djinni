@@ -20,9 +20,13 @@ constants = record {
 
     const opt_bool_constant: optional<bool> = true;
     const opt_i8_constant: optional<i8> = 1;
+    # opt_i16_constant has documentation.
     const opt_i16_constant: optional<i16> = 2;
     const opt_i32_constant: optional<i32> = 3;
     const opt_i64_constant: optional<i64> = 4;
+    # opt_f32_constant has long documentation.
+    # (Second line of multi-line documentation.
+    #   Indented third line of multi-line documentation.)
     const opt_f32_constant: optional<f32> = 5.0;
     const opt_f64_constant: optional<f64> = 5.0;
 
@@ -57,9 +61,13 @@ constants_interface = interface +c {
 
     const opt_bool_constant: optional<bool> = true;
     const opt_i8_constant: optional<i8> = 1;
+    # opt_i16_constant has documentation.
     const opt_i16_constant: optional<i16> = 2;
     const opt_i32_constant: optional<i32> = 3;
     const opt_i64_constant: optional<i64> = 4;
+    # opt_f32_constant has long documentation.
+    # (Second line of multi-line documentation.
+    #   Indented third line of multi-line documentation.)
     const opt_f32_constant: optional<f32> = 5.0;
     const opt_f64_constant: optional<f64> = 5.0;
 

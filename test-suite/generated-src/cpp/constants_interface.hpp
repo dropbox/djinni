@@ -40,12 +40,18 @@ public:
 
     static std::experimental::optional<int8_t> const OPT_I8_CONSTANT;
 
+    /** opt_i16_constant has documentation. */
     static std::experimental::optional<int16_t> const OPT_I16_CONSTANT;
 
     static std::experimental::optional<int32_t> const OPT_I32_CONSTANT;
 
     static std::experimental::optional<int64_t> const OPT_I64_CONSTANT;
 
+    /**
+     * opt_f32_constant has long documentation.
+     * (Second line of multi-line documentation.
+     *   Indented third line of multi-line documentation.)
+     */
     static std::experimental::optional<float> const OPT_F32_CONSTANT;
 
     static std::experimental::optional<double> const OPT_F64_CONSTANT;

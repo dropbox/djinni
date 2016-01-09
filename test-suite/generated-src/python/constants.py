@@ -26,10 +26,12 @@ class Constants:
                Indented third line of multi-line documentation.)
         OPT_BOOL_CONSTANT
         OPT_I8_CONSTANT
-        OPT_I16_CONSTANT
+        OPT_I16_CONSTANT: opt_i16_constant has documentation.
         OPT_I32_CONSTANT
         OPT_I64_CONSTANT
-        OPT_F32_CONSTANT
+        OPT_F32_CONSTANT: opt_f32_constant has long documentation.
+             (Second line of multi-line documentation.
+               Indented third line of multi-line documentation.)
         OPT_F64_CONSTANT
         STRING_CONSTANT
         OPT_STRING_CONSTANT
