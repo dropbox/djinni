@@ -840,7 +840,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
         generateRecursiveConstants(w, i.consts, idPython.className(ident.name))
         w.wl
       }
-      if (i.ext.cpp && i.ext.py ) {
+      if (i.ext.cpp && i.ext.py) {
         writeCppProxyClass(pythonClass, cMethodWrapper, i.methods, w)
         writeCallbacksHelperClass(ident, pythonClass, i.methods, i.ext, w)
         w.wl("class " + pythonClass + "Helper" + ":").nested {

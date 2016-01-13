@@ -935,6 +935,28 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl
   }
 
+  def writeUnimplementableInterface(ident: Ident, origin: String, cppClass: String, refs: CRefs, i: Interface): Unit = {
+    val cClassWrapper = "DjinniWrapper" + cppClass
+
+    refs.hpp.add("#include " + q(marshal.cw + ident.name + ".hpp") + marshal.pythonCdefIgnore) // make sure own header included (for static)
+
+    // C header for cdef
+    writeCHeader(marshal.cw + ident.name, origin, cppClass, refs.h, true, w=> {
+      // Djinni Wrapper over cpp class
+      w.wl( "struct " + marshal.wrappedName(cppClass) + ";"  )
+      writeDjinniUnwrapperSignature(idCpp.method(ident.name), cClassWrapper, i.ext, w)
+    })
+
+    // Cpp header for Djinni Wrapper signatures
+    writeCppHeader(marshal.cw + ident.name, ident.name, origin, cppClass, true, w=>{
+      writeDjinniWrapper(ident, w, cppClass)
+    })
+
+    writeCFile(marshal.cw + ident.name, ident, origin, refs.hpp, true, w => {
+      writeGetWrappedObj(ident, w, cppClass, i.ext)
+    })
+  }
+
   def writeCToCpp(ident: Ident, origin: String, cppClass: String, refs: CRefs, i: Interface, create: Boolean): Unit = {
     val cClassWrapper = "DjinniWrapper" + cppClass
     val cMethodWrapper = idCpp.method(marshal.cw + ident.name)
@@ -1112,6 +1134,10 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       writeCToCpp(ident, origin, cppClass, refs, i, true)
     } else if (i.ext.py) {
       writeCFromCpp(ident, origin, cppClass, refs, i, true)
+    } else {
+      // Write out only the pieces of code needed to compile usage sites, without the code to implement in either
+      // language.  This ensures the code can compile for unused methods which reference types not used in Python.
+      writeUnimplementableInterface(ident, origin, cppClass, refs, i)
     }
   }
 
