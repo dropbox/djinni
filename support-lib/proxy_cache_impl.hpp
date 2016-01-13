@@ -67,6 +67,8 @@ template <typename T> static inline bool is_expired(T* ptr) { return !ptr; }
  */
 template <typename Traits>
 class ProxyCache<Traits>::Pimpl {
+    using Key = std::pair<std::type_index, UnowningImplPointer>;
+
 public:
     /*
      * Look up an object in the proxy cache, and create a new one if not found.
@@ -74,10 +76,12 @@ public:
      * This takes a function pointer, not an arbitrary functor, because we want to minimize
      * code size: this function should only be instantiated *once* per langauge direction.
      */
-    OwningProxyPointer get(const OwningImplPointer & impl, AllocatorFunction * alloc) {
+    OwningProxyPointer get(const std::type_index & tag,
+                           const OwningImplPointer & impl,
+                           AllocatorFunction * alloc) {
         std::unique_lock<std::mutex> lock(m_mutex);
         UnowningImplPointer ptr = get_unowning(impl);
-        auto existing_proxy_iter = m_mapping.find(ptr);
+        auto existing_proxy_iter = m_mapping.find({tag, ptr});
         if (existing_proxy_iter != m_mapping.end()) {
             OwningProxyPointer existing_proxy = upgrade_weak(existing_proxy_iter->second);
             if (existing_proxy) {
@@ -89,16 +93,16 @@ public:
         }
 
         auto alloc_result = alloc(impl);
-        m_mapping.emplace(alloc_result.second, alloc_result.first);
+        m_mapping.emplace(Key{tag, alloc_result.second}, alloc_result.first);
         return alloc_result.first;
     }
 
     /*
      * Erase an object from the proxy cache.
      */
-    void remove(const UnowningImplPointer & impl_unowning) {
+    void remove(const std::type_index & tag, const UnowningImplPointer & impl_unowning) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        auto it = m_mapping.find(impl_unowning);
+        auto it = m_mapping.find({tag, impl_unowning});
         if (it != m_mapping.end()) {
             // The entry in the map should already be expired: this is called from Handle's
             // destructor, so the proxy must already be gone. However, remove() does not
@@ -116,10 +120,20 @@ public:
     }
 
 private:
-    std::unordered_map<UnowningImplPointer,
-                       WeakProxyPointer,
-                       UnowningImplPointerHash,
-                       UnowningImplPointerEqual> m_mapping;
+    struct KeyHash {
+        std::size_t operator()(const Key & k) const {
+            return k.first.hash_code() ^ UnowningImplPointerHash{}(k.second);
+        }
+    };
+
+    struct KeyEqual {
+        bool operator()(const Key & lhs, const Key & rhs) const {
+            return lhs.first == rhs.first
+                && UnowningImplPointerEqual{}(lhs.second, rhs.second);
+        }
+    };
+
+    std::unordered_map<Key, WeakProxyPointer, KeyHash, KeyEqual> m_mapping;
     std::mutex m_mutex;
 
     // Only ProxyCache<Traits>::get_base() can allocate these objects.
@@ -128,8 +142,10 @@ private:
 };
 
 template <typename Traits>
-void ProxyCache<Traits>::cleanup(const std::shared_ptr<Pimpl> & base, UnowningImplPointer ptr) {
-    base->remove(ptr);
+void ProxyCache<Traits>::cleanup(const std::shared_ptr<Pimpl> & base,
+                                 const std::type_index & tag,
+                                 UnowningImplPointer ptr) {
+    base->remove(tag, ptr);
 }
 
 /*
@@ -150,9 +166,11 @@ auto ProxyCache<Traits>::get_base() -> const std::shared_ptr<Pimpl> & {
 }
 
 template <typename Traits>
-auto ProxyCache<Traits>::get(const OwningImplPointer & impl, AllocatorFunction * alloc)
+auto ProxyCache<Traits>::get(const std::type_index & tag,
+                             const OwningImplPointer & impl,
+                             AllocatorFunction * alloc)
         -> OwningProxyPointer {
-    return get_base()->get(impl, alloc);
+    return get_base()->get(tag, impl, alloc);
 }
 
 } // namespace djinni

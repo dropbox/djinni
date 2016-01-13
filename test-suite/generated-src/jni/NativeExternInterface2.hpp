@@ -27,7 +27,7 @@ private:
     friend ::djinni::JniClass<NativeExternInterface2>;
     friend ::djinni::JniInterface<::ExternInterface2, NativeExternInterface2>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::ExternInterface2
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::ExternInterface2
     {
     public:
         JavaProxy(JniType j);

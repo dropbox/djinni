@@ -27,7 +27,7 @@ private:
     friend ::djinni::JniClass<NativeTextboxListener>;
     friend ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::textsort::TextboxListener
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::textsort::TextboxListener
     {
     public:
         JavaProxy(JniType j);
