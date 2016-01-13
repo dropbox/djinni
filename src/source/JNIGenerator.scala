@@ -221,9 +221,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"friend $baseType;")
         w.wl
         if (i.ext.java) {
-          w.wl(s"class JavaProxy final : ::djinni::JavaProxyCacheEntry, public $cppSelf").bracedSemi {
+          w.wl(s"class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public $cppSelf").bracedSemi {
             w.wlOutdent(s"public:")
-            // w.wl(s"using JavaProxyCacheEntry::JavaProxyCacheEntry;")
             w.wl(s"JavaProxy(JniType j);")
             w.wl(s"~JavaProxy();")
             w.wl

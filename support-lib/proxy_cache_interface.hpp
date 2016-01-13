@@ -17,6 +17,7 @@
 #pragma once
 
 #include <functional>
+#include <typeindex>
 
 namespace djinni {
 
@@ -71,10 +72,10 @@ template <typename T> static inline T * get_unowning(T * ptr) { return ptr; }
  *
  * Here's an overview of the structure:
  *
- *                           ______________
- *          WeakProxyPonter |              | UnowningImplPointer
- *           - - - - - - - -| ProxyCache:: |- - - - - - - - - -
- *          |               |   Handle<T>  |                   |
+ *                           ______________  std::pair<ImplType,
+ *          WeakProxyPonter |              | UnowningImplPointer>
+ *           - - - - - - - -|  ProxyCache  |- - - - - - - - - -
+ *          |               |              |                   |
  *          |               |______________|                   |
  *          |                                                  |
  *      ____v____        ______________          ______________v__________
@@ -86,6 +87,14 @@ template <typename T> static inline T * get_unowning(T * ptr) { return ptr; }
  *     ( can be member, base, )       ( T is a generally a specific   )
  *     ( or cross-language    )       ( owning type like id<Foo>,     )
  *     ( reference like jlong )       ( shared_ptr<Foo>, or GlobalRef )
+ *
+ * The cache contains a map from pair<ImplType, UnowningImplPointer>
+ * to WeakProxyPointer, allowing it to answer the question: "given this
+ * impl, do we already have a proxy in existance?"
+ *
+ * We use one map for all translated types, rather than a separate one for each type,
+ * to minimize duplication of code and make it so the unordered_map is as contained as
+ * possible.
  */
 template <typename Traits>
 class ProxyCache {
@@ -111,15 +120,20 @@ public:
      * managing C++ proxies for ObjC objects, OwningImplPointer would be `id`, and the C++
      * proxy class `MyInterface` which wraps `@protocol DBMyInterface` would contain a
      * `Handle<id<DBMyInterface>>`.
+     *
+     * TagType should be the same type that was passed in to `get()` when this handle was
+     * created. Normally this is the same as T (a specialized OwningImplPointer), but in
+     * cases like Java where all object types are uniformly represented as `jobject` in C++,
+     * another type may be used.
      */
-    template <class T>
+    template <typename T, typename TagType = T>
     class Handle {
     public:
         template <typename... Args> Handle(Args &&... args)
             : m_cache(get_base()), m_obj(std::forward<Args>(args)...) {}
         Handle(const Handle &) = delete;
         Handle & operator=(const Handle &) = delete;
-        ~Handle() { if (m_obj) cleanup(m_cache, get_unowning(m_obj)); }
+        ~Handle() { if (m_obj) cleanup(m_cache, typeid(TagType), get_unowning(m_obj)); }
 
         void assign(const T & obj) { m_obj = obj; }
 
@@ -156,10 +170,14 @@ public:
      * Return the existing proxy for `impl`, if any. If not, create one by calling `alloc`,
      * store a weak reference to it in the proxy cache, and return it.
      */
-    static OwningProxyPointer get(const OwningImplPointer & impl, AllocatorFunction * alloc);
+    static OwningProxyPointer get(const std::type_index &,
+                                  const OwningImplPointer & impl,
+                                  AllocatorFunction * alloc);
 
 private:
-    static void cleanup(const std::shared_ptr<Pimpl> &, UnowningImplPointer);
+    static void cleanup(const std::shared_ptr<Pimpl> &,
+                        const std::type_index &,
+                        UnowningImplPointer);
     static const std::shared_ptr<Pimpl> & get_base();
 };
 

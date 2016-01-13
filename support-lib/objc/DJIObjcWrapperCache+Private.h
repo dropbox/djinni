@@ -42,6 +42,7 @@ using ObjcProxyCache = ProxyCache<ObjcProxyCacheTraits>;
 template <typename CppType, typename ObjcType>
 static std::shared_ptr<CppType> get_objc_proxy(ObjcType * objcRef) {
     return std::static_pointer_cast<CppType>(ObjcProxyCache::get(
+        typeid(objcRef),
         objcRef,
         [] (const __strong id & objcRef) -> std::pair<std::shared_ptr<void>, __unsafe_unretained id> {
             return {
