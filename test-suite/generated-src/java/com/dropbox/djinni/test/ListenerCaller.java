@@ -7,6 +7,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+/**
+ * Tester for the ability to call two interfaces which might be
+ * implemented on the same object.  That's not relevant in all
+ * languages, due to the details of multiple inheritance and object
+ * comparison.
+ */
 public abstract class ListenerCaller {
     public abstract void callFirst();
 
