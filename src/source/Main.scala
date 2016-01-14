@@ -65,6 +65,8 @@ object Main {
     var objcppIncludePrefix: String = ""
     var objcppIncludeCppPrefix: String = ""
     var objcppIncludeObjcPrefixOptional: Option[String] = None
+	var cppExtendedRecordIncludePrefix: String = ""
+	var objcExtendedRecordIncludePrefix: String = ""
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
     var objcppNamespace: String = "djinni_generated"
     var objcBaseLibIncludePrefix: String = ""
@@ -74,7 +76,7 @@ object Main {
     var yamlOutFolder: Option[File] = None
     var yamlOutFile: Option[String] = None
     var yamlPrefix: String = ""
-
+	
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
       def identStyle(optionName: String, update: IdentConverter => Unit) = {
@@ -161,6 +163,10 @@ object Main {
         .text("The prefix for #include of the main C++ header files from Objective-C++ files.")
       opt[String]("objcpp-include-objc-prefix").valueName("<prefix>").foreach(x => objcppIncludeObjcPrefixOptional = Some(x))
         .text("The prefix for #import of the Objective-C header files from Objective-C++ files (default: the same as --objcpp-include-prefix)")
+      opt[String]("cpp-extended-record-include-prefix").valueName("<prefix>").foreach(cppExtendedRecordIncludePrefix = _)
+        .text("The prefix for #include of the extended record C++ header files from Objective-C++ files.")
+      opt[String]("objc-extended-record-include-prefix").valueName("<prefix>").foreach(objcExtendedRecordIncludePrefix = _)
+        .text("The prefix for #import of the extended record Objective-C[++] header files from Objective-C++ files.")
       opt[String]("objcpp-namespace").valueName("<prefix>").foreach(objcppNamespace = _)
         .text("The namespace name to use for generated Objective-C++ classes.")
       opt[String]("objc-base-lib-include-prefix").valueName("...").foreach(x => objcBaseLibIncludePrefix = x)
@@ -308,7 +314,9 @@ object Main {
       skipGeneration,
       yamlOutFolder,
       yamlOutFile,
-      yamlPrefix)
+      yamlPrefix,
+	  cppExtendedRecordIncludePrefix,
+	  objcExtendedRecordIncludePrefix)
 
 
     try {

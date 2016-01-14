@@ -109,8 +109,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"using Boxed = $helperClass;")
           w.wl
           w.wl(s"static CppType toCpp(ObjcType objc);")
-          w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
-          w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
+            w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
+            w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
           w.wl
           w.wlOutdent("private:")
           w.wl("class ObjcProxy;")
@@ -302,8 +302,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     val noBaseSelf = objcMarshal.typename(ident, r) // Used for constant names
     val cppSelf = cppMarshal.fqTypename(ident, r)
 
-    refs.privHeader.add("!#import " + q(spec.objcppIncludeObjcPrefix + (if(r.ext.objc) "../" else "") + headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#import " + q(spec.objcppIncludeObjcPrefix + (if(r.ext.objc) spec.objcExtendedRecordIncludePrefix else "") + headerName(ident)))
+    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + (if(r.ext.cpp) spec.cppExtendedRecordIncludePrefix else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#include <cassert>")
     refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(objcName)))
