@@ -12,7 +12,7 @@ djinni/user_token.djinni
 djinni/test.djinni
 djinni/primtypes.djinni
 djinni/constants.djinni
-djinni/listeners.djinni
+djinni/multiple_inheritance.djinni
 djinni/date.djinni
 djinni/date.yaml
 djinni/duration.djinni

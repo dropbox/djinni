@@ -10,4 +10,4 @@
 @import "test.djinni"
 @import "primtypes.djinni"
 @import "constants.djinni"
-@import "listeners.djinni"
+@import "multiple_inheritance.djinni"
