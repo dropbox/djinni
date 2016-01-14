@@ -5,6 +5,9 @@ from listener_caller import ListenerCaller
 from first_listener import FirstListener
 from second_listener import SecondListener
 
+from return_one import ReturnOne
+from return_two import ReturnTwo
+
 class MultiListenerImpl(FirstListener, SecondListener):
     def __init__(self):
         self.first_called = False
@@ -16,7 +19,7 @@ class MultiListenerImpl(FirstListener, SecondListener):
     def second(self):
         self.second_called = True
 
-def test_listener_caller():
+def test_multiple_inheritance_in_python():
     listener = MultiListenerImpl()
     caller = ListenerCaller.init(listener, listener)
 
@@ -32,3 +35,10 @@ def test_listener_caller():
 
     assert listener.first_called
     assert listener.second_called
+
+def test_multiple_inheritance_in_cpp():
+    return_one = ReturnOne.get_instance()
+    assert return_one.return_one() == 1
+
+    return_two = ReturnTwo.get_instance()
+    assert return_two.return_two() == 2

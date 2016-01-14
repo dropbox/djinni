@@ -29,6 +29,10 @@ DerivedData
 # py build artifacts
 build_py/
 
+# py test artifacts
+**/.cache/
+**/__pycache__/
+
 # djinni output directories
 djinni-output-temp/
 djinni-output-temp-py/
