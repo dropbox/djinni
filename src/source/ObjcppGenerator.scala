@@ -109,8 +109,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"using Boxed = $helperClass;")
           w.wl
           w.wl(s"static CppType toCpp(ObjcType objc);")
-            w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
-            w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
+          w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
+          w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
           w.wl
           w.wlOutdent("private:")
           w.wl("class ObjcProxy;")
