@@ -33,6 +33,7 @@ case class Parser() {
 
 val visitedFiles = mutable.Set[File]()
 val fileStack = mutable.Stack[File]()
+def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
 
 private object IdlParser extends RegexParsers {
   override protected val whiteSpace = """[ \t\n\r]+""".r
@@ -41,10 +42,10 @@ private object IdlParser extends RegexParsers {
 
   def importFile: Parser[FileRef] = ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
     case "import" ~ x =>
-      val newPath = fileStack.top.getParent() + "/" + x
+      val newPath = fileParent + x
       new IdlFileRef(new File(newPath))
     case "extern" ~ x =>
-      val newPath = fileStack.top.getParent() + "/" + x
+      val newPath = fileParent + x
       new ExternFileRef(new File(newPath))
   }
   def filePath = "[^\"]*".r
