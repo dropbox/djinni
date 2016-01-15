@@ -27,6 +27,7 @@ object Main {
     var cppOutFolder: Option[File] = None
     var cppNamespace: String = ""
     var cppIncludePrefix: String = ""
+	var cppExtendedRecordIncludePrefix: String = ""
     var cppFileIdentStyle: IdentConverter = IdentStyle.underLower
     var cppOptionalTemplate: String = "std::optional"
     var cppOptionalHeader: String = "<optional>"
@@ -62,11 +63,10 @@ object Main {
     var objcIdentStyle = IdentStyle.objcDefault
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
+	var objcExtendedRecordIncludePrefix: String = ""
     var objcppIncludePrefix: String = ""
     var objcppIncludeCppPrefix: String = ""
     var objcppIncludeObjcPrefixOptional: Option[String] = None
-	var cppExtendedRecordIncludePrefix: String = ""
-	var objcExtendedRecordIncludePrefix: String = ""
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
     var objcppNamespace: String = "djinni_generated"
     var objcBaseLibIncludePrefix: String = ""
@@ -279,6 +279,7 @@ object Main {
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,
+      cppExtendedRecordIncludePrefix,
       cppNamespace,
       cppIdentStyle,
       cppFileIdentStyle,
@@ -305,7 +306,8 @@ object Main {
       objcppExt,
       objcHeaderExt,
       objcIncludePrefix,
-      objcppIncludePrefix,
+	  objcExtendedRecordIncludePrefix,
+	  objcppIncludePrefix,
       objcppIncludeCppPrefix,
       objcppIncludeObjcPrefix,
       objcppNamespace,
@@ -314,9 +316,7 @@ object Main {
       skipGeneration,
       yamlOutFolder,
       yamlOutFile,
-      yamlPrefix,
-	  cppExtendedRecordIncludePrefix,
-	  objcExtendedRecordIncludePrefix)
+      yamlPrefix)
 
 
     try {

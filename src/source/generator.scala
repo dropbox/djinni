@@ -38,6 +38,7 @@ package object generatorTools {
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
                    cppIncludePrefix: String,
+				   cppExtendedRecordIncludePrefix: String,
                    cppNamespace: String,
                    cppIdentStyle: CppIdentStyle,
                    cppFileIdentStyle: IdentConverter,
@@ -64,6 +65,7 @@ package object generatorTools {
                    objcppExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
+				   objcExtendedRecordIncludePrefix: String,
                    objcppIncludePrefix: String,
                    objcppIncludeCppPrefix: String,
                    objcppIncludeObjcPrefix: String,
@@ -73,9 +75,7 @@ package object generatorTools {
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
                    yamlOutFile: Option[String],
-                   yamlPrefix: String,
-				   cppExtendedRecordIncludePrefix: String,
-				   objcExtendedRecordIncludePrefix: String)
+                   yamlPrefix: String)
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
