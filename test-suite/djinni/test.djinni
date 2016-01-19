@@ -49,3 +49,8 @@ test_helpers = interface +c {
 empty_record = record {
     
 }
+
+# Extended record
+extended_record = record +c {
+	foo: bool;
+}
