@@ -1,0 +1,5 @@
+
+# Extended record
+extended_record = record +c {
+    foo: bool;
+}

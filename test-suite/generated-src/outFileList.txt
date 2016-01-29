@@ -4,6 +4,7 @@ djinni-output-temp/cpp/record_with_duration_and_derivings.cpp
 djinni-output-temp/cpp/date_record.hpp
 djinni-output-temp/cpp/date_record.cpp
 djinni-output-temp/cpp/map_date_record.hpp
+djinni-output-temp/cpp/extended_record_base.hpp
 djinni-output-temp/cpp/objc_only_listener.hpp
 djinni-output-temp/cpp/java_only_listener.hpp
 djinni-output-temp/cpp/uses_single_language_listeners.hpp
@@ -41,6 +42,7 @@ djinni-output-temp/java/TestDuration.java
 djinni-output-temp/java/RecordWithDurationAndDerivings.java
 djinni-output-temp/java/DateRecord.java
 djinni-output-temp/java/MapDateRecord.java
+djinni-output-temp/java/ExtendedRecord.java
 djinni-output-temp/java/ObjcOnlyListener.java
 djinni-output-temp/java/JavaOnlyListener.java
 djinni-output-temp/java/UsesSingleLanguageListeners.java
@@ -77,6 +79,8 @@ djinni-output-temp/jni/NativeDateRecord.hpp
 djinni-output-temp/jni/NativeDateRecord.cpp
 djinni-output-temp/jni/NativeMapDateRecord.hpp
 djinni-output-temp/jni/NativeMapDateRecord.cpp
+djinni-output-temp/jni/NativeExtendedRecord.hpp
+djinni-output-temp/jni/NativeExtendedRecord.cpp
 djinni-output-temp/jni/NativeObjcOnlyListener.hpp
 djinni-output-temp/jni/NativeObjcOnlyListener.cpp
 djinni-output-temp/jni/NativeJavaOnlyListener.hpp
@@ -139,6 +143,8 @@ djinni-output-temp/objc/DBDateRecord.h
 djinni-output-temp/objc/DBDateRecord.mm
 djinni-output-temp/objc/DBMapDateRecord.h
 djinni-output-temp/objc/DBMapDateRecord.mm
+djinni-output-temp/objc/DBExtendedRecord.h
+djinni-output-temp/objc/DBExtendedRecord.mm
 djinni-output-temp/objc/DBObjcOnlyListener.h
 djinni-output-temp/objc/DBJavaOnlyListener.h
 djinni-output-temp/objc/DBUsesSingleLanguageListeners.h
@@ -189,6 +195,8 @@ djinni-output-temp/objc/DBDateRecord+Private.h
 djinni-output-temp/objc/DBDateRecord+Private.mm
 djinni-output-temp/objc/DBMapDateRecord+Private.h
 djinni-output-temp/objc/DBMapDateRecord+Private.mm
+djinni-output-temp/objc/DBExtendedRecord+Private.h
+djinni-output-temp/objc/DBExtendedRecord+Private.mm
 djinni-output-temp/objc/DBObjcOnlyListener+Private.h
 djinni-output-temp/objc/DBObjcOnlyListener+Private.mm
 djinni-output-temp/objc/DBJavaOnlyListener+Private.h
