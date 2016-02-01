@@ -66,8 +66,8 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
         }
       case DRecord =>
         val r = d.body.asInstanceOf[Record]
-        val prefix = if (r.ext.objc) "../" else ""
-        List(ImportRef(q(spec.objcIncludePrefix + prefix + headerName(d.name))))
+        val prefix = if (r.ext.objc) spec.objcExtendedRecordIncludePrefix else spec.objcIncludePrefix
+        List(ImportRef(q(prefix + headerName(d.name))))
     }
     case e: MExtern => List(ImportRef(e.objc.header))
     case p: MParam => List()
