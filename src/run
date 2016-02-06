@@ -19,10 +19,8 @@ base_dir=$(cd "`dirname "$loc"`" && pwd)
 # Determine os version and choose correspondent .sh or .bat file accordingly.
 os_version="`uname -a`"
 
-if [[ $os_version == *"MINGW"* ]]; then
-  echo "It's Windows MINGW!"
+if [[ $os_version == *"MINGW"* ]]; then  
   cmd //C "$base_dir/target/start.bat" "$@"
-else
-  echo "It's Linux or Mac OS!"
+else  
   exec "$base_dir/target/start" "$@"
 fi
