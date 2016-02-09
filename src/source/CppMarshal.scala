@@ -66,14 +66,14 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           List()
         }
       case DInterface =>
-        if (d.name != exclude) {
-          val base = List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
-          spec.cppNnHeader match {
-            case Some(nnHdr) => ImportRef(nnHdr) :: base
-            case _ => base
-          }
+        val base = if (d.name != exclude) {
+          List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
         } else {
           List(ImportRef("<memory>"))
+        }
+        spec.cppNnHeader match {
+          case Some(nnHdr) => ImportRef(nnHdr) :: base
+          case _ => base
         }
     }
     case e: MExtern => e.defType match {
