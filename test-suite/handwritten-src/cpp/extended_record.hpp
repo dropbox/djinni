@@ -7,5 +7,7 @@ namespace testsuite {
 	struct ExtendedRecord : public ExtendedRecordBase
 	{
 		using ExtendedRecordBase::ExtendedRecordBase;
+		
+		ExtendedRecord();
 	};
 }

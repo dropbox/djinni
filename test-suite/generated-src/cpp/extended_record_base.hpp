@@ -4,9 +4,10 @@
 #pragma once
 
 #include <utility>
-struct ExtendedRecord; // Requiring extended class
 
 namespace testsuite {
+
+struct ExtendedRecord; // Requiring extended class
 
 /** Extended record */
 struct ExtendedRecordBase {
