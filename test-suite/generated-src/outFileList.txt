@@ -5,6 +5,7 @@ djinni-output-temp/cpp/date_record.hpp
 djinni-output-temp/cpp/date_record.cpp
 djinni-output-temp/cpp/map_date_record.hpp
 djinni-output-temp/cpp/extended_record_base.hpp
+djinni-output-temp/cpp/extended_record_base.cpp
 djinni-output-temp/cpp/objc_only_listener.hpp
 djinni-output-temp/cpp/java_only_listener.hpp
 djinni-output-temp/cpp/uses_single_language_listeners.hpp

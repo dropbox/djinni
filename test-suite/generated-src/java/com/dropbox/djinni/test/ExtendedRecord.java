@@ -9,6 +9,10 @@ import javax.annotation.Nonnull;
 /** Extended record */
 public final class ExtendedRecord {
 
+    @Nonnull
+    public static final ExtendedRecord EXTENDED_RECORD_CONST = new ExtendedRecord(
+        true /* mFoo */ );
+
 
     /*package*/ final boolean mFoo;
 
