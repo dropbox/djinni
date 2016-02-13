@@ -6,9 +6,10 @@
 #include <cstdint>
 #include <string>
 #include <utility>
-struct FooExtensibleRecord; // Requiring extended class
 
 namespace testsuite {
+
+struct FooExtensibleRecord; // Requiring extended class
 
 struct FooExtensibleRecordBase {
     int32_t number1;

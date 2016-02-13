@@ -146,12 +146,16 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     // Requiring the extended class
     if (r.ext.cpp) {
-      refs.hpp.add(s"struct $self; // Requiring extended class")
-      refs.cpp.add("#include "+q("../" + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+      refs.cpp.add("#include "+q(spec.cppExtendedRecordIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     }
 
     // C++ Header
     def writeCppPrototype(w: IndentWriter) {
+      if (r.ext.cpp) {
+        w.w(s"struct $self; // Requiring extended class")
+        w.wl
+        w.wl
+      }
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
       w.w("struct " + actualSelf + cppFinal).bracedSemi {
