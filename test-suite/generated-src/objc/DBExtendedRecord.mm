@@ -3,6 +3,12 @@
 
 #import "DBExtendedRecord.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+
+DBExtendedRecord * __nonnull const DBExtendedRecordExtendedRecordConst = [[DBExtendedRecord alloc] initWithFoo:YES];
+
+#pragma clang diagnostic pop
 
 @implementation DBExtendedRecord
 

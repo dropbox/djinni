@@ -71,6 +71,7 @@ fi
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
     --cpp-optional-header "<experimental/optional>" \
+    --cpp-extended-record-include-prefix "../../handwritten-src/cpp/" \
     \
     --jni-out "$temp_out_relative/jni" \
     --ident-jni-class NativeFooBar \
