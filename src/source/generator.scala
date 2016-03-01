@@ -215,8 +215,8 @@ package object generatorTools {
       if (spec.yamlOutFolder.isDefined) {
         if (!spec.skipGeneration) {
           createFolder("YAML", spec.yamlOutFolder.get)
-          new YamlGenerator(spec).generate(idl)
         }
+        new YamlGenerator(spec).generate(idl)
       }
       if (spec.pyOutFolder.isDefined) {
         DEBUG(spec.pyOutFolder.get.toString)

@@ -190,7 +190,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
       if (i.ext.objc) {
         w.wl
-        val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
         wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"class $helperClass::ObjcProxy final")
           w.wl(s": public $cppSelf")
@@ -247,7 +246,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
           } else {
             // ObjC only, or ObjC and C++.
-            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
               w.w(s"if ([(id)objc isKindOfClass:[$objcSelf class]])").braced {
@@ -255,7 +253,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"return ${nnCheck(getProxyExpr)};")
               }
             }
-            val getProxyExpr = s"::djinni::get_objc_proxy<$objcExtSelf>(objc)"
+            val getProxyExpr = s"::djinni::get_objc_proxy<ObjcProxy>(objc)"
             w.wl(s"return ${nnCheck(getProxyExpr)};")
           }
         }
@@ -268,14 +266,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           if (i.ext.objc && !i.ext.cpp) {
             // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
             // throw bad_cast if we gave it something of the wrong type.
-            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
-            w.wl(s"return dynamic_cast<$objcExtSelf&>(*cpp).Handle::get();")
+            w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();")
           } else {
             // C++ only, or C++ and ObjC.
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
-              val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
-              w.w(s"if (auto cppPtr = dynamic_cast<$objcExtSelf*>(cpp.get()))").braced {
+              w.w(s"if (auto cppPtr = dynamic_cast<ObjcProxy*>(cpp.get()))").braced {
                 w.wl("return cppPtr->Handle::get();")
               }
             }
