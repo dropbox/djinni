@@ -57,9 +57,13 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
   def nnCheck(expr: String): String = spec.cppNnCheckExpression.fold(expr)(check => s"$check($expr)")
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
+      m.params.map(p => refs.find(p.ty))
+      m.ret.foreach(refs.find)
+    })
+    getInterfaceSuperMethods(i, idl).map(m => {
       m.params.map(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
     })
@@ -72,18 +76,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
     refs.privHeader.add("#include <memory>")
     refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    if (i.superIdent.isDefined) {
+      refs.privHeader.add("#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(i.superIdent.get.name)));
+    }
+
     refs.body.add("!#import " + q(spec.objcppIncludeObjcPrefix + headerName(ident)))
 
     spec.cppNnHeader match {
       case Some(nnHdr) => refs.privHeader.add("#include " + nnHdr)
       case _ =>
-    }
-
-    def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
-      val label = if (method.static) "+" else "-"
-      val ret = objcMarshal.fqReturnType(method.ret)
-      val decl = s"$label ($ret)${idObjc.method(method.ident)}"
-      writeAlignedObjcCall(w, decl, method.params, "", p => (idObjc.field(p.ident), s"(${objcMarshal.paramType(p.ty)})${idObjc.local(p.ident)}"))
     }
 
     val helperClass = objcppMarshal.helperClass(ident)
@@ -159,32 +160,14 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
           w.wl("return self;")
         }
-        for (m <- i.methods) {
-          w.wl
-          writeObjcFuncDecl(m, w)
-          w.braced {
-            w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
-              m.params.foreach(p => {
-                if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
-                  // We have a non-optional interface, assert that we're getting a non-null value
-                  val paramName = idObjc.local(p.ident)
-                  val stringWriter = new StringWriter()
-                  writeObjcFuncDecl(m, new IndentWriter(stringWriter))
-                  val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
-                  val exceptionReason = s"Got unexpected null parameter '$paramName' to function $objcSelf $singleLineFunctionDecl"
-                  w.w(s"if ($paramName == nil)").braced {
-                    w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
-                  }
-                }
-              })
-              val ret = m.ret.fold("")(_ => "auto r = ")
-              val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
-              writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
 
-              w.wl(";")
-              m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
-            }
-          }
+        w.wl; w.wl(s"// $objcSelf methods")
+        writeCppProxyMethods(w, i.methods, objcSelf, cppSelf)
+
+        val superMethods = getInterfaceSuperMethods(i, idl)
+        if (!superMethods.isEmpty) {
+          w.wl; w.wl(s"// ${objcppMarshal.superTypename(i).getOrElse("Super")} methods")
+          writeCppProxyMethods(w, superMethods, objcSelf, cppSelf)
         }
       }
 
@@ -285,6 +268,43 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         w.wl("@end")
       }
     })
+  }
+
+  def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
+    val label = if (method.static) "+" else "-"
+    val ret = objcMarshal.fqReturnType(method.ret)
+    val decl = s"$label ($ret)${idObjc.method(method.ident)}"
+    writeAlignedObjcCall(w, decl, method.params, "", p => (idObjc.field(p.ident), s"(${objcMarshal.paramType(p.ty)})${idObjc.local(p.ident)}"))
+  }
+
+  def writeCppProxyMethods(w: IndentWriter, methods: Seq[Interface.Method], objcName: String, cppName: String) {
+    for (m <- methods) {
+      w.wl
+      writeObjcFuncDecl(m, w)
+      w.braced {
+        w.w("try").bracedEnd(" DJINNI_TRANSLATE_EXCEPTIONS()") {
+          m.params.foreach(p => {
+            if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
+              // We have a non-optional interface, assert that we're getting a non-null value
+              val paramName = idObjc.local(p.ident)
+              val stringWriter = new StringWriter()
+              writeObjcFuncDecl(m, new IndentWriter(stringWriter))
+              val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
+              val exceptionReason = s"Got unexpected null parameter '$paramName' to function $objcName $singleLineFunctionDecl"
+              w.w(s"if ($paramName == nil)").braced {
+                w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
+              }
+            }
+          })
+          val ret = m.ret.fold("")(_ => "auto r = ")
+          val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppName + "::") + idCpp.method(m.ident) + "("
+          writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
+
+          w.wl(";")
+          m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
+        }
+      }
+    }
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {

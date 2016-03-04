@@ -46,6 +46,10 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       case _ =>
     }
 
+    def addHppInclude(name: String): Unit = {
+      jniHpp.add("#include " + name)
+    }
+
     def find(ty: TypeRef) { find(ty.resolved) }
     def find(tm: MExpr) {
       tm.args.foreach(find)
@@ -169,9 +173,18 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     writeJniFiles(origin, params.nonEmpty, ident, refs, writeJniPrototype, writeJniBody)
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new JNIRefs(ident.name)
+
+    if (i.superIdent.isDefined) {
+      refs.addHppInclude(jniMarshal.include(i.superIdent.get.name))
+    }
+
     i.methods.foreach(m => {
+      m.params.foreach(p => refs.find(p.ty))
+      m.ret.foreach(refs.find)
+    })
+    getInterfaceSuperMethods(i, idl).foreach(m => {
       m.params.foreach(p => refs.find(p.ty))
       m.ret.foreach(refs.find)
     })
@@ -336,30 +349,35 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         nativeHook("nativeDestroy", false, Seq.empty, None, {
           w.wl(s"delete reinterpret_cast<djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
         })
-        for (m <- i.methods) {
-          val nativeAddon = if (m.static) "" else "native_"
-          nativeHook(nativeAddon + idJava.method(m.ident), m.static, m.params, m.ret, {
-            //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
-            if (!m.static) w.wl(s"const auto& ref = ::djinni::objectFromHandleAddress<$cppSelf>(nativeRef);")
-            m.params.foreach(p => {
-              if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
-                // We have a non-optional interface in nn mode, assert that we're getting a non-null value
-                val paramName = idJava.local(p.ident)
-                val javaMethodName = idJava.method(m.ident)
-                val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
-                val javaParamsString: String = javaParams.mkString("(", ", ", ")")
-                val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
-                w.wl( s"""DJINNI_ASSERT_MSG(j_$paramName, jniEnv, "Got unexpected null parameter '$paramName' to function $functionString");""")
-              }
+
+        def writeJniMethods(w: IndentWriter, methods: Seq[Interface.Method]) {
+          for (m <- methods) {
+            val nativeAddon = if (m.static) "" else "native_"
+            nativeHook(nativeAddon + idJava.method(m.ident), m.static, m.params, m.ret, {
+              //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
+              if (!m.static) w.wl(s"const auto& ref = ::djinni::objectFromHandleAddress<$cppSelf>(nativeRef);")
+              m.params.foreach(p => {
+                if (isInterface(p.ty.resolved) && spec.cppNnCheckExpression.nonEmpty) {
+                  // We have a non-optional interface in nn mode, assert that we're getting a non-null value
+                  val paramName = idJava.local(p.ident)
+                  val javaMethodName = idJava.method(m.ident)
+                  val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
+                  val javaParamsString: String = javaParams.mkString("(", ", ", ")")
+                  val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
+                  w.wl( s"""DJINNI_ASSERT_MSG(j_$paramName, jniEnv, "Got unexpected null parameter '$paramName' to function $functionString");""")
+                }
+              })
+              val methodName = idCpp.method(m.ident)
+              val ret = m.ret.fold("")(r => "auto r = ")
+              val call = if (m.static) s"$cppSelf::$methodName(" else s"ref->$methodName("
+              writeAlignedCall(w, ret + call, m.params, ")", p => jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident)))
+              w.wl(";")
+              m.ret.fold()(r => w.wl(s"return ::djinni::release(${jniMarshal.fromCpp(r, "r")});"))
             })
-            val methodName = idCpp.method(m.ident)
-            val ret = m.ret.fold("")(r => "auto r = ")
-            val call = if (m.static) s"$cppSelf::$methodName(" else s"ref->$methodName("
-            writeAlignedCall(w, ret + call, m.params, ")", p => jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident)))
-            w.wl(";")
-            m.ret.fold()(r => w.wl(s"return ::djinni::release(${jniMarshal.fromCpp(r, "r")});"))
-          })
+          }
         }
+        writeJniMethods(w, getInterfaceSuperMethods(i, idl))
+        writeJniMethods(w, i.methods)
       }
     }
 

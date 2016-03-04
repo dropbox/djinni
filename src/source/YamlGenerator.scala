@@ -171,7 +171,7 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     // unused
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     // unused
   }
 
