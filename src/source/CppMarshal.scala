@@ -20,6 +20,11 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case r: Record => withNs(Some(spec.cppNamespace), idCpp.ty(name))
   }
 
+  def superTypename(ty: TypeDef): Option[String] = ty match {
+    case i: Interface => if (i.superIdent.isDefined) Some(i.superIdent.get.name) else None
+    case _ => None
+  }
+
   override def paramType(tm: MExpr): String = toCppParamType(tm)
   override def fqParamType(tm: MExpr): String = toCppParamType(tm, Some(spec.cppNamespace))
 

@@ -3,6 +3,7 @@ package djinni
 import djinni.ast._
 import djinni.generatorTools._
 import djinni.meta._
+import scala.collection.mutable.ListBuffer
 import scala.language.implicitConversions
 
 // Generate code for marshalling a specific type from/to C++ including header and type names.
@@ -16,6 +17,8 @@ abstract class Marshal(spec: Spec) {
   // Same as typename() but always fully namespace or package qualified
   def fqTypename(tm: MExpr): String
   def fqTypename(ty: TypeRef): String = fqTypename(ty.resolved)
+  // Typename string of the interface that the type extends
+  def superTypename(ty: TypeRef): String = typename(ty.resolved)
   // Type signature for a function parameter
   def paramType(tm: MExpr): String
   def paramType(ty: TypeRef): String = paramType(ty.resolved)
@@ -35,6 +38,27 @@ abstract class Marshal(spec: Spec) {
   // Generate code for an expression that transforms an expression `expr` of the C++ type `tm` to its non-C++ counterpart
   def fromCpp(tm: MExpr, expr: String): String = ""
   def fromCpp(ty: TypeRef, expr: String): String = fromCpp(ty.resolved, expr)
+
+  def interfaceForIdent(idl: Seq[TypeDecl], ident: Ident): Interface = {
+    idl.find(td => td.ident.name == ident.name) match {
+      case Some(superDec) => superDec.body match {
+        case i: Interface => i
+        case _ => throw new AssertionError("Unreachable. The parser throws an exception when extending a non-interface type.")
+      }
+      case _ => throw new AssertionError("Unreachable. The parser throws an exception when extending an interface that doesn't exist.")
+    }
+  }
+
+  def superInterfacesForInterface(i: Interface, idl: Seq[TypeDecl]): Seq[Interface] = {
+    val interfaces = ListBuffer[Interface]()
+
+    var interface = i
+    while (interface.superIdent.isDefined) {
+      interface = interfaceForIdent(idl, interface.superIdent.get)
+      interfaces += interface
+    }
+    interfaces
+  }
 
   implicit def identToString(ident: Ident): String = ident.name
   protected val idCpp = spec.cppIdentStyle

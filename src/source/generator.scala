@@ -22,6 +22,7 @@ import djinni.generatorTools._
 import djinni.meta._
 import djinni.syntax.Error
 import djinni.writer.IndentWriter
+import scala.collection.mutable.ListBuffer
 import scala.language.implicitConversions
 import scala.collection.mutable
 
@@ -319,13 +320,13 @@ abstract class Generator(spec: Spec)
         assert(td.params.isEmpty)
         generateEnum(td.origin, td.ident, td.doc, e)
       case r: Record => generateRecord(td.origin, td.ident, td.doc, td.params, r)
-      case i: Interface => generateInterface(td.origin, td.ident, td.doc, td.params, i)
+      case i: Interface => generateInterface(idl, td.origin, td.ident, td.doc, td.params, i)
     }
   }
 
   def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum)
   def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record)
-  def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface)
+  def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface)
 
   // --------------------------------------------------------------------------
   // Render type expression
@@ -375,4 +376,27 @@ abstract class Generator(spec: Spec)
         w.wl(" */")
     }
   }
+
+  // --------------------------------------------------------------------------
+  // Interface Inheritance Utils
+
+  def getInterfaceSuperMethods(i: Interface, idl: Seq[TypeDecl]): Seq[Interface.Method] = {
+    val methods = ListBuffer[Interface.Method]();
+
+    var superIdent = i.superIdent
+    while (superIdent.isDefined) {
+      idl.find(td => td.ident.name == superIdent.get.name) match {
+        case Some(superDec) => superDec.body match {
+          case i: Interface => {
+            methods.appendAll(i.methods)
+            superIdent = i.superIdent
+          }
+          case _ => throw new AssertionError("Unreachable. The parser throws an exception when extending a non-interface type.")
+        }
+        case _ => throw new AssertionError("Unreachable. The parser throws an exception when extending an interface that doesn't exist.")
+      }
+    }
+    methods.filter(m => !m.static)
+  }
+
 }

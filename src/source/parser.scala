@@ -40,8 +40,8 @@ private object IdlParser extends RegexParsers {
   def idlFile(origin: String): Parser[IdlFile] = rep(importFile) ~ rep(typeDecl(origin)) ^^ { case imp~types => IdlFile(imp, types) }
 
   def importFile: Parser[FileRef] = {
-    
-	def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
+
+  def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
 
     ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
       case "import" ~ x =>
@@ -90,7 +90,7 @@ private object IdlParser extends RegexParsers {
     success(Ext(foundJava, foundCpp, foundObjc))
   }
 
-  def typeDef: Parser[TypeDef] = record | enum | interface
+  def typeDef: Parser[TypeDef] = record | enum | interface | interfaceExtends
 
   def recordHeader = "record" ~> extRecord
   def record: Parser[Record] = recordHeader ~ bracesList(field | const) ~ opt(deriving) ^^ {
@@ -123,14 +123,23 @@ private object IdlParser extends RegexParsers {
     case ext~items => {
       val methods = items collect {case m: Method => m}
       val consts = items collect {case c: Const => c}
-      Interface(ext, methods, consts)
+      Interface(None, ext, methods, consts)
+    }
+  }
+
+  def interfaceExtendsHeaders = "interface extends" ~> ident
+  def interfaceExtends: Parser[Interface] = interfaceExtendsHeaders ~ extInterface ~ bracesList(method | const) ^^ {
+    case ident~ext~items => {
+      val methods = items collect {case m: Method => m}
+      val consts = items collect {case c: Const => c}
+      Interface(Some(ident), ext, methods, consts)
     }
   }
 
   def externTypeDecl: Parser[TypeDef] = externEnum | externInterface | externRecord
   def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List()) }
   def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]())) }
-  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List()) }
+  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(None, ext, List(), List()) }
 
   def staticLabel: Parser[Boolean] = ("static ".r | "".r) ^^ {
     case "static " => true
