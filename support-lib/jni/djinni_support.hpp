@@ -362,6 +362,7 @@ static const std::shared_ptr<T> & objectFromHandleAddress(jlong handle) {
  * here, so this object has an invalid state and default constructor.
  */
 struct CppProxyClassInfo {
+    const std::string proxyClassName;
     const GlobalRef<jclass> clazz;
     const jmethodID constructor;
     const jfieldID idField;
@@ -413,8 +414,10 @@ public:
      * Given a Java object, find or create a C++ version. The cases here are:
      * 1. Null
      * 2. The provided Java object is actually a CppProxy (Java-side proxy for a C++ impl)
-     * 3. The provided Java object has an existing JavaProxy (C++-side proxy for a Java impl)
-     * 4. The provided Java object needs a new JavaProxy allocated
+     * 3. The provided Java object is a CppProxy, but is a proxy for a subclass of the class
+     *    associated with this JniInterface.
+     * 4. The provided Java object has an existing JavaProxy (C++-side proxy for a Java impl)
+     * 5. The provided Java object needs a new JavaProxy allocated
      */
     std::shared_ptr<I> _fromJava(JNIEnv* jniEnv, jobject j) const {
         // Case 1 - null
@@ -422,16 +425,44 @@ public:
             return nullptr;
         }
 
-        // Case 2 - already a Java proxy; we just need to pull the C++ impl out. (This case
+        // Case 2 & 3 - already a Java proxy; we just need to pull the C++ impl out. (This case
         // is only possible if we were constructed with a cppProxyClassName parameter.)
-        if (m_cppProxyClass
-                && jniEnv->IsSameObject(jniEnv->GetObjectClass(j), m_cppProxyClass.clazz.get())) {
-            jlong handle = jniEnv->GetLongField(j, m_cppProxyClass.idField);
-            jniExceptionCheck(jniEnv);
-            return objectFromHandleAddress<I>(handle);
-        }
+        if (m_cppProxyClass) {
+            if (jniEnv->IsSameObject(jniEnv->GetObjectClass(j), m_cppProxyClass.clazz.get())) {
+                // Case 2
+                //
+                // The provided Java object's class is the same as the JniInterface proxy's class.
+                // Use the JniInterface proxy's class to get the C++ object associated with the
+                // provided Java object.
 
-        // Cases 3 and 4 - see _getJavaProxy helper below. JavaProxyCache is responsible for
+                jlong handle = jniEnv->GetLongField(j, m_cppProxyClass.idField);
+                jniExceptionCheck(jniEnv);
+                return objectFromHandleAddress<I>(handle);
+            } else {
+                // Case 3
+                //
+                // The provided Java object and the JniInterface proxy's class should have a super
+                // class in common. If that's the case, attempt to use the provided Java object
+                // directly to get its associated C++ object.
+
+                jclass superClazz = jniEnv->GetSuperclass(m_cppProxyClass.clazz.get());
+                while(superClazz != nullptr) {
+                    if (jniEnv->IsInstanceOf(j, superClazz)) {
+                        jclass clazz = jniEnv->GetObjectClass(j);
+                        jfieldID idField = jniEnv->GetFieldID(clazz, "nativeRef", "J");
+                        if (!jniEnv->ExceptionCheck()) {
+                            jlong handle = jniEnv->GetLongField(j, idField);
+                            jniExceptionCheck(jniEnv);
+                            return objectFromHandleAddress<I>(handle);
+                        }
+                        jniEnv->ExceptionClear();
+                        break;
+                    }
+                    superClazz = jniEnv->GetSuperclass(superClazz);
+                }
+            }
+        }
+        // Cases 4 and 5 - see _getJavaProxy helper below. JavaProxyCache is responsible for
         // distinguishing between the two cases. Only possible if Self::JavaProxy exists.
         return _getJavaProxy<Self>(j);
     }
@@ -469,14 +500,31 @@ private:
     static std::pair<jobject, void*> newCppProxy(const std::shared_ptr<void> & cppObj) {
         const auto & data = JniClass<Self>::get();
         const auto & jniEnv = jniGetThreadEnv();
-        std::unique_ptr<CppProxyHandle<I>> to_encapsulate(
-                new CppProxyHandle<I>(std::static_pointer_cast<I>(cppObj)));
+
+        auto castCppObj = std::static_pointer_cast<I>(cppObj);
+        std::unique_ptr<CppProxyHandle<I>> to_encapsulate(new CppProxyHandle<I>(castCppObj));
         jlong handle = static_cast<jlong>(reinterpret_cast<uintptr_t>(to_encapsulate.get()));
-        jobject cppProxy = jniEnv->NewObject(data.m_cppProxyClass.clazz.get(),
-                                             data.m_cppProxyClass.constructor,
-                                             handle);
+
+        jobject cppProxy = nullptr;
+        if (data.m_cppProxyClass.proxyClassName != castCppObj->jniProxyClassName()) {
+            // The cppObj is an instance of a subclass of the class associated with this JniInterface
+            // instance. Create a proxy object from the proxy class name associated with the
+            // cppObj object, instead of relying on this JniInterface's proxy class info.
+            CppProxyClassInfo tempProxyClassInfo{castCppObj->jniProxyClassName().c_str()};
+            cppProxy = jniEnv->NewObject(tempProxyClassInfo.clazz.get(),
+                                         tempProxyClassInfo.constructor,
+                                         handle);
+        } else {
+            // Use the JniInterface's proxy class info, since the cppObj is the same type
+            // as the class associated with this JniInterface instance.
+            cppProxy = jniEnv->NewObject(data.m_cppProxyClass.clazz.get(),
+                                         data.m_cppProxyClass.constructor,
+                                         handle);
+        }
+
         jniExceptionCheck(jniEnv);
         to_encapsulate.release();
+
         return { cppProxy, cppObj.get() };
     }
 

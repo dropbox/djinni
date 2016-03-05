@@ -27,15 +27,21 @@ import scala.collection.mutable
 class CppGenerator(spec: Spec) extends Generator(spec) {
 
   val marshal = new CppMarshal(spec)
+  val jniMarshal = new JNIMarshal(spec)
+  val objcMarshal = new ObjcMarshal(spec)
 
   val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
   def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
     writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
-  class CppRefs(name: String) {
+  class CppRefs(ident: Ident) {
     var hpp = mutable.TreeSet[String]()
     var hppFwds = mutable.TreeSet[String]()
     var cpp = mutable.TreeSet[String]()
+
+    def addInclude(ident: Ident) {
+      hpp.add(s"#include ${marshal.include(ident)}")
+    }
 
     def find(ty: TypeRef, forwardDeclareOnly: Boolean) { find(ty.resolved, forwardDeclareOnly) }
     def find(tm: MExpr, forwardDeclareOnly: Boolean) {
@@ -43,12 +49,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       find(tm.base, forwardDeclareOnly)
     }
     def find(m: Meta, forwardDeclareOnly : Boolean) = {
-      for(r <- marshal.hppReferences(m, name, forwardDeclareOnly)) r match {
+      for(r <- marshal.hppReferences(m, ident.name, forwardDeclareOnly)) r match {
         case ImportRef(arg) => hpp.add("#include " + arg)
         case DeclRef(decl, Some(spec.cppNamespace)) => hppFwds.add(decl)
         case DeclRef(_, _) =>
       }
-      for(r <- marshal.cppReferences(m, name, forwardDeclareOnly)) r match {
+      for(r <- marshal.cppReferences(m, ident.name, forwardDeclareOnly)) r match {
         case ImportRef(arg) => cpp.add("#include " + arg)
         case DeclRef(_, _) =>
       }
@@ -56,7 +62,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    val refs = new CppRefs(ident.name)
+    val refs = new CppRefs(ident)
     val self = marshal.typename(ident, e)
 
     if (spec.cppEnumHashWorkaround) {
@@ -135,7 +141,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
-    val refs = new CppRefs(ident.name)
+    val refs = new CppRefs(ident)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
     refs.hpp.add("#include <utility>") // Add for std::move
@@ -262,25 +268,75 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
-    val refs = new CppRefs(ident.name)
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+    val refs = new CppRefs(ident)
+    if (i.superIdent.isDefined) {
+      refs.addInclude(i.superIdent.get)
+    }
+
+    refs.hpp.add("#include <string>") // needed for std::string jniProxyClassName();
+
+    // HACK: DISABLES FORWARD DECLARATIONS.
+    //
+    // FIXME: Forward declarations break the use of enums as keys in maps.
+    //
+    // Passing false instead of true for the find methods forwardDeclareOnly parameter
+    // disables the use of forward declarations. We'll leave them disabled until
+    // Dropbox has a solution.
     i.methods.map(m => {
-      m.params.map(p => refs.find(p.ty, true))
-      m.ret.foreach((x)=>refs.find(x, true))
+      m.params.map(p => refs.find(p.ty, false))
+      m.ret.foreach((x)=>refs.find(x, false))
     })
     i.consts.map(c => {
-      refs.find(c.ty, true)
+      refs.find(c.ty, false)
     })
 
     val self = marshal.typename(ident, i)
+    val superNametype = marshal.superTypename(i)
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
+
       writeDoc(w, doc)
       writeCppTypeParams(w, typeParams)
-      w.w(s"class $self").bracedSemi {
+
+      val extendsDef = if (superNametype.isDefined) " : public " + superNametype.get else ""
+      w.w(s"class $self$extendsDef").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
         w.wl(s"virtual ~$self() {}")
+
+        // Proxy class name
+        val jniProxyClassName = if (i.ext.cpp) q(jniMarshal.undecoratedTypename(ident, i) + "$CppProxy") else "nullptr"
+        w.wl
+        w.wl("/**")
+        w.wl(" * Defines the name of the JNI C++ proxy class. Used to convert a")
+        w.wl(" * C++ implemented object to a Java object when the type of the object being")
+        w.wl(" * converted is unknown to the JniInterface (see djinni_support.hpp).")
+        w.wl(" * ")
+        w.wl(" * The proxy class name is only used for converting Djinni interfaces that")
+        w.wl(" * are implemented in C++. Java implemented interfaces are converted differently.")
+        w.wl(" * However, the C++ class of an interface implemented in Java must still have a")
+        w.wl(" * jniProxyClassName method in order for Djinni's JniInterface::fromCpp method to compile.")
+        w.wl(" * ")
+        w.wl(" * @return The name of the class's associated JNI proxy class.")
+        w.wl(" * ")
+        w.wl(" * @see JniInterface in djinni_support.hpp")
+        w.wl(" */")
+        w.wl(s"virtual const std::string jniProxyClassName() { return $jniProxyClassName; }")
+
+        val objcTypeName = q(objcMarshal.typename(ident, i))
+        w.wl
+        w.wl("/**")
+        w.wl(" * Defines the name of the Objective-C type for the class. Used to convert a")
+        w.wl(" * C++ object to an Objective-C object when the type of the object being")
+        w.wl(" * converted is unknown to the C++ wrapper cache (see DJICppWrapperCache+Private.hpp).")
+        w.wl(" * ")
+        w.wl(" * @return The name of the Objective C type associated with the class.")
+        w.wl(" * ")
+        w.wl(" * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp")
+        w.wl(" */")
+        w.wl(s"virtual const std::string objcTypeName() { return $objcTypeName; }")
+
         // Constants
         generateHppConstants(w, i.consts)
         // Methods
@@ -299,7 +355,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       }
     })
 
-    // Cpp only generated in need of Constants
+    // Only generate the cpp file if constants need to be defined.
     if (i.consts.nonEmpty) {
       writeCppFile(ident, origin, refs.cpp, w => {
         generateCppConstants(w, i.consts, self)
@@ -312,5 +368,4 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     if (params.isEmpty) return
     w.wl("template " + params.map(p => "typename " + idCpp.typeParam(p.ident)).mkString("<", ", ", ">"))
   }
-
 }

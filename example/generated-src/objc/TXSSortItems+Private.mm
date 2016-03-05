@@ -32,6 +32,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+// TXSSortItems methods
+
 - (void)sort:(TXSSortOrder)order
        items:(nonnull TXSItemList *)items {
     try {

@@ -41,6 +41,8 @@ public abstract class SortItems {
             super.finalize();
         }
 
+        // SortItems methods
+
         @Override
         public void sort(SortOrder order, ItemList items)
         {

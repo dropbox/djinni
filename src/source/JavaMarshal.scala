@@ -12,6 +12,11 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   override def typename(tm: MExpr): String = toJavaType(tm, None)
   def typename(name: String, ty: TypeDef): String = idJava.ty(name)
 
+  def superTypename(ty: TypeDef): Option[String] = ty match {
+    case i: Interface => if(i.superIdent.isDefined) Some(idJava.ty(i.superIdent.get.name)) else None
+    case _ => None
+  }
+
   override def fqTypename(tm: MExpr): String = toJavaType(tm, spec.javaPackage)
   def fqTypename(name: String, ty: TypeDef): String = withPackage(spec.javaPackage, idJava.ty(name))
 

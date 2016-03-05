@@ -12,6 +12,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   }
   def typename(name: String, ty: TypeDef): String = idObjc.ty(name)
 
+  def superTypename(ty: TypeDef): Option[String] = ty match {
+    case i: Interface => if(i.superIdent.isDefined) Some(idObjc.ty(i.superIdent.get.name)) else None
+    case _ => None
+  }
+
   override def fqTypename(tm: MExpr): String = typename(tm)
   def fqTypename(name: String, ty: TypeDef): String = typename(name, ty)
 

@@ -74,7 +74,7 @@ object Record {
   }
 }
 
-case class Interface(ext: Ext, methods: Seq[Interface.Method], consts: Seq[Const]) extends TypeDef
+case class Interface(superIdent: Option[Ident], ext: Ext, methods: Seq[Interface.Method], consts: Seq[Const]) extends TypeDef
 object Interface {
   case class Method(ident: Ident, params: Seq[Field], ret: Option[TypeRef], doc: Doc, static: Boolean, const: Boolean)
 }
