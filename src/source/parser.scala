@@ -41,12 +41,14 @@ private object IdlParser extends RegexParsers {
 
   def importFile: Parser[FileRef] = {
 
-  def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
+    def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
 
     ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
       case "import" ~ x =>
         val newPath = fileParent + x
-        new IdlFileRef(new File(newPath))
+
+        def importFile = new File(newPath)
+        new IdlFileRef(importFile.getCanonicalFile)
       case "extern" ~ x =>
         val newPath = fileParent + x
         new ExternFileRef(new File(newPath))
