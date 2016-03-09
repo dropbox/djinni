@@ -3,6 +3,7 @@
 
 #import "DBClientInterface+Private.h"
 #import "DBClientInterface.h"
+#import "DBClientInterface+Private.h"
 #import "DBClientReturnedRecord+Private.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
@@ -42,6 +43,20 @@ public:
             return ::djinni::String::toCpp(r);
         }
     }
+    std::string meth_taking_interface(const std::shared_ptr<::testsuite::ClientInterface> & c_i) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() methTakingInterface:(::djinni_generated::ClientInterface::fromCpp(c_i))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::string meth_taking_optional_interface(const std::shared_ptr<::testsuite::ClientInterface> & c_i) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() methTakingOptionalInterface:(::djinni::Optional<std::experimental::optional, ::djinni_generated::ClientInterface>::fromCpp(c_i))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
 };
 
 }  // namespace djinni_generated
@@ -56,7 +71,7 @@ auto ClientInterface::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType
+auto ClientInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

@@ -3,6 +3,7 @@
 
 #import "DBConstantsInterface+Private.h"
 #import "DBConstantsInterface.h"
+#import "DBConstantRecord+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
@@ -45,7 +46,7 @@ auto ConstantsInterface::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto ConstantsInterface::fromCpp(const CppType& cpp) -> ObjcType
+auto ConstantsInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

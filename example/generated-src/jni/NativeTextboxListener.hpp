@@ -11,6 +11,7 @@ namespace djinni_generated {
 class NativeTextboxListener final : ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener> {
 public:
     using CppType = std::shared_ptr<::textsort::TextboxListener>;
+    using CppOptType = std::shared_ptr<::textsort::TextboxListener>;
     using JniType = jobject;
 
     using Boxed = NativeTextboxListener;
@@ -18,14 +19,15 @@ public:
     ~NativeTextboxListener();
 
     static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeTextboxListener>::get()._fromJava(jniEnv, j); }
-    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeTextboxListener>::get()._toJava(jniEnv, c)}; }
+    static ::djinni::LocalRef<JniType> fromCppOpt(JNIEnv* jniEnv, const CppOptType& c) { return {jniEnv, ::djinni::JniClass<NativeTextboxListener>::get()._toJava(jniEnv, c)}; }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return fromCppOpt(jniEnv, c); }
 
 private:
     NativeTextboxListener();
     friend ::djinni::JniClass<NativeTextboxListener>;
     friend ::djinni::JniInterface<::textsort::TextboxListener, NativeTextboxListener>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::textsort::TextboxListener
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::textsort::TextboxListener
     {
     public:
         JavaProxy(JniType j);

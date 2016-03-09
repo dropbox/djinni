@@ -20,4 +20,25 @@ float const DBConstantsInterfaceF32Constant = 5.0f;
 
 double const DBConstantsInterfaceF64Constant = 5.0;
 
+NSNumber * __nullable const DBConstantsInterfaceOptBoolConstant = @YES;
+
+NSNumber * __nullable const DBConstantsInterfaceOptI8Constant = @1;
+
+NSNumber * __nullable const DBConstantsInterfaceOptI16Constant = @2;
+
+NSNumber * __nullable const DBConstantsInterfaceOptI32Constant = @3;
+
+NSNumber * __nullable const DBConstantsInterfaceOptI64Constant = @4;
+
+NSNumber * __nullable const DBConstantsInterfaceOptF32Constant = @5.0;
+
+NSNumber * __nullable const DBConstantsInterfaceOptF64Constant = @5.0;
+
+NSString * __nonnull const DBConstantsInterfaceStringConstant = @"string-constant";
+
+NSString * __nullable const DBConstantsInterfaceOptStringConstant = @"string-constant";
+
+DBConstantRecord * __nonnull const DBConstantsInterfaceObjectConstant = [[DBConstantRecord alloc] initWithSomeInteger:DBConstantsInterfaceI32Constant
+        someString:DBConstantsInterfaceStringConstant];
+
 #pragma clang diagnostic pop

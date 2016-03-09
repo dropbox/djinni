@@ -14,12 +14,14 @@ class ExternInterface1
 {
 public:
     using CppType = std::shared_ptr<::ExternInterface1>;
+    using CppOptType = std::shared_ptr<::ExternInterface1>;
     using ObjcType = DBExternInterface1*;
 
     using Boxed = ExternInterface1;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

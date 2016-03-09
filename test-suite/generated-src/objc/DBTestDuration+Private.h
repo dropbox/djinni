@@ -14,12 +14,14 @@ class TestDuration
 {
 public:
     using CppType = std::shared_ptr<::testsuite::TestDuration>;
+    using CppOptType = std::shared_ptr<::testsuite::TestDuration>;
     using ObjcType = DBTestDuration*;
 
     using Boxed = TestDuration;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

@@ -1,0 +1,6 @@
+
+# Extended record
+extended_record = record +c {
+    foo: bool;
+    const extended_record_const: extended_record = {foo=true};
+}

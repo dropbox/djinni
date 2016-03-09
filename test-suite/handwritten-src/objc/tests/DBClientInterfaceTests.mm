@@ -1,5 +1,6 @@
 #import "DBClientInterfaceImpl.h"
 #import "DBClientInterface+Private.h"
+#import "DBReverseClientInterface.h"
 #import "DBTestHelpers.h"
 #import <XCTest/XCTest.h>
 
@@ -29,6 +30,19 @@ using namespace testsuite;
 - (void)testCppUTF8String
 {
     [DBTestHelpers checkClientInterfaceNonascii:[[DBClientInterfaceImpl alloc] init]];
+}
+
+- (void)testClientInterfaceArgs
+{
+    [DBTestHelpers checkClientInterfaceArgs:[[DBClientInterfaceImpl alloc] init]];
+}
+
+- (void)testReverseClientInterfaceArgs
+{
+    DBReverseClientInterface * i = [DBReverseClientInterface create];
+
+    XCTAssertEqualObjects([i methTakingInterface:i], @"test");
+    XCTAssertEqualObjects([i methTakingOptionalInterface:i], @"test");
 }
 
 - (void)testObjcInterfaceWrapper

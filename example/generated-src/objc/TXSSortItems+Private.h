@@ -14,12 +14,14 @@ class SortItems
 {
 public:
     using CppType = std::shared_ptr<::textsort::SortItems>;
+    using CppOptType = std::shared_ptr<::textsort::SortItems>;
     using ObjcType = TXSSortItems*;
 
     using Boxed = SortItems;
 
     static CppType toCpp(ObjcType objc);
-    static ObjcType fromCpp(const CppType& cpp);
+    static ObjcType fromCppOpt(const CppOptType& cpp);
+    static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }
 
 private:
     class ObjcProxy;

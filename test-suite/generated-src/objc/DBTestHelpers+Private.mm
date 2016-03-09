@@ -132,6 +132,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
++ (void)checkClientInterfaceArgs:(nullable id<DBClientInterface>)i {
+    try {
+        ::testsuite::TestHelpers::check_client_interface_args(::djinni_generated::ClientInterface::toCpp(i));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 + (void)checkEnumMap:(nonnull NSDictionary<NSNumber *, NSString *> *)m {
     try {
         ::testsuite::TestHelpers::check_enum_map(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::String>::toCpp(m));
@@ -210,7 +216,7 @@ auto TestHelpers::toCpp(ObjcType objc) -> CppType
     return objc->_cppRefHandle.get();
 }
 
-auto TestHelpers::fromCpp(const CppType& cpp) -> ObjcType
+auto TestHelpers::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

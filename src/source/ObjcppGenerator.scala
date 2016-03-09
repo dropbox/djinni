@@ -102,18 +102,15 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
             case _ =>
               w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+              w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
           }
           w.wl("using ObjcType = " + (if(i.ext.objc) s"id<$self>" else s"$self*") + ";");
           w.wl
           w.wl(s"using Boxed = $helperClass;")
           w.wl
           w.wl(s"static CppType toCpp(ObjcType objc);")
-          if (spec.cppNnType.nonEmpty) {
-            w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
-            w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
-          } else {
-            w.wl(s"static ObjcType fromCpp(const CppType& cpp);")
-          }
+          w.wl(s"static ObjcType fromCppOpt(const CppOptType& cpp);")
+          w.wl(s"static ObjcType fromCpp(const CppType& cpp) { return fromCppOpt(cpp); }")
           w.wl
           w.wlOutdent("private:")
           w.wl("class ObjcProxy;")
@@ -193,7 +190,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
       if (i.ext.objc) {
         w.wl
-        val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
         wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"class $helperClass::ObjcProxy final")
           w.wl(s": public $cppSelf")
@@ -250,7 +246,6 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
             //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
           } else {
             // ObjC only, or ObjC and C++.
-            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
               w.w(s"if ([(id)objc isKindOfClass:[$objcSelf class]])").braced {
@@ -258,14 +253,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"return ${nnCheck(getProxyExpr)};")
               }
             }
-            val getProxyExpr = s"::djinni::get_objc_proxy<$objcExtSelf>(objc)"
+            val getProxyExpr = s"::djinni::get_objc_proxy<ObjcProxy>(objc)"
             w.wl(s"return ${nnCheck(getProxyExpr)};")
           }
         }
         w.wl
-        val fromCppFunc = if (spec.cppNnType.isEmpty) "fromCpp(const CppType& cpp)"
-             else "fromCppOpt(const CppOptType& cpp)"
-        w.wl(s"auto $helperClass::$fromCppFunc -> ObjcType").braced {
+        w.wl(s"auto $helperClass::fromCppOpt(const CppOptType& cpp) -> ObjcType").braced {
           // Handle null
           w.w("if (!cpp)").braced {
             w.wl("return nil;")
@@ -273,14 +266,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           if (i.ext.objc && !i.ext.cpp) {
             // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
             // throw bad_cast if we gave it something of the wrong type.
-            val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
-            w.wl(s"return dynamic_cast<$objcExtSelf&>(*cpp).Handle::get();")
+            w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();")
           } else {
             // C++ only, or C++ and ObjC.
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
-              val objcExtSelf = objcppMarshal.helperClass("objc_proxy")
-              w.w(s"if (auto cppPtr = dynamic_cast<$objcExtSelf*>(cpp.get()))").braced {
+              w.w(s"if (auto cppPtr = dynamic_cast<ObjcProxy*>(cpp.get()))").braced {
                 w.wl("return cppPtr->Handle::get();")
               }
             }
@@ -307,8 +298,8 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
     val noBaseSelf = objcMarshal.typename(ident, r) // Used for constant names
     val cppSelf = cppMarshal.fqTypename(ident, r)
 
-    refs.privHeader.add("!#import " + q(spec.objcppIncludeObjcPrefix + (if(r.ext.objc) "../" else "") + headerName(ident)))
-    refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + (if(r.ext.cpp) "../" else "") + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+    refs.privHeader.add("!#import " + q((if(r.ext.objc) spec.objcExtendedRecordIncludePrefix else spec.objcppIncludeObjcPrefix) + headerName(ident)))
+    refs.privHeader.add("!#include " + q((if(r.ext.cpp) spec.cppExtendedRecordIncludePrefix else spec.objcppIncludeCppPrefix) + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
 
     refs.body.add("#include <cassert>")
     refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(objcName)))

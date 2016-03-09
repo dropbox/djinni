@@ -12,6 +12,9 @@ djinni/user_token.djinni
 djinni/test.djinni
 djinni/primtypes.djinni
 djinni/constants.djinni
+djinni/multiple_inheritance.djinni
+djinni/single_language_interfaces.djinni
+djinni/extended_record.djinni
 djinni/date.djinni
 djinni/date.yaml
 djinni/duration.djinni

@@ -10,3 +10,6 @@
 @import "test.djinni"
 @import "primtypes.djinni"
 @import "constants.djinni"
+@import "multiple_inheritance.djinni"
+@import "single_language_interfaces.djinni"
+@import "extended_record.djinni"

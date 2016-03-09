@@ -28,6 +28,10 @@ if [[ "$java_version" == 1.[6-7] ]]; then
     jvm_args+=(-XX:MaxPermSize=256M)  # Not relevant to JDK 1.8+
 fi
 
+if [[ "$DJINNI_SBT_BOOT_PROPERTIES" != "" ]]; then
+    jvm_args+=(-Dsbt.boot.properties="$DJINNI_SBT_BOOT_PROPERTIES")
+fi
+
 java \
     -Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled "${jvm_args[@]}" \
     -Djava.security.manager -Djava.security.policy="$base_dir/sbt.security.policy" \

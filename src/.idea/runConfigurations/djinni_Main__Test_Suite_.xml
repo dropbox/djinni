@@ -8,8 +8,8 @@
     </extension>
     <option name="MAIN_CLASS_NAME" value="djinni.Main" />
     <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="--java-out ../test-suite/djinni-output-temp/java --java-package com.dropbox.djinni.test --ident-java-field mFooBar --cpp-out ../test-suite/djinni-output-temp/cpp --ident-cpp-enum-type foo_bar --cpp-optional-template std::experimental::optional --cpp-optional-header &lt;experimental/optional&gt; --jni-out ../test-suite/djinni-output-temp/jni --ident-jni-class NativeFooBar --ident-jni-file NativeFooBar --objc-out ../test-suite/djinni-output-temp/objc --objcpp-out ../test-suite/djinni-output-temp/objc --objc-type-prefix DB --idl ../test-suite/djinni/all.djinni --list-out-files ../test-suite/generated-src/outFileList.txt --list-in-files ../test-suite/generated-src/inFileList.txt" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="PROGRAM_PARAMETERS" value="--java-out djinni-output-temp/java --java-package com.dropbox.djinni.test --java-nullable-annotation &quot;javax.annotation.CheckForNull&quot; --java-nonnull-annotation &quot;javax.annotation.Nonnull&quot; --ident-java-field mFooBar --cpp-out djinni-output-temp/cpp --cpp-namespace testsuite --ident-cpp-enum-type foo_bar --cpp-optional-template &quot;std::experimental::optional&quot; --cpp-optional-header &quot;&lt;experimental/optional&gt;&quot; --jni-out djinni-output-temp/jni --ident-jni-class NativeFooBar --ident-jni-file NativeFooBar --objc-out djinni-output-temp/objc --objcpp-out djinni-output-temp/objc --objc-type-prefix DB --list-in-files generated-src/inFileList.txt --list-out-files generated-src/outFileList.txt --yaml-out djinni-output-temp/yaml --yaml-out-file &quot;yaml-test.yaml&quot; --yaml-prefix &quot;test_&quot; --idl djinni/all.djinni" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../test-suite" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="ENABLE_SWING_INSPECTOR" value="false" />

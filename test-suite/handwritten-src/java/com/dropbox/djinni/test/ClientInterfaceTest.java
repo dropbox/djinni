@@ -18,4 +18,15 @@ public class ClientInterfaceTest extends TestCase {
     public void testClientReturnUTF8() {
         TestHelpers.checkClientInterfaceNonascii(jClientInterface);
     }
+
+    public void testClientInterfaceArgs() {
+        TestHelpers.checkClientInterfaceArgs(jClientInterface);
+    }
+
+    public void testReverseClientInterfaceArgs() {
+        ReverseClientInterface i = ReverseClientInterface.create();
+
+        assertEquals(i.methTakingInterface(i), "test");
+        assertEquals(i.methTakingOptionalInterface(i), "test");
+    }
 }

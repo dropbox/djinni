@@ -195,6 +195,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
           case _ =>
             w.wl(s"using CppType = std::shared_ptr<$cppSelf>;")
+            w.wl(s"using CppOptType = std::shared_ptr<$cppSelf>;")
         }
         w.wl(s"using JniType = jobject;")
         w.wl
@@ -208,12 +209,11 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"""DJINNI_ASSERT_MSG(j, jniEnv, "$jniSelf::fromCpp requires a non-null Java object");""")
             w.wl(s"""return ${nnCheck(s"::djinni::JniClass<$jniSelf>::get()._fromJava(jniEnv, j)")};""")
           }
-          w.wl(s"static ::djinni::LocalRef<JniType> fromCppOpt(JNIEnv* jniEnv, const CppOptType& c) { return {jniEnv, ::djinni::JniClass<$jniSelf>::get()._toJava(jniEnv, c)}; }")
-          w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return fromCppOpt(jniEnv, c); }")
         } else {
           w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<$jniSelf>::get()._fromJava(jniEnv, j); }")
-          w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<$jniSelf>::get()._toJava(jniEnv, c)}; }")
         }
+        w.wl(s"static ::djinni::LocalRef<JniType> fromCppOpt(JNIEnv* jniEnv, const CppOptType& c) { return {jniEnv, ::djinni::JniClass<$jniSelf>::get()._toJava(jniEnv, c)}; }")
+        w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return fromCppOpt(jniEnv, c); }")
         w.wl
         w.wlOutdent("private:")
         w.wl(s"$jniSelf();")
@@ -221,9 +221,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"friend $baseType;")
         w.wl
         if (i.ext.java) {
-          w.wl(s"class JavaProxy final : ::djinni::JavaProxyCacheEntry, public $cppSelf").bracedSemi {
+          w.wl(s"class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public $cppSelf").bracedSemi {
             w.wlOutdent(s"public:")
-            // w.wl(s"using JavaProxyCacheEntry::JavaProxyCacheEntry;")
             w.wl(s"JavaProxy(JniType j);")
             w.wl(s"~JavaProxy();")
             w.wl
