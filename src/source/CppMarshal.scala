@@ -5,27 +5,42 @@ import djinni.generatorTools._
 import djinni.meta._
 
 class CppMarshal(spec: Spec) extends Marshal(spec) {
+  // The scopeSymbols parameter accepted by many of these functions describes a Seq of
+  // symbols/names that are declared in the current scope. The TypeRef or MExpr expression
+  // will be fully qualified if it clashes with any of these symbols, even if full qualification
+  // has not been requested.
 
-  override def typename(tm: MExpr): String = toCppType(tm, None)
+  override def typename(tm: MExpr): String = toCppType(tm, None, Seq())
+  def typename(tm: MExpr, scopeSymbols: Seq[String]): String = toCppType(tm, None, scopeSymbols)
+  def typename(ty: TypeRef, scopeSymbols: Seq[String]): String = typename(ty.resolved, scopeSymbols)
   def typename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => idCpp.enumType(name)
     case i: Interface => idCpp.ty(name)
     case r: Record => idCpp.ty(name)
   }
 
-  override def fqTypename(tm: MExpr): String = toCppType(tm, Some(spec.cppNamespace))
+  override def fqTypename(tm: MExpr): String = toCppType(tm, Some(spec.cppNamespace), Seq())
   def fqTypename(name: String, ty: TypeDef): String = ty match {
     case e: Enum => withNs(Some(spec.cppNamespace), idCpp.enumType(name))
     case i: Interface => withNs(Some(spec.cppNamespace), idCpp.ty(name))
     case r: Record => withNs(Some(spec.cppNamespace), idCpp.ty(name))
   }
 
+  def paramType(tm: MExpr, scopeSymbols: Seq[String]): String = toCppParamType(tm, None, scopeSymbols)
+  def paramType(ty: TypeRef, scopeSymbols: Seq[String]): String = paramType(ty.resolved, scopeSymbols)
   override def paramType(tm: MExpr): String = toCppParamType(tm)
   override def fqParamType(tm: MExpr): String = toCppParamType(tm, Some(spec.cppNamespace))
 
+  def returnType(ret: Option[TypeRef], scopeSymbols: Seq[String]): String = {
+    ret.fold("void")(toCppType(_, None, scopeSymbols))
+  }
   override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, None))
-  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(toCppType(_, Some(spec.cppNamespace)))
+  override def fqReturnType(ret: Option[TypeRef]): String = {
+    ret.fold("void")(toCppType(_, Some(spec.cppNamespace)))
+  }
 
+  def fieldType(tm: MExpr, scopeSymbols: Seq[String]): String = typename(tm, scopeSymbols)
+  def fieldType(ty: TypeRef, scopeSymbols: Seq[String]): String = fieldType(ty.resolved, scopeSymbols)
   override def fieldType(tm: MExpr): String = typename(tm)
   override def fqFieldType(tm: MExpr): String = fqTypename(tm)
 
@@ -113,8 +128,21 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
 
   def include(ident: String): String = q(spec.cppIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt)
 
-  private def toCppType(ty: TypeRef, namespace: Option[String] = None): String = toCppType(ty.resolved, namespace)
-  private def toCppType(tm: MExpr, namespace: Option[String]): String = {
+  private def toCppType(ty: TypeRef, namespace: Option[String] = None, scopeSymbols: Seq[String] = Seq()): String =
+    toCppType(ty.resolved, namespace, scopeSymbols)
+
+  private def toCppType(tm: MExpr, namespace: Option[String], scopeSymbols: Seq[String]): String = {
+    def withNamespace(name: String): String = {
+      // If an unqualified symbol needs to have its namespace added, this code assumes that the
+      // namespace is the one that's defined for generated types (spec.cppNamespace).
+      // This seems like a safe assumption for the C++ generator as it doesn't make much use of
+      // other global names, but might need to be refined to cover other types in the future.
+      val ns = namespace match {
+        case Some(ns) => Some(ns)
+        case None => if (scopeSymbols.contains(name)) Some(spec.cppNamespace) else None
+      }
+      withNs(ns, name)
+    }
     def base(m: Meta): String = m match {
       case p: MPrimitive => p.cName
       case MString => "std::string"
@@ -126,9 +154,9 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case MMap => "std::unordered_map"
       case d: MDef =>
         d.defType match {
-          case DEnum => withNs(namespace, idCpp.enumType(d.name))
-          case DRecord => withNs(namespace, idCpp.ty(d.name))
-          case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
+          case DEnum => withNamespace(idCpp.enumType(d.name))
+          case DRecord => withNamespace(idCpp.ty(d.name))
+          case DInterface => s"std::shared_ptr<${withNamespace(idCpp.ty(d.name))}>"
         }
       case e: MExtern => e.defType match {
         case DInterface => s"std::shared_ptr<${e.cpp.typename}>"
@@ -145,14 +173,14 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           tm.base match {
             case d: MDef =>
               d.defType match {
-                case DInterface => s"${nnType}<${withNs(namespace, idCpp.ty(d.name))}>"
+                case DInterface => s"${nnType}<${withNamespace(idCpp.ty(d.name))}>"
                 case _ => base(tm.base) + args
               }
             case MOptional =>
               tm.args.head.base match {
                 case d: MDef =>
                   d.defType match {
-                    case DInterface => s"std::shared_ptr<${withNs(namespace, idCpp.ty(d.name))}>"
+                    case DInterface => s"std::shared_ptr<${withNamespace(idCpp.ty(d.name))}>"
                     case _ => base(tm.base) + args
                   }
                 case _ => base(tm.base) + args
@@ -195,8 +223,8 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   // this can be used in c++ generation to know whether a const& should be applied to the parameter or not
-  private def toCppParamType(tm: MExpr, namespace: Option[String] = None): String = {
-    val cppType = toCppType(tm, namespace)
+  private def toCppParamType(tm: MExpr, namespace: Option[String] = None, scopeSymbols: Seq[String] = Seq()): String = {
+    val cppType = toCppType(tm, namespace, scopeSymbols)
     val refType = "const " + cppType + " &"
     val valueType = cppType
     if(byValue(tm)) valueType else refType

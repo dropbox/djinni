@@ -273,6 +273,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = marshal.typename(ident, i)
+    val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
@@ -287,8 +288,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         for (m <- i.methods) {
           w.wl
           writeDoc(w, m.doc)
-          val ret = marshal.returnType(m.ret)
-          val params = m.params.map(p => marshal.paramType(p.ty) + " " + idCpp.local(p.ident))
+          val ret = marshal.returnType(m.ret, methodNamesInScope)
+          val params = m.params.map(p => marshal.paramType(p.ty, methodNamesInScope) + " " + idCpp.local(p.ident))
           if (m.static) {
             w.wl(s"static $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")};")
           } else {
