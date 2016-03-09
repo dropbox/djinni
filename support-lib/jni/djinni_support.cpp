@@ -50,10 +50,26 @@ JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
     const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    if (get_res != 0 || !env) {
-        // :(
+
+    if (get_res == JNI_EDETACHED) {
+//        std::cout << "GetEnv: not attached" << std::endl;
+        if (g_cachedJVM->AttachCurrentThread(&env, NULL) != 0) {
+//            std::cout << "Failed to attach" << std::endl;
+            std::abort();
+        }
+
+    } else if (get_res == JNI_OK) {
+        //
+    } else if (get_res == JNI_EVERSION || get_res == JNI_ERR) {
+//        std::cout << "GetEnv: version not supported" << std::endl;
         std::abort();
     }
+
+
+//    if (get_res != 0 || !env) {
+//        // :(
+//        std::abort();
+//    }
 
     return env;
 }
