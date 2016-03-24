@@ -165,7 +165,7 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
         writeCppProxyMethods(w, i.methods, objcSelf, cppSelf)
 
         val superMethods = getInterfaceSuperMethods(i, idl)
-        if (!superMethods.isEmpty) {
+        if (superMethods.nonEmpty) {
           w.wl; w.wl(s"// ${objcppMarshal.superTypename(i).getOrElse("Super")} methods")
           writeCppProxyMethods(w, superMethods, objcSelf, cppSelf)
         }
@@ -181,31 +181,14 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           w.bracedSemi {
             w.wlOutdent("public:")
             w.wl("using Handle::Handle;")
-            for (m <- i.methods) {
-              val ret = cppMarshal.fqReturnType(m.ret)
-              val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
-              w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
-                w.w("@autoreleasepool").braced {
-                  val ret = m.ret.fold("")(_ => "auto r = ")
-                  val call = s"[Handle::get() ${idObjc.method(m.ident)}"
-                  writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
-                  w.wl(";")
-                  m.ret.fold()(ty => {
-                    if (spec.cppNnCheckExpression.nonEmpty && isInterface(ty.resolved)) {
-                      // We have a non-optional interface, so assert that we're getting a non-null value
-                      // before putting it into a non-null pointer
-                      val stringWriter = new StringWriter()
-                      writeObjcFuncDecl(m, new IndentWriter(stringWriter))
-                      val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
-                      val exceptionReason = s"Got unexpected null return value from function $objcSelf $singleLineFunctionDecl"
-                      w.w(s"if (r == nil)").braced {
-                        w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
-                      }
-                    }
-                    w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
-                  })
-                }
-              }
+
+            w.wl; w.wl(s"// $helperClass methods")
+            writeObjcProxyMethods(w, i.methods, objcSelf)
+
+            val superMethods = getInterfaceSuperMethods(i, idl)
+            if (superMethods.nonEmpty) {
+              w.wl; w.wl(s"// ${cppMarshal.superTypename(i).getOrElse("Super")} methods")
+              writeObjcProxyMethods(w, superMethods, objcSelf)
             }
           }
         })
@@ -306,6 +289,35 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
 
           w.wl(";")
           m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
+        }
+      }
+    }
+  }
+
+  def writeObjcProxyMethods(w: IndentWriter, methods: Seq[Interface.Method], objcName: String) {
+    for (m <- methods) {
+      val ret = cppMarshal.fqReturnType(m.ret)
+      val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
+      w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
+        w.w("@autoreleasepool").braced {
+          val ret = m.ret.fold("")(_ => "auto r = ")
+          val call = s"[Handle::get() ${idObjc.method(m.ident)}"
+          writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
+          w.wl(";")
+          m.ret.fold()(ty => {
+            if (spec.cppNnCheckExpression.nonEmpty && isInterface(ty.resolved)) {
+              // We have a non-optional interface, so assert that we're getting a non-null value
+              // before putting it into a non-null pointer
+              val stringWriter = new StringWriter()
+              writeObjcFuncDecl(m, new IndentWriter(stringWriter))
+              val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
+              val exceptionReason = s"Got unexpected null return value from function $objcName $singleLineFunctionDecl"
+              w.w(s"if (r == nil)").braced {
+                w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
+              }
+            }
+            w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
+          })
         }
       }
     }

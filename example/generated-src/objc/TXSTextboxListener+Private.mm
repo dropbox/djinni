@@ -16,6 +16,8 @@ class TextboxListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // TextboxListener methods
     void update(const ::textsort::ItemList & c_items) override
     {
         @autoreleasepool {

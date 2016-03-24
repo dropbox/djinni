@@ -239,22 +239,33 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"JavaProxy(JniType j);")
             w.wl(s"~JavaProxy();")
             w.wl
-            for (m <- i.methods) {
-              val ret = cppMarshal.fqReturnType(m.ret)
-              val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
-              w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
+
+            def writeJavaProxyMethodDecls(w: IndentWriter, methods: Seq[Interface.Method]) {
+              for (m <- methods) {
+                val ret = cppMarshal.fqReturnType(m.ret)
+                val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident))
+                w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override;")
+              }
             }
+            writeJavaProxyMethodDecls(w, getInterfaceSuperMethods(i, idl))
+            writeJavaProxyMethodDecls(w, i.methods)
+
             w.wl
             w.wlOutdent(s"private:")
             w.wl(s"friend ::djinni::JniInterface<$cppSelf, ${withNs(Some(spec.jniNamespace), jniSelf)}>;")
           }
           w.wl
           w.wl(s"const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass(${q(classLookup)}) };")
-          for (m <- i.methods) {
-            val javaMethodName = idJava.method(m.ident)
-            val javaMethodSig = q(jniMarshal.javaMethodSignature(m.params, m.ret))
-            w.wl(s"const jmethodID method_$javaMethodName { ::djinni::jniGetMethodID(clazz.get(), ${q(javaMethodName)}, $javaMethodSig) };")
+
+          def writeJavaProxyJniMethods(w: IndentWriter, methods: Seq[Interface.Method]) {
+            for (m <- methods) {
+              val javaMethodName = idJava.method(m.ident)
+              val javaMethodSig = q(jniMarshal.javaMethodSignature(m.params, m.ret))
+              w.wl(s"const jmethodID method_$javaMethodName { ::djinni::jniGetMethodID(clazz.get(), ${q(javaMethodName)}, $javaMethodSig) };")
+            }
           }
+          writeJavaProxyJniMethods(w, getInterfaceSuperMethods(i, idl))
+          writeJavaProxyJniMethods(w, i.methods)
         }
       }
     }
@@ -276,46 +287,51 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         writeJniTypeParams(w, typeParams)
         w.wl(s"$jniSelfWithParams::JavaProxy::~JavaProxy() = default;")
         w.wl
-        for (m <- i.methods) {
-          val ret = cppMarshal.fqReturnType(m.ret)
-          val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
-          writeJniTypeParams(w, typeParams)
-          val methodNameAndSignature: String = s"${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}"
-          w.w(s"$ret $jniSelfWithParams::JavaProxy::$methodNameAndSignature").braced {
-            w.wl(s"auto jniEnv = ::djinni::jniGetThreadEnv();")
-            w.wl(s"::djinni::JniLocalScope jscope(jniEnv, 10);")
-            w.wl(s"const auto& data = ::djinni::JniClass<${withNs(Some(spec.jniNamespace), jniSelf)}>::get();")
-            val call = m.ret.fold("jniEnv->CallVoidMethod(")(r => "auto jret = " + toJniCall(r, (jt: String) => s"jniEnv->Call${jt}Method("))
-            w.w(call)
-            val javaMethodName = idJava.method(m.ident)
-            w.w(s"Handle::get().get(), data.method_$javaMethodName")
-            if(m.params.nonEmpty){
-              w.wl(",")
-              writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
-                val param = jniMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))
-                s"::djinni::get($param)"
+
+        def writeJavaProxyMethodImpls(w: IndentWriter, methods: Seq[Interface.Method]) {
+          for (m <- methods) {
+            val ret = cppMarshal.fqReturnType(m.ret)
+            val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
+            writeJniTypeParams(w, typeParams)
+            val methodNameAndSignature: String = s"${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}"
+            w.w(s"$ret $jniSelfWithParams::JavaProxy::$methodNameAndSignature").braced {
+              w.wl(s"auto jniEnv = ::djinni::jniGetThreadEnv();")
+              w.wl(s"::djinni::JniLocalScope jscope(jniEnv, 10);")
+              w.wl(s"const auto& data = ::djinni::JniClass<${withNs(Some(spec.jniNamespace), jniSelf)}>::get();")
+              val call = m.ret.fold("jniEnv->CallVoidMethod(")(r => "auto jret = " + toJniCall(r, (jt: String) => s"jniEnv->Call${jt}Method("))
+              w.w(call)
+              val javaMethodName = idJava.method(m.ident)
+              w.w(s"Handle::get().get(), data.method_$javaMethodName")
+              if(m.params.nonEmpty){
+                w.wl(",")
+                writeAlignedCall(w, " " * call.length(), m.params, ")", p => {
+                  val param = jniMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))
+                  s"::djinni::get($param)"
+                })
+              }
+              else
+                w.w(")")
+              w.wl(";")
+              w.wl(s"::djinni::jniExceptionCheck(jniEnv);")
+              m.ret.fold()(ty => {
+                (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
+                  case (Some(check), true) => {
+                    // We have a non-optional interface, assert that we're getting a non-null value
+                    val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
+                    val javaParamsString: String = javaParams.mkString("(", ",", ")")
+                    val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
+                    w.wl(s"""DJINNI_ASSERT_MSG(jret, jniEnv, "Got unexpected null return value from function $functionString");""")
+                    w.wl(s"return ${jniMarshal.toCpp(ty, "jret")};")
+                  }
+                  case _ =>
+                }
+                w.wl(s"return ${jniMarshal.toCpp(ty, "jret")};")
               })
             }
-            else
-              w.w(")")
-            w.wl(";")
-            w.wl(s"::djinni::jniExceptionCheck(jniEnv);")
-            m.ret.fold()(ty => {
-              (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
-                case (Some(check), true) => {
-                  // We have a non-optional interface, assert that we're getting a non-null value
-                  val javaParams = m.params.map(p => javaMarshal.fqParamType(p.ty) + " " + idJava.local(p.ident))
-                  val javaParamsString: String = javaParams.mkString("(", ",", ")")
-                  val functionString: String = s"${javaMarshal.fqTypename(ident, i)}#$javaMethodName$javaParamsString"
-                  w.wl(s"""DJINNI_ASSERT_MSG(jret, jniEnv, "Got unexpected null return value from function $functionString");""")
-                  w.wl(s"return ${jniMarshal.toCpp(ty, "jret")};")
-                }
-                case _ =>
-              }
-              w.wl(s"return ${jniMarshal.toCpp(ty, "jret")};")
-            })
           }
         }
+        writeJavaProxyMethodImpls(w, getInterfaceSuperMethods(i, idl))
+        writeJavaProxyMethodImpls(w, i.methods)
       }
       if (i.ext.cpp) {
         // Generate CEXPORT functions for JNI to call.
