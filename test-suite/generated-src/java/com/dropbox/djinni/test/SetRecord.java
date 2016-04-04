@@ -7,7 +7,7 @@ import java.util.HashSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class SetRecord {
+public class SetRecord {
 
 
     /*package*/ final HashSet<String> mSet;

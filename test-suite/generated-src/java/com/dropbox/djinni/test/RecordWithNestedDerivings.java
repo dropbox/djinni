@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class RecordWithNestedDerivings implements Comparable<RecordWithNestedDerivings> {
+public class RecordWithNestedDerivings implements Comparable<RecordWithNestedDerivings> {
 
 
     /*package*/ final int mKey;
