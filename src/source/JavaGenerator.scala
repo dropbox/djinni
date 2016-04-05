@@ -66,8 +66,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   def generateJavaConstants(w: IndentWriter, consts: Seq[Const]) = {
 
     def writeJavaConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+      case l: Long if marshal.fieldType(ty).equalsIgnoreCase("long") => w.w(l.toString + "l")
       case l: Long => w.w(l.toString)
-      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
+      case d: Double if marshal.fieldType(ty).equalsIgnoreCase("float") => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
