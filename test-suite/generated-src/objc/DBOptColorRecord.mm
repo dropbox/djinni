@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p myColor:%@>", self.class, self, self.myColor];
+    return [NSString stringWithFormat:@"<%@ %p myColor:%@>", self.class, (void *)self, self.myColor];
 }
 
 @end

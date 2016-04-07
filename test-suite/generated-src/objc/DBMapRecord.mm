@@ -25,7 +25,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p map:%@ imap:%@>", self.class, self, self.map, self.imap];
+    return [NSString stringWithFormat:@"<%@ %p map:%@ imap:%@>", self.class, (void *)self, self.map, self.imap];
 }
 
 @end
