@@ -285,19 +285,19 @@ namespace djinni
         template <typename C> static typename C::CppOptType opt_type(typename C::CppOptType *);
         using CppType = decltype(opt_type<T>(nullptr));
 
-        using JniType = typename T::Boxed::JniType;
-
-        using Boxed = Optional;
-
-        static CppType toCpp(JNIEnv* jniEnv, JniType j)
-        {
-            return j ? CppType(T::Boxed::toCpp(jniEnv, j)) : CppType();
-        }
-
-        static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
-        {
-            return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
-        }
+		using JniType = typename T::Boxed::JniType;
+		
+		using Boxed = Optional;
+		
+		static CppType toCpp(JNIEnv* jniEnv, JniType j)
+		{
+			return j ? T::Boxed::toCpp(jniEnv, j) : CppType();
+		}
+		
+		static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const OptionalType<typename T::CppType> &c)
+		{
+			return c ? T::Boxed::fromCpp(jniEnv, *c) : LocalRef<JniType>{};
+		}
 
         // fromCpp used for nullable shared_ptr
         template <typename C = T>
