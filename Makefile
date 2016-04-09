@@ -1,3 +1,15 @@
+#
+# Environment variables for overriding default behavior.
+#
+
+ifndef ANDROID_NDK_HOME
+ANDROID_NDK_HOME = $(abspath $(dir $(realpath $(shell which ndk-build))))
+endif
+
+#
+# Global targets.
+#
+
 all: djinni example_ios example_android example_localhost test
 
 clean:
