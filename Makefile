@@ -1,3 +1,15 @@
+#
+# Environment variables for overriding default behavior.
+#
+
+ifndef ANDROID_NDK_HOME
+ANDROID_NDK_HOME = $(abspath $(dir $(realpath $(shell which ndk-build))))
+endif
+
+#
+# Global targets.
+#
+
 all: djinni example_ios example_android example_localhost example_python test
 
 clean:
@@ -54,7 +66,7 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj/project.pbxproj
            -scheme TextSort \
            -configuration 'Debug' \
            -sdk iphonesimulator \
-	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.2'
+	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.3'
 
 #
 # Python example rules

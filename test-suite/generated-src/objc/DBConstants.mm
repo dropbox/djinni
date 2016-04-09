@@ -61,7 +61,7 @@ BOOL const DBConstantsDummy = NO;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p>", self.class, self];
+    return [NSString stringWithFormat:@"<%@ %p>", self.class, (void *)self];
 }
 
 @end

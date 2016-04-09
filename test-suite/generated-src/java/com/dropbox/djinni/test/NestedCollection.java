@@ -8,7 +8,7 @@ import java.util.HashSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class NestedCollection {
+public class NestedCollection {
 
 
     /*package*/ final ArrayList<HashSet<String>> mSetList;

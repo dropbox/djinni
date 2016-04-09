@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p mapList:%@>", self.class, self, self.mapList];
+    return [NSString stringWithFormat:@"<%@ %p mapList:%@>", self.class, (void *)self, self.mapList];
 }
 
 @end

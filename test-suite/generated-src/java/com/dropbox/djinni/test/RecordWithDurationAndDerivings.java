@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class RecordWithDurationAndDerivings implements Comparable<RecordWithDurationAndDerivings> {
+public class RecordWithDurationAndDerivings implements Comparable<RecordWithDurationAndDerivings> {
 
 
     /*package*/ final java.time.Duration mDt;

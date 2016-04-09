@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p setList:%@>", self.class, self, self.setList];
+    return [NSString stringWithFormat:@"<%@ %p setList:%@>", self.class, (void *)self, self.setList];
 }
 
 @end

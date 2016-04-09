@@ -7,7 +7,7 @@ import java.util.HashMap;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class MapRecord {
+public class MapRecord {
 
 
     /*package*/ final HashMap<String, Long> mMap;

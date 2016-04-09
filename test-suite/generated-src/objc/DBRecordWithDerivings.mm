@@ -62,7 +62,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p key1:%@ key2:%@>", self.class, self, @(self.key1), self.key2];
+    return [NSString stringWithFormat:@"<%@ %p key1:%@ key2:%@>", self.class, (void *)self, @(self.key1), self.key2];
 }
 
 @end

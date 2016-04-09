@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
-public final class EmptyRecord {
+public class EmptyRecord {
 
 
     public EmptyRecord(

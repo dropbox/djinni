@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Record containing constants */
-public final class Constants {
+public class Constants {
 
     /** bool_constant has documentation. */
     public static final boolean BOOL_CONSTANT = true;
