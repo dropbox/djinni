@@ -55,7 +55,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniMapListRecord::fromCpp(std::exp
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapListRecord::fromCpp(std::move(* dc))), optional_map_list_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapListRecord::fromCpp(std::move(* dc)), optional_map_list_record___delete);
 }
 
 std::experimental::optional<::testsuite::MapListRecord>DjinniMapListRecord::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

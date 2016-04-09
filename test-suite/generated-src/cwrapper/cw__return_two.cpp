@@ -37,6 +37,6 @@ int8_t cw__return_two_return_two(DjinniWrapperReturnTwo * djinni_this) {
 }
 DjinniWrapperReturnTwo * cw__return_two_get_instance() {
     try {
-        return DjinniWrapperReturnTwo::wrap(std::move(::testsuite::ReturnTwo::get_instance())).release();
+        return DjinniWrapperReturnTwo::wrap(::testsuite::ReturnTwo::get_instance()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

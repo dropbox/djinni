@@ -62,7 +62,7 @@ std::vector<std::unordered_map<std::string, int64_t>> DjinniListMapStringInt64T:
     _ret.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        _ret.push_back(DjinniMapStringInt64T::toCpp(std::move(djinni::Handle<DjinniObjectHandle>(s_py_callback_list_map_string_int64_t__get_elem(dh.get(), i), map_string_int64_t___delete))));
+        _ret.push_back(DjinniMapStringInt64T::toCpp(djinni::Handle<DjinniObjectHandle>(s_py_callback_list_map_string_int64_t__get_elem(dh.get(), i), map_string_int64_t___delete)));
     }
 
     return _ret;
@@ -72,7 +72,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListMapStringInt64T::fromCpp(st
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListMapStringInt64T::fromCpp(std::move(* dc))), optional_list_map_string_int64_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListMapStringInt64T::fromCpp(std::move(* dc)), optional_list_map_string_int64_t___delete);
 }
 
 std::experimental::optional<std::vector<std::unordered_map<std::string, int64_t>>>DjinniListMapStringInt64T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

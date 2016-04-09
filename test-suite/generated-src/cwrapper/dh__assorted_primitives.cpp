@@ -170,7 +170,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniAssortedPrimitives::fromCpp(std
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniAssortedPrimitives::fromCpp(std::move(* dc))), optional_assorted_primitives___delete);
+    return djinni::optionals::toOptionalHandle(DjinniAssortedPrimitives::fromCpp(std::move(* dc)), optional_assorted_primitives___delete);
 }
 
 std::experimental::optional<::testsuite::AssortedPrimitives>DjinniAssortedPrimitives::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

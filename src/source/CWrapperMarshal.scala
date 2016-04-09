@@ -251,66 +251,66 @@ class CWrapperMarshal(spec: Spec) extends Marshal(spec) { // modeled(pretty much
   def wrappedName(s: String): String = djinniWrapper + s // del
 
   // Get to data from within C structure
-  def convertTo(name: String, ty: TypeRef): String =  convertTo(name, ty.resolved)
-  def convertTo(name: String, ty: MExpr): String = {
-    val local = idCpp.local(name)
+  def convertTo(cppExpr: String, ty: TypeRef, tempExpr: Boolean = false): String =  convertTo(cppExpr, ty.resolved, tempExpr)
+  def convertTo(cppExpr: String, ty: MExpr, tempExpr: Boolean): String = {
+    val exprArg = if (tempExpr) { cppExpr } else { "std::move" + p(cppExpr) } // Move only when it wouldn't be pessimizing
     ty.base match {
       case MOptional => {
         ty.args(0).base match {
           case MPrimitive(_,_,_,_,_,_,_,_) | MDate =>
             val idlName = ty.args(0).base.asInstanceOf[MOpaque].idlName
-            "DjinniBoxed" + idCpp.ty(idlName) + "::toCpp" + p("std::move" + p(local))
+            "DjinniBoxed" + idCpp.ty(idlName) + "::toCpp" + p(exprArg)
           case MString | MBinary =>
             val idlName = ty.args(0).base.asInstanceOf[MOpaque].idlName
-            "DjinniOptional" + idCpp.ty(idlName) + "::toCpp" + p("std::move" + p(local))
-          case MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty.args(0))) + "::toCpp" + p("std::move" + p(local))
+            "DjinniOptional" + idCpp.ty(idlName) + "::toCpp" + p(exprArg)
+          case MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty.args(0))) + "::toCpp" + p(exprArg)
           case d: MDef => d.defType match {
-            case DRecord => "Djinni" + idCpp.ty(d.name) + "::toCpp"+ p("std::move" + p(local))
-            case DEnum => "get_boxed_enum_" + idCpp.method(d.name) + "_from_int32" + p(local)
-            case _ => convertTo(local, ty.args(0))
+            case DRecord => "Djinni" + idCpp.ty(d.name) + "::toCpp"+ p(exprArg)
+            case DEnum => "get_boxed_enum_" + idCpp.method(d.name) + "_from_int32" + p(cppExpr)
+            case _ => convertTo(cppExpr, ty.args(0), tempExpr)
           }
-          case _ => convertTo(local, ty.args(0))
+          case _ => convertTo(cppExpr, ty.args(0), tempExpr)
         }
       }
-      case MDate => "DjinniDate::toCpp" + p(local)
-      case MString| MBinary| MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty)) + "::toCpp" + p("std::move" + p(local))
+      case MDate => "DjinniDate::toCpp" + p(cppExpr)
+      case MString| MBinary| MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty)) + "::toCpp" + p(exprArg)
       case d: MDef => d.defType match {
-        case DInterface => djinniWrapper + idCpp.ty(d.name) + "::get" + p("std::move" + p(local))
-        case DRecord => "Djinni" + idCpp.ty(d.name) + "::toCpp" + p("std::move" + p(local))
-        case DEnum => "static_cast<" + withCppNs(idCpp.enumType(d.name)) + ">" + p(local)
+        case DInterface => djinniWrapper + idCpp.ty(d.name) + "::get" + p(exprArg)
+        case DRecord => "Djinni" + idCpp.ty(d.name) + "::toCpp" + p(exprArg)
+        case DEnum => "static_cast<" + withCppNs(idCpp.enumType(d.name)) + ">" + p(cppExpr)
       }
       case e: MExtern => throw new NotImplementedError()
-      case _ =>  local // MParam <- didn't need to do anything here
+      case _ =>  cppExpr // MParam <- didn't need to do anything here
     }
   }
 
   // Pack data into C structure (for returning C structure)
-  def convertFrom(name:String, ty: TypeRef): String = convertFrom(name, ty.resolved)
-  def convertFrom(name:String, ty: MExpr): String = {
-      val local = idCpp.local(name)
+  def convertFrom(cppExpr:String, ty: TypeRef, tempExpr:Boolean = false): String = convertFrom(cppExpr, ty.resolved, tempExpr)
+  def convertFrom(cppExpr:String, ty: MExpr, tempExpr:Boolean): String = {
       ty.base match  {
         case MOptional => {
           ty.args(0).base match {
             case MPrimitive(_,_,_,_,_,_,_,_) | MDate =>
               val idlName = ty.args(0).base.asInstanceOf[MOpaque].idlName
-              "DjinniBoxed" + idCpp.ty(idlName) + "::fromCpp" + p(local)
+              "DjinniBoxed" + idCpp.ty(idlName) + "::fromCpp" + p(cppExpr)
             case MString | MBinary  =>
               val idlName = ty.args(0).base.asInstanceOf[MOpaque].idlName
-              "DjinniOptional" + idCpp.ty(idlName) + "::fromCpp" + p(local)
-            case MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty.args(0))) + "::fromCpp" + p(local)
-            case _ => convertFrom(local, ty.args(0))
+              "DjinniOptional" + idCpp.ty(idlName) + "::fromCpp" + p(cppExpr)
+            case MList | MMap | MSet => "Djinni" + idCpp.ty(toCIdlType(ty.args(0))) + "::fromCpp" + p(cppExpr)
+            case _ => convertFrom(cppExpr, ty.args(0), tempExpr)
           }
         }
         case MString | MBinary | MDate | MList | MSet | MMap =>
           val idlName = idCpp.ty(toCIdlType(ty))
-          "Djinni" + idlName + "::fromCpp" + p(local)
+          "Djinni" + idlName + "::fromCpp" + p(cppExpr)
         case d: MDef => d.defType match {
-          case DInterface => djinniWrapper + idCpp.ty(d.name) + "::wrap" + p("std::move" + p(local))
-          case DRecord => "Djinni" + idCpp.ty(d.name) + "::fromCpp" + p(local)
-          case DEnum => "int32_from_enum_" + idCpp.method(d.name) + p(local)
+          case DInterface => (djinniWrapper + idCpp.ty(d.name) + "::wrap"
+            + p(if (tempExpr) { cppExpr } else { "std::move" + p(cppExpr) })) // Move only when it wouldn't be pessimizing
+          case DRecord => "Djinni" + idCpp.ty(d.name) + "::fromCpp" + p(cppExpr)
+          case DEnum => "int32_from_enum_" + idCpp.method(d.name) + p(cppExpr)
         }
         case e: MExtern => throw new NotImplementedError()
-        case _ => local // TODO: MParam <- didn't need to do anything here
+        case _ => cppExpr // TODO: MParam <- didn't need to do anything here
       }
   }
 

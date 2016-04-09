@@ -85,7 +85,7 @@ std::unordered_map<std::string, std::string> DjinniMapStringString::toCpp(djinni
 
     for (int i = 0; i < size; i++) {
         auto _key_c = std::unique_ptr<DjinniString>(s_py_callback_map_string_string__python_next(dh.get())); // key that would potentially be surrounded by unique pointer
-        auto _val = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_map_string_string__get_value(dh.get(), _key_c.get()))));
+        auto _val = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_map_string_string__get_value(dh.get(), _key_c.get())));
 
         auto _key = DjinniString::toCpp(std::move(_key_c));
         _ret.emplace(std::move(_key), std::move(_val));
@@ -98,7 +98,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapStringString::fromCpp(std::e
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapStringString::fromCpp(std::move(* dc))), optional_map_string_string___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapStringString::fromCpp(std::move(* dc)), optional_map_string_string___delete);
 }
 
 std::experimental::optional<std::unordered_map<std::string, std::string>>DjinniMapStringString::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

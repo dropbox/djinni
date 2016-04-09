@@ -60,7 +60,7 @@ std::unordered_set<int32_t> DjinniSetInt32T::toCpp(djinni::Handle<DjinniObjectHa
 
     for (int i = 0; i < size; i++) {
         auto _el = s_py_callback_set_int32_t__python_next(dh.get());
-        _ret.insert(_el);
+        _ret.insert(std::move(_el));
     }
 
     return _ret;
@@ -70,7 +70,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniSetInt32T::fromCpp(std::experim
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniSetInt32T::fromCpp(std::move(* dc))), optional_set_int32_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniSetInt32T::fromCpp(std::move(* dc)), optional_set_int32_t___delete);
 }
 
 std::experimental::optional<std::unordered_set<int32_t>>DjinniSetInt32T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

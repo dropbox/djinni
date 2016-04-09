@@ -77,8 +77,8 @@ std::unordered_set<std::string> DjinniSetString::toCpp(djinni::Handle<DjinniObje
     size_t size = s_py_callback_set_string__get_size(dh.get());
 
     for (int i = 0; i < size; i++) {
-        auto _el = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_set_string__python_next(dh.get()))));
-        _ret.insert(_el);
+        auto _el = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_set_string__python_next(dh.get())));
+        _ret.insert(std::move(_el));
     }
 
     return _ret;
@@ -88,7 +88,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniSetString::fromCpp(std::experim
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniSetString::fromCpp(std::move(* dc))), optional_set_string___delete);
+    return djinni::optionals::toOptionalHandle(DjinniSetString::fromCpp(std::move(* dc)), optional_set_string___delete);
 }
 
 std::experimental::optional<std::unordered_set<std::string>>DjinniSetString::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

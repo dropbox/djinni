@@ -61,7 +61,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniConstantRecord::fromCpp(std::ex
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniConstantRecord::fromCpp(std::move(* dc))), optional_constant_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniConstantRecord::fromCpp(std::move(* dc)), optional_constant_record___delete);
 }
 
 std::experimental::optional<::testsuite::ConstantRecord>DjinniConstantRecord::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

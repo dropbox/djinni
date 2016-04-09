@@ -55,7 +55,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniNestedCollection::fromCpp(std::
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniNestedCollection::fromCpp(std::move(* dc))), optional_nested_collection___delete);
+    return djinni::optionals::toOptionalHandle(DjinniNestedCollection::fromCpp(std::move(* dc)), optional_nested_collection___delete);
 }
 
 std::experimental::optional<::testsuite::NestedCollection>DjinniNestedCollection::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

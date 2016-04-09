@@ -54,7 +54,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniOptColorRecord::fromCpp(std::ex
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniOptColorRecord::fromCpp(std::move(* dc))), optional_opt_color_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniOptColorRecord::fromCpp(std::move(* dc)), optional_opt_color_record___delete);
 }
 
 std::experimental::optional<::testsuite::OptColorRecord>DjinniOptColorRecord::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

@@ -85,7 +85,7 @@ std::unordered_map<std::experimental::optional<int32_t>, std::unordered_set<std:
 
     for (int i = 0; i < size; i++) {
         auto _key_c = std::unique_ptr<DjinniBoxedI32>(s_py_callback_map_boxed_int32_t_set_string__python_next(dh.get())); // key that would potentially be surrounded by unique pointer
-        auto _val = DjinniSetString::toCpp(std::move(djinni::Handle<DjinniObjectHandle>(s_py_callback_map_boxed_int32_t_set_string__get_value(dh.get(), _key_c.get()), set_string___delete)));
+        auto _val = DjinniSetString::toCpp(djinni::Handle<DjinniObjectHandle>(s_py_callback_map_boxed_int32_t_set_string__get_value(dh.get(), _key_c.get()), set_string___delete));
 
         auto _key = DjinniBoxedI32::toCpp(std::move(_key_c));
         _ret.emplace(std::move(_key), std::move(_val));
@@ -98,7 +98,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapBoxedInt32TSetString::fromCp
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapBoxedInt32TSetString::fromCpp(std::move(* dc))), optional_map_boxed_int32_t_set_string___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapBoxedInt32TSetString::fromCpp(std::move(* dc)), optional_map_boxed_int32_t_set_string___delete);
 }
 
 std::experimental::optional<std::unordered_map<std::experimental::optional<int32_t>, std::unordered_set<std::string>>>DjinniMapBoxedInt32TSetString::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

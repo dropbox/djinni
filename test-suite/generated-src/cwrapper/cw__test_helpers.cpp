@@ -158,13 +158,13 @@ void cw__test_helpers_check_enum(int c) {
 DjinniWrapperUserToken * cw__test_helpers_token_id(DjinniWrapperUserToken * t) {
     djinni::Handle<DjinniWrapperUserToken> _t(t, user_token___wrapper_dec_ref);
     try {
-        return DjinniWrapperUserToken::wrap(std::move(::testsuite::TestHelpers::token_id(DjinniWrapperUserToken::get(std::move(_t))))).release();
+        return DjinniWrapperUserToken::wrap(::testsuite::TestHelpers::token_id(DjinniWrapperUserToken::get(std::move(_t)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniWrapperUserToken * cw__test_helpers_create_cpp_token() {
     try {
-        return DjinniWrapperUserToken::wrap(std::move(::testsuite::TestHelpers::create_cpp_token())).release();
+        return DjinniWrapperUserToken::wrap(::testsuite::TestHelpers::create_cpp_token()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 

@@ -124,7 +124,7 @@ void foo_listener_add_callback___delete(void(* ptr)(DjinniObjectHandle * )) {
 
 std::string FooListenerPythonProxy::on_string_change(const std::string & private_string) {
     auto _private_string = DjinniString::fromCpp(private_string);
-    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_string_change(m_py_obj_handle, _private_string.release()))));
+    auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_string_change(m_py_obj_handle, _private_string.release())));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -138,7 +138,7 @@ int32_t FooListenerPythonProxy::get_private_int() {
 std::string FooListenerPythonProxy::on_changes_string_returned(int32_t i, float f, const std::string & s, const std::vector<uint8_t> & binar, bool b, const std::chrono::system_clock::time_point & d) {
     auto _s = DjinniString::fromCpp(s);
     auto _binar = DjinniBinary::fromCpp(binar);
-    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_changes_string_returned(m_py_obj_handle, i, f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d)))));
+    auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_changes_string_returned(m_py_obj_handle, i, f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d))));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -146,7 +146,7 @@ std::string FooListenerPythonProxy::on_changes_string_returned(int32_t i, float 
 std::vector<uint8_t> FooListenerPythonProxy::on_changes_binary_returned(int32_t i, float f, const std::string & s, const std::vector<uint8_t> & binar, bool b, const std::chrono::system_clock::time_point & d) {
     auto _s = DjinniString::fromCpp(s);
     auto _binar = DjinniBinary::fromCpp(binar);
-    auto _ret = DjinniBinary::toCpp(std::move(std::unique_ptr<DjinniBinary>(s_py_callback_foo_listener_on_changes_binary_returned(m_py_obj_handle, i, f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d)))));
+    auto _ret = DjinniBinary::toCpp(std::unique_ptr<DjinniBinary>(s_py_callback_foo_listener_on_changes_binary_returned(m_py_obj_handle, i, f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d))));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -168,7 +168,7 @@ int32_t FooListenerPythonProxy::on_changes_int_returned(int32_t i, float f, cons
 }
 
 ::testsuite::FooSomeOtherRecord FooListenerPythonProxy::on_changes_record_returned(int32_t n1, int32_t n2) {
-    auto _ret = DjinniFooSomeOtherRecord::toCpp(std::move(djinni::Handle<DjinniRecordHandle>(s_py_callback_foo_listener_on_changes_record_returned(m_py_obj_handle, n1, n2), foo_some_other_record___delete)));
+    auto _ret = DjinniFooSomeOtherRecord::toCpp(djinni::Handle<DjinniRecordHandle>(s_py_callback_foo_listener_on_changes_record_returned(m_py_obj_handle, n1, n2), foo_some_other_record___delete));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -177,7 +177,7 @@ std::experimental::optional<std::string> FooListenerPythonProxy::on_changes_stri
     auto _i = DjinniBoxedI32::fromCpp(i);
     auto _s = DjinniOptionalString::fromCpp(s);
     auto _binar = DjinniBinary::fromCpp(binar);
-    auto _ret = DjinniOptionalString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_changes_string_optional_returned(m_py_obj_handle, _i.release(), f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d)))));
+    auto _ret = DjinniOptionalString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_on_changes_string_optional_returned(m_py_obj_handle, _i.release(), f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d))));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -186,7 +186,7 @@ std::experimental::optional<int32_t> FooListenerPythonProxy::on_changes_int_opti
     auto _i = DjinniBoxedI32::fromCpp(i);
     auto _s = DjinniOptionalString::fromCpp(s);
     auto _binar = DjinniBinary::fromCpp(binar);
-    auto _ret = DjinniBoxedI32::toCpp(std::move(std::unique_ptr<DjinniBoxedI32>(s_py_callback_foo_listener_on_changes_int_optional_returned(m_py_obj_handle, _i.release(), f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d)))));
+    auto _ret = DjinniBoxedI32::toCpp(std::unique_ptr<DjinniBoxedI32>(s_py_callback_foo_listener_on_changes_int_optional_returned(m_py_obj_handle, _i.release(), f, _s.release(), _binar.release(), b, DjinniDate::fromCpp(d))));
     djinni::cw_throw_if_pending();
     return _ret;
 }

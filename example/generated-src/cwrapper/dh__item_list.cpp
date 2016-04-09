@@ -54,7 +54,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniItemList::fromCpp(std::experime
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniItemList::fromCpp(std::move(* dc))), optional_item_list___delete);
+    return djinni::optionals::toOptionalHandle(DjinniItemList::fromCpp(std::move(* dc)), optional_item_list___delete);
 }
 
 std::experimental::optional<::textsort::ItemList>DjinniItemList::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

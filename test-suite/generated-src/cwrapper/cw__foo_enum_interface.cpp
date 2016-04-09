@@ -58,6 +58,6 @@ int cw__foo_enum_interface_get_optional_enum(DjinniWrapperFooEnumInterface * dji
 }
 DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create() {
     try {
-        return DjinniWrapperFooEnumInterface::wrap(std::move(::testsuite::FooEnumInterface::create())).release();
+        return DjinniWrapperFooEnumInterface::wrap(::testsuite::FooEnumInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

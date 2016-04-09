@@ -222,7 +222,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniFooContainersRecord::fromCpp(st
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniFooContainersRecord::fromCpp(std::move(* dc))), optional_foo_containers_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniFooContainersRecord::fromCpp(std::move(* dc)), optional_foo_containers_record___delete);
 }
 
 std::experimental::optional<::testsuite::FooContainersRecord>DjinniFooContainersRecord::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

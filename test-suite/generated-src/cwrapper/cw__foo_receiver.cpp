@@ -141,7 +141,7 @@ void cw__foo_receiver_add_optional_listener(DjinniWrapperFooReceiver * djinni_th
 
 DjinniWrapperFooListener * cw__foo_receiver_get_optional_listener(DjinniWrapperFooReceiver * djinni_this) {
     try {
-        return DjinniWrapperFooListener::wrap(std::move(djinni_this->wrapped_obj->get_optional_listener())).release();
+        return DjinniWrapperFooListener::wrap(djinni_this->wrapped_obj->get_optional_listener()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
@@ -161,7 +161,7 @@ void cw__foo_receiver_add_listener_bf(DjinniWrapperFooReceiver * djinni_this, Dj
 
 DjinniWrapperFooListenerBf * cw__foo_receiver_get_foo_listener_bf(DjinniWrapperFooReceiver * djinni_this) {
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->get_foo_listener_bf())).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->get_foo_listener_bf()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
@@ -180,7 +180,7 @@ void cw__foo_receiver_set_listener_bf_in_listener_bf(DjinniWrapperFooReceiver * 
 
 DjinniWrapperFooListenerBf * cw__foo_receiver_get_listener_bf_in_listener_bf(DjinniWrapperFooReceiver * djinni_this) {
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->get_listener_bf_in_listener_bf())).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->get_listener_bf_in_listener_bf()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
@@ -200,18 +200,18 @@ DjinniBinary * cw__foo_receiver_get_binary_in_listener_bf_in_listener_bf(DjinniW
 DjinniWrapperFooListenerBf * cw__foo_receiver_send_return(DjinniWrapperFooReceiver * djinni_this, DjinniWrapperFooListenerBf * fl_bf) {
     djinni::Handle<DjinniWrapperFooListenerBf> _fl_bf(fl_bf, foo_listener_bf___wrapper_dec_ref);
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf))))).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
 DjinniWrapperFooListenerBf * cw__foo_receiver_in_listener_bf_send_return(DjinniWrapperFooReceiver * djinni_this, DjinniWrapperFooListenerBf * fl_bf) {
     djinni::Handle<DjinniWrapperFooListenerBf> _fl_bf(fl_bf, foo_listener_bf___wrapper_dec_ref);
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->in_listener_bf_send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf))))).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->in_listener_bf_send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooReceiver * cw__foo_receiver_create() {
     try {
-        return DjinniWrapperFooReceiver::wrap(std::move(::testsuite::FooReceiver::create())).release();
+        return DjinniWrapperFooReceiver::wrap(::testsuite::FooReceiver::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

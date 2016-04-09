@@ -54,7 +54,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniPrimitiveList::fromCpp(std::exp
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniPrimitiveList::fromCpp(std::move(* dc))), optional_primitive_list___delete);
+    return djinni::optionals::toOptionalHandle(DjinniPrimitiveList::fromCpp(std::move(* dc)), optional_primitive_list___delete);
 }
 
 std::experimental::optional<::testsuite::PrimitiveList>DjinniPrimitiveList::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

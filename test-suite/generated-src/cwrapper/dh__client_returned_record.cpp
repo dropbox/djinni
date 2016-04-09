@@ -72,7 +72,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniClientReturnedRecord::fromCpp(s
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniClientReturnedRecord::fromCpp(std::move(* dc))), optional_client_returned_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniClientReturnedRecord::fromCpp(std::move(* dc)), optional_client_returned_record___delete);
 }
 
 std::experimental::optional<::testsuite::ClientReturnedRecord>DjinniClientReturnedRecord::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

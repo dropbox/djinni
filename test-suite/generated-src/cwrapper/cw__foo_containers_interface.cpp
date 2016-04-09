@@ -111,6 +111,6 @@ DjinniObjectHandle * cw__foo_containers_interface_get_list_binary(DjinniWrapperF
 }
 DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create() {
     try {
-        return DjinniWrapperFooContainersInterface::wrap(std::move(::testsuite::FooContainersInterface::create())).release();
+        return DjinniWrapperFooContainersInterface::wrap(::testsuite::FooContainersInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

@@ -62,7 +62,7 @@ djinni::Handle<DjinniOptionalRecordHandle> DjinniRecordWithNestedDerivings::from
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniRecordWithNestedDerivings::fromCpp(std::move(* dc))), optional_record_with_nested_derivings___delete);
+    return djinni::optionals::toOptionalHandle(DjinniRecordWithNestedDerivings::fromCpp(std::move(* dc)), optional_record_with_nested_derivings___delete);
 }
 
 std::experimental::optional<::testsuite::RecordWithNestedDerivings>DjinniRecordWithNestedDerivings::toCpp(djinni::Handle<DjinniOptionalRecordHandle> dh) {

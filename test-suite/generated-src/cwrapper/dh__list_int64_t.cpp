@@ -70,7 +70,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListInt64T::fromCpp(std::experi
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListInt64T::fromCpp(std::move(* dc))), optional_list_int64_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListInt64T::fromCpp(std::move(* dc)), optional_list_int64_t___delete);
 }
 
 std::experimental::optional<std::vector<int64_t>>DjinniListInt64T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

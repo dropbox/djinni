@@ -21,7 +21,7 @@ clean:
 	-rm -rf build/
 	-rm -rf example/build/
 	-rm -rf build_ios/
-	-rm -rf build_by/
+	-rm -rf build_py/
 	-rm -f GypAndroid.mk
 
 #
@@ -82,6 +82,7 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj/project.pbxproj
            -target libtextsort_py \
            -configuration 'Debug' \
            ONLY_ACTIVE_ARCH=NO
+	mkdir -p ./build_py/cffi
 	cp example/build/Debug/libtextsort_py.dylib ./build_py/cffi/libtextsort_py.dylib
 
 example_python2: ./build_py/cffi/libtextsort_py.dylib

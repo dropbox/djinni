@@ -52,6 +52,6 @@ DjinniString * cw__reverse_client_interface_meth_taking_optional_interface(Djinn
 }
 DjinniWrapperReverseClientInterface * cw__reverse_client_interface_create() {
     try {
-        return DjinniWrapperReverseClientInterface::wrap(std::move(::testsuite::ReverseClientInterface::create())).release();
+        return DjinniWrapperReverseClientInterface::wrap(::testsuite::ReverseClientInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

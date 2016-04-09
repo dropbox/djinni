@@ -90,7 +90,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapStringInt64T::fromCpp(std::e
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapStringInt64T::fromCpp(std::move(* dc))), optional_map_string_int64_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapStringInt64T::fromCpp(std::move(* dc)), optional_map_string_int64_t___delete);
 }
 
 std::experimental::optional<std::unordered_map<std::string, int64_t>>DjinniMapStringInt64T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

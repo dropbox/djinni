@@ -47,6 +47,6 @@ DjinniWrapperListenerCaller * cw__listener_caller_init(DjinniWrapperFirstListene
     djinni::Handle<DjinniWrapperFirstListener> _first_l(first_l, first_listener___wrapper_dec_ref);
     djinni::Handle<DjinniWrapperSecondListener> _second_l(second_l, second_listener___wrapper_dec_ref);
     try {
-        return DjinniWrapperListenerCaller::wrap(std::move(::testsuite::ListenerCaller::init(DjinniWrapperFirstListener::get(std::move(_first_l)), DjinniWrapperSecondListener::get(std::move(_second_l))))).release();
+        return DjinniWrapperListenerCaller::wrap(::testsuite::ListenerCaller::init(DjinniWrapperFirstListener::get(std::move(_first_l)), DjinniWrapperSecondListener::get(std::move(_second_l)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

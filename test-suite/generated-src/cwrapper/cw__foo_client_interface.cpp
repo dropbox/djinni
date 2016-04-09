@@ -71,6 +71,6 @@ DjinniString * cw__foo_client_interface_get_extensible_record_string2(DjinniWrap
 }
 DjinniWrapperFooClientInterface * cw__foo_client_interface_create() {
     try {
-        return DjinniWrapperFooClientInterface::wrap(std::move(::testsuite::FooClientInterface::create())).release();
+        return DjinniWrapperFooClientInterface::wrap(::testsuite::FooClientInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

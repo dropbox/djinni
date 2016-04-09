@@ -43,7 +43,7 @@ void cw__sort_items_sort(DjinniWrapperSortItems * djinni_this, int order, Djinni
 DjinniWrapperSortItems * cw__sort_items_create_with_listener(DjinniWrapperTextboxListener * listener) {
     djinni::Handle<DjinniWrapperTextboxListener> _listener(listener, textbox_listener___wrapper_dec_ref);
     try {
-        return DjinniWrapperSortItems::wrap(std::move(::textsort::SortItems::create_with_listener(DjinniWrapperTextboxListener::get(std::move(_listener))))).release();
+        return DjinniWrapperSortItems::wrap(::textsort::SortItems::create_with_listener(DjinniWrapperTextboxListener::get(std::move(_listener)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 

@@ -79,7 +79,7 @@ std::vector<::testsuite::FooSomeOtherRecord> DjinniListRecordFooSomeOtherRecord:
     _ret.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        _ret.push_back(DjinniFooSomeOtherRecord::toCpp(std::move(djinni::Handle<DjinniRecordHandle>(s_py_callback_list_record_foo_some_other_record__get_elem(dh.get(), i), foo_some_other_record___delete))));
+        _ret.push_back(DjinniFooSomeOtherRecord::toCpp(djinni::Handle<DjinniRecordHandle>(s_py_callback_list_record_foo_some_other_record__get_elem(dh.get(), i), foo_some_other_record___delete)));
     }
 
     return _ret;
@@ -89,7 +89,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListRecordFooSomeOtherRecord::f
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListRecordFooSomeOtherRecord::fromCpp(std::move(* dc))), optional_list_record_foo_some_other_record___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListRecordFooSomeOtherRecord::fromCpp(std::move(* dc)), optional_list_record_foo_some_other_record___delete);
 }
 
 std::experimental::optional<std::vector<::testsuite::FooSomeOtherRecord>>DjinniListRecordFooSomeOtherRecord::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

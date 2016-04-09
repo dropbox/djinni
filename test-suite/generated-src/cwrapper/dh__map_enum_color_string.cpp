@@ -77,7 +77,7 @@ std::unordered_map<::testsuite::color, std::string> DjinniMapEnumColorString::to
 
     for (int i = 0; i < size; i++) {
         auto _key_c = s_py_callback_map_enum_color_string__python_next(dh.get()); // key that would potentially be surrounded by unique pointer
-        auto _val = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_map_enum_color_string__get_value(dh.get(), _key_c))));
+        auto _val = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_map_enum_color_string__get_value(dh.get(), _key_c)));
 
         auto _key = static_cast<::testsuite::color>(_key_c);
         _ret.emplace(std::move(_key), std::move(_val));
@@ -90,7 +90,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapEnumColorString::fromCpp(std
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapEnumColorString::fromCpp(std::move(* dc))), optional_map_enum_color_string___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapEnumColorString::fromCpp(std::move(* dc)), optional_map_enum_color_string___delete);
 }
 
 std::experimental::optional<std::unordered_map<::testsuite::color, std::string>>DjinniMapEnumColorString::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

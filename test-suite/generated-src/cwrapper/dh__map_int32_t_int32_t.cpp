@@ -79,7 +79,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapInt32TInt32T::fromCpp(std::e
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapInt32TInt32T::fromCpp(std::move(* dc))), optional_map_int32_t_int32_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapInt32TInt32T::fromCpp(std::move(* dc)), optional_map_int32_t_int32_t___delete);
 }
 
 std::experimental::optional<std::unordered_map<int32_t, int32_t>>DjinniMapInt32TInt32T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

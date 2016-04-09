@@ -72,11 +72,11 @@ DjinniString * cw__foo_interface_get_set_strings(DjinniWrapperFooInterface * dji
 
 DjinniWrapperFooPrimitives * cw__foo_interface_get_foo_primitives(DjinniWrapperFooInterface * djinni_this) {
     try {
-        return DjinniWrapperFooPrimitives::wrap(std::move(djinni_this->wrapped_obj->get_foo_primitives())).release();
+        return DjinniWrapperFooPrimitives::wrap(djinni_this->wrapped_obj->get_foo_primitives()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 DjinniWrapperFooInterface * cw__foo_interface_create() {
     try {
-        return DjinniWrapperFooInterface::wrap(std::move(::testsuite::FooInterface::create())).release();
+        return DjinniWrapperFooInterface::wrap(::testsuite::FooInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

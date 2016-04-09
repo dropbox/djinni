@@ -88,7 +88,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListInt32T::fromCpp(std::experi
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListInt32T::fromCpp(std::move(* dc))), optional_list_int32_t___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListInt32T::fromCpp(std::move(* dc)), optional_list_int32_t___delete);
 }
 
 std::experimental::optional<std::vector<int32_t>>DjinniListInt32T::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

@@ -79,7 +79,7 @@ std::vector<std::experimental::optional<std::vector<uint8_t>>> DjinniListOptiona
     _ret.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        _ret.push_back(DjinniOptionalBinary::toCpp(std::move(std::unique_ptr<DjinniBinary>(s_py_callback_list_optional_binary__get_elem(dh.get(), i)))));
+        _ret.push_back(DjinniOptionalBinary::toCpp(std::unique_ptr<DjinniBinary>(s_py_callback_list_optional_binary__get_elem(dh.get(), i))));
     }
 
     return _ret;
@@ -89,7 +89,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListOptionalBinary::fromCpp(std
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListOptionalBinary::fromCpp(std::move(* dc))), optional_list_optional_binary___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListOptionalBinary::fromCpp(std::move(* dc)), optional_list_optional_binary___delete);
 }
 
 std::experimental::optional<std::vector<std::experimental::optional<std::vector<uint8_t>>>>DjinniListOptionalBinary::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

@@ -84,7 +84,7 @@ std::unordered_map<int8_t, std::vector<std::chrono::system_clock::time_point>> D
 
     for (int i = 0; i < size; i++) {
         auto _key_c = s_py_callback_map_int8_t_list_date__python_next(dh.get()); // key that would potentially be surrounded by unique pointer
-        auto _val = DjinniListDate::toCpp(std::move(djinni::Handle<DjinniObjectHandle>(s_py_callback_map_int8_t_list_date__get_value(dh.get(), _key_c), list_date___delete)));
+        auto _val = DjinniListDate::toCpp(djinni::Handle<DjinniObjectHandle>(s_py_callback_map_int8_t_list_date__get_value(dh.get(), _key_c), list_date___delete));
 
         auto _key = _key_c;
         _ret.emplace(std::move(_key), std::move(_val));
@@ -97,7 +97,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniMapInt8TListDate::fromCpp(std::
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniMapInt8TListDate::fromCpp(std::move(* dc))), optional_map_int8_t_list_date___delete);
+    return djinni::optionals::toOptionalHandle(DjinniMapInt8TListDate::fromCpp(std::move(* dc)), optional_map_int8_t_list_date___delete);
 }
 
 std::experimental::optional<std::unordered_map<int8_t, std::vector<std::chrono::system_clock::time_point>>>DjinniMapInt8TListDate::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

@@ -112,19 +112,19 @@ void foo_listener_bf_add_callback___delete(void(* ptr)(DjinniObjectHandle * )) {
 
 std::string FooListenerBfPythonProxy::on_string_change(const std::string & private_string) {
     auto _private_string = DjinniString::fromCpp(private_string);
-    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_on_string_change(m_py_obj_handle, _private_string.release()))));
+    auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_on_string_change(m_py_obj_handle, _private_string.release())));
     djinni::cw_throw_if_pending();
     return _ret;
 }
 
 std::string FooListenerBfPythonProxy::get_string() {
-    auto _ret = DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_get_string(m_py_obj_handle))));
+    auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_get_string(m_py_obj_handle)));
     djinni::cw_throw_if_pending();
     return _ret;
 }
 
 std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::create() {
-    auto _ret = DjinniWrapperFooListenerBf::get(std::move(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_create(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref)));
+    auto _ret = DjinniWrapperFooListenerBf::get(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_create(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -136,7 +136,7 @@ void FooListenerBfPythonProxy::set_listener_bf(const std::shared_ptr<::testsuite
 }
 
 std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::get_listener_bf() {
-    auto _ret = DjinniWrapperFooListenerBf::get(std::move(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_get_listener_bf(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref)));
+    auto _ret = DjinniWrapperFooListenerBf::get(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_get_listener_bf(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -148,14 +148,14 @@ void FooListenerBfPythonProxy::set_binary(const std::vector<uint8_t> & b) {
 }
 
 std::vector<uint8_t> FooListenerBfPythonProxy::get_binary() {
-    auto _ret = DjinniBinary::toCpp(std::move(std::unique_ptr<DjinniBinary>(s_py_callback_foo_listener_bf_get_binary(m_py_obj_handle))));
+    auto _ret = DjinniBinary::toCpp(std::unique_ptr<DjinniBinary>(s_py_callback_foo_listener_bf_get_binary(m_py_obj_handle)));
     djinni::cw_throw_if_pending();
     return _ret;
 }
 
 std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::send_return(const std::shared_ptr<::testsuite::FooListenerBf> & fl_bf) {
     auto _fl_bf = DjinniWrapperFooListenerBf::wrap(std::move(fl_bf));
-    auto _ret = DjinniWrapperFooListenerBf::get(std::move(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_send_return(m_py_obj_handle, _fl_bf.release()), foo_listener_bf___wrapper_dec_ref)));
+    auto _ret = DjinniWrapperFooListenerBf::get(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_send_return(m_py_obj_handle, _fl_bf.release()), foo_listener_bf___wrapper_dec_ref));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -186,7 +186,7 @@ void cw__foo_listener_bf_set_listener_bf(DjinniWrapperFooListenerBf * djinni_thi
 
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_get_listener_bf(DjinniWrapperFooListenerBf * djinni_this) {
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->get_listener_bf())).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->get_listener_bf()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
@@ -206,7 +206,7 @@ DjinniBinary * cw__foo_listener_bf_get_binary(DjinniWrapperFooListenerBf * djinn
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_send_return(DjinniWrapperFooListenerBf * djinni_this, DjinniWrapperFooListenerBf * fl_bf) {
     djinni::Handle<DjinniWrapperFooListenerBf> _fl_bf(fl_bf, foo_listener_bf___wrapper_dec_ref);
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(djinni_this->wrapped_obj->send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf))))).release();
+        return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
@@ -217,6 +217,6 @@ void cw__foo_listener_bf_delete_fl_in_fl(DjinniWrapperFooListenerBf * djinni_thi
 }
 DjinniWrapperFooListenerBf * cw__foo_listener_bf_create() {
     try {
-        return DjinniWrapperFooListenerBf::wrap(std::move(::testsuite::FooListenerBf::create())).release();
+        return DjinniWrapperFooListenerBf::wrap(::testsuite::FooListenerBf::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

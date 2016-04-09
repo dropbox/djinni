@@ -79,7 +79,7 @@ std::vector<std::string> DjinniListString::toCpp(djinni::Handle<DjinniObjectHand
     _ret.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        _ret.push_back(DjinniString::toCpp(std::move(std::unique_ptr<DjinniString>(s_py_callback_list_string__get_elem(dh.get(), i)))));
+        _ret.push_back(DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_list_string__get_elem(dh.get(), i))));
     }
 
     return _ret;
@@ -89,7 +89,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListString::fromCpp(std::experi
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListString::fromCpp(std::move(* dc))), optional_list_string___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListString::fromCpp(std::move(* dc)), optional_list_string___delete);
 }
 
 std::experimental::optional<std::vector<std::string>>DjinniListString::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {

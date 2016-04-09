@@ -129,8 +129,10 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl("_ret.reserve" + p("size") + ";")
     w.wl
     w.wl("for (int i = 0; i < size; i++) {").nested {
-        w.wl("_ret.push_back" + p(marshal.convertTo(raiiForElement(
-          marshal.pyCallback(idCpp.method(classAsMethodName) + idCpp.method("__get_elem") + p("dh.get(), i")), tm.args(0)), elTyRef)) + ";")
+        w.wl("_ret.push_back" + p(marshal.convertTo(
+          raiiForElement(marshal.pyCallback(idCpp.method(classAsMethodName) + idCpp.method("__get_elem") + p("dh.get(), i")), tm.args(0)),
+          elTyRef,
+          tempExpr=true)) + ";")
     }
     w.wl("}")
     w.wl
@@ -171,8 +173,10 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       w.wl("auto _key_c = " + raiiForElement(
         marshal.pyCallback(idCpp.method(className) + idCpp.method("__python_next") + p("dh.get()")), tm.args(0)) + "; // key that would potentially be surrounded by unique pointer")
       val key = if (marshal.needsRAII(tm.args(0))) "_key_c.get()" else "_key_c" // don't delete ownership
-      w.wl("auto _val = " + marshal.convertTo(raiiForElement(
-        marshal.pyCallback(idCpp.method(className) + idCpp.method("__get_value") + p("dh.get(), " + key)), tm.args(1)), valTyRef) + ";")
+      w.wl("auto _val = " + marshal.convertTo(
+        raiiForElement(marshal.pyCallback(idCpp.method(className) + idCpp.method("__get_value") + p("dh.get(), " + key)), tm.args(1)),
+        valTyRef,
+        tempExpr=true) + ";")
       w.wl
       w.wl("auto _key = " + marshal.convertTo("_key_c", keyTyRef) + ";")
       w.wl("_ret.emplace(std::move(_key), std::move(_val));")
@@ -216,9 +220,11 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl("size_t size = " + marshal.pyCallback(idCpp.method(className) + idCpp.method("__get_size") + p("dh.get()") + ";"))
     w.wl
     w.wl("for (int i = 0; i < size; i++) {").nested {
-      w.wl("auto _el = " + marshal.convertTo(raiiForElement(
-        marshal.pyCallback(idCpp.method(className) + idCpp.method("__python_next") + p("dh.get()")), tm.args(0)), keyTyRef) + ";")
-      w.wl("_ret.insert(_el);")
+      w.wl("auto _el = " + marshal.convertTo(
+        raiiForElement(marshal.pyCallback(idCpp.method(className) + idCpp.method("__python_next") + p("dh.get()")), tm.args(0)),
+        keyTyRef,
+        tempExpr=true) + ";")
+      w.wl("_ret.insert(std::move(_el));")
     }
     w.wl("}")
     w.wl
@@ -330,7 +336,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
         w.wl("return nullptr;")
       }
       w.wl("}")
-      w.wl("return " + "djinni::optionals::toOptionalHandle" + p("std::move" + p(djinniWrapper + "::fromCpp" + p("std::move(* dc)")) + ", " + deleteMethod) + ";")
+      w.wl("return " + "djinni::optionals::toOptionalHandle" + p(djinniWrapper + "::fromCpp" + p("std::move(* dc)") + ", " + deleteMethod) + ";")
     }
     w.wl("}")
     w.wl
@@ -660,7 +666,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
         if (marshal.needsRAII(f.ty)) {
           w.w(marshal.convertTo(" _field_" + idCpp.method(f.ident.name), f.ty)) // RAII done above
         } else {
-          w.w(marshal.convertTo(marshal.pyCallback(idCpp.method(methodName) + p("dh.get()")), f.ty))
+          w.w(marshal.convertTo(marshal.pyCallback(idCpp.method(methodName) + p("dh.get()")), f.ty, tempExpr=true))
         }
       }
     }
@@ -686,7 +692,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
           if (marshal.needsRAII(f.ty)) {
             w.w("_field_" + idCpp.method(f.ident.name) + ".release()")
           }
-          else w.w(marshal.convertFrom(idCpp.local("dr." + f.ident.name), f.ty))
+          else w.w(marshal.convertFrom("dr." + idCpp.local(f.ident.name), f.ty))
 
         }
       }
@@ -856,10 +862,10 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
   def writeMethodToCpp(m: Interface.Method, fctPrefix: String, cWrapper: String, cMethodWrapper: String, w: IndentWriter): Unit = {
     val ret = marshal.cReturnType(m.ret, false)
-    val args = m.params.map (p => marshal.convertTo((if (marshal.needsRAII(p.ty.resolved)) "_" else "") + p.ident.name, p.ty)) // x
+    val args = m.params.map (p => marshal.convertTo((if (marshal.needsRAII(p.ty.resolved)) "_" else "") + p.ident.name, p.ty, tempExpr = false)) // x
     val fctCall = fctPrefix + idCpp.method(m.ident.name) + args.mkString("(", ", ", ")")
     val returnStmt = if (m.ret.isEmpty) fctCall + ";"
-    else "return " + marshal.convertFrom(fctCall , m.ret.get) + (if (marshal.needsRAII(m.ret.get)) ".release()" else "") + ";"
+    else "return " + marshal.convertFrom(fctCall, m.ret.get, tempExpr=true) + (if (marshal.needsRAII(m.ret.get)) ".release()" else "") + ";"
 
     val params = getDefArgs(m, cWrapper + " * " + dw, false)
     w.wl(ret + " " + cMethodWrapper + "_" + idCpp.method(m.ident.name) + params + " {").nested {
@@ -888,7 +894,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + params.mkString("(", ", ", ")")
       if (m.ret.isDefined) {
         val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + params.mkString("(", ", ", ")")
-        w.wl("auto _ret = " +  marshal.convertTo(raiiForElement(method_call, m.ret.get.resolved), m.ret.get) + ";")
+        w.wl("auto _ret = " +  marshal.convertTo(raiiForElement(method_call, m.ret.get.resolved), m.ret.get, tempExpr=true) + ";")
         w.wl("djinni::cw_throw_if_pending();")
         w.wl("return _ret;")
       }

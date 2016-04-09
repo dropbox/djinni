@@ -155,6 +155,6 @@ uint64_t cw__foo_primitives_get_date(DjinniWrapperFooPrimitives * djinni_this) {
 }
 DjinniWrapperFooPrimitives * cw__foo_primitives_create() {
     try {
-        return DjinniWrapperFooPrimitives::wrap(std::move(::testsuite::FooPrimitives::create())).release();
+        return DjinniWrapperFooPrimitives::wrap(::testsuite::FooPrimitives::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

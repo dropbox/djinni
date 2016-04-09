@@ -88,7 +88,7 @@ djinni::Handle<DjinniOptionalObjectHandle> DjinniListDate::fromCpp(std::experime
     if (dc == std::experimental::nullopt) {
         return nullptr;
     }
-    return djinni::optionals::toOptionalHandle(std::move(DjinniListDate::fromCpp(std::move(* dc))), optional_list_date___delete);
+    return djinni::optionals::toOptionalHandle(DjinniListDate::fromCpp(std::move(* dc)), optional_list_date___delete);
 }
 
 std::experimental::optional<std::vector<std::chrono::system_clock::time_point>>DjinniListDate::toCpp(djinni::Handle<DjinniOptionalObjectHandle> dh) {
