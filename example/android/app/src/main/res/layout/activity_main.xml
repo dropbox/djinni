@@ -43,6 +43,6 @@
         android:layout_above="@+id/actions"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="Type some text here"
+        android:hint="Type some text here"
         android:gravity="left|top" />
 </RelativeLayout>
