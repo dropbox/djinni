@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p datesById:%@>", self.class, self, self.datesById];
+    return [NSString stringWithFormat:@"<%@ %p datesById:%@>", self.class, (void *)self, self.datesById];
 }
 
 @end

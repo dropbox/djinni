@@ -52,7 +52,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p dt:%@>", self.class, self, @(self.dt)];
+    return [NSString stringWithFormat:@"<%@ %p dt:%@>", self.class, (void *)self, @(self.dt)];
 }
 
 @end

@@ -395,7 +395,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           w.w("[NSString stringWithFormat:@\"<%@ %p")
 
           for (f <- r.fields) w.w(s" ${idObjc.field(f.ident)}:%@")
-          w.w(">\", self.class, self")
+          w.w(">\", self.class, (void *)self")
 
           for (f <- r.fields) {
             w.w(", ")

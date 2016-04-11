@@ -1,3 +1,15 @@
+#
+# Environment variables for overriding default behavior.
+#
+
+ifndef ANDROID_NDK_HOME
+ANDROID_NDK_HOME = $(abspath $(dir $(realpath $(shell which ndk-build))))
+endif
+
+#
+# Global targets.
+#
+
 all: djinni example_ios example_android example_localhost test
 
 clean:
@@ -33,7 +45,7 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj
            -scheme TextSort \
            -configuration 'Debug' \
            -sdk iphonesimulator \
-	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.2'
+	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.3'
 
 # this target implicitly depends on GypAndroid.mk since gradle will try to make it
 example_android: GypAndroid.mk

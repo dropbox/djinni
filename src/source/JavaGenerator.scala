@@ -216,7 +216,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     val refs = new JavaRefs()
     r.fields.foreach(f => refs.find(f.ty))
 
-    val (javaName, javaFinal) = if (r.ext.java) (ident.name + "_base", "") else (ident.name, " final")
+    val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
+    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) " final" else ""
+
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class PrimitiveList {
+public class PrimitiveList {
 
 
     /*package*/ final ArrayList<Long> mList;

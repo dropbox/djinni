@@ -29,7 +29,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p recordId:%@ content:%@ misc:%@>", self.class, self, @(self.recordId), self.content, self.misc];
+    return [NSString stringWithFormat:@"<%@ %p recordId:%@ content:%@ misc:%@>", self.class, (void *)self, @(self.recordId), self.content, self.misc];
 }
 
 @end

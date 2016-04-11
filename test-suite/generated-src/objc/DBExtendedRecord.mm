@@ -27,7 +27,7 @@ DBExtendedRecord * __nonnull const DBExtendedRecordExtendedRecordConst = [[DBExt
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p foo:%@>", self.class, self, @(self.foo)];
+    return [NSString stringWithFormat:@"<%@ %p foo:%@>", self.class, (void *)self, @(self.foo)];
 }
 
 @end
