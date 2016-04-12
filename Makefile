@@ -33,7 +33,7 @@ djinni:
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
 	./example/run_djinni.sh
-	ANDROID_BUILD_TOP=$(shell dirname `which ndk-build`) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
+	ANDROID_BUILD_TOP=$(ANDROID_NDK_HOME) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
 
 # we specify a root target for android to prevent all of the targets from spidering out
 ./build_ios/example/libtextsort.xcodeproj: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
