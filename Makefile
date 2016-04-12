@@ -46,7 +46,7 @@ run_example_djinni:
 
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: run_example_djinni ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
-	ANDROID_BUILD_TOP=$(shell dirname `which ndk-build`) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
+	ANDROID_BUILD_TOP=$(ANDROID_NDK_HOME) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
 
 # this target implicitly depends on GypAndroid.mk since gradle will try to make it
 example_android: GypAndroid.mk
