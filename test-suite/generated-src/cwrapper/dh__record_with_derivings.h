@@ -9,7 +9,13 @@
 struct DjinniRecordWithDerivings;
 void record_with_derivings___delete(struct DjinniRecordHandle * );
 void optional_record_with_derivings___delete(struct DjinniOptionalRecordHandle * );
-void record_with_derivings_add_callback_get_record_with_derivings_f1(int32_t( * ptr)(struct DjinniRecordHandle *));
-void record_with_derivings_add_callback_get_record_with_derivings_f2(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void record_with_derivings_add_callback_python_create_record_with_derivings(struct DjinniRecordHandle *( * ptr)(int32_t,struct DjinniString *));
+void record_with_derivings_add_callback_get_record_with_derivings_f1(int8_t( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f2(int16_t( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f3(int32_t( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f4(int64_t( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f5(float( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f6(double( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f7(uint64_t( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_get_record_with_derivings_f8(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
+void record_with_derivings_add_callback_python_create_record_with_derivings(struct DjinniRecordHandle *( * ptr)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,struct DjinniString *));
 void record_with_derivings_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

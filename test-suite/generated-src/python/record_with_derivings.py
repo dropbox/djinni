@@ -3,7 +3,7 @@
 
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
-from djinni.pycffi_marshal import CPyPrimitive, CPyRecord, CPyString
+from djinni.pycffi_marshal import CPyDate, CPyPrimitive, CPyRecord, CPyString
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
@@ -17,16 +17,46 @@ class RecordWithDerivings:
 
     # Record deriving types
     def __eq__(self, other):
-        return self.key1==other.key1 and \
-        self.key2.__eq__(other.key2)
+        return self.eight==other.eight and \
+        self.sixteen==other.sixteen and \
+        self.thirtytwo==other.thirtytwo and \
+        self.sixtyfour==other.sixtyfour and \
+        self.fthirtytwo==other.fthirtytwo and \
+        self.fsixtyfour==other.fsixtyfour and \
+        self.d.__eq__(other.d) and \
+        self.s.__eq__(other.s)
     def __lt__(self, other):
-        if self.key1<other.key1:
+        if self.eight<other.eight:
             return True
-        if self.key1>other.key1:
+        if self.eight>other.eight:
             return False
-        if self.key2.__lt__(other.key2):
+        if self.sixteen<other.sixteen:
             return True
-        if self.key2.__gt__(other.key2):
+        if self.sixteen>other.sixteen:
+            return False
+        if self.thirtytwo<other.thirtytwo:
+            return True
+        if self.thirtytwo>other.thirtytwo:
+            return False
+        if self.sixtyfour<other.sixtyfour:
+            return True
+        if self.sixtyfour>other.sixtyfour:
+            return False
+        if self.fthirtytwo<other.fthirtytwo:
+            return True
+        if self.fthirtytwo>other.fthirtytwo:
+            return False
+        if self.fsixtyfour<other.fsixtyfour:
+            return True
+        if self.fsixtyfour>other.fsixtyfour:
+            return False
+        if self.d.__lt__(other.d):
+            return True
+        if self.d.__gt__(other.d):
+            return False
+        if self.s.__lt__(other.s):
+            return True
+        if self.s.__gt__(other.s):
             return False
         return False
     def __le__(self, other):
@@ -38,11 +68,23 @@ class RecordWithDerivings:
     def __hash__(self):
         # Pick an arbitrary non-zero starting value
         hash_code = 17
-        hash_code = hash_code * 31 + self.key1.__hash__()
-        hash_code = hash_code * 31 + self.key2.__hash__()
+        hash_code = hash_code * 31 + self.eight.__hash__()
+        hash_code = hash_code * 31 + self.sixteen.__hash__()
+        hash_code = hash_code * 31 + self.thirtytwo.__hash__()
+        hash_code = hash_code * 31 + self.sixtyfour.__hash__()
+        hash_code = hash_code * 31 + self.fthirtytwo.__hash__()
+        hash_code = hash_code * 31 + self.fsixtyfour.__hash__()
+        hash_code = hash_code * 31 + self.d.__hash__()
+        hash_code = hash_code * 31 + self.s.__hash__()
         return hash_code
 
-    def __init__(self, key1, key2):
-        self.key1 = key1
-        self.key2 = key2
+    def __init__(self, eight, sixteen, thirtytwo, sixtyfour, fthirtytwo, fsixtyfour, d, s):
+        self.eight = eight
+        self.sixteen = sixteen
+        self.thirtytwo = thirtytwo
+        self.sixtyfour = sixtyfour
+        self.fthirtytwo = fthirtytwo
+        self.fsixtyfour = fsixtyfour
+        self.d = d
+        self.s = s
 

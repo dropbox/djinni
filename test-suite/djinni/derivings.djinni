@@ -1,6 +1,12 @@
 record_with_derivings = record {
-    key1: i32;
-    key2: string;
+    eight: i8;
+    sixteen: i16;
+    thirtytwo: i32;
+    sixtyfour: i64;
+    fthirtytwo: f32;
+    fsixtyfour: f64;
+    d: date;
+    s: string;
 } deriving (eq, ord)
 
 record_with_nested_derivings = record {

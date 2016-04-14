@@ -293,6 +293,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                       w.w(s"(self.${idObjc.field(f.ident)} != nil && [self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]))")
                   }
                 case MString => w.w(s"[self.${idObjc.field(f.ident)} isEqualToString:typedOther.${idObjc.field(f.ident)}]")
+                case MDate => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDate:typedOther.${idObjc.field(f.ident)}]")
                 case t: MPrimitive => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
                 case df: MDef => df.defType match {
                   case DRecord => w.w(s"[self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]")
@@ -366,7 +367,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           w.wl("NSComparisonResult tempResult;")
           for (f <- r.fields) {
             f.ty.resolved.base match {
-              case MString => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
+              case MString | MDate => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
               case t: MPrimitive => generatePrimitiveOrder(f.ident, w)
               case df: MDef => df.defType match {
                 case DRecord => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")

@@ -3,7 +3,7 @@
 
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
-from djinni.pycffi_marshal import CPyPrimitive, CPyRecord, CPyString
+from djinni.pycffi_marshal import CPyDate, CPyPrimitive, CPyRecord, CPyString
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
@@ -16,19 +16,74 @@ class RecordWithDerivingsHelper:
         assert c_ptr in c_data_set
         c_data_set.remove(ffi.cast("void*", c_ptr))
 
-    @ffi.callback("int32_t(struct DjinniRecordHandle *)")
+    @ffi.callback("int8_t(struct DjinniRecordHandle *)")
     def get_record_with_derivings_f1(cself):
         try:
-            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).key1)
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).eight)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("int16_t(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f2(cself):
+        try:
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).sixteen)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("int32_t(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f3(cself):
+        try:
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).thirtytwo)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("int64_t(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f4(cself):
+        try:
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).sixtyfour)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("float(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f5(cself):
+        try:
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).fthirtytwo)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("double(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f6(cself):
+        try:
+            _ret = CPyPrimitive.fromPy(CPyRecord.toPy(None, cself).fsixtyfour)
+            return _ret
+        except Exception as _djinni_py_e:
+            CPyException.setExceptionFromPy(_djinni_py_e)
+            return ffi.NULL
+
+    @ffi.callback("uint64_t(struct DjinniRecordHandle *)")
+    def get_record_with_derivings_f7(cself):
+        try:
+            _ret = CPyDate.fromPy(CPyRecord.toPy(None, cself).d)
+            assert _ret != ffi.NULL
             return _ret
         except Exception as _djinni_py_e:
             CPyException.setExceptionFromPy(_djinni_py_e)
             return ffi.NULL
 
     @ffi.callback("struct DjinniString *(struct DjinniRecordHandle *)")
-    def get_record_with_derivings_f2(cself):
+    def get_record_with_derivings_f8(cself):
         try:
-            with CPyString.fromPy(CPyRecord.toPy(None, cself).key2) as py_obj:
+            with CPyString.fromPy(CPyRecord.toPy(None, cself).s) as py_obj:
                 _ret = py_obj.release_djinni_string()
                 assert _ret != ffi.NULL
                 return _ret
@@ -36,11 +91,17 @@ class RecordWithDerivingsHelper:
             CPyException.setExceptionFromPy(_djinni_py_e)
             return ffi.NULL
 
-    @ffi.callback("struct DjinniRecordHandle *(int32_t,struct DjinniString *)")
-    def python_create_record_with_derivings(key1,key2):
+    @ffi.callback("struct DjinniRecordHandle *(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,struct DjinniString *)")
+    def python_create_record_with_derivings(eight,sixteen,thirtytwo,sixtyfour,fthirtytwo,fsixtyfour,d,s):
         py_rec = RecordWithDerivings(
-            CPyPrimitive.toPy(key1),
-            CPyString.toPy(key2))
+            CPyPrimitive.toPy(eight),
+            CPyPrimitive.toPy(sixteen),
+            CPyPrimitive.toPy(thirtytwo),
+            CPyPrimitive.toPy(sixtyfour),
+            CPyPrimitive.toPy(fthirtytwo),
+            CPyPrimitive.toPy(fsixtyfour),
+            CPyDate.toPy(d),
+            CPyString.toPy(s))
         return CPyRecord.fromPy(RecordWithDerivings.c_data_set, py_rec) #to do: can be optional?
 
     @ffi.callback("void (struct DjinniRecordHandle *)")
@@ -50,10 +111,16 @@ class RecordWithDerivingsHelper:
 
     @staticmethod
     def _add_callbacks():
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f4(RecordWithDerivingsHelper.get_record_with_derivings_f4)
         lib.record_with_derivings_add_callback_get_record_with_derivings_f1(RecordWithDerivingsHelper.get_record_with_derivings_f1)
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f8(RecordWithDerivingsHelper.get_record_with_derivings_f8)
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f5(RecordWithDerivingsHelper.get_record_with_derivings_f5)
         lib.record_with_derivings_add_callback_get_record_with_derivings_f2(RecordWithDerivingsHelper.get_record_with_derivings_f2)
         lib.record_with_derivings_add_callback_python_create_record_with_derivings(RecordWithDerivingsHelper.python_create_record_with_derivings)
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f6(RecordWithDerivingsHelper.get_record_with_derivings_f6)
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f7(RecordWithDerivingsHelper.get_record_with_derivings_f7)
         lib.record_with_derivings_add_callback___delete(RecordWithDerivingsHelper.__delete)
+        lib.record_with_derivings_add_callback_get_record_with_derivings_f3(RecordWithDerivingsHelper.get_record_with_derivings_f3)
 
 RecordWithDerivingsHelper._add_callbacks()
 

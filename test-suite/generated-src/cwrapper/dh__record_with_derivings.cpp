@@ -7,6 +7,7 @@
 #include "record_with_derivings.hpp"
 
 #include "dh__record_with_derivings.hpp"
+#include <chrono>
 
 static void(*s_py_callback_record_with_derivings___delete)(DjinniRecordHandle * );
 void record_with_derivings_add_callback___delete(void(* ptr)(DjinniRecordHandle * )) {
@@ -19,41 +20,89 @@ void record_with_derivings___delete(DjinniRecordHandle * drh) {
 void optional_record_with_derivings___delete(DjinniOptionalRecordHandle * drh) {
     s_py_callback_record_with_derivings___delete((DjinniRecordHandle *) drh); // can't static cast, find better way
 }
-static int32_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f1)(DjinniRecordHandle *);
+static int8_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f1)(DjinniRecordHandle *);
 
-void record_with_derivings_add_callback_get_record_with_derivings_f1(int32_t( * ptr)(DjinniRecordHandle *)) {
+void record_with_derivings_add_callback_get_record_with_derivings_f1(int8_t( * ptr)(DjinniRecordHandle *)) {
     s_py_callback_record_with_derivings_get_record_with_derivings_f1 = ptr;
 }
 
-static DjinniString * ( * s_py_callback_record_with_derivings_get_record_with_derivings_f2)(DjinniRecordHandle *);
+static int16_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f2)(DjinniRecordHandle *);
 
-void record_with_derivings_add_callback_get_record_with_derivings_f2(DjinniString *( * ptr)(DjinniRecordHandle *)) {
+void record_with_derivings_add_callback_get_record_with_derivings_f2(int16_t( * ptr)(DjinniRecordHandle *)) {
     s_py_callback_record_with_derivings_get_record_with_derivings_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_record_with_derivings_python_create_record_with_derivings)(int32_t,DjinniString *);
+static int32_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f3)(DjinniRecordHandle *);
 
-void record_with_derivings_add_callback_python_create_record_with_derivings(DjinniRecordHandle *( * ptr)(int32_t,DjinniString *)) {
+void record_with_derivings_add_callback_get_record_with_derivings_f3(int32_t( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f3 = ptr;
+}
+
+static int64_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f4)(DjinniRecordHandle *);
+
+void record_with_derivings_add_callback_get_record_with_derivings_f4(int64_t( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f4 = ptr;
+}
+
+static float ( * s_py_callback_record_with_derivings_get_record_with_derivings_f5)(DjinniRecordHandle *);
+
+void record_with_derivings_add_callback_get_record_with_derivings_f5(float( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f5 = ptr;
+}
+
+static double ( * s_py_callback_record_with_derivings_get_record_with_derivings_f6)(DjinniRecordHandle *);
+
+void record_with_derivings_add_callback_get_record_with_derivings_f6(double( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f6 = ptr;
+}
+
+static uint64_t ( * s_py_callback_record_with_derivings_get_record_with_derivings_f7)(DjinniRecordHandle *);
+
+void record_with_derivings_add_callback_get_record_with_derivings_f7(uint64_t( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f7 = ptr;
+}
+
+static DjinniString * ( * s_py_callback_record_with_derivings_get_record_with_derivings_f8)(DjinniRecordHandle *);
+
+void record_with_derivings_add_callback_get_record_with_derivings_f8(DjinniString *( * ptr)(DjinniRecordHandle *)) {
+    s_py_callback_record_with_derivings_get_record_with_derivings_f8 = ptr;
+}
+
+static DjinniRecordHandle * ( * s_py_callback_record_with_derivings_python_create_record_with_derivings)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,DjinniString *);
+
+void record_with_derivings_add_callback_python_create_record_with_derivings(DjinniRecordHandle *( * ptr)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,DjinniString *)) {
     s_py_callback_record_with_derivings_python_create_record_with_derivings = ptr;
 }
 
 djinni::Handle<DjinniRecordHandle> DjinniRecordWithDerivings::fromCpp(const ::testsuite::RecordWithDerivings& dr) {
-    auto  _field_key2 = DjinniString::fromCpp(dr.key2);
+    auto  _field_s = DjinniString::fromCpp(dr.s);
 
     djinni::Handle<DjinniRecordHandle> _aux(
         s_py_callback_record_with_derivings_python_create_record_with_derivings(
-            dr.key1,
-            _field_key2.release()),
+            dr.eight,
+            dr.sixteen,
+            dr.thirtytwo,
+            dr.sixtyfour,
+            dr.fthirtytwo,
+            dr.fsixtyfour,
+            DjinniDate::fromCpp(dr.d),
+            _field_s.release()),
         record_with_derivings___delete);
     return _aux;
 }
 
 ::testsuite::RecordWithDerivings DjinniRecordWithDerivings::toCpp(djinni::Handle<DjinniRecordHandle> dh) {
-    std::unique_ptr<DjinniString> _field_key2(s_py_callback_record_with_derivings_get_record_with_derivings_f2(dh.get()));
+    std::unique_ptr<DjinniString> _field_s(s_py_callback_record_with_derivings_get_record_with_derivings_f8(dh.get()));
 
     auto _aux = ::testsuite::RecordWithDerivings(
         s_py_callback_record_with_derivings_get_record_with_derivings_f1(dh.get()),
-        DjinniString::toCpp(std::move( _field_key2)));
+        s_py_callback_record_with_derivings_get_record_with_derivings_f2(dh.get()),
+        s_py_callback_record_with_derivings_get_record_with_derivings_f3(dh.get()),
+        s_py_callback_record_with_derivings_get_record_with_derivings_f4(dh.get()),
+        s_py_callback_record_with_derivings_get_record_with_derivings_f5(dh.get()),
+        s_py_callback_record_with_derivings_get_record_with_derivings_f6(dh.get()),
+        DjinniDate::toCpp(s_py_callback_record_with_derivings_get_record_with_derivings_f7(dh.get())),
+        DjinniString::toCpp(std::move( _field_s)));
     return _aux;
 }
 
