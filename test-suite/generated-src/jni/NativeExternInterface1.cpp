@@ -16,7 +16,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_ExternInterface1_00024CppPr
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::ExternInterface1>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::ExternInterface1>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
