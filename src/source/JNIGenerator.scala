@@ -334,7 +334,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         nativeHook("nativeDestroy", false, Seq.empty, None, {
-          w.wl(s"delete reinterpret_cast<djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
+          w.wl(s"delete reinterpret_cast<::djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
         })
         for (m <- i.methods) {
           val nativeAddon = if (m.static) "" else "native_"
