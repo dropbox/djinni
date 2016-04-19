@@ -19,8 +19,6 @@ void foo_listener_bf_add_callback_on_string_change(struct DjinniString *(* ptr)(
 
 void foo_listener_bf_add_callback_get_string(struct DjinniString *(* ptr)(struct DjinniObjectHandle * ));
 
-void foo_listener_bf_add_callback_create(struct DjinniWrapperFooListenerBf *(* ptr)(struct DjinniObjectHandle * ));
-
 void foo_listener_bf_add_callback_set_listener_bf(void(* ptr)(struct DjinniObjectHandle * , struct DjinniWrapperFooListenerBf *));
 
 void foo_listener_bf_add_callback_get_listener_bf(struct DjinniWrapperFooListenerBf *(* ptr)(struct DjinniObjectHandle * ));
@@ -39,8 +37,6 @@ void foo_listener_bf_add_callback___delete(void(* ptr)(struct DjinniObjectHandle
 struct DjinniString * cw__foo_listener_bf_on_string_change(struct DjinniWrapperFooListenerBf * djinni_this, struct DjinniString * private_string);
 
 struct DjinniString * cw__foo_listener_bf_get_string(struct DjinniWrapperFooListenerBf * djinni_this);
-
-struct DjinniWrapperFooListenerBf * cw__foo_listener_bf_create();
 
 void cw__foo_listener_bf_set_listener_bf(struct DjinniWrapperFooListenerBf * djinni_this, struct DjinniWrapperFooListenerBf * listener);
 

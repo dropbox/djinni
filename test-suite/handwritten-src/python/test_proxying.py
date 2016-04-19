@@ -26,10 +26,6 @@ class FooListenerBfImpl:
         return self._b
     def send_return(self,fl):
         return fl
-    def create():
-        # TODO: decide if we want to have this here or make checks in the helper.frompy for all
-        # methods to exist as attributes on the class more lenient
-        print ("I don't use it but the +p +c plus the check in fromPy for having all methods needs me to have this")
 
 def fr_set_get(fr, fl, s):
     fr.add_listener_bf(fl)

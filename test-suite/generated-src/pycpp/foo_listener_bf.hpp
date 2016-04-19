@@ -18,8 +18,6 @@ public:
 
     virtual std::string get_string() = 0;
 
-    static std::shared_ptr<FooListenerBf> create();
-
     virtual void set_listener_bf(const std::shared_ptr<FooListenerBf> & listener) = 0;
 
     virtual std::shared_ptr<FooListenerBf> get_listener_bf() = 0;

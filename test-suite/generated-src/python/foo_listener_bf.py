@@ -44,9 +44,6 @@ class FooListenerBf(with_metaclass(ABCMeta)):
     def delete_fl_in_fl(self):
         raise NotImplementedError
 
-    @staticmethod
-    def create():
-        return FooListenerBfCppProxy.create()
 
 class FooListenerBfCppProxy(FooListenerBf):
     def __init__(self, proxy):
@@ -69,14 +66,6 @@ class FooListenerBfCppProxy(FooListenerBf):
         _ret_c = lib.cw__foo_listener_bf_get_string(self._cpp_impl)
         CPyException.toPyCheckAndRaise(_ret_c)
         _ret = CPyString.toPy(_ret_c)
-        assert _ret is not None
-        return _ret
-
-    @staticmethod
-    def create():
-        _ret_c = lib.cw__foo_listener_bf_create()
-        CPyException.toPyCheckAndRaise(_ret_c)
-        _ret = FooListenerBfHelper.toPy(_ret_c)
         assert _ret is not None
         return _ret
 
@@ -133,16 +122,6 @@ class FooListenerBfCallbacksHelper():
                 _ret = py_obj.release_djinni_string()
                 assert _ret != ffi.NULL
                 return _ret
-        except Exception as _djinni_py_e:
-            CPyException.setExceptionFromPy(_djinni_py_e)
-            return ffi.NULL
-
-    @ffi.callback("struct DjinniWrapperFooListenerBf *(struct DjinniObjectHandle * )")
-    def create():
-        try:
-            _ret = FooListenerBfHelper.fromPy(FooListenerBfHelper.selfToPy(cself).create())
-            assert _ret != ffi.NULL
-            return _ret
         except Exception as _djinni_py_e:
             CPyException.setExceptionFromPy(_djinni_py_e)
             return ffi.NULL
@@ -208,7 +187,6 @@ class FooListenerBfCallbacksHelper():
     def _add_callbacks():
         lib.foo_listener_bf_add_callback_on_string_change(FooListenerBfCallbacksHelper.on_string_change)
         lib.foo_listener_bf_add_callback_get_string(FooListenerBfCallbacksHelper.get_string)
-        lib.foo_listener_bf_add_callback_create(FooListenerBfCallbacksHelper.create)
         lib.foo_listener_bf_add_callback_set_listener_bf(FooListenerBfCallbacksHelper.set_listener_bf)
         lib.foo_listener_bf_add_callback_get_listener_bf(FooListenerBfCallbacksHelper.get_listener_bf)
         lib.foo_listener_bf_add_callback_set_binary(FooListenerBfCallbacksHelper.set_binary)
@@ -252,8 +230,6 @@ class FooListenerBfHelper:
         if not hasattr(py_obj, "on_string_change"):
             raise TypeError
         if not hasattr(py_obj, "get_string"):
-            raise TypeError
-        if not hasattr(py_obj, "create"):
             raise TypeError
         if not hasattr(py_obj, "set_listener_bf"):
             raise TypeError

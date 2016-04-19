@@ -4,6 +4,7 @@
 #include <iostream>
 #include <experimental/optional>
 #include "wrapper_marshal.hpp"
+#include "foo_listener_bf_impl.hpp"
 #include "foo_receiver_impl.hpp"
 #include "foo_some_other_record.hpp"
 
@@ -115,7 +116,7 @@ std::string FooReceiverImpl::get_listener_bf_string() {
 
 std::shared_ptr<FooListenerBf> FooReceiverImpl::get_foo_listener_bf() {
     if (!m_cpp_listener) {
-        m_cpp_listener = FooListenerBf::create();
+        m_cpp_listener = std::make_shared<FooListenerBfImpl>();
     }
     return m_cpp_listener;
 }

@@ -17,7 +17,7 @@ client_interface = interface +p +j +o {
 }
 
 reverse_client_interface = interface +c {
-    return_str(): string;
+    const return_str(): string;
 
     meth_taking_interface(i: reverse_client_interface): string;
     meth_taking_optional_interface(i: optional<reverse_client_interface>): string;

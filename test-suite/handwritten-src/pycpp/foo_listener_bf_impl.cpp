@@ -10,10 +10,6 @@ std::string FooListenerBfImpl::on_string_change(const std::string & private_stri
     return m_string;
 }
 
-std::shared_ptr<FooListenerBf> FooListenerBf::create() {
-    return std::make_shared<FooListenerBfImpl>();
-}
-
 std::string FooListenerBfImpl::get_string() {
     return m_string;
 }

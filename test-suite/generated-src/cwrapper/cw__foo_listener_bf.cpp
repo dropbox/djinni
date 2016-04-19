@@ -12,7 +12,6 @@
 
 static DjinniString *(*s_py_callback_foo_listener_bf_on_string_change)(DjinniObjectHandle * , DjinniString *);
 static DjinniString *(*s_py_callback_foo_listener_bf_get_string)(DjinniObjectHandle * );
-static DjinniWrapperFooListenerBf *(*s_py_callback_foo_listener_bf_create)(DjinniObjectHandle * );
 static void(*s_py_callback_foo_listener_bf_set_listener_bf)(DjinniObjectHandle * , DjinniWrapperFooListenerBf *);
 static DjinniWrapperFooListenerBf *(*s_py_callback_foo_listener_bf_get_listener_bf)(DjinniObjectHandle * );
 static void(*s_py_callback_foo_listener_bf_set_binary)(DjinniObjectHandle * , DjinniBinary *);
@@ -78,10 +77,6 @@ void foo_listener_bf_add_callback_get_string(DjinniString *(* ptr)(DjinniObjectH
     s_py_callback_foo_listener_bf_get_string = ptr;
 }
 
-void foo_listener_bf_add_callback_create(DjinniWrapperFooListenerBf *(* ptr)(DjinniObjectHandle * )) {
-    s_py_callback_foo_listener_bf_create = ptr;
-}
-
 void foo_listener_bf_add_callback_set_listener_bf(void(* ptr)(DjinniObjectHandle * , DjinniWrapperFooListenerBf *)) {
     s_py_callback_foo_listener_bf_set_listener_bf = ptr;
 }
@@ -119,12 +114,6 @@ std::string FooListenerBfPythonProxy::on_string_change(const std::string & priva
 
 std::string FooListenerBfPythonProxy::get_string() {
     auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_get_string(m_py_obj_handle)));
-    djinni::cw_throw_if_pending();
-    return _ret;
-}
-
-std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::create() {
-    auto _ret = DjinniWrapperFooListenerBf::get(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_create(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref));
     djinni::cw_throw_if_pending();
     return _ret;
 }
@@ -214,9 +203,4 @@ void cw__foo_listener_bf_delete_fl_in_fl(DjinniWrapperFooListenerBf * djinni_thi
     try {
         djinni_this->wrapped_obj->delete_fl_in_fl();
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
-}
-DjinniWrapperFooListenerBf * cw__foo_listener_bf_create() {
-    try {
-        return DjinniWrapperFooListenerBf::wrap(::testsuite::FooListenerBf::create()).release();
-    } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

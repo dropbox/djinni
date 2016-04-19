@@ -35,8 +35,6 @@ class FooListenerBfPythonProxy final : public ::testsuite::FooListenerBf {
 
         std::string get_string();
 
-        std::shared_ptr<::testsuite::FooListenerBf> create();
-
         void set_listener_bf(const std::shared_ptr<::testsuite::FooListenerBf> & listener);
 
         std::shared_ptr<::testsuite::FooListenerBf> get_listener_bf();
