@@ -13,6 +13,6 @@ public class MockRecordTest extends TestCase {
 
     public void testMockConstants() {
         Constants mock = new MockConstants();
-        assertEquals("The toString() method should be overrided.", "MockConstants{}", mock.toString());
+        assertEquals("The toString() method should be overridden.", "MockConstants{}", mock.toString());
     }
 }

@@ -9,6 +9,20 @@
 - (nonnull instancetype)init;
 + (nonnull instancetype)constants;
 
++ (NSNumber * __nullable)optBoolConstant;
++ (NSNumber * __nullable)optI8Constant;
+/** opt_i16_constant has documentation. */
++ (NSNumber * __nullable)optI16Constant;
++ (NSNumber * __nullable)optI32Constant;
++ (NSNumber * __nullable)optI64Constant;
+/**
+ * opt_f32_constant has long documentation.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
++ (NSNumber * __nullable)optF32Constant;
++ (NSNumber * __nullable)optF64Constant;
++ (DBConstantRecord * __nonnull)objectConstant;
 @end
 
 /** bool_constant has documentation. */
@@ -24,22 +38,8 @@ extern float const DBConstantsF32Constant;
  *   Indented third line of multi-line documentation.)
  */
 extern double const DBConstantsF64Constant;
-extern NSNumber * __nullable const DBConstantsOptBoolConstant;
-extern NSNumber * __nullable const DBConstantsOptI8Constant;
-/** opt_i16_constant has documentation. */
-extern NSNumber * __nullable const DBConstantsOptI16Constant;
-extern NSNumber * __nullable const DBConstantsOptI32Constant;
-extern NSNumber * __nullable const DBConstantsOptI64Constant;
-/**
- * opt_f32_constant has long documentation.
- * (Second line of multi-line documentation.
- *   Indented third line of multi-line documentation.)
- */
-extern NSNumber * __nullable const DBConstantsOptF32Constant;
-extern NSNumber * __nullable const DBConstantsOptF64Constant;
 extern NSString * __nonnull const DBConstantsStringConstant;
 extern NSString * __nullable const DBConstantsOptStringConstant;
-extern DBConstantRecord * __nonnull const DBConstantsObjectConstant;
 /**
  * No support for null optional constants
  * No support for optional constant records
