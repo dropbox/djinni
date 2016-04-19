@@ -7,7 +7,7 @@ class ReverseClientInterfaceImpl : public ReverseClientInterface {
     ReverseClientInterfaceImpl() {}
     virtual ~ReverseClientInterfaceImpl() {}
 
-    virtual std::string return_str() override;
+    virtual std::string return_str() const override;
 
     virtual std::string meth_taking_interface(const std::shared_ptr<ReverseClientInterface> & i) override;
 

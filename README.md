@@ -225,6 +225,7 @@ methods. Djinni is capable of generating equality and order comparators, impleme
 as operator overloading in C++ and standard comparison functions in Java / Objective-C.
 
 Things to note:
+
  - All fields in the record are compared in the order they appear in the record declaration.
    If you need to add a field later, make sure the order is correct.
  - Ordering comparison is not supported for collection types, optionals, and booleans.
@@ -232,6 +233,18 @@ Things to note:
    types of comparators as the outer record.
 
 ### Interface
+
+#### Special Methods for C++ Only
+`+c` interfaces (implementable only in C++) can have methods flagged with the special keywords const and static which have special effects in C++:
+
+   special_methods = interface +c {
+       const accessor_method();
+       static factory_method();
+   }
+   
+- `const` methods will be declared as const in C++, though this cannot be enforced on callers in other languages, which lack this feature.
+- `static` methods will become a static method of the C++ class, which can be called from other languages without an object.  This is often useful for factory methods to act as a cross-language constructor.
+
 #### Exception Handling
 When an interface implemented in C++ throws a `std::exception`, it will be translated to a
 `java.lang.RuntimeException` in Java or an `NSException` in Objective-C. The `what()` message
