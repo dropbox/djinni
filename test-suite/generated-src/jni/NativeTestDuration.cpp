@@ -16,7 +16,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::TestDuration>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::testsuite::TestDuration>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

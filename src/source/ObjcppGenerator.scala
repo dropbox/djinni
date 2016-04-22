@@ -25,7 +25,7 @@ import djinni.writer.IndentWriter
 
 import scala.collection.mutable
 
-class ObjcppGenerator(spec: Spec) extends Generator(spec) {
+class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
   val objcMarshal = new ObjcMarshal(spec)
   val objcppMarshal = new ObjcppMarshal(spec)
@@ -185,6 +185,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
               m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
             }
           }
+        }
+
+        if (i.consts.nonEmpty) {
+          w.wl
+          generateObjcConstants(w, i.consts, self, ObjcConstantType.ConstMethod)
         }
       }
 

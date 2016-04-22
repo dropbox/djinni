@@ -45,7 +45,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_UsesSingleLanguageListeners
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::UsesSingleLanguageListeners>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::testsuite::UsesSingleLanguageListeners>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

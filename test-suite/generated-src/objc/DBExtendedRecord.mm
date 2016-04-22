@@ -3,12 +3,6 @@
 
 #import "DBExtendedRecord.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-
-DBExtendedRecord * __nonnull const DBExtendedRecordExtendedRecordConst = [[DBExtendedRecord alloc] initWithFoo:YES];
-
-#pragma clang diagnostic pop
 
 @implementation DBExtendedRecord
 
@@ -23,6 +17,12 @@ DBExtendedRecord * __nonnull const DBExtendedRecordExtendedRecordConst = [[DBExt
 + (nonnull instancetype)extendedRecordWithFoo:(BOOL)foo
 {
     return [[self alloc] initWithFoo:foo];
+}
+
++ (DBExtendedRecord * __nonnull)extendedRecordConst
+{
+    static DBExtendedRecord * const s_extendedRecordConst = [[DBExtendedRecord alloc] initWithFoo:YES];
+    return s_extendedRecordConst;
 }
 
 - (NSString *)description
