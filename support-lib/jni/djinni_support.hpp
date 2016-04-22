@@ -150,7 +150,11 @@ void jniExceptionCheck(JNIEnv * env);
  * can replace it by defining your own version.  The default implementation
  * will throw a jni_exception containing the given jthrowable.
  */
+#ifdef _MSC_VER
+__declspec(noreturn)
+#else
 __attribute__((noreturn))
+#endif
 void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception);
 
 /*
