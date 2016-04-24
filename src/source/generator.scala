@@ -66,6 +66,7 @@ package object generatorTools {
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
                    objcExtendedRecordIncludePrefix: String,
+                   objcBridgingHeaderWriter: Option[Writer],
                    objcppIncludePrefix: String,
                    objcppIncludeCppPrefix: String,
                    objcppIncludeObjcPrefix: String,
@@ -195,6 +196,9 @@ package object generatorTools {
           createFolder("Objective-C++", spec.objcppOutFolder.get)
         }
         new ObjcppGenerator(spec).generate(idl)
+      }
+      if (spec.objcBridgingHeaderWriter.isDefined) {
+        new SwiftGenerator(spec).generate(idl)
       }
       if (spec.yamlOutFolder.isDefined) {
         if (!spec.skipGeneration) {

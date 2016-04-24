@@ -17,6 +17,8 @@
 		65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */; };
 		65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */; };
 		65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF919AD0CDF0038F82F /* TXSViewController.m */; };
+		7AFC26D31CCD2C0A008145C4 /* TextSort-Bridging-Header.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC26D21CCD2C0A008145C4 /* TextSort-Bridging-Header.mm */; };
+		7AFC26DA1CCD306F008145C4 /* TXSTextboxListenerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC26D91CCD306F008145C4 /* TXSTextboxListenerImpl.swift */; };
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
 /* End PBXBuildFile section */
@@ -38,6 +40,9 @@
 		65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSTextboxListenerImpl.m; sourceTree = "<group>"; };
 		65D7FDF819AD0CDF0038F82F /* TXSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSViewController.h; sourceTree = "<group>"; };
 		65D7FDF919AD0CDF0038F82F /* TXSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSViewController.m; sourceTree = "<group>"; };
+		7AFC26D11CCD2C0A008145C4 /* TextSort-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSort-Bridging-Header.h"; sourceTree = "<group>"; };
+		7AFC26D21CCD2C0A008145C4 /* TextSort-Bridging-Header.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "TextSort-Bridging-Header.mm"; sourceTree = "<group>"; };
+		7AFC26D91CCD306F008145C4 /* TXSTextboxListenerImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TXSTextboxListenerImpl.swift; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +96,9 @@
 		65834DE619AC599E0061AD3F /* TextSort */ = {
 			isa = PBXGroup;
 			children = (
+				7AFC26D91CCD306F008145C4 /* TXSTextboxListenerImpl.swift */,
+				7AFC26D11CCD2C0A008145C4 /* TextSort-Bridging-Header.h */,
+				7AFC26D21CCD2C0A008145C4 /* TextSort-Bridging-Header.mm */,
 				65834DF219AC599E0061AD3F /* Main_iPhone.storyboard */,
 				65834DFB19AC599E0061AD3F /* Images.xcassets */,
 				65834DE719AC599E0061AD3F /* Supporting Files */,
@@ -150,6 +158,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = TXS;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Dropbox, Inc.";
 			};
@@ -190,8 +199,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
+				7AFC26D31CCD2C0A008145C4 /* TextSort-Bridging-Header.mm in Sources */,
 				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */,
+				7AFC26DA1CCD306F008145C4 /* TXSTextboxListenerImpl.swift in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,11 +308,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
 				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TextSort/TextSort-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -312,11 +327,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
 				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TextSort/TextSort-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
