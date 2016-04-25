@@ -113,7 +113,8 @@ void jniExceptionCheck(JNIEnv * env) {
     }
 }
 
-DJINNI_WEAK_DEFINITION __attribute__((noreturn))
+DJINNI_WEAK_DEFINITION
+DJINNI_NORETURN_DEFINITION
 void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception) {
     throw jni_exception { env, java_exception };
 }
@@ -154,12 +155,7 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
     const char * file_basename = slash ? slash + 1 : file;
 
     char buf[256];
-#if (defined _MSC_VER) && (_MSC_VER < 1900)
-    // snprintf not implemented on MSVC prior to 2015
-    _snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
-#else
-    snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
-#endif
+    DJINNI_SNPRINTF(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
 
     const jclass cassert = env->FindClass("java/lang/Error");
     assert(cassert);
