@@ -160,6 +160,11 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           }
           w.wl("return self;")
         }
+        w.wl
+        w.wl(s"- (const std::shared_ptr<$cppSelf>&) cppRef")
+        w.braced {
+            w.wl("return _cppRefHandle.get();")
+        }
 
         w.wl; w.wl(s"// $objcSelf methods")
         writeCppProxyMethods(w, i.methods, objcSelf, cppSelf)
@@ -209,7 +214,12 @@ class ObjcppGenerator(spec: Spec) extends Generator(spec) {
           if (i.ext.cpp && !i.ext.objc) {
             // C++ only. In this case we generate a class instead of a protocol, so
             // we don't have to do any casting at all, just access cppRef directly.
-            w.wl("return " + nnCheck("objc->_cppRefHandle.get()") + ";")
+            //
+            // The cppRef is accessed through a getter to support interface inheritance.
+            // Accessing the cppRef through a getter ensures that the cppRef of subtypes
+            // will be returned. Accessing the ivar directly results in accessing the
+            // supertype's cppRef.
+            w.wl("return " + nnCheck("[objc cppRef]") + ";")
             //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
           } else {
             // ObjC only, or ObjC and C++.
