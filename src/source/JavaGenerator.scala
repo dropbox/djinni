@@ -282,11 +282,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 skipFirst { w.wl(" &&") }
                 f.ty.resolved.base match {
                   case MBinary => w.w(s"java.util.Arrays.equals(${idJava.field(f.ident)}, other.${idJava.field(f.ident)})")
-                  case MList | MSet | MMap => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                  case MList | MSet | MMap | MString | MDate => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case MOptional =>
                     w.w(s"((this.${idJava.field(f.ident)} == null && other.${idJava.field(f.ident)} == null) || ")
                     w.w(s"(this.${idJava.field(f.ident)} != null && this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})))")
-                  case MString => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case t: MPrimitive => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
                   case df: MDef => df.defType match {
                     case DRecord => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
@@ -383,7 +382,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             w.wl("int tempResult;")
             for (f <- r.fields) {
               f.ty.resolved.base match {
-                case MString => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                case MString | MDate => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
                 case t: MPrimitive => primitiveCompare(f.ident)
                 case df: MDef => df.defType match {
                   case DRecord => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")

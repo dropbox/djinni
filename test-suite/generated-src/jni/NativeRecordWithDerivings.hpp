@@ -25,9 +25,15 @@ private:
     friend ::djinni::JniClass<NativeRecordWithDerivings>;
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/RecordWithDerivings") };
-    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(ILjava/lang/String;)V") };
-    const jfieldID field_mKey1 { ::djinni::jniGetFieldID(clazz.get(), "mKey1", "I") };
-    const jfieldID field_mKey2 { ::djinni::jniGetFieldID(clazz.get(), "mKey2", "Ljava/lang/String;") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(BSIJFDLjava/util/Date;Ljava/lang/String;)V") };
+    const jfieldID field_mEight { ::djinni::jniGetFieldID(clazz.get(), "mEight", "B") };
+    const jfieldID field_mSixteen { ::djinni::jniGetFieldID(clazz.get(), "mSixteen", "S") };
+    const jfieldID field_mThirtytwo { ::djinni::jniGetFieldID(clazz.get(), "mThirtytwo", "I") };
+    const jfieldID field_mSixtyfour { ::djinni::jniGetFieldID(clazz.get(), "mSixtyfour", "J") };
+    const jfieldID field_mFthirtytwo { ::djinni::jniGetFieldID(clazz.get(), "mFthirtytwo", "F") };
+    const jfieldID field_mFsixtyfour { ::djinni::jniGetFieldID(clazz.get(), "mFsixtyfour", "D") };
+    const jfieldID field_mD { ::djinni::jniGetFieldID(clazz.get(), "mD", "Ljava/util/Date;") };
+    const jfieldID field_mS { ::djinni::jniGetFieldID(clazz.get(), "mS", "Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

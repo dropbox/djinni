@@ -16,7 +16,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_ReturnTwo_00024CppProxy_nat
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::ReturnTwo>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::testsuite::ReturnTwo>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

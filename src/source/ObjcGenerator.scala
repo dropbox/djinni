@@ -26,9 +26,7 @@ import djinni.writer.IndentWriter
 import scala.collection.mutable
 import scala.collection.parallel.immutable
 
-class ObjcGenerator(spec: Spec) extends Generator(spec) {
-
-  val marshal = new ObjcMarshal(spec)
+class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
   class ObjcRefs() {
     var body = mutable.TreeSet[String]()
@@ -65,58 +63,17 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
   def bodyName(ident: String): String = idObjc.ty(ident) + "." + spec.objcppExt // Must be a Obj-C++ file in case the constants are not compile-time constant expressions
 
-  def writeObjcConstVariable(w: IndentWriter, c: Const, s: String): Unit = {
+  def writeObjcConstMethDecl(c: Const, w: IndentWriter) {
+    val label = "+"
     val nullability = marshal.nullability(c.ty.resolved).fold("")(" __" + _)
-    val td = marshal.fqFieldType(c.ty) + nullability
-    // MBinary | MList | MSet | MMap are not allowed for constants.
-    w.w(s"${td} const $s${idObjc.const(c.ident)}")
+    val ret = marshal.fqFieldType(c.ty) + nullability
+    val decl = s"$label ($ret)${idObjc.method(c.ident)}"
+    writeAlignedObjcCall(w, decl, List(), ";", p => ("",""))
   }
 
-  def generateObjcConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
-    def boxedPrimitive(ty: TypeRef): String = {
-      val (_, needRef) = toObjcType(ty)
-      if (needRef) "@" else ""
-    }
-    def writeObjcConstValue(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
-      case l: Long => w.w(boxedPrimitive(ty) + l.toString)
-      case d: Double if marshal.fieldType(ty) == "float" => w.w(boxedPrimitive(ty) + d.toString + "f")
-      case d: Double => w.w(boxedPrimitive(ty) + d.toString)
-      case b: Boolean => w.w(boxedPrimitive(ty) + (if (b) "YES" else "NO"))
-      case s: String => w.w("@" + s)
-      case e: EnumValue => w.w(idObjc.enum(e.ty + "_" + e.name))
-      case v: ConstRef => w.w(selfName + idObjc.const (v.name))
-      case z: Map[_, _] => { // Value is record
-        val recordMdef = ty.resolved.base.asInstanceOf[MDef]
-        val record = recordMdef.body.asInstanceOf[Record]
-        val vMap = z.asInstanceOf[Map[String, Any]]
-        val head = record.fields.head
-        w.w(s"[[${marshal.typename(ty)} alloc] initWith${IdentStyle.camelUpper(head.ident)}:")
-        writeObjcConstValue(w, head.ty, vMap.apply(head.ident))
-        w.nestedN(2) {
-          val skipFirst = SkipFirst()
-          for (f <- record.fields) skipFirst {
-            w.wl
-            w.w(s"${idObjc.field(f.ident)}:")
-            writeObjcConstValue(w, f.ty, vMap.apply(f.ident))
-          }
-        }
-        w.w("]")
-      }
-    }
-
-    w.wl("#pragma clang diagnostic push")
-    w.wl("#pragma clang diagnostic ignored " + q("-Wunused-variable"))
-    for (c <- consts) {
-      w.wl
-      writeObjcConstVariable(w, c, selfName)
-      w.w(s" = ")
-      writeObjcConstValue(w, c.ty, c.value)
-      w.wl(";")
-    }
-    w.wl
-    w.wl("#pragma clang diagnostic pop")
-  }
-
+  /**
+    * Generate Interface
+    */
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
@@ -138,11 +95,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       writeAlignedObjcCall(w, decl, method.params, "", p => (idObjc.field(p.ident), s"(${marshal.paramType(p.ty)})${idObjc.local(p.ident)}"))
     }
 
+    // Generate the header file for Interface
     writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
-      for (c <- i.consts) {
+      for (c <- i.consts if marshal.canBeConstVariable(c)) {
         writeDoc(w, c.doc)
         w.w(s"extern ")
-        writeObjcConstVariable(w, c, self)
+        writeObjcConstVariableDecl(w, c, self)
         w.wl(s";")
       }
       w.wl
@@ -154,15 +112,23 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         writeObjcFuncDecl(m, w)
         w.wl(";")
       }
+      for (c <- i.consts if !marshal.canBeConstVariable(c)) {
+        w.wl
+        writeDoc(w, c.doc)
+        writeObjcConstMethDecl(c, w)
+      }
       w.wl
       w.wl("@end")
     })
 
+    // Generate the implementation file for Interface
     if (i.consts.nonEmpty) {
       refs.body.add("#import " + q(spec.objcIncludePrefix + marshal.headerName(ident)))
       writeObjcFile(bodyName(ident.name), origin, refs.body, w => {
-        generateObjcConstants(w, i.consts, self)
+        generateObjcConstants(w, i.consts, self, ObjcConstantType.ConstVariable)
       })
+      // For constants implemented via Methods, we generate their definitions in the
+      // corresponding ObjcCpp file (i.e.: `ClassName`+Private.mm)
     }
   }
 
@@ -196,6 +162,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
     val firstInitializerArg = if(r.fields.isEmpty) "" else IdentStyle.camelUpper("with_" + r.fields.head.ident.name)
 
+    // Generate the header file for record
     writeObjcFile(marshal.headerName(objcName), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(s"@interface $self : NSObject")
@@ -208,6 +175,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
 
       writeInitializer("-", "init")
       if (!r.ext.objc) writeInitializer("+", IdentStyle.camelLower(objcName))
+
+      for (c <- r.consts if !marshal.canBeConstVariable(c)) {
+        w.wl
+        writeDoc(w, c.doc)
+        writeObjcConstMethDecl(c, w)
+      }
 
       for (f <- r.fields) {
         w.wl
@@ -224,17 +197,19 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       // Constants come last in case one of them is of the record's type
       if (r.consts.nonEmpty) {
         w.wl
-        for (c <- r.consts) {
+        for (c <- r.consts if marshal.canBeConstVariable(c)) {
           writeDoc(w, c.doc)
           w.w(s"extern ")
-          writeObjcConstVariable(w, c, noBaseSelf);
+          writeObjcConstVariableDecl(w, c, noBaseSelf);
           w.wl(s";")
         }
       }
     })
 
+    // Generate the implementation file for record
     writeObjcFile(bodyName(objcName), origin, refs.body, w => {
-      if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf)
+      if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf, ObjcConstantType.ConstVariable)
+
       w.wl
       w.wl(s"@implementation $self")
       w.wl
@@ -268,6 +243,8 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
         w.wl
       }
 
+      if (r.consts.nonEmpty) generateObjcConstants(w, r.consts, noBaseSelf, ObjcConstantType.ConstMethod)
+
       if (r.derivingTypes.contains(DerivingType.Eq)) {
         w.wl("- (BOOL)isEqual:(id)other")
         w.braced {
@@ -293,6 +270,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
                       w.w(s"(self.${idObjc.field(f.ident)} != nil && [self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]))")
                   }
                 case MString => w.w(s"[self.${idObjc.field(f.ident)} isEqualToString:typedOther.${idObjc.field(f.ident)}]")
+                case MDate => w.w(s"[self.${idObjc.field(f.ident)} isEqualToDate:typedOther.${idObjc.field(f.ident)}]")
                 case t: MPrimitive => w.w(s"self.${idObjc.field(f.ident)} == typedOther.${idObjc.field(f.ident)}")
                 case df: MDef => df.defType match {
                   case DRecord => w.w(s"[self.${idObjc.field(f.ident)} isEqual:typedOther.${idObjc.field(f.ident)}]")
@@ -366,7 +344,7 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
           w.wl("NSComparisonResult tempResult;")
           for (f <- r.fields) {
             f.ty.resolved.base match {
-              case MString => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
+              case MString | MDate => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
               case t: MPrimitive => generatePrimitiveOrder(f.ident, w)
               case df: MDef => df.defType match {
                 case DRecord => w.wl(s"tempResult = [self.${idObjc.field(f.ident)} compare:other.${idObjc.field(f.ident)}];")
@@ -437,56 +415,5 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       }
       f(w)
     })
-  }
-
-  // TODO: this should be in ObjcMarshal
-  // Return value: (Type_Name, Is_Class_Or_Not)
-  def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
-  def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)
-  def toObjcType(tm: MExpr): (String, Boolean) = toObjcType(tm, false)
-  def toObjcType(tm: MExpr, needRef: Boolean): (String, Boolean) = {
-    def f(tm: MExpr, needRef: Boolean): (String, Boolean) = {
-      tm.base match {
-        case MOptional =>
-          // We use "nil" for the empty optional.
-          assert(tm.args.size == 1)
-          val arg = tm.args.head
-          arg.base match {
-            case MOptional => throw new AssertionError("nested optional?")
-            case m => f(arg, true)
-          }
-        case o =>
-          val base = o match {
-            case p: MPrimitive => if (needRef) (p.objcBoxed, true) else (p.objcName, false)
-            case MString => ("NSString", true)
-            case MDate => ("NSDate", true)
-            case MBinary => ("NSData", true)
-            case MOptional => throw new AssertionError("optional should have been special cased")
-            case MList => ("NSArray", true)
-            case MSet => ("NSSet", true)
-            case MMap => ("NSDictionary", true)
-            case d: MDef => d.defType match {
-              case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
-              case DRecord => (idObjc.ty(d.name), true)
-              case DInterface =>
-                val ext = d.body.asInstanceOf[Interface].ext
-                if (ext.cpp) (s"${idObjc.ty(d.name)}*", false) else (s"id<${idObjc.ty(d.name)}>", false)
-            }
-            case e: MExtern => if(needRef) (e.objc.boxed, true) else (e.objc.typename, e.objc.pointer)
-            case p: MParam => throw new AssertionError("Parameter should not happen at Obj-C top level")
-          }
-          base
-      }
-    }
-    f(tm, needRef)
-  }
-
-  // TODO: this should be in ObjcMarshal
-  def toObjcTypeDef(ty: TypeRef): String = toObjcTypeDef(ty.resolved, false)
-  def toObjcTypeDef(ty: TypeRef, needRef: Boolean): String = toObjcTypeDef(ty.resolved, needRef)
-  def toObjcTypeDef(tm: MExpr): String = toObjcTypeDef(tm, false)
-  def toObjcTypeDef(tm: MExpr, needRef: Boolean): String = {
-    val (name, asterisk) = toObjcType(tm, needRef)
-    name + (if (asterisk) " *" else " ")
   }
 }

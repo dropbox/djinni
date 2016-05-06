@@ -18,7 +18,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_native
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::textsort::SortItems>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::textsort::SortItems>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

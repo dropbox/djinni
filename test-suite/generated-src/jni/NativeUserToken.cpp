@@ -27,7 +27,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_UserToken_00024CppProxy_nat
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::UserToken>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::testsuite::UserToken>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
