@@ -24,13 +24,8 @@
 #include <unordered_map>
 
 #include "../proxy_cache_interface.hpp"
+#include "../djinni_common.hpp"
 #include <jni.h>
-
-// work-around for missing noexcept and constexpr support in MSVC prior to 2015
-#if (defined _MSC_VER) && (_MSC_VER < 1900)
-#  define noexcept _NOEXCEPT
-#  define constexpr
-#endif
 
 /*
  * Djinni support library
@@ -150,17 +145,13 @@ void jniExceptionCheck(JNIEnv * env);
  * can replace it by defining your own version.  The default implementation
  * will throw a jni_exception containing the given jthrowable.
  */
-__attribute__((noreturn))
+DJINNI_NORETURN_DEFINITION
 void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception);
 
 /*
  * Set an AssertionError in env with message message, and then throw via jniExceptionCheck.
  */
-#ifdef _MSC_VER
-  __declspec(noreturn)
-#else
-  __attribute__((noreturn))
-#endif
+DJINNI_NORETURN_DEFINITION
 void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const char * check);
 
 #define DJINNI_ASSERT_MSG(check, env, message) \
