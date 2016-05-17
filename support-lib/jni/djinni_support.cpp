@@ -489,19 +489,19 @@ private:
     };
 
     // Helper used by constructor
-    static jobject create(JNIEnv * jniEnv, jobject obj) {
+    static GlobalRef<jobject> create(JNIEnv * jniEnv, jobject obj) {
         const JniInfo & weakRefClass = JniClass<JniInfo>::get();
-        jobject weakRef = jniEnv->NewObject(weakRefClass.clazz.get(), weakRefClass.constructor, obj);
+        LocalRef<jobject> weakRef(jniEnv, jniEnv->NewObject(weakRefClass.clazz.get(), weakRefClass.constructor, obj));
         // DJINNI_ASSERT performs an exception check before anything else, so we don't need
         // a separate jniExceptionCheck call.
         DJINNI_ASSERT(weakRef, jniEnv);
-        return weakRef;
+        return GlobalRef<jobject>(jniEnv, weakRef);
     }
 
 public:
     // Constructor
     JavaWeakRef(jobject obj) : JavaWeakRef(jniGetThreadEnv(), obj) {}
-    JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(jniEnv, create(jniEnv, obj)) {}
+    JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(create(jniEnv, obj)) {}
 
     // Get the object pointed to if it's still strongly reachable or, return null if not.
     // (Analogous to weak_ptr::lock.) Returns a local reference.
