@@ -366,7 +366,7 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
         utf16_encode(utf8_decode(str, i), utf16);
 
     jstring res = env->NewString(
-        reinterpret_cast<const jchar *>(utf16.data()), utf16.length());
+        reinterpret_cast<const jchar *>(utf16.data()), jsize(utf16.length()));
     DJINNI_ASSERT(res, env);
     return res;
 }

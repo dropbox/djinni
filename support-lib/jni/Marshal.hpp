@@ -230,7 +230,7 @@ namespace djinni
             // Using .data() on an empty vector is UB
             if(!c.empty())
             {
-                jniEnv->SetByteArrayRegion(j.get(), 0, c.size(), reinterpret_cast<const jbyte*>(c.data()));
+                jniEnv->SetByteArrayRegion(j.get(), 0, jsize(c.size()), reinterpret_cast<const jbyte*>(c.data()));
             }
             return j;
         }
