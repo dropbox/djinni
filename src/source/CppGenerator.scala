@@ -138,10 +138,13 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
+    if (r.baseType.isDefined) {
+        refs.find(r.baseType.get, false)
+    }
     refs.hpp.add("#include <utility>") // Add for std::move
 
     val self = marshal.typename(ident, r)
-    val (cppName, cppFinal) = if (r.ext.cpp) (ident.name + "_base", "") else (ident.name, " final")
+    val cppName = if (r.ext.cpp) ident.name + "_base" else ident.name
     val actualSelf = marshal.typename(cppName, r)
 
     // Requiring the extended class
@@ -158,7 +161,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       }
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
-      w.w("struct " + actualSelf + cppFinal).bracedSemi {
+      val inheritance = r.baseType.fold("")(": public " + marshal.fieldType(_))
+      w.w("struct " + actualSelf + inheritance).bracedSemi {
         generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {

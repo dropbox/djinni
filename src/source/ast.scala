@@ -66,7 +66,7 @@ object Enum {
   case class Option(ident: Ident, doc: Doc)
 }
 
-case class Record(ext: Ext, fields: Seq[Field], consts: Seq[Const], derivingTypes: Set[DerivingType]) extends TypeDef
+case class Record(ext: Ext, fields: Seq[Field], consts: Seq[Const], derivingTypes: Set[DerivingType], baseType: Option[TypeRef]) extends TypeDef
 object Record {
   object DerivingType extends Enumeration {
     type DerivingType = Value

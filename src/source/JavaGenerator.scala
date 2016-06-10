@@ -210,10 +210,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new JavaRefs()
     r.fields.foreach(f => refs.find(f.ty))
+    if (r.baseType.isDefined) {
+        refs.find(r.baseType.get)
+    }
 
     val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
-    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) " final" else ""
-
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
@@ -225,7 +226,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         } else {
           ""
         }
-      w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
+      val inheritance = r.baseType.fold("")(" extends " + marshal.fqTypename(_))
+      w.w(s"public class ${self + javaTypeParams(params)}$comparableFlag$inheritance").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
@@ -238,6 +240,19 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl(s"public $self(").nestedN(2) {
           val skipFirst = SkipFirst()
+          def addBaseTypeArgs(bt: Option[TypeRef]) {
+            if (bt.isDefined) {
+              val recordMdef = bt.get.resolved.base.asInstanceOf[MDef]
+              val record = recordMdef.body.asInstanceOf[Record]
+              addBaseTypeArgs(record.baseType)
+              for (f <- record.fields) {
+                skipFirst { w.wl(",") }
+                marshal.nullityAnnotation(f.ty).map(annotation => w.w(annotation + " "))
+                w.w(marshal.typename(f.ty) + " " + idJava.local(f.ident))
+              }
+            }
+          }
+          addBaseTypeArgs(r.baseType)
           for (f <- r.fields) {
             skipFirst { w.wl(",") }
             marshal.nullityAnnotation(f.ty).map(annotation => w.w(annotation + " "))
@@ -246,6 +261,23 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl(") {")
         }
         w.nested {
+          if (r.baseType.isDefined) {
+            w.wl(s"super(")
+            val skipFirst = SkipFirst()
+            def addBaseTypeCtorArgs(bt: Option[TypeRef]) {
+              val recordMdef = bt.get.resolved.base.asInstanceOf[MDef]
+              val record = recordMdef.body.asInstanceOf[Record]
+              if (record.baseType.isDefined) {
+                addBaseTypeCtorArgs(record.baseType)
+              }
+              for (f <- record.fields) {
+                skipFirst { w.wl(",") }
+                w.w(idJava.local(f.ident))
+              }
+            }
+            addBaseTypeCtorArgs(r.baseType)
+            w.wl(s");")
+          }
           for (f <- r.fields) {
             w.wl(s"this.${idJava.field(f.ident)} = ${idJava.local(f.ident)};")
           }

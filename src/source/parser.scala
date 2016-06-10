@@ -93,12 +93,13 @@ private object IdlParser extends RegexParsers {
   def typeDef: Parser[TypeDef] = record | enum | interface
 
   def recordHeader = "record" ~> extRecord
-  def record: Parser[Record] = recordHeader ~ bracesList(field | const) ~ opt(deriving) ^^ {
-    case ext~items~deriving => {
+  def basetype: Parser[TypeRef] = ":" ~> typeRef
+  def record: Parser[Record] = recordHeader ~ opt(basetype) ~ bracesList(field | const) ~ opt(deriving) ^^ {
+    case ext~basetype~items~deriving => {
       val fields = items collect {case f: Field => f}
       val consts = items collect {case c: Const => c}
       val derivingTypes = deriving.getOrElse(Set[DerivingType]())
-      Record(ext, fields, consts, derivingTypes)
+      Record(ext, fields, consts, derivingTypes, basetype)
     }
   }
   def field: Parser[Field] = doc ~ ident ~ ":" ~ typeRef ^^ {
@@ -129,7 +130,7 @@ private object IdlParser extends RegexParsers {
 
   def externTypeDecl: Parser[TypeDef] = externEnum | externInterface | externRecord
   def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List()) }
-  def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]())) }
+  def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]()), None) }
   def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List()) }
 
   def staticLabel: Parser[Boolean] = ("static ".r | "".r) ^^ {
