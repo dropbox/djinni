@@ -124,6 +124,7 @@ void jniExceptionCheck(JNIEnv * env) {
     }
     const LocalRef<jthrowable> e(env->ExceptionOccurred());
     if (e) {
+        env->ExceptionDescribe();
         env->ExceptionClear();
         jniThrowCppFromJavaException(env, e.get());
     }
