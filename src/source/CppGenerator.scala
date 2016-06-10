@@ -161,7 +161,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       }
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
-      val inheritance = r.baseType.fold("")(": public " + marshal.fieldType(_))
+      val inheritance = r.baseType.fold("")(": public " + marshal.typename(_))
       w.w("struct " + actualSelf + inheritance).bracedSemi {
         generateHppConstants(w, r.consts)
         // Field definitions.
@@ -189,11 +189,29 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         // Constructor.
         if(r.fields.nonEmpty) {
           w.wl
-          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
+          def getBaseTypeArgs(r: Record): Seq[Field] = {
+            if (!r.baseType.isDefined) {
+              return Seq[Field]()
+            }
+            val recordMdef = r.baseType.get.resolved.base.asInstanceOf[MDef]
+            val record = recordMdef.body.asInstanceOf[Record]
+            return getBaseTypeArgs(record) ++ record.fields
+          }
+          val baseTypeArgs = getBaseTypeArgs(r)
+          val args = baseTypeArgs ++ r.fields
+          writeAlignedCall(w, actualSelf + "(", args, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
           w.wl
           val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "_))"
-          w.wl(": " + init(r.fields.head))
-          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
+          val skipFirst = SkipFirst()
+          w.w(": ")
+          val fields = if (r.baseType.isDefined) {
+            writeAlignedCall(w, s"${marshal.typename(r.baseType.get)}(", baseTypeArgs, ")", f => idCpp.local(f.ident))
+            r.fields
+          } else {
+            w.wl(init(r.fields.head))        
+            r.fields.tail
+          }
+          fields.map(f => ", " + init(f)).foreach(w.wl)
           w.wl("{}")
         }
 
