@@ -205,7 +205,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           val skipFirst = SkipFirst()
           w.w(": ")
           val fields = if (r.baseType.isDefined) {
-            writeAlignedCall(w, s"${marshal.typename(r.baseType.get)}(", baseTypeArgs, ")", f => idCpp.local(f.ident))
+            writeAlignedCall(w, s"${marshal.typename(r.baseType.get)}(", baseTypeArgs, ")", f => s"std::move(${idCpp.local(f.ident)}_)")
+            w.wl
             r.fields
           } else {
             w.wl(init(r.fields.head))        

@@ -81,8 +81,20 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
+  def getBaseTypeFields(r: Record): Seq[Field] = {
+    if (!r.baseType.isDefined) {
+      return Seq[Field]()
+    }
+    val recordMdef = r.baseType.get.resolved.base.asInstanceOf[MDef]
+    val record = recordMdef.body.asInstanceOf[Record]
+    return getBaseTypeFields(record) ++ record.fields
+  }
+
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new JNIRefs(ident.name)
+    if (r.baseType.isDefined) {
+       refs.jniHpp.add("#include " + q(spec.jniIncludeCppPrefix + spec.cppFileIdentStyle(jniMarshal.helperClass(cppMarshal.typename(r.baseType.get))) + "." + spec.cppHeaderExt))
+    }
     r.fields.foreach(f => refs.find(f.ty))
 
     val jniHelper = jniMarshal.helperClass(ident)
@@ -90,7 +102,8 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
     def writeJniPrototype(w: IndentWriter) {
       writeJniTypeParams(w, params)
-      w.w(s"class $jniHelper final").bracedSemi {
+      val inheritance=if (r.baseType.isDefined) ": public " + jniMarshal.helperClass(cppMarshal.typename(r.baseType.get)) else ""
+      w.w(s"class $jniHelper$inheritance").bracedSemi {
         w.wlOutdent("public:")
         w.wl(s"using CppType = $cppSelf;")
         w.wl(s"using JniType = jobject;")
@@ -102,14 +115,16 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
         w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j);")
         w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);")
         w.wl
-        w.wlOutdent("private:")
+        w.wlOutdent("protected:")
         w.wl(s"$jniHelper();")
         w.wl(s"friend ::djinni::JniClass<$jniHelper>;")
         w.wl
         val classLookup = q(jniMarshal.undecoratedTypename(ident, r))
         w.wl(s"const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass($classLookup) };")
-        val constructorSig = q(jniMarshal.javaMethodSignature(r.fields, None))
+        val fields = getBaseTypeFields(r) ++ r.fields
+        val constructorSig = q(jniMarshal.javaMethodSignature(fields, None))
         w.wl(s"const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), ${q("<init>")}, $constructorSig) };")
+        w.wl
         for (f <- r.fields) {
           val javaFieldName = idJava.field(f.ident)
           val javaSig = q(jniMarshal.fqTypename(f.ty))
@@ -129,15 +144,16 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.wl
 
       writeJniTypeParams(w, params)
+      val fields = getBaseTypeFields(r) ++ r.fields
       w.w(s"auto $jniHelperWithParams::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType>").braced{
         //w.wl(s"::${spec.jniNamespace}::JniLocalScope jscope(jniEnv, 10);")
         if(r.fields.isEmpty) w.wl("(void)c; // Suppress warnings in release builds for empty records")
         w.wl(s"const auto& data = ::djinni::JniClass<$jniHelper>::get();")
         val call = "auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject("
         w.w(call + "data.clazz.get(), data.jconstructor")
-        if(r.fields.nonEmpty) {
+        if(fields.nonEmpty) {
           w.wl(",")
-          writeAlignedCall(w, " " * call.length(), r.fields, ")}", f => {
+          writeAlignedCall(w, " " * call.length(), fields, ")}", f => {
             val name = idCpp.field(f.ident)
             val param = jniMarshal.fromCpp(f.ty, s"c.$name")
             s"::djinni::get($param)"
@@ -154,11 +170,11 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"auto $jniHelperWithParams::toCpp(JNIEnv* jniEnv, JniType j) -> CppType").braced {
         w.wl(s"::djinni::JniLocalScope jscope(jniEnv, ${r.fields.size + 1});")
         w.wl(s"assert(j != nullptr);")
-        if(r.fields.isEmpty)
+        if(fields.isEmpty)
           w.wl("(void)j; // Suppress warnings in release builds for empty records")
         else
           w.wl(s"const auto& data = ::djinni::JniClass<$jniHelper>::get();")
-        writeAlignedCall(w, "return {", r.fields, "}", f => {
+        writeAlignedCall(w, "return {", fields, "}", f => {
           val fieldId = "data.field_" + idJava.field(f.ident)
           val jniFieldAccess = toJniCall(f.ty, (jt: String) => s"jniEnv->Get${jt}Field(j, $fieldId)")
           jniMarshal.toCpp(f.ty, jniFieldAccess)
