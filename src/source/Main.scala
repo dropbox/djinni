@@ -41,7 +41,7 @@ object Main {
     var javaAnnotation: Option[String] = None
     var javaNullableAnnotation: Option[String] = None
     var javaNonnullAnnotation: Option[String] = None
-    var javaUseFinalForRecord: Boolean = true
+    var javaImplementAndroidOsParcelable : Boolean = false
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
     var jniNamespace: String = "djinni_generated"
@@ -106,8 +106,8 @@ object Main {
         .text("Java annotation (@Nullable) to place on all fields and return values that are optional")
       opt[String]("java-nonnull-annotation").valueName("<nonnull-annotation-class>").foreach(x => javaNonnullAnnotation = Some(x))
         .text("Java annotation (@Nonnull) to place on all fields and return values that are not optional")
-      opt[Boolean]("java-use-final-for-record").valueName("<use-final-for-record>").foreach(x => javaUseFinalForRecord = x)
-        .text("Whether generated Java classes for records should be marked 'final' (default: true). ")
+      opt[Boolean]("java-implement-android-os-parcelable").valueName("<true/false>").foreach(x => javaImplementAndroidOsParcelable = x)
+        .text("all generated java classes will implement the interface android.os.Parcelable")
       note("")
       opt[File]("cpp-out").valueName("<out-folder>").foreach(x => cppOutFolder = Some(x))
         .text("The output folder for C++ files (Generator disabled if unspecified).")
@@ -279,7 +279,7 @@ object Main {
       javaAnnotation,
       javaNullableAnnotation,
       javaNonnullAnnotation,
-      javaUseFinalForRecord,
+      javaImplementAndroidOsParcelable,
       cppOutFolder,
       cppHeaderOutFolder,
       cppIncludePrefix,

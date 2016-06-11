@@ -227,7 +227,13 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           ""
         }
       val inheritance = r.baseType.fold("")(" extends " + marshal.fqTypename(_))
-      w.w(s"public class ${self + javaTypeParams(params)}$comparableFlag$inheritance").braced {
+      val parcelable =
+        if (spec.javaImplementAndroidOsParcelable) {
+          " implements android.os.Parcelable"
+        } else {
+          ""
+        }
+      w.w(s"public class ${self + javaTypeParams(params)}$comparableFlag$inheritance$parcelable").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
@@ -262,7 +268,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         w.nested {
           if (r.baseType.isDefined) {
-            w.wl(s"super(")
+            w.wl("super(")
             val skipFirst = SkipFirst()
             def addBaseTypeCtorArgs(bt: Option[TypeRef]) {
               val recordMdef = bt.get.resolved.base.asInstanceOf[MDef]
@@ -271,12 +277,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 addBaseTypeCtorArgs(record.baseType)
               }
               for (f <- record.fields) {
-                skipFirst { w.wl(",") }
+                skipFirst { w.wl(", ") }
                 w.w(idJava.local(f.ident))
               }
             }
             addBaseTypeCtorArgs(r.baseType)
-            w.wl(s");")
+            w.wl(");")
           }
           for (f <- r.fields) {
             w.wl(s"this.${idJava.field(f.ident)} = ${idJava.local(f.ident)};")
@@ -388,6 +394,96 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s""""}";""")
         }
         w.wl
+
+        if (spec.javaImplementAndroidOsParcelable) {
+          // CREATOR
+          w.wl
+          w.wl(s"public static final android.os.Parcelable.Creator<$self> CREATOR")
+          w.wl(s"    = new android.os.Parcelable.Creator<$self>()").bracedSemi {
+            w.wl("@Override")
+            w.wl(s"public $self createFromParcel(android.os.Parcel in)").braced {
+              w.wl(s"return new $self(in);")
+            }
+            w.wl
+            w.wl("@Override")
+            w.wl(s"public $self[] newArray(int size)").braced {
+              w.wl(s"return new $self[size];")
+            }
+          }
+
+          // constructor (Parcel)
+          w.wl
+          w.wl(s"public $self(android.os.Parcel in)").braced {
+            if (r.baseType.isDefined) {
+              w.wl("super(in);")
+            }
+            for (f <- r.fields) {
+              f.ty.resolved.base match {
+                case MString => w.wl(s"this.${idJava.field(f.ident)} = in.readString();")
+                case MDate => w.wl(s"this.${idJava.field(f.ident)} = new Date(in.readString());")
+                case t: MPrimitive => t.jName match {
+                  case "short" | "int" | "long" | "byte" | "boolean" => w.wl(s"this.${idJava.field(f.ident)} = in.readInt();")
+                  case "float" => w.wl(s"this.${idJava.field(f.ident)} = in.readFloat();")
+                  case "double" => w.wl(s"this.${idJava.field(f.ident)} = in.readDouble();")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case df: MDef => df.defType match {
+                  case DRecord => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in);")
+                  case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case e: MExtern => e.defType match {
+                  case DRecord => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in);")
+                  case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case MList => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
+                case _ => throw new AssertionError("Unreachable")
+              }
+            }
+          }
+
+          // describeContents
+          w.wl
+          w.wl("@Override")
+          w.w("public int describeContents()").braced {
+            w.wl("return 0;")
+          }
+
+          // writeToParsel
+          w.wl
+          w.wl("@Override")
+          w.w("public void writeToParcel(android.os.Parcel out, int flags)").braced {
+            if (r.baseType.isDefined) {
+              w.wl("super.writeToParcel(out, flags);")
+            }
+            for (f <- r.fields) {
+              f.ty.resolved.base match {
+                case MString => w.wl(s"out.writeString(this.${idJava.field(f.ident)});")
+                case MDate => w.wl(s"out.writeString(this.${idJava.field(f.ident)}.toString());")
+                case t: MPrimitive => t.jName match {
+                  case "short" | "int" | "long" | "byte" | "boolean" => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
+                  case "float" => w.wl(s"out.writeFloat(this.${idJava.field(f.ident)});")
+                  case "double" => w.wl(s"out.writeDouble(this.${idJava.field(f.ident)});")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case df: MDef => df.defType match {
+                  case DRecord => w.wl(s"this.${idJava.field(f.ident)}.writeToParcel(out, flags);")
+                  case DEnum => w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.ordinal());")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case e: MExtern => e.defType match {
+                  case DRecord => w.wl(s"this.${idJava.field(f.ident)}.writeToParcel(out, flags);")
+                  case DEnum => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
+                  case _ => throw new AssertionError("Unreachable")
+                }
+                case MList => w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+                case _ => throw new AssertionError("Unreachable")
+              }
+            }
+          }
+          w.wl
+        }
 
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           def primitiveCompare(ident: Ident) {
