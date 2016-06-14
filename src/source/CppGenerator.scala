@@ -187,18 +187,18 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
 
         // Constructor.
-        if(r.fields.nonEmpty) {
-          w.wl
-          def getBaseTypeArgs(r: Record): Seq[Field] = {
-            if (!r.baseType.isDefined) {
-              return Seq[Field]()
-            }
-            val recordMdef = r.baseType.get.resolved.base.asInstanceOf[MDef]
-            val record = recordMdef.body.asInstanceOf[Record]
-            return getBaseTypeArgs(record) ++ record.fields
+        def getBaseTypeArgs(r: Record): Seq[Field] = {
+          if (!r.baseType.isDefined) {
+            return Seq[Field]()
           }
-          val baseTypeArgs = getBaseTypeArgs(r)
-          val args = baseTypeArgs ++ r.fields
+          val recordMdef = r.baseType.get.resolved.base.asInstanceOf[MDef]
+          val record = recordMdef.body.asInstanceOf[Record]
+          return getBaseTypeArgs(record) ++ record.fields
+        }
+        val baseTypeArgs = getBaseTypeArgs(r)
+        val args = baseTypeArgs ++ r.fields
+        if(args.nonEmpty) {
+          w.wl
           writeAlignedCall(w, actualSelf + "(", args, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
           w.wl
           val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "_))"

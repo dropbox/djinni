@@ -96,6 +96,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
        refs.jniHpp.add("#include " + q(spec.jniIncludeCppPrefix + spec.cppFileIdentStyle(jniMarshal.helperClass(cppMarshal.typename(r.baseType.get))) + "." + spec.cppHeaderExt))
     }
     r.fields.foreach(f => refs.find(f.ty))
+    getBaseTypeFields(r).foreach(f => refs.find(f.ty))
 
     val jniHelper = jniMarshal.helperClass(ident)
     val cppSelf = cppMarshal.fqTypename(ident, r) + cppTypeArgs(params)
