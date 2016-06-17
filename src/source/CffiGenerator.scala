@@ -53,8 +53,12 @@ class CffiGenerator(spec: Spec) extends Generator(spec) {
       w.wl("f.close()")
       w.wl
       w.wl("ffi.set_source('" + cffi + "', '''#include \"clean_headers.h\"''',").nested {
-        w.wl("runtime_library_dirs=['.'],")
-        w.wl("libraries=['" + spec.pycffiDynamicLibList + "'])")
+        w.w("runtime_library_dirs=['.']")
+        if(!spec.pycffiDynamicLibList.isEmpty) {
+          w.wl(",")
+          w.w("libraries=['" + spec.pycffiDynamicLibList + "']")
+        }
+        w.wl(")")
       }
       w.wl
       w.wl("ffi.cdef(\"typedef _Bool bool;\"\n + cdef_headers)")

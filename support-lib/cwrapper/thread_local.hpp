@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <memory>
 
 namespace djinni {
 namespace support_lib {
