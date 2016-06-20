@@ -18,6 +18,7 @@ python_cmd=$1
 
 export PYTHONPATH="$base_dir/../support-lib/py:$base_dir/../build_py/cffi:$base_dir/generated-src/python:$PYTHONPATH"
 export DYLD_LIBRARY_PATH=$base_dir/../build_py/cffi:$DYLD_LIBRARY_PATH
+export PYCFFI_WRAPPER=PyCFFIlib_cffi
 (cd "$base_dir/../build_py/cffi" \
         && "$python_cmd" ../../example/generated-src/cffi/pycffi_lib_build.py ../../support-lib/cwrapper/wrapper_marshal.h $(ls ../../example/generated-src/cwrapper/*.h) \
         && echo && "$python_cmd" ../../example/python/textsort.py)

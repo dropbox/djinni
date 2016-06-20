@@ -1,4 +1,12 @@
-from PyCFFIlib_cffi import ffi, lib
+import sys
+import os
+if sys.version_info < (2, 7):
+    ffi = getattr(__import__(os.environ['PYCFFI_WRAPPER'], fromlist=['ffi']))
+    lib = getattr(__import__(os.environ['PYCFFI_WRAPPER'], fromlist=['lib']))
+else:
+    from importlib import import_module
+    ffi = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'ffi')
+    lib = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'lib')
 from djinni.pycffi_marshal import CPyString
 from djinni.support import MultiSet
 

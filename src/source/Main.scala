@@ -84,6 +84,7 @@ object Main {
     var pycffiPackageName: String = ""
     var pycffiDynamicLibList: String = ""
     var pycffiOutFolder: Option[File] = None
+    var python3Usage: Boolean = false
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -202,9 +203,11 @@ object Main {
       opt[String]("pycffi-package-name").valueName("...").foreach(x => pycffiPackageName= x)
         .text("The package name to use for the generated PyCFFI classes.")
       opt[String]("pycffi-dynamic-lib-list").valueName("...").foreach(x => pycffiDynamicLibList= x)
-        .text("The names of the dynamic libraries to be linked with PyCFFI.")
+        .text("The comma separated names of the dynamic libraries to be linked with PyCFFI.")
       opt[File]("c-wrapper-out").valueName("<out-folder>").foreach(x => cWrapperOutFolder = Some(x))
         .text("The output folder for Wrapper C files (Generator disabled if unspecified).")
+      opt[Boolean]("python3-usage").valueName("<true/false>").foreach(x => python3Usage = x)
+        .text("Whether the generated code should be run by python3 (default: false)")
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -346,7 +349,8 @@ object Main {
       pycffiPackageName,
       pycffiDynamicLibList,
       idlFileName,
-      cWrapperOutFolder)
+      cWrapperOutFolder,
+      python3Usage)
 
     try {
       val r = generate(idl, outSpec)

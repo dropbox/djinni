@@ -84,7 +84,9 @@ package object generatorTools {
                    pycffiPackageName: String,
                    pycffiDynamicLibList: String,
                    idlFileName: String,
-                   cWrapperOutFolder: Option[File])
+                   cWrapperOutFolder: Option[File],
+                   python3Usage: Boolean
+                   )
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
