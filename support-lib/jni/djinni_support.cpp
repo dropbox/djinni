@@ -113,7 +113,8 @@ void jniExceptionCheck(JNIEnv * env) {
     }
 }
 
-DJINNI_WEAK_DEFINITION __attribute__((noreturn))
+DJINNI_WEAK_DEFINITION
+DJINNI_NORETURN_DEFINITION
 void jniThrowCppFromJavaException(JNIEnv * env, jthrowable java_exception) {
     throw jni_exception { env, java_exception };
 }
@@ -154,12 +155,7 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
     const char * file_basename = slash ? slash + 1 : file;
 
     char buf[256];
-#if (defined _MSC_VER) && (_MSC_VER < 1900)
-    // snprintf not implemented on MSVC prior to 2015
-    _snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
-#else
-    snprintf(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
-#endif
+    DJINNI_SNPRINTF(buf, sizeof buf, "djinni (%s:%d): %s", file_basename, line, check);
 
     const jclass cassert = env->FindClass("java/lang/Error");
     assert(cassert);
@@ -370,7 +366,7 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
         utf16_encode(utf8_decode(str, i), utf16);
 
     jstring res = env->NewString(
-        reinterpret_cast<const jchar *>(utf16.data()), utf16.length());
+        reinterpret_cast<const jchar *>(utf16.data()), jsize(utf16.length()));
     DJINNI_ASSERT(res, env);
     return res;
 }
@@ -493,19 +489,19 @@ private:
     };
 
     // Helper used by constructor
-    static jobject create(JNIEnv * jniEnv, jobject obj) {
+    static GlobalRef<jobject> create(JNIEnv * jniEnv, jobject obj) {
         const JniInfo & weakRefClass = JniClass<JniInfo>::get();
-        jobject weakRef = jniEnv->NewObject(weakRefClass.clazz.get(), weakRefClass.constructor, obj);
+        LocalRef<jobject> weakRef(jniEnv, jniEnv->NewObject(weakRefClass.clazz.get(), weakRefClass.constructor, obj));
         // DJINNI_ASSERT performs an exception check before anything else, so we don't need
         // a separate jniExceptionCheck call.
         DJINNI_ASSERT(weakRef, jniEnv);
-        return weakRef;
+        return GlobalRef<jobject>(jniEnv, weakRef);
     }
 
 public:
     // Constructor
     JavaWeakRef(jobject obj) : JavaWeakRef(jniGetThreadEnv(), obj) {}
-    JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(jniEnv, create(jniEnv, obj)) {}
+    JavaWeakRef(JNIEnv * jniEnv, jobject obj) : m_weakRef(create(jniEnv, obj)) {}
 
     // Get the object pointed to if it's still strongly reachable or, return null if not.
     // (Analogous to weak_ptr::lock.) Returns a local reference.
