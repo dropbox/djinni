@@ -6,8 +6,8 @@
 #import "DBFirstListener+Private.h"
 #import "DBListenerCaller+Private.h"
 #import "DBSecondListener+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
 #include <exception>
 #include <utility>
 

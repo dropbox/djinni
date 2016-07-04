@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "djinni_support.hpp"
+#include "djinni/support-lib/jni/djinni_support.hpp"
 #include "reverse_client_interface.hpp"
 
 namespace djinni_generated {

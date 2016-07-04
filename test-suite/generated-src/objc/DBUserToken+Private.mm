@@ -3,10 +3,10 @@
 
 #import "DBUserToken+Private.h"
 #import "DBUserToken.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIMarshal+Private.h"
-#import "DJIObjcWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
+#import "djinni/support-lib/objc/DJIMarshal+Private.h"
+#import "djinni/support-lib/objc/DJIObjcWrapperCache+Private.h"
 #include <exception>
 #include <utility>
 

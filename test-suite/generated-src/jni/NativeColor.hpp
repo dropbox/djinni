@@ -4,7 +4,7 @@
 #pragma once
 
 #include "color.hpp"
-#include "djinni_support.hpp"
+#include "djinni/support-lib/jni/djinni_support.hpp"
 
 namespace djinni_generated {
 

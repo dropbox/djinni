@@ -25,6 +25,7 @@ endif()
 ##
 
 set(support_dir ../../support-lib/jni)
+set(include_dir ../../include)
 set(test_include_dirs ../generated-src/jni/ ../generated-src/cpp/ ../handwritten-src/cpp/)
 
 file(
@@ -50,7 +51,7 @@ add_library(DjinniTestNative SHARED ${test_lib_srcs})
 include_directories(
   DjinniTestNative
   ${test_include_dirs}
-  ${support_dir}
+  ${include_dir}
   ${JNI_INCLUDE_DIRS})
 target_link_libraries(DjinniTestNative ${JNI_LIBRARIES})
 install(

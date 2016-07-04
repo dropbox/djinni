@@ -50,7 +50,7 @@ object Main {
     var jniIncludeCppPrefix: String = ""
     var jniFileIdentStyleOptional: Option[IdentConverter] = None
     var jniBaseLibClassIdentStyleOptional: Option[IdentConverter] = None
-    var jniBaseLibIncludePrefix: String = ""
+    var jniBaseLibIncludePrefix: String = "djinni/support-lib/jni/"
     var cppHeaderOutFolderOptional: Option[File] = None
     var cppExt: String = "cpp"
     var cppHeaderExt: String = "hpp"
@@ -70,7 +70,7 @@ object Main {
     var objcppIncludeObjcPrefixOptional: Option[String] = None
     var objcFileIdentStyleOptional: Option[IdentConverter] = None
     var objcppNamespace: String = "djinni_generated"
-    var objcBaseLibIncludePrefix: String = ""
+    var objcBaseLibIncludePrefix: String = "djinni/support-lib/objc/"
     var inFileListPath: Option[File] = None
     var outFileListPath: Option[File] = None
     var skipGeneration: Boolean = false

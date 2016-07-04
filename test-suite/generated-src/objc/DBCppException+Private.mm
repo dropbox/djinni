@@ -4,9 +4,9 @@
 #import "DBCppException+Private.h"
 #import "DBCppException.h"
 #import "DBCppException+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIMarshal+Private.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
+#import "djinni/support-lib/objc/DJIMarshal+Private.h"
 #include <exception>
 #include <utility>
 

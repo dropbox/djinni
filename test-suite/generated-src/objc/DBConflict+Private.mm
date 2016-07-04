@@ -3,8 +3,8 @@
 
 #import "DBConflict+Private.h"
 #import "DBConflict.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
 #include <exception>
 #include <utility>
 

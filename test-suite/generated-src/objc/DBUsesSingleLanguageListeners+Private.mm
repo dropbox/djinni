@@ -5,9 +5,9 @@
 #import "DBUsesSingleLanguageListeners.h"
 #import "DBJavaOnlyListener+Private.h"
 #import "DBObjcOnlyListener+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIObjcWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
+#import "djinni/support-lib/objc/DJIObjcWrapperCache+Private.h"
 #include <exception>
 #include <utility>
 

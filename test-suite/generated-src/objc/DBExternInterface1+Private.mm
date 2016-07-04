@@ -5,8 +5,8 @@
 #import "DBExternInterface1.h"
 #import "DBClientInterface+Private.h"
 #import "DBClientReturnedRecord+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
 #include <exception>
 #include <utility>
 

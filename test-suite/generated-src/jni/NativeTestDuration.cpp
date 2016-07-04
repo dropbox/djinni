@@ -3,7 +3,7 @@
 
 #include "NativeTestDuration.hpp"  // my header
 #include "Duration-jni.hpp"
-#include "Marshal.hpp"
+#include "djinni/support-lib/jni/Marshal.hpp"
 
 namespace djinni_generated {
 

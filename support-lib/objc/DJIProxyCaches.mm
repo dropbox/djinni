@@ -17,8 +17,8 @@
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
 #include "../proxy_cache_impl.hpp"
-#include "DJIObjcWrapperCache+Private.h"
-#include "DJICppWrapperCache+Private.h"
+#include "djinni/support-lib/objc/DJIObjcWrapperCache+Private.h"
+#include "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
 
 namespace djinni {
 

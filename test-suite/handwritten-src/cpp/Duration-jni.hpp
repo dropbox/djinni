@@ -1,5 +1,5 @@
 #pragma once
-#include "djinni_support.hpp"
+#include "djinni/support-lib/jni/djinni_support.hpp"
 #include <cassert>
 #include <chrono>
 

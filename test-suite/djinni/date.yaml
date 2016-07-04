@@ -16,7 +16,7 @@ objc:
   hash: '(NSUInteger)%s.timeIntervalSinceReferenceDate'
 objcpp:
   translator: '::djinni::Date'
-  header: '"DJIMarshal+Private.h"'
+  header: '"djinni/support-lib/objc/DJIMarshal+Private.h"'
 java:
   typename: 'java.util.Date'
   boxed: 'java.util.Date'
@@ -25,6 +25,6 @@ java:
   hash: '%s.hashCode()'
 jni:
   translator: '::djinni::Date'
-  header: '"Marshal.hpp"'
+  header: '"djinni/support-lib/jni/Marshal.hpp"'
   typename: jobject
   typeSignature: 'Ljava/util/Date;'

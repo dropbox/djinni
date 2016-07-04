@@ -3,7 +3,7 @@
 
 #import "DBConstants+Private.h"
 #import "DBConstantRecord+Private.h"
-#import "DJIMarshal+Private.h"
+#import "djinni/support-lib/objc/DJIMarshal+Private.h"
 #include <cassert>
 
 namespace djinni_generated {

@@ -3,7 +3,7 @@
 
 #import "DBSecondListener+Private.h"
 #import "DBSecondListener.h"
-#import "DJIObjcWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIObjcWrapperCache+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 

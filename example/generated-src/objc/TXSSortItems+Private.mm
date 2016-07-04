@@ -3,12 +3,12 @@
 
 #import "TXSSortItems+Private.h"
 #import "TXSSortItems.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIMarshal+Private.h"
 #import "TXSItemList+Private.h"
 #import "TXSSortItems+Private.h"
 #import "TXSTextboxListener+Private.h"
+#import "djinni/support-lib/objc/DJICppWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIError.h"
+#import "djinni/support-lib/objc/DJIMarshal+Private.h"
 #include <exception>
 #include <utility>
 

@@ -5,7 +5,7 @@
 #import "DBExternInterface2.h"
 #import "DBExternRecordWithDerivings+Private.h"
 #import "DBTestHelpers+Private.h"
-#import "DJIObjcWrapperCache+Private.h"
+#import "djinni/support-lib/objc/DJIObjcWrapperCache+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 

@@ -23,8 +23,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "../proxy_cache_interface.hpp"
-#include "../djinni_common.hpp"
+#include "djinni/support-lib/proxy_cache_interface.hpp"
+#include "djinni/support-lib/djinni_common.hpp"
 #include <jni.h>
 
 /*
