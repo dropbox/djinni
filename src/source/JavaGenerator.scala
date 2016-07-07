@@ -268,7 +268,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         w.nested {
           if (r.baseType.isDefined) {
-            w.wl("super(")
+            w.w("super(")
             val skipFirst = SkipFirst()
             def addBaseTypeCtorArgs(bt: Option[TypeRef]) {
               val recordMdef = bt.get.resolved.base.asInstanceOf[MDef]
@@ -277,7 +277,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 addBaseTypeCtorArgs(record.baseType)
               }
               for (f <- record.fields) {
-                skipFirst { w.wl(", ") }
+                skipFirst { w.w(", ") }
                 w.w(idJava.local(f.ident))
               }
             }
@@ -297,6 +297,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(f.ty).foreach(w.wl)
           w.w("public " + marshal.typename(f.ty) + " " + idJava.method("get_" + f.ident.name) + "()").braced {
             w.wl("return " + idJava.field(f.ident) + ";")
+          }
+          w.wl
+          w.w("public void " + idJava.method("set_" + f.ident.name) + "(" + marshal.typename(f.ty) + " " + idJava.local(f.ident) + ")").braced {
+            w.wl(idJava.field(f.ident) + " = " + idJava.local(f.ident) + ";")
           }
         }
 
