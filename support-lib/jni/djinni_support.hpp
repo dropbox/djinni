@@ -340,7 +340,8 @@ template <class T>
 static const std::shared_ptr<T> & objectFromHandleAddress(jlong handle) {
     assert(handle);
     assert(handle > 4096);
-    const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->get();
+    const auto & x = reinterpret_cast<const CppProxyHandle<T> *>(handle);
+    const auto & ret = x->get();
     assert(ret);
     return ret;
 }
@@ -542,6 +543,9 @@ private:
 
 jstring jniStringFromUTF8(JNIEnv * env, const std::string & str);
 std::string jniUTF8FromString(JNIEnv * env, const jstring jstr);
+
+jstring jniStringFromWString(JNIEnv * env, const std::wstring & str);
+std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr);
 
 class JniEnum {
 public:

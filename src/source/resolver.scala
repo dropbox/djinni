@@ -210,6 +210,9 @@ private def constTypeCheck(ty: MExpr, value: Any, resolvedConsts: Seq[Const]) {
 
 private def resolveRecord(scope: Scope, r: Record) {
   val dupeChecker = new DupeChecker("record field")
+  if( r.baseType.isDefined ) {
+    resolveRef(scope, r.baseType.get)
+  }
   for (f <- r.fields) {
     dupeChecker.check(f.ident)
     resolveRef(scope, f.ty)

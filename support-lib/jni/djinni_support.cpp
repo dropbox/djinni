@@ -371,6 +371,15 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
     return res;
 }
 
+jstring jniStringFromWString(JNIEnv * env, const std::wstring & str) {
+
+    std::u16string utf16(str.begin(), str.end());;
+    jstring res = env->NewString(
+        reinterpret_cast<const jchar *>(utf16.data()), utf16.length());
+    DJINNI_ASSERT(res, env);
+    return res;
+}
+
 // UTF-16 decode helpers.
 static inline bool is_high_surrogate(char16_t c) { return (c >= 0xD800) && (c < 0xDC00); }
 static inline bool is_low_surrogate(char16_t c)  { return (c >= 0xDC00) && (c < 0xE000); }
@@ -439,6 +448,20 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
     for (std::u16string::size_type i = 0; i < str.length(); )
         utf8_encode(utf16_decode(str, i), out);
     return out;
+}
+
+std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr) {
+    DJINNI_ASSERT(jstr, env);
+    const jsize length = env->GetStringLength(jstr);
+    jniExceptionCheck(env);
+
+    const auto deleter = [env, jstr] (const jchar * c) { env->ReleaseStringChars(jstr, c); };
+    std::unique_ptr<const jchar, decltype(deleter)> ptr(env->GetStringChars(jstr, nullptr),
+                                                        deleter);
+
+    const char16_t* begin = reinterpret_cast<const char16_t *>(ptr.get());
+    const char16_t* end = begin + length;
+    return std::wstring(begin, end);
 }
 
 DJINNI_WEAK_DEFINITION
