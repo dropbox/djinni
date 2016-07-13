@@ -16,7 +16,7 @@
 
 package djinni
 
-import java.io.{IOException, FileInputStream, InputStreamReader, File, BufferedWriter, FileWriter}
+import java.io.{IOException, FileNotFoundException, FileInputStream, InputStreamReader, File, BufferedWriter, FileWriter}
 
 import djinni.generatorTools._
 
@@ -244,10 +244,10 @@ object Main {
       None
     }
     val idl = try {
-      (new Parser).parseFile(idlFile, inFileListWriter)
+      (new Parser(idlIncludePaths)).parseFile(idlFile, inFileListWriter)
     }
     catch {
-      case ex: IOException =>
+      case ex @ (_: FileNotFoundException | _: IOException) =>
         System.err.println("Error reading from --idl file: " + ex.getMessage)
         System.exit(1); return
     }
