@@ -24,6 +24,7 @@ object Main {
 
   def main(args: Array[String]) {
     var idlFile: File = null
+    var idlIncludePaths: List[String] = List(".")
     var cppOutFolder: Option[File] = None
     var cppNamespace: String = ""
     var cppIncludePrefix: String = ""
@@ -93,6 +94,8 @@ object Main {
       help("help")
       opt[File]("idl").valueName("<in-file>").required().foreach(idlFile = _)
         .text("The IDL file with the type definitions, typically with extension \".djinni\".")
+      opt[String]("idl-include-path").valueName("<path> ...").optional().unbounded().foreach(x => idlIncludePaths = idlIncludePaths :+ x)
+        .text("An include path to search for Djinni @import directives. Can specify multiple paths.")
       note("")
       opt[File]("java-out").valueName("<out-folder>").foreach(x => javaOutFolder = Some(x))
         .text("The output for the Java files (Generator disabled if unspecified).")

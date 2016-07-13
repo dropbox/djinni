@@ -90,6 +90,7 @@ fi
     --yaml-prefix "test_" \
     \
     --idl "$in_relative" \
+    --idl-include-path "./djinni/vendor" \
 )
 
 # Make sure we can parse back our own generated YAML file
