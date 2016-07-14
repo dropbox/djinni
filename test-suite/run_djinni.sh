@@ -17,12 +17,14 @@ base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 temp_out="$base_dir/djinni-output-temp"
 in="$base_dir/djinni/all.djinni"
+wchar_in="$base_dir/djinni/wchar_test.djinni"
 
 # Relative version of in and temp_out are used for Djinni call below so that
 # generated lists of infiles/outfiles are not machine-dependent.  This
 # is an artifact of the test suite, where we want the genereated files
 # to be in git for examination.
 in_relative="djinni/all.djinni"
+wchar_in_relative="djinni/wchar_test.djinni"
 temp_out_relative="djinni-output-temp"
 
 cpp_out="$base_dir/generated-src/cpp"
@@ -59,6 +61,35 @@ fi
 "$base_dir/../src/build"
 [ ! -e "$temp_out" ] || rm -r "$temp_out"
 (cd "$base_dir" && \
+"$base_dir/../src/run-assume-built" \
+    --java-out "$temp_out_relative/java" \
+    --java-package $java_package \
+    --java-nullable-annotation "javax.annotation.CheckForNull" \
+    --java-nonnull-annotation "javax.annotation.Nonnull" \
+    --java-use-final-for-record false \
+    --ident-java-field mFooBar \
+    \
+    --cpp-out "$temp_out_relative/cpp" \
+    --cpp-namespace testsuite \
+    --ident-cpp-enum-type foo_bar \
+    --cpp-optional-template "std::experimental::optional" \
+    --cpp-optional-header "<experimental/optional>" \
+    --cpp-extended-record-include-prefix "../../handwritten-src/cpp/" \
+    --cpp-use-wide-strings true \
+    \
+    --jni-out "$temp_out_relative/jni" \
+    --ident-jni-class NativeFooBar \
+    --ident-jni-file NativeFooBar \
+    \
+    --objc-out "$temp_out_relative/objc" \
+    --objcpp-out "$temp_out_relative/objc" \
+    --objc-type-prefix DB \
+    \
+    --yaml-out "$temp_out_relative/yaml" \
+    --yaml-out-file "yaml-test.yaml" \
+    --yaml-prefix "test_" \
+    \
+    --idl "$wchar_in_relative" && \
 "$base_dir/../src/run-assume-built" \
     --java-out "$temp_out_relative/java" \
     --java-package $java_package \
