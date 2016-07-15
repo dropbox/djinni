@@ -118,6 +118,27 @@ struct String {
     }
 };
 
+struct WString {
+    using CppType = std::wstring;
+    using ObjcType = NSString*;
+
+    using Boxed = WString;
+
+    static CppType toCpp(ObjcType string) {
+        assert(string);
+        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
+        NSData* data = [string dataUsingEncoding:encoding];
+        return std::wstring((wchar_t*)[data bytes], [data length] / sizeof (wchar_t));
+    }
+
+    static ObjcType fromCpp(const CppType& string) {
+        assert(string.size() <= std::numeric_limits<NSUInteger>::max());
+        return [[NSString alloc] initWithBytes:string.data()
+                                        length:string.size() * sizeof(wchar_t)
+                                      encoding:NSUTF32LittleEndianStringEncoding];
+    }
+};
+
 struct Date {
     using CppType = std::chrono::system_clock::time_point;
     using ObjcType = NSDate*;
