@@ -138,6 +138,10 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       val objcSelf = if (i.ext.objc && i.ext.cpp) self + "CppProxy" else self
 
       if (i.ext.cpp) {
+		// Disable warnings in Clang about directly accessing the ivars of an object
+		w.wl("#if __clang__")
+        w.wl("#pragma clang diagnostic ignored \"-Wdirect-ivar-access\"")
+		w.wl("#endif")
         w.wl
         if (i.ext.objc)
           w.wl(s"@interface $objcSelf : NSObject<$self>")
