@@ -21,8 +21,8 @@
 
 - (void)test
 {
-    NSString *str1 = @"some string with unicode \u263a symbol";
-    NSString *str2 = @"another string with unicode \u263b symbol";
+    NSString *str1 = @"some string with unicode \u263A, \U0001F4A9 symbols";
+    NSString *str2 = @"another string with unicode \u263B, \U0001F4A8 symbols";
 
     XCTAssertEqualObjects([[DBWcharTestHelpers getRecord] s], str1);
     XCTAssertEqualObjects([DBWcharTestHelpers getString], str2);
