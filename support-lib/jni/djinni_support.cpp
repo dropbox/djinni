@@ -22,6 +22,7 @@
 #include <cstring>
 
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
+static_assert(sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
 
 namespace djinni {
 
@@ -371,11 +372,37 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
     return res;
 }
 
-jstring jniStringFromWString(JNIEnv * env, const std::wstring & str) {
+template<int wcharTypeSize>
+static std::u16string implWStringToUTF16(const std::wstring & str);
 
-    std::u16string utf16(str.begin(), str.end());;
+template<>
+inline std::u16string implWStringToUTF16<2>(const std::wstring & str) {
+    // case when wchar_t is represented by utf-16 encoding
+    return std::u16string(str.begin(), str.end());
+}
+
+template<>
+inline std::u16string implWStringToUTF16<4>(const std::wstring & str) {
+    // case when wchar_t is represented by utf-32 encoding
+    std::u16string utf16;
+    utf16.reserve(str.size());
+    for(size_t i = 0; i < str.size(); ++i)
+        utf16_encode(static_cast<char32_t>(str[i]), utf16);
+    return utf16;
+}
+
+inline std::u16string wstringToUTF16(const std::wstring & str) {
+    // hide "defined but not used" warnings
+    (void)implWStringToUTF16<2>;
+    (void)implWStringToUTF16<4>;
+    return implWStringToUTF16<sizeof(wchar_t)>(str);
+}
+
+jstring jniStringFromWString(JNIEnv * env, const std::wstring & str) {
+    std::u16string utf16 = wstringToUTF16(str);
+    const size_t len = utf16.size();
     jstring res = env->NewString(
-        reinterpret_cast<const jchar *>(utf16.data()), utf16.length());
+        reinterpret_cast<const jchar *>(utf16.data()), len);
     DJINNI_ASSERT(res, env);
     return res;
 }
@@ -450,6 +477,32 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
     return out;
 }
 
+template<int wcharTypeSize>
+static std::wstring implUTF16ToWString(const char16_t * data, size_t length);
+
+template<>
+inline std::wstring implUTF16ToWString<2>(const char16_t * data, size_t length) {
+    // case when wchar_t is represented by utf-16 encoding
+    return std::wstring(data, data + length);
+}
+
+template<>
+inline std::wstring implUTF16ToWString<4>(const char16_t * data, size_t length) {
+    // case when wchar_t is represented by utf-32 encoding
+    std::wstring result;
+    result.reserve(length);
+    for (size_t i = 0; i < length; )
+        result += static_cast<wchar_t>(utf16_decode(data, i));
+    return result;
+}
+
+inline std::wstring UTF16ToWString(const char16_t * data, size_t length) {
+    // hide "defined but not used" warnings
+    (void)implUTF16ToWString<2>;
+    (void)implUTF16ToWString<4>;
+    return implUTF16ToWString<sizeof(wchar_t)>(data, length);
+}
+
 std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr) {
     DJINNI_ASSERT(jstr, env);
     const jsize length = env->GetStringLength(jstr);
@@ -458,10 +511,8 @@ std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr) {
     const auto deleter = [env, jstr] (const jchar * c) { env->ReleaseStringChars(jstr, c); };
     std::unique_ptr<const jchar, decltype(deleter)> ptr(env->GetStringChars(jstr, nullptr),
                                                         deleter);
-
-    const char16_t* begin = reinterpret_cast<const char16_t *>(ptr.get());
-    const char16_t* end = begin + length;
-    return std::wstring(begin, end);
+    const char16_t* data = reinterpret_cast<const char16_t *>(ptr.get());
+    return UTF16ToWString(data, length);
 }
 
 DJINNI_WEAK_DEFINITION
