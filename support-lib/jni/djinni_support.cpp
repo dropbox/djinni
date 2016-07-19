@@ -385,8 +385,8 @@ template<>
 inline std::u16string implWStringToUTF16<4>(const std::wstring & str) {
     // case when wchar_t is represented by utf-32 encoding
     std::u16string utf16;
-    utf16.reserve(str.size());
-    for(size_t i = 0; i < str.size(); ++i)
+    utf16.reserve(str.length());
+    for (size_t i = 0; i < str.length(); ++i)
         utf16_encode(static_cast<char32_t>(str[i]), utf16);
     return utf16;
 }
@@ -400,9 +400,8 @@ inline std::u16string wstringToUTF16(const std::wstring & str) {
 
 jstring jniStringFromWString(JNIEnv * env, const std::wstring & str) {
     std::u16string utf16 = wstringToUTF16(str);
-    const size_t len = utf16.size();
     jstring res = env->NewString(
-        reinterpret_cast<const jchar *>(utf16.data()), len);
+        reinterpret_cast<const jchar *>(utf16.data()), utf16.length());
     DJINNI_ASSERT(res, env);
     return res;
 }
@@ -511,7 +510,7 @@ std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr) {
     const auto deleter = [env, jstr] (const jchar * c) { env->ReleaseStringChars(jstr, c); };
     std::unique_ptr<const jchar, decltype(deleter)> ptr(env->GetStringChars(jstr, nullptr),
                                                         deleter);
-    const char16_t* data = reinterpret_cast<const char16_t *>(ptr.get());
+    const char16_t * data = reinterpret_cast<const char16_t *>(ptr.get());
     return UTF16ToWString(data, length);
 }
 
