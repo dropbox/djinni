@@ -134,7 +134,9 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     "boxed" -> QuotedString(javaMarshal.fqTypename(td.ident, td.body)),
     "reference" -> javaMarshal.isReference(td),
     "generic" -> true,
-    "hash" -> QuotedString("%s.hashCode()")
+    "hash" -> QuotedString("%s.hashCode()"),
+    "writeToParcel" -> QuotedString("%s.writeToParcel(out, flags)"),
+    "readFromParcel" -> QuotedString("new %s(in)")
   )
 
   private def jni(td: TypeDecl) = Map[String, Any](
@@ -204,7 +206,9 @@ object YamlGenerator {
       nested(td, "java")("boxed").toString,
       nested(td, "java")("reference").asInstanceOf[Boolean],
       nested(td, "java")("generic").asInstanceOf[Boolean],
-      nested(td, "java")("hash").toString),
+      nested(td, "java")("hash").toString,
+      nested(td, "java")("writeToParcel").toString,
+      nested(td, "java")("readFromParcel").toString),
     MExtern.Jni(
       nested(td, "jni")("translator").toString,
       nested(td, "jni")("header").toString,

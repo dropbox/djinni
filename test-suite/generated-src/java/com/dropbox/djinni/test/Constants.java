@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Record containing constants */
-public class Constants {
+public class Constants implements android.os.Parcelable {
 
     /** bool_constant has documentation. */
     public static final boolean BOOL_CONSTANT = true;
@@ -83,6 +83,36 @@ public class Constants {
     public String toString() {
         return "Constants{" +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<Constants> CREATOR
+        = new android.os.Parcelable.Creator<Constants>()
+    {
+        @Override
+        public Constants createFromParcel(android.os.Parcel in)
+        {
+            return new Constants(in);
+        }
+
+        @Override
+        public Constants[] newArray(int size)
+        {
+            return new Constants[size];
+        }
+    };
+
+    public Constants(android.os.Parcel in)
+    {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
     }
 
 }

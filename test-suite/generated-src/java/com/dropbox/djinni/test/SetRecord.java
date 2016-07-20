@@ -7,7 +7,7 @@ import java.util.HashSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class SetRecord {
+public class SetRecord implements android.os.Parcelable {
 
 
     /*package*/ final HashSet<String> mSet;
@@ -37,6 +37,40 @@ public class SetRecord {
                 "mSet=" + mSet +
                 "," + "mIset=" + mIset +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<SetRecord> CREATOR
+        = new android.os.Parcelable.Creator<SetRecord>()
+    {
+        @Override
+        public SetRecord createFromParcel(android.os.Parcel in)
+        {
+            return new SetRecord(in);
+        }
+
+        @Override
+        public SetRecord[] newArray(int size)
+        {
+            return new SetRecord[size];
+        }
+    };
+
+    public SetRecord(android.os.Parcel in)
+    {
+        this.mSet = (HashSet<String>)in.readSerializable();
+        this.mIset = (HashSet<Integer>)in.readSerializable();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeSerializable(this.mSet);
+        out.writeSerializable(this.mIset);
     }
 
 }

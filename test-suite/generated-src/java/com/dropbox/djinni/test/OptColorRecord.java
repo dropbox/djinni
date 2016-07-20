@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class OptColorRecord {
+public class OptColorRecord implements android.os.Parcelable {
 
 
     /*package*/ final Color mMyColor;
@@ -26,6 +26,42 @@ public class OptColorRecord {
         return "OptColorRecord{" +
                 "mMyColor=" + mMyColor +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<OptColorRecord> CREATOR
+        = new android.os.Parcelable.Creator<OptColorRecord>()
+    {
+        @Override
+        public OptColorRecord createFromParcel(android.os.Parcel in)
+        {
+            return new OptColorRecord(in);
+        }
+
+        @Override
+        public OptColorRecord[] newArray(int size)
+        {
+            return new OptColorRecord[size];
+        }
+    };
+
+    public OptColorRecord(android.os.Parcel in)
+    {
+        if (in.readByte() == 0)
+            this.mMyColor = null;
+        else
+            this.mMyColor = Color.values()[in.readInt()];
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeByte((byte)1);
+        out.writeInt(this.mMyColor.ordinal());
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class MapRecord {
+public class MapRecord implements android.os.Parcelable {
 
 
     /*package*/ final HashMap<String, Long> mMap;
@@ -37,6 +37,40 @@ public class MapRecord {
                 "mMap=" + mMap +
                 "," + "mImap=" + mImap +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<MapRecord> CREATOR
+        = new android.os.Parcelable.Creator<MapRecord>()
+    {
+        @Override
+        public MapRecord createFromParcel(android.os.Parcel in)
+        {
+            return new MapRecord(in);
+        }
+
+        @Override
+        public MapRecord[] newArray(int size)
+        {
+            return new MapRecord[size];
+        }
+    };
+
+    public MapRecord(android.os.Parcel in)
+    {
+        this.mMap = (HashMap<String, Long>)in.readSerializable();
+        this.mImap = (HashMap<Integer, Integer>)in.readSerializable();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeSerializable(this.mMap);
+        out.writeSerializable(this.mImap);
     }
 
 }

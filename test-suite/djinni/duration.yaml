@@ -26,6 +26,8 @@ java:
   reference: true
   generic: false
   hash: '%s.hashCode()'
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration'
   header: '"Duration-jni.hpp"'
@@ -55,6 +57,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_h'
   header: '"Duration-jni.hpp"'
@@ -84,6 +88,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_min'
   header: '"Duration-jni.hpp"'
@@ -113,6 +119,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_s'
   header: '"Duration-jni.hpp"'
@@ -142,6 +150,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_ms'
   header: '"Duration-jni.hpp"'
@@ -171,6 +181,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_us'
   header: '"Duration-jni.hpp"'
@@ -200,6 +212,8 @@ java:
   reference: true
   generic: false
   hash: ''
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: '%s.parse(in.readString())'
 jni:
   translator: '::djinni::Duration_ns'
   header: '"Duration-jni.hpp"'

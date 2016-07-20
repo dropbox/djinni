@@ -23,6 +23,8 @@ java:
   reference: true
   generic: true
   hash: '%s.hashCode()'
+  writeToParcel: 'out.writeString(%s.toString())'
+  readFromParcel: 'new %s(in.readString())'
 jni:
   translator: '::djinni::Date'
   header: '"Marshal.hpp"'
