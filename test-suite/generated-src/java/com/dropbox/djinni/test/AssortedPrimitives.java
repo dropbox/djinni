@@ -264,20 +264,41 @@ public class AssortedPrimitives implements android.os.Parcelable {
         out.writeLong(this.mSixtyfour);
         out.writeFloat(this.mFthirtytwo);
         out.writeDouble(this.mFsixtyfour);
-        out.writeByte((byte)1);
-        out.writeByte(this.mOB ? (byte)1 : 0);
-        out.writeByte((byte)1);
-        out.writeByte(this.mOEight);
-        out.writeByte((byte)1);
-        out.writeInt(this.mOSixteen);
-        out.writeByte((byte)1);
-        out.writeInt(this.mOThirtytwo);
-        out.writeByte((byte)1);
-        out.writeLong(this.mOSixtyfour);
-        out.writeByte((byte)1);
-        out.writeFloat(this.mOFthirtytwo);
-        out.writeByte((byte)1);
-        out.writeDouble(this.mOFsixtyfour);
+        if (this.mOB != null) {
+            out.writeByte((byte)1);
+            out.writeByte(this.mOB ? (byte)1 : 0);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOEight != null) {
+            out.writeByte((byte)1);
+            out.writeByte(this.mOEight);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOSixteen != null) {
+            out.writeByte((byte)1);
+            out.writeInt(this.mOSixteen);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOThirtytwo != null) {
+            out.writeByte((byte)1);
+            out.writeInt(this.mOThirtytwo);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOSixtyfour != null) {
+            out.writeByte((byte)1);
+            out.writeLong(this.mOSixtyfour);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOFthirtytwo != null) {
+            out.writeByte((byte)1);
+            out.writeFloat(this.mOFthirtytwo);
+        } else
+            out.writeByte((byte)0);
+        if (this.mOFsixtyfour != null) {
+            out.writeByte((byte)1);
+            out.writeDouble(this.mOFsixtyfour);
+        } else
+            out.writeByte((byte)0);
     }
 
 }

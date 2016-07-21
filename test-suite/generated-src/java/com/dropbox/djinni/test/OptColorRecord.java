@@ -60,8 +60,11 @@ public class OptColorRecord implements android.os.Parcelable {
 
     @Override
     public void writeToParcel(android.os.Parcel out, int flags) {
-        out.writeByte((byte)1);
-        out.writeInt(this.mMyColor.ordinal());
+        if (this.mMyColor != null) {
+            out.writeByte((byte)1);
+            out.writeInt(this.mMyColor.ordinal());
+        } else
+            out.writeByte((byte)0);
     }
 
 }

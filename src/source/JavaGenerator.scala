@@ -461,11 +461,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               case MOptional => {
                 if (inOptional)
                 	throw new AssertionError("nested optional?")
-                if (f.ty.resolved.args.isEmpty) {
-                  w.wl("out.writeByte((byte)0);")
-                } else {
+                w.wl(s"if (this.${idJava.field(f.ident)} != null) {").nested {
                   w.wl("out.writeByte((byte)1);")
                   serializeField(f, f.ty.resolved.args.head.base, true)
+                }
+                w.wl("} else").nested {
+                  w.wl("out.writeByte((byte)0);")
                 }
               }
               case _ => throw new AssertionError("Unreachable")

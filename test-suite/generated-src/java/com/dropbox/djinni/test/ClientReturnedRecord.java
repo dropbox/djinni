@@ -84,8 +84,11 @@ public class ClientReturnedRecord implements android.os.Parcelable {
     public void writeToParcel(android.os.Parcel out, int flags) {
         out.writeLong(this.mRecordId);
         out.writeString(this.mContent);
-        out.writeByte((byte)1);
-        out.writeString(this.mMisc);
+        if (this.mMisc != null) {
+            out.writeByte((byte)1);
+            out.writeString(this.mMisc);
+        } else
+            out.writeByte((byte)0);
     }
 
 }
