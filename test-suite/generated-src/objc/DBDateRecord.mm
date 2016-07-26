@@ -46,7 +46,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p createdAt:%@>", self.class, self, self.createdAt];
+    return [NSString stringWithFormat:@"<%@ %p createdAt:%@>", self.class, (void *)self, self.createdAt];
 }
 
 @end

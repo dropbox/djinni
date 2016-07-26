@@ -151,4 +151,22 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
     name + (if(needRef) " *" else "")
   }
 
+  /**
+    * This method returns whether we can use global variable to represent a given constant.
+    *
+    * We can use global variables for constants which are safe to create during static init, which are numbers
+    * strings, and optional strings. Anything else needs to be a class method.
+    */
+  def canBeConstVariable(c:Const): Boolean = c.ty.resolved.base match {
+    case MPrimitive(_,_,_,_,_,_,_,_) => true
+    case MString => true
+    case MOptional =>
+      assert(c.ty.resolved.args.size == 1)
+      val arg = c.ty.resolved.args.head
+      arg.base match {
+        case MString => true
+        case _ => false
+      }
+    case _ => false
+  }
 }

@@ -363,7 +363,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         nativeHook("nativeDestroy", false, Seq.empty, None, {
-          w.wl(s"delete reinterpret_cast<djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
+          w.wl(s"delete reinterpret_cast<::djinni::CppProxyHandle<$cppSelf>*>(nativeRef);")
         })
 
         def writeJniMethods(w: IndentWriter, methods: Seq[Interface.Method]) {

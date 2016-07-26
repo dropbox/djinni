@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class AssortedPrimitives {
+public class AssortedPrimitives {
 
 
     /*package*/ final boolean mB;

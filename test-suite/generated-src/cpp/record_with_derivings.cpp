@@ -7,8 +7,14 @@ namespace testsuite {
 
 
 bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
-    return lhs.key1 == rhs.key1 &&
-           lhs.key2 == rhs.key2;
+    return lhs.eight == rhs.eight &&
+           lhs.sixteen == rhs.sixteen &&
+           lhs.thirtytwo == rhs.thirtytwo &&
+           lhs.sixtyfour == rhs.sixtyfour &&
+           lhs.fthirtytwo == rhs.fthirtytwo &&
+           lhs.fsixtyfour == rhs.fsixtyfour &&
+           lhs.d == rhs.d &&
+           lhs.s == rhs.s;
 }
 
 bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
@@ -16,16 +22,52 @@ bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) 
 }
 
 bool operator<(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs) {
-    if (lhs.key1 < rhs.key1) {
+    if (lhs.eight < rhs.eight) {
         return true;
     }
-    if (rhs.key1 < lhs.key1) {
+    if (rhs.eight < lhs.eight) {
         return false;
     }
-    if (lhs.key2 < rhs.key2) {
+    if (lhs.sixteen < rhs.sixteen) {
         return true;
     }
-    if (rhs.key2 < lhs.key2) {
+    if (rhs.sixteen < lhs.sixteen) {
+        return false;
+    }
+    if (lhs.thirtytwo < rhs.thirtytwo) {
+        return true;
+    }
+    if (rhs.thirtytwo < lhs.thirtytwo) {
+        return false;
+    }
+    if (lhs.sixtyfour < rhs.sixtyfour) {
+        return true;
+    }
+    if (rhs.sixtyfour < lhs.sixtyfour) {
+        return false;
+    }
+    if (lhs.fthirtytwo < rhs.fthirtytwo) {
+        return true;
+    }
+    if (rhs.fthirtytwo < lhs.fthirtytwo) {
+        return false;
+    }
+    if (lhs.fsixtyfour < rhs.fsixtyfour) {
+        return true;
+    }
+    if (rhs.fsixtyfour < lhs.fsixtyfour) {
+        return false;
+    }
+    if (lhs.d < rhs.d) {
+        return true;
+    }
+    if (rhs.d < lhs.d) {
+        return false;
+    }
+    if (lhs.s < rhs.s) {
+        return true;
+    }
+    if (rhs.s < lhs.s) {
         return false;
     }
     return false;

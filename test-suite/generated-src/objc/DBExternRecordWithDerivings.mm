@@ -62,7 +62,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p member:%@ e:%@>", self.class, self, self.member, @(self.e)];
+    return [NSString stringWithFormat:@"<%@ %p member:%@ e:%@>", self.class, (void *)self, self.member, @(self.e)];
 }
 
 @end

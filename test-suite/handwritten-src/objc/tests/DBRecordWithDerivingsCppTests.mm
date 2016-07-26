@@ -3,13 +3,22 @@
 
 #import <XCTest/XCTest.h>
 
+#import <chrono>
+
 using namespace testsuite;
 
-static RecordWithDerivings record1(1, "String1");
-static RecordWithDerivings record1A(1, "String1");
-static RecordWithDerivings record2(1, "String2");
-static RecordWithDerivings record3(2, "String1");
-
+static RecordWithDerivings record1(1, 2, 3, 4, 5.0f, 6.0,
+                                   std::chrono::system_clock::time_point(std::chrono::milliseconds(7)),
+                                   "String8");
+static RecordWithDerivings record1A(1, 2, 3, 4, 5.0f, 6.0,
+                                    std::chrono::system_clock::time_point(std::chrono::milliseconds(7)),
+                                    "String8");
+static RecordWithDerivings record2(1, 2, 3, 4, 5.0f, 6.0,
+                                   std::chrono::system_clock::time_point(std::chrono::milliseconds(7)),
+                                   "String8888");
+static RecordWithDerivings record3(111, 2, 3, 4, 5.0f, 6.0,
+                                   std::chrono::system_clock::time_point(std::chrono::milliseconds(7)),
+                                   "String8");
 static RecordWithNestedDerivings nestedRecord1(1, record1);
 static RecordWithNestedDerivings nestedRecord1A(1, record1A);
 static RecordWithNestedDerivings nestedRecord2(1, record2);

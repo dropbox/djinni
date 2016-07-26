@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class DateRecord implements Comparable<DateRecord> {
+public class DateRecord implements Comparable<DateRecord> {
 
 
     /*package*/ final java.util.Date mCreatedAt;

@@ -25,7 +25,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p set:%@ iset:%@>", self.class, self, self.set, self.iset];
+    return [NSString stringWithFormat:@"<%@ %p set:%@ iset:%@>", self.class, (void *)self, self.set, self.iset];
 }
 
 @end

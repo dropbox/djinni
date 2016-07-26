@@ -6,21 +6,45 @@
 
 @implementation DBRecordWithDerivings
 
-- (nonnull instancetype)initWithKey1:(int32_t)key1
-                                key2:(nonnull NSString *)key2
+- (nonnull instancetype)initWithEight:(int8_t)eight
+                              sixteen:(int16_t)sixteen
+                            thirtytwo:(int32_t)thirtytwo
+                            sixtyfour:(int64_t)sixtyfour
+                           fthirtytwo:(float)fthirtytwo
+                           fsixtyfour:(double)fsixtyfour
+                                    d:(nonnull NSDate *)d
+                                    s:(nonnull NSString *)s
 {
     if (self = [super init]) {
-        _key1 = key1;
-        _key2 = [key2 copy];
+        _eight = eight;
+        _sixteen = sixteen;
+        _thirtytwo = thirtytwo;
+        _sixtyfour = sixtyfour;
+        _fthirtytwo = fthirtytwo;
+        _fsixtyfour = fsixtyfour;
+        _d = d;
+        _s = [s copy];
     }
     return self;
 }
 
-+ (nonnull instancetype)recordWithDerivingsWithKey1:(int32_t)key1
-                                               key2:(nonnull NSString *)key2
++ (nonnull instancetype)recordWithDerivingsWithEight:(int8_t)eight
+                                             sixteen:(int16_t)sixteen
+                                           thirtytwo:(int32_t)thirtytwo
+                                           sixtyfour:(int64_t)sixtyfour
+                                          fthirtytwo:(float)fthirtytwo
+                                          fsixtyfour:(double)fsixtyfour
+                                                   d:(nonnull NSDate *)d
+                                                   s:(nonnull NSString *)s
 {
-    return [[self alloc] initWithKey1:key1
-                                 key2:key2];
+    return [[self alloc] initWithEight:eight
+                               sixteen:sixteen
+                             thirtytwo:thirtytwo
+                             sixtyfour:sixtyfour
+                            fthirtytwo:fthirtytwo
+                            fsixtyfour:fsixtyfour
+                                     d:d
+                                     s:s];
 }
 
 - (BOOL)isEqual:(id)other
@@ -29,23 +53,35 @@
         return NO;
     }
     DBRecordWithDerivings *typedOther = (DBRecordWithDerivings *)other;
-    return self.key1 == typedOther.key1 &&
-            [self.key2 isEqualToString:typedOther.key2];
+    return self.eight == typedOther.eight &&
+            self.sixteen == typedOther.sixteen &&
+            self.thirtytwo == typedOther.thirtytwo &&
+            self.sixtyfour == typedOther.sixtyfour &&
+            self.fthirtytwo == typedOther.fthirtytwo &&
+            self.fsixtyfour == typedOther.fsixtyfour &&
+            [self.d isEqualToDate:typedOther.d] &&
+            [self.s isEqualToString:typedOther.s];
 }
 
 - (NSUInteger)hash
 {
     return NSStringFromClass([self class]).hash ^
-            (NSUInteger)self.key1 ^
-            self.key2.hash;
+            (NSUInteger)self.eight ^
+            (NSUInteger)self.sixteen ^
+            (NSUInteger)self.thirtytwo ^
+            (NSUInteger)self.sixtyfour ^
+            (NSUInteger)self.fthirtytwo ^
+            (NSUInteger)self.fsixtyfour ^
+            self.d.hash ^
+            self.s.hash;
 }
 
 - (NSComparisonResult)compare:(DBRecordWithDerivings *)other
 {
     NSComparisonResult tempResult;
-    if (self.key1 < other.key1) {
+    if (self.eight < other.eight) {
         tempResult = NSOrderedAscending;
-    } else if (self.key1 > other.key1) {
+    } else if (self.eight > other.eight) {
         tempResult = NSOrderedDescending;
     } else {
         tempResult = NSOrderedSame;
@@ -53,7 +89,61 @@
     if (tempResult != NSOrderedSame) {
         return tempResult;
     }
-    tempResult = [self.key2 compare:other.key2];
+    if (self.sixteen < other.sixteen) {
+        tempResult = NSOrderedAscending;
+    } else if (self.sixteen > other.sixteen) {
+        tempResult = NSOrderedDescending;
+    } else {
+        tempResult = NSOrderedSame;
+    }
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    if (self.thirtytwo < other.thirtytwo) {
+        tempResult = NSOrderedAscending;
+    } else if (self.thirtytwo > other.thirtytwo) {
+        tempResult = NSOrderedDescending;
+    } else {
+        tempResult = NSOrderedSame;
+    }
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    if (self.sixtyfour < other.sixtyfour) {
+        tempResult = NSOrderedAscending;
+    } else if (self.sixtyfour > other.sixtyfour) {
+        tempResult = NSOrderedDescending;
+    } else {
+        tempResult = NSOrderedSame;
+    }
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    if (self.fthirtytwo < other.fthirtytwo) {
+        tempResult = NSOrderedAscending;
+    } else if (self.fthirtytwo > other.fthirtytwo) {
+        tempResult = NSOrderedDescending;
+    } else {
+        tempResult = NSOrderedSame;
+    }
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    if (self.fsixtyfour < other.fsixtyfour) {
+        tempResult = NSOrderedAscending;
+    } else if (self.fsixtyfour > other.fsixtyfour) {
+        tempResult = NSOrderedDescending;
+    } else {
+        tempResult = NSOrderedSame;
+    }
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    tempResult = [self.d compare:other.d];
+    if (tempResult != NSOrderedSame) {
+        return tempResult;
+    }
+    tempResult = [self.s compare:other.s];
     if (tempResult != NSOrderedSame) {
         return tempResult;
     }
@@ -62,7 +152,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p key1:%@ key2:%@>", self.class, self, @(self.key1), self.key2];
+    return [NSString stringWithFormat:@"<%@ %p eight:%@ sixteen:%@ thirtytwo:%@ sixtyfour:%@ fthirtytwo:%@ fsixtyfour:%@ d:%@ s:%@>", self.class, (void *)self, @(self.eight), @(self.sixteen), @(self.thirtytwo), @(self.sixtyfour), @(self.fthirtytwo), @(self.fsixtyfour), self.d, self.s];
 }
 
 @end

@@ -9,8 +9,8 @@
 - (nonnull instancetype)initWithFoo:(BOOL)foo;
 + (nonnull instancetype)extendedRecordWithFoo:(BOOL)foo;
 
++ (DBExtendedRecord * __nonnull)extendedRecordConst;
 @property (nonatomic, readonly) BOOL foo;
 
 @end
 
-extern DBExtendedRecord * __nonnull const DBExtendedRecordExtendedRecordConst;

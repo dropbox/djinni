@@ -3,30 +3,80 @@
 
 package com.dropbox.djinni.test;
 
+import java.util.Date;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class RecordWithDerivings implements Comparable<RecordWithDerivings> {
+public class RecordWithDerivings implements Comparable<RecordWithDerivings> {
 
 
-    /*package*/ final int mKey1;
+    /*package*/ final byte mEight;
 
-    /*package*/ final String mKey2;
+    /*package*/ final short mSixteen;
+
+    /*package*/ final int mThirtytwo;
+
+    /*package*/ final long mSixtyfour;
+
+    /*package*/ final float mFthirtytwo;
+
+    /*package*/ final double mFsixtyfour;
+
+    /*package*/ final Date mD;
+
+    /*package*/ final String mS;
 
     public RecordWithDerivings(
-            int key1,
-            @Nonnull String key2) {
-        this.mKey1 = key1;
-        this.mKey2 = key2;
+            byte eight,
+            short sixteen,
+            int thirtytwo,
+            long sixtyfour,
+            float fthirtytwo,
+            double fsixtyfour,
+            @Nonnull Date d,
+            @Nonnull String s) {
+        this.mEight = eight;
+        this.mSixteen = sixteen;
+        this.mThirtytwo = thirtytwo;
+        this.mSixtyfour = sixtyfour;
+        this.mFthirtytwo = fthirtytwo;
+        this.mFsixtyfour = fsixtyfour;
+        this.mD = d;
+        this.mS = s;
     }
 
-    public int getKey1() {
-        return mKey1;
+    public byte getEight() {
+        return mEight;
+    }
+
+    public short getSixteen() {
+        return mSixteen;
+    }
+
+    public int getThirtytwo() {
+        return mThirtytwo;
+    }
+
+    public long getSixtyfour() {
+        return mSixtyfour;
+    }
+
+    public float getFthirtytwo() {
+        return mFthirtytwo;
+    }
+
+    public double getFsixtyfour() {
+        return mFsixtyfour;
     }
 
     @Nonnull
-    public String getKey2() {
-        return mKey2;
+    public Date getD() {
+        return mD;
+    }
+
+    @Nonnull
+    public String getS() {
+        return mS;
     }
 
     @Override
@@ -35,24 +85,42 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
             return false;
         }
         RecordWithDerivings other = (RecordWithDerivings) obj;
-        return this.mKey1 == other.mKey1 &&
-                this.mKey2.equals(other.mKey2);
+        return this.mEight == other.mEight &&
+                this.mSixteen == other.mSixteen &&
+                this.mThirtytwo == other.mThirtytwo &&
+                this.mSixtyfour == other.mSixtyfour &&
+                this.mFthirtytwo == other.mFthirtytwo &&
+                this.mFsixtyfour == other.mFsixtyfour &&
+                this.mD.equals(other.mD) &&
+                this.mS.equals(other.mS);
     }
 
     @Override
     public int hashCode() {
         // Pick an arbitrary non-zero starting value
         int hashCode = 17;
-        hashCode = hashCode * 31 + mKey1;
-        hashCode = hashCode * 31 + mKey2.hashCode();
+        hashCode = hashCode * 31 + mEight;
+        hashCode = hashCode * 31 + mSixteen;
+        hashCode = hashCode * 31 + mThirtytwo;
+        hashCode = hashCode * 31 + ((int) (mSixtyfour ^ (mSixtyfour >>> 32)));
+        hashCode = hashCode * 31 + Float.floatToIntBits(mFthirtytwo);
+        hashCode = hashCode * 31 + ((int) (Double.doubleToLongBits(mFsixtyfour) ^ (Double.doubleToLongBits(mFsixtyfour) >>> 32)));
+        hashCode = hashCode * 31 + mD.hashCode();
+        hashCode = hashCode * 31 + mS.hashCode();
         return hashCode;
     }
 
     @Override
     public String toString() {
         return "RecordWithDerivings{" +
-                "mKey1=" + mKey1 +
-                "," + "mKey2=" + mKey2 +
+                "mEight=" + mEight +
+                "," + "mSixteen=" + mSixteen +
+                "," + "mThirtytwo=" + mThirtytwo +
+                "," + "mSixtyfour=" + mSixtyfour +
+                "," + "mFthirtytwo=" + mFthirtytwo +
+                "," + "mFsixtyfour=" + mFsixtyfour +
+                "," + "mD=" + mD +
+                "," + "mS=" + mS +
         "}";
     }
 
@@ -60,9 +128,9 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
     @Override
     public int compareTo(@Nonnull RecordWithDerivings other)  {
         int tempResult;
-        if (this.mKey1 < other.mKey1) {
+        if (this.mEight < other.mEight) {
             tempResult = -1;
-        } else if (this.mKey1 > other.mKey1) {
+        } else if (this.mEight > other.mEight) {
             tempResult = 1;
         } else {
             tempResult = 0;
@@ -70,7 +138,61 @@ public final class RecordWithDerivings implements Comparable<RecordWithDerivings
         if (tempResult != 0) {
             return tempResult;
         }
-        tempResult = this.mKey2.compareTo(other.mKey2);
+        if (this.mSixteen < other.mSixteen) {
+            tempResult = -1;
+        } else if (this.mSixteen > other.mSixteen) {
+            tempResult = 1;
+        } else {
+            tempResult = 0;
+        }
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        if (this.mThirtytwo < other.mThirtytwo) {
+            tempResult = -1;
+        } else if (this.mThirtytwo > other.mThirtytwo) {
+            tempResult = 1;
+        } else {
+            tempResult = 0;
+        }
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        if (this.mSixtyfour < other.mSixtyfour) {
+            tempResult = -1;
+        } else if (this.mSixtyfour > other.mSixtyfour) {
+            tempResult = 1;
+        } else {
+            tempResult = 0;
+        }
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        if (this.mFthirtytwo < other.mFthirtytwo) {
+            tempResult = -1;
+        } else if (this.mFthirtytwo > other.mFthirtytwo) {
+            tempResult = 1;
+        } else {
+            tempResult = 0;
+        }
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        if (this.mFsixtyfour < other.mFsixtyfour) {
+            tempResult = -1;
+        } else if (this.mFsixtyfour > other.mFsixtyfour) {
+            tempResult = 1;
+        } else {
+            tempResult = 0;
+        }
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        tempResult = this.mD.compareTo(other.mD);
+        if (tempResult != 0) {
+            return tempResult;
+        }
+        tempResult = this.mS.compareTo(other.mS);
         if (tempResult != 0) {
             return tempResult;
         }

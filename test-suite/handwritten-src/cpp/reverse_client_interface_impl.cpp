@@ -2,7 +2,7 @@
 
 namespace testsuite {
 
-std::string ReverseClientInterfaceImpl::return_str() {
+std::string ReverseClientInterfaceImpl::return_str() const {
     return "test";
 }
 

@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class OptColorRecord {
+public class OptColorRecord {
 
 
     /*package*/ final Color mMyColor;

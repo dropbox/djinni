@@ -36,6 +36,7 @@ package object generatorTools {
                    javaAnnotation: Option[String],
                    javaNullableAnnotation: Option[String],
                    javaNonnullAnnotation: Option[String],
+                   javaUseFinalForRecord: Boolean,
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
                    cppIncludePrefix: String,

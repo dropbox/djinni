@@ -17,22 +17,8 @@ extern int32_t const DBConstantsInterfaceI32Constant;
 extern int64_t const DBConstantsInterfaceI64Constant;
 extern float const DBConstantsInterfaceF32Constant;
 extern double const DBConstantsInterfaceF64Constant;
-extern NSNumber * __nullable const DBConstantsInterfaceOptBoolConstant;
-extern NSNumber * __nullable const DBConstantsInterfaceOptI8Constant;
-/** opt_i16_constant has documentation. */
-extern NSNumber * __nullable const DBConstantsInterfaceOptI16Constant;
-extern NSNumber * __nullable const DBConstantsInterfaceOptI32Constant;
-extern NSNumber * __nullable const DBConstantsInterfaceOptI64Constant;
-/**
- * opt_f32_constant has long documentation.
- * (Second line of multi-line documentation.
- *   Indented third line of multi-line documentation.)
- */
-extern NSNumber * __nullable const DBConstantsInterfaceOptF32Constant;
-extern NSNumber * __nullable const DBConstantsInterfaceOptF64Constant;
 extern NSString * __nonnull const DBConstantsInterfaceStringConstant;
 extern NSString * __nullable const DBConstantsInterfaceOptStringConstant;
-extern DBConstantRecord * __nonnull const DBConstantsInterfaceObjectConstant;
 
 /** Interface containing constants */
 @interface DBConstantsInterface : NSObject
@@ -44,4 +30,18 @@ extern DBConstantRecord * __nonnull const DBConstantsInterfaceObjectConstant;
  */
 - (void)dummy;
 
++ (NSNumber * __nullable)optBoolConstant;
++ (NSNumber * __nullable)optI8Constant;
+/** opt_i16_constant has documentation. */
++ (NSNumber * __nullable)optI16Constant;
++ (NSNumber * __nullable)optI32Constant;
++ (NSNumber * __nullable)optI64Constant;
+/**
+ * opt_f32_constant has long documentation.
+ * (Second line of multi-line documentation.
+ *   Indented third line of multi-line documentation.)
+ */
++ (NSNumber * __nullable)optF32Constant;
++ (NSNumber * __nullable)optF64Constant;
++ (DBConstantRecord * __nonnull)objectConstant;
 @end
