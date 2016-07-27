@@ -139,9 +139,9 @@ def test_strings():
             (u"my\0text", not DECODEUtf8),
             (u"the best text", not DECODEUtf8),
             (u"my \b friend", not DECODEUtf8),
-            #"Non-ASCII / 非 ASCII 字符"
-            (u"Non-ASCII / \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8),
-            (u"Non-ASCII / \u975e ASCII \u5b57\u7b26", not DECODEUtf8)
+            #"Non-ASCII /\0 非 ASCII 字符"
+            (u"Non-ASCII /\0 \xe9\x9d\x9e ASCII \xe5\xad\x97\xe7\xac\xa6", not DECODEUtf8),
+            (u"Non-ASCII /\0 \u975e ASCII \u5b57\u7b26", not DECODEUtf8)
         ])
     if PYTHON3:
         strs.update({
