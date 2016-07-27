@@ -35,11 +35,12 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   def writeJniHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
     writeHppFileGeneric(spec.jniHeaderOutFolder.get, spec.jniNamespace, spec.jniFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
-  class JNIRefs(name: String) {
+  class JNIRefs(name: String, cppPrefixOverride: Option[String]=None) {
     var jniHpp = mutable.TreeSet[String]()
     var jniCpp = mutable.TreeSet[String]()
 
-    jniHpp.add("#include " + q(spec.jniIncludeCppPrefix + spec.cppFileIdentStyle(name) + "." + spec.cppHeaderExt))
+    val cppPrefix = cppPrefixOverride.getOrElse(spec.jniIncludeCppPrefix)
+    jniHpp.add("#include " + q(cppPrefix + spec.cppFileIdentStyle(name) + "." + spec.cppHeaderExt))
     jniHpp.add("#include " + q(spec.jniBaseLibIncludePrefix + "djinni_support.hpp"))
     spec.cppNnHeader match {
       case Some(nnHdr) => jniHpp.add("#include " + nnHdr)
@@ -86,7 +87,12 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
-    val refs = new JNIRefs(ident.name)
+    val prefixOverride: Option[String] = if (r.ext.cpp) {
+      Some(spec.cppExtendedRecordIncludePrefix)
+    } else {
+      None
+    }
+    val refs = new JNIRefs(ident.name, prefixOverride)
     r.fields.foreach(f => refs.find(f.ty))
 
     val jniHelper = jniMarshal.helperClass(ident)

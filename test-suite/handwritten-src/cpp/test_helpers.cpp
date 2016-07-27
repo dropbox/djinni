@@ -76,7 +76,8 @@ bool TestHelpers::check_map_list_record(const MapListRecord & rec) {
 }
 
 static const std::string HELLO_WORLD = "Hello World!";
-static const std::string NON_ASCII = "Non-ASCII / 非 ASCII 字符";
+static const std::string NON_ASCII("Non-ASCII /\0 非 ASCII 字符",
+                                   sizeof("Non-ASCII /\0 非 ASCII 字符")-1);
 
 void TestHelpers::check_client_interface_ascii(const std::shared_ptr<ClientInterface> & i) {
     ClientReturnedRecord cReturnedRecord = i->get_record(5, HELLO_WORLD, {});

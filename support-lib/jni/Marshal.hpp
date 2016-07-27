@@ -174,7 +174,7 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            return {jniEnv, jniStringFromUTF8(jniEnv, c.c_str())};
+            return {jniEnv, jniStringFromUTF8(jniEnv, c)};
         }
     };
 
