@@ -59,8 +59,8 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     case MList => List(ImportRef("<vector>"))
     case MSet => List(ImportRef("<unordered_set>"))
     case MMap => List(ImportRef("<unordered_map>"))
-    case d: MDef => d.defType match {
-      case DRecord =>
+    case d: MDef => d.body match {
+      case r: Record =>
         if (d.name != exclude) {
           if (forwardDeclareOnly) {
             List(DeclRef(s"struct ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
@@ -70,17 +70,18 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
         } else {
           List()
         }
-      case DEnum =>
+      case e: Enum =>
         if (d.name != exclude) {
           if (forwardDeclareOnly) {
-            List(DeclRef(s"enum class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
+            val underlyingType = if(e.flags) " : unsigned" else ""
+            List(DeclRef(s"enum class ${typename(d.name, d.body)}${underlyingType};", Some(spec.cppNamespace)))
           } else {
             List(ImportRef(include(d.name)))
           }
         } else {
           List()
         }
-      case DInterface =>
+      case i: Interface =>
         val base = if (d.name != exclude) {
           List(ImportRef("<memory>"), DeclRef(s"class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
         } else {

@@ -103,11 +103,12 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
         }.mkString(" deriving(", ", ", ")")
       }
     }
-    td.body match {
-      case i: Interface => "interface" + ext(i.ext)
-      case r: Record => "record" + ext(r.ext) + deriving(r)
-      case e: Enum => "enum"
-    }
+  	td.body match {
+  	  case i: Interface => "interface" + ext(i.ext)
+  	  case r: Record => "record" + ext(r.ext) + deriving(r)
+      case Enum(_, false) => "enum"
+      case Enum(_, true) => "flags"
+  	}
   }
 
   private def cpp(td: TypeDecl) = Map[String, Any](

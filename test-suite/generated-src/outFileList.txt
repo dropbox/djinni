@@ -28,6 +28,10 @@ djinni-output-temp/cpp/conflict_user.hpp
 djinni-output-temp/cpp/user_token.hpp
 djinni-output-temp/cpp/color.hpp
 djinni-output-temp/cpp/opt_color_record.hpp
+djinni-output-temp/cpp/access_flags.hpp
+djinni-output-temp/cpp/empty_flags.hpp
+djinni-output-temp/cpp/flag_roundtrip.hpp
+djinni-output-temp/cpp/record_with_flags.hpp
 djinni-output-temp/cpp/client_returned_record.hpp
 djinni-output-temp/cpp/client_interface.hpp
 djinni-output-temp/cpp/reverse_client_interface.hpp
@@ -65,6 +69,10 @@ djinni-output-temp/java/ConflictUser.java
 djinni-output-temp/java/UserToken.java
 djinni-output-temp/java/Color.java
 djinni-output-temp/java/OptColorRecord.java
+djinni-output-temp/java/AccessFlags.java
+djinni-output-temp/java/EmptyFlags.java
+djinni-output-temp/java/FlagRoundtrip.java
+djinni-output-temp/java/RecordWithFlags.java
 djinni-output-temp/java/ClientReturnedRecord.java
 djinni-output-temp/java/ClientInterface.java
 djinni-output-temp/java/ReverseClientInterface.java
@@ -123,6 +131,12 @@ djinni-output-temp/jni/NativeUserToken.cpp
 djinni-output-temp/jni/NativeColor.hpp
 djinni-output-temp/jni/NativeOptColorRecord.hpp
 djinni-output-temp/jni/NativeOptColorRecord.cpp
+djinni-output-temp/jni/NativeAccessFlags.hpp
+djinni-output-temp/jni/NativeEmptyFlags.hpp
+djinni-output-temp/jni/NativeFlagRoundtrip.hpp
+djinni-output-temp/jni/NativeFlagRoundtrip.cpp
+djinni-output-temp/jni/NativeRecordWithFlags.hpp
+djinni-output-temp/jni/NativeRecordWithFlags.cpp
 djinni-output-temp/jni/NativeClientReturnedRecord.hpp
 djinni-output-temp/jni/NativeClientReturnedRecord.cpp
 djinni-output-temp/jni/NativeClientInterface.hpp
@@ -179,6 +193,11 @@ djinni-output-temp/objc/DBUserToken.h
 djinni-output-temp/objc/DBColor.h
 djinni-output-temp/objc/DBOptColorRecord.h
 djinni-output-temp/objc/DBOptColorRecord.mm
+djinni-output-temp/objc/DBAccessFlags.h
+djinni-output-temp/objc/DBEmptyFlags.h
+djinni-output-temp/objc/DBFlagRoundtrip.h
+djinni-output-temp/objc/DBRecordWithFlags.h
+djinni-output-temp/objc/DBRecordWithFlags.mm
 djinni-output-temp/objc/DBClientReturnedRecord.h
 djinni-output-temp/objc/DBClientReturnedRecord.mm
 djinni-output-temp/objc/DBClientInterface.h
@@ -244,6 +263,10 @@ djinni-output-temp/objc/DBUserToken+Private.h
 djinni-output-temp/objc/DBUserToken+Private.mm
 djinni-output-temp/objc/DBOptColorRecord+Private.h
 djinni-output-temp/objc/DBOptColorRecord+Private.mm
+djinni-output-temp/objc/DBFlagRoundtrip+Private.h
+djinni-output-temp/objc/DBFlagRoundtrip+Private.mm
+djinni-output-temp/objc/DBRecordWithFlags+Private.h
+djinni-output-temp/objc/DBRecordWithFlags+Private.mm
 djinni-output-temp/objc/DBClientReturnedRecord+Private.h
 djinni-output-temp/objc/DBClientReturnedRecord+Private.mm
 djinni-output-temp/objc/DBClientInterface+Private.h

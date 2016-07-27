@@ -15,14 +15,14 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   override def fqTypename(tm: MExpr): String = toJavaType(tm, spec.javaPackage)
   def fqTypename(name: String, ty: TypeDef): String = withPackage(spec.javaPackage, idJava.ty(name))
 
-  override def paramType(tm: MExpr): String = typename(tm)
-  override def fqParamType(tm: MExpr): String = fqTypename(tm)
+  override def paramType(tm: MExpr): String = toJavaValueType(tm, None)
+  override def fqParamType(tm: MExpr): String = toJavaValueType(tm, spec.javaPackage)
 
-  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaType(ty.resolved, None))
-  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaType(ty.resolved, spec.javaPackage))
+  override def returnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaValueType(ty.resolved, None))
+  override def fqReturnType(ret: Option[TypeRef]): String = ret.fold("void")(ty => toJavaValueType(ty.resolved, spec.javaPackage))
 
-  override def fieldType(tm: MExpr): String = typename(tm)
-  override def fqFieldType(tm: MExpr): String = fqTypename(tm)
+  override def fieldType(tm: MExpr): String = toJavaValueType(tm, None)
+  override def fqFieldType(tm: MExpr): String = toJavaValueType(tm, spec.javaPackage)
 
   override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct java to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to java conversion not possible")
@@ -36,6 +36,7 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
         case MDate => List(ImportRef("java.util.Date"))
         case _ => List()
       }
+    case e if isEnumFlags(e) => List(ImportRef("java.util.EnumSet"))
     case _ => List()
   }
 
@@ -64,6 +65,21 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
     case i: Interface => true
     case r: Record => true
     case e: Enum =>  true
+  }
+
+  def isEnumFlags(m: Meta): Boolean = m match {
+    case MDef(_, _, _, Enum(_, true)) => true
+    case MExtern(_, _, _, Enum(_, true), _, _, _, _, _) => true
+    case _ => false
+  }
+  def isEnumFlags(tm: MExpr): Boolean = tm.base match {
+    case MOptional => isEnumFlags(tm.args.head)
+    case _ => isEnumFlags(tm.base)
+  }
+
+  private def toJavaValueType(tm: MExpr, packageName: Option[String]): String = {
+    val name = toJavaType(tm, packageName)
+    if(isEnumFlags(tm)) s"EnumSet<$name>" else name
   }
 
   private def toJavaType(tm: MExpr, packageName: Option[String]): String = {
