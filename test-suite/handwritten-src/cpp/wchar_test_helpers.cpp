@@ -3,7 +3,8 @@
 
 namespace testsuite {
 
-static const std::wstring str1 = L"some string with unicode \u263A, \U0001F4A9 symbols";
+static const wchar_t s1[] = L"some string with unicode \u0000, \u263A, \U0001F4A9 symbols";
+static const std::wstring str1(s1, sizeof(s1) / sizeof(*s1) - 1);
 static const std::wstring str2 = L"another string with unicode \u263B, \U0001F4A8 symbols";
 
 WcharTestRec WcharTestHelpers::get_record()

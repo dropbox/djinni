@@ -193,7 +193,7 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            return {jniEnv, jniStringFromWString(jniEnv, c.c_str())};
+            return {jniEnv, jniStringFromWString(jniEnv, c)};
         }
     };
 
