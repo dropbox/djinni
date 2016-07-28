@@ -14,7 +14,13 @@ import javax.annotation.Nonnull;
 public abstract class UsesSingleLanguageListeners {
     public abstract void callForObjC(@CheckForNull ObjcOnlyListener l);
 
+    @CheckForNull
+    public abstract ObjcOnlyListener returnForObjC();
+
     public abstract void callForJava(@CheckForNull JavaOnlyListener l);
+
+    @CheckForNull
+    public abstract JavaOnlyListener returnForJava();
 
     private static final class CppProxy extends UsesSingleLanguageListeners
     {
@@ -48,11 +54,27 @@ public abstract class UsesSingleLanguageListeners {
         private native void native_callForObjC(long _nativeRef, ObjcOnlyListener l);
 
         @Override
+        public ObjcOnlyListener returnForObjC()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_returnForObjC(this.nativeRef);
+        }
+        private native ObjcOnlyListener native_returnForObjC(long _nativeRef);
+
+        @Override
         public void callForJava(JavaOnlyListener l)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             native_callForJava(this.nativeRef, l);
         }
         private native void native_callForJava(long _nativeRef, JavaOnlyListener l);
+
+        @Override
+        public JavaOnlyListener returnForJava()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_returnForJava(this.nativeRef);
+        }
+        private native JavaOnlyListener native_returnForJava(long _nativeRef);
     }
 }
