@@ -276,19 +276,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     refs.hpp.add("#include <string>") // needed for std::string jniProxyClassName();
 
-    // HACK: DISABLES FORWARD DECLARATIONS.
-    //
-    // FIXME: Forward declarations break the use of enums as keys in maps.
-    //
-    // Passing false instead of true for the find methods forwardDeclareOnly parameter
-    // disables the use of forward declarations. We'll leave them disabled until
-    // Dropbox has a solution.
     i.methods.map(m => {
-      m.params.map(p => refs.find(p.ty, false))
-      m.ret.foreach((x)=>refs.find(x, false))
+      m.params.map(p => refs.find(p.ty, true))
+      m.ret.foreach((x)=>refs.find(x, true))
     })
     i.consts.map(c => {
-      refs.find(c.ty, false)
+      refs.find(c.ty, true)
     })
 
     val self = marshal.typename(ident, i)

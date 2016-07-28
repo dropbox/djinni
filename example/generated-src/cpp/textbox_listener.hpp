@@ -3,10 +3,11 @@
 
 #pragma once
 
-#include "item_list.hpp"
 #include <string>
 
 namespace textsort {
+
+struct ItemList;
 
 class TextboxListener {
 public:
