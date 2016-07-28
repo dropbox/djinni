@@ -5,6 +5,7 @@
 #import "DBTestHelpers.h"
 #import "DBAssortedPrimitives+Private.h"
 #import "DBClientInterface+Private.h"
+#import "DBColor+Private.h"
 #import "DBMapListRecord+Private.h"
 #import "DBNestedCollection+Private.h"
 #import "DBPrimitiveList+Private.h"
