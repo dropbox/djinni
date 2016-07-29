@@ -51,6 +51,7 @@ The Python test-suite will run as part of the global test suite if you run `make
 * The support library code makes direct reference to <experimental/optional> types rather than respecting the command-line choice of a different optional library.
 * Use of non-nullable pointers is not yet supported.
 * Build scripts only support building with Xcode/clang on macOS.
+* There are no arguments for configurable header prefixes (or use of existing arguments).  All includes are unqualified.
 
 ## Contact
 If you have feedback, contact `atwyman@dropbox.com`.
