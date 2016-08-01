@@ -40,6 +40,12 @@ void cw__uses_single_language_listeners_callForObjC(DjinniWrapperUsesSingleLangu
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
+DjinniWrapperObjcOnlyListener * cw__uses_single_language_listeners_returnForObjC(DjinniWrapperUsesSingleLanguageListeners * djinni_this) {
+    try {
+        return DjinniWrapperObjcOnlyListener::wrap(djinni_this->wrapped_obj->returnForObjC()).release();
+    } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
+}
+
 void cw__uses_single_language_listeners_callForJava(DjinniWrapperUsesSingleLanguageListeners * djinni_this, DjinniWrapperJavaOnlyListener * l) {
     djinni::Handle<DjinniWrapperJavaOnlyListener> _l(l, java_only_listener___wrapper_dec_ref);
     try {
@@ -52,4 +58,10 @@ void cw__uses_single_language_listeners_callForPy(DjinniWrapperUsesSingleLanguag
     try {
         djinni_this->wrapped_obj->callForPy(DjinniWrapperPyOnlyListener::get(std::move(_l)));
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
+}
+
+DjinniWrapperPyOnlyListener * cw__uses_single_language_listeners_returnForPy(DjinniWrapperUsesSingleLanguageListeners * djinni_this) {
+    try {
+        return DjinniWrapperPyOnlyListener::wrap(djinni_this->wrapped_obj->returnForPy()).release();
+    } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }

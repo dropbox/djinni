@@ -10,7 +10,11 @@ void uses_single_language_listeners___wrapper_add_ref(struct DjinniWrapperUsesSi
 
 void cw__uses_single_language_listeners_callForObjC(struct DjinniWrapperUsesSingleLanguageListeners * djinni_this, struct DjinniWrapperObjcOnlyListener * l);
 
+struct DjinniWrapperObjcOnlyListener * cw__uses_single_language_listeners_returnForObjC(struct DjinniWrapperUsesSingleLanguageListeners * djinni_this);
+
 void cw__uses_single_language_listeners_callForJava(struct DjinniWrapperUsesSingleLanguageListeners * djinni_this, struct DjinniWrapperJavaOnlyListener * l);
 
 void cw__uses_single_language_listeners_callForPy(struct DjinniWrapperUsesSingleLanguageListeners * djinni_this, struct DjinniWrapperPyOnlyListener * l);
+
+struct DjinniWrapperPyOnlyListener * cw__uses_single_language_listeners_returnForPy(struct DjinniWrapperUsesSingleLanguageListeners * djinni_this);
 

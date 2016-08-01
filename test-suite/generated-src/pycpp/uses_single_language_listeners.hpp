@@ -21,9 +21,13 @@ public:
 
     virtual void callForObjC(const std::shared_ptr<ObjcOnlyListener> & l) = 0;
 
+    virtual std::shared_ptr<ObjcOnlyListener> returnForObjC() = 0;
+
     virtual void callForJava(const std::shared_ptr<JavaOnlyListener> & l) = 0;
 
     virtual void callForPy(const std::shared_ptr<PyOnlyListener> & l) = 0;
+
+    virtual std::shared_ptr<PyOnlyListener> returnForPy() = 0;
 };
 
 }  // namespace testsuite

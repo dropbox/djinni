@@ -28,11 +28,19 @@ class UsesSingleLanguageListeners(with_metaclass(ABCMeta)):
         raise NotImplementedError
 
     @abstractmethod
+    def returnForObjC(self):
+        raise NotImplementedError
+
+    @abstractmethod
     def callForJava(self, l):
         raise NotImplementedError
 
     @abstractmethod
     def callForPy(self, l):
+        raise NotImplementedError
+
+    @abstractmethod
+    def returnForPy(self):
         raise NotImplementedError
 
 
@@ -49,6 +57,13 @@ class UsesSingleLanguageListenersCppProxy(UsesSingleLanguageListeners):
         lib.cw__uses_single_language_listeners_callForObjC(self._cpp_impl, ObjcOnlyListenerHelper.fromPy(l))
         CPyException.toPyCheckAndRaise(ffi.NULL)
 
+    def returnForObjC(self):
+        _ret_c = lib.cw__uses_single_language_listeners_returnForObjC(self._cpp_impl)
+        CPyException.toPyCheckAndRaise(_ret_c)
+        _ret = ObjcOnlyListenerHelper.toPy(_ret_c)
+        assert _ret is not None
+        return _ret
+
     def callForJava(self, l):
         lib.cw__uses_single_language_listeners_callForJava(self._cpp_impl, JavaOnlyListenerHelper.fromPy(l))
         CPyException.toPyCheckAndRaise(ffi.NULL)
@@ -56,6 +71,13 @@ class UsesSingleLanguageListenersCppProxy(UsesSingleLanguageListeners):
     def callForPy(self, l):
         lib.cw__uses_single_language_listeners_callForPy(self._cpp_impl, PyOnlyListenerHelper.fromPy(l))
         CPyException.toPyCheckAndRaise(ffi.NULL)
+
+    def returnForPy(self):
+        _ret_c = lib.cw__uses_single_language_listeners_returnForPy(self._cpp_impl)
+        CPyException.toPyCheckAndRaise(_ret_c)
+        _ret = PyOnlyListenerHelper.toPy(_ret_c)
+        assert _ret is not None
+        return _ret
 
 class UsesSingleLanguageListenersHelper:
     c_data_set = MultiSet()
