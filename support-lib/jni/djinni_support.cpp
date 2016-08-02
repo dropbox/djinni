@@ -22,7 +22,6 @@
 #include <cstring>
 
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
-static_assert(sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
 
 namespace djinni {
 
@@ -373,7 +372,10 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
 }
 
 template<int wcharTypeSize>
-static std::u16string implWStringToUTF16(const std::wstring & str);
+static std::u16string implWStringToUTF16(const std::wstring & str)
+{
+    static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
+}
 
 template<>
 inline std::u16string implWStringToUTF16<2>(const std::wstring & str) {
