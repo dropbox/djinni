@@ -79,7 +79,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
       case MOptional => "Optional"
       case MBinary => "Binary"
       case MDate => "Date"
-      case MString => "String"
+      case MString => if (spec.cppUseWideStrings) "WString" else "String"
       case MList => "List"
       case MSet => "Set"
       case MMap => "Map"
