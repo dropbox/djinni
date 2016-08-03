@@ -375,6 +375,7 @@ template<int wcharTypeSize>
 static std::u16string implWStringToUTF16(const std::wstring & str)
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
+    return {}; // unreachable
 }
 
 template<>
@@ -482,6 +483,7 @@ template<int wcharTypeSize>
 static std::wstring implUTF16ToWString(const char16_t * data, size_t length)
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
+    return {}; // unreachable
 }
 
 template<>

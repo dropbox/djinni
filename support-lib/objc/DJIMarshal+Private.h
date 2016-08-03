@@ -122,6 +122,7 @@ template<int wcharTypeSize>
 static CFStringEncoding getWCharEncoding()
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
+    return {}; // unreachable
 }
 
 template<>
