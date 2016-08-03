@@ -3,8 +3,8 @@
 
 #pragma once
 
+#include "../../handwritten-src/cpp/extended_record.hpp"
 #include "djinni_support.hpp"
-#include "extended_record.hpp"
 
 namespace djinni_generated {
 

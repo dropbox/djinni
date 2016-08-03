@@ -174,7 +174,7 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            return {jniEnv, jniStringFromUTF8(jniEnv, c.c_str())};
+            return {jniEnv, jniStringFromUTF8(jniEnv, c)};
         }
     };
 
@@ -249,7 +249,7 @@ namespace djinni
             // Using .data() on an empty vector is UB
             if(!c.empty())
             {
-                jniEnv->SetByteArrayRegion(j.get(), 0, c.size(), reinterpret_cast<const jbyte*>(c.data()));
+                jniEnv->SetByteArrayRegion(j.get(), 0, jsize(c.size()), reinterpret_cast<const jbyte*>(c.data()));
             }
             return j;
         }
