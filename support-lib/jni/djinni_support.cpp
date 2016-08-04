@@ -372,25 +372,25 @@ jstring jniStringFromUTF8(JNIEnv * env, const std::string & str) {
 }
 
 template<int wcharTypeSize>
-static std::u16string implWStringToUTF16(const std::wstring & str)
+static std::u16string implWStringToUTF16(std::wstring::const_iterator, std::wstring::const_iterator)
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
     return {}; // unreachable
 }
 
 template<>
-inline std::u16string implWStringToUTF16<2>(const std::wstring & str) {
+inline std::u16string implWStringToUTF16<2>(std::wstring::const_iterator begin, std::wstring::const_iterator end) {
     // case when wchar_t is represented by utf-16 encoding
-    return std::u16string(str.begin(), str.end());
+    return std::u16string(begin, end);
 }
 
 template<>
-inline std::u16string implWStringToUTF16<4>(const std::wstring & str) {
+inline std::u16string implWStringToUTF16<4>(std::wstring::const_iterator begin, std::wstring::const_iterator end) {
     // case when wchar_t is represented by utf-32 encoding
     std::u16string utf16;
-    utf16.reserve(str.length());
-    for (size_t i = 0; i < str.length(); ++i)
-        utf16_encode(static_cast<char32_t>(str[i]), utf16);
+    utf16.reserve(std::distance(begin, end));
+    for(; begin != end; ++begin)
+        utf16_encode(static_cast<char32_t>(*begin), utf16);
     return utf16;
 }
 
@@ -398,7 +398,7 @@ inline std::u16string wstringToUTF16(const std::wstring & str) {
     // hide "defined but not used" warnings
     (void)implWStringToUTF16<2>;
     (void)implWStringToUTF16<4>;
-    return implWStringToUTF16<sizeof(wchar_t)>(str);
+    return implWStringToUTF16<sizeof(wchar_t)>(str.cbegin(), str.cend());
 }
 
 jstring jniStringFromWString(JNIEnv * env, const std::wstring & str) {
