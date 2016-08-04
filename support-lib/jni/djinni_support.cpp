@@ -398,6 +398,8 @@ inline std::u16string wstringToUTF16(const std::wstring & str) {
     // hide "defined but not used" warnings
     (void)implWStringToUTF16<2>;
     (void)implWStringToUTF16<4>;
+    // Note: The template helper operates on iterators to work around a compiler issue we saw on Mac.
+    // It triggered undefined symbols if wstring methods were called directly in the template function.
     return implWStringToUTF16<sizeof(wchar_t)>(str.cbegin(), str.cend());
 }
 
