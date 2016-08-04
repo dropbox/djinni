@@ -130,6 +130,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#include <exception>")
     }
+    if (!spec.cppNnType.isEmpty || !spec.cppNnCheckExpression.nonEmpty) {
+      refs.body.add("#include <stdexcept>")
+    }
 
     if (i.ext.objc) {
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
