@@ -3,7 +3,6 @@
 
 #import "DBCppException+Private.h"
 #import "DBCppException.h"
-#import "DBCppException+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"

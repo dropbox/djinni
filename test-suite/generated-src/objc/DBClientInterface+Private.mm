@@ -3,7 +3,6 @@
 
 #import "DBClientInterface+Private.h"
 #import "DBClientInterface.h"
-#import "DBClientInterface+Private.h"
 #import "DBClientReturnedRecord+Private.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"

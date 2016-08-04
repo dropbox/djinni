@@ -3,7 +3,6 @@
 
 #include "NativeCppException.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeCppException.hpp"
 
 namespace djinni_generated {
 

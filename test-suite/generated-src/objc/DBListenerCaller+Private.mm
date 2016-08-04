@@ -4,7 +4,6 @@
 #import "DBListenerCaller+Private.h"
 #import "DBListenerCaller.h"
 #import "DBFirstListener+Private.h"
-#import "DBListenerCaller+Private.h"
 #import "DBSecondListener+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
