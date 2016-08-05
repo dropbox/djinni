@@ -77,6 +77,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     refs.privHeader.add("#include <memory>")
     refs.privHeader.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     refs.body.add("!#import " + q(spec.objcppIncludeObjcPrefix + headerName(ident)))
+    refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
 
     spec.cppNnHeader match {
       case Some(nnHdr) => refs.privHeader.add("#include " + nnHdr)
@@ -124,7 +125,6 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     })
 
     if (i.ext.cpp) {
-      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
@@ -133,7 +133,10 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
     if (i.ext.objc) {
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
+    }
+
+    if (!i.ext.cpp && !i.ext.objc) {
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
     }
 
     writeObjcFile(privateBodyName(ident.name), origin, refs.body, w => {
@@ -253,7 +256,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             // we don't have to do any casting at all, just access cppRef directly.
             w.wl("return " + nnCheck("objc->_cppRefHandle.get()") + ";")
             //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
-          } else {
+          } else if (i.ext.cpp || i.ext.objc) {
             // ObjC only, or ObjC and C++.
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
@@ -264,6 +267,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             }
             val getProxyExpr = s"::djinni::get_objc_proxy<ObjcProxy>(objc)"
             w.wl(s"return ${nnCheck(getProxyExpr)};")
+          } else {
+            // Neither ObjC nor C++.  Unusable, but generate compilable code.
+            w.wl("DJINNI_UNIMPLEMENTED(@\"Interface not implementable in any language.\");")
           }
         }
         w.wl
@@ -276,7 +282,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
             // throw bad_cast if we gave it something of the wrong type.
             w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();")
-          } else {
+          } else if (i.ext.objc || i.ext.cpp) {
             // C++ only, or C++ and ObjC.
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
@@ -285,6 +291,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
               }
             }
             w.wl(s"return ::djinni::get_cpp_proxy<$objcSelf>(cpp);")
+          } else {
+            // Neither ObjC nor C++.  Unusable, but generate compilable code.
+            w.wl("DJINNI_UNIMPLEMENTED(@\"Interface not implementable in any language.\");")
           }
         }
       })

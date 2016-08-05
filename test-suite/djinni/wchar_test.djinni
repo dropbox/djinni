@@ -1,0 +1,10 @@
+wchar_test_rec = record {
+  s: string;
+}
+
+wchar_test_helpers = interface +c {
+  static get_record() : wchar_test_rec;
+  static get_string() : string;
+  static check_string(str: string) : bool;
+  static check_record(rec: wchar_test_rec) : bool;
+}

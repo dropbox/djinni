@@ -145,7 +145,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
     }
     def base(m: Meta): String = m match {
       case p: MPrimitive => p.cName
-      case MString => "std::string"
+      case MString => if (spec.cppUseWideStrings) "std::wstring" else "std::string"
       case MDate => "std::chrono::system_clock::time_point"
       case MBinary => "std::vector<uint8_t>"
       case MOptional => spec.cppOptionalTemplate
