@@ -75,7 +75,7 @@ fi
     --cpp-namespace testsuite \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
-    --cpp-optional-header "<experimental/optional>" \
+    --cpp-optional-header "\"../../handwritten-src/cpp/optional.hpp\"" \
     --cpp-extended-record-include-prefix "../../handwritten-src/cpp/" \
     --cpp-use-wide-strings true \
     \
@@ -104,7 +104,7 @@ fi
     --cpp-namespace testsuite \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
-    --cpp-optional-header "<experimental/optional>" \
+    --cpp-optional-header "\"../../handwritten-src/cpp/optional.hpp\"" \
     --cpp-extended-record-include-prefix "../../handwritten-src/cpp/" \
     \
     --jni-out "$temp_out_relative/jni" \
@@ -136,7 +136,7 @@ cp "$base_dir/djinni/yaml-test.djinni" "$temp_out/yaml"
     --cpp-out "$temp_out_relative/cpp" \
     --ident-cpp-enum-type foo_bar \
     --cpp-optional-template "std::experimental::optional" \
-    --cpp-optional-header "<experimental/optional>" \
+    --cpp-optional-header "\"../../handwritten-src/cpp/optional.hpp\"" \
     \
     --jni-out "$temp_out_relative/jni" \
     --ident-jni-class NativeFooBar \

@@ -5,9 +5,9 @@
 #import "TXSSortItems.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
-#import "DJIMarshal+Private.h"
 #import "TXSItemList+Private.h"
 #import "TXSSortItems+Private.h"
+#import "TXSSortOrder+Private.h"
 #import "TXSTextboxListener+Private.h"
 #include <exception>
 #include <utility>

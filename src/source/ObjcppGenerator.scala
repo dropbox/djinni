@@ -49,7 +49,11 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
   private def arcAssert(w: IndentWriter) = w.wl("static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");")
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    // No generation required
+    var imports = mutable.TreeSet[String]()
+    imports.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
+    imports.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+
+    writeObjcFile(objcppMarshal.privateHeaderName(ident.name), origin, imports, w => {} )
   }
 
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
