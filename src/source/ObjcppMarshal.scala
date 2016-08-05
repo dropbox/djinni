@@ -46,9 +46,7 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   def include(m: Meta) = m match {
-    case d: MDef => d.defType match {
-      case _ => q(spec.objcppIncludePrefix + privateHeaderName(d.name))
-    }
+    case d: MDef => q(spec.objcppIncludePrefix + privateHeaderName(d.name))
     case _ => throw new AssertionError("not applicable")
   }
 
