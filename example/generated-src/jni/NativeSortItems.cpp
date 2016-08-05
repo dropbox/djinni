@@ -3,7 +3,6 @@
 
 #include "NativeSortItems.hpp"  // my header
 #include "NativeItemList.hpp"
-#include "NativeSortItems.hpp"
 #include "NativeSortOrder.hpp"
 #include "NativeTextboxListener.hpp"
 

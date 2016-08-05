@@ -6,7 +6,6 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "TXSItemList+Private.h"
-#import "TXSSortItems+Private.h"
 #import "TXSSortOrder+Private.h"
 #import "TXSTextboxListener+Private.h"
 #include <exception>
