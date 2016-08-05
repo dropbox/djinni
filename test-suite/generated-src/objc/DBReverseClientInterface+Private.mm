@@ -3,11 +3,11 @@
 
 #import "DBReverseClientInterface+Private.h"
 #import "DBReverseClientInterface.h"
-#import "DBReverseClientInterface+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");

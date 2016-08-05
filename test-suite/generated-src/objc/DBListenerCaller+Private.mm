@@ -4,11 +4,11 @@
 #import "DBListenerCaller+Private.h"
 #import "DBListenerCaller.h"
 #import "DBFirstListener+Private.h"
-#import "DBListenerCaller+Private.h"
 #import "DBSecondListener+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");

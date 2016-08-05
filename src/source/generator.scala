@@ -49,6 +49,7 @@ package object generatorTools {
                    cppNnHeader: Option[String],
                    cppNnType: Option[String],
                    cppNnCheckExpression: Option[String],
+                   cppUseWideStrings: Boolean,
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
@@ -386,7 +387,9 @@ abstract class Generator(spec: Spec)
       w.wl
       val myHeader = q(includePrefix + fileIdentStyle(name) + "." + spec.cppHeaderExt)
       w.wl(s"#include $myHeader  // my header")
-      includes.foreach(w.wl(_))
+      val myHeaderInclude = s"#include $myHeader"
+      for (include <- includes if include != myHeaderInclude)
+        w.wl(include)
       w.wl
       wrapNamespace(w, namespace, f)
     })

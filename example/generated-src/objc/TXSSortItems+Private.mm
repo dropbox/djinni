@@ -5,11 +5,11 @@
 #import "TXSSortItems.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
-#import "DJIMarshal+Private.h"
 #import "TXSItemList+Private.h"
-#import "TXSSortItems+Private.h"
+#import "TXSSortOrder+Private.h"
 #import "TXSTextboxListener+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");

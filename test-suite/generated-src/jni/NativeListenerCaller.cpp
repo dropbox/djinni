@@ -3,7 +3,6 @@
 
 #include "NativeListenerCaller.hpp"  // my header
 #include "NativeFirstListener.hpp"
-#include "NativeListenerCaller.hpp"
 #include "NativeSecondListener.hpp"
 
 namespace djinni_generated {

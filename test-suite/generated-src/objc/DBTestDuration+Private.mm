@@ -8,6 +8,7 @@
 #import "DJIMarshal+Private.h"
 #import "Duration-objc.hpp"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
