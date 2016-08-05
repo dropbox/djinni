@@ -3,7 +3,6 @@
 
 #include "NativeClientInterface.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeClientInterface.hpp"
 #include "NativeClientReturnedRecord.hpp"
 
 namespace djinni_generated {
