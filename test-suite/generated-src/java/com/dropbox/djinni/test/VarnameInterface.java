@@ -9,10 +9,10 @@ import javax.annotation.Nonnull;
 
 public abstract class VarnameInterface {
     @Nonnull
-    public abstract VarnameRecord Rmethod(@Nonnull VarnameRecord r);
+    public abstract VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
 
     @CheckForNull
-    public abstract VarnameInterface Imethod(@CheckForNull VarnameInterface i);
+    public abstract VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
 
     private static final class CppProxy extends VarnameInterface
     {
@@ -38,19 +38,19 @@ public abstract class VarnameInterface {
         }
 
         @Override
-        public VarnameRecord Rmethod(VarnameRecord r)
+        public VarnameRecord Rmethod(VarnameRecord RArg)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            return native_Rmethod(this.nativeRef, r);
+            return native_Rmethod(this.nativeRef, RArg);
         }
-        private native VarnameRecord native_Rmethod(long _nativeRef, VarnameRecord r);
+        private native VarnameRecord native_Rmethod(long _nativeRef, VarnameRecord RArg);
 
         @Override
-        public VarnameInterface Imethod(VarnameInterface i)
+        public VarnameInterface Imethod(VarnameInterface IArg)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            return native_Imethod(this.nativeRef, i);
+            return native_Imethod(this.nativeRef, IArg);
         }
-        private native VarnameInterface native_Imethod(long _nativeRef, VarnameInterface i);
+        private native VarnameInterface native_Imethod(long _nativeRef, VarnameInterface IArg);
     }
 }
