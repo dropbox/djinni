@@ -229,7 +229,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
                       writeObjcFuncDecl(m, new IndentWriter(stringWriter))
                       val singleLineFunctionDecl = stringWriter.toString.replaceAll("\n *", " ")
                       val exceptionReason = s"Got unexpected null return value from function $objcSelf $singleLineFunctionDecl"
-                      w.w(s"if (r == nil)").braced {
+                      w.w(s"if (objcpp_result_ == nil)").braced {
                         w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
                       }
                     }
