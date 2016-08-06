@@ -93,7 +93,7 @@ package object generatorTools {
   def p(s: String) = "(" + s + ")"
   def q(s: String) = '"' + s + '"'
   def t(s: String) = "<" + s + ">"
-  def firstUpper(token: String) = token.charAt(0).toUpper + token.substring(1)
+  def firstUpper(token: String) = if (token.isEmpty()) token else token.charAt(0).toUpper + token.substring(1)
 
   type IdentConverter = String => String
 

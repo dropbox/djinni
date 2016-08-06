@@ -21,8 +21,8 @@ public:
     ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & c_i) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() foo:(::djinni_generated::TestHelpers::fromCpp(c_i))];
-            return ::djinni_generated::ExternRecordWithDerivings::toCpp(r);
+            auto objcpp_result_ = [Handle::get() foo:(::djinni_generated::TestHelpers::fromCpp(c_i))];
+            return ::djinni_generated::ExternRecordWithDerivings::toCpp(objcpp_result_);
         }
     }
 };

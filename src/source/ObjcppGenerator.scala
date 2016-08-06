@@ -187,12 +187,12 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
                   }
                 }
               })
-              val ret = m.ret.fold("")(_ => "auto r = ")
+              val ret = m.ret.fold("")(_ => "auto objcpp_result_ = ")
               val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppSelf + "::") + idCpp.method(m.ident) + "("
               writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
 
               w.wl(";")
-              m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
+              m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "objcpp_result_")};"))
             }
           }
         }
@@ -217,7 +217,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
                 w.w("@autoreleasepool").braced {
-                  val ret = m.ret.fold("")(_ => "auto r = ")
+                  val ret = m.ret.fold("")(_ => "auto objcpp_result_ = ")
                   val call = s"[Handle::get() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
                   w.wl(";")
@@ -233,7 +233,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
                         w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
                       }
                     }
-                    w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
+                    w.wl(s"return ${objcppMarshal.toCpp(ty, "objcpp_result_")};")
                   })
                 }
               }
