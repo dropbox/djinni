@@ -34,36 +34,36 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (DBColor)e:(DBColor)e {
     try {
-        auto r = _cppRefHandle.get()->e(::djinni::Enum<::testsuite::color, DBColor>::toCpp(e));
-        return ::djinni::Enum<::testsuite::color, DBColor>::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->e(::djinni::Enum<::testsuite::color, DBColor>::toCpp(e));
+        return ::djinni::Enum<::testsuite::color, DBColor>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nullable NSNumber *)o:(nullable NSNumber *)o {
     try {
-        auto r = _cppRefHandle.get()->o(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(o));
-        return ::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->o(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(o));
+        return ::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nonnull NSArray<NSNumber *> *)l:(nonnull NSArray<NSNumber *> *)l {
     try {
-        auto r = _cppRefHandle.get()->l(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(l));
-        return ::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->l(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(l));
+        return ::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nonnull NSSet<NSNumber *> *)s:(nonnull NSSet<NSNumber *> *)s {
     try {
-        auto r = _cppRefHandle.get()->s(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(s));
-        return ::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->s(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(s));
+        return ::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nonnull NSDictionary<NSNumber *, NSNumber *> *)m:(nonnull NSDictionary<NSNumber *, NSNumber *> *)m {
     try {
-        auto r = _cppRefHandle.get()->m(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(m));
-        return ::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->m(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(m));
+        return ::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -78,36 +78,36 @@ public:
     ::testsuite::color e(::testsuite::color c_e) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() e:(::djinni::Enum<::testsuite::color, DBColor>::fromCpp(c_e))];
-            return ::djinni::Enum<::testsuite::color, DBColor>::toCpp(r);
+            auto objcpp_result_ = [Handle::get() e:(::djinni::Enum<::testsuite::color, DBColor>::fromCpp(c_e))];
+            return ::djinni::Enum<::testsuite::color, DBColor>::toCpp(objcpp_result_);
         }
     }
     std::experimental::optional<::testsuite::color> o(std::experimental::optional<::testsuite::color> c_o) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() o:(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_o))];
-            return ::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(r);
+            auto objcpp_result_ = [Handle::get() o:(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_o))];
+            return ::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::vector<::testsuite::color> l(const std::vector<::testsuite::color> & c_l) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() l:(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_l))];
-            return ::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(r);
+            auto objcpp_result_ = [Handle::get() l:(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_l))];
+            return ::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::unordered_set<::testsuite::color> s(const std::unordered_set<::testsuite::color> & c_s) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() s:(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_s))];
-            return ::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(r);
+            auto objcpp_result_ = [Handle::get() s:(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_s))];
+            return ::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::unordered_map<::testsuite::color, ::testsuite::color> m(const std::unordered_map<::testsuite::color, ::testsuite::color> & c_m) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() m:(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_m))];
-            return ::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(r);
+            auto objcpp_result_ = [Handle::get() m:(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_m))];
+            return ::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
 };

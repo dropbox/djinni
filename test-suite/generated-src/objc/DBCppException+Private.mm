@@ -32,15 +32,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (int32_t)throwAnException {
     try {
-        auto r = _cppRefHandle.get()->throw_an_exception();
-        return ::djinni::I32::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->throw_an_exception();
+        return ::djinni::I32::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nullable DBCppException *)get {
     try {
-        auto r = ::testsuite::CppException::get();
-        return ::djinni_generated::CppException::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::CppException::get();
+        return ::djinni_generated::CppException::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

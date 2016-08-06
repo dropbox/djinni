@@ -33,29 +33,29 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nonnull DBWcharTestRec *)getRecord {
     try {
-        auto r = ::testsuite::WcharTestHelpers::get_record();
-        return ::djinni_generated::WcharTestRec::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::WcharTestHelpers::get_record();
+        return ::djinni_generated::WcharTestRec::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSString *)getString {
     try {
-        auto r = ::testsuite::WcharTestHelpers::get_string();
-        return ::djinni::WString::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::WcharTestHelpers::get_string();
+        return ::djinni::WString::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkString:(nonnull NSString *)str {
     try {
-        auto r = ::testsuite::WcharTestHelpers::check_string(::djinni::WString::toCpp(str));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::WcharTestHelpers::check_string(::djinni::WString::toCpp(str));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkRecord:(nonnull DBWcharTestRec *)rec {
     try {
-        auto r = ::testsuite::WcharTestHelpers::check_record(::djinni_generated::WcharTestRec::toCpp(rec));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::WcharTestHelpers::check_record(::djinni_generated::WcharTestRec::toCpp(rec));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

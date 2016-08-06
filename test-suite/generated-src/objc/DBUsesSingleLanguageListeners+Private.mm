@@ -40,8 +40,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (nullable id<DBObjcOnlyListener>)returnForObjC {
     try {
-        auto r = _cppRefHandle.get()->returnForObjC();
-        return ::djinni_generated::ObjcOnlyListener::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->returnForObjC();
+        return ::djinni_generated::ObjcOnlyListener::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -53,8 +53,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (nullable DBJavaOnlyListener *)returnForJava {
     try {
-        auto r = _cppRefHandle.get()->returnForJava();
-        return ::djinni_generated::JavaOnlyListener::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->returnForJava();
+        return ::djinni_generated::JavaOnlyListener::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -75,8 +75,8 @@ public:
     std::shared_ptr<::testsuite::ObjcOnlyListener> returnForObjC() override
     {
         @autoreleasepool {
-            auto r = [Handle::get() returnForObjC];
-            return ::djinni_generated::ObjcOnlyListener::toCpp(r);
+            auto objcpp_result_ = [Handle::get() returnForObjC];
+            return ::djinni_generated::ObjcOnlyListener::toCpp(objcpp_result_);
         }
     }
     void callForJava(const std::shared_ptr<::testsuite::JavaOnlyListener> & c_l) override
@@ -88,8 +88,8 @@ public:
     std::shared_ptr<::testsuite::JavaOnlyListener> returnForJava() override
     {
         @autoreleasepool {
-            auto r = [Handle::get() returnForJava];
-            return ::djinni_generated::JavaOnlyListener::toCpp(r);
+            auto objcpp_result_ = [Handle::get() returnForJava];
+            return ::djinni_generated::JavaOnlyListener::toCpp(objcpp_result_);
         }
     }
 };
