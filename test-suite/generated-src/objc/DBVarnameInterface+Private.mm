@@ -30,16 +30,16 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)r {
+- (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)RArg {
     try {
-        auto objcpp_result_ = _cppRefHandle.get()->_rmethod_(::djinni_generated::VarnameRecord::toCpp(r));
+        auto objcpp_result_ = _cppRefHandle.get()->_rmethod_(::djinni_generated::VarnameRecord::toCpp(RArg));
         return ::djinni_generated::VarnameRecord::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (nullable DBVarnameInterface *)Imethod:(nullable DBVarnameInterface *)i {
+- (nullable DBVarnameInterface *)Imethod:(nullable DBVarnameInterface *)IArg {
     try {
-        auto objcpp_result_ = _cppRefHandle.get()->_imethod_(::djinni_generated::VarnameInterface::toCpp(i));
+        auto objcpp_result_ = _cppRefHandle.get()->_imethod_(::djinni_generated::VarnameInterface::toCpp(IArg));
         return ::djinni_generated::VarnameInterface::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

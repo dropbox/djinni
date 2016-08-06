@@ -13,9 +13,9 @@ class VarnameInterface {
 public:
     virtual ~VarnameInterface() {}
 
-    virtual VarnameRecord _rmethod_(const VarnameRecord & r) = 0;
+    virtual VarnameRecord _rmethod_(const VarnameRecord & _r_arg_) = 0;
 
-    virtual std::shared_ptr<VarnameInterface> _imethod_(const std::shared_ptr<VarnameInterface> & i) = 0;
+    virtual std::shared_ptr<VarnameInterface> _imethod_(const std::shared_ptr<VarnameInterface> & _i_arg_) = 0;
 };
 
 }  // namespace testsuite

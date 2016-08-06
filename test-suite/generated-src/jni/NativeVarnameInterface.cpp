@@ -19,22 +19,22 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_VarnameInterface_00024CppPr
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_VarnameInterface_00024CppProxy_native_1Rmethod(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_r)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_VarnameInterface_00024CppProxy_native_1Rmethod(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_RArg)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::VarnameInterface>(nativeRef);
-        auto r = ref->_rmethod_(::djinni_generated::NativeVarnameRecord::toCpp(jniEnv, j_r));
+        auto r = ref->_rmethod_(::djinni_generated::NativeVarnameRecord::toCpp(jniEnv, j_RArg));
         return ::djinni::release(::djinni_generated::NativeVarnameRecord::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_VarnameInterface_00024CppProxy_native_1Imethod(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_i)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_VarnameInterface_00024CppProxy_native_1Imethod(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_IArg)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::VarnameInterface>(nativeRef);
-        auto r = ref->_imethod_(::djinni_generated::NativeVarnameInterface::toCpp(jniEnv, j_i));
+        auto r = ref->_imethod_(::djinni_generated::NativeVarnameInterface::toCpp(jniEnv, j_IArg));
         return ::djinni::release(::djinni_generated::NativeVarnameInterface::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }

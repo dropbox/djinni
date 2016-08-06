@@ -15,11 +15,11 @@ from djinni import exception # this forces run of __init__.py which gives cpp op
 
 class VarnameInterface(with_metaclass(ABCMeta)):
     @abstractmethod
-    def _rmethod_(self, r):
+    def _rmethod_(self, _r_arg_):
         raise NotImplementedError
 
     @abstractmethod
-    def _imethod_(self, i):
+    def _imethod_(self, _i_arg_):
         raise NotImplementedError
 
 
@@ -32,15 +32,15 @@ class VarnameInterfaceCppProxy(VarnameInterface):
             return
         lib._varname_interface____wrapper_dec_ref(self._cpp_impl)
 
-    def _rmethod_(self, r):
-        _ret_c = lib.cw___varname_interface___rmethod_(self._cpp_impl, CPyRecord.fromPy(VarnameRecord.c_data_set, r))
+    def _rmethod_(self, _r_arg_):
+        _ret_c = lib.cw___varname_interface___rmethod_(self._cpp_impl, CPyRecord.fromPy(VarnameRecord.c_data_set, _r_arg_))
         CPyException.toPyCheckAndRaise(_ret_c)
         _ret = CPyRecord.toPy(VarnameRecord.c_data_set, _ret_c)
         assert _ret is not None
         return _ret
 
-    def _imethod_(self, i):
-        _ret_c = lib.cw___varname_interface___imethod_(self._cpp_impl, VarnameInterfaceHelper.fromPy(i))
+    def _imethod_(self, _i_arg_):
+        _ret_c = lib.cw___varname_interface___imethod_(self._cpp_impl, VarnameInterfaceHelper.fromPy(_i_arg_))
         CPyException.toPyCheckAndRaise(_ret_c)
         _ret = VarnameInterfaceHelper.toPy(_ret_c)
         assert _ret is not None

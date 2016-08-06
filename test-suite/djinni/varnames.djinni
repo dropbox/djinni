@@ -6,6 +6,6 @@ _varname_record_ = record {
 }
 
 _varname_interface_ = interface +c {
-    _rmethod_(r: _varname_record_): _varname_record_;
-    _imethod_(i: _varname_interface_): _varname_interface_;
+    _rmethod_(_r_arg_: _varname_record_): _varname_record_;
+    _imethod_(_i_arg_: _varname_interface_): _varname_interface_;
 }

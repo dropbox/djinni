@@ -8,8 +8,8 @@
 
 @interface DBVarnameInterface : NSObject
 
-- (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)r;
+- (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)RArg;
 
-- (nullable DBVarnameInterface *)Imethod:(nullable DBVarnameInterface *)i;
+- (nullable DBVarnameInterface *)Imethod:(nullable DBVarnameInterface *)IArg;
 
 @end

@@ -8,7 +8,7 @@ struct DjinniWrapperVarnameInterface;
 void _varname_interface____wrapper_dec_ref(struct DjinniWrapperVarnameInterface * dh);
 void _varname_interface____wrapper_add_ref(struct DjinniWrapperVarnameInterface * dh);
 
-struct DjinniRecordHandle * cw___varname_interface___rmethod_(struct DjinniWrapperVarnameInterface * djinni_this, struct DjinniRecordHandle * r);
+struct DjinniRecordHandle * cw___varname_interface___rmethod_(struct DjinniWrapperVarnameInterface * djinni_this, struct DjinniRecordHandle * _r_arg_);
 
-struct DjinniWrapperVarnameInterface * cw___varname_interface___imethod_(struct DjinniWrapperVarnameInterface * djinni_this, struct DjinniWrapperVarnameInterface * i);
+struct DjinniWrapperVarnameInterface * cw___varname_interface___imethod_(struct DjinniWrapperVarnameInterface * djinni_this, struct DjinniWrapperVarnameInterface * _i_arg_);
 

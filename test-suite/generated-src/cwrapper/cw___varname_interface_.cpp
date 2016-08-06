@@ -31,16 +31,16 @@ djinni::Handle<DjinniWrapperVarnameInterface> DjinniWrapperVarnameInterface::wra
     return nullptr;
 }
 
-DjinniRecordHandle * cw___varname_interface___rmethod_(DjinniWrapperVarnameInterface * djinni_this, DjinniRecordHandle * r) {
-    djinni::Handle<DjinniRecordHandle> _r(r, _varname_record____delete);
+DjinniRecordHandle * cw___varname_interface___rmethod_(DjinniWrapperVarnameInterface * djinni_this, DjinniRecordHandle * _r_arg_) {
+    djinni::Handle<DjinniRecordHandle> __r_arg_(_r_arg_, _varname_record____delete);
     try {
-        return DjinniVarnameRecord::fromCpp(djinni_this->wrapped_obj->_rmethod_(DjinniVarnameRecord::toCpp(std::move(_r)))).release();
+        return DjinniVarnameRecord::fromCpp(djinni_this->wrapped_obj->_rmethod_(DjinniVarnameRecord::toCpp(std::move(__r_arg_)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniWrapperVarnameInterface * cw___varname_interface___imethod_(DjinniWrapperVarnameInterface * djinni_this, DjinniWrapperVarnameInterface * i) {
-    djinni::Handle<DjinniWrapperVarnameInterface> _i(i, _varname_interface____wrapper_dec_ref);
+DjinniWrapperVarnameInterface * cw___varname_interface___imethod_(DjinniWrapperVarnameInterface * djinni_this, DjinniWrapperVarnameInterface * _i_arg_) {
+    djinni::Handle<DjinniWrapperVarnameInterface> __i_arg_(_i_arg_, _varname_interface____wrapper_dec_ref);
     try {
-        return DjinniWrapperVarnameInterface::wrap(djinni_this->wrapped_obj->_imethod_(DjinniWrapperVarnameInterface::get(std::move(_i)))).release();
+        return DjinniWrapperVarnameInterface::wrap(djinni_this->wrapped_obj->_imethod_(DjinniWrapperVarnameInterface::get(std::move(__i_arg_)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
