@@ -141,14 +141,12 @@ package object generatorTools {
 
   object JavaAccessModifier extends Enumeration {
     val Public = Value("public")
-    val Protected = Value("protected")
     val Package = Value("package")
 
     def getCodeGenerationString(javaAccessModifier: JavaAccessModifier.Value): String = {
       javaAccessModifier match {
         case Public => "public "
-        case Protected => "protected "
-        case Package => ""
+        case Package => "/*package*/ "
       }
     }
 

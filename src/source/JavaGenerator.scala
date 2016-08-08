@@ -213,7 +213,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     r.fields.foreach(f => refs.find(f.ty))
 
     val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
-    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final" else ""
+    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
 
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
@@ -226,7 +226,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         } else {
           ""
         }
-      w.w(s"${javaClassAccessModifierString}$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
+      w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.

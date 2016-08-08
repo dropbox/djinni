@@ -100,7 +100,7 @@ object Main {
         .text("The output for the Java files (Generator disabled if unspecified).")
       opt[String]("java-package").valueName("...").foreach(x => javaPackage = Some(x))
         .text("The package name to use for generated Java classes.")
-      opt[JavaAccessModifier.Value]("java-class-access-modifier").valueName("<public/protected/package>").foreach(x => javaClassAccessModifier = x)
+      opt[JavaAccessModifier.Value]("java-class-access-modifier").valueName("<public/package>").foreach(x => javaClassAccessModifier = x)
         .text("The access modifier to use for generated Java classes (default: public).")
       opt[String]("java-cpp-exception").valueName("<exception-class>").foreach(x => javaCppException = Some(x))
         .text("The type for translated C++ exceptions in Java (default: java.lang.RuntimeException that is not checked)")
