@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public final class ItemList {
+/*package*/ final class ItemList {
 
 
     /*package*/ final ArrayList<String> mItems;

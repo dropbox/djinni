@@ -30,6 +30,7 @@ package object generatorTools {
   case class Spec(
                    javaOutFolder: Option[File],
                    javaPackage: Option[String],
+                   javaClassAccessModifier: JavaAccessModifier.Value,
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
@@ -137,6 +138,20 @@ package object generatorTools {
       None
     }
   }
+
+  object JavaAccessModifier extends Enumeration {
+    val Public = Value("public")
+    val Package = Value("package")
+
+    def getCodeGenerationString(javaAccessModifier: JavaAccessModifier.Value): String = {
+      javaAccessModifier match {
+        case Public => "public "
+        case Package => "/*package*/ "
+      }
+    }
+
+  }
+  implicit val javaAccessModifierReads: scopt.Read[JavaAccessModifier.Value] = scopt.Read.reads(JavaAccessModifier withName _)
 
   final case class SkipFirst() {
     private var first = true
