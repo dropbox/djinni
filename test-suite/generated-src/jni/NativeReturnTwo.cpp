@@ -3,7 +3,6 @@
 
 #include "NativeReturnTwo.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeReturnTwo.hpp"
 
 namespace djinni_generated {
 

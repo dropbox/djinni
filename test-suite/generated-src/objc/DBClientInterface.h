@@ -7,7 +7,7 @@
 
 
 /** Client interface */
-@protocol DBClientInterface
+@protocol DBClientInterface <NSObject>
 
 /** Returns record of given string */
 - (nonnull DBClientReturnedRecord *)getRecord:(int64_t)recordId

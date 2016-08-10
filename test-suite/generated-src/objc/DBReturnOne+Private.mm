@@ -3,11 +3,11 @@
 
 #import "DBReturnOne+Private.h"
 #import "DBReturnOne.h"
-#import "DBReturnOne+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -30,17 +30,24 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::ReturnOne>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBReturnOne methods
+
 + (nullable DBReturnOne *)getInstance {
     try {
-        auto r = ::testsuite::ReturnOne::get_instance();
-        return ::djinni_generated::ReturnOne::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::ReturnOne::get_instance();
+        return ::djinni_generated::ReturnOne::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (int8_t)returnOne {
     try {
-        auto r = _cppRefHandle.get()->return_one();
-        return ::djinni::I8::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->return_one();
+        return ::djinni::I8::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -51,7 +58,7 @@ auto ReturnOne::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ReturnOne::fromCppOpt(const CppOptType& cpp) -> ObjcType

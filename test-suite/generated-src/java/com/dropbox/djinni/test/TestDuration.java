@@ -89,5 +89,7 @@ public abstract class TestDuration {
             destroy();
             super.finalize();
         }
+
+        // TestDuration methods
     }
 }

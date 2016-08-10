@@ -37,6 +37,8 @@ public abstract class ReturnOne {
             super.finalize();
         }
 
+        // ReturnOne methods
+
         @Override
         public byte returnOne()
         {

@@ -31,6 +31,8 @@ public abstract class ExternInterface1 {
             super.finalize();
         }
 
+        // ExternInterface1 methods
+
         @Override
         public com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i)
         {

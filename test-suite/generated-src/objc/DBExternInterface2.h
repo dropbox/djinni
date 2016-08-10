@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 
 
-@protocol DBExternInterface2
+@protocol DBExternInterface2 <NSObject>
 
 - (nonnull DBExternRecordWithDerivings *)foo:(nullable DBTestHelpers *)i;
 

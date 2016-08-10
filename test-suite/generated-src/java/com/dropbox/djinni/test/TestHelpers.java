@@ -104,5 +104,7 @@ public abstract class TestHelpers {
             destroy();
             super.finalize();
         }
+
+        // TestHelpers methods
     }
 }

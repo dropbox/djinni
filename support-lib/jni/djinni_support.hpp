@@ -591,6 +591,9 @@ private:
 jstring jniStringFromUTF8(JNIEnv * env, const std::string & str);
 std::string jniUTF8FromString(JNIEnv * env, const jstring jstr);
 
+jstring jniStringFromWString(JNIEnv * env, const std::wstring & str);
+std::wstring jniWStringFromString(JNIEnv * env, const jstring jstr);
+
 class JniEnum {
 public:
     /*

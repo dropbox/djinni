@@ -36,6 +36,8 @@ public abstract class CppException {
             super.finalize();
         }
 
+        // CppException methods
+
         @Override
         public int throwAnException()
         {

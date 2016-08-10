@@ -8,6 +8,7 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -30,10 +31,17 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::ExternInterface1>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBExternInterface1 methods
+
 - (nonnull DBClientReturnedRecord *)foo:(nullable id<DBClientInterface>)i {
     try {
-        auto r = _cppRefHandle.get()->foo(::djinni_generated::ClientInterface::toCpp(i));
-        return ::djinni_generated::ClientReturnedRecord::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->foo(::djinni_generated::ClientInterface::toCpp(i));
+        return ::djinni_generated::ClientReturnedRecord::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -44,7 +52,7 @@ auto ExternInterface1::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ExternInterface1::fromCppOpt(const CppOptType& cpp) -> ObjcType

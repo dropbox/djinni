@@ -178,6 +178,25 @@ namespace djinni
         }
     };
 
+    struct WString
+    {
+        using CppType = std::wstring;
+        using JniType = jstring;
+
+        using Boxed = WString;
+
+        static CppType toCpp(JNIEnv* jniEnv, JniType j)
+        {
+            assert(j != nullptr);
+            return jniWStringFromString(jniEnv, j);
+        }
+
+        static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
+        {
+            return {jniEnv, jniStringFromWString(jniEnv, c)};
+        }
+    };
+
     struct Binary
     {
         using CppType = std::vector<uint8_t>;

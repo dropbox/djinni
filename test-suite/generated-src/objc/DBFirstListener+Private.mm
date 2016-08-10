@@ -4,6 +4,7 @@
 #import "DBFirstListener+Private.h"
 #import "DBFirstListener.h"
 #import "DJIObjcWrapperCache+Private.h"
+#include <stdexcept>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -15,6 +16,8 @@ class FirstListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // FirstListener methods
     void first() override
     {
         @autoreleasepool {

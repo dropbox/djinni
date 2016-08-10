@@ -49,7 +49,11 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
   private def arcAssert(w: IndentWriter) = w.wl("static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");")
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
-    // No generation required
+    var imports = mutable.TreeSet[String]()
+    imports.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
+    imports.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
+
+    writeObjcFile(objcppMarshal.privateHeaderName(ident.name), origin, imports, w => {} )
   }
 
   def headerName(ident: String): String = idObjc.ty(ident) + "." + spec.objcHeaderExt
@@ -81,6 +85,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     }
 
     refs.body.add("!#import " + q(spec.objcppIncludeObjcPrefix + headerName(ident)))
+    refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
 
     spec.cppNnHeader match {
       case Some(nnHdr) => refs.privHeader.add("#include " + nnHdr)
@@ -121,16 +126,21 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     })
 
     if (i.ext.cpp) {
-      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJICppWrapperCache+Private.h"))
       refs.body.add("#include <utility>")
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
       refs.body.add("#include <exception>")
     }
+    if (!spec.cppNnType.isEmpty || !spec.cppNnCheckExpression.nonEmpty) {
+      refs.body.add("#include <stdexcept>")
+    }
 
     if (i.ext.objc) {
       refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIObjcWrapperCache+Private.h"))
-      refs.body.add("!#import " + q(spec.objcppIncludePrefix + objcppMarshal.privateHeaderName(ident.name)))
+    }
+
+    if (!i.ext.cpp && !i.ext.objc) {
+      refs.body.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIError.h"))
     }
 
     writeObjcFile(privateBodyName(ident.name), origin, refs.body, w => {
@@ -225,7 +235,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             // supertype's cppRef.
             w.wl("return " + nnCheck("[objc cppRef]") + ";")
             //w.wl(s"return ${spec.cppNnCheckExpression.getOrElse("")}(objc->_cppRefHandle.get());")
-          } else {
+          } else if (i.ext.cpp || i.ext.objc) {
             // ObjC only, or ObjC and C++.
             if (i.ext.cpp) {
               // If it could be implemented in C++, we might have to unwrap a proxy object.
@@ -236,6 +246,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             }
             val getProxyExpr = s"::djinni::get_objc_proxy<ObjcProxy>(objc)"
             w.wl(s"return ${nnCheck(getProxyExpr)};")
+          } else {
+            // Neither ObjC nor C++.  Unusable, but generate compilable code.
+            w.wl("DJINNI_UNIMPLEMENTED(@\"Interface not implementable in any language.\");")
           }
         }
         w.wl
@@ -248,7 +261,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
             // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
             // throw bad_cast if we gave it something of the wrong type.
             w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();")
-          } else {
+          } else if (i.ext.objc || i.ext.cpp) {
             // C++ only, or C++ and ObjC.
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
@@ -257,6 +270,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
               }
             }
             w.wl(s"return ::djinni::get_cpp_proxy<$objcSelf>(cpp);")
+          } else {
+            // Neither ObjC nor C++.  Unusable, but generate compilable code.
+            w.wl("DJINNI_UNIMPLEMENTED(@\"Interface not implementable in any language.\");")
           }
         }
       })
@@ -294,12 +310,12 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
               }
             }
           })
-          val ret = m.ret.fold("")(_ => "auto r = ")
+          val ret = m.ret.fold("")(_ => "auto objcpp_result_ = ")
           val call = ret + (if (!m.static) "_cppRefHandle.get()->" else cppName + "::") + idCpp.method(m.ident) + "("
           writeAlignedCall(w, call, m.params, ")", p => objcppMarshal.toCpp(p.ty, idObjc.local(p.ident.name)))
 
           w.wl(";")
-          m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "r")};"))
+          m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "objcpp_result_")};"))
         }
       }
     }
@@ -311,7 +327,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
       w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
         w.w("@autoreleasepool").braced {
-          val ret = m.ret.fold("")(_ => "auto r = ")
+          val ret = m.ret.fold("")(_ => "auto objcpp_result_ = ")
           val call = s"[Handle::get() ${idObjc.method(m.ident)}"
           writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
           w.wl(";")
@@ -327,7 +343,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
                 w.wl(s"""throw std::invalid_argument("$exceptionReason");""")
               }
             }
-            w.wl(s"return ${objcppMarshal.toCpp(ty, "r")};")
+            w.wl(s"return ${objcppMarshal.toCpp(ty, "objcpp_result_")};")
           })
         }
       }
@@ -408,9 +424,16 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       w.wl("// This file generated by Djinni from " + origin)
       w.wl
       if (refs.nonEmpty) {
-        // Ignore the ! in front of each line; used to put own headers to the top
-        // according to Objective-C style guide
-        refs.foreach(s => w.wl(if (s.charAt(0) == '!') s.substring(1) else s))
+        var included = mutable.TreeSet[String]();
+        for (s <- refs) {
+          // Ignore the ! in front of each line; used to put own headers to the top
+          // according to Objective-C style guide
+          val include = if (s.charAt(0) == '!') s.substring(1) else s
+          if (!included.contains(include)) {
+            included += include
+            w.wl(include)
+          }
+        }
         w.wl
       }
       f(w)

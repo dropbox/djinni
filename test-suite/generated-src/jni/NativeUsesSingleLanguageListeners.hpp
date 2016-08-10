@@ -34,7 +34,9 @@ private:
         ~JavaProxy();
 
         void callForObjC(const std::shared_ptr<::testsuite::ObjcOnlyListener> & l) override;
+        std::shared_ptr<::testsuite::ObjcOnlyListener> returnForObjC() override;
         void callForJava(const std::shared_ptr<::testsuite::JavaOnlyListener> & l) override;
+        std::shared_ptr<::testsuite::JavaOnlyListener> returnForJava() override;
 
     private:
         friend ::djinni::JniInterface<::testsuite::UsesSingleLanguageListeners, ::djinni_generated::NativeUsesSingleLanguageListeners>;
@@ -42,7 +44,9 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/UsesSingleLanguageListeners") };
     const jmethodID method_callForObjC { ::djinni::jniGetMethodID(clazz.get(), "callForObjC", "(Lcom/dropbox/djinni/test/ObjcOnlyListener;)V") };
+    const jmethodID method_returnForObjC { ::djinni::jniGetMethodID(clazz.get(), "returnForObjC", "()Lcom/dropbox/djinni/test/ObjcOnlyListener;") };
     const jmethodID method_callForJava { ::djinni::jniGetMethodID(clazz.get(), "callForJava", "(Lcom/dropbox/djinni/test/JavaOnlyListener;)V") };
+    const jmethodID method_returnForJava { ::djinni::jniGetMethodID(clazz.get(), "returnForJava", "()Lcom/dropbox/djinni/test/JavaOnlyListener;") };
 };
 
 }  // namespace djinni_generated

@@ -43,6 +43,8 @@ public abstract class ReverseClientInterface {
             super.finalize();
         }
 
+        // ReverseClientInterface methods
+
         @Override
         public String returnStr()
         {

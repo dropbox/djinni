@@ -29,6 +29,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   val javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val javaNonnullAnnotation = spec.javaNonnullAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaClassAccessModifierString = JavaAccessModifier.getCodeGenerationString(spec.javaClassAccessModifier)
   val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
@@ -109,7 +110,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(ident, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public enum ${marshal.typename(ident, e)}").braced {
+      w.w(s"${javaClassAccessModifierString}enum ${marshal.typename(ident, e)}").braced {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
@@ -150,7 +151,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
       // In java we need to add an "extends Type" to a class to subclass it.
       val extendsDef = if (superTypename.isDefined) " extends " + superTypename.get else ""
-      w.w(s"public abstract class $javaClass$typeParamList$extendsDef").braced {
+      w.w(s"${javaClassAccessModifierString}abstract class $javaClass$typeParamList$extendsDef").braced {
         val skipFirst = SkipFirst()
         generateJavaConstants(w, i.consts)
 
@@ -237,7 +238,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     r.fields.foreach(f => refs.find(f.ty))
 
     val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
-    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) " final" else ""
+    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
 
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
@@ -250,7 +251,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         } else {
           ""
         }
-      w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
+      w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.

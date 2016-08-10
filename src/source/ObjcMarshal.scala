@@ -63,7 +63,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
         List(ImportRef(include(d.name)))
       case DInterface =>
         val ext = d.body.asInstanceOf[Interface].ext
-        if (ext.cpp && !ext.objc) {
+        if (!ext.objc) {
           List(ImportRef("<Foundation/Foundation.h>"), DeclRef(s"@class ${typename(d.name, d.body)};", None))
         }
         else {
@@ -124,7 +124,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
               case DRecord => (idObjc.ty(d.name), true)
               case DInterface =>
                 val ext = d.body.asInstanceOf[Interface].ext
-                if (ext.cpp && !ext.objc)
+                if (!ext.objc)
                   (idObjc.ty(d.name), true)
                 else
                   (s"id<${idObjc.ty(d.name)}>", false)

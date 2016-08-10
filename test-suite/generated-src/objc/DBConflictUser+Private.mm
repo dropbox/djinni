@@ -8,6 +8,7 @@
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -30,17 +31,24 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::ConflictUser>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBConflictUser methods
+
 - (nullable DBConflict *)Conflict {
     try {
-        auto r = _cppRefHandle.get()->Conflict();
-        return ::djinni_generated::Conflict::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->Conflict();
+        return ::djinni_generated::Conflict::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (BOOL)conflictArg:(nonnull NSSet<DBConflict *> *)cs {
     try {
-        auto r = _cppRefHandle.get()->conflict_arg(::djinni::Set<::djinni_generated::Conflict>::toCpp(cs));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->conflict_arg(::djinni::Set<::djinni_generated::Conflict>::toCpp(cs));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -51,7 +59,7 @@ auto ConflictUser::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ConflictUser::fromCppOpt(const CppOptType& cpp) -> ObjcType
