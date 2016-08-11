@@ -38,7 +38,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBReverseClientInterface"; }
+    virtual const std::string objcProxyClassName() { return "DBReverseClientInterface"; }
 
     virtual std::string return_str() const = 0;
 

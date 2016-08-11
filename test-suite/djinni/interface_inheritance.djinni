@@ -1,0 +1,44 @@
+interface_inheritance_constant = interface {
+	const base_method_return_value: string = "base_method";
+	const base_override_method_return_value: string = "override_method";
+
+	const sub_method_return_value: string = "sub_method";
+	const sub_override_method_return_value: string = "sub_override_method";
+}
+
+base_cpp_interface_inheritance = interface +c {
+	base_method(): string;
+	override_method(): string;	
+
+	static create(): base_cpp_interface_inheritance;
+}
+
+sub_cpp_interface_inheritance = interface extends base_cpp_interface_inheritance +c {
+	sub_method(): string;
+
+	static create(): sub_cpp_interface_inheritance;
+}
+
+base_objc_java_interface_inheritance = interface +o +j {
+	base_method(): string;
+	override_method(): string;	
+}
+
+sub_objc_java_interface_inheritance = interface extends base_objc_java_interface_inheritance +o +j {
+	sub_method(): string;
+}
+
+interface_encapsulator = interface +c {
+	set_cpp_object(object: base_cpp_interface_inheritance);
+	get_cpp_object(): base_cpp_interface_inheritance;
+	sub_cpp_as_base_cpp(): base_cpp_interface_inheritance;
+
+	set_objc_java_object(object: base_objc_java_interface_inheritance);
+	get_objc_java_object(): base_objc_java_interface_inheritance;
+
+	# Takes a sub interface object through a base interface argument, then cast the argument back to 
+	# the sub interface. Returning null signifies failure.
+	cast_base_arg_to_sub(subAsBase: base_objc_java_interface_inheritance): sub_objc_java_interface_inheritance;
+
+	static create(): interface_encapsulator;
+}

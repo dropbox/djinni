@@ -264,6 +264,21 @@ private def resolveRecord(scope: Scope, r: Record) {
 }
 
 private def resolveInterface(idl: Seq[TypeDecl], scope: Scope, i: Interface) {
+  // Check that the inherited interface 1) exists, 2) is in fact an interface, and 3) is implemented in the same language
+  if (i.superIdent.isDefined) {
+    val superIdent = i.superIdent.get
+    idl.find(td => td.ident.name == superIdent.name) match {
+      case Some(superDecl) => superDecl.body match {
+        case si: Interface =>
+          if (!si.ext.equals(i.ext))
+            throw Error(superIdent.loc, "Sub-interface implementation declarations (+j +o +c) must match super-interface.").toException
+          else None // All good!
+        case _ => throw Error(superIdent.loc, s"'${superIdent.name}' is not an interface. Interfaces can only extend other interfaces.").toException
+      }
+      case None => throw Error(superIdent.loc, s"Unknown interface '${superIdent.name}'").toException
+    }
+  }
+
   // Const and static methods are only allowed on +c (only) interfaces
   if (i.ext.java || i.ext.objc) {
     for (m <- i.methods) {
@@ -273,19 +288,6 @@ private def resolveInterface(idl: Seq[TypeDecl], scope: Scope, i: Interface) {
         throw Error(m.ident.loc, "const method not allowed for +j or +o +p interfaces").toException
     }
   }
-
-  // Check that the inherited interface 1) exists, and 2) is in fact an interface
-  if (i.superIdent.isDefined) {
-    val superIdent = i.superIdent.get
-    idl.find(td => td.ident.name == superIdent.name) match {
-      case Some(superDecl) => superDecl.body match {
-        case i: Interface => // All good!
-        case _ => throw Error(superIdent.loc, s"'${superIdent.name}' is not an interface. Interfaces can only extend other interfaces.").toException
-      }
-      case None => throw Error(superIdent.loc, s"Unknown interface '${superIdent.name}'").toException
-    }
-  }
-
 
   // Static+const isn't valid
   if (i.ext.cpp) {

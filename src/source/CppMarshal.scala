@@ -27,7 +27,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
   }
 
   def superTypename(ty: TypeDef): Option[String] = ty match {
-    case i: Interface => if (i.superIdent.isDefined) Some(i.superIdent.get.name) else None
+    case i: Interface => if (i.superIdent.isDefined) Some(idCpp.ty(i.superIdent.get.name)) else None
     case _ => None
   }
 

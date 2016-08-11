@@ -39,7 +39,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBReturnTwo"; }
+    virtual const std::string objcProxyClassName() { return "DBReturnTwo"; }
 
     static std::shared_ptr<ReturnTwo> get_instance();
 

@@ -41,7 +41,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBConstantsInterface"; }
+    virtual const std::string objcProxyClassName() { return "DBConstantsInterface"; }
 
     static bool const BOOL_CONSTANT;
 

@@ -46,7 +46,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBListenerCaller"; }
+    virtual const std::string objcProxyClassName() { return "DBListenerCaller"; }
 
     static std::shared_ptr<ListenerCaller> init(const std::shared_ptr<FirstListener> & first_l, const std::shared_ptr<SecondListener> & second_l);
 

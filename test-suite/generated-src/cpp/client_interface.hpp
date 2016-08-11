@@ -43,7 +43,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBClientInterface"; }
+    virtual const std::string objcProxyClassName() { return "DBClientInterface"; }
 
     /** Returns record of given string */
     virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) = 0;

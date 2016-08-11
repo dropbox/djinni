@@ -38,7 +38,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBWcharTestHelpers"; }
+    virtual const std::string objcProxyClassName() { return "DBWcharTestHelpers"; }
 
     static WcharTestRec get_record();
 

@@ -40,7 +40,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBConflictUser"; }
+    virtual const std::string objcProxyClassName() { return "DBConflictUser"; }
 
     virtual std::shared_ptr<::testsuite::Conflict> Conflict() = 0;
 

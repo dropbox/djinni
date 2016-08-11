@@ -318,7 +318,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(" */")
         w.wl(s"virtual const std::string jniProxyClassName() { return $jniProxyClassName; }")
 
-        val objcTypeName = q(objcMarshal.typename(ident, i))
+        val objcTypeName = objcMarshal.typename(ident, i)
+        val objcProxyClassName = q(if (i.ext.objc && i.ext.cpp) objcTypeName + "CppProxy" else objcTypeName)
+
         w.wl
         w.wl("/**")
         w.wl(" * Defines the name of the Objective-C type for the class. Used to convert a")
@@ -329,7 +331,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         w.wl(" * ")
         w.wl(" * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp")
         w.wl(" */")
-        w.wl(s"virtual const std::string objcTypeName() { return $objcTypeName; }")
+        w.wl(s"virtual const std::string objcProxyClassName() { return $objcProxyClassName; }")
 
         // Constants
         generateHppConstants(w, i.consts)

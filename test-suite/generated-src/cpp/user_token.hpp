@@ -36,7 +36,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBUserToken"; }
+    virtual const std::string objcProxyClassName() { return "DBUserTokenCppProxy"; }
 
     virtual std::string whoami() = 0;
 };

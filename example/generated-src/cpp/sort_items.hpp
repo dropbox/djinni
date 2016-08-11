@@ -41,7 +41,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "TXSSortItems"; }
+    virtual const std::string objcProxyClassName() { return "TXSSortItems"; }
 
     /** For the iOS / Android demo */
     virtual void sort(sort_order order, const ItemList & items) = 0;

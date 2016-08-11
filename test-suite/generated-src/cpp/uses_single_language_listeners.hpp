@@ -44,7 +44,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBUsesSingleLanguageListeners"; }
+    virtual const std::string objcProxyClassName() { return "DBUsesSingleLanguageListenersCppProxy"; }
 
     virtual void callForObjC(const std::shared_ptr<ObjcOnlyListener> & l) = 0;
 

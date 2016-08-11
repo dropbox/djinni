@@ -55,7 +55,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBTestHelpers"; }
+    virtual const std::string objcProxyClassName() { return "DBTestHelpers"; }
 
     /** Method with documentation */
     static SetRecord get_set_record();

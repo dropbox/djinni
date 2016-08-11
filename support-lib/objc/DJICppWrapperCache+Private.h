@@ -46,7 +46,7 @@ ObjcType * get_cpp_proxy_impl(const std::shared_ptr<CppType> & cppRef) {
         [] (const std::shared_ptr<void> & cppRef) -> std::pair<id, void *> {
             auto castCppRef = std::static_pointer_cast<CppType>(cppRef);
             return {
-                [((ObjcType *)[objc_getClass(castCppRef->objcTypeName().c_str()) alloc]) initWithCpp:castCppRef],
+                [((ObjcType *)[objc_getClass(castCppRef->objcProxyClassName().c_str()) alloc]) initWithCpp:castCppRef],
                 cppRef.get()
             };
         }

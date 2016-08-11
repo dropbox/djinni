@@ -38,7 +38,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBExternInterface2"; }
+    virtual const std::string objcProxyClassName() { return "DBExternInterface2"; }
 
     virtual ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & i) = 0;
 };

@@ -38,7 +38,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBCppException"; }
+    virtual const std::string objcProxyClassName() { return "DBCppException"; }
 
     virtual int32_t throw_an_exception() = 0;
 

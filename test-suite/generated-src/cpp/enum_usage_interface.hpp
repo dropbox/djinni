@@ -42,7 +42,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBEnumUsageInterface"; }
+    virtual const std::string objcProxyClassName() { return "DBEnumUsageInterfaceCppProxy"; }
 
     virtual color e(color e) = 0;
 

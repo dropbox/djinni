@@ -39,7 +39,7 @@ public:
      * 
      * @see get_cpp_proxy function in DJICppWrapperCache+Private.hpp
      */
-    virtual const std::string objcTypeName() { return "DBTestDuration"; }
+    virtual const std::string objcProxyClassName() { return "DBTestDuration"; }
 
     static std::string hoursString(std::chrono::duration<int32_t, std::ratio<3600>> dt);
 
