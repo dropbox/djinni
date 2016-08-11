@@ -16,6 +16,8 @@ class SecondListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // SecondListener methods
     void second() override
     {
         @autoreleasepool {

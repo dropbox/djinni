@@ -11,6 +11,8 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   override def typename(tm: MExpr): String = throw new AssertionError("not applicable")
   def typename(name: String, ty: TypeDef): String = throw new AssertionError("not applicable")
 
+  def superTypename(ty: TypeDef): Option[String] = objcMarshal.superTypename(ty)
+
   override def fqTypename(tm: MExpr): String = throw new AssertionError("not applicable")
   def fqTypename(name: String, ty: TypeDef): String = throw new AssertionError("not applicable")
 

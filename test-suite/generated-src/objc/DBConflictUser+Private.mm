@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::ConflictUser>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBConflictUser methods
+
 - (nullable DBConflict *)Conflict {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->Conflict();
@@ -52,7 +59,7 @@ auto ConflictUser::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ConflictUser::fromCppOpt(const CppOptType& cpp) -> ObjcType

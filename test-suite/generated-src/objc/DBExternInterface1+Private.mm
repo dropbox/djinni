@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::ExternInterface1>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBExternInterface1 methods
+
 - (nonnull DBClientReturnedRecord *)foo:(nullable id<DBClientInterface>)i {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->foo(::djinni_generated::ClientInterface::toCpp(i));
@@ -45,7 +52,7 @@ auto ExternInterface1::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ExternInterface1::fromCppOpt(const CppOptType& cpp) -> ObjcType

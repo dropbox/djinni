@@ -34,6 +34,8 @@ public abstract class UserToken {
             super.finalize();
         }
 
+        // UserToken methods
+
         @Override
         public String whoami()
         {

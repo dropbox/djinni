@@ -10,7 +10,7 @@
  * Generating and compiling this makes sure other languages don't break
  * on references to interfaces they don't need.
  */
-@protocol DBUsesSingleLanguageListeners
+@protocol DBUsesSingleLanguageListeners <NSObject>
 
 - (void)callForObjC:(nullable id<DBObjcOnlyListener>)l;
 

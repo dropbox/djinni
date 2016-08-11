@@ -120,16 +120,22 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new JavaRefs()
 
-    i.methods.map(m => {
-      m.params.map(p => refs.find(p.ty))
-      m.ret.foreach(refs.find)
-    })
-    i.consts.map(c => {
-      refs.find(c.ty)
-    })
+    def mapRefs(i: Interface) {
+      i.methods.map(m => {
+        m.params.map(p => refs.find(p.ty))
+        m.ret.foreach(refs.find)
+      })
+      i.consts.map(c => {
+        refs.find(c.ty)
+      })
+    }
+
+    marshal.superInterfacesForInterface(i, idl).foreach { mapRefs(_) }
+    mapRefs(i)
+
     if (i.ext.cpp) {
       refs.java.add("java.util.concurrent.atomic.AtomicBoolean")
     }
@@ -140,7 +146,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"${javaClassAccessModifierString}abstract class $javaClass$typeParamList").braced {
+
+      val superTypename = marshal.superTypename(i)
+
+      // In java we need to add an "extends Type" to a class to subclass it.
+      val extendsDef = if (superTypename.isDefined) " extends " + superTypename.get else ""
+      w.w(s"${javaClassAccessModifierString}abstract class $javaClass$typeParamList$extendsDef").braced {
         val skipFirst = SkipFirst()
         generateJavaConstants(w, i.consts)
 
@@ -188,24 +199,38 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
-              val ret = marshal.returnType(m.ret)
-              val returnStmt = m.ret.fold("")(_ => "return ")
-              val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
-              val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")
-              val meth = idJava.method(m.ident)
-              w.wl
-              w.wl(s"@Override")
-              w.wl(s"public $ret $meth($params)$throwException").braced {
-                w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
-                w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
-              }
-              w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
+
+            // For JNI support, Djinni generates a nested class, called CppProxy, which handles the bridging
+            // between Java and C++. The super interface methods need to be declared within the proxy.
+            w.wl; w.wl(s"// $javaClass methods")
+            writeCppProxyMethods(w, i.methods, throwException)
+
+            val superMethods = getInterfaceSuperMethods(i, idl)
+            if (!superMethods.isEmpty) {
+              w.wl; w.wl(s"// ${superTypename.getOrElse("Super")} methods")
+              writeCppProxyMethods(w, superMethods, throwException)
             }
           }
         }
       }
     })
+  }
+
+  def writeCppProxyMethods(w: IndentWriter, methods: Seq[Interface.Method], throwException: String) {
+    for (m <- methods if !m.static) { // Static methods not in CppProxy
+      val ret = marshal.returnType(m.ret)
+      val returnStmt = m.ret.fold("")(_ => "return ")
+      val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
+      val args = m.params.map(p => idJava.local(p.ident)).mkString(", ")
+      val meth = idJava.method(m.ident)
+      w.wl
+      w.wl(s"@Override")
+      w.wl(s"public $ret $meth($params)$throwException").braced {
+        w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
+        w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
+      }
+      w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
+    }
   }
 
   override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {

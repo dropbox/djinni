@@ -5,7 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
-@protocol DBEnumUsageInterface
+@protocol DBEnumUsageInterface <NSObject>
 
 - (DBColor)e:(DBColor)e;
 

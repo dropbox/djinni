@@ -128,6 +128,20 @@
 		CFFD58B41B041BD9001E10B6 /* DBConstantsInterface+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */; };
 		CFFD58B71B041BFD001E10B6 /* constants_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */; };
 		CFFD58B81B041BFD001E10B6 /* constants_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */; };
+		E07CADE91D58D44200567C5B /* base_cpp_interface_inheritance_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E07CADE71D58D44200567C5B /* base_cpp_interface_inheritance_impl.cpp */; };
+		E07CADEC1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E07CADEA1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.cpp */; };
+		E0EFF6C51D58F68A003F6C91 /* DBInterfaceInheritanceTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6C41D58F68A003F6C91 /* DBInterfaceInheritanceTests.mm */; };
+		E0EFF6CE1D590681003F6C91 /* DBInterfaceInheritanceConstant.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6CB1D590681003F6C91 /* DBInterfaceInheritanceConstant.mm */; };
+		E0EFF6CF1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6CD1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.mm */; };
+		E0EFF6D21D5906A2003F6C91 /* interface_encapsulator_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6D01D5906A2003F6C91 /* interface_encapsulator_impl.cpp */; };
+		E0EFF6D61D59070E003F6C91 /* interface_inheritance_constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6D41D59070E003F6C91 /* interface_inheritance_constant.cpp */; };
+		E0EFF6E01D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6D91D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.mm */; };
+		E0EFF6E21D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6DF1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.mm */; };
+		E0EFF6EF1D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6E81D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.mm */; };
+		E0EFF6F01D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6EB1D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.mm */; };
+		E0EFF6F11D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6EE1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.mm */; };
+		E0EFF6F71D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6F61D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.m */; };
+		E0EFF6FA1D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFF6F91D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -398,6 +412,43 @@
 		CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBConstantsInterface+Private.mm"; sourceTree = "<group>"; };
 		CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = constants_interface.cpp; sourceTree = "<group>"; };
 		CFFD58B61B041BFD001E10B6 /* constants_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = constants_interface.hpp; sourceTree = "<group>"; };
+		E07CADE71D58D44200567C5B /* base_cpp_interface_inheritance_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base_cpp_interface_inheritance_impl.cpp; sourceTree = "<group>"; };
+		E07CADE81D58D44200567C5B /* base_cpp_interface_inheritance_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base_cpp_interface_inheritance_impl.hpp; sourceTree = "<group>"; };
+		E07CADEA1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sub_cpp_interface_inheritance_impl.cpp; sourceTree = "<group>"; };
+		E07CADEB1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sub_cpp_interface_inheritance_impl.hpp; sourceTree = "<group>"; };
+		E0EFF6C41D58F68A003F6C91 /* DBInterfaceInheritanceTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBInterfaceInheritanceTests.mm; sourceTree = "<group>"; };
+		E0EFF6CA1D590681003F6C91 /* DBInterfaceInheritanceConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBInterfaceInheritanceConstant.h; sourceTree = "<group>"; };
+		E0EFF6CB1D590681003F6C91 /* DBInterfaceInheritanceConstant.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBInterfaceInheritanceConstant.mm; sourceTree = "<group>"; };
+		E0EFF6CC1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBInterfaceInheritanceConstant+Private.h"; sourceTree = "<group>"; };
+		E0EFF6CD1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBInterfaceInheritanceConstant+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6D01D5906A2003F6C91 /* interface_encapsulator_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_encapsulator_impl.cpp; sourceTree = "<group>"; };
+		E0EFF6D11D5906A2003F6C91 /* interface_encapsulator_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface_encapsulator_impl.hpp; sourceTree = "<group>"; };
+		E0EFF6D41D59070E003F6C91 /* interface_inheritance_constant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_inheritance_constant.cpp; sourceTree = "<group>"; };
+		E0EFF6D51D59070E003F6C91 /* interface_inheritance_constant.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface_inheritance_constant.hpp; sourceTree = "<group>"; };
+		E0EFF6D71D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBBaseCppInterfaceInheritance.h; sourceTree = "<group>"; };
+		E0EFF6D81D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBBaseCppInterfaceInheritance+Private.h"; sourceTree = "<group>"; };
+		E0EFF6D91D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBBaseCppInterfaceInheritance+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6DD1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBSubCppInterfaceInheritance.h; sourceTree = "<group>"; };
+		E0EFF6DE1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBSubCppInterfaceInheritance+Private.h"; sourceTree = "<group>"; };
+		E0EFF6DF1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBSubCppInterfaceInheritance+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6E31D5A02D5003F6C91 /* base_cpp_interface_inheritance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base_cpp_interface_inheritance.hpp; sourceTree = "<group>"; };
+		E0EFF6E51D5A02D5003F6C91 /* sub_cpp_interface_inheritance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sub_cpp_interface_inheritance.hpp; sourceTree = "<group>"; };
+		E0EFF6E61D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBBaseObjcJavaInterfaceInheritance.h; sourceTree = "<group>"; };
+		E0EFF6E71D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBBaseObjcJavaInterfaceInheritance+Private.h"; sourceTree = "<group>"; };
+		E0EFF6E81D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBBaseObjcJavaInterfaceInheritance+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6E91D5A07B7003F6C91 /* DBInterfaceEncapsulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBInterfaceEncapsulator.h; sourceTree = "<group>"; };
+		E0EFF6EA1D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBInterfaceEncapsulator+Private.h"; sourceTree = "<group>"; };
+		E0EFF6EB1D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBInterfaceEncapsulator+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6EC1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBSubObjcJavaInterfaceInheritance.h; sourceTree = "<group>"; };
+		E0EFF6ED1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBSubObjcJavaInterfaceInheritance+Private.h"; sourceTree = "<group>"; };
+		E0EFF6EE1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBSubObjcJavaInterfaceInheritance+Private.mm"; sourceTree = "<group>"; };
+		E0EFF6F21D5A07CC003F6C91 /* base_objc_java_interface_inheritance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base_objc_java_interface_inheritance.hpp; sourceTree = "<group>"; };
+		E0EFF6F31D5A07CC003F6C91 /* interface_encapsulator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface_encapsulator.hpp; sourceTree = "<group>"; };
+		E0EFF6F41D5A07CC003F6C91 /* sub_objc_java_interface_inheritance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sub_objc_java_interface_inheritance.hpp; sourceTree = "<group>"; };
+		E0EFF6F51D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBBaseObjcJavaInterfaceInheritanceImpl.h; sourceTree = "<group>"; };
+		E0EFF6F61D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBBaseObjcJavaInterfaceInheritanceImpl.m; sourceTree = "<group>"; };
+		E0EFF6F81D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBSubObjcJavaInterfaceInheritanceImpl.h; sourceTree = "<group>"; };
+		E0EFF6F91D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBSubObjcJavaInterfaceInheritanceImpl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -442,6 +493,10 @@
 			children = (
 				6536CD7119A6C96C00DD7715 /* DBClientInterfaceImpl.h */,
 				6536CD7219A6C96C00DD7715 /* DBClientInterfaceImpl.mm */,
+				E0EFF6F51D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.h */,
+				E0EFF6F61D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.m */,
+				E0EFF6F81D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.h */,
+				E0EFF6F91D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.m */,
 			);
 			name = "handwritten-objc";
 			path = "../handwritten-src/objc/impl";
@@ -464,6 +519,12 @@
 				A278D45219BA3601006FD937 /* test_helpers.cpp */,
 				CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */,
 				6551684E1C40511C003682A4 /* return_one_two.cpp */,
+				E07CADE71D58D44200567C5B /* base_cpp_interface_inheritance_impl.cpp */,
+				E07CADE81D58D44200567C5B /* base_cpp_interface_inheritance_impl.hpp */,
+				E07CADEA1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.cpp */,
+				E07CADEB1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.hpp */,
+				E0EFF6D01D5906A2003F6C91 /* interface_encapsulator_impl.cpp */,
+				E0EFF6D11D5906A2003F6C91 /* interface_encapsulator_impl.hpp */,
 			);
 			name = "handwritten-cpp";
 			path = "../handwritten-src/cpp";
@@ -489,6 +550,7 @@
 				A200940E1B0697D300EF8D9B /* DBTokenTests.mm */,
 				6536CD8419A6C99800DD7715 /* DjinniObjcTestTests-Info.plist */,
 				6536CD8219A6C99800DD7715 /* InfoPlist.strings */,
+				E0EFF6C41D58F68A003F6C91 /* DBInterfaceInheritanceTests.mm */,
 			);
 			name = Tests;
 			path = "../handwritten-src/objc/tests";
@@ -571,6 +633,25 @@
 				B5F06A7F1D4973BD005BE736 /* DBObjcOnlyListener.h */,
 				B5F06A801D4973BD005BE736 /* DBObjcOnlyListener+Private.h */,
 				B5F06A811D4973BD005BE736 /* DBObjcOnlyListener+Private.mm */,
+				E0EFF6E61D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance.h */,
+				E0EFF6E71D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.h */,
+				E0EFF6E81D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.mm */,
+				E0EFF6E91D5A07B7003F6C91 /* DBInterfaceEncapsulator.h */,
+				E0EFF6EA1D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.h */,
+				E0EFF6EB1D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.mm */,
+				E0EFF6EC1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance.h */,
+				E0EFF6ED1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.h */,
+				E0EFF6EE1D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.mm */,
+				E0EFF6D71D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance.h */,
+				E0EFF6D81D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.h */,
+				E0EFF6D91D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.mm */,
+				E0EFF6DD1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance.h */,
+				E0EFF6DE1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.h */,
+				E0EFF6DF1D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.mm */,
+				E0EFF6CA1D590681003F6C91 /* DBInterfaceInheritanceConstant.h */,
+				E0EFF6CB1D590681003F6C91 /* DBInterfaceInheritanceConstant.mm */,
+				E0EFF6CC1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.h */,
+				E0EFF6CD1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.mm */,
 				B5D8FC321C23E2F40045ADCF /* DBConstantRecord.h */,
 				B5D8FC331C23E2F40045ADCF /* DBConstantRecord.mm */,
 				B5D8FC341C23E2F40045ADCF /* DBConstantRecord+Private.h */,
@@ -700,6 +781,13 @@
 				B5F06A6A1D497396005BE736 /* java_only_listener.hpp */,
 				B5F06A6B1D497396005BE736 /* objc_only_listener.hpp */,
 				B5F06A6C1D497396005BE736 /* uses_single_language_listeners.hpp */,
+				E0EFF6F21D5A07CC003F6C91 /* base_objc_java_interface_inheritance.hpp */,
+				E0EFF6F31D5A07CC003F6C91 /* interface_encapsulator.hpp */,
+				E0EFF6F41D5A07CC003F6C91 /* sub_objc_java_interface_inheritance.hpp */,
+				E0EFF6E31D5A02D5003F6C91 /* base_cpp_interface_inheritance.hpp */,
+				E0EFF6E51D5A02D5003F6C91 /* sub_cpp_interface_inheritance.hpp */,
+				E0EFF6D41D59070E003F6C91 /* interface_inheritance_constant.cpp */,
+				E0EFF6D51D59070E003F6C91 /* interface_inheritance_constant.hpp */,
 				B5D8FC381C23E30D0045ADCF /* constant_record.hpp */,
 				B5E9C93C1C1F9DCA0073C123 /* reverse_client_interface.hpp */,
 				B52DA56C1B103FBE005CE75F /* assorted_primitives.cpp */,
@@ -833,9 +921,11 @@
 				CFAED8761B54291900E3B8A3 /* DBEmptyRecord+Private.mm in Sources */,
 				655168421C404B81003682A4 /* DBFirstListener+Private.mm in Sources */,
 				A24850271AF96EBC00AFE907 /* DBClientReturnedRecord.mm in Sources */,
+				E0EFF6FA1D5A0ACF003F6C91 /* DBSubObjcJavaInterfaceInheritanceImpl.m in Sources */,
 				CFC5D9D61B15106400BF2DF8 /* DBExternRecordWithDerivings.mm in Sources */,
 				CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,
 				A238CA941AF84B7100CDDCE5 /* DBMapDateRecord+Private.mm in Sources */,
+				E0EFF6D21D5906A2003F6C91 /* interface_encapsulator_impl.cpp in Sources */,
 				CFFD588F1B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
 				A24850291AF96EBC00AFE907 /* DBDateRecord.mm in Sources */,
 				A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */,
@@ -862,8 +952,11 @@
 				B52DA5691B103F72005CE75F /* DBAssortedPrimitives.mm in Sources */,
 				A24850281AF96EBC00AFE907 /* DBConstants.mm in Sources */,
 				655168431C404B81003682A4 /* DBSecondListener+Private.mm in Sources */,
+				E0EFF6E01D5A02B5003F6C91 /* DBBaseCppInterfaceInheritance+Private.mm in Sources */,
 				CFFD58B71B041BFD001E10B6 /* constants_interface.cpp in Sources */,
 				CFAED8751B54291900E3B8A3 /* DBEmptyRecord.mm in Sources */,
+				E07CADEC1D58D55800567C5B /* sub_cpp_interface_inheritance_impl.cpp in Sources */,
+				E0EFF6EF1D5A07B7003F6C91 /* DBBaseObjcJavaInterfaceInheritance+Private.mm in Sources */,
 				A238CA9A1AF84B7100CDDCE5 /* DBNestedCollection+Private.mm in Sources */,
 				CFFD58911B019E79001E10B6 /* DBUserToken+Private.mm in Sources */,
 				B5153F9A1D54284100012654 /* DBJavaOnlyListener+Private.mm in Sources */,
@@ -880,6 +973,7 @@
 				B5F06A861D4973BD005BE736 /* DBConflictUser+Private.mm in Sources */,
 				B5E9C93B1C1F9D9D0073C123 /* reverse_client_interface_impl.cpp in Sources */,
 				CFC5D9D81B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,
+				E0EFF6CF1D590681003F6C91 /* DBInterfaceInheritanceConstant+Private.mm in Sources */,
 				A238CAA21AF84B7100CDDCE5 /* DBSetRecord+Private.mm in Sources */,
 				A2AE38491BB3074800B7A0C9 /* DJIProxyCaches.mm in Sources */,
 				A238CA9E1AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm in Sources */,
@@ -894,6 +988,7 @@
 				650CA05E1C2AB5AB007ADDDB /* ListenerCaller.cpp in Sources */,
 				A248502A1AF96EBC00AFE907 /* DBMapDateRecord.mm in Sources */,
 				B5F06A6D1D497396005BE736 /* extended_record_base.cpp in Sources */,
+				E0EFF6F71D5A09D8003F6C91 /* DBBaseObjcJavaInterfaceInheritanceImpl.m in Sources */,
 				A238CA8E1AF84B7100CDDCE5 /* DBClientReturnedRecord+Private.mm in Sources */,
 				B5F06A8A1D4973BD005BE736 /* DBExtendedRecord+Private.mm in Sources */,
 				6551684D1C4050A4003682A4 /* DBReturnTwo+Private.mm in Sources */,
@@ -904,9 +999,16 @@
 				A248502E1AF96EBC00AFE907 /* DBPrimitiveList.mm in Sources */,
 				B5F06A8C1D4973BD005BE736 /* DBObjcOnlyListener+Private.mm in Sources */,
 				B5153F961D54283700012654 /* DBUsesSingleLanguageListeners+Private.mm in Sources */,
+				E07CADE91D58D44200567C5B /* base_cpp_interface_inheritance_impl.cpp in Sources */,
+				A209B57A1BBA2A0A0070C310 /* DBOptColorRecord+Private.mm in Sources */,
 				B5D8FC371C23E2F40045ADCF /* DBConstantRecord+Private.mm in Sources */,
 				B519111B1D542B0700772DFE /* wchar_test_helpers.cpp in Sources */,
+				E0EFF6D61D59070E003F6C91 /* interface_inheritance_constant.cpp in Sources */,
+				E0EFF6E21D5A02B5003F6C91 /* DBSubCppInterfaceInheritance+Private.mm in Sources */,
+				E0EFF6F01D5A07B7003F6C91 /* DBInterfaceEncapsulator+Private.mm in Sources */,
 				A238CAA01AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm in Sources */,
+				E0EFF6F11D5A07B7003F6C91 /* DBSubObjcJavaInterfaceInheritance+Private.mm in Sources */,
+				E0EFF6CE1D590681003F6C91 /* DBInterfaceInheritanceConstant.mm in Sources */,
 				CFC5DA0A1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -945,6 +1047,7 @@
 				CFC5D9F31B15276900BF2DF8 /* DBDurationTests.m in Sources */,
 				CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
 				CFC5DA0B1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
+				E0EFF6C51D58F68A003F6C91 /* DBInterfaceInheritanceTests.mm in Sources */,
 				CFC5D9E91B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				6536CD9419A6C9A800DD7715 /* DBSetRecordTests.mm in Sources */,
 				CFC5D9D91B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,

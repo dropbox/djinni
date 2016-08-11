@@ -41,6 +41,8 @@ import javax.annotation.Nonnull;
             super.finalize();
         }
 
+        // SortItems methods
+
         @Override
         public void sort(SortOrder order, ItemList items)
         {

@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::UserToken>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBUserTokenCppProxy methods
+
 - (nonnull NSString *)whoami {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->whoami();
@@ -46,6 +53,8 @@ class UserToken::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // UserToken methods
     std::string whoami() override
     {
         @autoreleasepool {

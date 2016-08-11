@@ -35,5 +35,7 @@ public abstract class Conflict {
             destroy();
             super.finalize();
         }
+
+        // Conflict methods
     }
 }

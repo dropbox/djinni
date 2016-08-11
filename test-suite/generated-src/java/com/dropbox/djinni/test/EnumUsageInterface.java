@@ -49,6 +49,8 @@ public abstract class EnumUsageInterface {
             super.finalize();
         }
 
+        // EnumUsageInterface methods
+
         @Override
         public Color e(Color e)
         {

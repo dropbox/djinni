@@ -50,6 +50,14 @@ case class Ext(java: Boolean, cpp: Boolean, objc: Boolean) {
   def any(): Boolean = {
     java || cpp || objc
   }
+
+  override def equals(that: Any): Boolean = that match {
+    case that: Ext => that.java == this.java && that.objc == this.objc && that.cpp == this.cpp
+    case _ => false
+  }
+  override def hashCode:Int = {
+    (if (java) 1 << 0 else 0) | (if (cpp) 1 << 1 else 0) | (if (objc) 1 << 2 else 0)
+  }
 }
 
 case class TypeRef(expr: TypeExpr) {
@@ -74,7 +82,7 @@ object Record {
   }
 }
 
-case class Interface(ext: Ext, methods: Seq[Interface.Method], consts: Seq[Const]) extends TypeDef
+case class Interface(superIdent: Option[Ident], ext: Ext, methods: Seq[Interface.Method], consts: Seq[Const]) extends TypeDef
 object Interface {
   case class Method(ident: Ident, params: Seq[Field], ret: Option[TypeRef], doc: Doc, static: Boolean, const: Boolean)
 }

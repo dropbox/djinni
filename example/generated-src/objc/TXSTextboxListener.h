@@ -5,7 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
-@protocol TXSTextboxListener
+@protocol TXSTextboxListener <NSObject>
 
 - (void)update:(nonnull TXSItemList *)items;
 

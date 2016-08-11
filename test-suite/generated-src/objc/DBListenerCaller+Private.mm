@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::ListenerCaller>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBListenerCaller methods
+
 + (nullable DBListenerCaller *)init:(nullable id<DBFirstListener>)firstL
                             secondL:(nullable id<DBSecondListener>)secondL {
     try {
@@ -59,7 +66,7 @@ auto ListenerCaller::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ListenerCaller::fromCppOpt(const CppOptType& cpp) -> ObjcType

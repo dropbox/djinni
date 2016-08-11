@@ -30,6 +30,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::VarnameInterface>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBVarnameInterface methods
+
 - (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)RArg {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->_rmethod_(::djinni_generated::VarnameRecord::toCpp(RArg));
@@ -51,7 +58,7 @@ auto VarnameInterface::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto VarnameInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType

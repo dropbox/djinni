@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::WcharTestHelpers>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBWcharTestHelpers methods
+
 + (nonnull DBWcharTestRec *)getRecord {
     try {
         auto objcpp_result_ = ::testsuite::WcharTestHelpers::get_record();
@@ -66,7 +73,7 @@ auto WcharTestHelpers::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto WcharTestHelpers::fromCppOpt(const CppOptType& cpp) -> ObjcType

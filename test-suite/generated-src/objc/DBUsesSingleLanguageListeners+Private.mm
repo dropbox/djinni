@@ -32,6 +32,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::UsesSingleLanguageListeners>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBUsesSingleLanguageListenersCppProxy methods
+
 - (void)callForObjC:(nullable id<DBObjcOnlyListener>)l {
     try {
         _cppRefHandle.get()->callForObjC(::djinni_generated::ObjcOnlyListener::toCpp(l));
@@ -66,6 +73,8 @@ class UsesSingleLanguageListeners::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // UsesSingleLanguageListeners methods
     void callForObjC(const std::shared_ptr<::testsuite::ObjcOnlyListener> & c_l) override
     {
         @autoreleasepool {

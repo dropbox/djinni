@@ -30,6 +30,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::CppException>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBCppException methods
+
 - (int32_t)throwAnException {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->throw_an_exception();
@@ -51,7 +58,7 @@ auto CppException::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto CppException::fromCppOpt(const CppOptType& cpp) -> ObjcType

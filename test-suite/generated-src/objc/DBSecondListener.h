@@ -5,7 +5,7 @@
 
 
 /** Used for ObjC multiple inheritance tests */
-@protocol DBSecondListener
+@protocol DBSecondListener <NSObject>
 
 - (void)second;
 

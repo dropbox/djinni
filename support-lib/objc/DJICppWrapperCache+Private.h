@@ -16,8 +16,8 @@
 
 //  This header can only be imported to Objective-C++ source code!
 
-#import <Foundation/Foundation.h>
 #include <memory>
+#include <objc/runtime.h>
 
 #include "../proxy_cache_interface.hpp"
 
@@ -44,8 +44,9 @@ ObjcType * get_cpp_proxy_impl(const std::shared_ptr<CppType> & cppRef) {
         typeid(cppRef),
         cppRef,
         [] (const std::shared_ptr<void> & cppRef) -> std::pair<id, void *> {
+            auto castCppRef = std::static_pointer_cast<CppType>(cppRef);
             return {
-                [[ObjcType alloc] initWithCpp:std::static_pointer_cast<CppType>(cppRef)],
+                [((ObjcType *)[objc_getClass(castCppRef->objcProxyClassName().c_str()) alloc]) initWithCpp:castCppRef],
                 cppRef.get()
             };
         }

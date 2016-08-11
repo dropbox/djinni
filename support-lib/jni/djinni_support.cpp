@@ -546,12 +546,13 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcep
 template class ProxyCache<JavaProxyCacheTraits>;
 
 CppProxyClassInfo::CppProxyClassInfo(const char * className)
-    : clazz(jniFindClass(className)),
+    : proxyClassName{std::string(className)},
+      clazz(jniFindClass(className)),
       constructor(jniGetMethodID(clazz.get(), "<init>", "(J)V")),
       idField(jniGetFieldID(clazz.get(), "nativeRef", "J")) {
 }
 
-CppProxyClassInfo::CppProxyClassInfo() : constructor{}, idField{} {
+CppProxyClassInfo::CppProxyClassInfo() : proxyClassName{}, constructor{}, idField{} {
 }
 
 CppProxyClassInfo::~CppProxyClassInfo() {

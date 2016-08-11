@@ -18,6 +18,8 @@ class ExternInterface2::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // ExternInterface2 methods
     ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & c_i) override
     {
         @autoreleasepool {

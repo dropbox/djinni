@@ -70,7 +70,7 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
         scope = scope.updated(typeParam.ident.name, MParam(typeParam.ident.name))
       }
 
-      resolve(scope, typeDecl.body)
+      resolve(idl, scope, typeDecl.body)
     }
 
     for (typeDecl <- idl) {
@@ -84,11 +84,11 @@ def resolve(metas: Scope, idl: Seq[TypeDecl]): Option[Error] = {
   None
 }
 
-private def resolve(scope: Scope, typeDef: TypeDef) {
+private def resolve(idl: Seq[TypeDecl], scope: Scope, typeDef: TypeDef) {
   typeDef match {
     case e: Enum => resolveEnum(scope, e)
     case r: Record => resolveRecord(scope, r)
-    case i: Interface => resolveInterface(scope, i)
+    case i: Interface => resolveInterface(idl, scope, i)
   }
 }
 
@@ -263,7 +263,22 @@ private def resolveRecord(scope: Scope, r: Record) {
   }
 }
 
-private def resolveInterface(scope: Scope, i: Interface) {
+private def resolveInterface(idl: Seq[TypeDecl], scope: Scope, i: Interface) {
+  // Check that the inherited interface 1) exists, 2) is in fact an interface, and 3) is implemented in the same language
+  if (i.superIdent.isDefined) {
+    val superIdent = i.superIdent.get
+    idl.find(td => td.ident.name == superIdent.name) match {
+      case Some(superDecl) => superDecl.body match {
+        case si: Interface =>
+          if (!si.ext.equals(i.ext))
+            throw Error(superIdent.loc, "Sub-interface implementation declarations (+j +o +c) must match super-interface.").toException
+          else None // All good!
+        case _ => throw Error(superIdent.loc, s"'${superIdent.name}' is not an interface. Interfaces can only extend other interfaces.").toException
+      }
+      case None => throw Error(superIdent.loc, s"Unknown interface '${superIdent.name}'").toException
+    }
+  }
+
   // Const and static methods are only allowed on +c (only) interfaces
   if (i.ext.java || i.ext.objc) {
     for (m <- i.methods) {

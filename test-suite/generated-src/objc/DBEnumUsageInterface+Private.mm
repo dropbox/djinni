@@ -32,6 +32,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::EnumUsageInterface>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBEnumUsageInterfaceCppProxy methods
+
 - (DBColor)e:(DBColor)e {
     try {
         auto objcpp_result_ = _cppRefHandle.get()->e(::djinni::Enum<::testsuite::color, DBColor>::toCpp(e));
@@ -75,6 +82,8 @@ class EnumUsageInterface::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // EnumUsageInterface methods
     ::testsuite::color e(::testsuite::color c_e) override
     {
         @autoreleasepool {

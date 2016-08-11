@@ -40,5 +40,7 @@ public abstract class WcharTestHelpers {
             destroy();
             super.finalize();
         }
+
+        // WcharTestHelpers methods
     }
 }

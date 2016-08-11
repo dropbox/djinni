@@ -44,6 +44,8 @@ public abstract class ListenerCaller {
             super.finalize();
         }
 
+        // ListenerCaller methods
+
         @Override
         public void callFirst()
         {

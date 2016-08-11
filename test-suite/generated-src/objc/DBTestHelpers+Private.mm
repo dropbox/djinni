@@ -38,6 +38,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::TestHelpers>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBTestHelpers methods
+
 + (nonnull DBSetRecord *)getSetRecord {
     try {
         auto objcpp_result_ = ::testsuite::TestHelpers::get_set_record();
@@ -215,7 +222,7 @@ auto TestHelpers::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto TestHelpers::fromCppOpt(const CppOptType& cpp) -> ObjcType

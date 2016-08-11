@@ -45,6 +45,8 @@ public abstract class UsesSingleLanguageListeners {
             super.finalize();
         }
 
+        // UsesSingleLanguageListeners methods
+
         @Override
         public void callForObjC(ObjcOnlyListener l)
         {

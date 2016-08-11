@@ -31,6 +31,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::testsuite::ConstantsInterface>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// DBConstantsInterface methods
+
 - (void)dummy {
     try {
         _cppRefHandle.get()->dummy();
@@ -94,7 +101,7 @@ auto ConstantsInterface::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto ConstantsInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType

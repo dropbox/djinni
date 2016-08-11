@@ -97,6 +97,8 @@ public abstract class ConstantsInterface {
             super.finalize();
         }
 
+        // ConstantsInterface methods
+
         @Override
         public void dummy()
         {

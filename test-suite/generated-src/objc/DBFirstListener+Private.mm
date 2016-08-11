@@ -16,6 +16,8 @@ class FirstListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // FirstListener methods
     void first() override
     {
         @autoreleasepool {

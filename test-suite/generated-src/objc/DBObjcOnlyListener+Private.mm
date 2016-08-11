@@ -16,6 +16,8 @@ class ObjcOnlyListener::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // ObjcOnlyListener methods
 };
 
 }  // namespace djinni_generated

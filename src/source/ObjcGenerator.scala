@@ -74,7 +74,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
   /**
     * Generate Interface
     */
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(idl: Seq[TypeDecl], origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
@@ -87,6 +87,10 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     val self = marshal.typename(ident, i)
 
     refs.header.add("#import <Foundation/Foundation.h>")
+
+    if (i.superIdent.isDefined) {
+      refs.header.add ("#import " + q(spec.objcIncludePrefix + marshal.headerName(i.superIdent.get)))
+    }
 
     def writeObjcFuncDecl(method: Interface.Method, w: IndentWriter) {
       val label = if (method.static) "+" else "-"
@@ -105,7 +109,11 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       }
       w.wl
       writeDoc(w, doc)
-      if (i.ext.objc) w.wl(s"@protocol $self") else w.wl(s"@interface $self : NSObject")
+
+      // Top level Djinni protocols need to extend NSObject. Without extending NSObject, protocols can't leverage
+      // methods like respondsToSelector when the instance variable is of the form id<ProtocolName> ivarName;
+      val superTypename = marshal.superTypename(i).getOrElse("NSObject")
+      if (i.ext.objc) w.wl(s"@protocol $self <$superTypename>") else w.wl(s"@interface $self : $superTypename")
       for (m <- i.methods) {
         w.wl
         writeDoc(w, m.doc)

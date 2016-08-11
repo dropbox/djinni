@@ -32,6 +32,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
+- (const std::shared_ptr<::textsort::SortItems>&) cppRef
+{
+    return _cppRefHandle.get();
+}
+
+// TXSSortItems methods
+
 - (void)sort:(TXSSortOrder)order
        items:(nonnull TXSItemList *)items {
     try {
@@ -61,7 +68,7 @@ auto SortItems::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return [objc cppRef];
 }
 
 auto SortItems::fromCppOpt(const CppOptType& cpp) -> ObjcType

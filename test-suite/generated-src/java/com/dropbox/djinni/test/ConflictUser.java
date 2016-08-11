@@ -37,6 +37,8 @@ public abstract class ConflictUser {
             super.finalize();
         }
 
+        // ConflictUser methods
+
         @Override
         public Conflict Conflict()
         {

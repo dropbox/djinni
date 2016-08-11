@@ -18,6 +18,8 @@ class ClientInterface::ObjcProxy final
 {
 public:
     using Handle::Handle;
+
+    // ClientInterface methods
     ::testsuite::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
     {
         @autoreleasepool {
