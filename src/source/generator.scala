@@ -85,7 +85,8 @@ package object generatorTools {
   }
   def q(s: String) = '"' + s + '"'
   def firstUpper(token: String) = if (token.isEmpty()) token else token.charAt(0).toUpper + token.substring(1)
-
+  def toUpperCase(token: String) = token.toUpperCase
+  
   type IdentConverter = String => String
 
   case class CppIdentStyle(ty: IdentConverter, enumType: IdentConverter, typeParam: IdentConverter,
@@ -108,7 +109,11 @@ package object generatorTools {
     }
     val underLower = (s: String) => s
     val underUpper = (s: String) => s.split('_').map(firstUpper).mkString("_")
-    val underCaps = (s: String) => s.toUpperCase
+    val underCaps = (s: String) => {
+      // Splits the string either by underscores or Camel case. Underscores have precendence. 
+      val splitArr = if (s.contains("_")) s.split('_') else s.split("(?<=.)(?=\\p{Lu})")
+      splitArr.map(toUpperCase).mkString("_")
+    }
     val prefix = (prefix: String, suffix: IdentConverter) => (s: String) => prefix + suffix(s)
 
     val javaDefault = JavaIdentStyle(camelUpper, camelUpper, camelLower, camelLower, camelLower, underCaps, underCaps)
