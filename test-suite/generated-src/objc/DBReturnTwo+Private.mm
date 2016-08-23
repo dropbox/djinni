@@ -3,11 +3,11 @@
 
 #import "DBReturnTwo+Private.h"
 #import "DBReturnTwo.h"
-#import "DBReturnTwo+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -32,15 +32,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nullable DBReturnTwo *)getInstance {
     try {
-        auto r = ::testsuite::ReturnTwo::get_instance();
-        return ::djinni_generated::ReturnTwo::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::ReturnTwo::get_instance();
+        return ::djinni_generated::ReturnTwo::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (int8_t)returnTwo {
     try {
-        auto r = _cppRefHandle.get()->return_two();
-        return ::djinni::I8::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->return_two();
+        return ::djinni::I8::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

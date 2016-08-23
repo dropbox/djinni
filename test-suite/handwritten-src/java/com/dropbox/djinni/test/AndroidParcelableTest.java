@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import android.os.Parcel;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 
 public class AndroidParcelableTest extends TestCase {
 
@@ -37,19 +38,38 @@ public class AndroidParcelableTest extends TestCase {
         assertEquals(c1.getSetList(), c2.getSetList());
     }
 
-    private void performTestOptEnum(Color color) {
+    private void performEnumTest(Color color) {
+        ArrayList<Color> list = new ArrayList<Color>();
+        list.add(null);
+        list.add(Color.RED);
+        list.add(color);
+        list.add(Color.ORANGE);
+
+        HashSet<Color> set = new HashSet<Color>();
+        set.add(color);
+        set.add(Color.BLUE);
+
+        HashMap<Color, Color> map = new HashMap<Color, Color>();
+        map.put(null, color);
+        map.put(Color.ORANGE, Color.RED);
+
         Parcel parcel = new Parcel();
-        OptColorRecord r1 = new OptColorRecord(color);
+        EnumUsageRecord r1 = new EnumUsageRecord(Color.RED, color, list, set, map);
         r1.writeToParcel(parcel, 0);
         parcel.flush();
-        OptColorRecord r2 = new OptColorRecord(parcel);
-        assertEquals(r1.getMyColor(), r2.getMyColor());
+        EnumUsageRecord r2 = new EnumUsageRecord(parcel);
+
+        assertEquals(r1.getE(), r2.getE());
+        assertEquals(r1.getO(), r2.getO());
+        assertEquals(r1.getL(), r2.getL());
+        assertEquals(r1.getS(), r2.getS());
+        assertEquals(r1.getM(), r2.getM());
     }
 
-    public void testOptEnum() {
-        performTestOptEnum(null);
-        performTestOptEnum(Color.ORANGE);
-        performTestOptEnum(Color.VIOLET);
+    public void testEnum() {
+        performEnumTest(null);
+        performEnumTest(Color.ORANGE);
+        performEnumTest(Color.VIOLET);
     }
 
     public void testExternType() {

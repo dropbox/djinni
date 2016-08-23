@@ -4,11 +4,11 @@
 #import "DBListenerCaller+Private.h"
 #import "DBListenerCaller.h"
 #import "DBFirstListener+Private.h"
-#import "DBListenerCaller+Private.h"
 #import "DBSecondListener+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -34,9 +34,9 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (nullable DBListenerCaller *)init:(nullable id<DBFirstListener>)firstL
                             secondL:(nullable id<DBSecondListener>)secondL {
     try {
-        auto r = ::testsuite::ListenerCaller::init(::djinni_generated::FirstListener::toCpp(firstL),
-                                                   ::djinni_generated::SecondListener::toCpp(secondL));
-        return ::djinni_generated::ListenerCaller::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::ListenerCaller::init(::djinni_generated::FirstListener::toCpp(firstL),
+                                                                ::djinni_generated::SecondListener::toCpp(secondL));
+        return ::djinni_generated::ListenerCaller::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

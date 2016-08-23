@@ -428,7 +428,6 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 * [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 about Djinni implementatino techniques, and the addition of Python.
 * You can see a [CppCon 2014 talk](https://www.youtube.com/watch?v=5AZMEm3rZ2Y) by app developers at Dropbox about their cross-platform experiences.
 
-
 ## Authors
 - Kannan Goundan
 - Tony Grue
@@ -439,5 +438,5 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Andrew Twyman
 
 ## Contacts
-- Jacob Potter - `djinni@j4cbo.com`
 - Andrew Twyman - `atwyman@dropbox.com`
+- Jacob Potter - `djinni@j4cbo.com`

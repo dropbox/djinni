@@ -5,11 +5,11 @@
 #import "TXSSortItems.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
-#import "DJIMarshal+Private.h"
 #import "TXSItemList+Private.h"
-#import "TXSSortItems+Private.h"
+#import "TXSSortOrder+Private.h"
 #import "TXSTextboxListener+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -42,15 +42,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nullable TXSSortItems *)createWithListener:(nullable id<TXSTextboxListener>)listener {
     try {
-        auto r = ::textsort::SortItems::create_with_listener(::djinni_generated::TextboxListener::toCpp(listener));
-        return ::djinni_generated::SortItems::fromCpp(r);
+        auto objcpp_result_ = ::textsort::SortItems::create_with_listener(::djinni_generated::TextboxListener::toCpp(listener));
+        return ::djinni_generated::SortItems::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull TXSItemList *)runSort:(nonnull TXSItemList *)items {
     try {
-        auto r = ::textsort::SortItems::run_sort(::djinni_generated::ItemList::toCpp(items));
-        return ::djinni_generated::ItemList::fromCpp(r);
+        auto objcpp_result_ = ::textsort::SortItems::run_sort(::djinni_generated::ItemList::toCpp(items));
+        return ::djinni_generated::ItemList::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

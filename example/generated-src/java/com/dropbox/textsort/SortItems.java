@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class SortItems {
+/*package*/ abstract class SortItems {
     /** For the iOS / Android demo */
     public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 

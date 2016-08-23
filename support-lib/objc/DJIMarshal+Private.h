@@ -118,6 +118,54 @@ struct String {
     }
 };
 
+template<int wcharTypeSize>
+static CFStringEncoding getWCharEncoding()
+{
+    static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
+    return {}; // unreachable
+}
+
+template<>
+inline CFStringEncoding getWCharEncoding<2>() {
+    // case when wchar_t is represented by utf-16 encoding
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+    return NSUTF16BigEndianStringEncoding;
+#else
+    return NSUTF16LittleEndianStringEncoding;
+#endif
+}
+
+template<>
+inline CFStringEncoding getWCharEncoding<4>() {
+    // case when wchar_t is represented by utf-32 encoding
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+    return NSUTF32BigEndianStringEncoding;
+#else
+    return NSUTF32LittleEndianStringEncoding;
+#endif
+}
+
+struct WString {
+    using CppType = std::wstring;
+    using ObjcType = NSString*;
+
+    using Boxed = WString;
+
+    static CppType toCpp(ObjcType string) {
+        assert(string);
+        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(getWCharEncoding<sizeof(wchar_t)>());
+        NSData* data = [string dataUsingEncoding:encoding];
+        return std::wstring((wchar_t*)[data bytes], [data length] / sizeof (wchar_t));
+    }
+
+    static ObjcType fromCpp(const CppType& string) {
+        assert(string.size() <= std::numeric_limits<NSUInteger>::max());
+        return [[NSString alloc] initWithBytes:string.data()
+                                     length:string.size() * sizeof(wchar_t)
+                                     encoding:getWCharEncoding<sizeof(wchar_t)>()];
+    }
+};
+
 struct Date {
     using CppType = std::chrono::system_clock::time_point;
     using ObjcType = NSDate*;

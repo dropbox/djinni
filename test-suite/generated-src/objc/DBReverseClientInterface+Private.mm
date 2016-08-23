@@ -3,11 +3,11 @@
 
 #import "DBReverseClientInterface+Private.h"
 #import "DBReverseClientInterface.h"
-#import "DBReverseClientInterface+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -32,29 +32,29 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (nonnull NSString *)returnStr {
     try {
-        auto r = _cppRefHandle.get()->return_str();
-        return ::djinni::String::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->return_str();
+        return ::djinni::String::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nonnull NSString *)methTakingInterface:(nullable DBReverseClientInterface *)i {
     try {
-        auto r = _cppRefHandle.get()->meth_taking_interface(::djinni_generated::ReverseClientInterface::toCpp(i));
-        return ::djinni::String::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->meth_taking_interface(::djinni_generated::ReverseClientInterface::toCpp(i));
+        return ::djinni::String::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nonnull NSString *)methTakingOptionalInterface:(nullable DBReverseClientInterface *)i {
     try {
-        auto r = _cppRefHandle.get()->meth_taking_optional_interface(::djinni::Optional<std::experimental::optional, ::djinni_generated::ReverseClientInterface>::toCpp(i));
-        return ::djinni::String::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->meth_taking_optional_interface(::djinni::Optional<std::experimental::optional, ::djinni_generated::ReverseClientInterface>::toCpp(i));
+        return ::djinni::String::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nullable DBReverseClientInterface *)create {
     try {
-        auto r = ::testsuite::ReverseClientInterface::create();
-        return ::djinni_generated::ReverseClientInterface::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::ReverseClientInterface::create();
+        return ::djinni_generated::ReverseClientInterface::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
