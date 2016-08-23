@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Extended record */
-public class ExtendedRecord implements android.os.Parcelable {
+public class ExtendedRecord {
 
     @Nonnull
     public static final ExtendedRecord EXTENDED_RECORD_CONST = new ExtendedRecord(
@@ -30,38 +30,6 @@ public class ExtendedRecord implements android.os.Parcelable {
         return "ExtendedRecord{" +
                 "mFoo=" + mFoo +
         "}";
-    }
-
-
-    public static final android.os.Parcelable.Creator<ExtendedRecord> CREATOR
-        = new android.os.Parcelable.Creator<ExtendedRecord>()
-    {
-        @Override
-        public ExtendedRecord createFromParcel(android.os.Parcel in)
-        {
-            return new ExtendedRecord(in);
-        }
-
-        @Override
-        public ExtendedRecord[] newArray(int size)
-        {
-            return new ExtendedRecord[size];
-        }
-    };
-
-    public ExtendedRecord(android.os.Parcel in)
-    {
-        this.mFoo = in.readByte() != 0;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(android.os.Parcel out, int flags) {
-        out.writeByte(this.mFoo ? (byte)1 : 0);
     }
 
 }

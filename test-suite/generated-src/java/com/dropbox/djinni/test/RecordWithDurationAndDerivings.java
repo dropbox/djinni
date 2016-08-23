@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class RecordWithDurationAndDerivings implements Comparable<RecordWithDurationAndDerivings>, android.os.Parcelable {
+public class RecordWithDurationAndDerivings implements Comparable<RecordWithDurationAndDerivings> {
 
 
     /*package*/ final java.time.Duration mDt;
@@ -43,38 +43,6 @@ public class RecordWithDurationAndDerivings implements Comparable<RecordWithDura
         return "RecordWithDurationAndDerivings{" +
                 "mDt=" + mDt +
         "}";
-    }
-
-
-    public static final android.os.Parcelable.Creator<RecordWithDurationAndDerivings> CREATOR
-        = new android.os.Parcelable.Creator<RecordWithDurationAndDerivings>()
-    {
-        @Override
-        public RecordWithDurationAndDerivings createFromParcel(android.os.Parcel in)
-        {
-            return new RecordWithDurationAndDerivings(in);
-        }
-
-        @Override
-        public RecordWithDurationAndDerivings[] newArray(int size)
-        {
-            return new RecordWithDurationAndDerivings[size];
-        }
-    };
-
-    public RecordWithDurationAndDerivings(android.os.Parcel in)
-    {
-        this.mDt = java.time.Duration.parse(in.readString());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(android.os.Parcel out, int flags) {
-        out.writeString(mDt.toString());
     }
 
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class PrimitiveList implements android.os.Parcelable {
+public class PrimitiveList {
 
 
     /*package*/ final ArrayList<Long> mList;
@@ -27,38 +27,6 @@ public class PrimitiveList implements android.os.Parcelable {
         return "PrimitiveList{" +
                 "mList=" + mList +
         "}";
-    }
-
-
-    public static final android.os.Parcelable.Creator<PrimitiveList> CREATOR
-        = new android.os.Parcelable.Creator<PrimitiveList>()
-    {
-        @Override
-        public PrimitiveList createFromParcel(android.os.Parcel in)
-        {
-            return new PrimitiveList(in);
-        }
-
-        @Override
-        public PrimitiveList[] newArray(int size)
-        {
-            return new PrimitiveList[size];
-        }
-    };
-
-    public PrimitiveList(android.os.Parcel in)
-    {
-        this.mList = (ArrayList<Long>)in.readSerializable();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(android.os.Parcel out, int flags) {
-        out.writeSerializable(this.mList);
     }
 
 }

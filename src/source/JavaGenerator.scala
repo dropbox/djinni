@@ -222,7 +222,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       val interfaces = scala.collection.mutable.ArrayBuffer[String]()
       if (r.derivingTypes.contains(DerivingType.Ord))
           interfaces += s"Comparable<$self>"
-      if (spec.javaImplementAndroidOsParcelable)
+      if (r.derivingTypes.contains(DerivingType.AndroidParcelable))
           interfaces += "android.os.Parcelable"
       val implementsSection = if (interfaces.isEmpty) "" else " implements " + interfaces.mkString(", ")
       w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$implementsSection").braced {
@@ -357,7 +357,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         w.wl
 
-        if (spec.javaImplementAndroidOsParcelable) {
+        if (r.derivingTypes.contains(DerivingType.AndroidParcelable)) {
           // CREATOR
           w.wl
           w.wl(s"public static final android.os.Parcelable.Creator<$self> CREATOR")

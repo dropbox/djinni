@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
-public class EmptyRecord implements android.os.Parcelable {
+public class EmptyRecord {
 
 
     public EmptyRecord(
@@ -22,36 +22,6 @@ public class EmptyRecord implements android.os.Parcelable {
     public String toString() {
         return "EmptyRecord{" +
         "}";
-    }
-
-
-    public static final android.os.Parcelable.Creator<EmptyRecord> CREATOR
-        = new android.os.Parcelable.Creator<EmptyRecord>()
-    {
-        @Override
-        public EmptyRecord createFromParcel(android.os.Parcel in)
-        {
-            return new EmptyRecord(in);
-        }
-
-        @Override
-        public EmptyRecord[] newArray(int size)
-        {
-            return new EmptyRecord[size];
-        }
-    };
-
-    public EmptyRecord(android.os.Parcel in)
-    {
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(android.os.Parcel out, int flags) {
     }
 
 }

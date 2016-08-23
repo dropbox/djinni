@@ -7,7 +7,7 @@ import java.util.HashMap;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class MapDateRecord implements android.os.Parcelable {
+public class MapDateRecord {
 
 
     /*package*/ final HashMap<String, java.util.Date> mDatesById;
@@ -27,38 +27,6 @@ public class MapDateRecord implements android.os.Parcelable {
         return "MapDateRecord{" +
                 "mDatesById=" + mDatesById +
         "}";
-    }
-
-
-    public static final android.os.Parcelable.Creator<MapDateRecord> CREATOR
-        = new android.os.Parcelable.Creator<MapDateRecord>()
-    {
-        @Override
-        public MapDateRecord createFromParcel(android.os.Parcel in)
-        {
-            return new MapDateRecord(in);
-        }
-
-        @Override
-        public MapDateRecord[] newArray(int size)
-        {
-            return new MapDateRecord[size];
-        }
-    };
-
-    public MapDateRecord(android.os.Parcel in)
-    {
-        this.mDatesById = (HashMap<String, java.util.Date>)in.readSerializable();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(android.os.Parcel out, int flags) {
-        out.writeSerializable(this.mDatesById);
     }
 
 }

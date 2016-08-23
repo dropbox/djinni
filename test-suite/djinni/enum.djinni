@@ -13,4 +13,4 @@ color = enum {
 
 opt_color_record = record {
 	my_color: optional<color>;
-}
+} deriving(parcelable)
