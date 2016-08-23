@@ -2,7 +2,7 @@
 
 date_record = record {
     created_at: extern_date;
-} deriving(eq, ord)
+} deriving(eq, ord, parcelable)
 
 map_date_record = record {
     dates_by_id: map<string, extern_date>;

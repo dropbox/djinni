@@ -208,8 +208,8 @@ object YamlGenerator {
       nested(td, "java")("reference").asInstanceOf[Boolean],
       nested(td, "java")("generic").asInstanceOf[Boolean],
       nested(td, "java")("hash").toString,
-      nested(td, "java")("writeToParcel").toString,
-      nested(td, "java")("readFromParcel").toString),
+      if (nested(td, "java") contains "writeToParcel") nested(td, "java")("writeToParcel").toString else "%s.writeToParcel(out, flags)",
+      if (nested(td, "java") contains "readFromParcel") nested(td, "java")("readFromParcel").toString else "new %s(in)"),
     MExtern.Jni(
       nested(td, "jni")("translator").toString,
       nested(td, "jni")("header").toString,

@@ -51,4 +51,15 @@ public class AndroidParcelableTest extends TestCase {
         performTestOptEnum(Color.ORANGE);
         performTestOptEnum(Color.VIOLET);
     }
+
+    public void testExternType() {
+        DateRecord dr = new DateRecord(new java.util.Date());
+
+        Parcel parcel = new Parcel();
+        dr.writeToParcel(parcel, 0);
+        parcel.flush();
+        DateRecord dr2 = new DateRecord(parcel);
+
+        assertEquals(dr, dr2);
+    }
 }

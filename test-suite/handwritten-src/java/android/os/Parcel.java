@@ -1,25 +1,25 @@
+/*
+ * Mock replacement for Android's implementation of android.os.Parcel
+ * Used in tests to check the generation of the records that implement the parcelable interface
+ */
 package android.os;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public final class Parcel {
 
-    private FileOutputStream mOutFile;
-    private FileInputStream mInFile;
+    private ByteArrayOutputStream mOutStream;
     private ObjectOutputStream mOut;
     private ObjectInputStream mIn;
 
     public Parcel() {
-        final String fname = "parcel.tmp";
         try {
-            mOutFile = new FileOutputStream(fname);
-            mInFile = new FileInputStream(fname);
-            mOut = new ObjectOutputStream(mOutFile);
-            mIn = new ObjectInputStream(mInFile);
+            mOutStream = new ByteArrayOutputStream();
+            mOut = new ObjectOutputStream(mOutStream);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -28,7 +28,8 @@ public final class Parcel {
     public final void flush() {
         try {
             mOut.flush();
-            mOutFile.flush();
+            mIn = new ObjectInputStream(new ByteArrayInputStream(
+                mOutStream.toByteArray()));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
