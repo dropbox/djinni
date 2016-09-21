@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "djinni_support.hpp"
+#include "djinni/jni/djinni_support.hpp"
 #include "record_with_duration_and_derivings.hpp"
 
 namespace djinni_generated {

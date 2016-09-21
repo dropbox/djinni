@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #include <memory>
 
-#include "../proxy_cache_interface.hpp"
+#include "djinni/proxy_cache_interface.hpp"
 
 namespace djinni {
 

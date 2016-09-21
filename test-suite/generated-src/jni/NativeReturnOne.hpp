@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "djinni_support.hpp"
+#include "djinni/jni/djinni_support.hpp"
 #include "return_one.hpp"
 
 namespace djinni_generated {

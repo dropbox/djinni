@@ -4,8 +4,8 @@
 #import "DBVarnameInterface+Private.h"
 #import "DBVarnameInterface.h"
 #import "DBVarnameRecord+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
+#import "djinni/objc/DJICppWrapperCache+Private.h"
+#import "djinni/objc/DJIError.h"
 #include <exception>
 #include <stdexcept>
 #include <utility>

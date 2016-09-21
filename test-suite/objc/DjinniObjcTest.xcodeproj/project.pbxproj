@@ -165,10 +165,9 @@
 		650CA0571C2AB48E007ADDDB /* DBListenerCaller+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBListenerCaller+Private.mm"; sourceTree = "<group>"; };
 		650CA05B1C2AB524007ADDDB /* DBMultipleInheritanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBMultipleInheritanceTests.m; sourceTree = "<group>"; };
 		650CA05D1C2AB5AB007ADDDB /* ListenerCaller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListenerCaller.cpp; sourceTree = "<group>"; };
-		6536CD6A19A6C82200DD7715 /* DJIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIError.h; sourceTree = "<group>"; };
-		6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIProxyCaches.mm; sourceTree = "<group>"; };
-		6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJICppWrapperCache+Private.h"; sourceTree = "<group>"; };
-		6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIObjcWrapperCache+Private.h"; sourceTree = "<group>"; };
+		6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DJIProxyCaches.mm; path = src/objc/DJIProxyCaches.mm; sourceTree = "<group>"; };
+		6536CD6D19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "DJIObjcWrapperCache+Private.h"; path = "include/djinni/objc/DJIObjcWrapperCache+Private.h"; sourceTree = "<group>"; };
+		6536CD6E19A6C82200DD7715 /* DJICppWrapperCache+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "DJICppWrapperCache+Private.h"; path = "include/djinni/objc/DJICppWrapperCache+Private.h"; sourceTree = "<group>"; };
 		6536CD7119A6C96C00DD7715 /* DBClientInterfaceImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBClientInterfaceImpl.h; sourceTree = "<group>"; };
 		6536CD7219A6C96C00DD7715 /* DBClientInterfaceImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBClientInterfaceImpl.mm; sourceTree = "<group>"; };
 		6536CD7619A6C98800DD7715 /* cpp_exception_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpp_exception_impl.cpp; sourceTree = "<group>"; };
@@ -219,7 +218,7 @@
 		A238CA861AF84B7100CDDCE5 /* DBRecordWithDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBRecordWithDerivings+Private.mm"; sourceTree = "<group>"; };
 		A238CA881AF84B7100CDDCE5 /* DBRecordWithNestedDerivings+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBRecordWithNestedDerivings+Private.mm"; sourceTree = "<group>"; };
 		A238CA8A1AF84B7100CDDCE5 /* DBSetRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBSetRecord+Private.mm"; sourceTree = "<group>"; };
-		A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DJIMarshal+Private.h"; sourceTree = "<group>"; };
+		A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "DJIMarshal+Private.h"; path = "include/djinni/objc/DJIMarshal+Private.h"; sourceTree = "<group>"; };
 		A242491C1AF192E0003BF8F0 /* DBClientInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBClientInterface.h; sourceTree = "<group>"; };
 		A242491F1AF192E0003BF8F0 /* DBClientReturnedRecord+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBClientReturnedRecord+Private.h"; sourceTree = "<group>"; };
 		A24249201AF192E0003BF8F0 /* DBClientReturnedRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBClientReturnedRecord.h; sourceTree = "<group>"; };
@@ -281,7 +280,7 @@
 		A24850241AF96EBC00AFE907 /* DBRecordWithNestedDerivings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBRecordWithNestedDerivings.mm; sourceTree = "<group>"; };
 		A24850251AF96EBC00AFE907 /* DBSetRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBSetRecord.mm; sourceTree = "<group>"; };
 		A278D45219BA3601006FD937 /* test_helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helpers.cpp; sourceTree = "<group>"; };
-		A2CB54B319BA6E6000A9E600 /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIError.mm; sourceTree = "<group>"; };
+		A2CB54B319BA6E6000A9E600 /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DJIError.mm; path = src/objc/DJIError.mm; sourceTree = "<group>"; };
 		A2CCB9411AF80DFC00E6230A /* DBClientInterface+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBClientInterface+Private.h"; sourceTree = "<group>"; };
 		B5153F871D54282C00012654 /* wchar_test_rec.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wchar_test_rec.hpp; sourceTree = "<group>"; };
 		B5153F891D54283700012654 /* DBWcharTestRec+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBWcharTestRec+Private.mm"; sourceTree = "<group>"; };
@@ -371,6 +370,10 @@
 		B5F06AA21D4987EF005BE736 /* DBEnumUsageRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBEnumUsageRecord.mm; sourceTree = "<group>"; };
 		B5F06AA31D4987EF005BE736 /* DBEnumUsageRecord+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBEnumUsageRecord+Private.h"; sourceTree = "<group>"; };
 		B5F06AA41D4987EF005BE736 /* DBEnumUsageRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBEnumUsageRecord+Private.mm"; sourceTree = "<group>"; };
+		CF19C6131D92BA0F00DF9283 /* DJIError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DJIError.h; path = include/djinni/objc/DJIError.h; sourceTree = "<group>"; };
+		CF19C6141D92BA7000DF9283 /* djinni_common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = djinni_common.hpp; path = include/djinni/djinni_common.hpp; sourceTree = "<group>"; };
+		CF19C6151D92BA7000DF9283 /* proxy_cache_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = proxy_cache_interface.hpp; path = include/djinni/proxy_cache_interface.hpp; sourceTree = "<group>"; };
+		CF19C6161D92BA7900DF9283 /* proxy_cache_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = proxy_cache_impl.hpp; path = src/proxy_cache_impl.hpp; sourceTree = "<group>"; };
 		CFAED8711B54291900E3B8A3 /* DBEmptyRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBEmptyRecord.h; sourceTree = "<group>"; };
 		CFAED8721B54291900E3B8A3 /* DBEmptyRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBEmptyRecord.mm; sourceTree = "<group>"; };
 		CFAED8731B54291900E3B8A3 /* DBEmptyRecord+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBEmptyRecord+Private.h"; sourceTree = "<group>"; };
@@ -444,15 +447,18 @@
 		6536CD6919A6C82200DD7715 /* objc-support-lib */ = {
 			isa = PBXGroup;
 			children = (
+				CF19C6161D92BA7900DF9283 /* proxy_cache_impl.hpp */,
+				CF19C6141D92BA7000DF9283 /* djinni_common.hpp */,
+				CF19C6151D92BA7000DF9283 /* proxy_cache_interface.hpp */,
+				CF19C6131D92BA0F00DF9283 /* DJIError.h */,
 				A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */,
 				A2CB54B319BA6E6000A9E600 /* DJIError.mm */,
-				6536CD6A19A6C82200DD7715 /* DJIError.h */,
 				6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */,
-				6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */,
-				6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */,
+				6536CD6D19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */,
+				6536CD6E19A6C82200DD7715 /* DJICppWrapperCache+Private.h */,
 			);
 			name = "objc-support-lib";
-			path = "../../support-lib/objc";
+			path = "../../support-lib";
 			sourceTree = "<group>";
 		};
 		6536CD7019A6C96C00DD7715 /* handwritten-objc */ = {
@@ -1043,6 +1049,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/../../support-lib/include",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/DjinniObjcTest/objc",
 					"$(SRCROOT)/DjinniObjcTest/cpp",
@@ -1081,6 +1088,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/../../support-lib/include",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/DjinniObjcTest/objc",
 					"$(SRCROOT)/DjinniObjcTest/cpp",

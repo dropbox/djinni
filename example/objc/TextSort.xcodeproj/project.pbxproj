@@ -254,7 +254,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../support-lib/objc $(SRCROOT)/../generated-src/objc";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../support-lib/include/ $(SRCROOT)/../generated-src/objc";
 			};
 			name = Debug;
 		};
@@ -287,7 +287,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../support-lib/objc $(SRCROOT)/../generated-src/objc";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../support-lib/include/ $(SRCROOT)/../generated-src/objc";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

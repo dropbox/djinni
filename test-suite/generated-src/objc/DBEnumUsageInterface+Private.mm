@@ -4,10 +4,10 @@
 #import "DBEnumUsageInterface+Private.h"
 #import "DBEnumUsageInterface.h"
 #import "DBColor+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIMarshal+Private.h"
-#import "DJIObjcWrapperCache+Private.h"
+#import "djinni/objc/DJICppWrapperCache+Private.h"
+#import "djinni/objc/DJIError.h"
+#import "djinni/objc/DJIMarshal+Private.h"
+#import "djinni/objc/DJIObjcWrapperCache+Private.h"
 #include <exception>
 #include <stdexcept>
 #include <utility>

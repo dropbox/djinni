@@ -3,7 +3,7 @@
 
 #include "NativeRecordWithDurationAndDerivings.hpp"  // my header
 #include "Duration-jni.hpp"
-#include "Marshal.hpp"
+#include "djinni/jni/Marshal.hpp"
 
 namespace djinni_generated {
 

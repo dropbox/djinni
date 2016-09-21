@@ -17,7 +17,7 @@
 // This provides a minimal JNI_OnLoad and JNI_OnUnload implementation - include it if your
 // app doesn't use JNI except through Djinni.
 
-#include "djinni_support.hpp"
+#include "djinni/jni/djinni_support.hpp"
 
 // Called when library is loaded by the first class which uses it.
 CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM * jvm, void * /*reserved*/) {
