@@ -10,7 +10,8 @@ namespace testsuite {
 
 struct RecordUsingExtendedRecord final {
 
-    static RecordUsingExtendedRecord const CR;
+    static  const RecordUsingExtendedRecord CR;
+
     ExtendedRecord er;
 
     RecordUsingExtendedRecord(ExtendedRecord er_)

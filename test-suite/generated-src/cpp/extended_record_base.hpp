@@ -12,7 +12,8 @@ struct ExtendedRecord; // Requiring extended class
 /** Extended record */
 struct ExtendedRecordBase {
 
-    static ExtendedRecord const EXTENDED_RECORD_CONST;
+    static  const ExtendedRecord EXTENDED_RECORD_CONST;
+
     bool foo;
 
     ExtendedRecordBase(bool foo_)

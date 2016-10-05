@@ -91,11 +91,34 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   def generateHppConstants(w: IndentWriter, consts: Seq[Const]) = {
+    var needsCppGen = false
+
     for (c <- consts) {
+      var isConstExpr = true
+      val constValue = c.value match {
+        case l: Long => " = { " + l.toString + " };"
+        case d: Double if marshal.fieldType(c.ty) == "float" => " = { " + d.toString + "f };"
+        case d: Double => " = { " + d.toString + " };"
+        case b: Boolean => if (b) " = { true };" else " = { false };"
+        case e: EnumValue => " = " + marshal.typename(c.ty) + "::" + idCpp.enum(e.ty.name + "_" + e.name) + ";"
+        case _ => {
+          needsCppGen = true;
+          isConstExpr = false;
+          ";"
+          }
+      }
+
       w.wl
       writeDoc(w, c.doc)
-      w.wl(s"static ${marshal.fieldType(c.ty)} const ${idCpp.const(c.ident)};")
+      w.w(s"static ${if (isConstExpr) "constexpr" else "" } const ${marshal.fieldType(c.ty)} ${idCpp.const(c.ident)}${constValue}")
     }
+
+    if (!consts.isEmpty) {
+      w.wl
+      w.wl
+    }
+
+    needsCppGen
   }
 
   def generateCppConstants(w: IndentWriter, consts: Seq[Const], selfName: String) = {
@@ -127,10 +150,20 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     val skipFirst = SkipFirst()
     for (c <- consts) {
-      skipFirst{ w.wl }
-      w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
-      writeCppConst(w, c.ty, c.value)
-      w.wl(";")
+      val isConstExpr = c.value match {
+        case l: Long => true
+        case d: Double => true
+        case b: Boolean => true
+        case e: EnumValue => true
+        case _ => false
+      }
+
+      if (!isConstExpr) {
+        skipFirst{ w.wl }
+        w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
+        writeCppConst(w, c.ty, c.value)
+        w.wl(";")
+      }
     }
   }
 
@@ -149,6 +182,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.cpp.add("#include "+q(spec.cppExtendedRecordIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     }
 
+    var constantsRequireCpp = false;
+
     // C++ Header
     def writeCppPrototype(w: IndentWriter) {
       if (r.ext.cpp) {
@@ -159,7 +194,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
       w.w("struct " + actualSelf + cppFinal).bracedSemi {
-        generateHppConstants(w, r.consts)
+        constantsRequireCpp = generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
           writeDoc(w, f.doc)
@@ -210,7 +245,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
-    if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
+    if (constantsRequireCpp || r.derivingTypes.nonEmpty) {
       writeCppFile(cppName, origin, refs.cpp, w => {
         generateCppConstants(w, r.consts, actualSelf)
 
@@ -274,6 +309,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
+    var generateCppFile = false;
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
@@ -283,7 +319,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         // Destructor
         w.wl(s"virtual ~$self() {}")
         // Constants
-        generateHppConstants(w, i.consts)
+        generateCppFile = generateHppConstants(w, i.consts)
         // Methods
         for (m <- i.methods) {
           w.wl
@@ -301,7 +337,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     // Cpp only generated in need of Constants
-    if (i.consts.nonEmpty) {
+    if (generateCppFile) {
       writeCppFile(ident, origin, refs.cpp, w => {
         generateCppConstants(w, i.consts, self)
       })

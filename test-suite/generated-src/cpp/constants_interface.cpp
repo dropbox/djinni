@@ -6,34 +6,6 @@
 
 namespace testsuite {
 
-bool const ConstantsInterface::BOOL_CONSTANT = true;
-
-int8_t const ConstantsInterface::I8_CONSTANT = 1;
-
-int16_t const ConstantsInterface::I16_CONSTANT = 2;
-
-int32_t const ConstantsInterface::I32_CONSTANT = 3;
-
-int64_t const ConstantsInterface::I64_CONSTANT = 4;
-
-float const ConstantsInterface::F32_CONSTANT = 5.0f;
-
-double const ConstantsInterface::F64_CONSTANT = 5.0;
-
-std::experimental::optional<bool> const ConstantsInterface::OPT_BOOL_CONSTANT = true;
-
-std::experimental::optional<int8_t> const ConstantsInterface::OPT_I8_CONSTANT = 1;
-
-std::experimental::optional<int16_t> const ConstantsInterface::OPT_I16_CONSTANT = 2;
-
-std::experimental::optional<int32_t> const ConstantsInterface::OPT_I32_CONSTANT = 3;
-
-std::experimental::optional<int64_t> const ConstantsInterface::OPT_I64_CONSTANT = 4;
-
-std::experimental::optional<float> const ConstantsInterface::OPT_F32_CONSTANT = 5.0;
-
-std::experimental::optional<double> const ConstantsInterface::OPT_F64_CONSTANT = 5.0;
-
 std::string const ConstantsInterface::STRING_CONSTANT = {"string-constant"};
 
 std::experimental::optional<std::string> const ConstantsInterface::OPT_STRING_CONSTANT = {"string-constant"};
