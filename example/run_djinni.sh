@@ -28,6 +28,8 @@ java_package="com.dropbox.textsort"
 
 gen_stamp="$temp_out/gen.stamp"
 
+objc_bridging_header="$base_dir/objc/TextSort/TextSort-Bridging-Header.h"
+
 if [ $# -eq 0 ]; then
     # Normal build.
     true
@@ -69,6 +71,7 @@ fi
 	--objc-out "$temp_out/objc" \
 	--objcpp-out "$temp_out/objc" \
     --objc-type-prefix TXS \
+    --objc-bridging-header "$objc_bridging_header" \
     \
     --idl "$in"
 
