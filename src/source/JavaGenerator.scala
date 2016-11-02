@@ -457,7 +457,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
           case _ => throw new AssertionError("Unreachable")
         }
-        case MList | MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
+        case MList => {
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}");
+          w.wl(s"in.readList(this.${idJava.field(f.ident)}, ${marshal.typename(f.ty)}.class.getClassLoader());")
+        }
+        case MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
@@ -512,7 +516,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           case DEnum => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
           case _ => throw new AssertionError("Unreachable")
         }
-        case MList | MSet | MMap => w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+        case MList => w.wl(s"out.writeList(this.${idJava.field(f.ident)});")
+        case MSet | MMap => w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
