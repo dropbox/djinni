@@ -49,8 +49,8 @@ public class NestedCollection implements android.os.Parcelable {
 
     public NestedCollection(android.os.Parcel in)
     {
-        this.mSetList = new ArrayList<HashSet<String>>
-        in.readList(this.mSetList, ArrayList<HashSet<String>>.class.getClassLoader());
+        this.mSetList = new ArrayList<HashSet<String>>();
+        in.readList(this.mSetList, null);
     }
 
     @Override

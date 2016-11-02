@@ -95,8 +95,8 @@ public class EnumUsageRecord implements android.os.Parcelable {
             this.mO = null;
         else
             this.mO = Color.values()[in.readInt()];
-        this.mL = new ArrayList<Color>
-        in.readList(this.mL, ArrayList<Color>.class.getClassLoader());
+        this.mL = new ArrayList<Color>();
+        in.readList(this.mL, null);
         this.mS = (HashSet<Color>)in.readSerializable();
         this.mM = (HashMap<Color, Color>)in.readSerializable();
     }

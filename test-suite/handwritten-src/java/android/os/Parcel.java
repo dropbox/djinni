@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
 public final class Parcel {
 
@@ -151,6 +152,26 @@ public final class Parcel {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public final void writeList(List val) {
+        try {
+            mOut.writeInt(val.size());
+            for(Object obj : val)
+               mOut.writeObject(obj);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public final void readList(List outVal, ClassLoader loader) {
+        try {
+            int size = mIn.readInt();
+            for(int i = 0; i < size; ++i)
+               outVal.add(mIn.readObject());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 };

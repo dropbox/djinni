@@ -458,8 +458,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           case _ => throw new AssertionError("Unreachable")
         }
         case MList => {
-          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}");
-          w.wl(s"in.readList(this.${idJava.field(f.ident)}, ${marshal.typename(f.ty)}.class.getClassLoader());")
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();");
+          w.wl(s"in.readList(this.${idJava.field(f.ident)}, null);")
         }
         case MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
         case MOptional => {
