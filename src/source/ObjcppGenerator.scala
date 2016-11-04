@@ -70,6 +70,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
+    i.properties.map(p => {
+      refs.find(p.ty)
+    })
 
     val self = objcMarshal.typename(ident, i)
     val cppSelf = cppMarshal.fqTypename(ident, i)

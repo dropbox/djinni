@@ -30,13 +30,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (int32_t)intMethod {
-    try {
-        auto objcpp_result_ = _cppRefHandle.get()->int_method();
-        return ::djinni::I32::fromCpp(objcpp_result_);
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
 + (nullable DBPropertiesTestHelper *)createNew {
     try {
         auto objcpp_result_ = ::testsuite::PropertiesTestHelper::create_new();
