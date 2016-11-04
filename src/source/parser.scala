@@ -16,14 +16,16 @@
 
 package djinni
 
-import java.io.{File, InputStreamReader, FileInputStream, Writer}
+import java.io.{File, FileInputStream, InputStreamReader, Writer}
 
-import djinni.ast.Interface.Method
+import djinni.ast.Interface.{Method, Property}
 import djinni.ast.Record.DerivingType.DerivingType
 import djinni.syntax._
 import djinni.ast._
 import java.util.{Map => JMap}
+
 import org.yaml.snakeyaml.Yaml
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.util.parsing.combinator.RegexParsers
@@ -119,18 +121,19 @@ private object IdlParser extends RegexParsers {
   }
 
   def interfaceHeader = "interface" ~> extInterface
-  def interface: Parser[Interface] = interfaceHeader ~ bracesList(method | const) ^^ {
+  def interface: Parser[Interface] = interfaceHeader ~ bracesList(method | const | property) ^^ {
     case ext~items => {
       val methods = items collect {case m: Method => m}
       val consts = items collect {case c: Const => c}
-      Interface(ext, methods, consts)
+      val properties = items collect {case p: Property => p}
+      Interface(ext, methods, consts, properties)
     }
   }
 
   def externTypeDecl: Parser[TypeDef] = externEnum | externInterface | externRecord
   def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List()) }
   def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]())) }
-  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List()) }
+  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List(), List()) }
 
   def staticLabel: Parser[Boolean] = ("static ".r | "".r) ^^ {
     case "static " => true
@@ -162,6 +165,10 @@ private object IdlParser extends RegexParsers {
 
   def const: Parser[Const] = doc ~ "const" ~ ident ~ ":" ~ typeRef ~ "=" ~ value ^^ {
     case doc~_~ident~_~typeRef~_~value => Const(ident, typeRef, value, doc)
+  }
+
+  def property: Parser[Interface.Property] = doc ~ ident ~ ret ^^ {
+    case doc~ident~ret => Interface.Property(ident, ret, doc)
   }
 
   def typeRef: Parser[TypeRef] = typeExpr ^^ TypeRef
