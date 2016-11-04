@@ -8,8 +8,6 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 public abstract class PropertiesTestHelper {
-    public abstract int intMethod();
-
     @CheckForNull
     public static native PropertiesTestHelper createNew();
 
@@ -35,13 +33,5 @@ public abstract class PropertiesTestHelper {
             destroy();
             super.finalize();
         }
-
-        @Override
-        public int intMethod()
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            return native_intMethod(this.nativeRef);
-        }
-        private native int native_intMethod(long _nativeRef);
     }
 }

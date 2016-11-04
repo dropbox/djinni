@@ -5,14 +5,13 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 
 namespace testsuite {
 
 class PropertiesTestHelper {
 public:
     virtual ~PropertiesTestHelper() {}
-
-    virtual int32_t int_method() = 0;
 
     static std::shared_ptr<PropertiesTestHelper> create_new();
 

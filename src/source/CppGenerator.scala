@@ -271,6 +271,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty, true)
     })
+    i.properties.map(p => {
+      refs.find(p.ty, true)
+    })
 
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
