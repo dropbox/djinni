@@ -21,6 +21,7 @@ private:
     
     int32_t m_item;
     std::string m_test_string;
+
     
 public:
     
@@ -29,14 +30,6 @@ public:
     
     std::string get_test_string();
     void set_test_string(std::string new_test_string);
-    
-    int32_t int_method() {
-        return 42;
-    }
-    
-    std::string string_method(const std::string & value) {
-        return value;
-    }
 };
     
 }
