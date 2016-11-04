@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22A756721DCB66AE00671B6D /* properties_test_helper_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22A756701DCB66AE00671B6D /* properties_test_helper_impl.cpp */; };
+		22A756771DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = 22A756761DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.mm */; };
+		22A756791DCB6FF200671B6D /* DPPropertyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A756781DCB6FF200671B6D /* DPPropertyTests.m */; };
 		5AEA68151D38F4A40083D770 /* DBWcharTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 728E11201D37DE27005A554D /* DBWcharTests.m */; };
 		650CA05A1C2AB48E007ADDDB /* DBListenerCaller+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = 650CA0571C2AB48E007ADDDB /* DBListenerCaller+Private.mm */; };
 		650CA05E1C2AB5AB007ADDDB /* ListenerCaller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 650CA05D1C2AB5AB007ADDDB /* ListenerCaller.cpp */; };
@@ -159,6 +162,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		22A756701DCB66AE00671B6D /* properties_test_helper_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = properties_test_helper_impl.cpp; sourceTree = "<group>"; };
+		22A756711DCB66AE00671B6D /* properties_test_helper_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = properties_test_helper_impl.hpp; sourceTree = "<group>"; };
+		22A756731DCB685F00671B6D /* properties_test_helper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = properties_test_helper.hpp; sourceTree = "<group>"; };
+		22A756741DCB6C2D00671B6D /* DBPropertiesTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBPropertiesTestHelper.h; sourceTree = "<group>"; };
+		22A756751DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBPropertiesTestHelper+Private.h"; sourceTree = "<group>"; };
+		22A756761DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBPropertiesTestHelper+Private.mm"; sourceTree = "<group>"; };
+		22A756781DCB6FF200671B6D /* DPPropertyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPPropertyTests.m; sourceTree = "<group>"; };
 		650CA04E1C2AB460007ADDDB /* listener_caller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = listener_caller.hpp; sourceTree = "<group>"; };
 		650CA0551C2AB48E007ADDDB /* DBListenerCaller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBListenerCaller.h; sourceTree = "<group>"; };
 		650CA0561C2AB48E007ADDDB /* DBListenerCaller+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBListenerCaller+Private.h"; sourceTree = "<group>"; };
@@ -482,6 +492,8 @@
 				A278D45219BA3601006FD937 /* test_helpers.cpp */,
 				CFC5D9FB1B152E4300BF2DF8 /* TranslateDuration.cpp */,
 				6551684E1C40511C003682A4 /* return_one_two.cpp */,
+				22A756701DCB66AE00671B6D /* properties_test_helper_impl.cpp */,
+				22A756711DCB66AE00671B6D /* properties_test_helper_impl.hpp */,
 			);
 			name = "handwritten-cpp";
 			path = "../handwritten-src/cpp";
@@ -501,6 +513,7 @@
 				6536CD7D19A6C99800DD7715 /* DBNestedCollectionTests.mm */,
 				6536CD7E19A6C99800DD7715 /* DBPrimitiveListTests.mm */,
 				B52DA56F1B104025005CE75F /* DBPrimitivesTests.m */,
+				22A756781DCB6FF200671B6D /* DPPropertyTests.m */,
 				6536CD7F19A6C99800DD7715 /* DBRecordWithDerivingsCppTests.mm */,
 				6536CD8019A6C99800DD7715 /* DBRecordWithDerivingsObjcTests.mm */,
 				6536CD8119A6C99800DD7715 /* DBSetRecordTests.mm */,
@@ -671,6 +684,9 @@
 				A24850221AF96EBC00AFE907 /* DBPrimitiveList.mm */,
 				A242493A1AF192E0003BF8F0 /* DBPrimitiveList+Private.h */,
 				A238CA841AF84B7100CDDCE5 /* DBPrimitiveList+Private.mm */,
+				22A756741DCB6C2D00671B6D /* DBPropertiesTestHelper.h */,
+				22A756751DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.h */,
+				22A756761DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.mm */,
 				A242493E1AF192E0003BF8F0 /* DBRecordWithDerivings.h */,
 				A24850231AF96EBC00AFE907 /* DBRecordWithDerivings.mm */,
 				A242493D1AF192E0003BF8F0 /* DBRecordWithDerivings+Private.h */,
@@ -756,6 +772,7 @@
 				A24249691AF192FC003BF8F0 /* map_record.hpp */,
 				A242496A1AF192FC003BF8F0 /* nested_collection.hpp */,
 				A242496B1AF192FC003BF8F0 /* primitive_list.hpp */,
+				22A756731DCB685F00671B6D /* properties_test_helper.hpp */,
 				A242496C1AF192FC003BF8F0 /* record_with_derivings.cpp */,
 				A242496D1AF192FC003BF8F0 /* record_with_derivings.hpp */,
 				CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */,
@@ -867,6 +884,7 @@
 				CFC5DA0E1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp in Sources */,
 				A238CA941AF84B7100CDDCE5 /* DBMapDateRecord+Private.mm in Sources */,
 				CFFD588F1B019E79001E10B6 /* DBTestHelpers+Private.mm in Sources */,
+				22A756771DCB6C2D00671B6D /* DBPropertiesTestHelper+Private.mm in Sources */,
 				A24850291AF96EBC00AFE907 /* DBDateRecord.mm in Sources */,
 				A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */,
 				6551684C1C4050A4003682A4 /* DBReturnOne+Private.mm in Sources */,
@@ -921,6 +939,7 @@
 				A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */,
 				CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
 				B58B16B71D5AD56600EF92B5 /* DBInterfaceUsingExtendedRecord.mm in Sources */,
+				22A756721DCB66AE00671B6D /* properties_test_helper_impl.cpp in Sources */,
 				B51911181D542A7000772DFE /* DBWcharTestHelpers+Private.mm in Sources */,
 				A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */,
 				B51911521D555EE900772DFE /* DBVarnameInterface+Private.mm in Sources */,
@@ -981,6 +1000,7 @@
 				CFC5D9F31B15276900BF2DF8 /* DBDurationTests.m in Sources */,
 				CFC5D9EB1B1513E800BF2DF8 /* DBExternInterface2+Private.mm in Sources */,
 				CFC5DA0B1B1532F600BF2DF8 /* DBRecordWithDurationAndDerivings+Private.mm in Sources */,
+				22A756791DCB6FF200671B6D /* DPPropertyTests.m in Sources */,
 				CFC5D9E91B1513E800BF2DF8 /* DBExternInterface1+Private.mm in Sources */,
 				6536CD9419A6C9A800DD7715 /* DBSetRecordTests.mm in Sources */,
 				CFC5D9D91B15106400BF2DF8 /* DBExternRecordWithDerivings+Private.mm in Sources */,

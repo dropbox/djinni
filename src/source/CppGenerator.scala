@@ -297,6 +297,14 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
           }
         }
+        // Properties
+        for (p <- i.properties) {
+          w.wl
+          writeDoc(w, p.doc)
+          val ret = marshal.fieldType(p.ty)
+          w.wl(s"virtual $ret get_${idCpp.method(p.ident)}() = 0;")
+          w.wl(s"virtual void set_${idCpp.method(p.ident)}($ret new_${idCpp.method(p.ident)}) = 0;")
+        }
       }
     })
 

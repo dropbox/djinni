@@ -197,6 +197,21 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
           }
         }
 
+        for (p <- i.properties) {
+          w.wl
+          w.wl(s"- (${marshal.fqFieldType(p.ty)})${idObjc.method(p.ident)}")
+          w.braced {
+            val call = "_cppRefHandle.get()->get_" + idCpp.method(p.ident) + "();"
+            w.wl(s"auto objcpp_result_ = ${call}")
+            w.wl(s"return ${objcppMarshal.fromCpp(p.ty, "objcpp_result_")};")
+          }
+          w.wl(s"- (void)set${idObjc.method(p.ident).capitalize}:(${marshal.fqFieldType(p.ty)})${idCpp.method(p.ident)}")
+          w.braced {
+            val call = s"_cppRefHandle.get()->set_${idCpp.method(p.ident)}(${objcppMarshal.toCpp(p.ty, idCpp.method(p.ident))})";
+            w.wl(s"${call};")
+          }
+        }
+
         if (i.consts.nonEmpty) {
           w.wl
           generateObjcConstants(w, i.consts, self, ObjcConstantType.ConstMethod)
