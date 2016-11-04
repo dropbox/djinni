@@ -21,7 +21,7 @@ private:
     
     int32_t m_item;
     std::string m_test_string;
-
+    std::vector<int32_t> m_test_list;
     
 public:
     
@@ -30,6 +30,9 @@ public:
     
     std::string get_test_string();
     void set_test_string(std::string new_test_string);
+    
+    std::vector<int32_t> get_test_list();
+    void set_test_list(std::vector<int32_t> new_test_list);
 };
     
 }

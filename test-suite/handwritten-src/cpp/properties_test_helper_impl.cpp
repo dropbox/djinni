@@ -29,4 +29,12 @@ namespace testsuite {
     void PropertiesTestHelperImpl::set_test_string(std::string new_test_string) {
         m_test_string = new_test_string;
     }
+    
+    std::vector<int32_t> PropertiesTestHelperImpl::get_test_list() {
+        return m_test_list;
+    }
+    
+    void PropertiesTestHelperImpl::set_test_list(std::vector<int32_t> new_test_list) {
+        m_test_list = new_test_list;
+    }
 }

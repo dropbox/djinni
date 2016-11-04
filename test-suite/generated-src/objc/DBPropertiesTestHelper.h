@@ -13,4 +13,6 @@
 
 @property (nonatomic, nonnull) NSString * testString;
 
+@property (nonatomic, nonnull) NSArray<NSNumber *> * testList;
+
 @end
