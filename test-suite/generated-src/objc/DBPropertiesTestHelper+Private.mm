@@ -57,6 +57,16 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     _cppRefHandle.get()->set_test_string(::djinni::String::toCpp(test_string));
 }
 
+- (NSArray<NSNumber *> *)testList
+{
+    auto objcpp_result_ = _cppRefHandle.get()->get_test_list();
+    return ::djinni::List<::djinni::I32>::fromCpp(objcpp_result_);
+}
+- (void)setTestList:(NSArray<NSNumber *> *)test_list
+{
+    _cppRefHandle.get()->set_test_list(::djinni::List<::djinni::I32>::toCpp(test_list));
+}
+
 namespace djinni_generated {
 
 auto PropertiesTestHelper::toCpp(ObjcType objc) -> CppType

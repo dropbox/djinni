@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace testsuite {
 
@@ -20,6 +21,9 @@ public:
 
     virtual std::string get_test_string() = 0;
     virtual void set_test_string(std::string new_test_string) = 0;
+
+    virtual std::vector<int32_t> get_test_list() = 0;
+    virtual void set_test_list(std::vector<int32_t> new_test_list) = 0;
 };
 
 }  // namespace testsuite

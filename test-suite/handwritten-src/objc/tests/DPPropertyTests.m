@@ -28,13 +28,24 @@
     
     DBPropertiesTestHelper *testHelper = [DBPropertiesTestHelper createNew];
 
+    // Test integer property
     testHelper.item = 1;
     
     XCTAssert(testHelper.item == 1);
     
+    // Test string property
     testHelper.testString = @"fooBar";
     
     XCTAssert([testHelper.testString isEqualToString:@"fooBar"]);
+    
+    //Test list property
+    NSArray<NSNumber *> *list = [NSArray arrayWithObjects:@1, @2, @3, nil];
+    
+    testHelper.testList = list;
+    
+    for (unsigned int i = 0; i < list.count;i++) {
+        XCTAssert([list objectAtIndex:i] == [testHelper.testList objectAtIndex:i]);
+    }
 }
 
 @end

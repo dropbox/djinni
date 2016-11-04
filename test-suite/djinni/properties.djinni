@@ -2,6 +2,7 @@ properties_test_helper = interface +c {
 
     item: i32;
     test_string: string;
+    test_list: list<i32>;
 
     static create_new(): properties_test_helper;
 }
