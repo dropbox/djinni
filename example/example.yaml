@@ -30,7 +30,7 @@ objc:
   header: '"MLB/MLBRecord1.h"'
   # Only used for "record" types: determines the type used when boxing the record is required.
   # Should not contain the pointer asterisk "*", protocols are not supported.
-  # This fiels is the same as "typename" most of the time as records are typically NSObjects and require no special boxing.
+  # This files is the same as "typename" most of the time as records are typically NSObjects and require no special boxing.
   # However, some may not, for example NSTimeInterval is boxed to NSNumber.
   boxed: 'MLBRecord1'
   # Specifies whether the unboxed type is a pointer.
