@@ -14,6 +14,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(NestedCollectionTest.class);
         mySuite.addTestSuite(MapRecordTest.class);
         mySuite.addTestSuite(PrimitiveListTest.class);
+        mySuite.addTestSuite(PropertyTest.class);
         mySuite.addTestSuite(RecordWithDerivingsTest.class);
         mySuite.addTestSuite(CppExceptionTest.class);
         mySuite.addTestSuite(ClientInterfaceTest.class);

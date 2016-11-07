@@ -3,6 +3,7 @@
 
 package com.dropbox.djinni.test;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -10,6 +11,15 @@ import javax.annotation.Nonnull;
 public abstract class PropertiesTestHelper {
     @CheckForNull
     public static native PropertiesTestHelper createNew();
+
+    public abstract int getItem();
+    public abstract void setItem(int newItem);
+
+    public abstract String getTestString();
+    public abstract void setTestString(String newTestString);
+
+    public abstract ArrayList<Integer> getTestList();
+    public abstract void setTestList(ArrayList<Integer> newTestList);
 
     private static final class CppProxy extends PropertiesTestHelper
     {
@@ -33,5 +43,53 @@ public abstract class PropertiesTestHelper {
             destroy();
             super.finalize();
         }
+
+        @Override
+        public int getItem()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getItem(this.nativeRef);
+        }
+        private native int native_getItem(long _nativeRef);
+
+        @Override
+        public void setItem(int newItem)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setItem(this.nativeRef, newItem);
+        }
+        private native void native_setItem(long _nativeRef, int newItem);
+
+        @Override
+        public String getTestString()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getTestString(this.nativeRef);
+        }
+        private native String native_getTestString(long _nativeRef);
+
+        @Override
+        public void setTestString(String newTestString)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setTestString(this.nativeRef, newTestString);
+        }
+        private native void native_setTestString(long _nativeRef, String newTestString);
+
+        @Override
+        public ArrayList<Integer> getTestList()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getTestList(this.nativeRef);
+        }
+        private native ArrayList<Integer> native_getTestList(long _nativeRef);
+
+        @Override
+        public void setTestList(ArrayList<Integer> newTestList)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setTestList(this.nativeRef, newTestList);
+        }
+        private native void native_setTestList(long _nativeRef, ArrayList<Integer> newTestList);
     }
 }

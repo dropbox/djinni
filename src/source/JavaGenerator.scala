@@ -130,6 +130,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
+    i.properties.map(p => {
+      refs.find(p.ty)
+    })
+
     if (i.ext.cpp) {
       refs.java.add("java.util.concurrent.atomic.AtomicBoolean")
     }
@@ -167,6 +171,15 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
+        for (p <- i.properties) {
+          skipFirst { w.wl }
+          writeDoc(w, p.doc)
+          val ret = marshal.fqTypename(p.ty)
+          val meth = idJava.method(p.ident).capitalize;
+          w.wl("public abstract " + ret + " get" + meth + "();")
+          w.wl("public abstract void set" + meth + "(" + ret + " new" + meth + ");")
+        }
+
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
@@ -201,6 +214,26 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
               }
               w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
+            }
+
+            for (p <- i.properties) {
+              val ret = marshal.fieldType(p.ty)
+              var meth = idJava.method(p.ident).capitalize
+              w.wl
+              w.wl(s"@Override")
+              w.wl(s"public $ret get$meth()$throwException").braced {
+                w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
+                w.wl(s"return native_get$meth(this.nativeRef);")
+              }
+              w.wl(s"private native ${ret} native_get${meth}(long _nativeRef);")
+
+              w.wl
+              w.wl(s"@Override")
+              w.wl(s"public void set$meth(${ret} new${meth})$throwException").braced {
+                w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
+                w.wl(s"native_set$meth(this.nativeRef, new${meth});")
+              }
+              w.wl(s"private native void native_set${meth}(long _nativeRef, ${ret} new${meth});")
             }
           }
         }
