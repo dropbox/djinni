@@ -22,6 +22,7 @@ private:
     int32_t m_item;
     std::string m_test_string;
     std::vector<int32_t> m_test_list;
+    bool m_read_only_bool = true;
     
 public:
     
@@ -33,6 +34,8 @@ public:
     
     std::vector<int32_t> get_test_list();
     void set_test_list(std::vector<int32_t> new_test_list);
+
+    bool get_read_only_bool();
 };
     
 }

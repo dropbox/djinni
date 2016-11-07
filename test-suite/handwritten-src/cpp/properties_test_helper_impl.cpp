@@ -37,4 +37,8 @@ namespace testsuite {
     void PropertiesTestHelperImpl::set_test_list(std::vector<int32_t> new_test_list) {
         m_test_list = new_test_list;
     }
+
+    bool PropertiesTestHelperImpl::get_read_only_bool() {
+        return m_read_only_bool;
+    }
 }

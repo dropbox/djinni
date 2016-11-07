@@ -15,4 +15,6 @@
 
 @property (nonatomic, nonnull) NSArray<NSNumber *> * testList;
 
+@property (nonatomic, readonly) BOOL readOnlyBool;
+
 @end

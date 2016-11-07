@@ -24,6 +24,8 @@ public:
 
     virtual std::vector<int32_t> get_test_list() = 0;
     virtual void set_test_list(std::vector<int32_t> new_test_list) = 0;
+
+    virtual bool get_read_only_bool() = 0;
 };
 
 }  // namespace testsuite

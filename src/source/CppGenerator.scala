@@ -306,7 +306,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           writeDoc(w, p.doc)
           val ret = marshal.fieldType(p.ty)
           w.wl(s"virtual $ret get_${idCpp.method(p.ident)}() = 0;")
-          w.wl(s"virtual void set_${idCpp.method(p.ident)}($ret new_${idCpp.method(p.ident)}) = 0;")
+          if(!p.readOnly) {
+            w.wl(s"virtual void set_${idCpp.method(p.ident)}($ret new_${idCpp.method(p.ident)}) = 0;")
+          }
         }
       }
     })
