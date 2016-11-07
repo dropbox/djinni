@@ -98,14 +98,4 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_PropertiesTestHelper_00
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_PropertiesTestHelper_00024CppProxy_native_1setReadOnlyBool(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jboolean j_readOnlyBool)
-{
-    try {
-        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::PropertiesTestHelper>(nativeRef);
-        ref->set_read_only_bool(::djinni::Bool::toCpp(jniEnv, j_readOnlyBool));
-        ;
-    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
-}
-
 }  // namespace djinni_generated
