@@ -67,6 +67,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     _cppRefHandle.get()->set_test_list(::djinni::List<::djinni::I32>::toCpp(test_list));
 }
 
+- (BOOL)readOnlyBool
+{
+    auto objcpp_result_ = _cppRefHandle.get()->get_read_only_bool();
+    return ::djinni::Bool::fromCpp(objcpp_result_);
+}
+
 namespace djinni_generated {
 
 auto PropertiesTestHelper::toCpp(ObjcType objc) -> CppType

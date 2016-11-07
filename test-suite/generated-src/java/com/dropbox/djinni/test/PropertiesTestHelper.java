@@ -21,6 +21,9 @@ public abstract class PropertiesTestHelper {
     public abstract ArrayList<Integer> getTestList();
     public abstract void setTestList(ArrayList<Integer> newTestList);
 
+    public abstract boolean getReadOnlyBool();
+    public abstract void setReadOnlyBool(boolean newReadOnlyBool);
+
     private static final class CppProxy extends PropertiesTestHelper
     {
         private final long nativeRef;
@@ -91,5 +94,21 @@ public abstract class PropertiesTestHelper {
             native_setTestList(this.nativeRef, newTestList);
         }
         private native void native_setTestList(long _nativeRef, ArrayList<Integer> newTestList);
+
+        @Override
+        public boolean getReadOnlyBool()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getReadOnlyBool(this.nativeRef);
+        }
+        private native boolean native_getReadOnlyBool(long _nativeRef);
+
+        @Override
+        public void setReadOnlyBool(boolean newReadOnlyBool)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setReadOnlyBool(this.nativeRef, newReadOnlyBool);
+        }
+        private native void native_setReadOnlyBool(long _nativeRef, boolean newReadOnlyBool);
     }
 }

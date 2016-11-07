@@ -143,6 +143,10 @@ private object IdlParser extends RegexParsers {
     case "const " => true
     case "" => false
   }
+  def readOnlyLabel: Parser[Boolean] = ("readonly ".r | "".r) ^^ {
+    case "readonly " => true
+    case "" => false
+  }
   def method: Parser[Interface.Method] = doc ~ staticLabel ~ constLabel ~ ident ~ parens(repsepend(field, ",")) ~ opt(ret) ^^ {
     case doc~staticLabel~constLabel~ ident~params~ret => Interface.Method(ident, params, ret, doc, staticLabel, constLabel)
   }
@@ -167,8 +171,8 @@ private object IdlParser extends RegexParsers {
     case doc~_~ident~_~typeRef~_~value => Const(ident, typeRef, value, doc)
   }
 
-  def property: Parser[Interface.Property] = doc ~ ident ~ ret ^^ {
-    case doc~ident~ret => Interface.Property(ident, ret, doc)
+  def property: Parser[Interface.Property] = doc ~ readOnlyLabel ~ ident ~ ret ^^ {
+    case doc~readOnlyLabel~ident~ret => Interface.Property(ident, ret, doc, readOnlyLabel)
   }
 
   def typeRef: Parser[TypeRef] = typeExpr ^^ TypeRef

@@ -38,7 +38,7 @@
     
     XCTAssert([testHelper.testString isEqualToString:@"fooBar"]);
     
-    //Test list property
+    // Test list property
     NSArray<NSNumber *> *list = [NSArray arrayWithObjects:@1, @2, @3, nil];
     
     testHelper.testList = list;
@@ -46,6 +46,11 @@
     for (unsigned int i = 0; i < list.count;i++) {
         XCTAssert([list objectAtIndex:i] == [testHelper.testList objectAtIndex:i]);
     }
+    
+    // Test read only property
+    XCTAssert(testHelper.readOnlyBool == true);
+    
+    XCTAssert([testHelper respondsToSelector:NSSelectorFromString(@"setReadOnlyBool:")] == false);
 }
 
 @end
