@@ -177,7 +177,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           val ret = marshal.fqTypename(p.ty)
           val meth = idJava.method(p.ident).capitalize;
           w.wl("public abstract " + ret + " get" + meth + "();")
-          w.wl("public abstract void set" + meth + "(" + ret + " new" + meth + ");")
+          if(!p.readOnly) {
+            w.wl("public abstract void set" + meth + "(" + ret + " new" + meth + ");")
+          }
         }
 
         if (i.ext.cpp) {
@@ -227,13 +229,15 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               }
               w.wl(s"private native ${ret} native_get${meth}(long _nativeRef);")
 
-              w.wl
-              w.wl(s"@Override")
-              w.wl(s"public void set$meth(${ret} new${meth})$throwException").braced {
-                w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
-                w.wl(s"native_set$meth(this.nativeRef, new${meth});")
+              if(!p.readOnly) {
+                w.wl
+                w.wl(s"@Override")
+                w.wl(s"public void set$meth(${ret} new${meth})$throwException").braced {
+                  w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
+                  w.wl(s"native_set$meth(this.nativeRef, new${meth});")
+                }
+                w.wl(s"private native void native_set${meth}(long _nativeRef, ${ret} new${meth});")
               }
-              w.wl(s"private native void native_set${meth}(long _nativeRef, ${ret} new${meth});")
             }
           }
         }

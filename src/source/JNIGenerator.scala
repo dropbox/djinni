@@ -378,15 +378,17 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"${ret}${call}();")
             w.wl(s"return ::djinni::release(${jniMarshal.fromCpp(p.ty, "r")});")
           })
-          val setterParam = Iterable(Field(p.ident, p.ty, Doc(Nil)));
-          nativeHook(s"native_set${idJava.method(p.ident).capitalize}", false, setterParam, Option(null), {
-            w.wl(s"const auto& ref = ::djinni::objectFromHandleAddress<$cppSelf>(nativeRef);")
-            val methodName = "set_" + idCpp.method(p.ident)
-            val call = s"ref->$methodName"
-            val params = jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident))
-            w.wl(s"${call}(${params});")
-            w.wl(";")
-          })
+          if(!p.readOnly) {
+            val setterParam = Iterable(Field(p.ident, p.ty, Doc(Nil)));
+            nativeHook(s"native_set${idJava.method(p.ident).capitalize}", false, setterParam, Option(null), {
+              w.wl(s"const auto& ref = ::djinni::objectFromHandleAddress<$cppSelf>(nativeRef);")
+              val methodName = "set_" + idCpp.method(p.ident)
+              val call = s"ref->$methodName"
+              val params = jniMarshal.toCpp(p.ty, "j_" + idJava.local(p.ident))
+              w.wl(s"${call}(${params});")
+              w.wl(";")
+            })
+          }
         }
       }
     }

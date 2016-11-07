@@ -1,7 +1,6 @@
 package com.dropbox.djinni.test;
 
 import junit.framework.TestCase;
-
 import java.util.ArrayList;
 
 /**
@@ -33,6 +32,19 @@ public class PropertyTest extends TestCase {
 
         for (int i = 0; i < list.size();i++) {
             assertEquals(list.get(i), testHelper.getTestList().get(i));
+        }
+    }
+
+    public void testReadOnlyProperty() {
+
+        PropertiesTestHelper testHelper = PropertiesTestHelper.createNew();
+
+        // Test readonly property.
+        assertEquals(true, testHelper.getReadOnlyBool());
+
+        try {
+            assertNull(PropertiesTestHelper.class.getDeclaredMethod("setReadOnlyBool", void.class));
+        } catch (NoSuchMethodException e) {
         }
     }
 }
