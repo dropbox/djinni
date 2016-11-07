@@ -459,7 +459,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         case MList => {
           w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();");
-          w.wl(s"in.readList(this.${idJava.field(f.ident)}, null);")
+          w.wl(s"in.readList(this.${idJava.field(f.ident)}, getClass().getClassLoader());")
         }
         case MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
         case MOptional => {
