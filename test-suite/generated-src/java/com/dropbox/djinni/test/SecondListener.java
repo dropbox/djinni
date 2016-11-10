@@ -7,6 +7,6 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Used for ObjC multiple inheritance tests */
-public abstract class SecondListener {
-    public abstract void second();
+public interface SecondListener {
+    public void second();
 }
