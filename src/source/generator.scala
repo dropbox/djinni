@@ -34,6 +34,7 @@ package object generatorTools {
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
+                   javaGenerateInterfaces: Boolean,
                    javaNullableAnnotation: Option[String],
                    javaNonnullAnnotation: Option[String],
                    javaUseFinalForRecord: Boolean,

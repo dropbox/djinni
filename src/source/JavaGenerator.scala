@@ -140,7 +140,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      val isAbstractClass = i.ext.cpp || i.methods.exists(_.static) || i.consts.size > 0
+      val isAbstractClass = (spec.javaGenerateInterfaces == false) || i.ext.cpp || i.methods.exists(_.static) || i.consts.size > 0
       val classPrefix = if (isAbstractClass) "abstract class" else "interface"
       val methodPrefix = if (isAbstractClass) "abstract " else ""
       w.w(s"${javaClassAccessModifierString}$classPrefix $javaClass$typeParamList").braced {
