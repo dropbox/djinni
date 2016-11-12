@@ -6,7 +6,7 @@ djinni:
 	./run_djinni.sh
 
 objc: djinni
-	cd objc; xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.3'
+	cd objc; xcodebuild -sdk iphonesimulator -project DjinniObjcTest.xcodeproj -scheme DjinniObjcTest test -destination 'platform=iOS Simulator,name=iPhone 6s,OS=10.1'
 
 java: djinni
 	cd java && ant compile test
