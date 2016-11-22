@@ -13,6 +13,7 @@
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
 
 @interface DBUsesSingleLanguageListenersCppProxy : NSObject<DBUsesSingleLanguageListeners>
 
