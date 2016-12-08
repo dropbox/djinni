@@ -69,9 +69,7 @@ fi
 	--objcpp-out "$temp_out/objc" \
     --objc-type-prefix TXS \
     \
-    --idl "$in" \
-    --idl-include-path "../../" \
-    --idl-include-path "path/to/idl"
+    --idl "$in"
 
 # Copy changes from "$temp_output" to final dir.
 
