@@ -55,7 +55,7 @@ private object IdlParser extends RegexParsers {
 
     includePaths.foreach(path => {
       if (file.isEmpty) {
-        var relPath = if (path == ".") fileParent else path + "/"
+        var relPath = if (path.isEmpty) fileParent else path + "/"
         val tmp = new File(relPath + fileName);
         if (tmp.exists)
           file = Some(tmp)

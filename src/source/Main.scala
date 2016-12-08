@@ -24,7 +24,7 @@ object Main {
 
   def main(args: Array[String]) {
     var idlFile: File = null
-    var idlIncludePaths: List[String] = List(".")
+    var idlIncludePaths: List[String] = List("")
     var cppOutFolder: Option[File] = None
     var cppNamespace: String = ""
     var cppIncludePrefix: String = ""

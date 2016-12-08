@@ -17,5 +17,5 @@ djinni/single_language_interfaces.djinni
 djinni/extended_record.djinni
 djinni/date.djinni
 djinni/date.yaml
-./djinni/vendor/third-party/duration.djinni
-./djinni/vendor/third-party/duration.yaml
+djinni/vendor/third-party/duration.djinni
+djinni/vendor/third-party/duration.yaml
