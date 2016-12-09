@@ -26,6 +26,7 @@ import java.util.{Map => JMap}
 import org.yaml.snakeyaml.Yaml
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.util.control.Breaks._
 import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.{Position, Positional}
 
@@ -53,16 +54,15 @@ private object IdlParser extends RegexParsers {
   def importFile(fileName: String): File = {
     var file: Option[File] = None
 
-    includePaths.foreach(path => {
-      if (file.isEmpty) {
-        var relPath = if (path.isEmpty) fileParent else path + "/"
-        val tmp = new File(relPath + fileName);
-        if (tmp.exists)
-          file = Some(tmp)
-      }
+    val path = includePaths.find(path => {
+      val relPath = if (path.isEmpty) fileParent else path + "/"
+      val tmp = new File(relPath + fileName)
+      val exists = tmp.exists
+      if (exists) file = Some(tmp)
+      exists
     })
 
-    if (file.isEmpty) throw new FileNotFoundException("Unable to find file \"" + fileName + "\" at " + fileStack.top.getCanonicalPath)
+    if (path.isEmpty || file.isEmpty) throw new FileNotFoundException("Unable to find file \"" + fileName + "\" at " + fileStack.top.getCanonicalPath)
 
     return file.get
   }
