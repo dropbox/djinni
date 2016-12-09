@@ -1,0 +1,11 @@
+# Underscore is used as a separator in Djinni names, so we don't really
+# anticipate it to be used as a prefix/suffix.  Some name styles behave
+# badly when it is.  However this test case ensures we at least don't crash.
+_varname_record_ = record {
+    _field_: i8;
+}
+
+_varname_interface_ = interface +c {
+    _rmethod_(_r_arg_: _varname_record_): _varname_record_;
+    _imethod_(_i_arg_: _varname_interface_): _varname_interface_;
+}

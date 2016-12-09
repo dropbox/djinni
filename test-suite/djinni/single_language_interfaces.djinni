@@ -5,5 +5,7 @@ java_only_listener = interface +j {}
 # on references to interfaces they don't need.
 uses_single_language_listeners = interface +o +j +c {
   callForObjC(l: objc_only_listener);
+  returnForObjC(): objc_only_listener;
   callForJava(l: java_only_listener);
+  returnForJava(): java_only_listener;
 }

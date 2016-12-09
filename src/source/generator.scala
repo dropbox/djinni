@@ -30,6 +30,7 @@ package object generatorTools {
   case class Spec(
                    javaOutFolder: Option[File],
                    javaPackage: Option[String],
+                   javaClassAccessModifier: JavaAccessModifier.Value,
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
@@ -49,6 +50,7 @@ package object generatorTools {
                    cppNnHeader: Option[String],
                    cppNnType: Option[String],
                    cppNnCheckExpression: Option[String],
+                   cppUseWideStrings: Boolean,
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
@@ -82,7 +84,7 @@ package object generatorTools {
     if (s.isEmpty) s else ", " + s
   }
   def q(s: String) = '"' + s + '"'
-  def firstUpper(token: String) = token.charAt(0).toUpper + token.substring(1)
+  def firstUpper(token: String) = if (token.isEmpty()) token else token.charAt(0).toUpper + token.substring(1)
 
   type IdentConverter = String => String
 
@@ -136,6 +138,20 @@ package object generatorTools {
       None
     }
   }
+
+  object JavaAccessModifier extends Enumeration {
+    val Public = Value("public")
+    val Package = Value("package")
+
+    def getCodeGenerationString(javaAccessModifier: JavaAccessModifier.Value): String = {
+      javaAccessModifier match {
+        case Public => "public "
+        case Package => "/*package*/ "
+      }
+    }
+
+  }
+  implicit val javaAccessModifierReads: scopt.Read[JavaAccessModifier.Value] = scopt.Read.reads(JavaAccessModifier withName _)
 
   final case class SkipFirst() {
     private var first = true
@@ -308,7 +324,9 @@ abstract class Generator(spec: Spec)
       w.wl
       val myHeader = q(includePrefix + fileIdentStyle(name) + "." + spec.cppHeaderExt)
       w.wl(s"#include $myHeader  // my header")
-      includes.foreach(w.wl(_))
+      val myHeaderInclude = s"#include $myHeader"
+      for (include <- includes if include != myHeaderInclude)
+        w.wl(include)
       w.wl
       wrapNamespace(w, namespace, f)
     })

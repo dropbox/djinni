@@ -98,7 +98,7 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
       }
       case MOptional => "Optional"
       case MBinary => "Binary"
-      case MString => "String"
+      case MString => if (spec.cppUseWideStrings) "WString" else "String"
       case MDate => "Date"
       case MList => "List"
       case MSet => "Set"

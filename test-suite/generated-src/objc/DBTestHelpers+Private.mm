@@ -5,6 +5,7 @@
 #import "DBTestHelpers.h"
 #import "DBAssortedPrimitives+Private.h"
 #import "DBClientInterface+Private.h"
+#import "DBColor+Private.h"
 #import "DBMapListRecord+Private.h"
 #import "DBNestedCollection+Private.h"
 #import "DBPrimitiveList+Private.h"
@@ -14,6 +15,7 @@
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -38,85 +40,85 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nonnull DBSetRecord *)getSetRecord {
     try {
-        auto r = ::testsuite::TestHelpers::get_set_record();
-        return ::djinni_generated::SetRecord::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_set_record();
+        return ::djinni_generated::SetRecord::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec {
     try {
-        auto r = ::testsuite::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(rec));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(rec));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull DBPrimitiveList *)getPrimitiveList {
     try {
-        auto r = ::testsuite::TestHelpers::get_primitive_list();
-        return ::djinni_generated::PrimitiveList::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_primitive_list();
+        return ::djinni_generated::PrimitiveList::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkPrimitiveList:(nonnull DBPrimitiveList *)pl {
     try {
-        auto r = ::testsuite::TestHelpers::check_primitive_list(::djinni_generated::PrimitiveList::toCpp(pl));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_primitive_list(::djinni_generated::PrimitiveList::toCpp(pl));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull DBNestedCollection *)getNestedCollection {
     try {
-        auto r = ::testsuite::TestHelpers::get_nested_collection();
-        return ::djinni_generated::NestedCollection::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_nested_collection();
+        return ::djinni_generated::NestedCollection::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkNestedCollection:(nonnull DBNestedCollection *)nc {
     try {
-        auto r = ::testsuite::TestHelpers::check_nested_collection(::djinni_generated::NestedCollection::toCpp(nc));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_nested_collection(::djinni_generated::NestedCollection::toCpp(nc));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSDictionary<NSString *, NSNumber *> *)getMap {
     try {
-        auto r = ::testsuite::TestHelpers::get_map();
-        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_map();
+        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m {
     try {
-        auto r = ::testsuite::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSDictionary<NSString *, NSNumber *> *)getEmptyMap {
     try {
-        auto r = ::testsuite::TestHelpers::get_empty_map();
-        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_empty_map();
+        return ::djinni::Map<::djinni::String, ::djinni::I64>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkEmptyMap:(nonnull NSDictionary<NSString *, NSNumber *> *)m {
     try {
-        auto r = ::testsuite::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_empty_map(::djinni::Map<::djinni::String, ::djinni::I64>::toCpp(m));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull DBMapListRecord *)getMapListRecord {
     try {
-        auto r = ::testsuite::TestHelpers::get_map_list_record();
-        return ::djinni_generated::MapListRecord::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::get_map_list_record();
+        return ::djinni_generated::MapListRecord::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (BOOL)checkMapListRecord:(nonnull DBMapListRecord *)m {
     try {
-        auto r = ::testsuite::TestHelpers::check_map_list_record(::djinni_generated::MapListRecord::toCpp(m));
-        return ::djinni::Bool::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_map_list_record(::djinni_generated::MapListRecord::toCpp(m));
+        return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -152,15 +154,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nullable id<DBUserToken>)tokenId:(nullable id<DBUserToken>)t {
     try {
-        auto r = ::testsuite::TestHelpers::token_id(::djinni_generated::UserToken::toCpp(t));
-        return ::djinni_generated::UserToken::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::token_id(::djinni_generated::UserToken::toCpp(t));
+        return ::djinni_generated::UserToken::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nullable id<DBUserToken>)createCppToken {
     try {
-        auto r = ::testsuite::TestHelpers::create_cpp_token();
-        return ::djinni_generated::UserToken::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::create_cpp_token();
+        return ::djinni_generated::UserToken::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -172,8 +174,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (int64_t)cppTokenId:(nullable id<DBUserToken>)t {
     try {
-        auto r = ::testsuite::TestHelpers::cpp_token_id(::djinni_generated::UserToken::toCpp(t));
-        return ::djinni::I64::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::cpp_token_id(::djinni_generated::UserToken::toCpp(t));
+        return ::djinni::I64::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -187,22 +189,22 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nullable NSNumber *)returnNone {
     try {
-        auto r = ::testsuite::TestHelpers::return_none();
-        return ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::return_none();
+        return ::djinni::Optional<std::experimental::optional, ::djinni::I32>::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull DBAssortedPrimitives *)assortedPrimitivesId:(nonnull DBAssortedPrimitives *)i {
     try {
-        auto r = ::testsuite::TestHelpers::assorted_primitives_id(::djinni_generated::AssortedPrimitives::toCpp(i));
-        return ::djinni_generated::AssortedPrimitives::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::assorted_primitives_id(::djinni_generated::AssortedPrimitives::toCpp(i));
+        return ::djinni_generated::AssortedPrimitives::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 + (nonnull NSData *)idBinary:(nonnull NSData *)b {
     try {
-        auto r = ::testsuite::TestHelpers::id_binary(::djinni::Binary::toCpp(b));
-        return ::djinni::Binary::fromCpp(r);
+        auto objcpp_result_ = ::testsuite::TestHelpers::id_binary(::djinni::Binary::toCpp(b));
+        return ::djinni::Binary::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

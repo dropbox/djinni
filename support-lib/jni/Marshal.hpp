@@ -174,7 +174,26 @@ namespace djinni
 
         static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
         {
-            return {jniEnv, jniStringFromUTF8(jniEnv, c.c_str())};
+            return {jniEnv, jniStringFromUTF8(jniEnv, c)};
+        }
+    };
+
+    struct WString
+    {
+        using CppType = std::wstring;
+        using JniType = jstring;
+
+        using Boxed = WString;
+
+        static CppType toCpp(JNIEnv* jniEnv, JniType j)
+        {
+            assert(j != nullptr);
+            return jniWStringFromString(jniEnv, j);
+        }
+
+        static LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c)
+        {
+            return {jniEnv, jniStringFromWString(jniEnv, c)};
         }
     };
 
