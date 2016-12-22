@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include "extern_record_with_derivings.hpp"
 #include "test_helpers.hpp"
 #include <memory>
+
+struct ExternRecordWithDerivings;
 
 class ExternInterface2 {
 public:

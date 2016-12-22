@@ -3,14 +3,8 @@
 
 #pragma once
 
-#include "assorted_primitives.hpp"
-#include "color.hpp"
-#include "map_list_record.hpp"
-#include "nested_collection.hpp"
-#include "primitive_list.hpp"
-#include "set_record.hpp"
+#include "../../handwritten-src/cpp/optional.hpp"
 #include <cstdint>
-#include <experimental/optional>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -20,6 +14,12 @@ namespace testsuite {
 
 class ClientInterface;
 class UserToken;
+enum class color;
+struct AssortedPrimitives;
+struct MapListRecord;
+struct NestedCollection;
+struct PrimitiveList;
+struct SetRecord;
 
 /**
  * Helper methods used by various different tests.
@@ -63,6 +63,8 @@ public:
     static void check_client_interface_ascii(const std::shared_ptr<ClientInterface> & i);
 
     static void check_client_interface_nonascii(const std::shared_ptr<ClientInterface> & i);
+
+    static void check_client_interface_args(const std::shared_ptr<ClientInterface> & i);
 
     static void check_enum_map(const std::unordered_map<color, std::string> & m);
 

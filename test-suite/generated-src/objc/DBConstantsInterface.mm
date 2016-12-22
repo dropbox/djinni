@@ -3,8 +3,6 @@
 
 #import "DBConstantsInterface.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
 
 BOOL const DBConstantsInterfaceBoolConstant = YES;
 
@@ -20,4 +18,6 @@ float const DBConstantsInterfaceF32Constant = 5.0f;
 
 double const DBConstantsInterfaceF64Constant = 5.0;
 
-#pragma clang diagnostic pop
+NSString * __nonnull const DBConstantsInterfaceStringConstant = @"string-constant";
+
+NSString * __nullable const DBConstantsInterfaceOptStringConstant = @"string-constant";

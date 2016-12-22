@@ -3,10 +3,42 @@
 
 #import <XCTest/XCTest.h>
 
-static DBRecordWithDerivings *record1 = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String1"];
-static DBRecordWithDerivings *record1A = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String1"];
-static DBRecordWithDerivings *record2 = [DBRecordWithDerivings recordWithDerivingsWithKey1:1 key2:@"String2"];
-static DBRecordWithDerivings *record3 = [DBRecordWithDerivings recordWithDerivingsWithKey1:2 key2:@"String1"];
+static DBRecordWithDerivings *record1 = [DBRecordWithDerivings
+                                         recordWithDerivingsWithEight:1
+                                         sixteen:2
+                                         thirtytwo:3
+                                         sixtyfour:4
+                                         fthirtytwo:5.0f
+                                         fsixtyfour:6.0
+                                         d:[NSDate dateWithTimeIntervalSince1970:7]
+                                         s:@"String8"];
+static DBRecordWithDerivings *record1A = [DBRecordWithDerivings
+                                          recordWithDerivingsWithEight:1
+                                          sixteen:2
+                                          thirtytwo:3
+                                          sixtyfour:4
+                                          fthirtytwo:5.0f
+                                          fsixtyfour:6.0
+                                          d:[NSDate dateWithTimeIntervalSince1970:7]
+                                          s:@"String8"];
+static DBRecordWithDerivings *record2 = [DBRecordWithDerivings
+                                         recordWithDerivingsWithEight:1
+                                         sixteen:2
+                                         thirtytwo:3
+                                         sixtyfour:4
+                                         fthirtytwo:5.0f
+                                         fsixtyfour:6.0
+                                         d:[NSDate dateWithTimeIntervalSince1970:7]
+                                         s:@"String888"];
+static DBRecordWithDerivings *record3 = [DBRecordWithDerivings
+                                         recordWithDerivingsWithEight:111
+                                         sixteen:2
+                                         thirtytwo:3
+                                         sixtyfour:4
+                                         fthirtytwo:5.0f
+                                         fsixtyfour:6.0
+                                         d:[NSDate dateWithTimeIntervalSince1970:7]
+                                         s:@"String8"];
 
 static DBRecordWithNestedDerivings *nestedRecord1 = [DBRecordWithNestedDerivings recordWithNestedDerivingsWithKey:1 rec:record1];
 static DBRecordWithNestedDerivings *nestedRecord1A = [DBRecordWithNestedDerivings recordWithNestedDerivingsWithKey:1 rec:record1A];

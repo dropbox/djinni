@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithItems:(nonnull NSArray<NSString *> *)items
 {
     if (self = [super init]) {
-        _items = items;
+        _items = [items copy];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p items:%@>", self.class, self, self.items];
+    return [NSString stringWithFormat:@"<%@ %p items:%@>", self.class, (void *)self, self.items];
 }
 
 @end

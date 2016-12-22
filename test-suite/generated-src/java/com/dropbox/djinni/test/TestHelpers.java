@@ -54,6 +54,8 @@ public abstract class TestHelpers {
 
     public static native void checkClientInterfaceNonascii(@CheckForNull ClientInterface i);
 
+    public static native void checkClientInterfaceArgs(@CheckForNull ClientInterface i);
+
     public static native void checkEnumMap(@Nonnull HashMap<Color, String> m);
 
     public static native void checkEnum(@Nonnull Color c);

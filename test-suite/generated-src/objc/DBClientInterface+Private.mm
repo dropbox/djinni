@@ -6,6 +6,7 @@
 #import "DBClientReturnedRecord+Private.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
+#include <stdexcept>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -20,26 +21,40 @@ public:
     ::testsuite::ClientReturnedRecord get_record(int64_t c_record_id, const std::string & c_utf8string, const std::experimental::optional<std::string> & c_misc) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() getRecord:(::djinni::I64::fromCpp(c_record_id))
-                                   utf8string:(::djinni::String::fromCpp(c_utf8string))
-                                         misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(c_misc))];
-            return ::djinni_generated::ClientReturnedRecord::toCpp(r);
+            auto objcpp_result_ = [Handle::get() getRecord:(::djinni::I64::fromCpp(c_record_id))
+                                                utf8string:(::djinni::String::fromCpp(c_utf8string))
+                                                      misc:(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(c_misc))];
+            return ::djinni_generated::ClientReturnedRecord::toCpp(objcpp_result_);
         }
     }
     double identifier_check(const std::vector<uint8_t> & c_data, int32_t c_r, int64_t c_jret) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() identifierCheck:(::djinni::Binary::fromCpp(c_data))
-                                                  r:(::djinni::I32::fromCpp(c_r))
-                                               jret:(::djinni::I64::fromCpp(c_jret))];
-            return ::djinni::F64::toCpp(r);
+            auto objcpp_result_ = [Handle::get() identifierCheck:(::djinni::Binary::fromCpp(c_data))
+                                                               r:(::djinni::I32::fromCpp(c_r))
+                                                            jret:(::djinni::I64::fromCpp(c_jret))];
+            return ::djinni::F64::toCpp(objcpp_result_);
         }
     }
     std::string return_str() override
     {
         @autoreleasepool {
-            auto r = [Handle::get() returnStr];
-            return ::djinni::String::toCpp(r);
+            auto objcpp_result_ = [Handle::get() returnStr];
+            return ::djinni::String::toCpp(objcpp_result_);
+        }
+    }
+    std::string meth_taking_interface(const std::shared_ptr<::testsuite::ClientInterface> & c_i) override
+    {
+        @autoreleasepool {
+            auto objcpp_result_ = [Handle::get() methTakingInterface:(::djinni_generated::ClientInterface::fromCpp(c_i))];
+            return ::djinni::String::toCpp(objcpp_result_);
+        }
+    }
+    std::string meth_taking_optional_interface(const std::shared_ptr<::testsuite::ClientInterface> & c_i) override
+    {
+        @autoreleasepool {
+            auto objcpp_result_ = [Handle::get() methTakingOptionalInterface:(::djinni::Optional<std::experimental::optional, ::djinni_generated::ClientInterface>::fromCpp(c_i))];
+            return ::djinni::String::toCpp(objcpp_result_);
         }
     }
 };
@@ -56,7 +71,7 @@ auto ClientInterface::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto ClientInterface::fromCpp(const CppType& cpp) -> ObjcType
+auto ClientInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

@@ -53,6 +53,7 @@ fi
 "$base_dir/../src/run-assume-built" \
     --java-out "$temp_out/java" \
     --java-package $java_package \
+    --java-class-access-modifier "package" \
     --java-nullable-annotation "javax.annotation.CheckForNull" \
     --java-nonnull-annotation "javax.annotation.Nonnull" \
     --ident-java-field mFooBar \

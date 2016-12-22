@@ -5,6 +5,7 @@
 #import "TXSTextboxListener.h"
 #import "DJIObjcWrapperCache+Private.h"
 #import "TXSItemList+Private.h"
+#include <stdexcept>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -36,7 +37,7 @@ auto TextboxListener::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto TextboxListener::fromCpp(const CppType& cpp) -> ObjcType
+auto TextboxListener::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

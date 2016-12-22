@@ -2,7 +2,7 @@ Djinni Linux Tests
 ------------------
 
 This directory contains a suite of tools for testing djinni (JNI only)
-on Linux.  The suite helps ensure the portability of djinni and 
+on Linux via Docker.  The suite helps ensure the portability of djinni and 
 (self-)document compatible platforms.
 
 Quickstart

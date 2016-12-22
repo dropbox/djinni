@@ -10,8 +10,8 @@
                                imap:(nonnull NSDictionary<NSNumber *, NSNumber *> *)imap
 {
     if (self = [super init]) {
-        _map = map;
-        _imap = imap;
+        _map = [map copy];
+        _imap = [imap copy];
     }
     return self;
 }
@@ -25,7 +25,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p map:%@ imap:%@>", self.class, self, self.map, self.imap];
+    return [NSString stringWithFormat:@"<%@ %p map:%@ imap:%@>", self.class, (void *)self, self.map, self.imap];
 }
 
 @end

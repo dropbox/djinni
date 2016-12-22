@@ -30,14 +30,17 @@ package object generatorTools {
   case class Spec(
                    javaOutFolder: Option[File],
                    javaPackage: Option[String],
+                   javaClassAccessModifier: JavaAccessModifier.Value,
                    javaIdentStyle: JavaIdentStyle,
                    javaCppException: Option[String],
                    javaAnnotation: Option[String],
                    javaNullableAnnotation: Option[String],
                    javaNonnullAnnotation: Option[String],
+                   javaUseFinalForRecord: Boolean,
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
                    cppIncludePrefix: String,
+                   cppExtendedRecordIncludePrefix: String,
                    cppNamespace: String,
                    cppIdentStyle: CppIdentStyle,
                    cppFileIdentStyle: IdentConverter,
@@ -47,6 +50,7 @@ package object generatorTools {
                    cppNnHeader: Option[String],
                    cppNnType: Option[String],
                    cppNnCheckExpression: Option[String],
+                   cppUseWideStrings: Boolean,
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
@@ -64,6 +68,7 @@ package object generatorTools {
                    objcppExt: String,
                    objcHeaderExt: String,
                    objcIncludePrefix: String,
+                   objcExtendedRecordIncludePrefix: String,
                    objcppIncludePrefix: String,
                    objcppIncludeCppPrefix: String,
                    objcppIncludeObjcPrefix: String,
@@ -98,7 +103,7 @@ package object generatorTools {
     if (s.isEmpty) s else ", " + s
   }
   def q(s: String) = '"' + s + '"'
-  def firstUpper(token: String) = token.charAt(0).toUpper + token.substring(1)
+  def firstUpper(token: String) = if (token.isEmpty()) token else token.charAt(0).toUpper + token.substring(1)
 
   type IdentConverter = String => String
 
@@ -157,6 +162,20 @@ package object generatorTools {
       None
     }
   }
+
+  object JavaAccessModifier extends Enumeration {
+    val Public = Value("public")
+    val Package = Value("package")
+
+    def getCodeGenerationString(javaAccessModifier: JavaAccessModifier.Value): String = {
+      javaAccessModifier match {
+        case Public => "public "
+        case Package => "/*package*/ "
+      }
+    }
+
+  }
+  implicit val javaAccessModifierReads: scopt.Read[JavaAccessModifier.Value] = scopt.Read.reads(JavaAccessModifier withName _)
 
   final case class SkipFirst() {
     private var first = true
@@ -221,8 +240,9 @@ package object generatorTools {
       if (spec.yamlOutFolder.isDefined) {
         if (!spec.skipGeneration) {
           createFolder("YAML", spec.yamlOutFolder.get)
-          new YamlGenerator(spec).generate(idl)
         }
+        new YamlGenerator(spec).generate(idl)
+      }
       if (spec.cxOutFolder.isDefined) {
         if (!spec.skipGeneration) {
           createFolder("Cx", spec.cxOutFolder.get)
@@ -292,7 +312,7 @@ abstract class Generator(spec: Spec)
   }
 
   protected def createFile(folder: File, fileName: String, f: IndentWriter => Unit): Unit = createFile(folder, fileName, out => new IndentWriter(out), f)
-  
+
   implicit def identToString(ident: Ident): String = ident.name
   val idCpp = spec.cppIdentStyle
   val idJava = spec.javaIdentStyle
@@ -350,7 +370,9 @@ abstract class Generator(spec: Spec)
       w.wl
       val myHeader = q(includePrefix + fileIdentStyle(name) + "." + headerExt)
       w.wl(s"#include $myHeader  // my header")
-      includes.foreach(w.wl(_))
+      val myHeaderInclude = s"#include $myHeader"
+      for (include <- includes if include != myHeaderInclude)
+        w.wl(include)
       w.wl
       wrapNamespace(w, namespace, f)
     })

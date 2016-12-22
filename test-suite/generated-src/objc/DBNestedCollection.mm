@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithSetList:(nonnull NSArray<NSSet<NSString *> *> *)setList
 {
     if (self = [super init]) {
-        _setList = setList;
+        _setList = [setList copy];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p setList:%@>", self.class, self, self.setList];
+    return [NSString stringWithFormat:@"<%@ %p setList:%@>", self.class, (void *)self, self.setList];
 }
 
 @end

@@ -3,8 +3,6 @@
 
 #import "DBConstants.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
 
 BOOL const DBConstantsBoolConstant = YES;
 
@@ -22,35 +20,76 @@ double const DBConstantsF64Constant = 5.0;
 
 NSString * __nonnull const DBConstantsStringConstant = @"string-constant";
 
-NSNumber * __nullable const DBConstantsOptionalIntegerConstant = @1;
+NSString * __nullable const DBConstantsOptStringConstant = @"string-constant";
 
-DBConstants * __nonnull const DBConstantsObjectConstant = [[DBConstants alloc] initWithSomeInteger:DBConstantsI32Constant
-        someString:DBConstantsStringConstant];
-
-#pragma clang diagnostic pop
+BOOL const DBConstantsDummy = NO;
 
 @implementation DBConstants
 
-- (nonnull instancetype)initWithSomeInteger:(int32_t)someInteger
-                                 someString:(nonnull NSString *)someString
+- (nonnull instancetype)init
 {
     if (self = [super init]) {
-        _someInteger = someInteger;
-        _someString = [someString copy];
     }
     return self;
 }
 
-+ (nonnull instancetype)constantsWithSomeInteger:(int32_t)someInteger
-                                      someString:(nonnull NSString *)someString
++ (nonnull instancetype)constants
 {
-    return [[self alloc] initWithSomeInteger:someInteger
-                                  someString:someString];
+    return [[self alloc] init];
+}
+
++ (NSNumber * __nullable)optBoolConstant
+{
+    static NSNumber * const s_optBoolConstant = @YES;
+    return s_optBoolConstant;
+}
+
++ (NSNumber * __nullable)optI8Constant
+{
+    static NSNumber * const s_optI8Constant = @1;
+    return s_optI8Constant;
+}
+
++ (NSNumber * __nullable)optI16Constant
+{
+    static NSNumber * const s_optI16Constant = @2;
+    return s_optI16Constant;
+}
+
++ (NSNumber * __nullable)optI32Constant
+{
+    static NSNumber * const s_optI32Constant = @3;
+    return s_optI32Constant;
+}
+
++ (NSNumber * __nullable)optI64Constant
+{
+    static NSNumber * const s_optI64Constant = @4;
+    return s_optI64Constant;
+}
+
++ (NSNumber * __nullable)optF32Constant
+{
+    static NSNumber * const s_optF32Constant = @5.0;
+    return s_optF32Constant;
+}
+
++ (NSNumber * __nullable)optF64Constant
+{
+    static NSNumber * const s_optF64Constant = @5.0;
+    return s_optF64Constant;
+}
+
++ (DBConstantRecord * __nonnull)objectConstant
+{
+    static DBConstantRecord * const s_objectConstant = [[DBConstantRecord alloc] initWithSomeInteger:DBConstantsI32Constant
+            someString:DBConstantsStringConstant];
+    return s_objectConstant;
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p someInteger:%@ someString:%@>", self.class, self, @(self.someInteger), self.someString];
+    return [NSString stringWithFormat:@"<%@ %p>", self.class, (void *)self];
 }
 
 @end

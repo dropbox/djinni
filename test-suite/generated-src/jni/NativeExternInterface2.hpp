@@ -11,6 +11,7 @@ namespace djinni_generated {
 class NativeExternInterface2 final : ::djinni::JniInterface<::ExternInterface2, NativeExternInterface2> {
 public:
     using CppType = std::shared_ptr<::ExternInterface2>;
+    using CppOptType = std::shared_ptr<::ExternInterface2>;
     using JniType = jobject;
 
     using Boxed = NativeExternInterface2;
@@ -18,14 +19,15 @@ public:
     ~NativeExternInterface2();
 
     static CppType toCpp(JNIEnv* jniEnv, JniType j) { return ::djinni::JniClass<NativeExternInterface2>::get()._fromJava(jniEnv, j); }
-    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return {jniEnv, ::djinni::JniClass<NativeExternInterface2>::get()._toJava(jniEnv, c)}; }
+    static ::djinni::LocalRef<JniType> fromCppOpt(JNIEnv* jniEnv, const CppOptType& c) { return {jniEnv, ::djinni::JniClass<NativeExternInterface2>::get()._toJava(jniEnv, c)}; }
+    static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c) { return fromCppOpt(jniEnv, c); }
 
 private:
     NativeExternInterface2();
     friend ::djinni::JniClass<NativeExternInterface2>;
     friend ::djinni::JniInterface<::ExternInterface2, NativeExternInterface2>;
 
-    class JavaProxy final : ::djinni::JavaProxyCacheEntry, public ::ExternInterface2
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::ExternInterface2
     {
     public:
         JavaProxy(JniType j);

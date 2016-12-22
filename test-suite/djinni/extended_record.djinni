@@ -1,0 +1,15 @@
+# Extended record
+extended_record = record +c {
+    foo: bool;
+    const extended_record_const: extended_record = { foo = true };
+}
+
+record_using_extended_record = record {
+    er: extended_record;
+    const cr: record_using_extended_record = {er = { foo = false } };
+}
+
+interface_using_extended_record = interface +c {
+    meth(er: extended_record): extended_record;
+    const cr: record_using_extended_record = {er = { foo = false } };
+}

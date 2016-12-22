@@ -37,14 +37,14 @@ using namespace testsuite;
 
 - (void)testObjcRoundTrip
 {
-	NSDate *now = [NSDate date];
-	DBDateRecord *date1 = [[DBDateRecord alloc] initWithCreatedAt:now];
-	const auto cpp_date1 = djinni_generated::DateRecord::toCpp(date1);
-	DBDateRecord *date2 = djinni_generated::DateRecord::fromCpp(cpp_date1);
-	const auto cpp_date2 = djinni_generated::DateRecord::toCpp(date2);
-	DBDateRecord *date3 = djinni_generated::DateRecord::fromCpp(cpp_date2);
-	const auto cpp_date3 = djinni_generated::DateRecord::toCpp(date3);
-	const bool cpp_is_equal = cpp_date1.created_at == cpp_date2.created_at && cpp_date2.created_at == cpp_date3.created_at;
+    NSDate *now = [NSDate date];
+    DBDateRecord *date1 = [[DBDateRecord alloc] initWithCreatedAt:now];
+    const auto cpp_date1 = djinni_generated::DateRecord::toCpp(date1);
+    DBDateRecord *date2 = djinni_generated::DateRecord::fromCpp(cpp_date1);
+    const auto cpp_date2 = djinni_generated::DateRecord::toCpp(date2);
+    DBDateRecord *date3 = djinni_generated::DateRecord::fromCpp(cpp_date2);
+    const auto cpp_date3 = djinni_generated::DateRecord::toCpp(date3);
+    const bool cpp_is_equal = cpp_date1.created_at == cpp_date2.created_at && cpp_date2.created_at == cpp_date3.created_at;
     // cpp is a integer representation (with less precision than NSDate), so direct comparison will work
     XCTAssertTrue(cpp_is_equal);
 

@@ -29,6 +29,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   val javaAnnotationHeader = spec.javaAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val javaNullableAnnotation = spec.javaNullableAnnotation.map(pkg => '@' + pkg.split("\\.").last)
   val javaNonnullAnnotation = spec.javaNonnullAnnotation.map(pkg => '@' + pkg.split("\\.").last)
+  val javaClassAccessModifierString = JavaAccessModifier.getCodeGenerationString(spec.javaClassAccessModifier)
   val marshal = new JavaMarshal(spec)
 
   class JavaRefs() {
@@ -66,8 +67,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   def generateJavaConstants(w: IndentWriter, consts: Seq[Const]) = {
 
     def writeJavaConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
+      case l: Long if marshal.fieldType(ty).equalsIgnoreCase("long") => w.w(l.toString + "l")
       case l: Long => w.w(l.toString)
-      case d: Double if marshal.fieldType(ty) == "float" => w.w(d.toString + "f")
+      case d: Double if marshal.fieldType(ty).equalsIgnoreCase("float") => w.w(d.toString + "f")
       case d: Double => w.w(d.toString)
       case b: Boolean => w.w(if (b) "true" else "false")
       case s: String => w.w(s)
@@ -108,7 +110,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(ident, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public enum ${marshal.typename(ident, e)}").braced {
+      w.w(s"${javaClassAccessModifierString}enum ${marshal.typename(ident, e)}").braced {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
@@ -138,7 +140,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"public abstract class $javaClass$typeParamList").braced {
+      w.w(s"${javaClassAccessModifierString}abstract class $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
         generateJavaConstants(w, i.consts)
 
@@ -210,7 +212,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     val refs = new JavaRefs()
     r.fields.foreach(f => refs.find(f.ty))
 
-    val (javaName, javaFinal) = if (r.ext.java) (ident.name + "_base", "") else (ident.name, " final")
+    val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
+    val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
+
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
@@ -222,7 +226,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         } else {
           ""
         }
-      w.w(s"public$javaFinal class ${self + javaTypeParams(params)}$comparableFlag").braced {
+      w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
@@ -274,11 +278,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 skipFirst { w.wl(" &&") }
                 f.ty.resolved.base match {
                   case MBinary => w.w(s"java.util.Arrays.equals(${idJava.field(f.ident)}, other.${idJava.field(f.ident)})")
-                  case MList | MSet | MMap => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
+                  case MList | MSet | MMap | MString | MDate => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case MOptional =>
                     w.w(s"((this.${idJava.field(f.ident)} == null && other.${idJava.field(f.ident)} == null) || ")
                     w.w(s"(this.${idJava.field(f.ident)} != null && this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})))")
-                  case MString => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
                   case t: MPrimitive => w.w(s"this.${idJava.field(f.ident)} == other.${idJava.field(f.ident)}")
                   case df: MDef => df.defType match {
                     case DRecord => w.w(s"this.${idJava.field(f.ident)}.equals(other.${idJava.field(f.ident)})")
@@ -375,7 +378,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             w.wl("int tempResult;")
             for (f <- r.fields) {
               f.ty.resolved.base match {
-                case MString => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
+                case MString | MDate => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")
                 case t: MPrimitive => primitiveCompare(f.ident)
                 case df: MDef => df.defType match {
                   case DRecord => w.wl(s"tempResult = this.${idJava.field(f.ident)}.compareTo(other.${idJava.field(f.ident)});")

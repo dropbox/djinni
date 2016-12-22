@@ -2,12 +2,18 @@ package com.dropbox.djinni.test;
 
 import junit.framework.TestCase;
 
+import java.util.Date;
+
 public class RecordWithDerivingsTest extends TestCase {
 
-    private final RecordWithDerivings record1 = new RecordWithDerivings(1, "String1");
-    private final RecordWithDerivings record1A = new RecordWithDerivings(1, "String1");
-    private final RecordWithDerivings record2 = new RecordWithDerivings(1, "String2");
-    private final RecordWithDerivings record3 = new RecordWithDerivings(2, "String1");
+    private final RecordWithDerivings record1 = new RecordWithDerivings((byte)1, (short)2, 3, 4, 5.0f, 6.0,
+            new Date(7), "String8");
+    private final RecordWithDerivings record1A = new RecordWithDerivings((byte)1, (short)2, 3, 4, 5.0f, 6.0,
+            new Date(7), "String8");
+    private final RecordWithDerivings record2 = new RecordWithDerivings((byte)1, (short)2, 3, 4, 5.0f, 6.0,
+            new Date(7), "String888");
+    private final RecordWithDerivings record3 = new RecordWithDerivings((byte)111, (short)2, 3, 4, 5.0f, 6.0,
+            new Date(7), "String8");
 
     public void testRecordOrd() {
         assertTrue(record1.compareTo(record1A) == 0);

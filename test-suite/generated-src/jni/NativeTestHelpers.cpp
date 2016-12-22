@@ -23,7 +23,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_n
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        delete reinterpret_cast<djinni::CppProxyHandle<::testsuite::TestHelpers>*>(nativeRef);
+        delete reinterpret_cast<::djinni::CppProxyHandle<::testsuite::TestHelpers>*>(nativeRef);
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
@@ -148,6 +148,14 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         ::testsuite::TestHelpers::check_client_interface_nonascii(::djinni_generated::NativeClientInterface::toCpp(jniEnv, j_i));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInterfaceArgs(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        ::testsuite::TestHelpers::check_client_interface_args(::djinni_generated::NativeClientInterface::toCpp(jniEnv, j_i));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

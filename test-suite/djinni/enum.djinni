@@ -11,6 +11,18 @@ color = enum {
 	violet;
 }
 
-opt_color_record = record {
-	my_color: optional<color>;
+enum_usage_record = record {
+    e: color;
+    o: optional<color>;
+    l: list<color>;
+    s: set<color>;
+    m: map<color, color>;
+}
+
+enum_usage_interface = interface +c +j +o {
+    e(e: color): color;
+    o(o: optional<color>): optional<color>;
+    l(l: list<color>): list<color>;
+    s(s: set<color>): set<color>;
+    m(m: map<color, color>): map<color, color>;
 }

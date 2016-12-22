@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList
 {
     if (self = [super init]) {
-        _mapList = mapList;
+        _mapList = [mapList copy];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p mapList:%@>", self.class, self, self.mapList];
+    return [NSString stringWithFormat:@"<%@ %p mapList:%@>", self.class, (void *)self, self.mapList];
 }
 
 @end

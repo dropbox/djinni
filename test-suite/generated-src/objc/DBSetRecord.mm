@@ -10,8 +10,8 @@
                                iset:(nonnull NSSet<NSNumber *> *)iset
 {
     if (self = [super init]) {
-        _set = set;
-        _iset = iset;
+        _set = [set copy];
+        _iset = [iset copy];
     }
     return self;
 }
@@ -25,7 +25,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p set:%@ iset:%@>", self.class, self, self.set, self.iset];
+    return [NSString stringWithFormat:@"<%@ %p set:%@ iset:%@>", self.class, (void *)self, self.set, self.iset];
 }
 
 @end

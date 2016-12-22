@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithList:(nonnull NSArray<NSNumber *> *)list
 {
     if (self = [super init]) {
-        _list = list;
+        _list = [list copy];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p list:%@>", self.class, self, self.list];
+    return [NSString stringWithFormat:@"<%@ %p list:%@>", self.class, (void *)self, self.list];
 }
 
 @end

@@ -39,13 +39,18 @@ private object IdlParser extends RegexParsers {
 
   def idlFile(origin: String): Parser[IdlFile] = rep(importFile) ~ rep(typeDecl(origin)) ^^ { case imp~types => IdlFile(imp, types) }
 
-  def importFile: Parser[FileRef] = ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
-    case "import" ~ x =>
-      val newPath = fileStack.top.getParent() + "/" + x
-      new IdlFileRef(new File(newPath))
-    case "extern" ~ x =>
-      val newPath = fileStack.top.getParent() + "/" + x
-      new ExternFileRef(new File(newPath))
+  def importFile: Parser[FileRef] = {
+    
+	def fileParent:String = if (fileStack.top.getParent() != null) return fileStack.top.getParent() + "/" else return ""
+
+    ("@" ~> directive) ~ ("\"" ~> filePath <~ "\"") ^^ {
+      case "import" ~ x =>
+        val newPath = fileParent + x
+        new IdlFileRef(new File(newPath))
+      case "extern" ~ x =>
+        val newPath = fileParent + x
+        new ExternFileRef(new File(newPath))
+    }
   }
   def filePath = "[^\"]*".r
 
@@ -266,31 +271,37 @@ def parseExternFile(externFile: File, inFileListWriter: Option[Writer]) : Seq[Ty
   }
 }
 
+def normalizePath(path: File) : File = {
+  return new File(java.nio.file.Paths.get(path.toString()).normalize().toString())
+}
+
 def parseFile(idlFile: File, inFileListWriter: Option[Writer]): Seq[TypeDecl] = {
+  val normalizedIdlFile = normalizePath(idlFile)
   if (inFileListWriter.isDefined) {
-    inFileListWriter.get.write(idlFile + "\n")
+    inFileListWriter.get.write(normalizedIdlFile + "\n")
   }
 
-  visitedFiles.add(idlFile)
-  fileStack.push(idlFile)
-  val fin = new FileInputStream(idlFile)
+  visitedFiles.add(normalizedIdlFile)
+  fileStack.push(normalizedIdlFile)
+  val fin = new FileInputStream(normalizedIdlFile)
   try {
-    parse(idlFile.getName, new InputStreamReader(fin, "UTF-8")) match {
+    parse(normalizedIdlFile.getName, new InputStreamReader(fin, "UTF-8")) match {
       case Left(err) =>
         System.err.println(err)
         System.exit(1); return null;
       case Right(idl) => {
         var types = idl.typeDecls
         idl.imports.foreach(x => {
-          if (fileStack.contains(x.file)) {
+          val normalized = normalizePath(x.file)
+          if (fileStack.contains(normalized)) {
             throw new AssertionError("Circular import detected!")
           }
-          if (!visitedFiles.contains(x.file)) {
+          if (!visitedFiles.contains(normalized)) {
             x match {
               case IdlFileRef(file) =>
-                types = parseFile(file, inFileListWriter) ++ types
+                types = parseFile(normalized, inFileListWriter) ++ types
               case ExternFileRef(file) =>
-                types = parseExternFile(file, inFileListWriter) ++ types
+                types = parseExternFile(normalized, inFileListWriter) ++ types
             }
           }
         })

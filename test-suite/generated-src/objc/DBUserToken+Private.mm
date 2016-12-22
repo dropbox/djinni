@@ -8,6 +8,7 @@
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
 #include <exception>
+#include <stdexcept>
 #include <utility>
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -32,8 +33,8 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (nonnull NSString *)whoami {
     try {
-        auto r = _cppRefHandle.get()->whoami();
-        return ::djinni::String::fromCpp(r);
+        auto objcpp_result_ = _cppRefHandle.get()->whoami();
+        return ::djinni::String::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -48,8 +49,8 @@ public:
     std::string whoami() override
     {
         @autoreleasepool {
-            auto r = [Handle::get() whoami];
-            return ::djinni::String::toCpp(r);
+            auto objcpp_result_ = [Handle::get() whoami];
+            return ::djinni::String::toCpp(objcpp_result_);
         }
     }
 };
@@ -69,7 +70,7 @@ auto UserToken::toCpp(ObjcType objc) -> CppType
     return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
-auto UserToken::fromCpp(const CppType& cpp) -> ObjcType
+auto UserToken::fromCppOpt(const CppOptType& cpp) -> ObjcType
 {
     if (!cpp) {
         return nil;

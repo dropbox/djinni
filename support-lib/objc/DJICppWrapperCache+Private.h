@@ -41,6 +41,7 @@ using CppProxyCache = ProxyCache<CppProxyCacheTraits>;
 template <typename ObjcType, typename CppType>
 ObjcType * get_cpp_proxy_impl(const std::shared_ptr<CppType> & cppRef) {
     return CppProxyCache::get(
+        typeid(cppRef),
         cppRef,
         [] (const std::shared_ptr<void> & cppRef) -> std::pair<id, void *> {
             return {

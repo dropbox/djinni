@@ -9,7 +9,7 @@
 - (nonnull instancetype)initWithDatesById:(nonnull NSDictionary<NSString *, NSDate *> *)datesById
 {
     if (self = [super init]) {
-        _datesById = datesById;
+        _datesById = [datesById copy];
     }
     return self;
 }
@@ -21,7 +21,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p datesById:%@>", self.class, self, self.datesById];
+    return [NSString stringWithFormat:@"<%@ %p datesById:%@>", self.class, (void *)self, self.datesById];
 }
 
 @end

@@ -1,4 +1,16 @@
-all: djinni example_ios example_android test
+#
+# Environment variables for overriding default behavior.
+#
+
+ifndef ANDROID_NDK_HOME
+ANDROID_NDK_HOME = $(abspath $(dir $(realpath $(shell which ndk-build))))
+endif
+
+#
+# Global targets.
+#
+
+all: djinni example_ios example_android example_localhost test
 
 clean:
 	-ndk-build -C example/android/app/ clean
@@ -21,7 +33,7 @@ djinni:
 # we specify a root target for android to prevent all of the targets from spidering out
 GypAndroid.mk: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
 	./example/run_djinni.sh
-	ANDROID_BUILD_TOP=$(shell dirname `which ndk-build`) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
+	ANDROID_BUILD_TOP=$(ANDROID_NDK_HOME) deps/gyp/gyp --depth=. -f android -DOS=android -Icommon.gypi example/libtextsort.gyp --root-target=libtextsort_jni
 
 # we specify a root target for android to prevent all of the targets from spidering out
 ./build_ios/example/libtextsort.xcodeproj: ./deps/gyp example/libtextsort.gyp support-lib/support_lib.gyp example/example.djinni
@@ -32,7 +44,8 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj
 	xcodebuild -workspace example/objc/TextSort.xcworkspace \
            -scheme TextSort \
            -configuration 'Debug' \
-           -sdk iphonesimulator
+           -sdk iphonesimulator \
+	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=10.1'
 
 # this target implicitly depends on GypAndroid.mk since gradle will try to make it
 example_android: GypAndroid.mk
