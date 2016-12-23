@@ -71,42 +71,43 @@ namespace djinni_generated {
 
 class EnumUsageInterface::ObjcProxy final
 : public ::testsuite::EnumUsageInterface
-, public ::djinni::ObjcProxyCache::Handle<ObjcType>
+, private ::djinni::ObjcProxyBase<ObjcType>
 {
+    friend class ::djinni_generated::EnumUsageInterface;
 public:
-    using Handle::Handle;
+    using ObjcProxyBase::ObjcProxyBase;
     ::testsuite::color e(::testsuite::color c_e) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() e:(::djinni::Enum<::testsuite::color, DBColor>::fromCpp(c_e))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() e:(::djinni::Enum<::testsuite::color, DBColor>::fromCpp(c_e))];
             return ::djinni::Enum<::testsuite::color, DBColor>::toCpp(objcpp_result_);
         }
     }
     std::experimental::optional<::testsuite::color> o(std::experimental::optional<::testsuite::color> c_o) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() o:(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_o))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() o:(::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_o))];
             return ::djinni::Optional<std::experimental::optional, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::vector<::testsuite::color> l(const std::vector<::testsuite::color> & c_l) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() l:(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_l))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() l:(::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_l))];
             return ::djinni::List<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::unordered_set<::testsuite::color> s(const std::unordered_set<::testsuite::color> & c_s) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() s:(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_s))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() s:(::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_s))];
             return ::djinni::Set<::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
     std::unordered_map<::testsuite::color, ::testsuite::color> m(const std::unordered_map<::testsuite::color, ::testsuite::color> & c_m) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() m:(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_m))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() m:(::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::fromCpp(c_m))];
             return ::djinni::Map<::djinni::Enum<::testsuite::color, DBColor>, ::djinni::Enum<::testsuite::color, DBColor>>::toCpp(objcpp_result_);
         }
     }
@@ -133,7 +134,7 @@ auto EnumUsageInterface::fromCppOpt(const CppOptType& cpp) -> ObjcType
         return nil;
     }
     if (auto cppPtr = dynamic_cast<ObjcProxy*>(cpp.get())) {
-        return cppPtr->Handle::get();
+        return cppPtr->djinni_private_get_proxied_objc_object();
     }
     return ::djinni::get_cpp_proxy<DBEnumUsageInterfaceCppProxy>(cpp);
 }
