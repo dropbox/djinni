@@ -21,7 +21,7 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
     val interfaceNullity = if (spec.cppNnType.nonEmpty) nonnull else nullable
     tm.base match {
       case MOptional => nullable
-      case MPrimitive(_,_,_,_,_,_,_,_) => None
+      case MPrimitive(_,_,_,_,_,_,_,_,_,_) => None
       case d: MDef => d.defType match {
         case DEnum => None
         case DInterface => interfaceNullity
@@ -45,9 +45,9 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   override def fqReturnType(ret: Option[TypeRef]): String = returnType(ret)
 
   override def fieldType(tm: MExpr): String = toObjcParamType(tm)
+  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fqFieldType(tm: MExpr): String = toObjcParamType(tm)
 
-  override def toCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct objc to cpp conversion not possible")
   override def fromCpp(tm: MExpr, expr: String): String = throw new AssertionError("direct cpp to objc conversion not possible")
 
   def references(m: Meta, exclude: String = ""): Seq[SymbolReference] = m match {

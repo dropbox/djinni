@@ -79,7 +79,27 @@ object Main {
     var yamlOutFolder: Option[File] = None
     var yamlOutFile: Option[String] = None
     var yamlPrefix: String = ""
-	
+    var cxOutFolder: Option[File] = None
+    var cxcppOutFolder: Option[File] = None
+    var cxHeaderOutFolderOptional: Option[File] = None
+    var cxcppHeaderOutFolderOptional: Option[File] = None
+    var cxIncludePrefix: String = ""
+    var cxcppIncludePrefix: String = ""
+    var cxcppIncludeCppPrefix: String = ""
+    var cxcppIncludeCxPrefix: String = ""
+    var cxIdentStyle: CxIdentStyle = IdentStyle.cxDefault
+    var cxFileIdentStyle: IdentConverter = IdentStyle.camelUpper
+    var cxExt: String = "cpp"
+    var cxHeaderExt: String = "h"
+    var cxcppExt: String = "cpp"
+    var cxcppHeaderExt: String = "h"
+    var cxNamespace: String = "djinni"
+    var cxcppNamespace: String = "djinni_generated"
+    var cxBaseLibIncludePrefix: String = ""
+    var inFileListPath: Option[File] = None
+    var outFileListPath: Option[File] = None
+    var skipGeneration: Boolean = false
+
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
       def identStyle(optionName: String, update: IdentConverter => Unit) = {
@@ -194,6 +214,37 @@ object Main {
         .text("Optional file in which to write the list of output files produced.")
       opt[Boolean]("skip-generation").valueName("<true/false>").foreach(x => skipGeneration = x)
         .text("Way of specifying if file generation should be skipped (default: false)")
+      opt[File]("cx-out").valueName("<out-folder>").foreach(x => cxOutFolder = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[File]("cxcpp-out").valueName("<out-folder>").foreach(x => cxcppOutFolder = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[File]("cx-header-out").valueName("<out-folder>").foreach(x => cxHeaderOutFolderOptional = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[File]("cxcpp-header-out").valueName("<out-folder>").foreach(x => cxcppHeaderOutFolderOptional = Some(x))
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-include-prefix").valueName("<prefix>").foreach(cxIncludePrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-prefix").valueName("<prefix>").foreach(cxcppIncludePrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-cpp-prefix").valueName("<prefix>").foreach(cxcppIncludeCppPrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-include-cx-prefix").valueName("<prefix>").foreach(cxcppIncludeCxPrefix = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-ext").valueName("<ext>").foreach(cxExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-h-ext").valueName("<ext>").foreach(cxHeaderExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-ext").valueName("<ext>").foreach(cxcppExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-h-ext").valueName("<ext>").foreach(cxcppHeaderExt = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-namespace").valueName("<prefix>").foreach(cxNamespace = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cxcpp-namespace").valueName("<prefix>").foreach(cxcppNamespace = _)
+        .text("HAHAHAHAHAHAHAHAHAHA")
+      opt[String]("cx-base-lib-include-prefix").valueName("...").foreach(x => cxBaseLibIncludePrefix = x)
+        .text("The C++/Cx base library's include path, relative to the C++/Cx classes.")
+
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -215,6 +266,13 @@ object Main {
       identStyle("ident-objc-type-param", c => { objcIdentStyle = objcIdentStyle.copy(typeParam = c) })
       identStyle("ident-objc-local",      c => { objcIdentStyle = objcIdentStyle.copy(local = c) })
       identStyle("ident-objc-file",       c => { objcFileIdentStyleOptional = Some(c) })
+      identStyle("ident-cx-enum",       c => { cxIdentStyle = cxIdentStyle.copy(enum = c) })
+      identStyle("ident-cx-field",      c => { cxIdentStyle = cxIdentStyle.copy(field = c) })
+      identStyle("ident-cx-method",     c => { cxIdentStyle = cxIdentStyle.copy(method = c) })
+      identStyle("ident-cx-type",       c => { cxIdentStyle = cxIdentStyle.copy(ty = c) })
+      identStyle("ident-cx-type-param", c => { cxIdentStyle = cxIdentStyle.copy(typeParam = c) })
+      identStyle("ident-cx-local",      c => { cxIdentStyle = cxIdentStyle.copy(local = c) })
+      identStyle("ident-cx-file",       c => { cxFileIdentStyle = c })
 
     }
 
@@ -229,6 +287,8 @@ object Main {
     val jniFileIdentStyle = jniFileIdentStyleOptional.getOrElse(cppFileIdentStyle)
     var objcFileIdentStyle = objcFileIdentStyleOptional.getOrElse(objcIdentStyle.ty)
     val objcppIncludeObjcPrefix = objcppIncludeObjcPrefixOptional.getOrElse(objcppIncludePrefix)
+    val cxHeaderOutFolder = if (cxHeaderOutFolderOptional.isDefined) cxHeaderOutFolderOptional else cxOutFolder
+    val cxcppHeaderOutFolder = if (cxcppHeaderOutFolderOptional.isDefined) cxcppHeaderOutFolderOptional else cxcppOutFolder
 
     // Add ObjC prefix to identstyle
     objcIdentStyle = objcIdentStyle.copy(ty = IdentStyle.prefix(objcTypePrefix,objcIdentStyle.ty))
@@ -237,6 +297,10 @@ object Main {
     if (cppTypeEnumIdentStyle != null) {
       cppIdentStyle = cppIdentStyle.copy(enumType = cppTypeEnumIdentStyle)
     }
+
+//    if (cxTypeEnumIdentStyle != null) {
+//      cxIdentStyle = cxIdentStyle.copy(enumType = cxTypeEnumIdentStyle)
+//    }
 
     // Parse IDL file.
     System.out.println("Parsing...")
@@ -330,7 +394,26 @@ object Main {
       skipGeneration,
       yamlOutFolder,
       yamlOutFile,
-      yamlPrefix)
+      yamlPrefix,
+      cxOutFolder,
+      cxcppOutFolder,
+      cxHeaderOutFolder,
+      cxcppHeaderOutFolder,
+      cxIncludePrefix,
+      cxcppIncludePrefix,
+      cxcppIncludeCppPrefix,
+      cxcppIncludeCxPrefix,
+      cxIdentStyle,
+      cxFileIdentStyle,
+      cxExt,
+      cxHeaderExt,
+      cxcppExt,
+      cxcppHeaderExt,
+      cxNamespace,
+      cxcppNamespace,
+      cxBaseLibIncludePrefix,
+      outFileListWriter,
+      skipGeneration)
 
 
     try {
