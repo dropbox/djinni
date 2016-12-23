@@ -258,7 +258,8 @@ object Main {
     // Parse IDL file.
     System.out.println("Parsing...")
     val inFileListWriter = if (inFileListPath.isDefined) {
-      createFolder("input file list", inFileListPath.get.getParentFile)
+      if (inFileListPath.get.getParentFile != null)
+        createFolder("input file list", inFileListPath.get.getParentFile)
       Some(new BufferedWriter(new FileWriter(inFileListPath.get)))
     } else {
       None
@@ -289,7 +290,8 @@ object Main {
 
     System.out.println("Generating...")
     val outFileListWriter = if (outFileListPath.isDefined) {
-      createFolder("output file list", outFileListPath.get.getParentFile)
+      if (outFileListPath.get.getParentFile != null)
+        createFolder("output file list", outFileListPath.get.getParentFile)
       Some(new BufferedWriter(new FileWriter(outFileListPath.get)))
     } else {
       None

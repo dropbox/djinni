@@ -14,3 +14,4 @@
 @import "single_language_interfaces.djinni"
 @import "extended_record.djinni"
 @import "varnames.djinni"
+@import "relative_paths.djinni"

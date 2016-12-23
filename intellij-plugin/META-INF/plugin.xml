@@ -15,12 +15,28 @@
   -->
 <idea-plugin version="2">
   <id>com.dropbox.djinni.ideaplugin</id>
-  <name>Djinni interface definition language file support</name>
+  <name>Djinni IDL file support</name>
   <version>0.8</version>
-  <vendor email="jaetzold@dropbox.com" url="http://www.dropbox.com">Dropbox</vendor>
+  <vendor url="https://github.com/dropbox/djinni">Dropbox Djinni Github Project</vendor>
 
   <description><![CDATA[
       Add some basic navigation, code-completion and error highlighting support to .djinni files.
+
+      <h4>License</h4>
+      Copyright 2015-2016 Dropbox, Inc.<br/>
+      <br/>
+      Licensed under the Apache License, Version 2.0 (the "License");<br/>
+      you may not use this file except in compliance with the License.<br/>
+      You may obtain a copy of the License at<br/>
+      <br/>
+      &nbsp;&nbsp;<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a><br/>
+      <br/>
+      Unless required by applicable law or agreed to in writing, software<br/>
+      distributed under the License is distributed on an "AS IS" BASIS,<br/>
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br/>
+      See the License for the specific language governing permissions and<br/>
+      limitations under the License.
+
     ]]></description>
 
   <change-notes><![CDATA[
@@ -29,7 +45,7 @@
   </change-notes>
 
   <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="131"/>
+  <idea-version since-build="139"/>
 
   <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
