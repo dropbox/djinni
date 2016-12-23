@@ -3,7 +3,7 @@
 
 #import "DBRecordWithNestedDerivings+Private.h"
 #import "DBRecordWithDerivings+Private.h"
-#import "DJIMarshal+Private.h"
+#import "djinni/objc/DJIMarshal+Private.h"
 #include <cassert>
 
 namespace djinni_generated {

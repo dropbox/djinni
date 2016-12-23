@@ -4,7 +4,7 @@
 #pragma once
 
 #include "client_interface.hpp"
-#include "djinni_support.hpp"
+#include "djinni/jni/djinni_support.hpp"
 
 namespace djinni_generated {
 
