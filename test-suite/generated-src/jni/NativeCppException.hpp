@@ -4,7 +4,7 @@
 #pragma once
 
 #include "cpp_exception.hpp"
-#include "djinni_support.hpp"
+#include "djinni/jni/djinni_support.hpp"
 
 namespace djinni_generated {
 

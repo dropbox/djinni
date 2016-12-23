@@ -4,9 +4,9 @@
 #import "DBWcharTestHelpers+Private.h"
 #import "DBWcharTestHelpers.h"
 #import "DBWcharTestRec+Private.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "DJIMarshal+Private.h"
+#import "djinni/objc/DJICppWrapperCache+Private.h"
+#import "djinni/objc/DJIError.h"
+#import "djinni/objc/DJIMarshal+Private.h"
 #include <exception>
 #include <stdexcept>
 #include <utility>
