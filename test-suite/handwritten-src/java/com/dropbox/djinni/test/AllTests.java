@@ -22,6 +22,7 @@ public class AllTests extends TestSuite {
         mySuite.addTestSuite(TokenTest.class);
         mySuite.addTestSuite(DurationTest.class);
         mySuite.addTestSuite(MockRecordTest.class);
+        mySuite.addTestSuite(AndroidParcelableTest.class);
         mySuite.addTestSuite(WcharTest.class);
         return mySuite;
     }

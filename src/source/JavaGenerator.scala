@@ -220,13 +220,13 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       javaAnnotationHeader.foreach(w.wl)
       val self = marshal.typename(javaName, r)
 
-      val comparableFlag =
-        if (r.derivingTypes.contains(DerivingType.Ord)) {
-          s" implements Comparable<$self>"
-        } else {
-          ""
-        }
-      w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$comparableFlag").braced {
+      val interfaces = scala.collection.mutable.ArrayBuffer[String]()
+      if (r.derivingTypes.contains(DerivingType.Ord))
+          interfaces += s"Comparable<$self>"
+      if (r.derivingTypes.contains(DerivingType.AndroidParcelable))
+          interfaces += "android.os.Parcelable"
+      val implementsSection = if (interfaces.isEmpty) "" else " implements " + interfaces.mkString(", ")
+      w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$implementsSection").braced {
         w.wl
         generateJavaConstants(w, r.consts)
         // Field definitions.
@@ -358,6 +358,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         w.wl
 
+        if (r.derivingTypes.contains(DerivingType.AndroidParcelable))
+          writeParcelable(w, self, r);
+
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           def primitiveCompare(ident: Ident) {
             w.wl(s"if (this.${idJava.field(ident)} < other.${idJava.field(ident)}) {").nested {
@@ -406,5 +409,137 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
   def javaTypeParams(params: Seq[TypeParam]): String =
     if (params.isEmpty) "" else params.map(p => idJava.typeParam(p.ident)).mkString("<", ", ", ">")
+
+  def writeParcelable(w: IndentWriter, self: String, r: Record) = {
+    // Generates the methods and the constructor to implement the interface android.os.Parcelable
+
+    // CREATOR
+    w.wl
+    w.wl(s"public static final android.os.Parcelable.Creator<$self> CREATOR")
+    w.wl(s"    = new android.os.Parcelable.Creator<$self>()").bracedSemi {
+      w.wl("@Override")
+      w.wl(s"public $self createFromParcel(android.os.Parcel in)").braced {
+        w.wl(s"return new $self(in);")
+      }
+      w.wl
+      w.wl("@Override")
+      w.wl(s"public $self[] newArray(int size)").braced {
+        w.wl(s"return new $self[size];")
+      }
+    }
+
+    // constructor (Parcel)
+    def deserializeField(f: Field, m: Meta, inOptional: Boolean) {
+      m match {
+        case MString => w.wl(s"this.${idJava.field(f.ident)} = in.readString();")
+        case MBinary => {
+          w.wl("this.${idJava.field(f.ident) = new byte[in.readInt()];")
+          w.wl("in.readByteArray(this.${idJava.field(f.ident));")
+        }
+        case MDate => w.wl(s"this.${idJava.field(f.ident)} = new Date(in.readString());")
+        case t: MPrimitive => t.jName match {
+          case "short" => w.wl(s"this.${idJava.field(f.ident)} = (short)in.readInt();")
+          case "int" => w.wl(s"this.${idJava.field(f.ident)} = in.readInt();")
+          case "long" => w.wl(s"this.${idJava.field(f.ident)} = in.readLong();")
+          case "byte" => w.wl(s"this.${idJava.field(f.ident)} = in.readByte();")
+          case "boolean" => w.wl(s"this.${idJava.field(f.ident)} = in.readByte() != 0;")
+          case "float" => w.wl(s"this.${idJava.field(f.ident)} = in.readFloat();")
+          case "double" => w.wl(s"this.${idJava.field(f.ident)} = in.readDouble();")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case df: MDef => df.defType match {
+          case DRecord => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in);")
+          case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case e: MExtern => e.defType match {
+          case DRecord => w.wl(s"this.${idJava.field(f.ident)} = ${e.java.readFromParcel.format(marshal.typename(f.ty))};")
+          case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case MList => {
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();");
+          w.wl(s"in.readList(this.${idJava.field(f.ident)}, getClass().getClassLoader());")
+        }
+        case MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
+        case MOptional => {
+          if (inOptional)
+          	throw new AssertionError("nested optional?")
+          w.wl("if (in.readByte() == 0)").nested {
+            w.wl(s"this.${idJava.field(f.ident)} = null;")
+          }
+          w.wl("else").nested {
+            deserializeField(f, f.ty.resolved.args.head.base, true);
+          }
+        }
+        case _ => throw new AssertionError("Unreachable")
+      }
+    }
+    w.wl
+    w.wl(s"public $self(android.os.Parcel in)").braced {
+      for (f <- r.fields)
+        deserializeField(f, f.ty.resolved.base, false);
+    }
+
+    // describeContents
+    w.wl
+    w.wl("@Override")
+    w.w("public int describeContents()").braced {
+      w.wl("return 0;")
+    }
+
+    // writeToParsel
+    def serializeField(f: Field, m: Meta, inOptional: Boolean) {
+      m match {
+        case MString => w.wl(s"out.writeString(this.${idJava.field(f.ident)});")
+        case MBinary => {
+          w.wl( "out.writeInt(this.${idJava.field(f.ident).length);" )
+          w.wl( "out.writeByteArray(this.${idJava.field(f.ident));" )
+        }
+        case MDate => w.wl(s"out.writeString(this.${idJava.field(f.ident)}.toString());")
+        case t: MPrimitive => t.jName match {
+          case "short" | "int" => w.wl(s"out.writeInt(this.${idJava.field(f.ident)});")
+          case "long" => w.wl(s"out.writeLong(this.${idJava.field(f.ident)});")
+          case "byte" => w.wl(s"out.writeByte(this.${idJava.field(f.ident)});")
+          case "boolean" => w.wl(s"out.writeByte(this.${idJava.field(f.ident)} ? (byte)1 : 0);")
+          case "float" => w.wl(s"out.writeFloat(this.${idJava.field(f.ident)});")
+          case "double" => w.wl(s"out.writeDouble(this.${idJava.field(f.ident)});")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case df: MDef => df.defType match {
+          case DRecord => w.wl(s"this.${idJava.field(f.ident)}.writeToParcel(out, flags);")
+          case DEnum => w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.ordinal());")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case e: MExtern => e.defType match {
+          case DRecord => w.wl(e.java.writeToParcel.format(idJava.field(f.ident)) + ";")
+          case DEnum => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
+          case _ => throw new AssertionError("Unreachable")
+        }
+        case MList => w.wl(s"out.writeList(this.${idJava.field(f.ident)});")
+        case MSet | MMap => w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+        case MOptional => {
+          if (inOptional)
+          	throw new AssertionError("nested optional?")
+          w.wl(s"if (this.${idJava.field(f.ident)} != null) {").nested {
+            w.wl("out.writeByte((byte)1);")
+            serializeField(f, f.ty.resolved.args.head.base, true)
+          }
+          w.wl("} else").nested {
+            w.wl("out.writeByte((byte)0);")
+          }
+        }
+        case _ => throw new AssertionError("Unreachable")
+      }
+    }
+
+    w.wl
+    w.wl("@Override")
+    w.w("public void writeToParcel(android.os.Parcel out, int flags)").braced {
+      for (f <- r.fields)
+        serializeField(f, f.ty.resolved.base, false)
+    }
+    w.wl
+  }
 
 }

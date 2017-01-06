@@ -34,6 +34,7 @@ djinni-output-temp/cpp/conflict_user.hpp
 djinni-output-temp/cpp/user_token.hpp
 djinni-output-temp/cpp/color.hpp
 djinni-output-temp/cpp/enum_usage_record.hpp
+djinni-output-temp/cpp/enum_usage_record.cpp
 djinni-output-temp/cpp/enum_usage_interface.hpp
 djinni-output-temp/cpp/client_returned_record.hpp
 djinni-output-temp/cpp/client_interface.hpp
@@ -43,6 +44,7 @@ djinni-output-temp/cpp/primitive_list.hpp
 djinni-output-temp/cpp/map_record.hpp
 djinni-output-temp/cpp/map_list_record.hpp
 djinni-output-temp/cpp/nested_collection.hpp
+djinni-output-temp/cpp/nested_collection.cpp
 djinni-output-temp/cpp/record_with_derivings.hpp
 djinni-output-temp/cpp/record_with_derivings.cpp
 djinni-output-temp/cpp/record_with_nested_derivings.hpp
