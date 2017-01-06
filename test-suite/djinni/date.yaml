@@ -14,6 +14,7 @@ objc:
   boxed: 'NSDate'
   pointer: true
   hash: '(NSUInteger)%s.timeIntervalSinceReferenceDate'
+  printDescription: '%s'
 objcpp:
   translator: '::djinni::Date'
   header: '"DJIMarshal+Private.h"'

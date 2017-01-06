@@ -88,6 +88,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
     case e: Enum => "NSNumber"
   }
 
+  def printDescription(td: TypeDecl) = td.body match {
+    case e: Enum => "@(%s)"
+    case _ => "%s"
+  }
+
   // Return value: (Type_Name, Is_Class_Or_Not)
   def toObjcType(ty: TypeRef): (String, Boolean) = toObjcType(ty.resolved, false)
   def toObjcType(ty: TypeRef, needRef: Boolean): (String, Boolean) = toObjcType(ty.resolved, needRef)

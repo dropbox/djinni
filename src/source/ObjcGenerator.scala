@@ -384,12 +384,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
                 case DEnum => w.w(s"@(self.${idObjc.field(f.ident)})")
                 case _ => w.w(s"self.${idObjc.field(f.ident)}")
               }
-              case e: MExtern =>
-                if (e.objc.pointer) {
-                  w.w(s"self.${idObjc.field(f.ident)}")
-                } else {
-                  w.w(s"@(self.${idObjc.field(f.ident)})")
-                }
+              case e: MExtern => w.w(e.objc.printDescription.format("self." + idObjc.field(f.ident)))
               case _ => w.w(s"self.${idObjc.field(f.ident)}")
             }
           }
