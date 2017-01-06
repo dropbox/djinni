@@ -1,3 +1,4 @@
+@import "properties.djinni"
 @import "set.djinni"
 @import "derivings.djinni"
 @import "nested_collection.djinni"
