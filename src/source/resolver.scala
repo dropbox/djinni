@@ -292,6 +292,11 @@ private def resolveInterface(scope: Scope, i: Interface) {
       case _ =>
     }
   }
+
+  for (p <- i.properties) {
+    dupeChecker.check(p.ident)
+    resolveRef(scope, p.ty)
+  }
   // Name checking for constants. Type check only possible after resolving record field types.
   for (c <- i.consts) {
     dupeChecker.check(c.ident)

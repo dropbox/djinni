@@ -271,6 +271,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty, true)
     })
+    i.properties.map(p => {
+      refs.find(p.ty, true)
+    })
 
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
@@ -295,6 +298,16 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           } else {
             val constFlag = if (m.const) " const" else ""
             w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
+          }
+        }
+        // Properties
+        for (p <- i.properties) {
+          w.wl
+          writeDoc(w, p.doc)
+          val ret = marshal.fieldType(p.ty)
+          w.wl(s"virtual $ret get_${idCpp.method(p.ident)}() = 0;")
+          if(!p.readOnly) {
+            w.wl(s"virtual void set_${idCpp.method(p.ident)}($ret new_${idCpp.method(p.ident)}) = 0;")
           }
         }
       }
