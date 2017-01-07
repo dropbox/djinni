@@ -20,7 +20,7 @@ public abstract class ReverseClientInterface {
     @CheckForNull
     public static native ReverseClientInterface create();
 
-    private static final class CppProxy extends ReverseClientInterface
+    public static final class CppProxy extends ReverseClientInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

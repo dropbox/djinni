@@ -21,7 +21,7 @@ public abstract class ListenerCaller {
     @CheckForNull
     public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
 
-    private static final class CppProxy extends ListenerCaller
+    public static final class CppProxy extends ListenerCaller
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

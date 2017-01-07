@@ -64,7 +64,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def generateJavaConstants(w: IndentWriter, consts: Seq[Const]) = {
+  def generateJavaConstants(w: IndentWriter, consts: Seq[Const], forJavaInterface: Boolean) = {
 
     def writeJavaConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long if marshal.fieldType(ty).equalsIgnoreCase("long") => w.w(l.toString + "l")
@@ -97,7 +97,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
       marshal.nullityAnnotation(c.ty).foreach(w.wl)
-      w.w(s"public static final ${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
+
+      // If the constants are part of a Java interface, omit the "static" and "final" specifiers.
+      val staticFinalString = if (forJavaInterface) "" else "static final "
+      w.w(s"public ${staticFinalString}${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl
@@ -140,12 +143,17 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      val isAbstractClass = (spec.javaGenerateInterfaces == false) || i.ext.cpp || i.methods.exists(_.static) || i.consts.size > 0
+
+      // If generating Java interfaces, as opposed to abstract classes, was not requested, or if
+      // the corresponding Djinni interface includes static methods, which Java interfaces
+      // cannot include, generate an an abstract class. Otherwise, generate an interface.
+      val isAbstractClass = (spec.javaGenerateInterfaces == false) || i.methods.exists(_.static)
       val classPrefix = if (isAbstractClass) "abstract class" else "interface"
       val methodPrefix = if (isAbstractClass) "abstract " else ""
+      val extendsKeyword = if (isAbstractClass) "extends" else "implements"
       w.w(s"${javaClassAccessModifierString}$classPrefix $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
-        generateJavaConstants(w, i.consts)
+        generateJavaConstants(w, i.consts, isAbstractClass == false)
 
         val throwException = spec.javaCppException.fold("")(" throws " + _)
         for (m <- i.methods if !m.static) {
@@ -173,7 +181,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          w.wl(s"private static final class CppProxy$typeParamList extends $javaClass$typeParamList").braced {
+          w.wl(s"public static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl
@@ -231,7 +239,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
       w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$comparableFlag").braced {
         w.wl
-        generateJavaConstants(w, r.consts)
+        generateJavaConstants(w, r.consts, false)
         // Field definitions.
         for (f <- r.fields) {
           w.wl

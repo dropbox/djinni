@@ -13,7 +13,7 @@ public abstract class CppException {
     @CheckForNull
     public static native CppException get();
 
-    private static final class CppProxy extends CppException
+    public static final class CppProxy extends CppException
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

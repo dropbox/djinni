@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class TokenTest extends TestCase {
 
-    private class JavaToken extends UserToken {
+    private class JavaToken implements UserToken {
         public String whoami() { return "Java"; }
     }
 

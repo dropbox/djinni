@@ -7,14 +7,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class VarnameInterface {
+public interface VarnameInterface {
     @Nonnull
-    public abstract VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
+    public VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
 
     @CheckForNull
-    public abstract VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
+    public VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
 
-    private static final class CppProxy extends VarnameInterface
+    public static final class CppProxy implements VarnameInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

@@ -11,9 +11,9 @@ import javax.annotation.Nonnull;
  * Test for conflict of method name with an interface name.
  * See the comments about scopeSymbols in CppMarshal.scala for more info.
  */
-public abstract class Conflict {
+public interface Conflict {
 
-    private static final class CppProxy extends Conflict
+    public static final class CppProxy implements Conflict
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

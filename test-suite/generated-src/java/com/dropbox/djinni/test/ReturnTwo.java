@@ -14,7 +14,7 @@ public abstract class ReturnTwo {
     @CheckForNull
     public static native ReturnTwo getInstance();
 
-    private static final class CppProxy extends ReturnTwo
+    public static final class CppProxy extends ReturnTwo
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
