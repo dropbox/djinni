@@ -9,41 +9,41 @@ import javax.annotation.Nonnull;
 
 /** Interface containing constants */
 public interface ConstantsInterface {
-    public boolean BOOL_CONSTANT = true;
+    boolean BOOL_CONSTANT = true;
 
-    public byte I8_CONSTANT = 1;
+    byte I8_CONSTANT = 1;
 
-    public short I16_CONSTANT = 2;
+    short I16_CONSTANT = 2;
 
     /** i32_constant has documentation. */
-    public int I32_CONSTANT = 3;
+    int I32_CONSTANT = 3;
 
     /**
      * i64_constant has long documentation.
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
      */
-    public long I64_CONSTANT = 4l;
+    long I64_CONSTANT = 4l;
 
-    public float F32_CONSTANT = 5.0f;
+    float F32_CONSTANT = 5.0f;
 
-    public double F64_CONSTANT = 5.0;
-
-    @CheckForNull
-    public Boolean OPT_BOOL_CONSTANT = true;
+    double F64_CONSTANT = 5.0;
 
     @CheckForNull
-    public Byte OPT_I8_CONSTANT = 1;
+    Boolean OPT_BOOL_CONSTANT = true;
+
+    @CheckForNull
+    Byte OPT_I8_CONSTANT = 1;
 
     /** opt_i16_constant has documentation. */
     @CheckForNull
-    public Short OPT_I16_CONSTANT = 2;
+    Short OPT_I16_CONSTANT = 2;
 
     @CheckForNull
-    public Integer OPT_I32_CONSTANT = 3;
+    Integer OPT_I32_CONSTANT = 3;
 
     @CheckForNull
-    public Long OPT_I64_CONSTANT = 4l;
+    Long OPT_I64_CONSTANT = 4l;
 
     /**
      * opt_f32_constant has long documentation.
@@ -51,19 +51,19 @@ public interface ConstantsInterface {
      *   Indented third line of multi-line documentation.)
      */
     @CheckForNull
-    public Float OPT_F32_CONSTANT = 5.0f;
+    Float OPT_F32_CONSTANT = 5.0f;
 
     @CheckForNull
-    public Double OPT_F64_CONSTANT = 5.0;
+    Double OPT_F64_CONSTANT = 5.0;
 
     @Nonnull
-    public String STRING_CONSTANT = "string-constant";
+    String STRING_CONSTANT = "string-constant";
 
     @CheckForNull
-    public String OPT_STRING_CONSTANT = "string-constant";
+    String OPT_STRING_CONSTANT = "string-constant";
 
     @Nonnull
-    public ConstantRecord OBJECT_CONSTANT = new ConstantRecord(
+    ConstantRecord OBJECT_CONSTANT = new ConstantRecord(
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 
