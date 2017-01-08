@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 public class ExtendedRecord {
 
     @Nonnull
-    ExtendedRecord EXTENDED_RECORD_CONST = new ExtendedRecord(
+    public static final ExtendedRecord EXTENDED_RECORD_CONST = new ExtendedRecord(
         true /* mFoo */ );
 
 

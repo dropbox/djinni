@@ -98,10 +98,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       javaAnnotationHeader.foreach(w.wl)
       marshal.nullityAnnotation(c.ty).foreach(w.wl)
 
-      // If the constants are part of a Java interface, omit the "public," "static,"
-      // and "final" specifiers.
-      val publicStaticFinalString = if (true) "" else "public static final "
-      w.w(s"${publicStaticFinalString}${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
+      // If the constants are part of a Java interface, omit the "static" and "final" specifiers.
+      val staticFinalString = if (forJavaInterface) "" else "static final "
+      w.w(s"public ${staticFinalString}${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl

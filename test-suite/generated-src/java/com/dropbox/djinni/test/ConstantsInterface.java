@@ -9,41 +9,41 @@ import javax.annotation.Nonnull;
 
 /** Interface containing constants */
 public interface ConstantsInterface {
-    boolean BOOL_CONSTANT = true;
+    public boolean BOOL_CONSTANT = true;
 
-    byte I8_CONSTANT = 1;
+    public byte I8_CONSTANT = 1;
 
-    short I16_CONSTANT = 2;
+    public short I16_CONSTANT = 2;
 
     /** i32_constant has documentation. */
-    int I32_CONSTANT = 3;
+    public int I32_CONSTANT = 3;
 
     /**
      * i64_constant has long documentation.
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
      */
-    long I64_CONSTANT = 4l;
+    public long I64_CONSTANT = 4l;
 
-    float F32_CONSTANT = 5.0f;
+    public float F32_CONSTANT = 5.0f;
 
-    double F64_CONSTANT = 5.0;
-
-    @CheckForNull
-    Boolean OPT_BOOL_CONSTANT = true;
+    public double F64_CONSTANT = 5.0;
 
     @CheckForNull
-    Byte OPT_I8_CONSTANT = 1;
+    public Boolean OPT_BOOL_CONSTANT = true;
+
+    @CheckForNull
+    public Byte OPT_I8_CONSTANT = 1;
 
     /** opt_i16_constant has documentation. */
     @CheckForNull
-    Short OPT_I16_CONSTANT = 2;
+    public Short OPT_I16_CONSTANT = 2;
 
     @CheckForNull
-    Integer OPT_I32_CONSTANT = 3;
+    public Integer OPT_I32_CONSTANT = 3;
 
     @CheckForNull
-    Long OPT_I64_CONSTANT = 4l;
+    public Long OPT_I64_CONSTANT = 4l;
 
     /**
      * opt_f32_constant has long documentation.
@@ -51,19 +51,19 @@ public interface ConstantsInterface {
      *   Indented third line of multi-line documentation.)
      */
     @CheckForNull
-    Float OPT_F32_CONSTANT = 5.0f;
+    public Float OPT_F32_CONSTANT = 5.0f;
 
     @CheckForNull
-    Double OPT_F64_CONSTANT = 5.0;
+    public Double OPT_F64_CONSTANT = 5.0;
 
     @Nonnull
-    String STRING_CONSTANT = "string-constant";
+    public String STRING_CONSTANT = "string-constant";
 
     @CheckForNull
-    String OPT_STRING_CONSTANT = "string-constant";
+    public String OPT_STRING_CONSTANT = "string-constant";
 
     @Nonnull
-    ConstantRecord OBJECT_CONSTANT = new ConstantRecord(
+    public ConstantRecord OBJECT_CONSTANT = new ConstantRecord(
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 

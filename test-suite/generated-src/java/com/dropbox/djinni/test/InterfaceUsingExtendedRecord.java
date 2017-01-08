@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 public interface InterfaceUsingExtendedRecord {
     @Nonnull
-    RecordUsingExtendedRecord CR = new RecordUsingExtendedRecord(
+    public RecordUsingExtendedRecord CR = new RecordUsingExtendedRecord(
         new ExtendedRecord(
             false /* mFoo */ ) /* mEr */ );
 
