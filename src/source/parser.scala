@@ -55,23 +55,19 @@ private object IdlParser extends RegexParsers {
     var file: Option[File] = None
 
     val path = includePaths.find(path => {
-      val relPath = if (path.isEmpty) fileParent else path + "/"
-      val tmp = new File(relPath + fileName)
+      val relPath = if (path.isEmpty) fileStack.top.getParent() else path
+      val tmp = new File(relPath, fileName)
       val exists = tmp.exists
       if (exists) file = Some(tmp)
       exists
     })
 
-    if (path.isEmpty || file.isEmpty) throw new FileNotFoundException("Unable to find file \"" + fileName + "\" at " + fileStack.top.getCanonicalPath)
+    if (file.isEmpty) throw new FileNotFoundException("Unable to find file \"" + fileName + "\" at " + fileStack.top.getCanonicalPath)
 
     return file.get
   }
 
   def filePath = "[^\"]*".r
-
-  def fileParent(): String = {
-    if (fileStack.top.getParent() != null) fileStack.top.getParent() + "/" else ""
-  }
 
   def directive = importDirective | externDirective
   def importDirective = "import".r
