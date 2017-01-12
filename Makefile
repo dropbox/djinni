@@ -44,8 +44,7 @@ example_ios: ./build_ios/example/libtextsort.xcodeproj
 	xcodebuild -workspace example/objc/TextSort.xcworkspace \
            -scheme TextSort \
            -configuration 'Debug' \
-           -sdk iphonesimulator \
-	   -destination 'platform=iOS Simulator,name=iPhone 6s,OS=10.1'
+           -sdk iphonesimulator
 
 # this target implicitly depends on GypAndroid.mk since gradle will try to make it
 example_android: GypAndroid.mk

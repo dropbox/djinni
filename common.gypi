@@ -13,6 +13,7 @@
       'DEAD_CODE_STRIPPING': 'YES',
       'SKIP_INSTALL': 'YES',
       'CLANG_ENABLE_OBJC_ARC': 'YES',
+      'IPHONEOS_DEPLOYMENT_TARGET': '8.0',
     },
     "conditions": [
         ['OS=="ios"', {

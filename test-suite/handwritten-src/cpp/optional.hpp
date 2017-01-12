@@ -553,7 +553,7 @@ public:
 template <class T>
 class optional<T&&>
 {
-  static_assert( sizeof(T) == 0, "optional rvalue referencs disallowed" );
+  static_assert( sizeof(T) == 0, "optional rvalue references disallowed" );
 };
 
 

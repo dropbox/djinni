@@ -1,3 +1,2 @@
-@import "./vendor/third-party/date.djinni"
-@import "../djinni/vendor/third-party/date.djinni"
-@extern "./vendor/third-party/date.yaml"
+@import "./varnames.djinni"
+@import "../djinni/varnames.djinni"

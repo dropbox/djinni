@@ -208,17 +208,18 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
         wrapNamespace(w, spec.objcppNamespace, w => {
           w.wl(s"class $helperClass::ObjcProxy final")
           w.wl(s": public $cppSelf")
-          w.wl(s", public ::djinni::ObjcProxyCache::Handle<ObjcType>") // Use base class to avoid name conflicts with user-defined methods having the same name as this new data member
+          w.wl(s", private ::djinni::ObjcProxyBase<ObjcType>")
           w.bracedSemi {
+            w.wl(s"friend class ${objcppMarshal.helperClassWithNs(ident)};")
             w.wlOutdent("public:")
-            w.wl("using Handle::Handle;")
+            w.wl("using ObjcProxyBase::ObjcProxyBase;")
             for (m <- i.methods) {
               val ret = cppMarshal.fqReturnType(m.ret)
               val params = m.params.map(p => cppMarshal.fqParamType(p.ty) + " c_" + idCpp.local(p.ident))
               w.wl(s"$ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")} override").braced {
                 w.w("@autoreleasepool").braced {
                   val ret = m.ret.fold("")(_ => "auto objcpp_result_ = ")
-                  val call = s"[Handle::get() ${idObjc.method(m.ident)}"
+                  val call = s"[djinni_private_get_proxied_objc_object() ${idObjc.method(m.ident)}"
                   writeAlignedObjcCall(w, ret + call, m.params, "]", p => (idObjc.field(p.ident), s"(${objcppMarshal.fromCpp(p.ty, "c_" + idCpp.local(p.ident))})"))
                   w.wl(";")
                   m.ret.fold()(ty => {
@@ -284,13 +285,13 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
           if (i.ext.objc && !i.ext.cpp) {
             // ObjC only. In this case we *must* unwrap a proxy object - the dynamic_cast will
             // throw bad_cast if we gave it something of the wrong type.
-            w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();")
+            w.wl(s"return dynamic_cast<ObjcProxy&>(*cpp).djinni_private_get_proxied_objc_object();")
           } else if (i.ext.objc || i.ext.cpp) {
             // C++ only, or C++ and ObjC.
             if (i.ext.objc) {
               // If it could be implemented in ObjC, we might have to unwrap a proxy object.
               w.w(s"if (auto cppPtr = dynamic_cast<ObjcProxy*>(cpp.get()))").braced {
-                w.wl("return cppPtr->Handle::get();")
+                w.wl("return cppPtr->djinni_private_get_proxied_objc_object();")
               }
             }
             w.wl(s"return ::djinni::get_cpp_proxy<$objcSelf>(cpp);")
