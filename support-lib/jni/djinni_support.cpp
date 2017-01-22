@@ -482,7 +482,7 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
 }
 
 template<int wcharTypeSize>
-static std::wstring implUTF16ToWString(const char16_t * data, size_t length)
+static std::wstring implUTF16ToWString(const char16_t * /*data*/, size_t /*length*/)
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
     return {}; // unreachable
