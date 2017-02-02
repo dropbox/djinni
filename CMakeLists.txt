@@ -40,11 +40,13 @@ if (APPLE)
 	target_link_libraries(djinni ${FOUNDATION})
 	source_group("objc" FILES ${OBJ_C_SRC} ${OBJC_HEADERS})
 	target_compile_options(djinni PUBLIC "-fobjc-arc")
+    set(PUBLIC_HEADERS ${SRC_SHARED} ${OBJC_HEADERS})
 	set_target_properties(djinni PROPERTIES
 		CXX_STANDARD 11
 		CXX_STANDARD_REQUIRED true
 		CXX_EXTENSIONS false
 		FRAMEWORK TRUE
+        PUBLIC_HEADER "${PUBLIC_HEADERS}"
 		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.dropbox.djinni"
 	)
 	include_directories(
