@@ -2,42 +2,54 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(djinni)
 
+set(SUPPORT_LIB_DIR support-lib)
+set(JNI_DIR ${SUPPORT_LIB_DIR}/jni)
+set(OBJ_C_DIR ${SUPPORT_LIB_DIR}/objc)
+
 set(SRC_SHARED
-  "support-lib/djinni_common.hpp"
-  "support-lib/proxy_cache_interface.hpp"
-  "support-lib/proxy_cache_impl.hpp"
+    "${SUPPORT_LIB_DIR}/djinni_common.hpp"
+    "${SUPPORT_LIB_DIR}/proxy_cache_interface.hpp"
+	"${SUPPORT_LIB_DIR}/proxy_cache_impl.hpp"
 )
 
-set(SRC_JNI
-  "support-lib/jni/djinni_main.cpp"
-  "support-lib/jni/djinni_support.cpp"
-  "support-lib/jni/djinni_support.hpp"
-  "support-lib/jni/Marshal.hpp"
+set(JNI_HEADERS
+	"${JNI_DIR}/djinni_support.hpp"
+	"${JNI_DIR}/Marshal.hpp"
 )
 
-set(SRC_OBJC
-  "support-lib/objc/DJICppWrapperCache+Private.h"
-  "support-lib/objc/DJIError.h"
-  "support-lib/objc/DJIError.mm"
-  "support-lib/objc/DJIMarshal+Private.h"
-  "support-lib/objc/DJIObjcWrapperCache+Private.h"
-  "support-lib/objc/DJIProxyCaches.mm"
+set(JNI_SRC
+	"${JNI_DIR}/djinni_main.cpp"
+	"${JNI_DIR}/djinni_support.cpp"
+)
+
+set(OBJC_HEADERS
+	"${OBJ_C_DIR}/DJICppWrapperCache+Private.h"
+	"${OBJ_C_DIR}/DJIError.h"
+	"${OBJ_C_DIR}/DJIMarshal+Private.h"
+	"${OBJ_C_DIR}/DJIObjcWrapperCache+Private.h"
+)
+
+set(OBJ_C_SRC
+	"${OBJ_C_DIR}/DJIError.mm"
+	"${OBJ_C_DIR}/DJIProxyCaches.mm"
 )
 
 if (APPLE)
-
-    add_library(djinni STATIC ${SRC_SHARED} ${SRC_OBJC})
-
-    source_group("objc" FILES ${SRC_OBJC})
-    target_compile_options(djinni PUBLIC "-fobjc-arc")
-
-    target_include_directories(djinni PUBLIC "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-    install(DIRECTORY "support-lib" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.hpp"
-    )
-
+	find_library(FOUNDATION Foundation)
+	add_library(djinni SHARED ${SRC_SHARED} ${OBJ_C_SRC} ${OBJC_HEADERS})
+	target_link_libraries(djinni ${FOUNDATION})
+	source_group("objc" FILES ${OBJ_C_SRC} ${OBJC_HEADERS})
+	target_compile_options(djinni PUBLIC "-fobjc-arc")
+	set_target_properties(djinni PROPERTIES
+		CXX_STANDARD 11
+		CXX_STANDARD_REQUIRED true
+		CXX_EXTENSIONS false
+		FRAMEWORK TRUE
+		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.dropbox.djinni"
+	)
+	include_directories(
+		${SUPPORT_LIB_DIR}
+		${OBJ_C_DIR}
+	)
 endif(APPLE)
-
-source_group("" FILES ${SRC_SHARED})
+source_group("cpp" FILES ${SRC_SHARED})
