@@ -19,8 +19,16 @@ base_dir=$(cd "`dirname "$loc"`" && pwd)
 # Determine os version and choose correspondent .sh or .bat file accordingly.
 os_version="`uname -a`"
 
-if [[ $os_version == *"MINGW"* ]]; then  
-  cmd //C "$base_dir/target/start.bat" "$@"
-else  
+if [[ $os_version == *"MINGW"* ]]; then
+  PARAMS=""
+  for PARAM in "$@"
+  do
+    escaped="${PARAM/</^^^<}"
+    escaped="${escaped/>/^^^>}"
+    PARAMS=( ${PARAMS[@]} "${escaped}" )
+  done
+  cmd //C "$base_dir/target/start.bat" "${PARAMS[@]}"
+else
   exec "$base_dir/target/start" "$@"
 fi
+
