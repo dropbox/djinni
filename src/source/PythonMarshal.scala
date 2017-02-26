@@ -52,16 +52,16 @@ class PythonMarshal(spec: Spec) extends Marshal(spec) {
         d.defType match {
           case DInterface  =>
             List(
-              ImportRef("from " + idPython.local(d.name) + " import " + className),
-              ImportRef("from " + idPython.local(d.name)  + " import " + className + "Helper"))
+              ImportRef("from " + spec.pyImportPrefix + idPython.local(d.name) + " import " + className),
+              ImportRef("from " + spec.pyImportPrefix + idPython.local(d.name)  + " import " + className + "Helper"))
           case DRecord =>
             List(
               ImportRef("from djinni.pycffi_marshal import CPyRecord"),
-              ImportRef("from " + idPython.local(d.name) + " import " + className),
-              ImportRef("from " + idPython.local(d.name) + "_helper" + " import " + className + "Helper"))
+              ImportRef("from " + spec.pyImportPrefix + idPython.local(d.name) + " import " + className),
+              ImportRef("from " + spec.pyImportPrefix + idPython.local(d.name) + "_helper" + " import " + className + "Helper"))
           case DEnum => List(
               ImportRef("from djinni.pycffi_marshal import CPyEnum"),
-              ImportRef("from " + idPython.local(d.name)  + " import " + className))
+              ImportRef("from " + spec.pyImportPrefix + idPython.local(d.name)  + " import " + className))
         }
       }
       else List()
@@ -93,25 +93,28 @@ class PythonMarshal(spec: Spec) extends Marshal(spec) {
           case MList => {
             refs.add("from djinni.pycffi_marshal import CPyObject")
             if (idPython.className(idlName) != idPython.className(exclude)) {
-              refs.add("from " + dh + idlName + " import " + idPython.className(idlName) + "Helper")
+              refs.add("from " + spec.pyImportPrefix + dh + idlName + " import " + idPython.className(idlName) + "Helper")
             }
             getRef(tm.args(0))
           }
           case MSet | MMap => {
             refs.add("from djinni.pycffi_marshal import CPyObject, CPyObjectProxy")
             if (idPython.className(idlName) != idPython.className(exclude)) {
-              refs.add("from " + dh +idlName + " import " + idPython.className(idlName) + "Helper")
-              refs.add("from " + dh + idlName + " import " + idPython.className(idlName) + "Proxy")
+              refs.add("from " + spec.pyImportPrefix + dh +idlName + " import " + idPython.className(idlName) + "Helper")
+              refs.add("from " + spec.pyImportPrefix + dh + idlName + " import " + idPython.className(idlName) + "Proxy")
             }
             getRef(tm.args(0))
             if (tm.base == MMap) getRef(tm.args(1))
           }
           case d: MDef => d.defType match {
             case DInterface =>
+              refs.add("from " + spec.pyImportPrefix + idPython.local(d.name) + " import " + idPython.className(d.name) + "Helper")
             case DRecord =>
-              refs.add("from " + idPython.local(d.name)  + " import " + idPython.className(d.name))
+              refs.add("from " + spec.pyImportPrefix + idPython.local(d.name) + " import " + idPython.className(d.name))
               refs.add("from djinni.pycffi_marshal import CPyRecord")
-            case DEnum => refs.add("from djinni.pycffi_marshal import CPyEnum")
+            case DEnum =>
+              refs.add("from " + spec.pyImportPrefix + idPython.local(d.name) + " import " + idPython.className(d.name))
+              refs.add("from djinni.pycffi_marshal import CPyEnum")
           }
           case mp: MPrimitive => refs.add("from djinni.pycffi_marshal import CPyPrimitive")
           case MString => refs.add("from djinni.pycffi_marshal import CPyString")

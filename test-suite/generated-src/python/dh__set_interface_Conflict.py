@@ -4,6 +4,8 @@
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
 from djinni.pycffi_marshal import CPyObject, CPyObjectProxy
+
+from Conflict import ConflictHelper
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception

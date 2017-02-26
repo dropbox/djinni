@@ -10,3 +10,4 @@
 @import "foo_containers.djinni"
 @import "foo_constants.djinni"
 @import "foo_enum_interface.djinni"
+@import "foo_duplicate_file_creation.djinni"

@@ -568,7 +568,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
         }
       } else {
         val className = "struct Djinni" + idCpp.ty(marshal.getExprIdlName(tm))
-        if (! writtenFiles.contains(marshal.dh + name + ".hpp") ) {
+        if (! writtenFiles.contains((marshal.dh + name + ".hpp").toLowerCase()) ) {
           writtenFiles.put(fileName.toLowerCase(), fileName)
           tm.base match {
             case MList => generateList(tm, name, className, ident, origin, h, hpp)

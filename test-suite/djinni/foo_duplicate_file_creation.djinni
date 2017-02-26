@@ -1,0 +1,13 @@
+Foo_Record = record {
+        a: string;
+}
+
+Foo_Callback = interface +c {
+        methodA(records: list<Foo_Record>);
+        methodB(records: list<Foo_Record>);
+}
+
+Foo_Callback2 = interface +p {
+        methodA(records: list<Foo_Record>);
+        methodB(records: list<Foo_Record>);
+}
