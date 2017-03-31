@@ -62,11 +62,9 @@ if(DJINNI_WITH_JNI)
     find_package(JNI REQUIRED QUIET)
     target_include_directories(djinni PUBLIC "${JNI_INCLUDE_DIRS}")
   endif()
-  # Exceptions and RTTI are disabled in the NDK by default
-  if(ANDROID)
-    target_compile_options(djinni PRIVATE "-fexceptions" "-frtti")
-  endif()
 endif()
+
+target_compile_options(djinni PRIVATE "-fexceptions" "-frtti")
 
 if(NOT (DJINNI_WITH_OBJC OR DJINNI_WITH_JNI))
   message(FATAL_ERROR "At least one of DJINNI_WITH_OBJC or DJINNI_WITH_JNI must be enabled.")
