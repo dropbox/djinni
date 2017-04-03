@@ -68,7 +68,7 @@ object Main {
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
     var objcExtendedRecordIncludePrefix: String = ""
-    var objcSwiftBridgingHeaderOut: Option[File] = None
+    var objcSwiftBridgingHeader: Option[String] = None
     var objcppIncludePrefix: String = ""
     var objcppIncludeCppPrefix: String = ""
     var objcppIncludeObjcPrefixOptional: Option[String] = None
@@ -165,8 +165,8 @@ object Main {
         .text("The prefix for Objective-C data types (usually two or three letters)")
       opt[String]("objc-include-prefix").valueName("<prefix>").foreach(objcIncludePrefix = _)
         .text("The prefix for #import of header files from Objective-C files.")
-      opt[File]("objc-swift-bridging-header-out").valueName("<path>").foreach(x => objcSwiftBridgingHeaderOut = Some(x))
-        .text("The path to Objective-C Bridging Header used in XCode's Swift projects.")
+      opt[String]("objc-swift-bridging-header").valueName("<name>").foreach(x => objcSwiftBridgingHeader = Some(x))
+        .text("The name of Objective-C Bridging Header used in XCode's Swift projects.")
       note("")
       opt[File]("objcpp-out").valueName("<out-folder>").foreach(x => objcppOutFolder = Some(x))
         .text("The output folder for private Objective-C++ files (Generator disabled if unspecified).")
@@ -285,12 +285,11 @@ object Main {
     } else {
       None
     }
-    val objcSwiftBridgingHeaderWriter = if (objcSwiftBridgingHeaderOut.isDefined) {
-      if (objcSwiftBridgingHeaderOut.get.getParentFile != null)
-        createFolder("Swift", objcSwiftBridgingHeaderOut.get.getParentFile)
-      val writer = new BufferedWriter(new FileWriter(objcSwiftBridgingHeaderOut.get))
-      SwiftBridgingHeaderGenerator.writeAutogenerationWarning(writer)
-      Some(writer)
+    val objcSwiftBridgingHeaderWriter = if (objcSwiftBridgingHeader.isDefined && objcOutFolder.isDefined) {
+      val objcSwiftBridgingHeaderFile = new File(objcOutFolder.get.getPath, objcSwiftBridgingHeader.get + ".h")
+      if (objcSwiftBridgingHeaderFile.getParentFile != null)
+        createFolder("output file list", objcSwiftBridgingHeaderFile.getParentFile)
+      Some(new BufferedWriter(new FileWriter(objcSwiftBridgingHeaderFile)))
     } else {
       None
     }
