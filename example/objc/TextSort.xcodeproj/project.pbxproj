@@ -17,7 +17,7 @@
 		65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */; };
 		65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */; };
 		65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF919AD0CDF0038F82F /* TXSViewController.m */; };
-		A546A26E1E72FBAF004A8BBD /* TXSTextboxListenerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerImpl.swift */; };
+		A546A26E1E72FBAF004A8BBD /* TXSTextboxResetListenerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546A26D1E72FBAF004A8BBD /* TXSTextboxResetListenerImpl.swift */; };
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
 /* End PBXBuildFile section */
@@ -39,7 +39,7 @@
 		65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSTextboxListenerImpl.m; sourceTree = "<group>"; };
 		65D7FDF819AD0CDF0038F82F /* TXSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSViewController.h; sourceTree = "<group>"; };
 		65D7FDF919AD0CDF0038F82F /* TXSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSViewController.m; sourceTree = "<group>"; };
-		A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TXSTextboxListenerImpl.swift; path = "../handwritten-src/swift/TXSTextboxListenerImpl.swift"; sourceTree = "<group>"; };
+		A546A26D1E72FBAF004A8BBD /* TXSTextboxResetListenerImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TXSTextboxResetListenerImpl.swift; path = "../handwritten-src/swift/TXSTextboxResetListenerImpl.swift"; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,7 +129,7 @@
 		A546A26A1E72F967004A8BBD /* handwritten-swift */ = {
 			isa = PBXGroup;
 			children = (
-				A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerImpl.swift */,
+				A546A26D1E72FBAF004A8BBD /* TXSTextboxResetListenerImpl.swift */,
 			);
 			name = "handwritten-swift";
 			sourceTree = "<group>";
@@ -208,7 +208,7 @@
 				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
 				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */,
-				A546A26E1E72FBAF004A8BBD /* TXSTextboxListenerImpl.swift in Sources */,
+				A546A26E1E72FBAF004A8BBD /* TXSTextboxResetListenerImpl.swift in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

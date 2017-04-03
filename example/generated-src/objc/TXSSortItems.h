@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 @class TXSSortItems;
 @protocol TXSTextboxListener;
+@protocol TXSTextboxResetListener;
 
 
 @interface TXSSortItems : NSObject
@@ -14,7 +15,10 @@
 - (void)sort:(TXSSortOrder)order
        items:(nonnull TXSItemList *)items;
 
-+ (nullable TXSSortItems *)createWithListener:(nullable id<TXSTextboxListener>)listener;
+- (void)reset;
+
++ (nullable TXSSortItems *)createWithListener:(nullable id<TXSTextboxListener>)listener
+                                resetListener:(nullable id<TXSTextboxResetListener>)resetListener;
 
 /** For the localhost / command-line demo */
 + (nonnull TXSItemList *)runSort:(nonnull TXSItemList *)items;

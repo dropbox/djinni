@@ -8,6 +8,7 @@
 namespace textsort {
 
 class TextboxListener;
+class TextboxResetListener;
 enum class sort_order;
 struct ItemList;
 
@@ -18,7 +19,9 @@ public:
     /** For the iOS / Android demo */
     virtual void sort(sort_order order, const ItemList & items) = 0;
 
-    static std::shared_ptr<SortItems> create_with_listener(const std::shared_ptr<TextboxListener> & listener);
+    virtual void reset() = 0;
+
+    static std::shared_ptr<SortItems> create_with_listener(const std::shared_ptr<TextboxListener> & listener, const std::shared_ptr<TextboxResetListener> & reset_listener);
 
     /** For the localhost / command-line demo */
     static ItemList run_sort(const ItemList & items);

@@ -13,6 +13,7 @@ public class MainActivity extends Activity {
     private EditText text;
     private SortItems sortItemsInterface;
     private TextboxListener textboxListener;
+    private TextboxResetListener textboxResetListener;
 
     static {
         System.loadLibrary("textsort_jni");
@@ -25,8 +26,13 @@ public class MainActivity extends Activity {
 
         text = (EditText) findViewById(R.id.editText);
         textboxListener = new TextboxListenerImpl(text);
+        textboxResetListener = new TextboxResetListenerImpl(text);
         // Call JNI to initiate the SortItems object from the given textboxListener and translate to Java
-        sortItemsInterface = SortItems.createWithListener(textboxListener);
+        sortItemsInterface = SortItems.createWithListener(textboxListener, textboxResetListener);
+    }
+
+    public void reset(View view) {
+        sortItemsInterface.reset();
     }
 
     public void sort(SortOrder order) {
