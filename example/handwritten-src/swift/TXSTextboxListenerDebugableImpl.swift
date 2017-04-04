@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc class TXSTextboxListenerImpl : NSObject, TXSTextboxListener {
+@objc class TXSTextboxListenerDebugableImpl : NSObject, TXSTextboxListener {
     private var textView_: UITextView
     
     @objc(initWithUITextView:)
@@ -17,6 +17,8 @@ import UIKit
     }
     
     @objc func update(_ items: TXSItemList) {
-        textView_.text = items.items.joined(separator: "\n")
+        let string = items.items.joined(separator: "\n")
+        print("TXSTextboxListenerDebugableImpl -> update \n\(string)")
+        textView_.text = string
     }
 }
