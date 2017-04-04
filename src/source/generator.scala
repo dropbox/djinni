@@ -170,8 +170,7 @@ package object generatorTools {
   case class GenerateException(message: String) extends java.lang.Exception(message)
 
   def createFolder(name: String, folder: File) {
-    val sucess = folder.mkdirs()
-
+    folder.mkdirs()
     if (folder.exists) {
       if (!folder.isDirectory) {
         throw new GenerateException(s"Unable to create $name folder at ${q(folder.getPath)}, there's something in the way.")
