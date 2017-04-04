@@ -11,10 +11,8 @@ import javax.annotation.Nonnull;
     /** For the iOS / Android demo */
     public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
-    public abstract void reset();
-
     @CheckForNull
-    public static native SortItems createWithListener(@CheckForNull TextboxListener listener, @CheckForNull TextboxResetListener resetListener);
+    public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
 
     /** For the localhost / command-line demo */
     @Nonnull
@@ -50,13 +48,5 @@ import javax.annotation.Nonnull;
             native_sort(this.nativeRef, order, items);
         }
         private native void native_sort(long _nativeRef, SortOrder order, ItemList items);
-
-        @Override
-        public void reset()
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_reset(this.nativeRef);
-        }
-        private native void native_reset(long _nativeRef);
     }
 }

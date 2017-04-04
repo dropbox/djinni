@@ -1,8 +1,8 @@
 #import "TXSItemList.h"
 #import "TXSSortItems.h"
-#import "TXSTextboxListenerImpl.h"
-#import "TXSViewController.h"
 #import "TextSort-Swift.h"
+#import "TXSViewController.h"
+#import "TXSTextboxListener.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -17,7 +17,6 @@
 @implementation TXSViewController {
     TXSSortItems* _sortItemInterface;
     id <TXSTextboxListener> _textboxListener;
-    id <TXSTextboxResetListener> _textboxResetListener;
 }
 
 - (void)viewDidLoad
@@ -36,13 +35,7 @@
 
     // Create the Objective-C TXSTextboxListener
     _textboxListener = [[TXSTextboxListenerImpl alloc] initWithUITextView:self.textView];
-    _textboxResetListener = [[TXSTextboxResetListenerImpl alloc] initWithUITextView:self.textView];
-    _sortItemInterface = [TXSSortItems createWithListener:_textboxListener resetListener:_textboxResetListener];
-}
-
-- (IBAction)reset:(id)sender
-{
-    [_sortItemInterface reset];
+    _sortItemInterface = [TXSSortItems createWithListener:_textboxListener];
 }
 
 - (IBAction)sort:(id)sender

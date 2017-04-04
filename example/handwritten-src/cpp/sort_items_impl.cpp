@@ -8,24 +8,14 @@
 
 namespace textsort {
 
-std::shared_ptr<SortItems> SortItems::create_with_listener(const std::shared_ptr<TextboxListener> & listener, const std::shared_ptr<TextboxResetListener> & reset_listener) {
-    return std::make_shared<SortItemsImpl>(listener, reset_listener);
+std::shared_ptr<SortItems> SortItems::create_with_listener(const std::shared_ptr<TextboxListener>& listener) {
+    return std::make_shared<SortItemsImpl>(listener);
 }
 
-SortItemsImpl::SortItemsImpl (const std::shared_ptr<TextboxListener> & listener, const std::shared_ptr<TextboxResetListener> & reset_listener) {
+SortItemsImpl::SortItemsImpl (const std::shared_ptr<TextboxListener> & listener) {
     this->m_listener = listener;
-    this->m_reset_listener = reset_listener;
 }
 
-void SortItemsImpl::reset() {
-
-    std::string resetText = "Type the lines to sort";
-    
-    // Pass result to client interface
-    this->m_reset_listener->reset(resetText);
-
-}
-    
 void SortItemsImpl::sort(sort_order order, const ItemList & items) {
     auto lines = items.items;
     switch (order) {
