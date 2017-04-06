@@ -1,7 +1,7 @@
 # This is an example YAML file mimicking the builtin "date" type as external type
 ---
 name: extern_date
-typedef: 'record deriving(eq, ord)'
+typedef: 'record deriving(eq, ord, parcelable)'
 params: []
 prefix: ''
 cpp:
@@ -23,6 +23,8 @@ java:
   reference: true
   generic: true
   hash: '%s.hashCode()'
+  writeToParcel: 'out.writeLong(%s.getTime())'
+  readFromParcel: 'new %s(in.readLong())'
 jni:
   translator: '::djinni::Date'
   header: '"Marshal.hpp"'
