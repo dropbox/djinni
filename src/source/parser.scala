@@ -123,6 +123,7 @@ private object IdlParser extends RegexParsers {
     _.map(ident => ident.name match {
       case "eq" => Record.DerivingType.Eq
       case "ord" => Record.DerivingType.Ord
+      case "parcelable" => Record.DerivingType.AndroidParcelable
       case _ => return err( s"""Unrecognized deriving type "${ident.name}"""")
     }).toSet
   }

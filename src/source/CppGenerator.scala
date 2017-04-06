@@ -210,7 +210,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
-    if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
+    //If the only derivingType is AndroidParcelable, there is no need to generate the cpp file
+    if (r.consts.nonEmpty || (r.derivingTypes.nonEmpty && r.derivingTypes != Set(DerivingType.AndroidParcelable))) {
       writeCppFile(cppName, origin, refs.cpp, w => {
         generateCppConstants(w, r.consts, actualSelf)
 
