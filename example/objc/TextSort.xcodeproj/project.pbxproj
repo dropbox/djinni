@@ -17,6 +17,7 @@
 		65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF519AD0CDF0038F82F /* TXSAppDelegate.m */; };
 		65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */; };
 		65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D7FDF919AD0CDF0038F82F /* TXSViewController.m */; };
+		A546A26E1E72FBAF004A8BBD /* TXSTextboxListenerDebugableImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerDebugableImpl.swift */; };
 		B003051919B70561008E1F67 /* libdjinni_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B003051819B70561008E1F67 /* libdjinni_objc.a */; };
 		B097B6BC19B1C07E0047653A /* libtextsort_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B097B6BB19B1C07E0047653A /* libtextsort_objc.a */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 		65D7FDF719AD0CDF0038F82F /* TXSTextboxListenerImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSTextboxListenerImpl.m; sourceTree = "<group>"; };
 		65D7FDF819AD0CDF0038F82F /* TXSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXSViewController.h; sourceTree = "<group>"; };
 		65D7FDF919AD0CDF0038F82F /* TXSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSViewController.m; sourceTree = "<group>"; };
+		A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerDebugableImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TXSTextboxListenerDebugableImpl.swift; path = "../handwritten-src/swift/TXSTextboxListenerDebugableImpl.swift"; sourceTree = "<group>"; };
 		B003051819B70561008E1F67 /* libdjinni_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdjinni_objc.a; path = "../../support-lib/build/Debug-iphoneos/libdjinni_objc.a"; sourceTree = "<group>"; };
 		B097B6BB19B1C07E0047653A /* libtextsort_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextsort_objc.a; path = "../../build/Debug-iphoneos/libtextsort_objc.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,6 +63,7 @@
 		65834DD419AC599E0061AD3F = {
 			isa = PBXGroup;
 			children = (
+				A546A26A1E72F967004A8BBD /* handwritten-swift */,
 				65D7FDF219AD0C730038F82F /* handwritten-objc */,
 				65834DE619AC599E0061AD3F /* TextSort */,
 				65834DDF19AC599E0061AD3F /* Frameworks */,
@@ -123,6 +126,14 @@
 			path = "../handwritten-src/objc";
 			sourceTree = "<group>";
 		};
+		A546A26A1E72F967004A8BBD /* handwritten-swift */ = {
+			isa = PBXGroup;
+			children = (
+				A546A26D1E72FBAF004A8BBD /* TXSTextboxListenerDebugableImpl.swift */,
+			);
+			name = "handwritten-swift";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,6 +163,11 @@
 				CLASSPREFIX = TXS;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Dropbox, Inc.";
+				TargetAttributes = {
+					65834DDC19AC599E0061AD3F = {
+						LastSwiftMigration = 0820;
+					};
+				};
 			};
 			buildConfigurationList = 65834DD819AC599E0061AD3F /* Build configuration list for PBXProject "TextSort" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -192,6 +208,7 @@
 				65D7FDFC19AD0CDF0038F82F /* TXSTextboxListenerImpl.m in Sources */,
 				65D7FDFB19AD0CDF0038F82F /* TXSAppDelegate.m in Sources */,
 				65D7FDFD19AD0CDF0038F82F /* TXSViewController.m in Sources */,
+				A546A26E1E72FBAF004A8BBD /* TXSTextboxListenerDebugableImpl.swift in Sources */,
 				65D7FDFA19AD0CDF0038F82F /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,12 +325,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
 				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "Dropbox.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../generated-src/objc/TextSort-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -324,12 +346,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSort/TextSort-Prefix.pch";
 				INFOPLIST_FILE = "TextSort/TextSort-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "Dropbox.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../generated-src/objc/TextSort-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -101,6 +101,7 @@ if [ $already_generated -eq 0 ]; then
         --objc-out "$temp_out/objc" \
         --objcpp-out "$temp_out/objc" \
         --objc-type-prefix TXS \
+        --objc-swift-bridging-header "TextSort-Bridging-Header" \
         \
         --py-out "$temp_out/python" \
         --pycffi-package-name PyCFFIlib \
