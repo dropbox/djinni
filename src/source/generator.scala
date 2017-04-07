@@ -74,6 +74,7 @@ package object generatorTools {
                    objcppIncludeObjcPrefix: String,
                    objcppNamespace: String,
                    objcBaseLibIncludePrefix: String,
+                   objcSwiftBridgingHeaderWriter: Option[Writer],
                    outFileListWriter: Option[Writer],
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
@@ -212,6 +213,10 @@ package object generatorTools {
           createFolder("Objective-C++", spec.objcppOutFolder.get)
         }
         new ObjcppGenerator(spec).generate(idl)
+      }
+      if (spec.objcSwiftBridgingHeaderWriter.isDefined) {
+        SwiftBridgingHeaderGenerator.writeAutogenerationWarning(spec.objcSwiftBridgingHeaderWriter.get)
+        new SwiftBridgingHeaderGenerator(spec).generate(idl)
       }
       if (spec.yamlOutFolder.isDefined) {
         if (!spec.skipGeneration) {

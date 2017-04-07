@@ -66,9 +66,10 @@ fi
     --ident-jni-class NativeFooBar \
     --ident-jni-file NativeFooBar \
     \
-	--objc-out "$temp_out/objc" \
-	--objcpp-out "$temp_out/objc" \
+    --objc-out "$temp_out/objc" \
+    --objcpp-out "$temp_out/objc" \
     --objc-type-prefix TXS \
+    --objc-swift-bridging-header "TextSort-Bridging-Header" \
     \
     --idl "$in"
 
