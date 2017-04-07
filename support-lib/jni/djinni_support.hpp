@@ -342,8 +342,9 @@ static const std::shared_ptr<T> & objectFromHandleAddress(jlong handle) {
     assert(handle > 4096);
     // Below line segfaults gcc-4.8. Using a temporary variable hides the bug.
     //const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->get();
-    const CppProxyHandle<T> *temp = reinterpret_cast<const CppProxyHandle<T> *>(handle);
-    const auto & ret = temp->get();
+    const CppProxyHandle<T> *proxy_handle =
+        reinterpret_cast<const CppProxyHandle<T> *>(handle);
+    const auto & ret = proxy_handle->get();
     assert(ret);
     return ret;
 }
