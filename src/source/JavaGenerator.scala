@@ -428,15 +428,19 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
+    def getCollectionTypeName(f: Field): String = {
+      return marshal.typename(f.ty).replaceFirst("HashSet<(.*)>", "$1")
+    }
+
     // constructor (Parcel)
     def deserializeField(f: Field, m: Meta, inOptional: Boolean) {
       m match {
         case MString => w.wl(s"this.${idJava.field(f.ident)} = in.readString();")
         case MBinary => {
-          w.wl("this.${idJava.field(f.ident) = new byte[in.readInt()];")
-          w.wl("in.readByteArray(this.${idJava.field(f.ident));")
+          w.wl(s"this.${idJava.field(f.ident)} = new byte[in.readInt()];")
+          w.wl(s"in.readByteArray(this.${idJava.field(f.ident)});")
         }
-        case MDate => w.wl(s"this.${idJava.field(f.ident)} = new Date(in.readString());")
+        case MDate => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in.readLong());")
         case t: MPrimitive => t.jName match {
           case "short" => w.wl(s"this.${idJava.field(f.ident)} = (short)in.readInt();")
           case "int" => w.wl(s"this.${idJava.field(f.ident)} = in.readInt();")
@@ -458,10 +462,18 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           case _ => throw new AssertionError("Unreachable")
         }
         case MList => {
-          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();");
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();")
           w.wl(s"in.readList(this.${idJava.field(f.ident)}, getClass().getClassLoader());")
         }
-        case MSet | MMap => w.wl(s"this.${idJava.field(f.ident)} = (${marshal.typename(f.ty)})in.readSerializable();")
+        case MSet =>  {
+          w.wl(s"ArrayList<${getCollectionTypeName(f)}> ${idJava.field(f.ident)}Temp = new ArrayList<${getCollectionTypeName(f)}>();")
+          w.wl(s"in.readList(${idJava.field(f.ident)}Temp, getClass().getClassLoader());")
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(${idJava.field(f.ident)}Temp);")
+        }
+        case MMap => {
+          w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}();")
+          w.wl(s"in.readMap(this.${idJava.field(f.ident)}, getClass().getClassLoader());")
+        }
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
@@ -469,7 +481,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             w.wl(s"this.${idJava.field(f.ident)} = null;")
           }
           w.wl("else").nested {
-            deserializeField(f, f.ty.resolved.args.head.base, true);
+            deserializeField(f, f.ty.resolved.args.head.base, true)
           }
         }
         case _ => throw new AssertionError("Unreachable")
@@ -478,7 +490,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     w.wl
     w.wl(s"public $self(android.os.Parcel in)").braced {
       for (f <- r.fields)
-        deserializeField(f, f.ty.resolved.base, false);
+        deserializeField(f, f.ty.resolved.base, false)
     }
 
     // describeContents
@@ -493,10 +505,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       m match {
         case MString => w.wl(s"out.writeString(this.${idJava.field(f.ident)});")
         case MBinary => {
-          w.wl( "out.writeInt(this.${idJava.field(f.ident).length);" )
-          w.wl( "out.writeByteArray(this.${idJava.field(f.ident));" )
+          w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.length);")
+          w.wl(s"out.writeByteArray(this.${idJava.field(f.ident)});")
         }
-        case MDate => w.wl(s"out.writeString(this.${idJava.field(f.ident)}.toString());")
+        case MDate => w.wl(s"out.writeLong(this.${idJava.field(f.ident)}.getTime());")
         case t: MPrimitive => t.jName match {
           case "short" | "int" => w.wl(s"out.writeInt(this.${idJava.field(f.ident)});")
           case "long" => w.wl(s"out.writeLong(this.${idJava.field(f.ident)});")
@@ -516,8 +528,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           case DEnum => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
           case _ => throw new AssertionError("Unreachable")
         }
-        case MList => w.wl(s"out.writeList(this.${idJava.field(f.ident)});")
-        case MSet | MMap => w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+        case MList => {
+          w.wl(s"out.writeList(this.${idJava.field(f.ident)});")
+        }
+        case MSet => w.wl(s"out.writeList(new ArrayList<${getCollectionTypeName(f)}>(this.${idJava.field(f.ident)}));")
+        case MMap => w.wl(s"out.writeMap(this.${idJava.field(f.ident)});")
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
