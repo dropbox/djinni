@@ -428,17 +428,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    def getCollectionTypeName(f: Field): String = {
-      return marshal.typename(f.ty).replaceFirst("HashSet<(.*)>", "$1")
-    }
-
     // constructor (Parcel)
     def deserializeField(f: Field, m: Meta, inOptional: Boolean) {
       m match {
         case MString => w.wl(s"this.${idJava.field(f.ident)} = in.readString();")
         case MBinary => {
-          w.wl(s"this.${idJava.field(f.ident)} = new byte[in.readInt()];")
-          w.wl(s"in.readByteArray(this.${idJava.field(f.ident)});")
+          w.wl(s"this.${idJava.field(f.ident)} = in.createByteArray();")
         }
         case MDate => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in.readLong());")
         case t: MPrimitive => t.jName match {
@@ -466,7 +461,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"in.readList(this.${idJava.field(f.ident)}, getClass().getClassLoader());")
         }
         case MSet =>  {
-          w.wl(s"ArrayList<${getCollectionTypeName(f)}> ${idJava.field(f.ident)}Temp = new ArrayList<${getCollectionTypeName(f)}>();")
+          val collectionTypeName = marshal.typename(f.ty).replaceFirst("HashSet<(.*)>", "$1")
+          w.wl(s"ArrayList<${collectionTypeName}> ${idJava.field(f.ident)}Temp = new ArrayList<${collectionTypeName}>();")
           w.wl(s"in.readList(${idJava.field(f.ident)}Temp, getClass().getClassLoader());")
           w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(${idJava.field(f.ident)}Temp);")
         }
@@ -505,7 +501,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       m match {
         case MString => w.wl(s"out.writeString(this.${idJava.field(f.ident)});")
         case MBinary => {
-          w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.length);")
           w.wl(s"out.writeByteArray(this.${idJava.field(f.ident)});")
         }
         case MDate => w.wl(s"out.writeLong(this.${idJava.field(f.ident)}.getTime());")
@@ -531,7 +526,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         case MList => {
           w.wl(s"out.writeList(this.${idJava.field(f.ident)});")
         }
-        case MSet => w.wl(s"out.writeList(new ArrayList<${getCollectionTypeName(f)}>(this.${idJava.field(f.ident)}));")
+        case MSet => {
+          val collectionTypeName = marshal.typename(f.ty).replaceFirst("HashSet<(.*)>", "$1")
+          w.wl(s"out.writeList(new ArrayList<${collectionTypeName}>(this.${idJava.field(f.ident)}));")
+        }
         case MMap => w.wl(s"out.writeMap(this.${idJava.field(f.ident)});")
         case MOptional => {
           if (inOptional)
