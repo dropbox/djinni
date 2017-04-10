@@ -4,12 +4,10 @@
  */
 package android.os;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public final class Parcel {
 
@@ -170,6 +168,32 @@ public final class Parcel {
             int size = mIn.readInt();
             for(int i = 0; i < size; ++i)
                outVal.add(mIn.readObject());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public final void writeMap(Map val) {
+        try {
+            Set<Map.Entry<Object,Object>> entries = val.entrySet();
+            mOut.writeInt(entries.size());
+            for(Map.Entry<Object, Object> obj : entries) {
+                mOut.writeObject(obj.getKey());
+                mOut.writeObject(obj.getValue());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public final void readMap(Map outVal, ClassLoader loader) {
+        try {
+            int size = mIn.readInt();
+            for(int i = 0; i < size; ++i) {
+                Object key = mIn.readObject();
+                Object value = mIn.readObject();
+                outVal.put(key, value);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
