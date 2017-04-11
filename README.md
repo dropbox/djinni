@@ -437,9 +437,6 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Iulia Tamas
 - Andrew Twyman
 
-## Contributors
-- Google Inc.
-
 ## Contacts
 - Andrew Twyman - `atwyman@dropbox.com`
 - Jacob Potter - `djinni@j4cbo.com`
