@@ -203,6 +203,10 @@ private:
     friend void jniInit(JavaVM *);
 };
 
+template<>
+static_registration<void *, const JniClassInitializer>::registration_map&
+static_registration<void *, const JniClassInitializer>::get_map();
+
 /*
  * Each instantiation of this template produces a singleton object of type C which
  * will be initialized by djinni::jniInit(). For example:

@@ -28,6 +28,14 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
+template<>
+static_registration<void *, const JniClassInitializer>::registration_map&
+static_registration<void *, const JniClassInitializer>::get_map()
+{
+    static std::unordered_map<void *, const JniClassInitializer*> m;
+    return m;
+};
+
 void jniInit(JavaVM * jvm) {
     g_cachedJVM = jvm;
 
