@@ -49,13 +49,33 @@ void jniShutdown() {
 JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
-    const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    if (get_res != 0 || !env) {
+
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (get_res == JNI_EDETACHED) {
+      // attach this thread to the JVM
+      get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+    }
+
+    if (get_res != JNI_OK || !env) {
         // :(
         std::abort();
     }
 
     return env;
+}
+
+void jniDetachThreadEnv() {
+    assert(g_cachedJVM);
+    JNIEnv * env = nullptr;
+
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (get_res != JNI_EDETACHED) {
+      get_res = g_cachedJVM->DetachCurrentThread();
+    }
+
+    if (get_res != JNI_OK || !env) {
+      // :(
+    }
 }
 
 static JNIEnv * getOptThreadEnv() {
