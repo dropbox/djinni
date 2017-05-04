@@ -146,7 +146,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       }
       withNs(ns, name)
     }
-    def base(m: Meta): String = m match {
+    def base(m: Meta, args: String): String = m match {
       case p: MPrimitive => p.cName
       case MString => if (spec.cppUseWideStrings) "std::wstring" else "std::string"
       case MDate => "std::chrono::system_clock::time_point"
@@ -162,8 +162,8 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           case DInterface => s"std::shared_ptr<${withNamespace(idCpp.ty(d.name))}>"
         }
       case e: MExtern => e.defType match {
-        case DInterface => s"std::shared_ptr<${e.cpp.typename}>"
-        case _ => e.cpp.typename
+        case DInterface => s"std::shared_ptr<${e.cpp.typename + args}>"
+        case _ => e.cpp.typename + args
       }
       case p: MParam => idCpp.typeParam(p.name)
     }
@@ -177,18 +177,18 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
             case d: MDef =>
               d.defType match {
                 case DInterface => s"${nnType}<${withNamespace(idCpp.ty(d.name))}>"
-                case _ => base(tm.base) + args
+                case _ => base(tm.base, args)
               }
             case MOptional =>
               tm.args.head.base match {
                 case d: MDef =>
                   d.defType match {
                     case DInterface => s"std::shared_ptr<${withNamespace(idCpp.ty(d.name))}>"
-                    case _ => base(tm.base) + args
+                    case _ => base(tm.base, args)
                   }
-                case _ => base(tm.base) + args
+                case _ => base(tm.base, args)
               }
-            case _ => base(tm.base) + args
+            case _ => base(tm.base, args)
           }
         }
       case None =>
@@ -197,7 +197,7 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
           expr(tm.args.head)
         } else {
           val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
-          base(tm.base) + args
+          base(tm.base, args)
         }
       }
     }
