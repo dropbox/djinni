@@ -1,7 +1,20 @@
 # Part of support library for djinni4python, handwritten
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-from PyCFFIlib_cffi import ffi, lib
+import sys
+import os
+if sys.version_info < (2, 7):
+    ffi = getattr(__import__(os.environ['PYCFFI_WRAPPER'], fromlist=['ffi']))
+    lib = getattr(__import__(os.environ['PYCFFI_WRAPPER'], fromlist=['lib']))
+    from future.utils import absolute_import, division, print_function, unicode_literals
+elif sys.version_info < (3, 0):
+    from importlib import import_module
+    ffi = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'ffi')
+    lib = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'lib')
+    from future.utils import absolute_import, division, print_function, unicode_literals
+else:
+    from importlib import import_module
+    ffi = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'ffi')
+    lib = getattr(import_module(os.environ['PYCFFI_WRAPPER']), 'lib')
 from djinni.support import encoded_utf_8
 import datetime
 import math

@@ -46,6 +46,7 @@ fi
 (export fname=foo_interface && cd $pyb && make -f ../PyCFFI.mk $lib)
 
 # Build and test CFFI module
+export PYCFFI_WRAPPER=PyCFFIlib_cffi
 "$python_cmd" --version
 (cd $pyb \
         && cffi_dep=($(ls ../generated-src/cwrapper/*.h)) \

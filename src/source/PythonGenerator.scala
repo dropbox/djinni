@@ -795,11 +795,20 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
       m.ret.foreach(t => refs.collect(t, false))
     })
     refs.python.add("from abc import ABCMeta, abstractmethod")
-    refs.python.add("from future.utils import with_metaclass")
+    if (!spec.python3Usage) {
+      refs.python.add("from future.utils import with_metaclass")
+    }
 
     writePythonFile(ident, origin, refs.python, true, w => {
       // Asbtract Class Definition
-      w.wl("class " + pythonClass + "(with_metaclass(ABCMeta)):").nested {
+      var metaclassStr : String = ""
+      if (spec.python3Usage) {
+        metaclassStr = "metaclass=ABCMeta"
+      }
+      else {
+        metaclassStr = "with_metaclass(ABCMeta)"
+      }
+      w.wl("class " + pythonClass + "(" + metaclassStr + "):").nested {
         val docConsts = if (!i.consts.exists(!_.doc.lines.isEmpty)) Seq() else Seq({
           w: IndentWriter => writeDocConstantsList(w, i.consts)
         })

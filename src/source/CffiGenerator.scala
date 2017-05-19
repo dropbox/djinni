@@ -57,6 +57,17 @@ class CffiGenerator(spec: Spec) extends Generator(spec) {
         if(!spec.pycffiDynamicLibList.isEmpty) {
           w.wl(",")
           w.w("libraries=['" + spec.pycffiDynamicLibList + "']")
+          w.w("libraries=[")
+          val libs = spec.pycffiDynamicLibList.split(",");
+          var first : Boolean = true
+          for (lib <- libs) {
+            if (!first) {
+              w.w(", ")
+            }
+            w.w("'" + lib + "'");
+            first = false
+          }
+          w.w("]")
         }
         w.wl(")")
       }
