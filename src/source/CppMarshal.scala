@@ -72,11 +72,10 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
         }
       case e: Enum =>
         if (d.name != exclude) {
-          if (forwardDeclareOnly) {
-            List(DeclRef(s"enum class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
-          } else {
-            List(ImportRef(include(d.name)))
-          }
+          // out enums might be used in Map or Set, which requires to be fully aware about the enum type
+          // so we cannot use forward declarations in this case, otherwise interfaces with std::unordered_map
+          // or std::unordered_set will not compile (e.g. the Objc djinni generated mm files)
+          List(ImportRef(include(d.name)))
         } else {
           List()
         }
