@@ -33,6 +33,7 @@ object Main {
     var cppOptionalTemplate: String = "std::optional"
     var cppOptionalHeader: String = "<optional>"
     var cppEnumHashWorkaround : Boolean = true
+    var cppUseForwardDeclarations : Boolean = true
     var cppNnHeader: Option[String] = None
     var cppNnType: Option[String] = None
     var cppNnCheckExpression: Option[String] = None
@@ -135,6 +136,8 @@ object Main {
         .text("The header to use for optional values (default: \"<optional>\")")
       opt[Boolean]("cpp-enum-hash-workaround").valueName("<true/false>").foreach(x => cppEnumHashWorkaround = x)
         .text("Work around LWG-2148 by generating std::hash specializations for C++ enums (default: true)")
+      opt[Boolean]("cpp-use-forward-declarations").valueName("<true/false>").foreach(x => cppUseForwardDeclarations = x)
+        .text("Use forward declarations for records and enums in C++ (default: true)")
       opt[String]("cpp-nn-header").valueName("<header>").foreach(x => cppNnHeader = Some(x))
         .text("The header to use for non-nullable pointers")
       opt[String]("cpp-nn-type").valueName("<header>").foreach(x => cppNnType = Some(x))
@@ -314,6 +317,7 @@ object Main {
       cppOptionalTemplate,
       cppOptionalHeader,
       cppEnumHashWorkaround,
+	  cppUseForwardDeclarations,
       cppNnHeader,
       cppNnType,
       cppNnCheckExpression,
