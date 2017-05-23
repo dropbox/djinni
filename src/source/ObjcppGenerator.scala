@@ -62,6 +62,11 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
   def nnCheck(expr: String): String = spec.cppNnCheckExpression.fold(expr)(check => s"$check($expr)")
 
   override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+    if (!i.ext.objc && !i.ext.cpp) {
+      // there is no point of generating interface if it is not expected to be used by OBJC nor CPP
+      return
+    }
+
     val refs = new ObjcRefs()
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
