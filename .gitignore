@@ -1,5 +1,11 @@
 .DS_Store
 
+# QtCreator stuff
+*.config
+*.creator
+*.creator.user
+*.includes
+
 **/.idea/workspace.xml
 **/.idea/tasks.xml
 

@@ -60,11 +60,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val self = marshal.typename(ident, e)
 
     if (spec.cppEnumHashWorkaround) {
+      refs.hpp.add("#include <type_traits>") // needed for std::underlying_type
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
-      w.w(s"enum class $self : int").bracedSemi {
+      w.w(s"enum class $self : unsigned int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
           w.wl(idCpp.enum(o.ident.name) + ",")
@@ -80,8 +81,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           (w: IndentWriter) => {
             w.wl("template <>")
             w.w(s"struct hash<$fqSelf>").bracedSemi {
-              w.w(s"size_t operator()($fqSelf type) const").braced {
-                w.wl("return std::hash<int>()(static_cast<int>(type));")
+              w.wl(s"using underlying_type = typename std::underlying_type<$fqSelf>::type;")
+              w.w(s"std::size_t operator()(const $fqSelf &type) const").braced {
+                w.wl("return std::hash<underlying_type>()(static_cast<underlying_type>(type));")
               }
             }
           }
