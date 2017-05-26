@@ -1,5 +1,6 @@
 #import "TXSItemList.h"
 #import "TXSSortItems.h"
+#import "TextSort-Swift.h"
 #import "TXSTextboxListenerImpl.h"
 #import "TXSViewController.h"
 #import "TXSTextboxListener.h"
@@ -11,6 +12,8 @@
 @property (nonatomic) IBOutlet UITextView *textView;
 
 @property (nonatomic) IBOutlet UIButton *button;
+
+@property (nonatomic) IBOutlet UISwitch *switchDebugMode;
 
 @end
 
@@ -33,9 +36,26 @@
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 
-    // Create the Objective-C TXSTextboxListener
-    _textboxListener = [[TXSTextboxListenerImpl alloc] initWithUITextView:self.textView];
+    [self createSorter];
+}
+
+-(void)createSorter
+{
+    if (_switchDebugMode.isOn) {
+        // Create the Swift TXSTextboxListener
+        _textboxListener = [[TXSTextboxListenerDebugableImpl alloc] initWithUITextView:self.textView];
+    }
+    else {
+        // Create the Objective-C TXSTextboxListener
+        _textboxListener = [[TXSTextboxListenerImpl alloc] initWithUITextView:self.textView];
+    }
+    
     _sortItemInterface = [TXSSortItems createWithListener:_textboxListener];
+}
+
+-(IBAction)toggleDebugMode:(id)sender
+{
+    [self createSorter];
 }
 
 - (IBAction)sort:(id)sender

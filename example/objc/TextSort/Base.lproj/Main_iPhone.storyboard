@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -15,52 +19,69 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Type the lines to sort" translatesAutoresizingMaskIntoConstraints="NO" id="GOB-Ok-Z2R">
-                                <rect key="frame" x="16" y="28" width="288" height="482"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="16" y="28" width="343" height="531"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A93-rB-AZ4">
-                                <rect key="frame" x="54" y="518" width="60" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A93-rB-AZ4">
+                                <rect key="frame" x="105.5" y="567" width="30" height="30"/>
                                 <state key="normal" title="Sort">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="sort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="JmD-7I-e8t"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="81n-2H-7fH">
-                                <rect key="frame" x="104" y="518" width="113" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="81n-2H-7fH">
+                                <rect key="frame" x="143.5" y="567" width="88" height="30"/>
                                 <state key="normal" title="Reverse Sort">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="reverseSort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3ph-FD-T7F"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cv7-dA-P8a">
-                                <rect key="frame" x="225" y="518" width="60" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cv7-dA-P8a">
+                                <rect key="frame" x="239.5" y="567" width="57" height="30"/>
                                 <state key="normal" title="Random">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="randomSort:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Qm2-PQ-ghk"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DNu-UL-kyQ">
+                                <rect key="frame" x="16" y="612" width="51" height="31"/>
+                                <connections>
+                                    <action selector="toggleDebugMode:" destination="vXZ-lx-hvc" eventType="valueChanged" id="saA-Gv-pMA"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Debug mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GQQ-Bh-tdD">
+                                <rect key="frame" x="73" y="617" width="286" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cv7-dA-P8a" firstAttribute="leading" secondItem="81n-2H-7fH" secondAttribute="trailing" constant="8" id="6k6-kS-Uv4"/>
                             <constraint firstItem="81n-2H-7fH" firstAttribute="baseline" secondItem="cv7-dA-P8a" secondAttribute="baseline" id="EDF-c5-6UY"/>
                             <constraint firstItem="GOB-Ok-Z2R" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="FcW-gp-TKr"/>
                             <constraint firstItem="cv7-dA-P8a" firstAttribute="top" secondItem="GOB-Ok-Z2R" secondAttribute="bottom" constant="8" id="LWK-fr-cJv"/>
                             <constraint firstItem="81n-2H-7fH" firstAttribute="leading" secondItem="A93-rB-AZ4" secondAttribute="trailing" constant="8" id="M4F-4D-BXj"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="81n-2H-7fH" secondAttribute="bottom" constant="20" id="Skf-gJ-Pvn"/>
+                            <constraint firstItem="DNu-UL-kyQ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="O7c-MW-i3e"/>
+                            <constraint firstItem="DNu-UL-kyQ" firstAttribute="centerY" secondItem="GQQ-Bh-tdD" secondAttribute="centerY" id="OmV-xh-MjX"/>
+                            <constraint firstItem="GQQ-Bh-tdD" firstAttribute="top" secondItem="81n-2H-7fH" secondAttribute="bottom" constant="20" id="P8h-HO-l5l"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="81n-2H-7fH" secondAttribute="bottom" constant="70" id="Skf-gJ-Pvn"/>
                             <constraint firstAttribute="centerX" secondItem="81n-2H-7fH" secondAttribute="centerX" id="dPr-yc-eNh"/>
+                            <constraint firstItem="GQQ-Bh-tdD" firstAttribute="leading" secondItem="DNu-UL-kyQ" secondAttribute="trailing" constant="8" id="jez-lS-j5y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="GQQ-Bh-tdD" secondAttribute="trailing" id="pDH-RO-DoJ"/>
                             <constraint firstItem="GOB-Ok-Z2R" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="r9O-jI-RXe"/>
                             <constraint firstItem="81n-2H-7fH" firstAttribute="baseline" secondItem="A93-rB-AZ4" secondAttribute="baseline" id="sDL-eI-t03"/>
                             <constraint firstItem="GOB-Ok-Z2R" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ykx-tI-cFm"/>
@@ -69,16 +90,18 @@
                     <navigationItem key="navigationItem" id="LTz-Tk-BIg"/>
                     <connections>
                         <outlet property="button" destination="A93-rB-AZ4" id="WYY-v8-55y"/>
+                        <outlet property="switchDebugMode" destination="DNu-UL-kyQ" id="zWL-2v-leX"/>
                         <outlet property="textView" destination="GOB-Ok-Z2R" id="fKy-K6-TxA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="26.5" y="34.5"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
 </document>
