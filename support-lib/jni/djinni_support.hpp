@@ -156,11 +156,11 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
 
 #define DJINNI_ASSERT_MSG(check, env, message) \
     do { \
-        djinni::jniExceptionCheck(env); \
+        ::djinni::jniExceptionCheck(env); \
         const bool check__res = bool(check); \
-        djinni::jniExceptionCheck(env); \
+        ::djinni::jniExceptionCheck(env); \
         if (!check__res) { \
-            djinni::jniThrowAssertionError(env, __FILE__, __LINE__, message); \
+            ::djinni::jniThrowAssertionError(env, __FILE__, __LINE__, message); \
         } \
     } while(false)
 #define DJINNI_ASSERT(check, env) DJINNI_ASSERT_MSG(check, env, #check)
@@ -340,7 +340,11 @@ template <class T>
 static const std::shared_ptr<T> & objectFromHandleAddress(jlong handle) {
     assert(handle);
     assert(handle > 4096);
-    const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->get();
+    // Below line segfaults gcc-4.8. Using a temporary variable hides the bug.
+    //const auto & ret = reinterpret_cast<const CppProxyHandle<T> *>(handle)->get();
+    const CppProxyHandle<T> *proxy_handle =
+        reinterpret_cast<const CppProxyHandle<T> *>(handle);
+    const auto & ret = proxy_handle->get();
     assert(ret);
     return ret;
 }
