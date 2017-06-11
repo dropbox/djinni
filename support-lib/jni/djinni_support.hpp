@@ -21,7 +21,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 #include "../proxy_cache_interface.hpp"
 #include "../djinni_common.hpp"
@@ -166,41 +166,22 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
 #define DJINNI_ASSERT(check, env) DJINNI_ASSERT_MSG(check, env, #check)
 
 /*
- * Helper for JniClassInitializer.
- */
-template <class Key, class T>
-class static_registration {
-public:
-    using registration_map = std::unordered_map<Key, T *>;
-    static registration_map get_all() {
-        const std::lock_guard<std::mutex> lock(get_mutex());
-        return get_map();
-    }
-    static_registration(const Key & key, T * obj) : m_key(key) {
-        const std::lock_guard<std::mutex> lock(get_mutex());
-        get_map().emplace(key, obj);
-    }
-    ~static_registration() {
-        const std::lock_guard<std::mutex> lock(get_mutex());
-        get_map().erase(m_key);
-    }
-private:
-    const Key m_key;
-    static registration_map & get_map()   { static registration_map m; return m;   }
-    static std::mutex       & get_mutex() { static std::mutex mtx;     return mtx; }
-};
-
-/*
  * Helper for JniClass. (This can't be a subclass because it needs to not be templatized.)
  */
 class JniClassInitializer {
+
+    using registration_set = std::unordered_set<JniClassInitializer *>;
+    static registration_set get_all();
+
 private:
-    using Registration = static_registration<void *, const JniClassInitializer>;
     const std::function<void()> init;
-    const Registration reg;
-    JniClassInitializer(const std::function<void()> & init) : init(init), reg(this, this) {}
+    JniClassInitializer(const std::function<void()> & init);
+    ~JniClassInitializer();
     template <class C> friend class JniClass;
     friend void jniInit(JavaVM *);
+
+    static registration_set & get_set();
+    static std::mutex       & get_mutex();
 };
 
 /*
