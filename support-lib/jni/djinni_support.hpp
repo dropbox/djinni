@@ -180,8 +180,8 @@ private:
     template <class C> friend class JniClass;
     friend void jniInit(JavaVM *);
 
-    static registration_vec m_vec;
-    static std::mutex m_mutex;
+    static registration_vec & get_vec();
+    static std::mutex       & get_mutex();
 };
 
 /*

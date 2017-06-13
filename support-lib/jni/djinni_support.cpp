@@ -28,22 +28,31 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
-/*static*/ JniClassInitializer::registration_vec JniClassInitializer::m_vec;
-/*static*/ std::mutex JniClassInitializer::m_mutex;
+/*static*/
+JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
+    static JniClassInitializer::registration_vec m;
+    return m;
+}
+
+/*static*/
+std::mutex & JniClassInitializer::get_mutex() {
+    static std::mutex mtx;
+    return mtx;
+}
 
 JniClassInitializer::registration_vec JniClassInitializer::get_all() {
-    const std::lock_guard<std::mutex> lock(m_mutex);
-    return m_vec;
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    return get_vec();
 }
 
 JniClassInitializer::JniClassInitializer(const std::function<void()> & init) : init(init){
-    const std::lock_guard<std::mutex> lock(m_mutex);
-    m_vec.emplace_back(this);
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    get_vec().emplace_back(this);
 }
 
 JniClassInitializer::~JniClassInitializer() {
-    const std::lock_guard<std::mutex> lock(m_mutex);
-    m_vec.erase(std::remove(m_vec.begin(), m_vec.end(), this), m_vec.end());
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    get_vec().erase(std::remove(get_vec().begin(), get_vec().end(), this), get_vec().end());
 }
 
 void jniInit(JavaVM * jvm) {
