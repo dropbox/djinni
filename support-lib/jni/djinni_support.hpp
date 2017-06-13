@@ -21,7 +21,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <unordered_set>
+#include <vector>
 
 #include "../proxy_cache_interface.hpp"
 #include "../djinni_common.hpp"
@@ -170,8 +170,8 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
  */
 class JniClassInitializer {
 
-    using registration_set = std::unordered_set<JniClassInitializer *>;
-    static registration_set get_all();
+    using registration_vec = std::vector<JniClassInitializer *>;
+    static registration_vec get_all();
 
 private:
     const std::function<void()> init;
@@ -180,8 +180,8 @@ private:
     template <class C> friend class JniClass;
     friend void jniInit(JavaVM *);
 
-    static registration_set & get_set();
-    static std::mutex       & get_mutex();
+    static registration_vec m_vec;
+    static std::mutex m_mutex;
 };
 
 /*
