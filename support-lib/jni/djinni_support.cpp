@@ -45,7 +45,7 @@ JniClassInitializer::registration_vec JniClassInitializer::get_all() {
     return get_vec();
 }
 
-JniClassInitializer::JniClassInitializer(const std::function<void()> & init) : init(init){
+JniClassInitializer::JniClassInitializer(const std::function<void()> & init) : init(init) {
     const std::lock_guard<std::mutex> lock(get_mutex());
     get_vec().emplace_back(this);
 }
