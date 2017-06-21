@@ -170,13 +170,13 @@ void jniThrowAssertionError(JNIEnv * env, const char * file, int line, const cha
  */
 class JniClassInitializer {
 
-    using registration_vec = std::vector<JniClassInitializer *>;
+    using registration_vec = std::vector<std::function<void()>>;
     static registration_vec get_all();
 
 private:
-    const std::function<void()> init;
+
     JniClassInitializer(const std::function<void()> & init);
-    ~JniClassInitializer();
+
     template <class C> friend class JniClass;
     friend void jniInit(JavaVM *);
 
