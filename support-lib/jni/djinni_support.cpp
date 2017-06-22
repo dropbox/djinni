@@ -40,6 +40,7 @@ std::mutex & JniClassInitializer::get_mutex() {
     return mtx;
 }
 
+/*static*/
 JniClassInitializer::registration_vec JniClassInitializer::get_all() {
     const std::lock_guard<std::mutex> lock(get_mutex());
     return get_vec();
