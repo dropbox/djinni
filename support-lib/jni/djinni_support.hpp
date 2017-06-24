@@ -175,7 +175,7 @@ class JniClassInitializer {
 
 private:
 
-    JniClassInitializer(const std::function<void()> & init);
+    JniClassInitializer(std::function<void()> init);
 
     template <class C> friend class JniClass;
     friend void jniInit(JavaVM *);
