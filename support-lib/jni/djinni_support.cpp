@@ -28,12 +28,35 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
+/*static*/
+JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
+    static JniClassInitializer::registration_vec m;
+    return m;
+}
+
+/*static*/
+std::mutex & JniClassInitializer::get_mutex() {
+    static std::mutex mtx;
+    return mtx;
+}
+
+/*static*/
+JniClassInitializer::registration_vec JniClassInitializer::get_all() {
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    return get_vec();
+}
+
+JniClassInitializer::JniClassInitializer(std::function<void()> init) {
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    get_vec().push_back(std::move(init));
+}
+
 void jniInit(JavaVM * jvm) {
     g_cachedJVM = jvm;
 
     try {
-        for (const auto & kv : JniClassInitializer::Registration::get_all()) {
-            kv.second->init();
+        for (const auto & initializer : JniClassInitializer::get_all()) {
+            initializer();
         }
     } catch (const std::exception & e) {
         // Default exception handling only, since non-default might not be safe if init
