@@ -58,7 +58,7 @@ void jniInit(JavaVM * jvm) {
         for (const auto & initializer : JniClassInitializer::get_all()) {
             initializer();
         }
-    } catch (const std::exception & e) {
+    } catch (const std::exception &) {
         // Default exception handling only, since non-default might not be safe if init
         // is incomplete.
         jniDefaultSetPendingFromCurrent(jniGetThreadEnv(), __func__);
