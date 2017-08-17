@@ -48,7 +48,7 @@ public:
      * it starts, before calling the normal ThreadFunc.
      */
     CppPlatformThreadsGeneric(std::function<void()> func_on_thread_start)
-    : m_func_on_thread_start(make_shared<std::function<void()>>(std::move(func_on_thread_start))) {}
+    : m_func_on_thread_start(std::make_shared<std::function<void()>>(std::move(func_on_thread_start))) {}
 
     /** Creates and starts a new thread which will call the given function. */
     virtual void create_thread(const std::string & /*name*/,
@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    const shared_ptr<std::function<void()>> m_func_on_thread_start;
+    const std::shared_ptr<std::function<void()>> m_func_on_thread_start;
 };
 
 /**
