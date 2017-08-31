@@ -37,7 +37,7 @@ file(
   ../generated-src/cpp/*.cpp
   ../handwritten-src/cpp/*.cpp)
 
-set(test_suite_common_flags "-g -Wall -Werror -std=c++11")
+set(test_suite_common_flags "-g -Wall -Werror -std=c++14")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${test_suite_common_flags}")
 if(UNIX OR APPLE)

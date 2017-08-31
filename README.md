@@ -24,6 +24,7 @@ Djinni generates code based on interface definitions in an IDL file. An IDL file
 three kinds of declarations: enums, records, and interfaces.
 
 * Enums become C++ enum classes, Java enums, or ObjC `NS_ENUM`s.
+* Flags become C++ enum classes with convenient bit-oriented operators, Java enums with `EnumSet`, or ObjC `NS_OPTIONS`.
 * Records are pure-data value objects.
 * Interfaces are objects with defined methods to call (in C++, passed by `shared_ptr`). Djinni
   produces code allowing an interface implemented in C++ to be transparently used from ObjC or
@@ -38,6 +39,14 @@ Djinni's input is an interface description file. Here's an example:
         option1;
         option2;
         option3;
+    }
+
+    my_flags = flags {
+      flag1;
+      flag2;
+      flag3;
+      no_flags = none;
+      all_flags = all;
     }
 
     my_record = record {
@@ -125,11 +134,11 @@ For more information, run `run --help` to see all command line arguments availab
 ##### Includes & Build target
 The following headers / code will be generated for each defined type:
 
-| Type      | C++ header             | C++ source                 | Java                | JNI header            | JNI source            |
-|-----------|------------------------|----------------------------|---------------------|-----------------------|-----------------------|
-| Enum      | my\_enum.hpp           |                            | MyEnum.java         | NativeMyEnum.hpp      | NativeMyEnum.cpp      |
-| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | MyRecord[Base].java | NativeMyRecord.hpp    | NativeMyRecord.cpp    |
-| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | MyInterface.java    | NativeMyInterface.hpp | NativeMyInterface.cpp |
+| Type       | C++ header             | C++ source                 | Java                | JNI header            | JNI source            |
+|------------|------------------------|----------------------------|---------------------|-----------------------|-----------------------|
+| Enum/Flags | my\_enum.hpp           |                            | MyEnum.java         | NativeMyEnum.hpp      | NativeMyEnum.cpp      |
+| Record     | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | MyRecord[Base].java | NativeMyRecord.hpp    | NativeMyRecord.cpp    |
+| Interface  | my\_interface.hpp      | my\_interface.cpp (+)      | MyInterface.java    | NativeMyInterface.hpp | NativeMyInterface.cpp |
 
 (+) Generated only for types that contain constants.
 
@@ -164,13 +173,13 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 ##### Includes & Build Target
 Generated files for Objective-C / C++ are as follows (assuming prefix is `DB`):
 
-| Type      | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
-|-----------|------------------------|----------------------------|--------------------------|-----------------------------|
-| Enum      | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
-| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
-|           |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
-| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
-|           |                        |                            |                          | DBMyInterface+Private.mm    |
+| Type       | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
+|------------|------------------------|----------------------------|--------------------------|-----------------------------|
+| Enum/Flags | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
+| Record     | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
+|            |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
+| Interface  | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
+|            |                        |                            |                          | DBMyInterface+Private.mm    |
 
 (+) Generated only for types that contain constants.
 (++) Generated only for types with derived operations and/or constants. These have `.mm` extensions to allow non-trivial constants.
@@ -182,6 +191,28 @@ Note that `+Private` files can only be used with ObjC++ source (other headers ar
 ### Enum
 Enums are translated to C++ `enum class`es with underlying type `int`, ObjC `NS_ENUM`s with
 underlying type `NSInteger`, and Java enums.
+
+### Flags
+Flags are translated to C++ `enum class`es with underlying type `unsigned` and a generated set
+of overloaded bitwise operators for convenience, ObjC `NS_OPTIONS` with underlying type
+`NSUInteger`, and Java `EnumSet<>`. Contrary to the above enums, the enumerants of flags represent
+single bits instead of integral values.
+
+When specifying a `flags` type in your IDL file you can assign special semantics to options:
+
+```
+my_flags = flags {
+  flag1;
+  flag2;
+  flag3;
+  no_flags = none;
+  all_flags = all;
+}
+```
+In the above example the elements marked with `none` and `all` are given special meaning.
+In C++ and ObjC the `no_flags` option is generated with a value that has no bits set (i.e. `0`),
+and `all_flags` is generated as a bitwise-or combination of all other values. In Java these
+special options are not generated as one can just use `EnumSet.noneOf()` and `EnumSet.allOf()`.
 
 ### Record
 Records are data objects. In C++, records contain all their elements by value, including other
@@ -203,7 +234,7 @@ The available data types for a record, argument, or return value are:
    Objective-C. Primitives in a set will be boxed in Java and Objective-C.
  - Map (`map<typeA, typeB>`). This is `unordered_map<K, V>` in C++, `HashMap` in Java, and
    `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
- - Enumerations
+ - Enumerations / Flags
  - Optionals (`optional<typeA>`). This is `std::experimental::optional<T>` in C++11, object /
    boxed primitive reference in Java (which can be `null`), and object / NSNumber strong
    reference in Objective-C (which can be `nil`).
