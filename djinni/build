@@ -15,7 +15,7 @@ done
 base_dir=$(cd "`dirname "$loc"`" && pwd)
 
 need_to_build=0
-dependencies=("build.sbt" "project/plugins.sbt" "source")
+dependencies=("build.sbt" "project/plugins.sbt" "src/main/scala")
 launcher="target/start"
 
 if [ $# -ne 0 ]; then
@@ -30,6 +30,7 @@ if [ ! -f "$base_dir/$launcher" ]; then
 else
     # If the launcher file isn't newer than all the build dependencies, the build needs to be rerun.
     dependencies_full_path=("$loc")
+    
     for dependency in "${dependencies[@]}"; do
         dependencies_full_path+=("$base_dir/$dependency")
     done
