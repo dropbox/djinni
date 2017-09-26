@@ -438,5 +438,6 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Andrew Twyman
 
 ## Contacts
+- Xianwen Chen - `xianwen@dropbox.com`
 - Andrew Twyman - `atwyman@dropbox.com`
 - Jacob Potter - `djinni@j4cbo.com`
