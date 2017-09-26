@@ -43,9 +43,9 @@ void map_enum_color_string_add_callback__get_size(size_t( * ptr)(DjinniObjectHan
     s_py_callback_map_enum_color_string__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_map_enum_color_string__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_map_enum_color_string__python_create)(void);
 
-void map_enum_color_string_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void map_enum_color_string_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_map_enum_color_string__python_create = ptr;
 }
 

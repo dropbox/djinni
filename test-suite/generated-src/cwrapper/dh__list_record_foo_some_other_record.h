@@ -11,5 +11,5 @@ void optional_list_record_foo_some_other_record___delete(struct DjinniOptionalOb
 void list_record_foo_some_other_record_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void list_record_foo_some_other_record_add_callback__get_elem(struct DjinniRecordHandle *( * ptr)(struct DjinniObjectHandle *, size_t));
 void list_record_foo_some_other_record_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void list_record_foo_some_other_record_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void list_record_foo_some_other_record_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void list_record_foo_some_other_record_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniRecordHandle *));

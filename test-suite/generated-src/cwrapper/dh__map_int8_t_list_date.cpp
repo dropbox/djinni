@@ -50,9 +50,9 @@ void map_int8_t_list_date_add_callback__get_size(size_t( * ptr)(DjinniObjectHand
     s_py_callback_map_int8_t_list_date__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_map_int8_t_list_date__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_map_int8_t_list_date__python_create)(void);
 
-void map_int8_t_list_date_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void map_int8_t_list_date_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_map_int8_t_list_date__python_create = ptr;
 }
 

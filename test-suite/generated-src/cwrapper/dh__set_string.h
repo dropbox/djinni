@@ -10,6 +10,6 @@ void set_string___delete(struct DjinniObjectHandle *);
 void optional_set_string___delete(struct DjinniOptionalObjectHandle *);
 void set_string_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void set_string_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void set_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void set_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void set_string_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniString *));
 void set_string_add_callback__python_next(struct DjinniString *( * ptr)(struct DjinniObjectHandle *));

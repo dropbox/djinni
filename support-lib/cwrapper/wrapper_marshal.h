@@ -20,7 +20,7 @@ void _djinni_add_callback_create_py_from_cpp_exception(CreateExceptionFnPtr fct_
 typedef void (* DeleteExceptionFnPtr) (struct DjinniPythonExceptionHandle *);
 void _djinni_add_callback_exception___delete(DeleteExceptionFnPtr fct_ptr); // called in cpp
 
-struct DjinniPythonExceptionHandle * djinni_from_python_check_and_clear_exception(); // called in python
+struct DjinniPythonExceptionHandle * djinni_from_python_check_and_clear_exception(void); // called in python
 
 // Djinni Structs and Boxed Types and Optionals
 struct DjinniBoxedI8;

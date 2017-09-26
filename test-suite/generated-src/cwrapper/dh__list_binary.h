@@ -11,5 +11,5 @@ void optional_list_binary___delete(struct DjinniOptionalObjectHandle *);
 void list_binary_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void list_binary_add_callback__get_elem(struct DjinniBinary *( * ptr)(struct DjinniObjectHandle *, size_t));
 void list_binary_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void list_binary_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void list_binary_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void list_binary_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniBinary *));

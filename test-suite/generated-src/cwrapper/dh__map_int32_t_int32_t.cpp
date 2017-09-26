@@ -33,9 +33,9 @@ void map_int32_t_int32_t_add_callback__get_size(size_t( * ptr)(DjinniObjectHandl
     s_py_callback_map_int32_t_int32_t__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_map_int32_t_int32_t__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_map_int32_t_int32_t__python_create)(void);
 
-void map_int32_t_int32_t_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void map_int32_t_int32_t_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_map_int32_t_int32_t__python_create = ptr;
 }
 

@@ -9,6 +9,6 @@ void optional_map_enum_color_enum_color___delete(struct DjinniOptionalObjectHand
 void map_enum_color_enum_color_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void map_enum_color_enum_color_add_callback__get_value(int( * ptr)(struct DjinniObjectHandle *, int));
 void map_enum_color_enum_color_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void map_enum_color_enum_color_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void map_enum_color_enum_color_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void map_enum_color_enum_color_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, int, int));
 void map_enum_color_enum_color_add_callback__python_next(int( * ptr)(struct DjinniObjectHandle *));

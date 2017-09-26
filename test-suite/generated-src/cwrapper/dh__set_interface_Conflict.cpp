@@ -26,9 +26,9 @@ void set_interface_Conflict_add_callback__get_size(size_t( * ptr)(DjinniObjectHa
     s_py_callback_set_interface_Conflict__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_set_interface_Conflict__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_set_interface_Conflict__python_create)(void);
 
-void set_interface_Conflict_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void set_interface_Conflict_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_set_interface_Conflict__python_create = ptr;
 }
 
