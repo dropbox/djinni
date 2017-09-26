@@ -34,4 +34,3 @@ intellij-plugin/djinni.jar
 
 # profiling output
 callgrind.out.*
-src/
