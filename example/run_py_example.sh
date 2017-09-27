@@ -19,7 +19,7 @@ python_cmd=$1
 export PYTHONPATH=${PYTHONPATH:-""}
 export PYTHONPATH="$base_dir/../support-lib/py:$base_dir/../build_py/cffi:$base_dir/generated-src/python:$PYTHONPATH"
 # The use of install_name_tool below is a hack to force MacOS to know where to load libtextsort_py.dylib,
-# needed because DYLD_LIBRARY_PATH is now ignored by System Integrity Protection.  A real installed which
+# needed because DYLD_LIBRARY_PATH is now ignored by System Integrity Protection.  A real installed app which
 # used a dylib like this would need a cleaner solution based on @rpath or somesuch thing.  The file existence
 # checks before the commands look for the two different .so names produced for CPython 2 or 3.
 #export DYLD_LIBRARY_PATH=$base_dir/../build_py/cffi:$DYLD_LIBRARY_PATH
