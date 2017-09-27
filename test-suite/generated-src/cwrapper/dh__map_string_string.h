@@ -11,6 +11,6 @@ void optional_map_string_string___delete(struct DjinniOptionalObjectHandle *);
 void map_string_string_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void map_string_string_add_callback__get_value(struct DjinniString *( * ptr)(struct DjinniObjectHandle *, struct DjinniString *));
 void map_string_string_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void map_string_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void map_string_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void map_string_string_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniString *, struct DjinniString *));
 void map_string_string_add_callback__python_next(struct DjinniString *( * ptr)(struct DjinniObjectHandle *));

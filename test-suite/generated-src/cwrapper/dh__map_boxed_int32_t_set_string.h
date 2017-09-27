@@ -11,6 +11,6 @@ void optional_map_boxed_int32_t_set_string___delete(struct DjinniOptionalObjectH
 void map_boxed_int32_t_set_string_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void map_boxed_int32_t_set_string_add_callback__get_value(struct DjinniObjectHandle *( * ptr)(struct DjinniObjectHandle *, struct DjinniBoxedI32 *));
 void map_boxed_int32_t_set_string_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void map_boxed_int32_t_set_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void map_boxed_int32_t_set_string_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void map_boxed_int32_t_set_string_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniBoxedI32 *, struct DjinniObjectHandle *));
 void map_boxed_int32_t_set_string_add_callback__python_next(struct DjinniBoxedI32 *( * ptr)(struct DjinniObjectHandle *));

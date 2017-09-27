@@ -44,9 +44,9 @@ void set_optional_string_add_callback__get_size(size_t( * ptr)(DjinniObjectHandl
     s_py_callback_set_optional_string__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_set_optional_string__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_set_optional_string__python_create)(void);
 
-void set_optional_string_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void set_optional_string_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_set_optional_string__python_create = ptr;
 }
 

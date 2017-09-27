@@ -50,9 +50,9 @@ void map_boxed_int32_t_set_string_add_callback__get_size(size_t( * ptr)(DjinniOb
     s_py_callback_map_boxed_int32_t_set_string__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_map_boxed_int32_t_set_string__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_map_boxed_int32_t_set_string__python_create)(void);
 
-void map_boxed_int32_t_set_string_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void map_boxed_int32_t_set_string_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_map_boxed_int32_t_set_string__python_create = ptr;
 }
 

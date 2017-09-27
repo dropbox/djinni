@@ -11,5 +11,5 @@ void optional_list_map_string_int64_t___delete(struct DjinniOptionalObjectHandle
 void list_map_string_int64_t_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void list_map_string_int64_t_add_callback__get_elem(struct DjinniObjectHandle *( * ptr)(struct DjinniObjectHandle *, size_t));
 void list_map_string_int64_t_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void list_map_string_int64_t_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void list_map_string_int64_t_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void list_map_string_int64_t_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, struct DjinniObjectHandle *));

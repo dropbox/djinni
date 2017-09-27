@@ -11,6 +11,6 @@ void optional_map_int8_t_list_date___delete(struct DjinniOptionalObjectHandle *)
 void map_int8_t_list_date_add_callback___delete(void(* ptr)(struct DjinniObjectHandle * ));
 void map_int8_t_list_date_add_callback__get_value(struct DjinniObjectHandle *( * ptr)(struct DjinniObjectHandle *, int8_t));
 void map_int8_t_list_date_add_callback__get_size(size_t( * ptr)(struct DjinniObjectHandle *));
-void map_int8_t_list_date_add_callback__python_create(struct DjinniObjectHandle *( * ptr)());
+void map_int8_t_list_date_add_callback__python_create(struct DjinniObjectHandle *( * ptr)(void));
 void map_int8_t_list_date_add_callback__python_add(void( * ptr)(struct DjinniObjectHandle *, int8_t, struct DjinniObjectHandle *));
 void map_int8_t_list_date_add_callback__python_next(int8_t( * ptr)(struct DjinniObjectHandle *));

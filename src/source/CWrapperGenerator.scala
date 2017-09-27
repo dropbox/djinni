@@ -268,7 +268,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     declareGlobalGetter("__get_size", ret, cArgs, className, w)
 
     ret = "DjinniObjectHandle *"
-    cArgs = Seq("").mkString("(", ", ", ")")
+    cArgs = "(void)" // () in C means "unspecified args", so this avoids -Wstrict-prototypes
     declareGlobalGetter("__python_create", ret, cArgs, className, w)
 
     ret = "void"
@@ -293,7 +293,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     declareGlobalGetterSignature("__get_size", ret, cArgs, className, w)
 
     ret = "struct DjinniObjectHandle *"
-    cArgs = Seq("").mkString("(", ", ", ")")
+    cArgs = "(void)" // () in C means "unspecified args", so this avoids -Wstrict-prototypes
     declareGlobalGetterSignature("__python_create", ret, cArgs, className, w)
 
     ret = "void"
