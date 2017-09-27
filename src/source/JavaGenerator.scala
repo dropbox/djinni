@@ -473,10 +473,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
-          w.wl("if (in.readByte() == 0)").nested {
+          w.wl("if (in.readByte() == 0)").braced {
             w.wl(s"this.${idJava.field(f.ident)} = null;")
           }
-          w.wl("else").nested {
+          w.wl("else").braced {
             deserializeField(f, f.ty.resolved.args.head.base, true)
           }
         }
@@ -534,11 +534,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
-          w.wl(s"if (this.${idJava.field(f.ident)} != null) {").nested {
+          w.wl(s"if (this.${idJava.field(f.ident)} != null)").braced {
             w.wl("out.writeByte((byte)1);")
             serializeField(f, f.ty.resolved.args.head.base, true)
           }
-          w.wl("} else").nested {
+          w.wl("else").braced {
             w.wl("out.writeByte((byte)0);")
           }
         }

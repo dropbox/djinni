@@ -92,9 +92,13 @@ public class EnumUsageRecord implements android.os.Parcelable {
     {
         this.mE = Color.values()[in.readInt()];
         if (in.readByte() == 0)
+        {
             this.mO = null;
+        }
         else
+        {
             this.mO = Color.values()[in.readInt()];
+        }
         this.mL = new ArrayList<Color>();
         in.readList(this.mL, getClass().getClassLoader());
         ArrayList<Color> mSTemp = new ArrayList<Color>();
@@ -112,11 +116,15 @@ public class EnumUsageRecord implements android.os.Parcelable {
     @Override
     public void writeToParcel(android.os.Parcel out, int flags) {
         out.writeInt(this.mE.ordinal());
-        if (this.mO != null) {
+        if (this.mO != null)
+        {
             out.writeByte((byte)1);
             out.writeInt(this.mO.ordinal());
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
+        }
         out.writeList(this.mL);
         out.writeList(new ArrayList<Color>(this.mS));
         out.writeMap(this.mM);

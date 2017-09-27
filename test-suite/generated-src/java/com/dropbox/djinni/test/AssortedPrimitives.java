@@ -221,33 +221,61 @@ public class AssortedPrimitives implements android.os.Parcelable {
         this.mFthirtytwo = in.readFloat();
         this.mFsixtyfour = in.readDouble();
         if (in.readByte() == 0)
+        {
             this.mOB = null;
+        }
         else
+        {
             this.mOB = in.readByte() != 0;
+        }
         if (in.readByte() == 0)
+        {
             this.mOEight = null;
+        }
         else
+        {
             this.mOEight = in.readByte();
+        }
         if (in.readByte() == 0)
+        {
             this.mOSixteen = null;
+        }
         else
+        {
             this.mOSixteen = (short)in.readInt();
+        }
         if (in.readByte() == 0)
+        {
             this.mOThirtytwo = null;
+        }
         else
+        {
             this.mOThirtytwo = in.readInt();
+        }
         if (in.readByte() == 0)
+        {
             this.mOSixtyfour = null;
+        }
         else
+        {
             this.mOSixtyfour = in.readLong();
+        }
         if (in.readByte() == 0)
+        {
             this.mOFthirtytwo = null;
+        }
         else
+        {
             this.mOFthirtytwo = in.readFloat();
+        }
         if (in.readByte() == 0)
+        {
             this.mOFsixtyfour = null;
+        }
         else
+        {
             this.mOFsixtyfour = in.readDouble();
+        }
     }
 
     @Override
@@ -264,41 +292,69 @@ public class AssortedPrimitives implements android.os.Parcelable {
         out.writeLong(this.mSixtyfour);
         out.writeFloat(this.mFthirtytwo);
         out.writeDouble(this.mFsixtyfour);
-        if (this.mOB != null) {
+        if (this.mOB != null)
+        {
             out.writeByte((byte)1);
             out.writeByte(this.mOB ? (byte)1 : 0);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOEight != null) {
+        }
+        if (this.mOEight != null)
+        {
             out.writeByte((byte)1);
             out.writeByte(this.mOEight);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOSixteen != null) {
+        }
+        if (this.mOSixteen != null)
+        {
             out.writeByte((byte)1);
             out.writeInt(this.mOSixteen);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOThirtytwo != null) {
+        }
+        if (this.mOThirtytwo != null)
+        {
             out.writeByte((byte)1);
             out.writeInt(this.mOThirtytwo);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOSixtyfour != null) {
+        }
+        if (this.mOSixtyfour != null)
+        {
             out.writeByte((byte)1);
             out.writeLong(this.mOSixtyfour);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOFthirtytwo != null) {
+        }
+        if (this.mOFthirtytwo != null)
+        {
             out.writeByte((byte)1);
             out.writeFloat(this.mOFthirtytwo);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
-        if (this.mOFsixtyfour != null) {
+        }
+        if (this.mOFsixtyfour != null)
+        {
             out.writeByte((byte)1);
             out.writeDouble(this.mOFsixtyfour);
-        } else
+        }
+        else
+        {
             out.writeByte((byte)0);
+        }
     }
 
 }
