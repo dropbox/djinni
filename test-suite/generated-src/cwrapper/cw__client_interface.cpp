@@ -107,7 +107,7 @@ double ClientInterfacePythonProxy::identifier_check(const std::vector<uint8_t> &
     return _ret;
 }
 
-std::string ClientInterfacePythonProxy::return_str() {
+std::string ClientInterfacePythonProxy::return_str(void) {
     auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_client_interface_return_str(m_py_obj_handle)));
     djinni::cw_throw_if_pending();
     return _ret;

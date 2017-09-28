@@ -33,9 +33,9 @@ void map_record_add_callback_get_map_record_f2(DjinniObjectHandle *( * ptr)(Djin
     s_py_callback_map_record_get_map_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_map_record_python_create_map_record)(DjinniObjectHandle *,DjinniObjectHandle *);
+static DjinniRecordHandle * ( * s_py_callback_map_record_python_create_map_record)(DjinniObjectHandle *, DjinniObjectHandle *);
 
-void map_record_add_callback_python_create_map_record(DjinniRecordHandle *( * ptr)(DjinniObjectHandle *,DjinniObjectHandle *)) {
+void map_record_add_callback_python_create_map_record(DjinniRecordHandle *( * ptr)(DjinniObjectHandle *, DjinniObjectHandle *)) {
     s_py_callback_map_record_python_create_map_record = ptr;
 }
 

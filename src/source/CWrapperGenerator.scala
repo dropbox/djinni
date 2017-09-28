@@ -31,24 +31,24 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
   def getCppDefArgs(m: Interface.Method, self: String) = {
     if (m.static || self == "") {
-      m.params.map(p => cppMarshal.fqParamType(p.ty) + " " +  idCpp.local(p.ident.name)).mkString("(", ", ", ")")
+      marshal.cArgDecl(m.params.map(p => cppMarshal.fqParamType(p.ty) + " " +  idCpp.local(p.ident.name)))
     } else {
-      (Seq[String](self) ++
-        m.params.map(p => cppMarshal.fqParamType(p.ty) + " " +  idCpp.local(p.ident.name))).mkString("(", ", ", ")")
+      marshal.cArgDecl(Seq[String](self) ++
+        m.params.map(p => cppMarshal.fqParamType(p.ty) + " " +  idCpp.local(p.ident.name)))
     }
   }
 
   def getDefArgs(m: Interface.Method, self: String, forHeader: Boolean) = {
     if (m.static || self == "") {
-      m.params.map(p => marshal.cParamType(p.ty, forHeader) + " " +  idCpp.local(p.ident.name)).mkString("(", ", ", ")")
+      marshal.cArgDecl(m.params.map(p => marshal.cParamType(p.ty, forHeader) + " " +  idCpp.local(p.ident.name)))
     } else {
-      (Seq[String](self) ++
-        m.params.map(p => marshal.cParamType(p.ty, forHeader) + " " +  idCpp.local(p.ident.name))).mkString("(", ", ", ")")
+      marshal.cArgDecl(Seq[String](self) ++
+        m.params.map(p => marshal.cParamType(p.ty, forHeader) + " " +  idCpp.local(p.ident.name)))
     }
   }
 
   def getCArgTypes(m: Interface.Method, self: String, forHeader: Boolean) = {
-    (Seq(self) ++ m.params.map(p => marshal.cParamType(p.ty, forHeader))).mkString("(", ", ", ")")
+    marshal.cArgDecl(Seq(self) ++ m.params.map(p => marshal.cParamType(p.ty, forHeader)))
   }
 
   def getRecordTypes(r: Record, forHeader: Boolean) = {
@@ -259,20 +259,20 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     var cArgs = ""
     if (getName != "") {
       ret = getReturnType
-      cArgs = Seq(handle, getType).mkString("(", ", ", ")")
+      cArgs = marshal.cArgDecl(Seq(handle, getType))
       declareGlobalGetter(getName, ret, cArgs, className, w)
     }
 
     ret = "size_t"
-    cArgs = Seq(handle).mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq(handle))
     declareGlobalGetter("__get_size", ret, cArgs, className, w)
 
     ret = "DjinniObjectHandle *"
-    cArgs = "(void)" // () in C means "unspecified args", so this avoids -Wstrict-prototypes
+    cArgs = marshal.cArgDecl(Seq())
     declareGlobalGetter("__python_create", ret, cArgs, className, w)
 
     ret = "void"
-    cArgs = Seq(handle, addCArgs).mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq(handle, addCArgs))
     declareGlobalGetter("__python_add", ret, cArgs, className, w)
   }
 
@@ -284,20 +284,20 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     var cArgs = ""
     if (getName != "") {
       ret = getReturnType
-      cArgs = Seq(handle, getType).mkString("(", ", ", ")")
+      cArgs = marshal.cArgDecl(Seq(handle, getType))
       declareGlobalGetterSignature(getName, ret, cArgs, className, w)
     }
 
     ret = "size_t"
-    cArgs = Seq(handle).mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq(handle))
     declareGlobalGetterSignature("__get_size", ret, cArgs, className, w)
 
     ret = "struct DjinniObjectHandle *"
-    cArgs = "(void)" // () in C means "unspecified args", so this avoids -Wstrict-prototypes
+    cArgs = marshal.cArgDecl(Seq())
     declareGlobalGetterSignature("__python_create", ret, cArgs, className, w)
 
     ret = "void"
-    cArgs = Seq(handle, addCArgs).mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq(handle, addCArgs))
     declareGlobalGetterSignature("__python_add", ret, cArgs, className, w)
   }
 
@@ -318,12 +318,12 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
     w.wl("}")
     w.wl
     // Function to call delete of record from Python
-    var cArgs = Seq(objectHandlePtr + " drh").mkString("(", ", ", ")")
+    var cArgs = marshal.cArgDecl(Seq(objectHandlePtr + " drh"))
     w.wl("void " + objectAsMethodName + "___delete" + cArgs + " {").nested {
       w.wl(marshal.pyCallback(objectAsMethodName + "___delete") + p("drh") + ";")
     }
     w.wl("}")
-    cArgs = Seq("DjinniOptionalObjectHandle * " + " drh").mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq("DjinniOptionalObjectHandle * " + " drh"))
     w.wl("void " + "optional_" + objectAsMethodName + "___delete" + cArgs + " {").nested {
       w.wl(marshal.pyCallback(objectAsMethodName + "___delete") + p(p(objectHandlePtr) + " drh") + ";")
     }
@@ -438,7 +438,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
       // __python_next
       val ret = keyType
-      val cArgs = Seq("struct " + handlePtr).mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq("struct " + handlePtr))
       declareGlobalGetterSignature("__python_next", ret, cArgs, classAsMethodName, w)
     })
 
@@ -455,7 +455,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
       // __python_next
       val ret = keyType
-      val cArgs = Seq(handlePtr).mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq(handlePtr))
       declareGlobalGetter("__python_next", ret, cArgs, classAsMethodName, w)
 
       // Map from cpp
@@ -512,7 +512,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
       // __python_next
       val ret = keyType
-      val cArgs = Seq("struct " + handlePtr).mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq("struct " + handlePtr))
       declareGlobalGetterSignature("__python_next", ret, cArgs, classAsMethodName, w)
     })
 
@@ -528,7 +528,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
       // __python_next
       val ret = keyType
-      val cArgs = Seq(handlePtr).mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq(handlePtr))
       declareGlobalGetter("__python_next", ret, cArgs, classAsMethodName, w)
 
       // Set from cpp
@@ -606,12 +606,12 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       val f_id = prefix + field_number.toString()
 
       val ret = marshal.returnType(Some(f.ty))
-      val cArgs = Seq("DjinniRecordHandle *").mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq("DjinniRecordHandle *"))
       declareGlobalGetter("_get_" + ident.name + "_f" + f_id, ret, cArgs, recordAsMethodName, w)
 
     }
     val ret = "DjinniRecordHandle *"
-    val cArgs =getRecordTypes(r, false).mkString("(",",",")")
+    val cArgs = marshal.cArgDecl(getRecordTypes(r, false))
     declareGlobalGetter("_python_create_" + recordAsMethodName, ret, cArgs, recordAsMethodName, w)
   }
 
@@ -623,17 +623,17 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       val f_id = prefix + field_number.toString()
 
       val ret = marshal.cReturnType(Some(f.ty), true)
-      val cArgs = Seq("struct DjinniRecordHandle *").mkString("(", ", ", ")")
+      val cArgs = marshal.cArgDecl(Seq("struct DjinniRecordHandle *"))
       declareGlobalGetterSignature("_get_" + ident.name + "_f" + f_id, ret, cArgs, recordAsMethodName, w)
     }
 
     // For creating record
     var ret = "struct DjinniRecordHandle *"
-    var cArgs = getRecordTypes(r, true).mkString("(", ",", ")")
+    var cArgs = marshal.cArgDecl(getRecordTypes(r, true))
     declareGlobalGetterSignature("_python_create_" + recordAsMethodName, ret, cArgs, recordAsMethodName, w)
     // For releasing record
     ret = "void"
-    cArgs = Seq("struct DjinniRecordHandle *").mkString("(", ", ", ")")
+    cArgs = marshal.cArgDecl(Seq("struct DjinniRecordHandle *"))
     declareGlobalGetterSignature("___delete", ret, cArgs, recordAsMethodName, w)
   }
 
@@ -863,7 +863,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
   def writeMethodToCpp(m: Interface.Method, fctPrefix: String, cWrapper: String, cMethodWrapper: String, w: IndentWriter): Unit = {
     val ret = marshal.cReturnType(m.ret, false)
     val args = m.params.map (p => marshal.convertTo((if (marshal.needsRAII(p.ty.resolved)) "_" else "") + p.ident.name, p.ty, tempExpr = false)) // x
-    val fctCall = fctPrefix + idCpp.method(m.ident.name) + args.mkString("(", ", ", ")")
+    val fctCall = fctPrefix + idCpp.method(m.ident.name) + marshal.cArgVals(args)
     val returnStmt = if (m.ret.isEmpty) fctCall + ";"
     else "return " + marshal.convertFrom(fctCall, m.ret.get, tempExpr=true) + (if (marshal.needsRAII(m.ret.get)) ".release()" else "") + ";"
 
@@ -882,7 +882,7 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
 
   def writeMethodFromCpp(ident: Ident, m: Interface.Method, cppClass: String, handle: String, w: IndentWriter): Unit = {
     val ret = cppMarshal.fqReturnType(m.ret)
-    val args = m.params.map(p => cppMarshal.fqParamType(p.ty) + " " +  idCpp.local(p.ident.name)).mkString("(", ", ", ")")
+    val args = marshal.cArgDecl(m.params.map(p => cppMarshal.fqParamType(p.ty) + " " + idCpp.local(p.ident.name)))
     val params = Seq(handle) ++  m.params.map (p =>
       if (marshal.needsRAII(p.ty.resolved)) "_" + idPython.local(p.ident.name) + ".release()"
       else marshal.convertFrom(idPython.local(p.ident.name), p.ty))
@@ -891,9 +891,9 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       // take ownership of arguments memory when arguments come from Python
       m.params.foreach(p => if (marshal.needsRAII(p.ty)) w.wl("auto _" + p.ident.name + " = " + marshal.convertFrom(p.ident.name, p.ty) + ";"))
 
-      val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + params.mkString("(", ", ", ")")
+      val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + marshal.cArgVals(params)
       if (m.ret.isDefined) {
-        val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + params.mkString("(", ", ", ")")
+        val method_call = marshal.pyCallback(idCpp.method(ident.name) + "_" + idCpp.method(m.ident.name)) + marshal.cArgVals(params)
         w.wl("auto _ret = " +  marshal.convertTo(raiiForElement(method_call, m.ret.get.resolved), m.ret.get, tempExpr=true) + ";")
         w.wl("djinni::cw_throw_if_pending();")
         w.wl("return _ret;")
@@ -1238,14 +1238,14 @@ class CWrapperGenerator(spec: Spec) extends Generator(spec) {
       w.wl
       // Function to call delete of record from Python
       var ret = "void"
-      var cArgs = Seq("DjinniRecordHandle * drh").mkString("(", ", ", ")")
+      var cArgs = marshal.cArgDecl(Seq("DjinniRecordHandle * drh"))
       w.wl("void "  + idCpp.method(ident.name + "___delete") + cArgs + " {" ).nested {
         w.wl(marshal.pyCallback(idCpp.method(ident.name) + "___delete") + p("drh") + ";")
       }
       w.wl("}")
       // Function to call delete of Optional record from Python
       ret = "void"
-      cArgs = Seq("DjinniOptionalRecordHandle * drh").mkString("(", ", ", ")")
+      cArgs = marshal.cArgDecl(Seq("DjinniOptionalRecordHandle * drh"))
       w.wl("void "  + idCpp.method("optional_" + ident.name + "___delete") + cArgs + " {" ).nested {
         w.wl(marshal.pyCallback(idCpp.method(ident.name) + "___delete") + p("(DjinniRecordHandle *) drh") + "; // can't static cast, find better way")
       }

@@ -35,7 +35,7 @@ class ClientInterfacePythonProxy final : public ::testsuite::ClientInterface {
 
         double identifier_check(const std::vector<uint8_t> & data, int32_t r, int64_t jret);
 
-        std::string return_str();
+        std::string return_str(void);
 
         std::string meth_taking_interface(const std::shared_ptr<::testsuite::ClientInterface> & i);
 

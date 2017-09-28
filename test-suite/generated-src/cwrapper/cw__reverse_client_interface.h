@@ -14,5 +14,5 @@ struct DjinniString * cw__reverse_client_interface_meth_taking_interface(struct 
 
 struct DjinniString * cw__reverse_client_interface_meth_taking_optional_interface(struct DjinniWrapperReverseClientInterface * djinni_this, struct DjinniWrapperReverseClientInterface * i);
 
-struct DjinniWrapperReverseClientInterface * cw__reverse_client_interface_create();
+struct DjinniWrapperReverseClientInterface * cw__reverse_client_interface_create(void);
 

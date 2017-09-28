@@ -2,8 +2,8 @@
 
 #include <float.h> // python_cdef_ignore
 
-float min_f32_t();
-float max_f32_t();
+float min_f32_t(void);
+float max_f32_t(void);
 
-double min_f64_t();
-double max_f64_t();
+double min_f64_t(void);
+double max_f64_t(void);

@@ -50,7 +50,7 @@ DjinniString * cw__reverse_client_interface_meth_taking_optional_interface(Djinn
         return DjinniString::fromCpp(djinni_this->wrapped_obj->meth_taking_optional_interface(DjinniWrapperReverseClientInterface::get(std::move(_i)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperReverseClientInterface * cw__reverse_client_interface_create() {
+DjinniWrapperReverseClientInterface * cw__reverse_client_interface_create(void) {
     try {
         return DjinniWrapperReverseClientInterface::wrap(::testsuite::ReverseClientInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

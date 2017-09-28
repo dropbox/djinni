@@ -12,13 +12,13 @@ void foo_static___wrapper_add_ref(struct DjinniWrapperFooStatic * dh);
 
 struct DjinniString * cw__foo_static_update_static_messg_to(struct DjinniString * static_string);
 
-struct DjinniString * cw__foo_static_get_static_messg();
+struct DjinniString * cw__foo_static_get_static_messg(void);
 
 int32_t cw__foo_static_update_static_counter_by(int32_t plus);
 
 int32_t cw__foo_static_update_static_counter_to(int32_t init);
 
-int32_t cw__foo_static_get_static_counter();
+int32_t cw__foo_static_get_static_counter(void);
 
 uint64_t cw__foo_static_date_id(uint64_t d);
 

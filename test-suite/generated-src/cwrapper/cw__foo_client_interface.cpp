@@ -69,7 +69,7 @@ DjinniString * cw__foo_client_interface_get_extensible_record_string2(DjinniWrap
         return DjinniString::fromCpp(djinni_this->wrapped_obj->get_extensible_record_string2()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperFooClientInterface * cw__foo_client_interface_create() {
+DjinniWrapperFooClientInterface * cw__foo_client_interface_create(void) {
     try {
         return DjinniWrapperFooClientInterface::wrap(::testsuite::FooClientInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

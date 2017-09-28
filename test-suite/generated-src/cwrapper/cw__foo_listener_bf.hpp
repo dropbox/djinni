@@ -33,19 +33,19 @@ class FooListenerBfPythonProxy final : public ::testsuite::FooListenerBf {
 
         std::string on_string_change(const std::string & private_string);
 
-        std::string get_string();
+        std::string get_string(void);
 
         void set_listener_bf(const std::shared_ptr<::testsuite::FooListenerBf> & listener);
 
-        std::shared_ptr<::testsuite::FooListenerBf> get_listener_bf();
+        std::shared_ptr<::testsuite::FooListenerBf> get_listener_bf(void);
 
         void set_binary(const std::vector<uint8_t> & b);
 
-        std::vector<uint8_t> get_binary();
+        std::vector<uint8_t> get_binary(void);
 
         std::shared_ptr<::testsuite::FooListenerBf> send_return(const std::shared_ptr<::testsuite::FooListenerBf> & fl_bf);
 
-        void delete_fl_in_fl();
+        void delete_fl_in_fl(void);
 
     private:
         DjinniObjectHandle * m_py_obj_handle;

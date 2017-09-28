@@ -11,5 +11,5 @@ void set_record___delete(struct DjinniRecordHandle * );
 void optional_set_record___delete(struct DjinniOptionalRecordHandle * );
 void set_record_add_callback_get_set_record_f1(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
 void set_record_add_callback_get_set_record_f2(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
-void set_record_add_callback_python_create_set_record(struct DjinniRecordHandle *( * ptr)(struct DjinniObjectHandle *,struct DjinniObjectHandle *));
+void set_record_add_callback_python_create_set_record(struct DjinniRecordHandle *( * ptr)(struct DjinniObjectHandle *, struct DjinniObjectHandle *));
 void set_record_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

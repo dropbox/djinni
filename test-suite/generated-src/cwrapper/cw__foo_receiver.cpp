@@ -210,7 +210,7 @@ DjinniWrapperFooListenerBf * cw__foo_receiver_in_listener_bf_send_return(DjinniW
         return DjinniWrapperFooListenerBf::wrap(djinni_this->wrapped_obj->in_listener_bf_send_return(DjinniWrapperFooListenerBf::get(std::move(_fl_bf)))).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperFooReceiver * cw__foo_receiver_create() {
+DjinniWrapperFooReceiver * cw__foo_receiver_create(void) {
     try {
         return DjinniWrapperFooReceiver::wrap(::testsuite::FooReceiver::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

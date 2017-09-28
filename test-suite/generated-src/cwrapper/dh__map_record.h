@@ -11,5 +11,5 @@ void map_record___delete(struct DjinniRecordHandle * );
 void optional_map_record___delete(struct DjinniOptionalRecordHandle * );
 void map_record_add_callback_get_map_record_f1(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
 void map_record_add_callback_get_map_record_f2(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
-void map_record_add_callback_python_create_map_record(struct DjinniRecordHandle *( * ptr)(struct DjinniObjectHandle *,struct DjinniObjectHandle *));
+void map_record_add_callback_python_create_map_record(struct DjinniRecordHandle *( * ptr)(struct DjinniObjectHandle *, struct DjinniObjectHandle *));
 void map_record_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

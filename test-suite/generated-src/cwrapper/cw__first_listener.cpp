@@ -68,7 +68,7 @@ void first_listener_add_callback___delete(void(* ptr)(DjinniObjectHandle * )) {
     s_py_callback_first_listener___delete = ptr;
 }
 
-void FirstListenerPythonProxy::first() {
+void FirstListenerPythonProxy::first(void) {
     s_py_callback_first_listener_first(m_py_obj_handle);
     djinni::cw_throw_if_pending();
 }

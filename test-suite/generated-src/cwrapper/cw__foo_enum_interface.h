@@ -16,5 +16,5 @@ void cw__foo_enum_interface_set_optional_enum(struct DjinniWrapperFooEnumInterfa
 
 int cw__foo_enum_interface_get_optional_enum(struct DjinniWrapperFooEnumInterface * djinni_this);
 
-struct DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create();
+struct DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create(void);
 

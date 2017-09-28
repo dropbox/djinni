@@ -31,9 +31,9 @@ void constant_record_add_callback_get_constant_record_f2(DjinniString *( * ptr)(
     s_py_callback_constant_record_get_constant_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_constant_record_python_create_constant_record)(int32_t,DjinniString *);
+static DjinniRecordHandle * ( * s_py_callback_constant_record_python_create_constant_record)(int32_t, DjinniString *);
 
-void constant_record_add_callback_python_create_constant_record(DjinniRecordHandle *( * ptr)(int32_t,DjinniString *)) {
+void constant_record_add_callback_python_create_constant_record(DjinniRecordHandle *( * ptr)(int32_t, DjinniString *)) {
     s_py_callback_constant_record_python_create_constant_record = ptr;
 }
 

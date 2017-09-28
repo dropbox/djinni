@@ -31,9 +31,9 @@ void foo_some_other_record_add_callback_get_foo_some_other_record_f2(int32_t( * 
     s_py_callback_foo_some_other_record_get_foo_some_other_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_foo_some_other_record_python_create_foo_some_other_record)(int64_t,int32_t);
+static DjinniRecordHandle * ( * s_py_callback_foo_some_other_record_python_create_foo_some_other_record)(int64_t, int32_t);
 
-void foo_some_other_record_add_callback_python_create_foo_some_other_record(DjinniRecordHandle *( * ptr)(int64_t,int32_t)) {
+void foo_some_other_record_add_callback_python_create_foo_some_other_record(DjinniRecordHandle *( * ptr)(int64_t, int32_t)) {
     s_py_callback_foo_some_other_record_python_create_foo_some_other_record = ptr;
 }
 

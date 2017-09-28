@@ -33,9 +33,9 @@ void set_record_add_callback_get_set_record_f2(DjinniObjectHandle *( * ptr)(Djin
     s_py_callback_set_record_get_set_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_set_record_python_create_set_record)(DjinniObjectHandle *,DjinniObjectHandle *);
+static DjinniRecordHandle * ( * s_py_callback_set_record_python_create_set_record)(DjinniObjectHandle *, DjinniObjectHandle *);
 
-void set_record_add_callback_python_create_set_record(DjinniRecordHandle *( * ptr)(DjinniObjectHandle *,DjinniObjectHandle *)) {
+void set_record_add_callback_python_create_set_record(DjinniRecordHandle *( * ptr)(DjinniObjectHandle *, DjinniObjectHandle *)) {
     s_py_callback_set_record_python_create_set_record = ptr;
 }
 

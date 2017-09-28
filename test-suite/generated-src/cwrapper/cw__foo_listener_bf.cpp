@@ -112,7 +112,7 @@ std::string FooListenerBfPythonProxy::on_string_change(const std::string & priva
     return _ret;
 }
 
-std::string FooListenerBfPythonProxy::get_string() {
+std::string FooListenerBfPythonProxy::get_string(void) {
     auto _ret = DjinniString::toCpp(std::unique_ptr<DjinniString>(s_py_callback_foo_listener_bf_get_string(m_py_obj_handle)));
     djinni::cw_throw_if_pending();
     return _ret;
@@ -124,7 +124,7 @@ void FooListenerBfPythonProxy::set_listener_bf(const std::shared_ptr<::testsuite
     djinni::cw_throw_if_pending();
 }
 
-std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::get_listener_bf() {
+std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::get_listener_bf(void) {
     auto _ret = DjinniWrapperFooListenerBf::get(djinni::Handle<DjinniWrapperFooListenerBf>(s_py_callback_foo_listener_bf_get_listener_bf(m_py_obj_handle), foo_listener_bf___wrapper_dec_ref));
     djinni::cw_throw_if_pending();
     return _ret;
@@ -136,7 +136,7 @@ void FooListenerBfPythonProxy::set_binary(const std::vector<uint8_t> & b) {
     djinni::cw_throw_if_pending();
 }
 
-std::vector<uint8_t> FooListenerBfPythonProxy::get_binary() {
+std::vector<uint8_t> FooListenerBfPythonProxy::get_binary(void) {
     auto _ret = DjinniBinary::toCpp(std::unique_ptr<DjinniBinary>(s_py_callback_foo_listener_bf_get_binary(m_py_obj_handle)));
     djinni::cw_throw_if_pending();
     return _ret;
@@ -149,7 +149,7 @@ std::shared_ptr<::testsuite::FooListenerBf> FooListenerBfPythonProxy::send_retur
     return _ret;
 }
 
-void FooListenerBfPythonProxy::delete_fl_in_fl() {
+void FooListenerBfPythonProxy::delete_fl_in_fl(void) {
     s_py_callback_foo_listener_bf_delete_fl_in_fl(m_py_obj_handle);
     djinni::cw_throw_if_pending();
 }

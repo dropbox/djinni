@@ -32,5 +32,5 @@ void cw__foo_containers_interface_set_list_binary(struct DjinniWrapperFooContain
 
 struct DjinniObjectHandle * cw__foo_containers_interface_get_list_binary(struct DjinniWrapperFooContainersInterface * djinni_this);
 
-struct DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create();
+struct DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create(void);
 

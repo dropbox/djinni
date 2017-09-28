@@ -35,7 +35,7 @@ int32_t cw__cpp_exception_throw_an_exception(DjinniWrapperCppException * djinni_
         return djinni_this->wrapped_obj->throw_an_exception();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperCppException * cw__cpp_exception_get() {
+DjinniWrapperCppException * cw__cpp_exception_get(void) {
     try {
         return DjinniWrapperCppException::wrap(::testsuite::CppException::get()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

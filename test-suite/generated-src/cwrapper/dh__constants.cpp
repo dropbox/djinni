@@ -19,9 +19,9 @@ void constants___delete(DjinniRecordHandle * drh) {
 void optional_constants___delete(DjinniOptionalRecordHandle * drh) {
     s_py_callback_constants___delete((DjinniRecordHandle *) drh); // can't static cast, find better way
 }
-static DjinniRecordHandle * ( * s_py_callback_constants_python_create_constants)();
+static DjinniRecordHandle * ( * s_py_callback_constants_python_create_constants)(void);
 
-void constants_add_callback_python_create_constants(DjinniRecordHandle *( * ptr)()) {
+void constants_add_callback_python_create_constants(DjinniRecordHandle *( * ptr)(void)) {
     s_py_callback_constants_python_create_constants = ptr;
 }
 

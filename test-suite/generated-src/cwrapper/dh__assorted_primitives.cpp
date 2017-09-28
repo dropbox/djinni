@@ -104,9 +104,9 @@ void assorted_primitives_add_callback_get_assorted_primitives_f14(DjinniBoxedF64
     s_py_callback_assorted_primitives_get_assorted_primitives_f14 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_assorted_primitives_python_create_assorted_primitives)(bool,int8_t,int16_t,int32_t,int64_t,float,double,DjinniBoxedBool *,DjinniBoxedI8 *,DjinniBoxedI16 *,DjinniBoxedI32 *,DjinniBoxedI64 *,DjinniBoxedF32 *,DjinniBoxedF64 *);
+static DjinniRecordHandle * ( * s_py_callback_assorted_primitives_python_create_assorted_primitives)(bool, int8_t, int16_t, int32_t, int64_t, float, double, DjinniBoxedBool *, DjinniBoxedI8 *, DjinniBoxedI16 *, DjinniBoxedI32 *, DjinniBoxedI64 *, DjinniBoxedF32 *, DjinniBoxedF64 *);
 
-void assorted_primitives_add_callback_python_create_assorted_primitives(DjinniRecordHandle *( * ptr)(bool,int8_t,int16_t,int32_t,int64_t,float,double,DjinniBoxedBool *,DjinniBoxedI8 *,DjinniBoxedI16 *,DjinniBoxedI32 *,DjinniBoxedI64 *,DjinniBoxedF32 *,DjinniBoxedF64 *)) {
+void assorted_primitives_add_callback_python_create_assorted_primitives(DjinniRecordHandle *( * ptr)(bool, int8_t, int16_t, int32_t, int64_t, float, double, DjinniBoxedBool *, DjinniBoxedI8 *, DjinniBoxedI16 *, DjinniBoxedI32 *, DjinniBoxedI64 *, DjinniBoxedF32 *, DjinniBoxedF64 *)) {
     s_py_callback_assorted_primitives_python_create_assorted_primitives = ptr;
 }
 

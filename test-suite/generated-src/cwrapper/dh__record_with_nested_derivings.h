@@ -11,5 +11,5 @@ void record_with_nested_derivings___delete(struct DjinniRecordHandle * );
 void optional_record_with_nested_derivings___delete(struct DjinniOptionalRecordHandle * );
 void record_with_nested_derivings_add_callback_get_record_with_nested_derivings_f1(int32_t( * ptr)(struct DjinniRecordHandle *));
 void record_with_nested_derivings_add_callback_get_record_with_nested_derivings_f2(struct DjinniRecordHandle *( * ptr)(struct DjinniRecordHandle *));
-void record_with_nested_derivings_add_callback_python_create_record_with_nested_derivings(struct DjinniRecordHandle *( * ptr)(int32_t,struct DjinniRecordHandle *));
+void record_with_nested_derivings_add_callback_python_create_record_with_nested_derivings(struct DjinniRecordHandle *( * ptr)(int32_t, struct DjinniRecordHandle *));
 void record_with_nested_derivings_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

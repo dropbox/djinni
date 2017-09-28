@@ -7,5 +7,5 @@
 struct DjinniConstants;
 void constants___delete(struct DjinniRecordHandle * );
 void optional_constants___delete(struct DjinniOptionalRecordHandle * );
-void constants_add_callback_python_create_constants(struct DjinniRecordHandle *( * ptr)());
+void constants_add_callback_python_create_constants(struct DjinniRecordHandle *( * ptr)(void));
 void constants_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

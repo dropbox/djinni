@@ -55,9 +55,9 @@ void enum_usage_record_add_callback_get_enum_usage_record_f5(DjinniObjectHandle 
     s_py_callback_enum_usage_record_get_enum_usage_record_f5 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_enum_usage_record_python_create_enum_usage_record)(int,int,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *);
+static DjinniRecordHandle * ( * s_py_callback_enum_usage_record_python_create_enum_usage_record)(int, int, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *);
 
-void enum_usage_record_add_callback_python_create_enum_usage_record(DjinniRecordHandle *( * ptr)(int,int,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *)) {
+void enum_usage_record_add_callback_python_create_enum_usage_record(DjinniRecordHandle *( * ptr)(int, int, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *)) {
     s_py_callback_enum_usage_record_python_create_enum_usage_record = ptr;
 }
 

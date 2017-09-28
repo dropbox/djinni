@@ -51,5 +51,5 @@ void cw__foo_primitives_set_date(struct DjinniWrapperFooPrimitives * djinni_this
 
 uint64_t cw__foo_primitives_get_date(struct DjinniWrapperFooPrimitives * djinni_this);
 
-struct DjinniWrapperFooPrimitives * cw__foo_primitives_create();
+struct DjinniWrapperFooPrimitives * cw__foo_primitives_create(void);
 

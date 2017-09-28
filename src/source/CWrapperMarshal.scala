@@ -316,5 +316,18 @@ class CWrapperMarshal(spec: Spec) extends Marshal(spec) { // modeled(pretty much
 
   def checkForException(s: String) = "lib.check_for_exception" + p(s)
 
+  def cArgDecl(args: Seq[String]) = {
+    if (args.length == 0) {
+      // CWrapper headers need to be parsed as C.  `()` in C means "unspecified args" and triggers
+      // -Wstrict-prototypes.  `(void)` means no args in C.  In C++ the two forms are equivalent.
+      "(void)"
+    } else {
+      args.mkString("(", ", ", ")")
+    }
+  }
+
+  def cArgVals(args: Seq[String]) = {
+    args.mkString("(", ", ", ")")
+  }
 }
 

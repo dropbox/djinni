@@ -33,7 +33,7 @@ class FooListenerPythonProxy final : public ::testsuite::FooListener {
 
         std::string on_string_change(const std::string & private_string);
 
-        int32_t get_private_int();
+        int32_t get_private_int(void);
 
         std::string on_changes_string_returned(int32_t i, float f, const std::string & s, const std::vector<uint8_t> & binar, bool b, const std::chrono::system_clock::time_point & d);
 
@@ -51,7 +51,7 @@ class FooListenerPythonProxy final : public ::testsuite::FooListener {
 
         void cause_py_exception(const std::string & exception_arg);
 
-        void cause_zero_division_error();
+        void cause_zero_division_error(void);
 
     private:
         DjinniObjectHandle * m_py_obj_handle;

@@ -68,7 +68,7 @@ void second_listener_add_callback___delete(void(* ptr)(DjinniObjectHandle * )) {
     s_py_callback_second_listener___delete = ptr;
 }
 
-void SecondListenerPythonProxy::second() {
+void SecondListenerPythonProxy::second(void) {
     s_py_callback_second_listener_second(m_py_obj_handle);
     djinni::cw_throw_if_pending();
 }

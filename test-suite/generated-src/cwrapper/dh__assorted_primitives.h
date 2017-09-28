@@ -24,5 +24,5 @@ void assorted_primitives_add_callback_get_assorted_primitives_f11(struct DjinniB
 void assorted_primitives_add_callback_get_assorted_primitives_f12(struct DjinniBoxedI64 *( * ptr)(struct DjinniRecordHandle *));
 void assorted_primitives_add_callback_get_assorted_primitives_f13(struct DjinniBoxedF32 *( * ptr)(struct DjinniRecordHandle *));
 void assorted_primitives_add_callback_get_assorted_primitives_f14(struct DjinniBoxedF64 *( * ptr)(struct DjinniRecordHandle *));
-void assorted_primitives_add_callback_python_create_assorted_primitives(struct DjinniRecordHandle *( * ptr)(bool,int8_t,int16_t,int32_t,int64_t,float,double,struct DjinniBoxedBool *,struct DjinniBoxedI8 *,struct DjinniBoxedI16 *,struct DjinniBoxedI32 *,struct DjinniBoxedI64 *,struct DjinniBoxedF32 *,struct DjinniBoxedF64 *));
+void assorted_primitives_add_callback_python_create_assorted_primitives(struct DjinniRecordHandle *( * ptr)(bool, int8_t, int16_t, int32_t, int64_t, float, double, struct DjinniBoxedBool *, struct DjinniBoxedI8 *, struct DjinniBoxedI16 *, struct DjinniBoxedI32 *, struct DjinniBoxedI64 *, struct DjinniBoxedF32 *, struct DjinniBoxedF64 *));
 void assorted_primitives_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));
