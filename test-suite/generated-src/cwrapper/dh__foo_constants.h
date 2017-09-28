@@ -11,5 +11,5 @@ void foo_constants___delete(struct DjinniRecordHandle * );
 void optional_foo_constants___delete(struct DjinniOptionalRecordHandle * );
 void foo_constants_add_callback_get_foo_constants_f1(int32_t( * ptr)(struct DjinniRecordHandle *));
 void foo_constants_add_callback_get_foo_constants_f2(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void foo_constants_add_callback_python_create_foo_constants(struct DjinniRecordHandle *( * ptr)(int32_t,struct DjinniString *));
+void foo_constants_add_callback_python_create_foo_constants(struct DjinniRecordHandle *( * ptr)(int32_t, struct DjinniString *));
 void foo_constants_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

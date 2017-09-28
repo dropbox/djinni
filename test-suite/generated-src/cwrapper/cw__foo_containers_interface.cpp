@@ -109,7 +109,7 @@ DjinniObjectHandle * cw__foo_containers_interface_get_list_binary(DjinniWrapperF
         return DjinniListBinary::fromCpp(djinni_this->wrapped_obj->get_list_binary()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create() {
+DjinniWrapperFooContainersInterface * cw__foo_containers_interface_create(void) {
     try {
         return DjinniWrapperFooContainersInterface::wrap(::testsuite::FooContainersInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

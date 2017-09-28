@@ -129,7 +129,7 @@ std::string FooListenerPythonProxy::on_string_change(const std::string & private
     return _ret;
 }
 
-int32_t FooListenerPythonProxy::get_private_int() {
+int32_t FooListenerPythonProxy::get_private_int(void) {
     auto _ret = s_py_callback_foo_listener_get_private_int(m_py_obj_handle);
     djinni::cw_throw_if_pending();
     return _ret;
@@ -197,7 +197,7 @@ void FooListenerPythonProxy::cause_py_exception(const std::string & exception_ar
     djinni::cw_throw_if_pending();
 }
 
-void FooListenerPythonProxy::cause_zero_division_error() {
+void FooListenerPythonProxy::cause_zero_division_error(void) {
     s_py_callback_foo_listener_cause_zero_division_error(m_py_obj_handle);
     djinni::cw_throw_if_pending();
 }

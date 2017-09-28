@@ -31,7 +31,7 @@ class FirstListenerPythonProxy final : public ::testsuite::FirstListener {
         ~FirstListenerPythonProxy();
         DjinniObjectHandle * get_m_py_obj_handle();
 
-        void first();
+        void first(void);
 
     private:
         DjinniObjectHandle * m_py_obj_handle;

@@ -39,7 +39,7 @@ DjinniString * cw__foo_static_update_static_messg_to(DjinniString * static_strin
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniString * cw__foo_static_get_static_messg() {
+DjinniString * cw__foo_static_get_static_messg(void) {
     try {
         return DjinniString::fromCpp(::testsuite::FooStatic::get_static_messg()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -57,7 +57,7 @@ int32_t cw__foo_static_update_static_counter_to(int32_t init) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-int32_t cw__foo_static_get_static_counter() {
+int32_t cw__foo_static_get_static_counter(void) {
     try {
         return ::testsuite::FooStatic::get_static_counter();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

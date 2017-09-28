@@ -68,9 +68,9 @@ void record_with_derivings_add_callback_get_record_with_derivings_f8(DjinniStrin
     s_py_callback_record_with_derivings_get_record_with_derivings_f8 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_record_with_derivings_python_create_record_with_derivings)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,DjinniString *);
+static DjinniRecordHandle * ( * s_py_callback_record_with_derivings_python_create_record_with_derivings)(int8_t, int16_t, int32_t, int64_t, float, double, uint64_t, DjinniString *);
 
-void record_with_derivings_add_callback_python_create_record_with_derivings(DjinniRecordHandle *( * ptr)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,DjinniString *)) {
+void record_with_derivings_add_callback_python_create_record_with_derivings(DjinniRecordHandle *( * ptr)(int8_t, int16_t, int32_t, int64_t, float, double, uint64_t, DjinniString *)) {
     s_py_callback_record_with_derivings_python_create_record_with_derivings = ptr;
 }
 

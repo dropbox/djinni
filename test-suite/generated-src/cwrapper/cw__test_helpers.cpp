@@ -43,7 +43,7 @@ djinni::Handle<DjinniWrapperTestHelpers> DjinniWrapperTestHelpers::wrap(std::sha
     return nullptr;
 }
 
-DjinniRecordHandle * cw__test_helpers_get_set_record() {
+DjinniRecordHandle * cw__test_helpers_get_set_record(void) {
     try {
         return DjinniSetRecord::fromCpp(::testsuite::TestHelpers::get_set_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -56,7 +56,7 @@ bool cw__test_helpers_check_set_record(DjinniRecordHandle * rec) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniRecordHandle * cw__test_helpers_get_primitive_list() {
+DjinniRecordHandle * cw__test_helpers_get_primitive_list(void) {
     try {
         return DjinniPrimitiveList::fromCpp(::testsuite::TestHelpers::get_primitive_list()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -69,7 +69,7 @@ bool cw__test_helpers_check_primitive_list(DjinniRecordHandle * pl) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniRecordHandle * cw__test_helpers_get_nested_collection() {
+DjinniRecordHandle * cw__test_helpers_get_nested_collection(void) {
     try {
         return DjinniNestedCollection::fromCpp(::testsuite::TestHelpers::get_nested_collection()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -82,7 +82,7 @@ bool cw__test_helpers_check_nested_collection(DjinniRecordHandle * nc) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniObjectHandle * cw__test_helpers_get_map() {
+DjinniObjectHandle * cw__test_helpers_get_map(void) {
     try {
         return DjinniMapStringInt64T::fromCpp(::testsuite::TestHelpers::get_map()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -95,7 +95,7 @@ bool cw__test_helpers_check_map(DjinniObjectHandle * m) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniObjectHandle * cw__test_helpers_get_empty_map() {
+DjinniObjectHandle * cw__test_helpers_get_empty_map(void) {
     try {
         return DjinniMapStringInt64T::fromCpp(::testsuite::TestHelpers::get_empty_map()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -108,7 +108,7 @@ bool cw__test_helpers_check_empty_map(DjinniObjectHandle * m) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniRecordHandle * cw__test_helpers_get_map_list_record() {
+DjinniRecordHandle * cw__test_helpers_get_map_list_record(void) {
     try {
         return DjinniMapListRecord::fromCpp(::testsuite::TestHelpers::get_map_list_record()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -162,7 +162,7 @@ DjinniWrapperUserToken * cw__test_helpers_token_id(DjinniWrapperUserToken * t) {
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
 
-DjinniWrapperUserToken * cw__test_helpers_create_cpp_token() {
+DjinniWrapperUserToken * cw__test_helpers_create_cpp_token(void) {
     try {
         return DjinniWrapperUserToken::wrap(::testsuite::TestHelpers::create_cpp_token()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
@@ -190,7 +190,7 @@ void cw__test_helpers_check_token_type(DjinniWrapperUserToken * t, DjinniString 
     } CW_TRANSLATE_EXCEPTIONS_RETURN();
 }
 
-DjinniBoxedI32 * cw__test_helpers_return_none() {
+DjinniBoxedI32 * cw__test_helpers_return_none(void) {
     try {
         return DjinniBoxedI32::fromCpp(::testsuite::TestHelpers::return_none()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

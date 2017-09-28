@@ -10,7 +10,7 @@ struct DjinniWrapperReturnTwo;
 void return_two___wrapper_dec_ref(struct DjinniWrapperReturnTwo * dh);
 void return_two___wrapper_add_ref(struct DjinniWrapperReturnTwo * dh);
 
-struct DjinniWrapperReturnTwo * cw__return_two_get_instance();
+struct DjinniWrapperReturnTwo * cw__return_two_get_instance(void);
 
 int8_t cw__return_two_return_two(struct DjinniWrapperReturnTwo * djinni_this);
 

@@ -17,5 +17,5 @@ void record_with_derivings_add_callback_get_record_with_derivings_f5(float( * pt
 void record_with_derivings_add_callback_get_record_with_derivings_f6(double( * ptr)(struct DjinniRecordHandle *));
 void record_with_derivings_add_callback_get_record_with_derivings_f7(uint64_t( * ptr)(struct DjinniRecordHandle *));
 void record_with_derivings_add_callback_get_record_with_derivings_f8(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void record_with_derivings_add_callback_python_create_record_with_derivings(struct DjinniRecordHandle *( * ptr)(int8_t,int16_t,int32_t,int64_t,float,double,uint64_t,struct DjinniString *));
+void record_with_derivings_add_callback_python_create_record_with_derivings(struct DjinniRecordHandle *( * ptr)(int8_t, int16_t, int32_t, int64_t, float, double, uint64_t, struct DjinniString *));
 void record_with_derivings_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

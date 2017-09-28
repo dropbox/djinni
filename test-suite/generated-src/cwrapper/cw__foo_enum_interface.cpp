@@ -56,7 +56,7 @@ int cw__foo_enum_interface_get_optional_enum(DjinniWrapperFooEnumInterface * dji
         return int32_from_enum_color(djinni_this->wrapped_obj->get_optional_enum());
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create() {
+DjinniWrapperFooEnumInterface * cw__foo_enum_interface_create(void) {
     try {
         return DjinniWrapperFooEnumInterface::wrap(::testsuite::FooEnumInterface::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

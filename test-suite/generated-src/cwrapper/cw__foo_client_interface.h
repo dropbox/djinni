@@ -22,5 +22,5 @@ int32_t cw__foo_client_interface_get_extensible_record_number2(struct DjinniWrap
 
 struct DjinniString * cw__foo_client_interface_get_extensible_record_string2(struct DjinniWrapperFooClientInterface * djinni_this);
 
-struct DjinniWrapperFooClientInterface * cw__foo_client_interface_create();
+struct DjinniWrapperFooClientInterface * cw__foo_client_interface_create(void);
 

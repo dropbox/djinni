@@ -12,5 +12,5 @@ void enum_usage_record_add_callback_get_enum_usage_record_f2(int( * ptr)(struct 
 void enum_usage_record_add_callback_get_enum_usage_record_f3(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
 void enum_usage_record_add_callback_get_enum_usage_record_f4(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
 void enum_usage_record_add_callback_get_enum_usage_record_f5(struct DjinniObjectHandle *( * ptr)(struct DjinniRecordHandle *));
-void enum_usage_record_add_callback_python_create_enum_usage_record(struct DjinniRecordHandle *( * ptr)(int,int,struct DjinniObjectHandle *,struct DjinniObjectHandle *,struct DjinniObjectHandle *));
+void enum_usage_record_add_callback_python_create_enum_usage_record(struct DjinniRecordHandle *( * ptr)(int, int, struct DjinniObjectHandle *, struct DjinniObjectHandle *, struct DjinniObjectHandle *));
 void enum_usage_record_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

@@ -19,9 +19,9 @@ void empty_record___delete(DjinniRecordHandle * drh) {
 void optional_empty_record___delete(DjinniOptionalRecordHandle * drh) {
     s_py_callback_empty_record___delete((DjinniRecordHandle *) drh); // can't static cast, find better way
 }
-static DjinniRecordHandle * ( * s_py_callback_empty_record_python_create_empty_record)();
+static DjinniRecordHandle * ( * s_py_callback_empty_record_python_create_empty_record)(void);
 
-void empty_record_add_callback_python_create_empty_record(DjinniRecordHandle *( * ptr)()) {
+void empty_record_add_callback_python_create_empty_record(DjinniRecordHandle *( * ptr)(void)) {
     s_py_callback_empty_record_python_create_empty_record = ptr;
 }
 

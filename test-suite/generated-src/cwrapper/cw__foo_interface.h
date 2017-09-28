@@ -22,7 +22,7 @@ struct DjinniString * cw__foo_interface_get_private_string(struct DjinniWrapperF
 
 struct DjinniString * cw__foo_interface_get_set_strings(struct DjinniWrapperFooInterface * djinni_this, struct DjinniString * ps1, struct DjinniString * ps2);
 
-struct DjinniWrapperFooInterface * cw__foo_interface_create();
+struct DjinniWrapperFooInterface * cw__foo_interface_create(void);
 
 struct DjinniWrapperFooPrimitives * cw__foo_interface_get_foo_primitives(struct DjinniWrapperFooInterface * djinni_this);
 

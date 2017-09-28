@@ -31,9 +31,9 @@ void foo_extensible_record_add_callback_get_foo_extensible_record_f2(DjinniStrin
     s_py_callback_foo_extensible_record_get_foo_extensible_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_foo_extensible_record_python_create_foo_extensible_record)(int32_t,DjinniString *);
+static DjinniRecordHandle * ( * s_py_callback_foo_extensible_record_python_create_foo_extensible_record)(int32_t, DjinniString *);
 
-void foo_extensible_record_add_callback_python_create_foo_extensible_record(DjinniRecordHandle *( * ptr)(int32_t,DjinniString *)) {
+void foo_extensible_record_add_callback_python_create_foo_extensible_record(DjinniRecordHandle *( * ptr)(int32_t, DjinniString *)) {
     s_py_callback_foo_extensible_record_python_create_foo_extensible_record = ptr;
 }
 

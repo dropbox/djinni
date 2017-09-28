@@ -32,9 +32,9 @@ void record_with_nested_derivings_add_callback_get_record_with_nested_derivings_
     s_py_callback_record_with_nested_derivings_get_record_with_nested_derivings_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_record_with_nested_derivings_python_create_record_with_nested_derivings)(int32_t,DjinniRecordHandle *);
+static DjinniRecordHandle * ( * s_py_callback_record_with_nested_derivings_python_create_record_with_nested_derivings)(int32_t, DjinniRecordHandle *);
 
-void record_with_nested_derivings_add_callback_python_create_record_with_nested_derivings(DjinniRecordHandle *( * ptr)(int32_t,DjinniRecordHandle *)) {
+void record_with_nested_derivings_add_callback_python_create_record_with_nested_derivings(DjinniRecordHandle *( * ptr)(int32_t, DjinniRecordHandle *)) {
     s_py_callback_record_with_nested_derivings_python_create_record_with_nested_derivings = ptr;
 }
 

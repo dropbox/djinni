@@ -12,5 +12,5 @@ void cpp_exception___wrapper_add_ref(struct DjinniWrapperCppException * dh);
 
 int32_t cw__cpp_exception_throw_an_exception(struct DjinniWrapperCppException * djinni_this);
 
-struct DjinniWrapperCppException * cw__cpp_exception_get();
+struct DjinniWrapperCppException * cw__cpp_exception_get(void);
 

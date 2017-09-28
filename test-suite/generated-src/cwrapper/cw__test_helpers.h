@@ -11,27 +11,27 @@ struct DjinniWrapperTestHelpers;
 void test_helpers___wrapper_dec_ref(struct DjinniWrapperTestHelpers * dh);
 void test_helpers___wrapper_add_ref(struct DjinniWrapperTestHelpers * dh);
 
-struct DjinniRecordHandle * cw__test_helpers_get_set_record();
+struct DjinniRecordHandle * cw__test_helpers_get_set_record(void);
 
 bool cw__test_helpers_check_set_record(struct DjinniRecordHandle * rec);
 
-struct DjinniRecordHandle * cw__test_helpers_get_primitive_list();
+struct DjinniRecordHandle * cw__test_helpers_get_primitive_list(void);
 
 bool cw__test_helpers_check_primitive_list(struct DjinniRecordHandle * pl);
 
-struct DjinniRecordHandle * cw__test_helpers_get_nested_collection();
+struct DjinniRecordHandle * cw__test_helpers_get_nested_collection(void);
 
 bool cw__test_helpers_check_nested_collection(struct DjinniRecordHandle * nc);
 
-struct DjinniObjectHandle * cw__test_helpers_get_map();
+struct DjinniObjectHandle * cw__test_helpers_get_map(void);
 
 bool cw__test_helpers_check_map(struct DjinniObjectHandle * m);
 
-struct DjinniObjectHandle * cw__test_helpers_get_empty_map();
+struct DjinniObjectHandle * cw__test_helpers_get_empty_map(void);
 
 bool cw__test_helpers_check_empty_map(struct DjinniObjectHandle * m);
 
-struct DjinniRecordHandle * cw__test_helpers_get_map_list_record();
+struct DjinniRecordHandle * cw__test_helpers_get_map_list_record(void);
 
 bool cw__test_helpers_check_map_list_record(struct DjinniRecordHandle * m);
 
@@ -47,7 +47,7 @@ void cw__test_helpers_check_enum(int c);
 
 struct DjinniWrapperUserToken * cw__test_helpers_token_id(struct DjinniWrapperUserToken * t);
 
-struct DjinniWrapperUserToken * cw__test_helpers_create_cpp_token();
+struct DjinniWrapperUserToken * cw__test_helpers_create_cpp_token(void);
 
 void cw__test_helpers_check_cpp_token(struct DjinniWrapperUserToken * t);
 
@@ -55,7 +55,7 @@ int64_t cw__test_helpers_cpp_token_id(struct DjinniWrapperUserToken * t);
 
 void cw__test_helpers_check_token_type(struct DjinniWrapperUserToken * t, struct DjinniString * type);
 
-struct DjinniBoxedI32 * cw__test_helpers_return_none();
+struct DjinniBoxedI32 * cw__test_helpers_return_none(void);
 
 struct DjinniRecordHandle * cw__test_helpers_assorted_primitives_id(struct DjinniRecordHandle * i);
 

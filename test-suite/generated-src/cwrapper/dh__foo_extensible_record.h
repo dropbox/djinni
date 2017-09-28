@@ -11,5 +11,5 @@ void foo_extensible_record___delete(struct DjinniRecordHandle * );
 void optional_foo_extensible_record___delete(struct DjinniOptionalRecordHandle * );
 void foo_extensible_record_add_callback_get_foo_extensible_record_f1(int32_t( * ptr)(struct DjinniRecordHandle *));
 void foo_extensible_record_add_callback_get_foo_extensible_record_f2(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void foo_extensible_record_add_callback_python_create_foo_extensible_record(struct DjinniRecordHandle *( * ptr)(int32_t,struct DjinniString *));
+void foo_extensible_record_add_callback_python_create_foo_extensible_record(struct DjinniRecordHandle *( * ptr)(int32_t, struct DjinniString *));
 void foo_extensible_record_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

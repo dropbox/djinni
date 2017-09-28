@@ -31,7 +31,7 @@ class SecondListenerPythonProxy final : public ::testsuite::SecondListener {
         ~SecondListenerPythonProxy();
         DjinniObjectHandle * get_m_py_obj_handle();
 
-        void second();
+        void second(void);
 
     private:
         DjinniObjectHandle * m_py_obj_handle;

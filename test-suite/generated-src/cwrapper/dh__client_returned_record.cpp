@@ -38,9 +38,9 @@ void client_returned_record_add_callback_get_client_returned_record_f3(DjinniStr
     s_py_callback_client_returned_record_get_client_returned_record_f3 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_client_returned_record_python_create_client_returned_record)(int64_t,DjinniString *,DjinniString *);
+static DjinniRecordHandle * ( * s_py_callback_client_returned_record_python_create_client_returned_record)(int64_t, DjinniString *, DjinniString *);
 
-void client_returned_record_add_callback_python_create_client_returned_record(DjinniRecordHandle *( * ptr)(int64_t,DjinniString *,DjinniString *)) {
+void client_returned_record_add_callback_python_create_client_returned_record(DjinniRecordHandle *( * ptr)(int64_t, DjinniString *, DjinniString *)) {
     s_py_callback_client_returned_record_python_create_client_returned_record = ptr;
 }
 

@@ -61,5 +61,5 @@ struct DjinniWrapperFooListenerBf * cw__foo_receiver_send_return(struct DjinniWr
 
 struct DjinniWrapperFooListenerBf * cw__foo_receiver_in_listener_bf_send_return(struct DjinniWrapperFooReceiver * djinni_this, struct DjinniWrapperFooListenerBf * fl_bf);
 
-struct DjinniWrapperFooReceiver * cw__foo_receiver_create();
+struct DjinniWrapperFooReceiver * cw__foo_receiver_create(void);
 

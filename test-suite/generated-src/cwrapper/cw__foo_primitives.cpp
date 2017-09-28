@@ -153,7 +153,7 @@ uint64_t cw__foo_primitives_get_date(DjinniWrapperFooPrimitives * djinni_this) {
         return DjinniDate::fromCpp(djinni_this->wrapped_obj->get_date());
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);
 }
-DjinniWrapperFooPrimitives * cw__foo_primitives_create() {
+DjinniWrapperFooPrimitives * cw__foo_primitives_create(void) {
     try {
         return DjinniWrapperFooPrimitives::wrap(::testsuite::FooPrimitives::create()).release();
     } CW_TRANSLATE_EXCEPTIONS_RETURN(0);

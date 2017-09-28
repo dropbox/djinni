@@ -12,5 +12,5 @@ void optional_client_returned_record___delete(struct DjinniOptionalRecordHandle 
 void client_returned_record_add_callback_get_client_returned_record_f1(int64_t( * ptr)(struct DjinniRecordHandle *));
 void client_returned_record_add_callback_get_client_returned_record_f2(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
 void client_returned_record_add_callback_get_client_returned_record_f3(struct DjinniString *( * ptr)(struct DjinniRecordHandle *));
-void client_returned_record_add_callback_python_create_client_returned_record(struct DjinniRecordHandle *( * ptr)(int64_t,struct DjinniString *,struct DjinniString *));
+void client_returned_record_add_callback_python_create_client_returned_record(struct DjinniRecordHandle *( * ptr)(int64_t, struct DjinniString *, struct DjinniString *));
 void client_returned_record_add_callback___delete(void( * ptr)(struct DjinniRecordHandle *));

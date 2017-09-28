@@ -31,9 +31,9 @@ void some_const_record_add_callback_get_some_const_record_f2(int16_t( * ptr)(Dji
     s_py_callback_some_const_record_get_some_const_record_f2 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_some_const_record_python_create_some_const_record)(int16_t,int16_t);
+static DjinniRecordHandle * ( * s_py_callback_some_const_record_python_create_some_const_record)(int16_t, int16_t);
 
-void some_const_record_add_callback_python_create_some_const_record(DjinniRecordHandle *( * ptr)(int16_t,int16_t)) {
+void some_const_record_add_callback_python_create_some_const_record(DjinniRecordHandle *( * ptr)(int16_t, int16_t)) {
     s_py_callback_some_const_record_python_create_some_const_record = ptr;
 }
 

@@ -134,9 +134,9 @@ void foo_containers_record_add_callback_get_foo_containers_record_f16(DjinniObje
     s_py_callback_foo_containers_record_get_foo_containers_record_f16 = ptr;
 }
 
-static DjinniRecordHandle * ( * s_py_callback_foo_containers_record_python_create_foo_containers_record)(DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *);
+static DjinniRecordHandle * ( * s_py_callback_foo_containers_record_python_create_foo_containers_record)(DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *);
 
-void foo_containers_record_add_callback_python_create_foo_containers_record(DjinniRecordHandle *( * ptr)(DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniOptionalObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *,DjinniObjectHandle *)) {
+void foo_containers_record_add_callback_python_create_foo_containers_record(DjinniRecordHandle *( * ptr)(DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniOptionalObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *, DjinniObjectHandle *)) {
     s_py_callback_foo_containers_record_python_create_foo_containers_record = ptr;
 }
 
