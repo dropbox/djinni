@@ -73,30 +73,24 @@ public class EnumUsageRecord implements android.os.Parcelable {
 
 
     public static final android.os.Parcelable.Creator<EnumUsageRecord> CREATOR
-        = new android.os.Parcelable.Creator<EnumUsageRecord>()
-    {
+        = new android.os.Parcelable.Creator<EnumUsageRecord>() {
         @Override
-        public EnumUsageRecord createFromParcel(android.os.Parcel in)
-        {
+        public EnumUsageRecord createFromParcel(android.os.Parcel in) {
             return new EnumUsageRecord(in);
         }
 
         @Override
-        public EnumUsageRecord[] newArray(int size)
-        {
+        public EnumUsageRecord[] newArray(int size) {
             return new EnumUsageRecord[size];
         }
     };
 
-    public EnumUsageRecord(android.os.Parcel in)
-    {
+    public EnumUsageRecord(android.os.Parcel in) {
         this.mE = Color.values()[in.readInt()];
-        if (in.readByte() == 0)
-        {
+        if (in.readByte() == 0) {
             this.mO = null;
         }
-        else
-        {
+        else {
             this.mO = Color.values()[in.readInt()];
         }
         this.mL = new ArrayList<Color>();
@@ -116,13 +110,10 @@ public class EnumUsageRecord implements android.os.Parcelable {
     @Override
     public void writeToParcel(android.os.Parcel out, int flags) {
         out.writeInt(this.mE.ordinal());
-        if (this.mO != null)
-        {
+        if (this.mO != null) {
             out.writeByte((byte)1);
             out.writeInt(this.mO.ordinal());
-        }
-        else
-        {
+        } else {
             out.writeByte((byte)0);
         }
         out.writeList(this.mL);

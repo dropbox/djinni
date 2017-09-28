@@ -416,14 +416,14 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     // CREATOR
     w.wl
     w.wl(s"public static final android.os.Parcelable.Creator<$self> CREATOR")
-    w.wl(s"    = new android.os.Parcelable.Creator<$self>()").bracedSemi {
+    w.w(s"    = new android.os.Parcelable.Creator<$self>()").bracedSemi {
       w.wl("@Override")
-      w.wl(s"public $self createFromParcel(android.os.Parcel in)").braced {
+      w.w(s"public $self createFromParcel(android.os.Parcel in)").braced {
         w.wl(s"return new $self(in);")
       }
       w.wl
       w.wl("@Override")
-      w.wl(s"public $self[] newArray(int size)").braced {
+      w.w(s"public $self[] newArray(int size)").braced {
         w.wl(s"return new $self[size];")
       }
     }
@@ -473,10 +473,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
-          w.wl("if (in.readByte() == 0)").braced {
+          w.w("if (in.readByte() == 0)").braced {
             w.wl(s"this.${idJava.field(f.ident)} = null;")
           }
-          w.wl("else").braced {
+          w.w("else").braced {
             deserializeField(f, f.ty.resolved.args.head.base, true)
           }
         }
@@ -484,7 +484,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       }
     }
     w.wl
-    w.wl(s"public $self(android.os.Parcel in)").braced {
+    w.w(s"public $self(android.os.Parcel in)").braced {
       for (f <- r.fields)
         deserializeField(f, f.ty.resolved.base, false)
     }
@@ -496,7 +496,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       w.wl("return 0;")
     }
 
-    // writeToParsel
+    // writeToParcel
     def serializeField(f: Field, m: Meta, inOptional: Boolean) {
       m match {
         case MString => w.wl(s"out.writeString(this.${idJava.field(f.ident)});")
@@ -534,13 +534,14 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         case MOptional => {
           if (inOptional)
           	throw new AssertionError("nested optional?")
-          w.wl(s"if (this.${idJava.field(f.ident)} != null)").braced {
+          w.wl(s"if (this.${idJava.field(f.ident)} != null) {").nested {
             w.wl("out.writeByte((byte)1);")
             serializeField(f, f.ty.resolved.args.head.base, true)
           }
-          w.wl("else").braced {
+          w.wl("} else {").nested {
             w.wl("out.writeByte((byte)0);")
           }
+          w.wl("}")
         }
         case _ => throw new AssertionError("Unreachable")
       }

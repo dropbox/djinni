@@ -32,23 +32,19 @@ public class NestedCollection implements android.os.Parcelable {
 
 
     public static final android.os.Parcelable.Creator<NestedCollection> CREATOR
-        = new android.os.Parcelable.Creator<NestedCollection>()
-    {
+        = new android.os.Parcelable.Creator<NestedCollection>() {
         @Override
-        public NestedCollection createFromParcel(android.os.Parcel in)
-        {
+        public NestedCollection createFromParcel(android.os.Parcel in) {
             return new NestedCollection(in);
         }
 
         @Override
-        public NestedCollection[] newArray(int size)
-        {
+        public NestedCollection[] newArray(int size) {
             return new NestedCollection[size];
         }
     };
 
-    public NestedCollection(android.os.Parcel in)
-    {
+    public NestedCollection(android.os.Parcel in) {
         this.mSetList = new ArrayList<HashSet<String>>();
         in.readList(this.mSetList, getClass().getClassLoader());
     }

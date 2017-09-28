@@ -47,23 +47,19 @@ public class DateRecord implements Comparable<DateRecord>, android.os.Parcelable
 
 
     public static final android.os.Parcelable.Creator<DateRecord> CREATOR
-        = new android.os.Parcelable.Creator<DateRecord>()
-    {
+        = new android.os.Parcelable.Creator<DateRecord>() {
         @Override
-        public DateRecord createFromParcel(android.os.Parcel in)
-        {
+        public DateRecord createFromParcel(android.os.Parcel in) {
             return new DateRecord(in);
         }
 
         @Override
-        public DateRecord[] newArray(int size)
-        {
+        public DateRecord[] newArray(int size) {
             return new DateRecord[size];
         }
     };
 
-    public DateRecord(android.os.Parcel in)
-    {
+    public DateRecord(android.os.Parcel in) {
         this.mCreatedAt = new java.util.Date(in.readLong());
     }
 
