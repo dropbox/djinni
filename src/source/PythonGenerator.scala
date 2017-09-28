@@ -342,13 +342,13 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
       tm.base match {
         case MList | MSet | MMap => {
           if (justCollect) {
-            if (tm.base == MList) python.add("from " + marshal.dh + fileName + " import " + idPython.className(fileName) + "Helper")
+            if (tm.base == MList) python.add("from " + spec.pyImportPrefix + marshal.dh + fileName + " import " + idPython.className(fileName) + "Helper")
             else {
-              python.add("from " + marshal.dh + fileName + " import " + idPython.className(fileName) + "Helper")
-              python.add("from " + marshal.dh + fileName + " import " + idPython.className(fileName) + "Proxy")
+              python.add("from " + spec.pyImportPrefix + marshal.dh + fileName + " import " + idPython.className(fileName) + "Helper")
+              python.add("from " + spec.pyImportPrefix + marshal.dh + fileName + " import " + idPython.className(fileName) + "Proxy")
             }
           } else {
-            if (!writtenFiles.contains(idlName + ".py")) {
+            if (!writtenFiles.contains((idlName + ".py").toLowerCase())) {
               writtenFiles.put(fileName.toLowerCase(), fileName)
               generateContainer(tm, isOpt, fileName, idlName, ident, origin, marshal.referencesForContainer(tm, idlName))
             }
@@ -527,8 +527,8 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
       case d: MDef => d.defType match {
         case DEnum =>
           checkForExceptionFromPython(w => {
-            w.wl("_ret= " + marshal.convertFrom(libCall, ret))
-            w.wl("assert _ret.value != -1")
+            w.wl("_ret = " + marshal.convertFrom(libCall, ret))
+            w.wl("assert _ret != -1")
             w.wl("return _ret")
           }, true, w)
           return
@@ -1035,7 +1035,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
     })
 
     writePythonFile(ident.name + "_helper", origin, refs.python, true, w => {
-      w.wl("from " + ident.name + " import " + recordClassName )
+      w.wl("from " + spec.pyImportPrefix + ident.name + " import " + recordClassName )
       w.wl
       w.wl("class " + recordClassName + "Helper" + ":").nested {
         w.wl("@staticmethod")

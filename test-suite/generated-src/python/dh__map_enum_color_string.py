@@ -4,6 +4,8 @@
 from djinni.support import MultiSet # default imported in all files
 from djinni.exception import CPyException # default imported in all files
 from djinni.pycffi_marshal import CPyEnum, CPyObject, CPyObjectProxy, CPyString
+
+from color import Color
 from PyCFFIlib_cffi import ffi, lib
 
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
@@ -51,8 +53,8 @@ class MapEnumColorStringHelper:
     @ffi.callback("int(struct DjinniObjectHandle *)")
     def __python_next(cself):
         try:
-            _ret= CPyEnum.fromPy(next(CPyObjectProxy.toPyIter(cself)))
-            assert _ret.value != -1
+            _ret = CPyEnum.fromPy(next(CPyObjectProxy.toPyIter(cself)))
+            assert _ret != -1
             return _ret
         except Exception as _djinni_py_e:
             CPyException.setExceptionFromPy(_djinni_py_e)

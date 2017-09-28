@@ -26,8 +26,8 @@ class EnumUsageRecordHelper:
     @ffi.callback("int(struct DjinniRecordHandle *)")
     def get_enum_usage_record_f1(cself):
         try:
-            _ret= CPyEnum.fromPy(CPyRecord.toPy(None, cself).e)
-            assert _ret.value != -1
+            _ret = CPyEnum.fromPy(CPyRecord.toPy(None, cself).e)
+            assert _ret != -1
             return _ret
         except Exception as _djinni_py_e:
             CPyException.setExceptionFromPy(_djinni_py_e)
