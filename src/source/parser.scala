@@ -105,7 +105,7 @@ private object IdlParser extends RegexParsers {
     success(Ext(foundJava, foundCpp, foundObjc))
   }
 
-  def typeDef: Parser[TypeDef] = record | enum | interface
+  def typeDef: Parser[TypeDef] = record | enum | flags | interface
 
   def recordHeader = "record" ~> extRecord
   def record: Parser[Record] = recordHeader ~ bracesList(field | const) ~ opt(deriving) ^^ {
@@ -127,10 +127,25 @@ private object IdlParser extends RegexParsers {
     }).toSet
   }
 
+  def flagsAll = "all".r
+  def flagsNone = "none".r
+
   def enumHeader = "enum".r
-  def enum: Parser[Enum] = enumHeader ~> bracesList(enumOption) ^^ Enum.apply
+  def flagsHeader = "flags".r
+  def enum: Parser[Enum] = enumHeader ~> bracesList(enumOption) ^^ {
+    case items => Enum(items, false)
+  }
+  def flags: Parser[Enum] = flagsHeader ~> bracesList(flagsOption) ^^ {
+    case items => Enum(items, true)
+  }
+
   def enumOption: Parser[Enum.Option] = doc ~ ident ^^ {
-    case doc~ident => Enum.Option(ident, doc)
+    case doc~ident => Enum.Option(ident, doc, None)
+  }
+  def flagsOption: Parser[Enum.Option] = doc ~ ident ~ opt("=" ~> (flagsAll | flagsNone)) ^^ {
+    case doc~ident~None => Enum.Option(ident, doc, None)
+    case doc~ident~Some("all") => Enum.Option(ident, doc, Some(Enum.SpecialFlag.AllFlags))
+    case doc~ident~Some("none") => Enum.Option(ident, doc, Some(Enum.SpecialFlag.NoFlags))
   }
 
   def interfaceHeader = "interface" ~> extInterface
@@ -142,8 +157,9 @@ private object IdlParser extends RegexParsers {
     }
   }
 
-  def externTypeDecl: Parser[TypeDef] = externEnum | externInterface | externRecord
-  def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List()) }
+  def externTypeDecl: Parser[TypeDef] = externEnum | externFlags | externInterface | externRecord
+  def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List(), false) }
+  def externFlags: Parser[Enum] = flagsHeader ^^ { case _ => Enum(List(), true) }
   def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]())) }
   def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List()) }
 

@@ -546,11 +546,43 @@ public:
 
 protected:
     JniEnum(const std::string & name);
+    jclass enumClass() const { return m_clazz.get(); }
 
 private:
     const GlobalRef<jclass> m_clazz;
     const jmethodID m_staticmethValues;
     const jmethodID m_methOrdinal;
+};
+
+class JniFlags : private JniEnum {
+public:
+    /*
+     * Given a Java EnumSet convert it to the corresponding bit pattern
+     * which can then be static_cast<> to the actual enum.
+     */
+    unsigned flags(JNIEnv * env, jobject obj) const;
+
+    /*
+     * Create a Java EnumSet of the specified flags considering the given number of active bits.
+     */
+    LocalRef<jobject> create(JNIEnv * env, unsigned flags, int bits) const;
+
+    using JniEnum::create;
+
+protected:
+    JniFlags(const std::string & name);
+
+private:
+    const GlobalRef<jclass> m_clazz { jniFindClass("java/util/EnumSet") };
+    const jmethodID m_methNoneOf { jniGetStaticMethodID(m_clazz.get(), "noneOf", "(Ljava/lang/Class;)Ljava/util/EnumSet;") };
+    const jmethodID m_methAdd { jniGetMethodID(m_clazz.get(), "add", "(Ljava/lang/Object;)Z") };
+    const jmethodID m_methIterator { jniGetMethodID(m_clazz.get(), "iterator", "()Ljava/util/Iterator;") };
+    const jmethodID m_methSize { jniGetMethodID(m_clazz.get(), "size", "()I") };
+
+    struct {
+        const GlobalRef<jclass> clazz { jniFindClass("java/util/Iterator") };
+        const jmethodID methNext { jniGetMethodID(clazz.get(), "next", "()Ljava/lang/Object;") };
+    } m_iterator;
 };
 
 #define DJINNI_FUNCTION_PROLOGUE0(env_)

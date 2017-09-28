@@ -76,7 +76,10 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
     }
     case e: MExtern => e.jni.typeSignature
     case MParam(_) => "Ljava/lang/Object;"
-    case d: MDef => s"L${undecoratedTypename(d.name, d.body)};"
+    case d: MDef => d.body match {
+      case e: Enum if e.flags => "Ljava/util/EnumSet;"
+      case _ => s"L${undecoratedTypename(d.name, d.body)};"
+    }
   }
 
   def javaMethodSignature(params: Iterable[Field], ret: Option[TypeRef]) = {
