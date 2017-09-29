@@ -1,6 +1,5 @@
 #!/bin/bash
-# set -x
-set -e
+set -eux
 
 # Locate the script file.  Cross symlinks if necessary.
 loc="$0"
@@ -26,8 +25,8 @@ export py_hw="$base_dir/handwritten-src/python"
 export wrapper_marshal="../../support-lib/cwrapper/wrapper_marshal.h"
 export limits_helper="$base_dir/handwritten-src/cwrapper/limits_helper.h"
 
+export PYTHONPATH=${PYTHONPATH:-""}
 export PYTHONPATH="$support_lib/py:$base_dir/pybuild:$base_dir/generated-src/python:$PYTHONPATH"
-# echo $PYTHONPATH
 
 export lib="libmylib.dylib"
 mkdir -p "$base_dir/pybuild"
@@ -51,4 +50,6 @@ fi
         && cffi_dep=($(ls ../generated-src/cwrapper/*.h)) \
         && cffi_dep+=($limits_helper) \
         && "$python_cmd" $cffi_out/pycffi_lib_build.py $wrapper_marshal ${cffi_dep[*]} \
+        && echo && ([ ! -f PyCFFIlib_cffi.so ] || install_name_tool -change libmylib.dylib "$pyb/libmylib.dylib" PyCFFIlib_cffi.so) \
+        && echo && ([ ! -f PyCFFIlib_cffi.*.so ] || install_name_tool -change libmylib.dylib "$pyb/libmylib.dylib" PyCFFIlib_cffi.*.so) \
         && "$python_cmd" -m pytest -s  $py_hw)
