@@ -218,44 +218,37 @@ public class AssortedPrimitives implements android.os.Parcelable {
         this.mFsixtyfour = in.readDouble();
         if (in.readByte() == 0) {
             this.mOB = null;
-        }
-        else {
+        } else {
             this.mOB = in.readByte() != 0;
         }
         if (in.readByte() == 0) {
             this.mOEight = null;
-        }
-        else {
+        } else {
             this.mOEight = in.readByte();
         }
         if (in.readByte() == 0) {
             this.mOSixteen = null;
-        }
-        else {
+        } else {
             this.mOSixteen = (short)in.readInt();
         }
         if (in.readByte() == 0) {
             this.mOThirtytwo = null;
-        }
-        else {
+        } else {
             this.mOThirtytwo = in.readInt();
         }
         if (in.readByte() == 0) {
             this.mOSixtyfour = null;
-        }
-        else {
+        } else {
             this.mOSixtyfour = in.readLong();
         }
         if (in.readByte() == 0) {
             this.mOFthirtytwo = null;
-        }
-        else {
+        } else {
             this.mOFthirtytwo = in.readFloat();
         }
         if (in.readByte() == 0) {
             this.mOFsixtyfour = null;
-        }
-        else {
+        } else {
             this.mOFsixtyfour = in.readDouble();
         }
     }
