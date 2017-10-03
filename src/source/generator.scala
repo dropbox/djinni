@@ -24,6 +24,7 @@ import djinni.syntax.Error
 import djinni.writer.IndentWriter
 import scala.language.implicitConversions
 import scala.collection.mutable
+import scala.util.matching.Regex
 
 package object generatorTools {
 
@@ -416,10 +417,10 @@ abstract class Generator(spec: Spec)
   // --------------------------------------------------------------------------
 
   def writeMethodDoc(w: IndentWriter, method: Interface.Method, ident: IdentConverter) {
-    val paramReplacements = method.params.map(p => (s"@param ${p.ident.name}", s"@param ${ident(p.ident.name)}"))
+    val paramReplacements = method.params.map(p => (s"\\b${Regex.quote(p.ident.name)}\\b", s"${ident(p.ident.name)}"))
     val newDoc = Doc(method.doc.lines.map(l => {
       paramReplacements.foldLeft(l)((line, rep) =>
-        line.replace(rep._1, rep._2))
+        line.replaceAll(rep._1, rep._2))
     }))
     writeDoc(w, newDoc)
   }
