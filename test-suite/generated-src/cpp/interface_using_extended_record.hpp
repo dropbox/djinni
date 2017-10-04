@@ -12,7 +12,8 @@ class InterfaceUsingExtendedRecord {
 public:
     virtual ~InterfaceUsingExtendedRecord() {}
 
-    static RecordUsingExtendedRecord const CR;
+    static  const RecordUsingExtendedRecord CR;
+
 
     virtual ExtendedRecord meth(const ExtendedRecord & er) = 0;
 };
