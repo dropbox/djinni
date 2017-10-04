@@ -100,6 +100,7 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
         r.derivingTypes.collect {
           case Record.DerivingType.Eq => "eq"
           case Record.DerivingType.Ord => "ord"
+          case Record.DerivingType.AndroidParcelable => "parcelable"
         }.mkString(" deriving(", ", ", ")")
       }
     }
@@ -135,7 +136,9 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     "boxed" -> QuotedString(javaMarshal.fqTypename(td.ident, td.body)),
     "reference" -> javaMarshal.isReference(td),
     "generic" -> true,
-    "hash" -> QuotedString("%s.hashCode()")
+    "hash" -> QuotedString("%s.hashCode()"),
+    "writeToParcel" -> QuotedString("%s.writeToParcel(out, flags)"),
+    "readFromParcel" -> QuotedString("new %s(in)")
   )
 
   private def jni(td: TypeDecl) = Map[String, Any](
@@ -205,7 +208,9 @@ object YamlGenerator {
       nested(td, "java")("boxed").toString,
       nested(td, "java")("reference").asInstanceOf[Boolean],
       nested(td, "java")("generic").asInstanceOf[Boolean],
-      nested(td, "java")("hash").toString),
+      nested(td, "java")("hash").toString,
+      if (nested(td, "java") contains "writeToParcel") nested(td, "java")("writeToParcel").toString else "%s.writeToParcel(out, flags)",
+      if (nested(td, "java") contains "readFromParcel") nested(td, "java")("readFromParcel").toString else "new %s(in)"),
     MExtern.Jni(
       nested(td, "jni")("translator").toString,
       nested(td, "jni")("header").toString,

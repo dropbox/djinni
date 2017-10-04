@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class DateRecord implements Comparable<DateRecord> {
+public class DateRecord implements Comparable<DateRecord>, android.os.Parcelable {
 
 
     /*package*/ final java.util.Date mCreatedAt;
@@ -43,6 +43,34 @@ public class DateRecord implements Comparable<DateRecord> {
         return "DateRecord{" +
                 "mCreatedAt=" + mCreatedAt +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<DateRecord> CREATOR
+        = new android.os.Parcelable.Creator<DateRecord>() {
+        @Override
+        public DateRecord createFromParcel(android.os.Parcel in) {
+            return new DateRecord(in);
+        }
+
+        @Override
+        public DateRecord[] newArray(int size) {
+            return new DateRecord[size];
+        }
+    };
+
+    public DateRecord(android.os.Parcel in) {
+        this.mCreatedAt = new java.util.Date(in.readLong());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeLong(mCreatedAt.getTime());
     }
 
 

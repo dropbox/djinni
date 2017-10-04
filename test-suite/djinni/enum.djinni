@@ -17,7 +17,7 @@ enum_usage_record = record {
     l: list<color>;
     s: set<color>;
     m: map<color, color>;
-}
+} deriving(parcelable)
 
 enum_usage_interface = interface +c +j +o {
     e(e: color): color;
