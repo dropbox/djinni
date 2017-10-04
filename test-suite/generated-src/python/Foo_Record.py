@@ -9,6 +9,11 @@ from PyCFFIlib_cffi import ffi, lib
 from djinni import exception # this forces run of __init__.py which gives cpp option to call back into py to create exception
 
 class FooRecord:
+    """
+     this file is using mixed-case as in past this was causing
+     duplicate files creation error
+    """
+
     c_data_set = MultiSet()
 
     @staticmethod
