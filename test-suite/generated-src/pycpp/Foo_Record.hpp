@@ -8,6 +8,10 @@
 
 namespace testsuite {
 
+/**
+ * this file is using mixed-case as in past this was causing
+ * duplicate files creation error
+ */
 struct FooRecord final {
     std::string a;
 

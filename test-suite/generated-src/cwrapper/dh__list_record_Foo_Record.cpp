@@ -32,9 +32,9 @@ void list_record_Foo_Record_add_callback__get_size(size_t( * ptr)(DjinniObjectHa
     s_py_callback_list_record_Foo_Record__get_size = ptr;
 }
 
-static DjinniObjectHandle * ( * s_py_callback_list_record_Foo_Record__python_create)();
+static DjinniObjectHandle * ( * s_py_callback_list_record_Foo_Record__python_create)(void);
 
-void list_record_Foo_Record_add_callback__python_create(DjinniObjectHandle *( * ptr)()) {
+void list_record_Foo_Record_add_callback__python_create(DjinniObjectHandle *( * ptr)(void)) {
     s_py_callback_list_record_Foo_Record__python_create = ptr;
 }
 
