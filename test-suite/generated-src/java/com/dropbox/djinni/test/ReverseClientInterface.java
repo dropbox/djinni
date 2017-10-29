@@ -7,20 +7,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class ReverseClientInterface {
+public interface ReverseClientInterface {
     @Nonnull
-    public abstract String returnStr();
+    public String returnStr();
 
     @Nonnull
-    public abstract String methTakingInterface(@CheckForNull ReverseClientInterface i);
+    public String methTakingInterface(@CheckForNull ReverseClientInterface i);
 
     @Nonnull
-    public abstract String methTakingOptionalInterface(@CheckForNull ReverseClientInterface i);
+    public String methTakingOptionalInterface(@CheckForNull ReverseClientInterface i);
 
     @CheckForNull
     public static native ReverseClientInterface create();
 
-    public static final class CppProxy extends ReverseClientInterface
+    public static final class CppProxy implements ReverseClientInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

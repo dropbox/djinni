@@ -8,13 +8,13 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Used for C++ multiple inheritance tests */
-public abstract class ReturnTwo {
-    public abstract byte returnTwo();
+public interface ReturnTwo {
+    public byte returnTwo();
 
     @CheckForNull
     public static native ReturnTwo getInstance();
 
-    public static final class CppProxy extends ReturnTwo
+    public static final class CppProxy implements ReturnTwo
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

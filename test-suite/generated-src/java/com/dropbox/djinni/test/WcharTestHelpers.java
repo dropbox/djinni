@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class WcharTestHelpers {
+public interface WcharTestHelpers {
     @Nonnull
     public static native WcharTestRec getRecord();
 
@@ -18,7 +18,7 @@ public abstract class WcharTestHelpers {
 
     public static native boolean checkRecord(@Nonnull WcharTestRec rec);
 
-    public static final class CppProxy extends WcharTestHelpers
+    public static final class CppProxy implements WcharTestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

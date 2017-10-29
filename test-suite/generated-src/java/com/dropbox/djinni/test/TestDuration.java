@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class TestDuration {
+public interface TestDuration {
     @Nonnull
     public static native String hoursString(@Nonnull java.time.Duration dt);
 
@@ -67,7 +67,7 @@ public abstract class TestDuration {
 
     public static native long unbox(@CheckForNull java.time.Duration dt);
 
-    public static final class CppProxy extends TestDuration
+    public static final class CppProxy implements TestDuration
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

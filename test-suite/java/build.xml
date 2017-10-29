@@ -35,7 +35,7 @@
 	  <arg value="install"/>
 	</exec>
     <mkdir dir="build/classes"/>
-    <javac destdir="build/classes" includeantruntime="false" encoding="UTF-8" debug="on" target="1.7" source="1.7">
+    <javac destdir="build/classes" includeantruntime="false" encoding="UTF-8" debug="on" target="1.8" source="1.8">
       <classpath>
         <fileset dir="../../deps/java/"><include name="*.jar"/></fileset>
         <fileset dir="../../deps/java/test"><include name="*.jar"/></fileset>

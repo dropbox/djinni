@@ -13,15 +13,15 @@ import javax.annotation.Nonnull;
  * languages, due to the details of multiple inheritance and object
  * comparison.
  */
-public abstract class ListenerCaller {
-    public abstract void callFirst();
+public interface ListenerCaller {
+    public void callFirst();
 
-    public abstract void callSecond();
+    public void callSecond();
 
     @CheckForNull
     public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
 
-    public static final class CppProxy extends ListenerCaller
+    public static final class CppProxy implements ListenerCaller
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

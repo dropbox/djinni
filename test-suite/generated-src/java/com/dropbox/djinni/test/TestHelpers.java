@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
-public abstract class TestHelpers {
+public interface TestHelpers {
     /** Method with documentation */
     @Nonnull
     public static native SetRecord getSetRecord();
@@ -82,7 +82,7 @@ public abstract class TestHelpers {
     @Nonnull
     public static native byte[] idBinary(@Nonnull byte[] b);
 
-    public static final class CppProxy extends TestHelpers
+    public static final class CppProxy implements TestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
