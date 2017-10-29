@@ -145,16 +145,14 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
 
       javaAnnotationHeader.foreach(w.wl)
 
-      // If generating Java interfaces, as opposed to abstract classes, was not requested, or if
-      // the corresponding Djinni interface includes static methods, which Java interfaces
-      // cannot include, generate an an abstract class. Otherwise, generate an interface.
-      val isAbstractClass = (spec.javaGenerateInterfaces == false) || i.methods.exists(_.static)
-      val classPrefix = if (isAbstractClass) "abstract class" else "interface"
-      val methodPrefix = if (isAbstractClass) "abstract " else ""
-      val extendsKeyword = if (isAbstractClass) "extends" else "implements"
+      // Generate an interface or an abstract class depending on whether the use
+      // of Java interfaces was requested.
+      val classPrefix = if (spec.javaGenerateInterfaces) "interface" else "abstract class"
+      val methodPrefix = if (spec.javaGenerateInterfaces) "" else "abstract "
+      val extendsKeyword = if (spec.javaGenerateInterfaces) "implements" else "extends"
       w.w(s"${javaClassAccessModifierString}$classPrefix $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
-        generateJavaConstants(w, i.consts, isAbstractClass == false)
+        generateJavaConstants(w, i.consts, spec.javaGenerateInterfaces)
 
         val throwException = spec.javaCppException.fold("")(" throws " + _)
         for (m <- i.methods if !m.static) {
