@@ -180,7 +180,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          w.wl(s"public static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
+          val cppProxyAccessibility = if (spec.javaGenerateInterfaces) "public" else "private"
+          w.wl(s"$cppProxyAccessibility static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl
