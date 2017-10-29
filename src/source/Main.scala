@@ -16,7 +16,7 @@
 
 package djinni
 
-import java.io.{IOException, FileInputStream, InputStreamReader, File, BufferedWriter, FileWriter}
+import java.io.{IOException, FileNotFoundException, FileInputStream, InputStreamReader, File, BufferedWriter, FileWriter}
 
 import djinni.generatorTools._
 
@@ -24,6 +24,7 @@ object Main {
 
   def main(args: Array[String]) {
     var idlFile: File = null
+    var idlIncludePaths: List[String] = List("")
     var cppOutFolder: Option[File] = None
     var cppNamespace: String = ""
     var cppIncludePrefix: String = ""
@@ -44,6 +45,7 @@ object Main {
     var javaGenerateInterfaces: Boolean = false
     var javaNullableAnnotation: Option[String] = None
     var javaNonnullAnnotation: Option[String] = None
+    var javaImplementAndroidOsParcelable : Boolean = false
     var javaUseFinalForRecord: Boolean = true
     var jniOutFolder: Option[File] = None
     var jniHeaderOutFolderOptional: Option[File] = None
@@ -68,6 +70,7 @@ object Main {
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
     var objcExtendedRecordIncludePrefix: String = ""
+    var objcSwiftBridgingHeader: Option[String] = None
     var objcppIncludePrefix: String = ""
     var objcppIncludeCppPrefix: String = ""
     var objcppIncludeObjcPrefixOptional: Option[String] = None
@@ -96,6 +99,8 @@ object Main {
       help("help")
       opt[File]("idl").valueName("<in-file>").required().foreach(idlFile = _)
         .text("The IDL file with the type definitions, typically with extension \".djinni\".")
+      opt[String]("idl-include-path").valueName("<path> ...").optional().unbounded().foreach(x => idlIncludePaths = idlIncludePaths :+ x)
+        .text("An include path to search for Djinni @import directives. Can specify multiple paths.")
       note("")
       opt[File]("java-out").valueName("<out-folder>").foreach(x => javaOutFolder = Some(x))
         .text("The output for the Java files (Generator disabled if unspecified).")
@@ -113,6 +118,8 @@ object Main {
         .text("Java annotation (@Nullable) to place on all fields and return values that are optional")
       opt[String]("java-nonnull-annotation").valueName("<nonnull-annotation-class>").foreach(x => javaNonnullAnnotation = Some(x))
         .text("Java annotation (@Nonnull) to place on all fields and return values that are not optional")
+      opt[Boolean]("java-implement-android-os-parcelable").valueName("<true/false>").foreach(x => javaImplementAndroidOsParcelable = x)
+        .text("all generated java classes will implement the interface android.os.Parcelable")
       opt[Boolean]("java-use-final-for-record").valueName("<use-final-for-record>").foreach(x => javaUseFinalForRecord = x)
         .text("Whether generated Java classes for records should be marked 'final' (default: true). ")
       note("")
@@ -164,6 +171,8 @@ object Main {
         .text("The prefix for Objective-C data types (usually two or three letters)")
       opt[String]("objc-include-prefix").valueName("<prefix>").foreach(objcIncludePrefix = _)
         .text("The prefix for #import of header files from Objective-C files.")
+      opt[String]("objc-swift-bridging-header").valueName("<name>").foreach(x => objcSwiftBridgingHeader = Some(x))
+        .text("The name of Objective-C Bridging Header used in XCode's Swift projects.")
       note("")
       opt[File]("objcpp-out").valueName("<out-folder>").foreach(x => objcppOutFolder = Some(x))
         .text("The output folder for private Objective-C++ files (Generator disabled if unspecified).")
@@ -201,6 +210,7 @@ object Main {
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
       identStyle("ident-java-field",     c => { javaIdentStyle = javaIdentStyle.copy(field = c) })
+      identStyle("ident-java-type",      c => { javaIdentStyle = javaIdentStyle.copy(ty = c) })
       identStyle("ident-cpp-enum",       c => { cppIdentStyle = cppIdentStyle.copy(enum = c) })
       identStyle("ident-cpp-field",      c => { cppIdentStyle = cppIdentStyle.copy(field = c) })
       identStyle("ident-cpp-method",     c => { cppIdentStyle = cppIdentStyle.copy(method = c) })
@@ -209,8 +219,8 @@ object Main {
       identStyle("ident-cpp-type-param", c => { cppIdentStyle = cppIdentStyle.copy(typeParam = c) })
       identStyle("ident-cpp-local",      c => { cppIdentStyle = cppIdentStyle.copy(local = c) })
       identStyle("ident-cpp-file",       c => { cppFileIdentStyle = c })
-      identStyle("ident-jni-class",           c => {jniClassIdentStyleOptional = Some(c)})
-      identStyle("ident-jni-file",            c => {jniFileIdentStyleOptional = Some(c)})
+      identStyle("ident-jni-class",      c => { jniClassIdentStyleOptional = Some(c)})
+      identStyle("ident-jni-file",       c => { jniFileIdentStyleOptional = Some(c)})
       identStyle("ident-objc-enum",       c => { objcIdentStyle = objcIdentStyle.copy(enum = c) })
       identStyle("ident-objc-field",      c => { objcIdentStyle = objcIdentStyle.copy(field = c) })
       identStyle("ident-objc-method",     c => { objcIdentStyle = objcIdentStyle.copy(method = c) })
@@ -251,10 +261,10 @@ object Main {
       None
     }
     val idl = try {
-      (new Parser).parseFile(idlFile, inFileListWriter)
+      (new Parser(idlIncludePaths)).parseFile(idlFile, inFileListWriter)
     }
     catch {
-      case ex: IOException =>
+      case ex @ (_: FileNotFoundException | _: IOException) =>
         System.err.println("Error reading from --idl file: " + ex.getMessage)
         System.exit(1); return
     }
@@ -281,6 +291,14 @@ object Main {
     } else {
       None
     }
+    val objcSwiftBridgingHeaderWriter = if (objcSwiftBridgingHeader.isDefined && objcOutFolder.isDefined) {
+      val objcSwiftBridgingHeaderFile = new File(objcOutFolder.get.getPath, objcSwiftBridgingHeader.get + ".h")
+      if (objcSwiftBridgingHeaderFile.getParentFile != null)
+        createFolder("output file list", objcSwiftBridgingHeaderFile.getParentFile)
+      Some(new BufferedWriter(new FileWriter(objcSwiftBridgingHeaderFile)))
+    } else {
+      None
+    }
 
     val outSpec = Spec(
       javaOutFolder,
@@ -292,6 +310,7 @@ object Main {
       javaGenerateInterfaces,
       javaNullableAnnotation,
       javaNonnullAnnotation,
+      javaImplementAndroidOsParcelable,
       javaUseFinalForRecord,
       cppOutFolder,
       cppHeaderOutFolder,
@@ -330,6 +349,7 @@ object Main {
       objcppIncludeObjcPrefix,
       objcppNamespace,
       objcBaseLibIncludePrefix,
+      objcSwiftBridgingHeaderWriter,
       outFileListWriter,
       skipGeneration,
       yamlOutFolder,
@@ -344,6 +364,9 @@ object Main {
     finally {
       if (outFileListWriter.isDefined) {
         outFileListWriter.get.close()
+      }
+      if (objcSwiftBridgingHeaderWriter.isDefined) {
+        objcSwiftBridgingHeaderWriter.get.close()
       }
     }
   }

@@ -14,14 +14,15 @@ namespace djinni_generated {
 
 class ExternInterface2::ObjcProxy final
 : public ::ExternInterface2
-, public ::djinni::ObjcProxyCache::Handle<ObjcType>
+, private ::djinni::ObjcProxyBase<ObjcType>
 {
+    friend class ::djinni_generated::ExternInterface2;
 public:
-    using Handle::Handle;
+    using ObjcProxyBase::ObjcProxyBase;
     ::ExternRecordWithDerivings foo(const std::shared_ptr<::testsuite::TestHelpers> & c_i) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [Handle::get() foo:(::djinni_generated::TestHelpers::fromCpp(c_i))];
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() foo:(::djinni_generated::TestHelpers::fromCpp(c_i))];
             return ::djinni_generated::ExternRecordWithDerivings::toCpp(objcpp_result_);
         }
     }
@@ -44,7 +45,7 @@ auto ExternInterface2::fromCppOpt(const CppOptType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();
+    return dynamic_cast<ObjcProxy&>(*cpp).djinni_private_get_proxied_objc_object();
 }
 
 }  // namespace djinni_generated

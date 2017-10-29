@@ -64,19 +64,26 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
     val cppSelf = cppMarshal.fqTypename(ident, e)
 
     writeJniHppFile(ident, origin, Iterable.concat(refs.jniHpp, refs.jniCpp), Nil, w => {
-      w.w(s"class $jniHelper final : ::djinni::JniEnum").bracedSemi {
+      val base = if(e.flags) "JniFlags" else "JniEnum"
+      val count = normalEnumOptions(e).length
+      w.w(s"class $jniHelper final : ::djinni::$base").bracedSemi {
         w.wlOutdent("public:")
         w.wl(s"using CppType = $cppSelf;")
         w.wl(s"using JniType = jobject;")
         w.wl
         w.wl(s"using Boxed = $jniHelper;")
         w.wl
-        w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<$jniHelper>::get().ordinal(jniEnv, j)); }")
-        w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<jint>(c)); }")
+        if(e.flags) {
+          w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<$jniHelper>::get().flags(jniEnv, j)); }")
+          w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<unsigned>(c), $count); }")
+        } else {
+          w.wl(s"static CppType toCpp(JNIEnv* jniEnv, JniType j) { return static_cast<CppType>(::djinni::JniClass<$jniHelper>::get().ordinal(jniEnv, j)); }")
+          w.wl(s"static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, CppType c) { return ::djinni::JniClass<$jniHelper>::get().create(jniEnv, static_cast<jint>(c)); }")
+        }
         w.wl
         w.wlOutdent("private:")
         val classLookup = q(jniMarshal.undecoratedTypename(ident, e))
-        w.wl(s"$jniHelper() : JniEnum($classLookup) {}")
+        w.wl(s"$jniHelper() : $base($classLookup) {}")
         w.wl(s"friend ::djinni::JniClass<$jniHelper>;")
       }
     })

@@ -53,6 +53,8 @@ class ObjcppMarshal(spec: Spec) extends Marshal(spec) {
   def helperClass(name: String) = idCpp.ty(name)
   private def helperClass(tm: MExpr): String = helperName(tm) + helperTemplates(tm)
 
+  def helperClassWithNs(name: String) = withNs(Some(spec.objcppNamespace), helperClass(name))
+
   def privateHeaderName(ident: String): String = idObjc.ty(ident) + "+Private." + spec.objcHeaderExt
 
   def helperName(tm: MExpr): String = tm.base match {

@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class AssortedPrimitives {
+public class AssortedPrimitives implements android.os.Parcelable {
 
 
     /*package*/ final boolean mB;
@@ -192,6 +192,123 @@ public class AssortedPrimitives {
                 "," + "mOFthirtytwo=" + mOFthirtytwo +
                 "," + "mOFsixtyfour=" + mOFsixtyfour +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<AssortedPrimitives> CREATOR
+        = new android.os.Parcelable.Creator<AssortedPrimitives>() {
+        @Override
+        public AssortedPrimitives createFromParcel(android.os.Parcel in) {
+            return new AssortedPrimitives(in);
+        }
+
+        @Override
+        public AssortedPrimitives[] newArray(int size) {
+            return new AssortedPrimitives[size];
+        }
+    };
+
+    public AssortedPrimitives(android.os.Parcel in) {
+        this.mB = in.readByte() != 0;
+        this.mEight = in.readByte();
+        this.mSixteen = (short)in.readInt();
+        this.mThirtytwo = in.readInt();
+        this.mSixtyfour = in.readLong();
+        this.mFthirtytwo = in.readFloat();
+        this.mFsixtyfour = in.readDouble();
+        if (in.readByte() == 0) {
+            this.mOB = null;
+        } else {
+            this.mOB = in.readByte() != 0;
+        }
+        if (in.readByte() == 0) {
+            this.mOEight = null;
+        } else {
+            this.mOEight = in.readByte();
+        }
+        if (in.readByte() == 0) {
+            this.mOSixteen = null;
+        } else {
+            this.mOSixteen = (short)in.readInt();
+        }
+        if (in.readByte() == 0) {
+            this.mOThirtytwo = null;
+        } else {
+            this.mOThirtytwo = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            this.mOSixtyfour = null;
+        } else {
+            this.mOSixtyfour = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            this.mOFthirtytwo = null;
+        } else {
+            this.mOFthirtytwo = in.readFloat();
+        }
+        if (in.readByte() == 0) {
+            this.mOFsixtyfour = null;
+        } else {
+            this.mOFsixtyfour = in.readDouble();
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeByte(this.mB ? (byte)1 : 0);
+        out.writeByte(this.mEight);
+        out.writeInt(this.mSixteen);
+        out.writeInt(this.mThirtytwo);
+        out.writeLong(this.mSixtyfour);
+        out.writeFloat(this.mFthirtytwo);
+        out.writeDouble(this.mFsixtyfour);
+        if (this.mOB != null) {
+            out.writeByte((byte)1);
+            out.writeByte(this.mOB ? (byte)1 : 0);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOEight != null) {
+            out.writeByte((byte)1);
+            out.writeByte(this.mOEight);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOSixteen != null) {
+            out.writeByte((byte)1);
+            out.writeInt(this.mOSixteen);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOThirtytwo != null) {
+            out.writeByte((byte)1);
+            out.writeInt(this.mOThirtytwo);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOSixtyfour != null) {
+            out.writeByte((byte)1);
+            out.writeLong(this.mOSixtyfour);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOFthirtytwo != null) {
+            out.writeByte((byte)1);
+            out.writeFloat(this.mOFthirtytwo);
+        } else {
+            out.writeByte((byte)0);
+        }
+        if (this.mOFsixtyfour != null) {
+            out.writeByte((byte)1);
+            out.writeDouble(this.mOFsixtyfour);
+        } else {
+            out.writeByte((byte)0);
+        }
     }
 
 }

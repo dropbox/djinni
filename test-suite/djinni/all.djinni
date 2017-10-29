@@ -1,4 +1,4 @@
 @import "common.djinni"
 
-@import "date.djinni"
-@import "duration.djinni"
+@import "vendor/third-party/date.djinni"
+@import "third-party/duration.djinni"

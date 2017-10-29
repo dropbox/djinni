@@ -73,7 +73,8 @@ class CppMarshal(spec: Spec) extends Marshal(spec) {
       case e: Enum =>
         if (d.name != exclude) {
           if (forwardDeclareOnly) {
-            List(DeclRef(s"enum class ${typename(d.name, d.body)};", Some(spec.cppNamespace)))
+            val underlyingType = if(e.flags) " : unsigned" else ""
+            List(DeclRef(s"enum class ${typename(d.name, d.body)}${underlyingType};", Some(spec.cppNamespace)))
           } else {
             List(ImportRef(include(d.name)))
           }

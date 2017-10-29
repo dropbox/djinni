@@ -17,7 +17,7 @@ enum_usage_record = record {
     l: list<color>;
     s: set<color>;
     m: map<color, color>;
-}
+} deriving(parcelable)
 
 enum_usage_interface = interface +c +j +o {
     e(e: color): color;
@@ -25,4 +25,34 @@ enum_usage_interface = interface +c +j +o {
     l(l: list<color>): list<color>;
     s(s: set<color>): set<color>;
     m(m: map<color, color>): map<color, color>;
+}
+
+access_flags = flags {
+  nobody = none;
+  owner_read;
+  owner_write;
+  owner_execute;
+  group_read;
+  group_write;
+  group_execute;
+  system_read;
+  system_write;
+  system_execute;
+  everybody = all;
+}
+
+empty_flags = flags {
+  none = none;
+  all = all;
+}
+
+flag_roundtrip = interface +c {
+  static roundtrip_access(flag: access_flags): access_flags;
+  static roundtrip_empty(flag: empty_flags): empty_flags;
+  static roundtrip_access_boxed(flag: optional<access_flags>): optional<access_flags>;
+  static roundtrip_empty_boxed(flag: optional<empty_flags>): optional<empty_flags>;
+}
+
+record_with_flags = record {
+  access: access_flags;
 }
