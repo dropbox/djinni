@@ -135,7 +135,6 @@ cp "$base_dir/djinni/yaml-test.djinni" "$temp_out/yaml"
 "$base_dir/../src/run-assume-built" \
     --java-out "$temp_out_relative/java" \
     --java-package $java_package \
-    --java-generate-interfaces true \
     --ident-java-field mFooBar \
     \
     --cpp-out "$temp_out_relative/cpp" \

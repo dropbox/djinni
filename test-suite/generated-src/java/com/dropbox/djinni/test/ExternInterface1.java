@@ -5,10 +5,10 @@ package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public interface ExternInterface1 {
-    public com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i);
+public abstract class ExternInterface1 {
+    public abstract com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i);
 
-    static final class CppProxy implements ExternInterface1
+    private static final class CppProxy extends ExternInterface1
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
