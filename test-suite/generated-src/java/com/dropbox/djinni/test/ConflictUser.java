@@ -14,7 +14,11 @@ public interface ConflictUser {
 
     public boolean conflictArg(@Nonnull HashSet<Conflict> cs);
 
-    public static final class CppProxy implements ConflictUser
+    static final class StaticNativeMethods
+    {
+    }
+
+    static final class CppProxy implements ConflictUser
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

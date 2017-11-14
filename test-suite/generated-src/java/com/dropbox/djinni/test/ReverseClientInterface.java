@@ -18,9 +18,19 @@ public interface ReverseClientInterface {
     public String methTakingOptionalInterface(@CheckForNull ReverseClientInterface i);
 
     @CheckForNull
-    public static native ReverseClientInterface create();
+    public static ReverseClientInterface create()
+    {
+        return StaticNativeMethods.create();
+    }
 
-    public static final class CppProxy implements ReverseClientInterface
+    static final class StaticNativeMethods
+    {
+
+        @CheckForNull
+        public static native ReverseClientInterface create();
+    }
+
+    static final class CppProxy implements ReverseClientInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

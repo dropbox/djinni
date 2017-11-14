@@ -16,73 +16,221 @@ import javax.annotation.Nonnull;
 public interface TestHelpers {
     /** Method with documentation */
     @Nonnull
-    public static native SetRecord getSetRecord();
+    public static SetRecord getSetRecord()
+    {
+        return StaticNativeMethods.getSetRecord();
+    }
 
     /**
      * Method with long documentation
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
      */
-    public static native boolean checkSetRecord(@Nonnull SetRecord rec);
+    public static boolean checkSetRecord(@Nonnull SetRecord rec)
+    {
+        return StaticNativeMethods.checkSetRecord(rec);
+    }
 
     @Nonnull
-    public static native PrimitiveList getPrimitiveList();
+    public static PrimitiveList getPrimitiveList()
+    {
+        return StaticNativeMethods.getPrimitiveList();
+    }
 
-    public static native boolean checkPrimitiveList(@Nonnull PrimitiveList pl);
-
-    @Nonnull
-    public static native NestedCollection getNestedCollection();
-
-    public static native boolean checkNestedCollection(@Nonnull NestedCollection nc);
-
-    @Nonnull
-    public static native HashMap<String, Long> getMap();
-
-    public static native boolean checkMap(@Nonnull HashMap<String, Long> m);
+    public static boolean checkPrimitiveList(@Nonnull PrimitiveList pl)
+    {
+        return StaticNativeMethods.checkPrimitiveList(pl);
+    }
 
     @Nonnull
-    public static native HashMap<String, Long> getEmptyMap();
+    public static NestedCollection getNestedCollection()
+    {
+        return StaticNativeMethods.getNestedCollection();
+    }
 
-    public static native boolean checkEmptyMap(@Nonnull HashMap<String, Long> m);
+    public static boolean checkNestedCollection(@Nonnull NestedCollection nc)
+    {
+        return StaticNativeMethods.checkNestedCollection(nc);
+    }
 
     @Nonnull
-    public static native MapListRecord getMapListRecord();
+    public static HashMap<String, Long> getMap()
+    {
+        return StaticNativeMethods.getMap();
+    }
 
-    public static native boolean checkMapListRecord(@Nonnull MapListRecord m);
+    public static boolean checkMap(@Nonnull HashMap<String, Long> m)
+    {
+        return StaticNativeMethods.checkMap(m);
+    }
 
-    public static native void checkClientInterfaceAscii(@CheckForNull ClientInterface i);
+    @Nonnull
+    public static HashMap<String, Long> getEmptyMap()
+    {
+        return StaticNativeMethods.getEmptyMap();
+    }
 
-    public static native void checkClientInterfaceNonascii(@CheckForNull ClientInterface i);
+    public static boolean checkEmptyMap(@Nonnull HashMap<String, Long> m)
+    {
+        return StaticNativeMethods.checkEmptyMap(m);
+    }
 
-    public static native void checkClientInterfaceArgs(@CheckForNull ClientInterface i);
+    @Nonnull
+    public static MapListRecord getMapListRecord()
+    {
+        return StaticNativeMethods.getMapListRecord();
+    }
 
-    public static native void checkEnumMap(@Nonnull HashMap<Color, String> m);
+    public static boolean checkMapListRecord(@Nonnull MapListRecord m)
+    {
+        return StaticNativeMethods.checkMapListRecord(m);
+    }
 
-    public static native void checkEnum(@Nonnull Color c);
+    public static void checkClientInterfaceAscii(@CheckForNull ClientInterface i)
+    {
+        StaticNativeMethods.checkClientInterfaceAscii(i);
+    }
+
+    public static void checkClientInterfaceNonascii(@CheckForNull ClientInterface i)
+    {
+        StaticNativeMethods.checkClientInterfaceNonascii(i);
+    }
+
+    public static void checkClientInterfaceArgs(@CheckForNull ClientInterface i)
+    {
+        StaticNativeMethods.checkClientInterfaceArgs(i);
+    }
+
+    public static void checkEnumMap(@Nonnull HashMap<Color, String> m)
+    {
+        StaticNativeMethods.checkEnumMap(m);
+    }
+
+    public static void checkEnum(@Nonnull Color c)
+    {
+        StaticNativeMethods.checkEnum(c);
+    }
 
     @CheckForNull
-    public static native UserToken tokenId(@CheckForNull UserToken t);
+    public static UserToken tokenId(@CheckForNull UserToken t)
+    {
+        return StaticNativeMethods.tokenId(t);
+    }
 
     @CheckForNull
-    public static native UserToken createCppToken();
+    public static UserToken createCppToken()
+    {
+        return StaticNativeMethods.createCppToken();
+    }
 
-    public static native void checkCppToken(@CheckForNull UserToken t);
+    public static void checkCppToken(@CheckForNull UserToken t)
+    {
+        StaticNativeMethods.checkCppToken(t);
+    }
 
-    public static native long cppTokenId(@CheckForNull UserToken t);
+    public static long cppTokenId(@CheckForNull UserToken t)
+    {
+        return StaticNativeMethods.cppTokenId(t);
+    }
 
-    public static native void checkTokenType(@CheckForNull UserToken t, @Nonnull String type);
+    public static void checkTokenType(@CheckForNull UserToken t, @Nonnull String type)
+    {
+        StaticNativeMethods.checkTokenType(t,
+                                           type);
+    }
 
     @CheckForNull
-    public static native Integer returnNone();
+    public static Integer returnNone()
+    {
+        return StaticNativeMethods.returnNone();
+    }
 
     /** Ensures that we generate integer translation code */
     @Nonnull
-    public static native AssortedPrimitives assortedPrimitivesId(@Nonnull AssortedPrimitives i);
+    public static AssortedPrimitives assortedPrimitivesId(@Nonnull AssortedPrimitives i)
+    {
+        return StaticNativeMethods.assortedPrimitivesId(i);
+    }
 
     @Nonnull
-    public static native byte[] idBinary(@Nonnull byte[] b);
+    public static byte[] idBinary(@Nonnull byte[] b)
+    {
+        return StaticNativeMethods.idBinary(b);
+    }
 
-    public static final class CppProxy implements TestHelpers
+    static final class StaticNativeMethods
+    {
+
+        /** Method with documentation */
+        @Nonnull
+        public static native SetRecord getSetRecord();
+
+        /**
+         * Method with long documentation
+         * (Second line of multi-line documentation.
+         *   Indented third line of multi-line documentation.)
+         */
+        public static native boolean checkSetRecord(@Nonnull SetRecord rec);
+
+        @Nonnull
+        public static native PrimitiveList getPrimitiveList();
+
+        public static native boolean checkPrimitiveList(@Nonnull PrimitiveList pl);
+
+        @Nonnull
+        public static native NestedCollection getNestedCollection();
+
+        public static native boolean checkNestedCollection(@Nonnull NestedCollection nc);
+
+        @Nonnull
+        public static native HashMap<String, Long> getMap();
+
+        public static native boolean checkMap(@Nonnull HashMap<String, Long> m);
+
+        @Nonnull
+        public static native HashMap<String, Long> getEmptyMap();
+
+        public static native boolean checkEmptyMap(@Nonnull HashMap<String, Long> m);
+
+        @Nonnull
+        public static native MapListRecord getMapListRecord();
+
+        public static native boolean checkMapListRecord(@Nonnull MapListRecord m);
+
+        public static native void checkClientInterfaceAscii(@CheckForNull ClientInterface i);
+
+        public static native void checkClientInterfaceNonascii(@CheckForNull ClientInterface i);
+
+        public static native void checkClientInterfaceArgs(@CheckForNull ClientInterface i);
+
+        public static native void checkEnumMap(@Nonnull HashMap<Color, String> m);
+
+        public static native void checkEnum(@Nonnull Color c);
+
+        @CheckForNull
+        public static native UserToken tokenId(@CheckForNull UserToken t);
+
+        @CheckForNull
+        public static native UserToken createCppToken();
+
+        public static native void checkCppToken(@CheckForNull UserToken t);
+
+        public static native long cppTokenId(@CheckForNull UserToken t);
+
+        public static native void checkTokenType(@CheckForNull UserToken t, @Nonnull String type);
+
+        @CheckForNull
+        public static native Integer returnNone();
+
+        /** Ensures that we generate integer translation code */
+        @Nonnull
+        public static native AssortedPrimitives assortedPrimitivesId(@Nonnull AssortedPrimitives i);
+
+        @Nonnull
+        public static native byte[] idBinary(@Nonnull byte[] b);
+    }
+
+    static final class CppProxy implements TestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

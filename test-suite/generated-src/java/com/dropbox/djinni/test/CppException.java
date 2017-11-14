@@ -11,9 +11,19 @@ public interface CppException {
     public int throwAnException();
 
     @CheckForNull
-    public static native CppException get();
+    public static CppException get()
+    {
+        return StaticNativeMethods.get();
+    }
 
-    public static final class CppProxy implements CppException
+    static final class StaticNativeMethods
+    {
+
+        @CheckForNull
+        public static native CppException get();
+    }
+
+    static final class CppProxy implements CppException
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

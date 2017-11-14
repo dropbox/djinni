@@ -19,9 +19,20 @@ public interface ListenerCaller {
     public void callSecond();
 
     @CheckForNull
-    public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
+    public static ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL)
+    {
+        return StaticNativeMethods.init(firstL,
+                                        secondL);
+    }
 
-    public static final class CppProxy implements ListenerCaller
+    static final class StaticNativeMethods
+    {
+
+        @CheckForNull
+        public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
+    }
+
+    static final class CppProxy implements ListenerCaller
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

@@ -12,9 +12,19 @@ public interface ReturnTwo {
     public byte returnTwo();
 
     @CheckForNull
-    public static native ReturnTwo getInstance();
+    public static ReturnTwo getInstance()
+    {
+        return StaticNativeMethods.getInstance();
+    }
 
-    public static final class CppProxy implements ReturnTwo
+    static final class StaticNativeMethods
+    {
+
+        @CheckForNull
+        public static native ReturnTwo getInstance();
+    }
+
+    static final class CppProxy implements ReturnTwo
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

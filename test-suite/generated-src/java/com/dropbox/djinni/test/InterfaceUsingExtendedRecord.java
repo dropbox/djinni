@@ -16,7 +16,11 @@ public interface InterfaceUsingExtendedRecord {
     @Nonnull
     public ExtendedRecord meth(@Nonnull ExtendedRecord er);
 
-    public static final class CppProxy implements InterfaceUsingExtendedRecord
+    static final class StaticNativeMethods
+    {
+    }
+
+    static final class CppProxy implements InterfaceUsingExtendedRecord
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

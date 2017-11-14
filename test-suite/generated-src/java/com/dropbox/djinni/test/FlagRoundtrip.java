@@ -10,18 +10,46 @@ import javax.annotation.Nonnull;
 
 public interface FlagRoundtrip {
     @Nonnull
-    public static native EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag);
+    public static EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag)
+    {
+        return StaticNativeMethods.roundtripAccess(flag);
+    }
 
     @Nonnull
-    public static native EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag);
+    public static EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag)
+    {
+        return StaticNativeMethods.roundtripEmpty(flag);
+    }
 
     @CheckForNull
-    public static native EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag);
+    public static EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag)
+    {
+        return StaticNativeMethods.roundtripAccessBoxed(flag);
+    }
 
     @CheckForNull
-    public static native EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag);
+    public static EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag)
+    {
+        return StaticNativeMethods.roundtripEmptyBoxed(flag);
+    }
 
-    public static final class CppProxy implements FlagRoundtrip
+    static final class StaticNativeMethods
+    {
+
+        @Nonnull
+        public static native EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag);
+
+        @Nonnull
+        public static native EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag);
+
+        @CheckForNull
+        public static native EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag);
+
+        @CheckForNull
+        public static native EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag);
+    }
+
+    static final class CppProxy implements FlagRoundtrip
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

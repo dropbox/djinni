@@ -150,6 +150,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       val classPrefix = if (spec.javaGenerateInterfaces) "interface" else "abstract class"
       val methodPrefix = if (spec.javaGenerateInterfaces) "" else "abstract "
       val extendsKeyword = if (spec.javaGenerateInterfaces) "implements" else "extends"
+      val innerClassAccessibility = if (spec.javaGenerateInterfaces) "" else "private "
       w.w(s"${javaClassAccessModifierString}$classPrefix $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
         generateJavaConstants(w, i.consts, spec.javaGenerateInterfaces)
@@ -166,22 +167,45 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl(s"public $methodPrefix" + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
+
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
           val ret = marshal.returnType(m.ret)
+          val returnPrefix = if (ret == "void") "" else "return "
           val params = m.params.map(p => {
             val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
             nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
           })
+
+          val args = m.params.map(p => idJava.local(p.ident))
+          val meth = idJava.method(m.ident)
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
-          w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
+          w.wl("public static "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")")).braced {
+            writeAlignedCall(w, s"${returnPrefix}StaticNativeMethods.${meth}(", m.params, ");", p => idJava.local(p.ident))
+            w.wl
+          }
         }
+
+        w.wl
+        w.wl(s"${innerClassAccessibility}static final class StaticNativeMethods").braced {     
+          for (m <- i.methods if m.static) {
+            skipFirst { w.wl }
+            writeDoc(w, m.doc)
+            val ret = marshal.returnType(m.ret)
+            val params = m.params.map(p => {
+              val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+              nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+            })
+            marshal.nullityAnnotation(m.ret).foreach(w.wl)
+            w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
+          }
+        }
+        
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          val cppProxyAccessibility = if (spec.javaGenerateInterfaces) "public" else "private"
-          w.wl(s"$cppProxyAccessibility static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
+          w.wl(s"${innerClassAccessibility}static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl

@@ -12,9 +12,19 @@ public interface ReturnOne {
     public byte returnOne();
 
     @CheckForNull
-    public static native ReturnOne getInstance();
+    public static ReturnOne getInstance()
+    {
+        return StaticNativeMethods.getInstance();
+    }
 
-    public static final class CppProxy implements ReturnOne
+    static final class StaticNativeMethods
+    {
+
+        @CheckForNull
+        public static native ReturnOne getInstance();
+    }
+
+    static final class CppProxy implements ReturnOne
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

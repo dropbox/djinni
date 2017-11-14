@@ -9,65 +9,188 @@ import javax.annotation.Nonnull;
 
 public interface TestDuration {
     @Nonnull
-    public static native String hoursString(@Nonnull java.time.Duration dt);
+    public static String hoursString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.hoursString(dt);
+    }
 
     @Nonnull
-    public static native String minutesString(@Nonnull java.time.Duration dt);
+    public static String minutesString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.minutesString(dt);
+    }
 
     @Nonnull
-    public static native String secondsString(@Nonnull java.time.Duration dt);
+    public static String secondsString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.secondsString(dt);
+    }
 
     @Nonnull
-    public static native String millisString(@Nonnull java.time.Duration dt);
+    public static String millisString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.millisString(dt);
+    }
 
     @Nonnull
-    public static native String microsString(@Nonnull java.time.Duration dt);
+    public static String microsString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.microsString(dt);
+    }
 
     @Nonnull
-    public static native String nanosString(@Nonnull java.time.Duration dt);
+    public static String nanosString(@Nonnull java.time.Duration dt)
+    {
+        return StaticNativeMethods.nanosString(dt);
+    }
 
     @Nonnull
-    public static native java.time.Duration hours(int count);
+    public static java.time.Duration hours(int count)
+    {
+        return StaticNativeMethods.hours(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration minutes(int count);
+    public static java.time.Duration minutes(int count)
+    {
+        return StaticNativeMethods.minutes(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration seconds(int count);
+    public static java.time.Duration seconds(int count)
+    {
+        return StaticNativeMethods.seconds(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration millis(int count);
+    public static java.time.Duration millis(int count)
+    {
+        return StaticNativeMethods.millis(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration micros(int count);
+    public static java.time.Duration micros(int count)
+    {
+        return StaticNativeMethods.micros(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration nanos(int count);
+    public static java.time.Duration nanos(int count)
+    {
+        return StaticNativeMethods.nanos(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration hoursf(double count);
+    public static java.time.Duration hoursf(double count)
+    {
+        return StaticNativeMethods.hoursf(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration minutesf(double count);
+    public static java.time.Duration minutesf(double count)
+    {
+        return StaticNativeMethods.minutesf(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration secondsf(double count);
+    public static java.time.Duration secondsf(double count)
+    {
+        return StaticNativeMethods.secondsf(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration millisf(double count);
+    public static java.time.Duration millisf(double count)
+    {
+        return StaticNativeMethods.millisf(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration microsf(double count);
+    public static java.time.Duration microsf(double count)
+    {
+        return StaticNativeMethods.microsf(count);
+    }
 
     @Nonnull
-    public static native java.time.Duration nanosf(double count);
+    public static java.time.Duration nanosf(double count)
+    {
+        return StaticNativeMethods.nanosf(count);
+    }
 
     @CheckForNull
-    public static native java.time.Duration box(long count);
+    public static java.time.Duration box(long count)
+    {
+        return StaticNativeMethods.box(count);
+    }
 
-    public static native long unbox(@CheckForNull java.time.Duration dt);
+    public static long unbox(@CheckForNull java.time.Duration dt)
+    {
+        return StaticNativeMethods.unbox(dt);
+    }
 
-    public static final class CppProxy implements TestDuration
+    static final class StaticNativeMethods
+    {
+
+        @Nonnull
+        public static native String hoursString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native String minutesString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native String secondsString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native String millisString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native String microsString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native String nanosString(@Nonnull java.time.Duration dt);
+
+        @Nonnull
+        public static native java.time.Duration hours(int count);
+
+        @Nonnull
+        public static native java.time.Duration minutes(int count);
+
+        @Nonnull
+        public static native java.time.Duration seconds(int count);
+
+        @Nonnull
+        public static native java.time.Duration millis(int count);
+
+        @Nonnull
+        public static native java.time.Duration micros(int count);
+
+        @Nonnull
+        public static native java.time.Duration nanos(int count);
+
+        @Nonnull
+        public static native java.time.Duration hoursf(double count);
+
+        @Nonnull
+        public static native java.time.Duration minutesf(double count);
+
+        @Nonnull
+        public static native java.time.Duration secondsf(double count);
+
+        @Nonnull
+        public static native java.time.Duration millisf(double count);
+
+        @Nonnull
+        public static native java.time.Duration microsf(double count);
+
+        @Nonnull
+        public static native java.time.Duration nanosf(double count);
+
+        @CheckForNull
+        public static native java.time.Duration box(long count);
+
+        public static native long unbox(@CheckForNull java.time.Duration dt);
+    }
+
+    static final class CppProxy implements TestDuration
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

@@ -9,16 +9,42 @@ import javax.annotation.Nonnull;
 
 public interface WcharTestHelpers {
     @Nonnull
-    public static native WcharTestRec getRecord();
+    public static WcharTestRec getRecord()
+    {
+        return StaticNativeMethods.getRecord();
+    }
 
     @Nonnull
-    public static native String getString();
+    public static String getString()
+    {
+        return StaticNativeMethods.getString();
+    }
 
-    public static native boolean checkString(@Nonnull String str);
+    public static boolean checkString(@Nonnull String str)
+    {
+        return StaticNativeMethods.checkString(str);
+    }
 
-    public static native boolean checkRecord(@Nonnull WcharTestRec rec);
+    public static boolean checkRecord(@Nonnull WcharTestRec rec)
+    {
+        return StaticNativeMethods.checkRecord(rec);
+    }
 
-    public static final class CppProxy implements WcharTestHelpers
+    static final class StaticNativeMethods
+    {
+
+        @Nonnull
+        public static native WcharTestRec getRecord();
+
+        @Nonnull
+        public static native String getString();
+
+        public static native boolean checkString(@Nonnull String str);
+
+        public static native boolean checkRecord(@Nonnull WcharTestRec rec);
+    }
+
+    static final class CppProxy implements WcharTestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

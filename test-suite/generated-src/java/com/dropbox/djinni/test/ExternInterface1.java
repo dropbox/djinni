@@ -8,7 +8,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public interface ExternInterface1 {
     public com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i);
 
-    public static final class CppProxy implements ExternInterface1
+    static final class StaticNativeMethods
+    {
+    }
+
+    static final class CppProxy implements ExternInterface1
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
