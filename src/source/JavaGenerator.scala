@@ -168,6 +168,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"public $methodPrefix" + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
 
+        // Implement the interface's static methods as calls to CppProxy's corresponding methods.
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeDoc(w, m.doc)
@@ -178,7 +179,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
           })
 
-          val args = m.params.map(p => idJava.local(p.ident))
           val meth = idJava.method(m.ident)
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")")).braced {
@@ -209,7 +209,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("super.finalize();")
             }
 
-            // Generate wrappers to the interface's non-static methods.
+            // Implement the interface's non-static methods.
             for (m <- i.methods if !m.static) {
               val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
@@ -228,7 +228,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             // Declare a native method for each of the interface's static methods.
             for (m <- i.methods if m.static) {
               skipFirst { w.wl }
-              writeDoc(w, m.doc)
               val ret = marshal.returnType(m.ret)
               val params = m.params.map(p => {
                 val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")

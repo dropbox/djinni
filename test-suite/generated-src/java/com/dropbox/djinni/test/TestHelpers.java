@@ -181,15 +181,9 @@ public interface TestHelpers {
             super.finalize();
         }
 
-        /** Method with documentation */
         @Nonnull
         public static native SetRecord getSetRecord();
 
-        /**
-         * Method with long documentation
-         * (Second line of multi-line documentation.
-         *   Indented third line of multi-line documentation.)
-         */
         public static native boolean checkSetRecord(@Nonnull SetRecord rec);
 
         @Nonnull
@@ -242,7 +236,6 @@ public interface TestHelpers {
         @CheckForNull
         public static native Integer returnNone();
 
-        /** Ensures that we generate integer translation code */
         @Nonnull
         public static native AssortedPrimitives assortedPrimitivesId(@Nonnull AssortedPrimitives i);
 
