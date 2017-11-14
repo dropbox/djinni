@@ -26,10 +26,6 @@ public interface EnumUsageInterface {
     @Nonnull
     public HashMap<Color, Color> m(@Nonnull HashMap<Color, Color> m);
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements EnumUsageInterface
     {
         private final long nativeRef;

@@ -14,14 +14,7 @@ public interface ReturnTwo {
     @CheckForNull
     public static ReturnTwo getInstance()
     {
-        return StaticNativeMethods.getInstance();
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @CheckForNull
-        public static native ReturnTwo getInstance();
+        return CppProxy.getInstance();
     }
 
     static final class CppProxy implements ReturnTwo
@@ -54,5 +47,8 @@ public interface ReturnTwo {
             return native_returnTwo(this.nativeRef);
         }
         private native byte native_returnTwo(long _nativeRef);
+
+        @CheckForNull
+        public static native ReturnTwo getInstance();
     }
 }

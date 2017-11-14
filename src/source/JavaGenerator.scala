@@ -182,23 +182,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           val meth = idJava.method(m.ident)
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")")).braced {
-            writeAlignedCall(w, s"${returnPrefix}StaticNativeMethods.${meth}(", m.params, ");", p => idJava.local(p.ident))
+            writeAlignedCall(w, s"${returnPrefix}CppProxy.${meth}(", m.params, ");", p => idJava.local(p.ident))
             w.wl
-          }
-        }
-
-        w.wl
-        w.wl(s"${innerClassAccessibility}static final class StaticNativeMethods").braced {     
-          for (m <- i.methods if m.static) {
-            skipFirst { w.wl }
-            writeDoc(w, m.doc)
-            val ret = marshal.returnType(m.ret)
-            val params = m.params.map(p => {
-              val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
-              nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
-            })
-            marshal.nullityAnnotation(m.ret).foreach(w.wl)
-            w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
           }
         }
         
@@ -223,7 +208,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
+
+            // Generate wrappers to the interface's non-static methods.
+            for (m <- i.methods if !m.static) {
               val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
@@ -236,6 +223,19 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
               }
               w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
+            }
+
+            // Declare a native method for each of the interface's static methods.
+            for (m <- i.methods if m.static) {
+              skipFirst { w.wl }
+              writeDoc(w, m.doc)
+              val ret = marshal.returnType(m.ret)
+              val params = m.params.map(p => {
+                val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+                nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+              })
+              marshal.nullityAnnotation(m.ret).foreach(w.wl)
+              w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
             }
           }
         }

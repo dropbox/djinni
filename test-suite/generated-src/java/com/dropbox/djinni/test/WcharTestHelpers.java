@@ -11,37 +11,23 @@ public interface WcharTestHelpers {
     @Nonnull
     public static WcharTestRec getRecord()
     {
-        return StaticNativeMethods.getRecord();
+        return CppProxy.getRecord();
     }
 
     @Nonnull
     public static String getString()
     {
-        return StaticNativeMethods.getString();
+        return CppProxy.getString();
     }
 
     public static boolean checkString(@Nonnull String str)
     {
-        return StaticNativeMethods.checkString(str);
+        return CppProxy.checkString(str);
     }
 
     public static boolean checkRecord(@Nonnull WcharTestRec rec)
     {
-        return StaticNativeMethods.checkRecord(rec);
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @Nonnull
-        public static native WcharTestRec getRecord();
-
-        @Nonnull
-        public static native String getString();
-
-        public static native boolean checkString(@Nonnull String str);
-
-        public static native boolean checkRecord(@Nonnull WcharTestRec rec);
+        return CppProxy.checkRecord(rec);
     }
 
     static final class CppProxy implements WcharTestHelpers
@@ -66,5 +52,15 @@ public interface WcharTestHelpers {
             destroy();
             super.finalize();
         }
+
+        @Nonnull
+        public static native WcharTestRec getRecord();
+
+        @Nonnull
+        public static native String getString();
+
+        public static native boolean checkString(@Nonnull String str);
+
+        public static native boolean checkRecord(@Nonnull WcharTestRec rec);
     }
 }

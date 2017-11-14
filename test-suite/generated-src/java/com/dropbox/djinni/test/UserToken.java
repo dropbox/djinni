@@ -11,10 +11,6 @@ public interface UserToken {
     @Nonnull
     public String whoami();
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements UserToken
     {
         private final long nativeRef;

@@ -20,7 +20,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_hoursString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_hoursString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -29,7 +29,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_minutesString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_minutesString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -38,7 +38,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_secondsString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_secondsString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -47,7 +47,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_millisString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_millisString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -56,7 +56,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_microsString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_microsString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -65,7 +65,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_nanosString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType j_dt)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_nanosString(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -74,7 +74,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_TestDuration_00024Static
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_hours(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_hours(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -83,7 +83,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_h>::JniType JNIC
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_minutes(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_minutes(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -92,7 +92,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_min>::JniType JN
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_seconds(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_seconds(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -101,7 +101,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_s>::JniType JNIC
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_millis(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_millis(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -110,7 +110,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ms>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_micros(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_micros(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -119,7 +119,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_us>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_nanos(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_nanos(JNIEnv* jniEnv, jobject /*this*/, jint j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -128,7 +128,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I32, ::djinni::Duration_ns>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_hoursf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_hoursf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -137,7 +137,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_h>::JniType JNIC
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_minutesf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_minutesf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -146,7 +146,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_min>::JniType JN
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_secondsf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_secondsf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -155,7 +155,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_s>::JniType JNIC
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_millisf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_millisf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -164,7 +164,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ms>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_microsf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_microsf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -173,7 +173,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_us>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_nanosf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_nanosf(JNIEnv* jniEnv, jobject /*this*/, jdouble j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -182,7 +182,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::JniType JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_box(JNIEnv* jniEnv, jobject /*this*/, jlong j_count)
+CJNIEXPORT ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniType JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_box(JNIEnv* jniEnv, jobject /*this*/, jlong j_count)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -191,7 +191,7 @@ CJNIEXPORT ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniTy
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestDuration_00024StaticNativeMethods_unbox(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniType j_dt)
+CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestDuration_00024CppProxy_unbox(JNIEnv* jniEnv, jobject /*this*/, ::djinni::Duration<::djinni::I64, ::djinni::Duration_s>::Boxed::JniType j_dt)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

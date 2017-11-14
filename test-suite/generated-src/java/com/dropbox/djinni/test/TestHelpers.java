@@ -18,7 +18,7 @@ public interface TestHelpers {
     @Nonnull
     public static SetRecord getSetRecord()
     {
-        return StaticNativeMethods.getSetRecord();
+        return CppProxy.getSetRecord();
     }
 
     /**
@@ -28,138 +28,158 @@ public interface TestHelpers {
      */
     public static boolean checkSetRecord(@Nonnull SetRecord rec)
     {
-        return StaticNativeMethods.checkSetRecord(rec);
+        return CppProxy.checkSetRecord(rec);
     }
 
     @Nonnull
     public static PrimitiveList getPrimitiveList()
     {
-        return StaticNativeMethods.getPrimitiveList();
+        return CppProxy.getPrimitiveList();
     }
 
     public static boolean checkPrimitiveList(@Nonnull PrimitiveList pl)
     {
-        return StaticNativeMethods.checkPrimitiveList(pl);
+        return CppProxy.checkPrimitiveList(pl);
     }
 
     @Nonnull
     public static NestedCollection getNestedCollection()
     {
-        return StaticNativeMethods.getNestedCollection();
+        return CppProxy.getNestedCollection();
     }
 
     public static boolean checkNestedCollection(@Nonnull NestedCollection nc)
     {
-        return StaticNativeMethods.checkNestedCollection(nc);
+        return CppProxy.checkNestedCollection(nc);
     }
 
     @Nonnull
     public static HashMap<String, Long> getMap()
     {
-        return StaticNativeMethods.getMap();
+        return CppProxy.getMap();
     }
 
     public static boolean checkMap(@Nonnull HashMap<String, Long> m)
     {
-        return StaticNativeMethods.checkMap(m);
+        return CppProxy.checkMap(m);
     }
 
     @Nonnull
     public static HashMap<String, Long> getEmptyMap()
     {
-        return StaticNativeMethods.getEmptyMap();
+        return CppProxy.getEmptyMap();
     }
 
     public static boolean checkEmptyMap(@Nonnull HashMap<String, Long> m)
     {
-        return StaticNativeMethods.checkEmptyMap(m);
+        return CppProxy.checkEmptyMap(m);
     }
 
     @Nonnull
     public static MapListRecord getMapListRecord()
     {
-        return StaticNativeMethods.getMapListRecord();
+        return CppProxy.getMapListRecord();
     }
 
     public static boolean checkMapListRecord(@Nonnull MapListRecord m)
     {
-        return StaticNativeMethods.checkMapListRecord(m);
+        return CppProxy.checkMapListRecord(m);
     }
 
     public static void checkClientInterfaceAscii(@CheckForNull ClientInterface i)
     {
-        StaticNativeMethods.checkClientInterfaceAscii(i);
+        CppProxy.checkClientInterfaceAscii(i);
     }
 
     public static void checkClientInterfaceNonascii(@CheckForNull ClientInterface i)
     {
-        StaticNativeMethods.checkClientInterfaceNonascii(i);
+        CppProxy.checkClientInterfaceNonascii(i);
     }
 
     public static void checkClientInterfaceArgs(@CheckForNull ClientInterface i)
     {
-        StaticNativeMethods.checkClientInterfaceArgs(i);
+        CppProxy.checkClientInterfaceArgs(i);
     }
 
     public static void checkEnumMap(@Nonnull HashMap<Color, String> m)
     {
-        StaticNativeMethods.checkEnumMap(m);
+        CppProxy.checkEnumMap(m);
     }
 
     public static void checkEnum(@Nonnull Color c)
     {
-        StaticNativeMethods.checkEnum(c);
+        CppProxy.checkEnum(c);
     }
 
     @CheckForNull
     public static UserToken tokenId(@CheckForNull UserToken t)
     {
-        return StaticNativeMethods.tokenId(t);
+        return CppProxy.tokenId(t);
     }
 
     @CheckForNull
     public static UserToken createCppToken()
     {
-        return StaticNativeMethods.createCppToken();
+        return CppProxy.createCppToken();
     }
 
     public static void checkCppToken(@CheckForNull UserToken t)
     {
-        StaticNativeMethods.checkCppToken(t);
+        CppProxy.checkCppToken(t);
     }
 
     public static long cppTokenId(@CheckForNull UserToken t)
     {
-        return StaticNativeMethods.cppTokenId(t);
+        return CppProxy.cppTokenId(t);
     }
 
     public static void checkTokenType(@CheckForNull UserToken t, @Nonnull String type)
     {
-        StaticNativeMethods.checkTokenType(t,
-                                           type);
+        CppProxy.checkTokenType(t,
+                                type);
     }
 
     @CheckForNull
     public static Integer returnNone()
     {
-        return StaticNativeMethods.returnNone();
+        return CppProxy.returnNone();
     }
 
     /** Ensures that we generate integer translation code */
     @Nonnull
     public static AssortedPrimitives assortedPrimitivesId(@Nonnull AssortedPrimitives i)
     {
-        return StaticNativeMethods.assortedPrimitivesId(i);
+        return CppProxy.assortedPrimitivesId(i);
     }
 
     @Nonnull
     public static byte[] idBinary(@Nonnull byte[] b)
     {
-        return StaticNativeMethods.idBinary(b);
+        return CppProxy.idBinary(b);
     }
 
-    static final class StaticNativeMethods
+    static final class CppProxy implements TestHelpers
     {
+        private final long nativeRef;
+        private final AtomicBoolean destroyed = new AtomicBoolean(false);
+
+        private CppProxy(long nativeRef)
+        {
+            if (nativeRef == 0) throw new RuntimeException("nativeRef is zero");
+            this.nativeRef = nativeRef;
+        }
+
+        private native void nativeDestroy(long nativeRef);
+        public void destroy()
+        {
+            boolean destroyed = this.destroyed.getAndSet(true);
+            if (!destroyed) nativeDestroy(this.nativeRef);
+        }
+        protected void finalize() throws java.lang.Throwable
+        {
+            destroy();
+            super.finalize();
+        }
 
         /** Method with documentation */
         @Nonnull
@@ -228,29 +248,5 @@ public interface TestHelpers {
 
         @Nonnull
         public static native byte[] idBinary(@Nonnull byte[] b);
-    }
-
-    static final class CppProxy implements TestHelpers
-    {
-        private final long nativeRef;
-        private final AtomicBoolean destroyed = new AtomicBoolean(false);
-
-        private CppProxy(long nativeRef)
-        {
-            if (nativeRef == 0) throw new RuntimeException("nativeRef is zero");
-            this.nativeRef = nativeRef;
-        }
-
-        private native void nativeDestroy(long nativeRef);
-        public void destroy()
-        {
-            boolean destroyed = this.destroyed.getAndSet(true);
-            if (!destroyed) nativeDestroy(this.nativeRef);
-        }
-        protected void finalize() throws java.lang.Throwable
-        {
-            destroy();
-            super.finalize();
-        }
     }
 }

@@ -7,8 +7,4 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 public interface JavaOnlyListener {
-
-    static final class StaticNativeMethods
-    {
-    }
 }

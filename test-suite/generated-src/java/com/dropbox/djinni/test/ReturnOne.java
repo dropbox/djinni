@@ -14,14 +14,7 @@ public interface ReturnOne {
     @CheckForNull
     public static ReturnOne getInstance()
     {
-        return StaticNativeMethods.getInstance();
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @CheckForNull
-        public static native ReturnOne getInstance();
+        return CppProxy.getInstance();
     }
 
     static final class CppProxy implements ReturnOne
@@ -54,5 +47,8 @@ public interface ReturnOne {
             return native_returnOne(this.nativeRef);
         }
         private native byte native_returnOne(long _nativeRef);
+
+        @CheckForNull
+        public static native ReturnOne getInstance();
     }
 }

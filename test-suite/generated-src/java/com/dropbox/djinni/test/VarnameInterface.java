@@ -14,10 +14,6 @@ public interface VarnameInterface {
     @CheckForNull
     public VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements VarnameInterface
     {
         private final long nativeRef;

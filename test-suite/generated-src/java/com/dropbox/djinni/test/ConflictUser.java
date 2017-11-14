@@ -14,10 +14,6 @@ public interface ConflictUser {
 
     public boolean conflictArg(@Nonnull HashSet<Conflict> cs);
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements ConflictUser
     {
         private final long nativeRef;

@@ -74,10 +74,6 @@ public interface ConstantsInterface {
      */
     public void dummy();
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements ConstantsInterface
     {
         private final long nativeRef;

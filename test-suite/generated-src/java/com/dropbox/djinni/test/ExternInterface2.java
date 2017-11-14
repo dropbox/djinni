@@ -5,8 +5,4 @@ package com.dropbox.djinni.test;
 
 public interface ExternInterface2 {
     public ExternRecordWithDerivings foo(com.dropbox.djinni.test.TestHelpers i);
-
-    static final class StaticNativeMethods
-    {
-    }
 }

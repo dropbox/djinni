@@ -13,10 +13,6 @@ import javax.annotation.Nonnull;
  */
 public interface Conflict {
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements Conflict
     {
         private final long nativeRef;

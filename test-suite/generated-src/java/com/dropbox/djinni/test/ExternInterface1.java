@@ -8,10 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public interface ExternInterface1 {
     public com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i);
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements ExternInterface1
     {
         private final long nativeRef;

@@ -22,8 +22,4 @@ public interface ClientInterface {
 
     @Nonnull
     public String methTakingOptionalInterface(@CheckForNull ClientInterface i);
-
-    static final class StaticNativeMethods
-    {
-    }
 }

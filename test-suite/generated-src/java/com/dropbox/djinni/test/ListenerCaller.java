@@ -21,15 +21,8 @@ public interface ListenerCaller {
     @CheckForNull
     public static ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL)
     {
-        return StaticNativeMethods.init(firstL,
-                                        secondL);
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @CheckForNull
-        public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
+        return CppProxy.init(firstL,
+                             secondL);
     }
 
     static final class CppProxy implements ListenerCaller
@@ -70,5 +63,8 @@ public interface ListenerCaller {
             native_callSecond(this.nativeRef);
         }
         private native void native_callSecond(long _nativeRef);
+
+        @CheckForNull
+        public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
     }
 }

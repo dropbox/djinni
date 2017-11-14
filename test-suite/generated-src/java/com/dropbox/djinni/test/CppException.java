@@ -13,14 +13,7 @@ public interface CppException {
     @CheckForNull
     public static CppException get()
     {
-        return StaticNativeMethods.get();
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @CheckForNull
-        public static native CppException get();
+        return CppProxy.get();
     }
 
     static final class CppProxy implements CppException
@@ -53,5 +46,8 @@ public interface CppException {
             return native_throwAnException(this.nativeRef);
         }
         private native int native_throwAnException(long _nativeRef);
+
+        @CheckForNull
+        public static native CppException get();
     }
 }

@@ -22,10 +22,6 @@ public interface UsesSingleLanguageListeners {
     @CheckForNull
     public JavaOnlyListener returnForJava();
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements UsesSingleLanguageListeners
     {
         private final long nativeRef;

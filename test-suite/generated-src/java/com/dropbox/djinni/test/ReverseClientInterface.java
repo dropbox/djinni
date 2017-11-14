@@ -20,14 +20,7 @@ public interface ReverseClientInterface {
     @CheckForNull
     public static ReverseClientInterface create()
     {
-        return StaticNativeMethods.create();
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @CheckForNull
-        public static native ReverseClientInterface create();
+        return CppProxy.create();
     }
 
     static final class CppProxy implements ReverseClientInterface
@@ -76,5 +69,8 @@ public interface ReverseClientInterface {
             return native_methTakingOptionalInterface(this.nativeRef, i);
         }
         private native String native_methTakingOptionalInterface(long _nativeRef, ReverseClientInterface i);
+
+        @CheckForNull
+        public static native ReverseClientInterface create();
     }
 }

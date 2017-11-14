@@ -12,41 +12,25 @@ public interface FlagRoundtrip {
     @Nonnull
     public static EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag)
     {
-        return StaticNativeMethods.roundtripAccess(flag);
+        return CppProxy.roundtripAccess(flag);
     }
 
     @Nonnull
     public static EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag)
     {
-        return StaticNativeMethods.roundtripEmpty(flag);
+        return CppProxy.roundtripEmpty(flag);
     }
 
     @CheckForNull
     public static EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag)
     {
-        return StaticNativeMethods.roundtripAccessBoxed(flag);
+        return CppProxy.roundtripAccessBoxed(flag);
     }
 
     @CheckForNull
     public static EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag)
     {
-        return StaticNativeMethods.roundtripEmptyBoxed(flag);
-    }
-
-    static final class StaticNativeMethods
-    {
-
-        @Nonnull
-        public static native EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag);
-
-        @Nonnull
-        public static native EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag);
-
-        @CheckForNull
-        public static native EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag);
-
-        @CheckForNull
-        public static native EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag);
+        return CppProxy.roundtripEmptyBoxed(flag);
     }
 
     static final class CppProxy implements FlagRoundtrip
@@ -71,5 +55,17 @@ public interface FlagRoundtrip {
             destroy();
             super.finalize();
         }
+
+        @Nonnull
+        public static native EnumSet<AccessFlags> roundtripAccess(@Nonnull EnumSet<AccessFlags> flag);
+
+        @Nonnull
+        public static native EnumSet<EmptyFlags> roundtripEmpty(@Nonnull EnumSet<EmptyFlags> flag);
+
+        @CheckForNull
+        public static native EnumSet<AccessFlags> roundtripAccessBoxed(@CheckForNull EnumSet<AccessFlags> flag);
+
+        @CheckForNull
+        public static native EnumSet<EmptyFlags> roundtripEmptyBoxed(@CheckForNull EnumSet<EmptyFlags> flag);
     }
 }

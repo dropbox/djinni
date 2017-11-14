@@ -9,8 +9,4 @@ import javax.annotation.Nonnull;
 /** Used for ObjC multiple inheritance tests */
 public interface FirstListener {
     public void first();
-
-    static final class StaticNativeMethods
-    {
-    }
 }

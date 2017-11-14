@@ -16,10 +16,6 @@ public interface InterfaceUsingExtendedRecord {
     @Nonnull
     public ExtendedRecord meth(@Nonnull ExtendedRecord er);
 
-    static final class StaticNativeMethods
-    {
-    }
-
     static final class CppProxy implements InterfaceUsingExtendedRecord
     {
         private final long nativeRef;
