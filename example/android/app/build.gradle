@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "com.dropbox.textsort"
@@ -27,8 +26,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.code.findbugs:jsr305:3.0.0'
 }
 
 task ndkBuild(type: Exec) {
