@@ -9,6 +9,9 @@ support/*.target.mk
 *.target.mk
 GypAndroid.mk
 
+# cmake
+out/
+
 # gyp
 deps/gyp
 
