@@ -346,6 +346,7 @@ object Main {
       objcppNamespace,
       objcBaseLibIncludePrefix,
       objcSwiftBridgingHeaderWriter,
+      objcSwiftBridgingHeader,
       outFileListWriter,
       skipGeneration,
       yamlOutFolder,
