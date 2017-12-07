@@ -492,15 +492,15 @@ java -jar $DJINNI_JAR_DIR/djinni-assembly-0.1-SNAPSHOT.jar \
 
 *Note*: The `all` target of the main `Makefile` includes the `djinni_jar` target.
 
-## Generate an apple universal binary
+## Generate an iOS universal binary of the support library.
 
-The `mac-build-support-lib.sh` helps you to build an universal static library.
+The `ios-build-support-lib.sh` helps you to build an universal static library for iOS platforms.
 It uses the platform file of the [ios-cmake](https://github.com/leetal/ios-cmake) repository.
 
 It basically creates one universal static library per `IOS_PLATFORM` variable and uses `lipo` 
 to merge all the files in one.
 
-There is basically two variable you would like to modify:
+There is basically two variables you would like to modify:
 
 - `BUILD_APPLE_ARCHITECTURES`: Specifies which `IOS_PLATFORM` to build.
 For more informations, take a look at https://github.com/leetal/ios-cmake.
