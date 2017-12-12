@@ -52,7 +52,7 @@ object SwiftBridgingHeaderGenerator {
   def writeBridgingVars(name: String, writer: Writer) {
     val varPrefix = bridgingVarPrefix(name)
     writer.write("#import <Foundation/Foundation.h>\n\n")
-    writer.write("//! Project version number for" + varPrefix +".\n")
+    writer.write("//! Project version number for " + varPrefix +".\n")
     writer.write("FOUNDATION_EXPORT double " + varPrefix + "VersionNumber;\n\n")
     writer.write("//! Project version string for" + varPrefix +".\n")
     writer.write("FOUNDATION_EXPORT const unsigned char " + varPrefix + "VersionString[];\n\n")
