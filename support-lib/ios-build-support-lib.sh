@@ -1,13 +1,14 @@
 #!/bin/sh
-
 # This script helps you to build apple fat binaries.
 # This uses the excellent https://github.com/leetal/ios-cmake cmake platform file.
 
+BASEDIR=$(cd "$(dirname "$0")"; pwd)
+
 # The directory used for building
-BUILD_DIR=$(pwd)/build
+BUILD_DIR=${BASEDIR}/build
 
 # The directory where library will be generated
-OUTPUT_DIR=$(pwd)/out/apple
+OUTPUT_DIR=${BASEDIR}/out/apple
 
 # The architecture to build for apple
 # See https://github.com/leetal/ios-cmake for more informations
@@ -30,7 +31,7 @@ function build_apple_native_static_arch {
   mkdir -p  ${BUILD_PATH}
   cd ${BUILD_PATH}
   
-  cmake ../.. -DDJINNI_WITH_OBJC=ON -DDJINNI_WITH_JNI=OFF -DDJINNI_STATIC_LIB=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DIOS_PLATFORM=$1 -DENABLE_BITCODE=${ENABLE_BITCODE} -DCMAKE_INSTALL_PREFIX=${BUILD_PATH}
+  cmake ${BASEDIR}/.. -DDJINNI_WITH_OBJC=ON -DDJINNI_WITH_JNI=OFF -DDJINNI_STATIC_LIB=ON -DCMAKE_TOOLCHAIN_FILE=${BASEDIR}/../cmake/ios.toolchain.cmake -DIOS_PLATFORM=$1 -DENABLE_BITCODE=${ENABLE_BITCODE} -DCMAKE_INSTALL_PREFIX=${BUILD_PATH}
   make -j 4
   
   cp ${BUILD_DIR}/${BUILD_PATH}/libdjinni_support_lib.a ${OUTPUT_DIR}/libdjinni_support_lib_$1.a
