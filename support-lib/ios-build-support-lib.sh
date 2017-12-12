@@ -30,7 +30,7 @@ function build_apple_native_static_arch {
   mkdir -p  ${BUILD_PATH}
   cd ${BUILD_PATH}
   
-  cmake ../.. -DDJINNI_WITH_OBJC=ON -DDJINNI_WITH_JNI=OFF -DDJINNI_STATIC_LIB=ON -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DIOS_PLATFORM=$1 -DENABLE_BITCODE=${ENABLE_BITCODE} -DCMAKE_INSTALL_PREFIX=${BUILD_PATH}
+  cmake ../.. -DDJINNI_WITH_OBJC=ON -DDJINNI_WITH_JNI=OFF -DDJINNI_STATIC_LIB=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DIOS_PLATFORM=$1 -DENABLE_BITCODE=${ENABLE_BITCODE} -DCMAKE_INSTALL_PREFIX=${BUILD_PATH}
   make -j 4
   
   cp ${BUILD_DIR}/${BUILD_PATH}/libdjinni_support_lib.a ${OUTPUT_DIR}/libdjinni_support_lib_$1.a
