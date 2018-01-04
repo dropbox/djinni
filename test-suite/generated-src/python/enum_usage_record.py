@@ -26,6 +26,16 @@ class EnumUsageRecord:
         SetEnumColorHelper.check_c_data_set_empty()
         MapEnumColorEnumColorHelper.check_c_data_set_empty()
 
+    # Record deriving types
+    def __hash__(self):
+        # Pick an arbitrary non-zero starting value
+        hash_code = 17
+        hash_code = hash_code * 31 + self.e.__hash__()
+        hash_code = hash_code * 31 + self.o.__hash__()
+        hash_code = hash_code * 31 + self.l.__hash__()
+        hash_code = hash_code * 31 + self.s.__hash__()
+        hash_code = hash_code * 31 + self.m.__hash__()
+        return hash_code
 
     def __init__(self, e, o, l, s, m):
         self.e = e

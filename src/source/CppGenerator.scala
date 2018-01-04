@@ -63,11 +63,33 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
 
+    val flagsType = "unsigned"
+    val enumType = "int"
+    val underlyingType = if(e.flags) flagsType else enumType
+
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
-      w.w(s"enum class $self : int").bracedSemi {
-        for (o <- e.options) {
-          writeDoc(w, o.doc)
-          w.wl(idCpp.enum(o.ident.name) + ",")
+      w.w(s"enum class $self : $underlyingType").bracedSemi {
+        writeEnumOptionNone(w, e, idCpp.enum)
+        writeEnumOptions(w, e, idCpp.enum)
+        writeEnumOptionAll(w, e, idCpp.enum)
+      }
+
+      if(e.flags) {
+        // Define some operators to make working with "enum class" flags actually practical
+        def binaryOp(op: String) {
+          w.w(s"constexpr $self operator$op($self lhs, $self rhs) noexcept").braced {
+            w.wl(s"return static_cast<$self>(static_cast<$flagsType>(lhs) $op static_cast<$flagsType>(rhs));")
+          }
+          w.w(s"constexpr $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
+            w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
+          }
+        }
+        binaryOp("|")
+        binaryOp("&")
+        binaryOp("^")
+
+        w.w(s"constexpr $self operator~($self x) noexcept").braced {
+          w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
         }
       }
     },
@@ -81,7 +103,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             w.wl("template <>")
             w.w(s"struct hash<$fqSelf>").bracedSemi {
               w.w(s"size_t operator()($fqSelf type) const").braced {
-                w.wl("return std::hash<int>()(static_cast<int>(type));")
+                w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
               }
             }
           }
@@ -210,7 +232,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
-    if (r.consts.nonEmpty || r.derivingTypes.nonEmpty) {
+    if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord)) {
       writeCppFile(cppName, origin, refs.cpp, w => {
         generateCppConstants(w, r.consts, actualSelf)
 

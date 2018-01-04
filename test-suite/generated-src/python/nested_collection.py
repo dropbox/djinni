@@ -20,6 +20,12 @@ class NestedCollection:
         assert len(NestedCollection.c_data_set) == 0
         ListSetStringHelper.check_c_data_set_empty()
 
+    # Record deriving types
+    def __hash__(self):
+        # Pick an arbitrary non-zero starting value
+        hash_code = 17
+        hash_code = hash_code * 31 + self.set_list.__hash__()
+        return hash_code
 
     def __init__(self, set_list):
         self.set_list = set_list

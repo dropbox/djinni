@@ -27,7 +27,7 @@ RUN wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz
 RUN tar xvfvz apache-ant-1.9.3-bin.tar.gz -C /opt
 ENV ANT_HOME /opt/apache-ant-1.9.3/bin/ant
 RUN ln -s /opt/apache-ant-1.9.3/bin/ant /usr/bin/ant
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.51-1.b16.el6_7.x86_64
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk.x86_64
 
 VOLUME /opt/djinni
 CMD /opt/djinni/test-suite/java/docker/build_and_run_tests.sh

@@ -6,13 +6,17 @@ ifndef ANDROID_NDK_HOME
 ANDROID_NDK_HOME = $(abspath $(dir $(realpath $(shell which ndk-build))))
 endif
 
+SCALA_VERSION=2.11
+DJINNI_VERSION=0.1-SNAPSHOT
+OUTPUT_JAR=src/target/scala-$(SCALA_VERSION)/djinni-assembly-$(DJINNI_VERSION).jar
+
 #
 # Global targets.
 #
 
 all: djinni example_ios example_android example_localhost example_python test
 
-clean:
+clean: djinni_jar_clean
 	-ndk-build -C example/android/app/ clean
 	-xcodebuild -workspace example/objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphonesimulator clean
 	-xcodebuild -project ./build_py/example/libtextsort.py.xcodeproj -target libtextsort_py -configuration 'Debug' clean
@@ -36,6 +40,14 @@ clean:
 
 djinni:
 	cd src && ./build
+
+$(OUTPUT_JAR):
+	cd src && sbt assembly
+
+djinni_jar: $(OUTPUT_JAR)
+
+djinni_jar_clean:
+	cd src && sbt clean
 
 run_example_djinni:
 	./example/run_djinni.sh
@@ -102,4 +114,4 @@ example_localhost: ./deps/java
 test: ./deps/java
 	make -C test-suite
 
-.PHONY: run_example_djinni example_android example_ios example_localhost example_python example_python2 example_python3 test djinni clean all
+.PHONY: run_example_djinni example_android example_ios example_localhost example_python example_python2 example_python3 test djinni clean all djinni_jar
