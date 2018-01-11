@@ -91,6 +91,11 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         w.w(s"constexpr $self operator~($self x) noexcept").braced {
           w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
         }
+      } else {
+        // Define useful operators for enum
+        w.w(s"constexpr $self operator++($self const& r, int increment) noexcept").braced {
+          w.wl(s"return $self(($underlyingType)r + increment);")
+        }
       }
     },
     w => {

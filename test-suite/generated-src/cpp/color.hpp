@@ -21,6 +21,9 @@ enum class color : int {
     INDIGO,
     VIOLET,
 };
+constexpr color operator++(color const& r, int increment) noexcept {
+    return color((int)r + increment);
+}
 
 }  // namespace testsuite
 
