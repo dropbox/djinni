@@ -106,6 +106,13 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
               }
             }
+            w.wl("template <>")
+            w.w(s"class numeric_limits<$fqSelf> : public numeric_limits<$underlyingType>").bracedSemi {
+              w.wl("public:")
+              w.wl("static constexpr bool is_specialized = true;")
+              if(!e.flags) w.wl(s"static constexpr $fqSelf min() noexcept { return $fqSelf::${idCpp.enum(normalEnumOptions(e).head.ident.name)}; }")
+              w.wl(s"static constexpr $fqSelf max() noexcept { return " + (if(e.flags) s"static_cast<$fqSelf>(${normalEnumOptions(e).size})" else s"$fqSelf::${idCpp.enum(normalEnumOptions(e).last.ident.name)}") +"; }")
+            }
           }
         )
       }
