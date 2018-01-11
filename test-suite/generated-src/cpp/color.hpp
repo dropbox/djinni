@@ -32,5 +32,12 @@ struct hash<::testsuite::color> {
         return std::hash<int>()(static_cast<int>(type));
     }
 };
+template <>
+class numeric_limits<::testsuite::color> : public numeric_limits<int> {
+    public:
+    static constexpr bool is_specialized = true;
+    static constexpr ::testsuite::color min() noexcept { return ::testsuite::color::RED; }
+    static constexpr ::testsuite::color max() noexcept { return ::testsuite::color::VIOLET; }
+};
 
 }  // namespace std

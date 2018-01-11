@@ -52,5 +52,11 @@ struct hash<::testsuite::access_flags> {
         return std::hash<unsigned>()(static_cast<unsigned>(type));
     }
 };
+template <>
+class numeric_limits<::testsuite::access_flags> : public numeric_limits<unsigned> {
+    public:
+    static constexpr bool is_specialized = true;
+    static constexpr ::testsuite::access_flags max() noexcept { return static_cast<::testsuite::access_flags>(9); }
+};
 
 }  // namespace std
