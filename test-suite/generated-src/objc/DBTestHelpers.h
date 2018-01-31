@@ -23,11 +23,13 @@
 + (nonnull DBSetRecord *)getSetRecord;
 
 /**
- * Method with long documentation
+ * Method with long documentation & doxygen
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
+ * @param theRecord the record to check
+ * @return whether the record is okay
  */
-+ (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec;
++ (BOOL)checkSetRecord:(nonnull DBSetRecord *)theRecord;
 
 + (nonnull DBPrimitiveList *)getPrimitiveList;
 
