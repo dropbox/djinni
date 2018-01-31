@@ -34,13 +34,11 @@ public:
     static SetRecord get_set_record();
 
     /**
-     * Method with long documentation & doxygen
+     * Method with long documentation
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
-     * @param the_record the record to check
-     * @return whether the record is okay
      */
-    static bool check_set_record(const SetRecord & the_record);
+    static bool check_set_record(const SetRecord & rec);
 
     static PrimitiveList get_primitive_list();
 

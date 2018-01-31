@@ -45,9 +45,9 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (BOOL)checkSetRecord:(nonnull DBSetRecord *)theRecord {
++ (BOOL)checkSetRecord:(nonnull DBSetRecord *)rec {
     try {
-        auto objcpp_result_ = ::testsuite::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(theRecord));
+        auto objcpp_result_ = ::testsuite::TestHelpers::check_set_record(::djinni_generated::SetRecord::toCpp(rec));
         return ::djinni::Bool::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

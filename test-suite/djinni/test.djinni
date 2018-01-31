@@ -4,12 +4,10 @@
 test_helpers = interface +c {
     # Method with documentation
     static get_set_record(): set_record;
-    # Method with long documentation & doxygen
+    # Method with long documentation
     # (Second line of multi-line documentation.
     #   Indented third line of multi-line documentation.)
-    # @param the_record the record to check
-    # @return whether the record is okay
-    static check_set_record(the_record: set_record): bool;
+    static check_set_record(rec: set_record): bool;
 
     static get_primitive_list(): primitive_list;
     static check_primitive_list(pl: primitive_list): bool;

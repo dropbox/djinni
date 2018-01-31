@@ -19,13 +19,11 @@ public abstract class TestHelpers {
     public static native SetRecord getSetRecord();
 
     /**
-     * Method with long documentation & doxygen
+     * Method with long documentation
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
-     * @param theRecord the record to check
-     * @return whether the record is okay
      */
-    public static native boolean checkSetRecord(@Nonnull SetRecord theRecord);
+    public static native boolean checkSetRecord(@Nonnull SetRecord rec);
 
     @Nonnull
     public static native PrimitiveList getPrimitiveList();
