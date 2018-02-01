@@ -6,11 +6,11 @@
 
 #import <Foundation/Foundation.h>
 
-//! Project version number for TextSort_Bridging_Header.
-FOUNDATION_EXPORT double TextSort_Bridging_HeaderVersionNumber;
+//! Project version number for TextSortBridgingHeader.
+FOUNDATION_EXPORT double TextSortBridgingHeaderVersionNumber;
 
-//! Project version string forTextSort_Bridging_Header.
-FOUNDATION_EXPORT const unsigned char TextSort_Bridging_HeaderVersionString[];
+//! Project version string for TextSortBridgingHeader.
+FOUNDATION_EXPORT const unsigned char TextSortBridgingHeaderVersionString[];
 
 #import "TXSItemList.h"
 #import "TXSSortOrder.h"

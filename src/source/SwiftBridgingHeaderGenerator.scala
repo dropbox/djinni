@@ -40,6 +40,7 @@ class SwiftBridgingHeaderGenerator(spec: Spec) extends Generator(spec) {
 object SwiftBridgingHeaderGenerator {
   
   val bridgingHeaderName = (s: String) => s.split('-').mkString("_")
+  val bridgingHeaderVariables = (s: String) => s.split('-').mkString("")
 
   def writeAutogenerationWarning(name: String, writer: Writer) {
     val bridgingHeaderVarName = bridgingHeaderName(name)
@@ -50,7 +51,7 @@ object SwiftBridgingHeaderGenerator {
   }
 
   def writeBridgingVars(name: String, writer: Writer) {
-    val bridgingHeaderVarName = bridgingHeaderName(name)
+    val bridgingHeaderVarName = bridgingHeaderVariables(name)
     writer.write("#import <Foundation/Foundation.h>\n\n")
     writer.write("//! Project version number for " + bridgingHeaderVarName +".\n")
     writer.write("FOUNDATION_EXPORT double " + bridgingHeaderVarName + "VersionNumber;\n\n")
