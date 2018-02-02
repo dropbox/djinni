@@ -38,6 +38,12 @@ BOOL const DBConstantsDummy = NO;
     return [[self alloc] init];
 }
 
++ (DBConstantEnum)constEnum
+{
+    static DBConstantEnum const s_constEnum = DBConstantEnumSomeValue;
+    return s_constEnum;
+}
+
 + (NSNumber * __nullable)optBoolConstant
 {
     static NSNumber * const s_optBoolConstant = @YES;

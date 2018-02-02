@@ -5,19 +5,21 @@
 
 namespace testsuite {
 
-bool const Constants::BOOL_CONSTANT = true;
+bool const Constants::BOOL_CONSTANT;
 
-int8_t const Constants::I8_CONSTANT = 1;
+int8_t const Constants::I8_CONSTANT;
 
-int16_t const Constants::I16_CONSTANT = 2;
+int16_t const Constants::I16_CONSTANT;
 
-int32_t const Constants::I32_CONSTANT = 3;
+int32_t const Constants::I32_CONSTANT;
 
-int64_t const Constants::I64_CONSTANT = 4;
+int64_t const Constants::I64_CONSTANT;
 
-float const Constants::F32_CONSTANT = 5.0f;
+float const Constants::F32_CONSTANT;
 
-double const Constants::F64_CONSTANT = 5.0;
+double const Constants::F64_CONSTANT;
+
+constant_enum const Constants::CONST_ENUM = constant_enum::SOME_VALUE;
 
 std::experimental::optional<bool> const Constants::OPT_BOOL_CONSTANT = true;
 
@@ -41,6 +43,6 @@ ConstantRecord const Constants::OBJECT_CONSTANT = ConstantRecord(
     Constants::I32_CONSTANT /* some_integer */ ,
     Constants::STRING_CONSTANT /* some_string */ );
 
-bool const Constants::DUMMY = false;
+bool const Constants::DUMMY;
 
 }  // namespace testsuite
