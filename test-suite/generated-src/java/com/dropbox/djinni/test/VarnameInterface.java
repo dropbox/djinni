@@ -8,6 +8,11 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 public abstract class VarnameInterface {
+    /**
+     * We should also rewrite parameter names in docstrings.
+     * RArg should be rewritten.
+     * _i_arg_ should not.
+     */
     @Nonnull
     public abstract VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
 

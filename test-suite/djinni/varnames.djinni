@@ -6,6 +6,9 @@ _varname_record_ = record {
 }
 
 _varname_interface_ = interface +c {
+    # We should also rewrite parameter names in docstrings.
+    # _r_arg_ should be rewritten.
+    # _i_arg_ should not.
     _rmethod_(_r_arg_: _varname_record_): _varname_record_;
     _imethod_(_i_arg_: _varname_interface_): _varname_interface_;
 }
