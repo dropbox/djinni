@@ -69,7 +69,7 @@ object Main {
     var objcTypePrefix: String = ""
     var objcIncludePrefix: String = ""
     var objcExtendedRecordIncludePrefix: String = ""
-    var objcSwiftBridgingHeader: Option[String] = None
+    var objcSwiftBridgingHeaderName: Option[String] = None
     var objcppIncludePrefix: String = ""
     var objcppIncludeCppPrefix: String = ""
     var objcppIncludeObjcPrefixOptional: Option[String] = None
@@ -176,7 +176,7 @@ object Main {
         .text("The prefix for Objective-C data types (usually two or three letters)")
       opt[String]("objc-include-prefix").valueName("<prefix>").foreach(objcIncludePrefix = _)
         .text("The prefix for #import of header files from Objective-C files.")
-      opt[String]("objc-swift-bridging-header").valueName("<name>").foreach(x => objcSwiftBridgingHeader = Some(x))
+      opt[String]("objc-swift-bridging-header").valueName("<name>").foreach(x => objcSwiftBridgingHeaderName = Some(x))
         .text("The name of Objective-C Bridging Header used in XCode's Swift projects.")
       note("")
       opt[File]("objcpp-out").valueName("<out-folder>").foreach(x => objcppOutFolder = Some(x))
@@ -309,8 +309,8 @@ object Main {
     } else {
       None
     }
-    val objcSwiftBridgingHeaderWriter = if (objcSwiftBridgingHeader.isDefined && objcOutFolder.isDefined) {
-      val objcSwiftBridgingHeaderFile = new File(objcOutFolder.get.getPath, objcSwiftBridgingHeader.get + ".h")
+    val objcSwiftBridgingHeaderWriter = if (objcSwiftBridgingHeaderName.isDefined && objcOutFolder.isDefined) {
+      val objcSwiftBridgingHeaderFile = new File(objcOutFolder.get.getPath, objcSwiftBridgingHeaderName.get + ".h")
       if (objcSwiftBridgingHeaderFile.getParentFile != null)
         createFolder("output file list", objcSwiftBridgingHeaderFile.getParentFile)
       Some(new BufferedWriter(new FileWriter(objcSwiftBridgingHeaderFile)))
@@ -367,6 +367,7 @@ object Main {
       objcppNamespace,
       objcBaseLibIncludePrefix,
       objcSwiftBridgingHeaderWriter,
+      objcSwiftBridgingHeaderName,
       outFileListWriter,
       skipGeneration,
       yamlOutFolder,

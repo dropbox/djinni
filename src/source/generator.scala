@@ -24,6 +24,7 @@ import djinni.syntax.Error
 import djinni.writer.IndentWriter
 import scala.language.implicitConversions
 import scala.collection.mutable
+import scala.util.matching.Regex
 
 package object generatorTools {
 
@@ -76,6 +77,7 @@ package object generatorTools {
                    objcppNamespace: String,
                    objcBaseLibIncludePrefix: String,
                    objcSwiftBridgingHeaderWriter: Option[Writer],
+                   objcSwiftBridgingHeaderName: Option[String],
                    outFileListWriter: Option[Writer],
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
@@ -233,7 +235,8 @@ package object generatorTools {
         new ObjcppGenerator(spec).generate(idl)
       }
       if (spec.objcSwiftBridgingHeaderWriter.isDefined) {
-        SwiftBridgingHeaderGenerator.writeAutogenerationWarning(spec.objcSwiftBridgingHeaderWriter.get)
+        SwiftBridgingHeaderGenerator.writeAutogenerationWarning(spec.objcSwiftBridgingHeaderName.get, spec.objcSwiftBridgingHeaderWriter.get)
+        SwiftBridgingHeaderGenerator.writeBridgingVars(spec.objcSwiftBridgingHeaderName.get, spec.objcSwiftBridgingHeaderWriter.get)
         new SwiftBridgingHeaderGenerator(spec).generate(idl)
       }
       if (spec.yamlOutFolder.isDefined) {
@@ -494,6 +497,15 @@ abstract class Generator(spec: Spec)
   }
 
   // --------------------------------------------------------------------------
+
+  def writeMethodDoc(w: IndentWriter, method: Interface.Method, ident: IdentConverter) {
+    val paramReplacements = method.params.map(p => (s"\\b${Regex.quote(p.ident.name)}\\b", s"${ident(p.ident.name)}"))
+    val newDoc = Doc(method.doc.lines.map(l => {
+      paramReplacements.foldLeft(l)((line, rep) =>
+        line.replaceAll(rep._1, rep._2))
+    }))
+    writeDoc(w, newDoc)
+  }
 
   def writeDoc(w: IndentWriter, doc: Doc) {
     doc.lines.length match {

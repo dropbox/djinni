@@ -16,6 +16,11 @@ from djinni import exception # this forces run of __init__.py which gives cpp op
 class VarnameInterface(with_metaclass(ABCMeta)):
     @abstractmethod
     def _rmethod_(self, _r_arg_):
+        """
+         We should also rewrite parameter names in docstrings.
+         _r_arg_ should be rewritten.
+         _i_arg_ should not.
+        """
         raise NotImplementedError
 
     @abstractmethod
