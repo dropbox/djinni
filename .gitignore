@@ -26,8 +26,23 @@ project.xcworkspace
 DerivedData
 *.xcuserdatad/
 
+# py build artifacts
+build_py/
+
+# py test artifacts
+**/.cache/
+**/__pycache__/
+
 # djinni output directories
 djinni-output-temp/
+djinni-output-temp-py/
+
+# pyCFFI extras
+*.pyc
+
+# python build artifacts
+pybuild/
+*.o
 
 # intellij-plugin build artifact
 intellij-plugin/djinni.jar

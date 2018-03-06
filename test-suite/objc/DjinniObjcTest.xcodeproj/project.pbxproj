@@ -61,6 +61,7 @@
 		A278D45319BA3601006FD937 /* test_helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A278D45219BA3601006FD937 /* test_helpers.cpp */; };
 		A2AE38491BB3074800B7A0C9 /* DJIProxyCaches.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */; };
 		A2CB54B419BA6E6000A9E600 /* DJIError.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2CB54B319BA6E6000A9E600 /* DJIError.mm */; };
+		B501A2B81D50082E00394D97 /* DBPyOnlyListener+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = B501A2B51D50082E00394D97 /* DBPyOnlyListener+Private.mm */; };
 		B5153F931D54283700012654 /* DBWcharTestRec+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5153F891D54283700012654 /* DBWcharTestRec+Private.mm */; };
 		B5153F941D54283700012654 /* DBWcharTestRec.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5153F8B1D54283700012654 /* DBWcharTestRec.mm */; };
 		B5153F961D54283700012654 /* DBUsesSingleLanguageListeners+Private.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5153F901D54283700012654 /* DBUsesSingleLanguageListeners+Private.mm */; };
@@ -290,6 +291,10 @@
 		A278D45219BA3601006FD937 /* test_helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helpers.cpp; sourceTree = "<group>"; };
 		A2CB54B319BA6E6000A9E600 /* DJIError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DJIError.mm; sourceTree = "<group>"; };
 		A2CCB9411AF80DFC00E6230A /* DBClientInterface+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBClientInterface+Private.h"; sourceTree = "<group>"; };
+		B501A2B41D50082300394D97 /* py_only_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = py_only_listener.hpp; sourceTree = "<group>"; };
+		B501A2B51D50082E00394D97 /* DBPyOnlyListener+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBPyOnlyListener+Private.mm"; sourceTree = "<group>"; };
+		B501A2B61D50082E00394D97 /* DBPyOnlyListener+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBPyOnlyListener+Private.h"; sourceTree = "<group>"; };
+		B501A2B71D50082E00394D97 /* DBPyOnlyListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBPyOnlyListener.h; sourceTree = "<group>"; };
 		B5153F871D54282C00012654 /* wchar_test_rec.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wchar_test_rec.hpp; sourceTree = "<group>"; };
 		B5153F891D54283700012654 /* DBWcharTestRec+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBWcharTestRec+Private.mm"; sourceTree = "<group>"; };
 		B5153F8A1D54283700012654 /* DBWcharTestRec+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBWcharTestRec+Private.h"; sourceTree = "<group>"; };
@@ -572,6 +577,9 @@
 		A24249181AF192E0003BF8F0 /* generated-objc */ = {
 			isa = PBXGroup;
 			children = (
+				B501A2B51D50082E00394D97 /* DBPyOnlyListener+Private.mm */,
+				B501A2B61D50082E00394D97 /* DBPyOnlyListener+Private.h */,
+				B501A2B71D50082E00394D97 /* DBPyOnlyListener.h */,
 				CFBBB8EC1B6E3A67002EF52F /* DBAccessFlags.h */,
 				176915461F7B837D00967E9D /* DBAccessFlags+Private.h */,
 				B52DA5641B103F6D005CE75F /* DBAssortedPrimitives.h */,
@@ -748,6 +756,7 @@
 		A242495D1AF192FC003BF8F0 /* generated-cpp */ = {
 			isa = PBXGroup;
 			children = (
+				B501A2B41D50082300394D97 /* py_only_listener.hpp */,
 				B58B16B21D5AD55B00EF92B5 /* record_using_extended_record.cpp */,
 				B58B16B31D5AD55B00EF92B5 /* interface_using_extended_record.cpp */,
 				B58B16A61D5AC9AD00EF92B5 /* record_using_extended_record.hpp */,
@@ -964,6 +973,7 @@
 				6551684F1C40511C003682A4 /* return_one_two.cpp in Sources */,
 				A24249751AF192FC003BF8F0 /* record_with_derivings.cpp in Sources */,
 				CFC5D9D01B15105100BF2DF8 /* extern_record_with_derivings.cpp in Sources */,
+				B501A2B81D50082E00394D97 /* DBPyOnlyListener+Private.mm in Sources */,
 				B58B16B71D5AD56600EF92B5 /* DBInterfaceUsingExtendedRecord.mm in Sources */,
 				B51911181D542A7000772DFE /* DBWcharTestHelpers+Private.mm in Sources */,
 				A238CA901AF84B7100CDDCE5 /* DBConstants+Private.mm in Sources */,

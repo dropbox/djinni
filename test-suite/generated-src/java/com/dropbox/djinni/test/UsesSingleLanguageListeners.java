@@ -19,8 +19,10 @@ public abstract class UsesSingleLanguageListeners {
 
     public abstract void callForJava(@CheckForNull JavaOnlyListener l);
 
+    public abstract void callForPy(@CheckForNull PyOnlyListener l);
+
     @CheckForNull
-    public abstract JavaOnlyListener returnForJava();
+    public abstract PyOnlyListener returnForPy();
 
     private static final class CppProxy extends UsesSingleLanguageListeners
     {
@@ -70,11 +72,19 @@ public abstract class UsesSingleLanguageListeners {
         private native void native_callForJava(long _nativeRef, JavaOnlyListener l);
 
         @Override
-        public JavaOnlyListener returnForJava()
+        public void callForPy(PyOnlyListener l)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            return native_returnForJava(this.nativeRef);
+            native_callForPy(this.nativeRef, l);
         }
-        private native JavaOnlyListener native_returnForJava(long _nativeRef);
+        private native void native_callForPy(long _nativeRef, PyOnlyListener l);
+
+        @Override
+        public PyOnlyListener returnForPy()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_returnForPy(this.nativeRef);
+        }
+        private native PyOnlyListener native_returnForPy(long _nativeRef);
     }
 }

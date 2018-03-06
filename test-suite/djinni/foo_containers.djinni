@@ -1,0 +1,49 @@
+
+foo_containers_record = record {
+    optional_list_int: optional<list<i32>>;
+    list_int: list<i32>;
+    list_binary: list<binary>;
+    list_optional_binary: list<optional<binary>>;
+    list_list_string: list<list<string>>;
+    list_record: list<foo_some_other_record>;
+
+    optional_map_string_int: optional<map<string,i32>>;
+    map_string_int: map<string, i32>;
+    map_string_string: map<string,string>;
+    map_optional_string_optional_string: map<optional<string>,optional<string>>;
+    map_int_list_date: map<i8, list<date>>;
+
+    optional_set_string: optional<set<string>>;
+    set_string: set<string>;
+    set_optional_string: set<optional<string>>;
+    map_int_set_string: map<i8, set<string>>;
+    map_optional_int_set_string: map<optional<i32>, set<string>>;
+}
+
+foo_containers_interface = interface +c {
+    set_containers_record(rec: foo_containers_record);
+    get_containers_record(): foo_containers_record;
+
+    set_optional_containers_record(rec: optional<foo_containers_record>);
+    get_optional_containers_record(): optional<foo_containers_record>;
+
+    set_optional_map_string_int(m: optional<map<string,i32>>);
+    get_optional_map_string_int(): optional<map<string,i32>>;
+
+    set_optional_list_int(m: optional<list<i32>>);
+    get_optional_list_int(): optional<list<i32>>;
+
+    set_list_record(lr: list<foo_some_other_record>);
+    #get_list_record(): list<foo_some_other_record>;
+
+    set_list_binary(lb: list<binary>);
+    get_list_binary(): list<binary>;
+
+    # Commented out until we figure out the std::hash situation in hpp
+    #set_set_record(sr: set<foo_some_other_record>);
+    #get_set_record(): set<foo_some_other_record>;
+
+    static create(): foo_containers_interface;
+}
+
+

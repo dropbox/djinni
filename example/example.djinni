@@ -17,6 +17,6 @@ sort_items = interface +c {
     static run_sort(items: item_list): item_list;
 }
 
-textbox_listener = interface +j +o {
+textbox_listener = interface +j +o +p {
     update(items: item_list);
 }

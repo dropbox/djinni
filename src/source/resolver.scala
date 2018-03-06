@@ -265,12 +265,12 @@ private def resolveRecord(scope: Scope, r: Record) {
 
 private def resolveInterface(scope: Scope, i: Interface) {
   // Const and static methods are only allowed on +c (only) interfaces
-  if (i.ext.java || i.ext.objc) {
+  if (i.ext.java || i.ext.objc || i.ext.py) {
     for (m <- i.methods) {
       if (m.static)
-        throw Error(m.ident.loc, "static not allowed for +j or +o interfaces").toException
+        throw Error(m.ident.loc, "static not allowed for +j, +o, or +p interfaces").toException
       if (m.const)
-        throw Error(m.ident.loc, "const method not allowed for +j or +o +p interfaces").toException
+        throw Error(m.ident.loc, "const method not allowed for +j, +o, or +p interfaces").toException
     }
   }
 

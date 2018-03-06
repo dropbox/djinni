@@ -5,6 +5,7 @@
 #import "DBUsesSingleLanguageListeners.h"
 #import "DBJavaOnlyListener+Private.h"
 #import "DBObjcOnlyListener+Private.h"
+#import "DBPyOnlyListener+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIObjcWrapperCache+Private.h"
@@ -51,10 +52,16 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (nullable DBJavaOnlyListener *)returnForJava {
+- (void)callForPy:(nullable DBPyOnlyListener *)l {
     try {
-        auto objcpp_result_ = _cppRefHandle.get()->returnForJava();
-        return ::djinni_generated::JavaOnlyListener::fromCpp(objcpp_result_);
+        _cppRefHandle.get()->callForPy(::djinni_generated::PyOnlyListener::toCpp(l));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (nullable DBPyOnlyListener *)returnForPy {
+    try {
+        auto objcpp_result_ = _cppRefHandle.get()->returnForPy();
+        return ::djinni_generated::PyOnlyListener::fromCpp(objcpp_result_);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -86,11 +93,17 @@ public:
             [djinni_private_get_proxied_objc_object() callForJava:(::djinni_generated::JavaOnlyListener::fromCpp(c_l))];
         }
     }
-    std::shared_ptr<::testsuite::JavaOnlyListener> returnForJava() override
+    void callForPy(const std::shared_ptr<::testsuite::PyOnlyListener> & c_l) override
     {
         @autoreleasepool {
-            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() returnForJava];
-            return ::djinni_generated::JavaOnlyListener::toCpp(objcpp_result_);
+            [djinni_private_get_proxied_objc_object() callForPy:(::djinni_generated::PyOnlyListener::fromCpp(c_l))];
+        }
+    }
+    std::shared_ptr<::testsuite::PyOnlyListener> returnForPy() override
+    {
+        @autoreleasepool {
+            auto objcpp_result_ = [djinni_private_get_proxied_objc_object() returnForPy];
+            return ::djinni_generated::PyOnlyListener::toCpp(objcpp_result_);
         }
     }
 };

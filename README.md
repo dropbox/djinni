@@ -1,7 +1,6 @@
 # Djinni
 
-Djinni is a tool for generating cross-language type declarations and interface bindings. It's
-designed to connect C++ with either Java or Objective-C. Python support is available in an experimental version on the `python` branch.
+Djinni is a tool for generating cross-language type declarations and interface bindings. It's designed to connect C++ with Java, Objective-C, or Python.  Python support is experimental.  For more information see `README.Python.md`.
 
 We at Dropbox use Djinni to interface cross-platform C++ library code with platform-specific
 Java and Objective-C on Android and iOS.

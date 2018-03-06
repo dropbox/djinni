@@ -1,10 +1,10 @@
-# Used for ObjC multiple inheritance tests
-first_listener = interface +o {
+# Used for non-C++ multiple inheritance tests
+first_listener = interface +o +p {
     first();
 }
 
-# Used for ObjC multiple inheritance tests
-second_listener = interface +o {
+# Used for non-C++ multiple inheritance tests
+second_listener = interface +o +p {
     second();
 }
 
@@ -17,7 +17,6 @@ listener_caller = interface +c {
     callFirst();
     callSecond();
 }
-
 
 # Used for C++ multiple inheritance tests
 return_one = interface +c {

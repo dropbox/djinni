@@ -1,0 +1,17 @@
+
+foo_static = interface +c {
+    # Static method with documentation
+    static update_static_messg_to(static_string: string): string;
+    # Static method with long documentation
+    # (Second line of multi-line documentation.
+    #   Indented third line of multi-line documentation.)
+    static get_static_messg(): string;
+
+    static update_static_counter_by(plus: i32): i32;
+    static update_static_counter_to(init: i32): i32;
+    static get_static_counter(): i32;
+
+    static date_id(d: date): date;
+    static opt_date_id(od: optional<date>): optional<date>;
+    static opt_i64_id(od: optional<i64>): optional<i64>;
+}

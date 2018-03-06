@@ -1,0 +1,34 @@
+
+foo_primitives = interface +c {
+    set_int8(private_int: i8);
+    get_int8(): i8;
+
+    set_int16(private_int: i16);
+    get_int16(): i16;
+
+    set_int32(private_int: i32);
+    get_int32(): i32;
+
+    set_int64(private_int: i64);
+    get_int64(): i64;
+
+    set_float(private_float: f32);
+    get_float(): f32;
+
+    set_double(private_double: f64);
+    get_double(): f64;
+
+    set_bool(private_bool: bool);
+    get_bool(): bool;
+
+    set_binary(private_binary: binary);
+    get_binary(): binary;
+
+    set_string(private_string: string);
+    get_string(): string;
+
+    set_date(private_date: date);
+    get_date(): date;
+
+    static create(): foo_primitives;
+}

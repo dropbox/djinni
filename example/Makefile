@@ -1,4 +1,4 @@
-all: android ios localhost
+all: android ios localhost py
 
 android: example.djinni
 	@make -C .. GypAndroid.mk
@@ -9,4 +9,7 @@ ios: example.djinni
 localhost: example.djinni
 	cd localhost && ant compile jar run
 
-.PHONY: android ios localhost
+py: example.djinni
+	@make -C .. ./build_py/Makefile
+
+.PHONY: android ios localhost py

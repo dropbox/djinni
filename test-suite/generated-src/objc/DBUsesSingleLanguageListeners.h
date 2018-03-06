@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 @class DBJavaOnlyListener;
+@class DBPyOnlyListener;
 @protocol DBObjcOnlyListener;
 
 
@@ -18,6 +19,8 @@
 
 - (void)callForJava:(nullable DBJavaOnlyListener *)l;
 
-- (nullable DBJavaOnlyListener *)returnForJava;
+- (void)callForPy:(nullable DBPyOnlyListener *)l;
+
+- (nullable DBPyOnlyListener *)returnForPy;
 
 @end

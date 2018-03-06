@@ -1,0 +1,13 @@
+
+foo_interface = interface +c {
+    int32_inverse(x: i32): i32;
+    set_private_int32(private_int: i32);
+    get_private_int32(): i32;
+    set_private_string(private_string: string);
+    get_private_string(): string;
+
+    get_set_strings(ps1: string, ps2: string): string;
+
+    static create(): foo_interface;
+    get_foo_primitives(): foo_primitives;
+}

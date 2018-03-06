@@ -1,0 +1,13 @@
+@import "enum.djinni"
+
+foo_enum_interface = interface +c {
+    # Returns record of given string
+    set_enum(some_color: color);
+    get_enum(): color;
+
+    set_optional_enum(some_color: optional<color>);
+    get_optional_enum(): optional<color>;
+
+    static create(): foo_enum_interface;
+}
+

@@ -6,7 +6,7 @@ client_returned_record = record {
 }
 
 # Client interface
-client_interface = interface +j +o {
+client_interface = interface +p +j +o {
     # Returns record of given string
     get_record(record_id: i64, utf8string: string, misc: optional<string>): client_returned_record;
 	identifier_check(data: binary, r: i32, jret: i64): f64;

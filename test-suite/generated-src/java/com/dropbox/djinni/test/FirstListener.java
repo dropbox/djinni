@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/** Used for ObjC multiple inheritance tests */
+/** Used for non-C++ multiple inheritance tests */
 public abstract class FirstListener {
     public abstract void first();
 }
