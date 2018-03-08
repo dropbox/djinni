@@ -12,6 +12,6 @@ while [ -h "$loc" ]; do
         loc="`dirname "$loc"`/$link"  # Relative link
     fi
 done
-base_dir=$(cd "`dirname "$loc"`" && pwd)
+base_dir=$(cd "`dirname "$loc"`" > /dev/null && pwd)
 
 exec "$base_dir/target/start" "$@"
