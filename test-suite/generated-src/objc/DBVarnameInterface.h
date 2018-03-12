@@ -8,6 +8,11 @@
 
 @interface DBVarnameInterface : NSObject
 
+/**
+ * We should also rewrite parameter names in docstrings.
+ * RArg should be rewritten.
+ * _i_arg_ should not.
+ */
 - (nonnull DBVarnameRecord *)Rmethod:(nonnull DBVarnameRecord *)RArg;
 
 - (nullable DBVarnameInterface *)Imethod:(nullable DBVarnameInterface *)IArg;

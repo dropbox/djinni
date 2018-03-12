@@ -158,7 +158,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         val throwException = spec.javaCppException.fold("")(" throws " + _)
         for (m <- i.methods if !m.static) {
           skipFirst { w.wl }
-          writeDoc(w, m.doc)
+          writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
           val params = m.params.map(p => {
             val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
@@ -171,7 +171,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         // Implement the interface's static methods as calls to CppProxy's corresponding methods.
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
-          writeDoc(w, m.doc)
+          writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
           val returnPrefix = if (ret == "void") "" else "return "
           val params = m.params.map(p => {
