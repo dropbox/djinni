@@ -24,6 +24,7 @@ Djinni generates code based on interface definitions in an IDL file. An IDL file
 three kinds of declarations: enums, records, and interfaces.
 
 * Enums become C++ enum classes, Java enums, or ObjC `NS_ENUM`s.
+* Flags become C++ enum classes with convenient bit-oriented operators, Java enums with `EnumSet`, or ObjC `NS_OPTIONS`.
 * Records are pure-data value objects.
 * Interfaces are objects with defined methods to call (in C++, passed by `shared_ptr`). Djinni
   produces code allowing an interface implemented in C++ to be transparently used from ObjC or
@@ -38,6 +39,14 @@ Djinni's input is an interface description file. Here's an example:
         option1;
         option2;
         option3;
+    }
+
+    my_flags = flags {
+      flag1;
+      flag2;
+      flag3;
+      no_flags = none;
+      all_flags = all;
     }
 
     my_record = record {
@@ -125,11 +134,11 @@ For more information, run `run --help` to see all command line arguments availab
 ##### Includes & Build target
 The following headers / code will be generated for each defined type:
 
-| Type      | C++ header             | C++ source                 | Java                | JNI header            | JNI source            |
-|-----------|------------------------|----------------------------|---------------------|-----------------------|-----------------------|
-| Enum      | my\_enum.hpp           |                            | MyEnum.java         | NativeMyEnum.hpp      | NativeMyEnum.cpp      |
-| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | MyRecord[Base].java | NativeMyRecord.hpp    | NativeMyRecord.cpp    |
-| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | MyInterface.java    | NativeMyInterface.hpp | NativeMyInterface.cpp |
+| Type       | C++ header             | C++ source                 | Java                | JNI header            | JNI source            |
+|------------|------------------------|----------------------------|---------------------|-----------------------|-----------------------|
+| Enum/Flags | my\_enum.hpp           |                            | MyEnum.java         | NativeMyEnum.hpp      | NativeMyEnum.cpp      |
+| Record     | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | MyRecord[Base].java | NativeMyRecord.hpp    | NativeMyRecord.cpp    |
+| Interface  | my\_interface.hpp      | my\_interface.cpp (+)      | MyInterface.java    | NativeMyInterface.hpp | NativeMyInterface.cpp |
 
 (+) Generated only for types that contain constants.
 
@@ -164,13 +173,13 @@ you'll need to add calls to your own `JNI_OnLoad` and `JNI_OnUnload` functions. 
 ##### Includes & Build Target
 Generated files for Objective-C / C++ are as follows (assuming prefix is `DB`):
 
-| Type      | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
-|-----------|------------------------|----------------------------|--------------------------|-----------------------------|
-| Enum      | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
-| Record    | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
-|           |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
-| Interface | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
-|           |                        |                            |                          | DBMyInterface+Private.mm    |
+| Type       | C++ header             | C++ source                 | Objective-C files        | Objective-C++ files         |
+|------------|------------------------|----------------------------|--------------------------|-----------------------------|
+| Enum/Flags | my\_enum.hpp           |                            | DBMyEnum.h               |                             |
+| Record     | my\_record[\_base].hpp | my\_record[\_base].cpp (+) | DBMyRecord[Base].h       | DBMyRecord[Base]+Private.h  |
+|            |                        |                            | DBMyRecord[Base].mm (++) | DBMyRecord[Base]+Private.mm |
+| Interface  | my\_interface.hpp      | my\_interface.cpp (+)      | DBMyInterface.h          | DBMyInterface+Private.h     |
+|            |                        |                            |                          | DBMyInterface+Private.mm    |
 
 (+) Generated only for types that contain constants.
 (++) Generated only for types with derived operations and/or constants. These have `.mm` extensions to allow non-trivial constants.
@@ -182,6 +191,28 @@ Note that `+Private` files can only be used with ObjC++ source (other headers ar
 ### Enum
 Enums are translated to C++ `enum class`es with underlying type `int`, ObjC `NS_ENUM`s with
 underlying type `NSInteger`, and Java enums.
+
+### Flags
+Flags are translated to C++ `enum class`es with underlying type `unsigned` and a generated set
+of overloaded bitwise operators for convenience, ObjC `NS_OPTIONS` with underlying type
+`NSUInteger`, and Java `EnumSet<>`. Contrary to the above enums, the enumerants of flags represent
+single bits instead of integral values.
+
+When specifying a `flags` type in your IDL file you can assign special semantics to options:
+
+```
+my_flags = flags {
+  flag1;
+  flag2;
+  flag3;
+  no_flags = none;
+  all_flags = all;
+}
+```
+In the above example the elements marked with `none` and `all` are given special meaning.
+In C++ and ObjC the `no_flags` option is generated with a value that has no bits set (i.e. `0`),
+and `all_flags` is generated as a bitwise-or combination of all other values. In Java these
+special options are not generated as one can just use `EnumSet.noneOf()` and `EnumSet.allOf()`.
 
 ### Record
 Records are data objects. In C++, records contain all their elements by value, including other
@@ -203,7 +234,7 @@ The available data types for a record, argument, or return value are:
    Objective-C. Primitives in a set will be boxed in Java and Objective-C.
  - Map (`map<typeA, typeB>`). This is `unordered_map<K, V>` in C++, `HashMap` in Java, and
    `NSDictionary` in Objective-C. Primitives in a map will be boxed in Java and Objective-C.
- - Enumerations
+ - Enumerations / Flags
  - Optionals (`optional<typeA>`). This is `std::experimental::optional<T>` in C++11, object /
    boxed primitive reference in Java (which can be `null`), and object / NSNumber strong
    reference in Objective-C (which can be `nil`).
@@ -267,7 +298,7 @@ When generating the interface for your project and wish to make it available to 
 in all of C++/Objective-C/Java you can tell Djinni to generate a special YAML file as part
 of the code generation process. This file then contains all the information Djinni requires
 to include your types in a different project. Instructing Djinni to create these YAML files
-is controlled by the follwoing arguments:
+is controlled by the following arguments:
 - `--yaml-out`: The output folder for YAML files (Generator disabled if unspecified).
 - `--yaml-out-file`: If specified all types are merged into a single YAML file instead of generating one file per type (relative to `--yaml-out`).
 - `--yaml-prefix`: The prefix to add to type names stored in YAML files (default: `""`).
@@ -419,13 +450,70 @@ integers are not included because they are not available in Java.
 ## Test Suite
 Run `make test` to invoke the test suite, found in the test-suite subdirectory. It will build and run Java code on a local JVMy, plus Objective-C on an iOS simulator.  The latter will only work on a Mac with Xcode.
 
+## Generate a standalone jar
+
+The `djinni_jar` target of the main `Makefile` creates a standalone `.jar`. 
+This uses the [sbt assembly plugin](https://github.com/sbt/sbt-assembly) under the hoods.
+
+Simply call this target from the root directory:
+```shell
+make djinni_jar
+```
+This will produce a `.jar` file inside the `src/target/scala_<SCALA_VERSION>/djinni-assembly-<VERSION>.jar`.
+
+You can move and use it as any other executable `.jar`.
+
+Assuming the `.jar` is located at `$DJINNI_JAR_DIR` its version equals `0.1-SNAPSHOT`:
+```shell
+# Example
+java -jar $DJINNI_JAR_DIR/djinni-assembly-0.1-SNAPSHOT.jar \
+    --java-out "$temp_out/java" \
+    --java-package $java_package \
+    --java-class-access-modifier "package" \
+    --java-nullable-annotation "javax.annotation.CheckForNull" \
+    --java-nonnull-annotation "javax.annotation.Nonnull" \
+    --ident-java-field mFooBar \
+    \
+    --cpp-out "$temp_out/cpp" \
+    --cpp-namespace textsort \
+    --ident-cpp-enum-type foo_bar \
+    \
+    --jni-out "$temp_out/jni" \
+    --ident-jni-class NativeFooBar \
+    --ident-jni-file NativeFooBar \
+    \
+    --objc-out "$temp_out/objc" \
+    --objcpp-out "$temp_out/objc" \
+    --objc-type-prefix TXS \
+    --objc-swift-bridging-header "TextSort-Bridging-Header" \
+    \
+    --idl "$in"
+```
+
+*Note*: The `all` target of the main `Makefile` includes the `djinni_jar` target.
+
+## Generate an iOS universal binary of the support library.
+
+The `ios-build-support-lib.sh` helps you to build an universal static library for iOS platforms.
+It uses the platform file of the [ios-cmake](https://github.com/leetal/ios-cmake) repository.
+
+It basically creates one universal static library per `IOS_PLATFORM` variable and uses `lipo` 
+to merge all the files in one.
+
+There is basically two variables you would like to modify:
+
+- `BUILD_APPLE_ARCHITECTURES`: Specifies which `IOS_PLATFORM` to build.
+For more informations, take a look at https://github.com/leetal/ios-cmake.
+
+- `ENABLE_BITCODE`: enable/disable the bitcode generation.
+
 ## Community Links
 
 * Join the discussion with other developers at the [Mobile C++ Slack Community](https://mobilecpp.herokuapp.com/)
 * There are a set of [tutorials](http://mobilecpptutorials.com/) for building a cross-platform app using Djinni.
 * [mx3](https://github.com/libmx3/mx3) is an example project demonstrating use of Djinni and other tools.
 * [Slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo) from the CppCon 2014 talk where we introduced Djinni.
-* [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 about Djinni implementatino techniques, and the addition of Python.
+* [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 about Djinni implementation techniques, and the addition of Python.
 * You can see a [CppCon 2014 talk](https://www.youtube.com/watch?v=5AZMEm3rZ2Y) by app developers at Dropbox about their cross-platform experiences.
 
 ## Authors
@@ -438,5 +526,6 @@ Run `make test` to invoke the test suite, found in the test-suite subdirectory. 
 - Andrew Twyman
 
 ## Contacts
+- Xianwen Chen - `xianwen@dropbox.com`
 - Andrew Twyman - `atwyman@dropbox.com`
 - Jacob Potter - `djinni@j4cbo.com`

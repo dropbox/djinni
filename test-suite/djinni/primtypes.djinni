@@ -14,4 +14,4 @@ assorted_primitives = record {
     o_sixtyfour: optional<i64>;
     o_fthirtytwo: optional<f32>;
     o_fsixtyfour: optional<f64>;
-} deriving (eq)
+} deriving (eq, parcelable)

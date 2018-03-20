@@ -98,6 +98,7 @@ fi
     --java-nullable-annotation "javax.annotation.CheckForNull" \
     --java-nonnull-annotation "javax.annotation.Nonnull" \
     --java-use-final-for-record false \
+    --java-implement-android-os-parcelable true \
     --ident-java-field mFooBar \
     \
     --cpp-out "$temp_out_relative/cpp" \
@@ -123,6 +124,7 @@ fi
     --yaml-prefix "test_" \
     \
     --idl "$in_relative" \
+    --idl-include-path "djinni/vendor" \
 )
 
 # Make sure we can parse back our own generated YAML file
@@ -156,7 +158,7 @@ mirror() {
     local src="$1" ; shift
     local dest="$1" ; shift
     mkdir -p "$dest"
-    rsync -a --delete --checksum --itemize-changes "$src"/ "$dest" | grep -v '^\.' | sed "s/^/[$prefix]/"
+    rsync -r --delete --checksum --itemize-changes "$src"/ "$dest" | sed "s/^/[$prefix]/"
 }
 
 echo "Copying generated code to final directories..."

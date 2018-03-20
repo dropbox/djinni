@@ -12,14 +12,15 @@ namespace djinni_generated {
 
 class SecondListener::ObjcProxy final
 : public ::testsuite::SecondListener
-, public ::djinni::ObjcProxyCache::Handle<ObjcType>
+, private ::djinni::ObjcProxyBase<ObjcType>
 {
+    friend class ::djinni_generated::SecondListener;
 public:
-    using Handle::Handle;
+    using ObjcProxyBase::ObjcProxyBase;
     void second() override
     {
         @autoreleasepool {
-            [Handle::get() second];
+            [djinni_private_get_proxied_objc_object() second];
         }
     }
 };
@@ -41,7 +42,7 @@ auto SecondListener::fromCppOpt(const CppOptType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();
+    return dynamic_cast<ObjcProxy&>(*cpp).djinni_private_get_proxied_objc_object();
 }
 
 }  // namespace djinni_generated

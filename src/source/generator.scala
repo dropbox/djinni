@@ -24,6 +24,7 @@ import djinni.syntax.Error
 import djinni.writer.IndentWriter
 import scala.language.implicitConversions
 import scala.collection.mutable
+import scala.util.matching.Regex
 
 package object generatorTools {
 
@@ -36,6 +37,7 @@ package object generatorTools {
                    javaAnnotation: Option[String],
                    javaNullableAnnotation: Option[String],
                    javaNonnullAnnotation: Option[String],
+                   javaImplementAndroidOsParcelable: Boolean,
                    javaUseFinalForRecord: Boolean,
                    cppOutFolder: Option[File],
                    cppHeaderOutFolder: Option[File],
@@ -74,6 +76,8 @@ package object generatorTools {
                    objcppIncludeObjcPrefix: String,
                    objcppNamespace: String,
                    objcBaseLibIncludePrefix: String,
+                   objcSwiftBridgingHeaderWriter: Option[Writer],
+                   objcSwiftBridgingHeaderName: Option[String],
                    outFileListWriter: Option[Writer],
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
@@ -212,6 +216,11 @@ package object generatorTools {
           createFolder("Objective-C++", spec.objcppOutFolder.get)
         }
         new ObjcppGenerator(spec).generate(idl)
+      }
+      if (spec.objcSwiftBridgingHeaderWriter.isDefined) {
+        SwiftBridgingHeaderGenerator.writeAutogenerationWarning(spec.objcSwiftBridgingHeaderName.get, spec.objcSwiftBridgingHeaderWriter.get)
+        SwiftBridgingHeaderGenerator.writeBridgingVars(spec.objcSwiftBridgingHeaderName.get, spec.objcSwiftBridgingHeaderWriter.get)
+        new SwiftBridgingHeaderGenerator(spec).generate(idl)
       }
       if (spec.yamlOutFolder.isDefined) {
         if (!spec.skipGeneration) {
@@ -381,7 +390,43 @@ abstract class Generator(spec: Spec)
     w.w(end)
   }
 
+  def normalEnumOptions(e: Enum) = e.options.filter(_.specialFlag == None)
+
+  def writeEnumOptionNone(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.NoFlags))) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + " = 0,")
+    }
+  }
+
+  def writeEnumOptions(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    var shift = 0
+    for (o <- normalEnumOptions(e)) {
+      writeDoc(w, o.doc)
+      w.wl(ident(o.ident.name) + (if(e.flags) s" = 1 << $shift" else "") + ",")
+      shift += 1
+    }
+  }
+
+  def writeEnumOptionAll(w: IndentWriter, e: Enum, ident: IdentConverter) {
+    for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.AllFlags))) {
+      writeDoc(w, o.doc)
+      w.w(ident(o.ident.name) + " = ")
+      w.w(normalEnumOptions(e).map(o => ident(o.ident.name)).fold("0")((acc, o) => acc + " | " + o))
+      w.wl(",")
+    }
+  }
+
   // --------------------------------------------------------------------------
+
+  def writeMethodDoc(w: IndentWriter, method: Interface.Method, ident: IdentConverter) {
+    val paramReplacements = method.params.map(p => (s"\\b${Regex.quote(p.ident.name)}\\b", s"${ident(p.ident.name)}"))
+    val newDoc = Doc(method.doc.lines.map(l => {
+      paramReplacements.foldLeft(l)((line, rep) =>
+        line.replaceAll(rep._1, rep._2))
+    }))
+    writeDoc(w, newDoc)
+  }
 
   def writeDoc(w: IndentWriter, doc: Doc) {
     doc.lines.length match {

@@ -28,14 +28,37 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
+/*static*/
+JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
+    static JniClassInitializer::registration_vec m;
+    return m;
+}
+
+/*static*/
+std::mutex & JniClassInitializer::get_mutex() {
+    static std::mutex mtx;
+    return mtx;
+}
+
+/*static*/
+JniClassInitializer::registration_vec JniClassInitializer::get_all() {
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    return get_vec();
+}
+
+JniClassInitializer::JniClassInitializer(std::function<void()> init) {
+    const std::lock_guard<std::mutex> lock(get_mutex());
+    get_vec().push_back(std::move(init));
+}
+
 void jniInit(JavaVM * jvm) {
     g_cachedJVM = jvm;
 
     try {
-        for (const auto & kv : JniClassInitializer::Registration::get_all()) {
-            kv.second->init();
+        for (const auto & initializer : JniClassInitializer::get_all()) {
+            initializer();
         }
-    } catch (const std::exception & e) {
+    } catch (const std::exception &) {
         // Default exception handling only, since non-default might not be safe if init
         // is incomplete.
         jniDefaultSetPendingFromCurrent(jniGetThreadEnv(), __func__);
@@ -242,6 +265,40 @@ LocalRef<jobject> JniEnum::create(JNIEnv * env, jint value) const {
                                                         value));
     jniExceptionCheck(env);
     return result;
+}
+
+JniFlags::JniFlags(const std::string & name)
+    : JniEnum { name }
+    {}
+
+unsigned JniFlags::flags(JNIEnv * env, jobject obj) const {
+    DJINNI_ASSERT(obj && env->IsInstanceOf(obj, m_clazz.get()), env);
+    auto size = env->CallIntMethod(obj, m_methSize);
+    jniExceptionCheck(env);
+    unsigned flags = 0;
+    auto it = LocalRef<jobject>(env, env->CallObjectMethod(obj, m_methIterator));
+    jniExceptionCheck(env);
+    for(jint i = 0; i < size; ++i) {
+        auto jf = LocalRef<jobject>(env, env->CallObjectMethod(it, m_iterator.methNext));
+        jniExceptionCheck(env);
+        flags |= (1u << static_cast<unsigned>(ordinal(env, jf)));
+    }
+    return flags;
+}
+
+LocalRef<jobject> JniFlags::create(JNIEnv * env, unsigned flags, int bits) const {
+    auto j = LocalRef<jobject>(env, env->CallStaticObjectMethod(m_clazz.get(), m_methNoneOf, enumClass()));
+    jniExceptionCheck(env);
+    unsigned mask = 1;
+    for(int i = 0; i < bits; ++i, mask <<= 1) {
+        if((flags & mask) != 0) {
+            auto jf = create(env, static_cast<jint>(i));
+            jniExceptionCheck(env);
+            env->CallBooleanMethod(j, m_methAdd, jf.get());
+            jniExceptionCheck(env);
+        }
+    }
+    return j;
 }
 
 JniLocalScope::JniLocalScope(JNIEnv* p_env, jint capacity, bool throwOnError)
@@ -482,7 +539,7 @@ std::string jniUTF8FromString(JNIEnv * env, const jstring jstr) {
 }
 
 template<int wcharTypeSize>
-static std::wstring implUTF16ToWString(const char16_t * data, size_t length)
+static std::wstring implUTF16ToWString(const char16_t * /*data*/, size_t /*length*/)
 {
     static_assert(wcharTypeSize == 2 || wcharTypeSize == 4, "wchar_t must be represented by UTF-16 or UTF-32 encoding");
     return {}; // unreachable

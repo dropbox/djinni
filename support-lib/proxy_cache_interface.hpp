@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <memory>
 #include <functional>
 #include <typeindex>
 
@@ -90,7 +91,7 @@ template <typename T> static inline T * get_unowning(T * ptr) { return ptr; }
  *
  * The cache contains a map from pair<ImplType, UnowningImplPointer>
  * to WeakProxyPointer, allowing it to answer the question: "given this
- * impl, do we already have a proxy in existance?"
+ * impl, do we already have a proxy in existence?"
  *
  * We use one map for all translated types, rather than a separate one for each type,
  * to minimize duplication of code and make it so the unordered_map is as contained as

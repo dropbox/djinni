@@ -12,7 +12,7 @@ RUN echo 1 | update-alternatives --config javac
 
 # Get modern ant
 RUN yum install -y ant
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.92-5.b14.fc24.x86_64
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
 
 VOLUME /opt/djinni
 CMD /opt/djinni/test-suite/java/docker/build_and_run_tests.sh
