@@ -1,5 +1,6 @@
 djinni/all.djinni
 djinni/common.djinni
+djinni/properties.djinni
 djinni/set.djinni
 djinni/derivings.djinni
 djinni/nested_collection.djinni

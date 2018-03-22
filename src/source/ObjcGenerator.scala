@@ -111,6 +111,13 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
         writeObjcFuncDecl(m, w)
         w.wl(";")
       }
+      for(p <- i.properties) {
+        w.wl
+        writeDoc(w, p.doc)
+        val nullability = marshal.nullability(p.ty.resolved).fold("")(", " + _)
+        val readonly = if(p.readOnly) ", readonly" else ""
+        w.wl(s"@property (nonatomic${nullability}${readonly}) ${marshal.fqFieldType(p.ty)} ${idObjc.field(p.ident)};")
+      }
       for (c <- i.consts if !marshal.canBeConstVariable(c)) {
         w.wl
         writeDoc(w, c.doc)

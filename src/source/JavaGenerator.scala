@@ -130,6 +130,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
+    i.properties.map(p => {
+      refs.find(p.ty)
+    })
+
     if (i.ext.cpp) {
       refs.java.add("java.util.concurrent.atomic.AtomicBoolean")
     }
@@ -145,7 +149,16 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         generateJavaConstants(w, i.consts)
 
         val throwException = spec.javaCppException.fold("")(" throws " + _)
-        for (m <- i.methods if !m.static) {
+        var localMethods = i.methods
+        for (p <- i.properties) {
+            var argSeq = Option(p.ty)
+            localMethods = localMethods :+ Interface.Method(Ident(s"get_${p.ident.name}", ident.file, ident.loc), Seq.empty, argSeq, Doc(Seq(s"getter for ${p.ident.name}")), false, false)
+            if (!p.readOnly) {
+              localMethods = localMethods :+ Interface.Method(Ident(s"set_${p.ident.name}", ident.file, ident.loc), Seq(Field(Ident(s"new_${p.ident.name}", p.ident.file, p.ident.loc), p.ty, Doc(Seq(p.ident)))), None, Doc(Seq(s"setter for ${p.ident.name}")), false, false)
+            }
+        }
+
+        for (m <- localMethods if !m.static) {
           skipFirst { w.wl }
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
@@ -156,7 +169,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
-        for (m <- i.methods if m.static) {
+        for (m <- localMethods if m.static) {
           skipFirst { w.wl }
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
@@ -167,6 +180,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
         }
+
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
@@ -188,7 +202,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
+
+            for (m <- localMethods if !m.static) { // Static methods not in CppProxy
               val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")

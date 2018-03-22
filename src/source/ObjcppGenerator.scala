@@ -70,6 +70,9 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     i.consts.map(c => {
       refs.find(c.ty)
     })
+    i.properties.map(p => {
+      refs.find(p.ty)
+    })
 
     val self = objcMarshal.typename(ident, i)
     val cppSelf = cppMarshal.fqTypename(ident, i)
@@ -193,6 +196,23 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
               w.wl(";")
               m.ret.fold()(r => w.wl(s"return ${objcppMarshal.fromCpp(r, "objcpp_result_")};"))
+            }
+          }
+        }
+
+        for (p <- i.properties) {
+          w.wl
+          w.wl(s"- (${marshal.fqFieldType(p.ty)})${idObjc.method(p.ident)}")
+          w.braced {
+            val call = "_cppRefHandle.get()->get_" + idCpp.method(p.ident) + "();"
+            w.wl(s"auto objcpp_result_ = ${call}")
+            w.wl(s"return ${objcppMarshal.fromCpp(p.ty, "objcpp_result_")};")
+          }
+          if(!p.readOnly) {
+            w.wl(s"- (void)set${idObjc.method(p.ident).capitalize}:(${marshal.fqFieldType(p.ty)})${idCpp.method(p.ident)}")
+            w.braced {
+              val call = s"_cppRefHandle.get()->set_${idCpp.method(p.ident)}(${objcppMarshal.toCpp(p.ty, idCpp.method(p.ident))})";
+              w.wl(s"${call};")
             }
           }
         }

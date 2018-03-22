@@ -52,6 +52,7 @@ djinni-output-temp/cpp/record_with_derivings.cpp
 djinni-output-temp/cpp/record_with_nested_derivings.hpp
 djinni-output-temp/cpp/record_with_nested_derivings.cpp
 djinni-output-temp/cpp/set_record.hpp
+djinni-output-temp/cpp/properties_test_helper.hpp
 djinni-output-temp/java/TestDuration.java
 djinni-output-temp/java/RecordWithDurationAndDerivings.java
 djinni-output-temp/java/DateRecord.java
@@ -96,6 +97,7 @@ djinni-output-temp/java/NestedCollection.java
 djinni-output-temp/java/RecordWithDerivings.java
 djinni-output-temp/java/RecordWithNestedDerivings.java
 djinni-output-temp/java/SetRecord.java
+djinni-output-temp/java/PropertiesTestHelper.java
 djinni-output-temp/jni/NativeTestDuration.hpp
 djinni-output-temp/jni/NativeTestDuration.cpp
 djinni-output-temp/jni/NativeRecordWithDurationAndDerivings.hpp
@@ -181,6 +183,8 @@ djinni-output-temp/jni/NativeRecordWithNestedDerivings.hpp
 djinni-output-temp/jni/NativeRecordWithNestedDerivings.cpp
 djinni-output-temp/jni/NativeSetRecord.hpp
 djinni-output-temp/jni/NativeSetRecord.cpp
+djinni-output-temp/jni/NativePropertiesTestHelper.hpp
+djinni-output-temp/jni/NativePropertiesTestHelper.cpp
 djinni-output-temp/objc/DBTestDuration.h
 djinni-output-temp/objc/DBRecordWithDurationAndDerivings.h
 djinni-output-temp/objc/DBRecordWithDurationAndDerivings.mm
@@ -247,6 +251,7 @@ djinni-output-temp/objc/DBRecordWithNestedDerivings.h
 djinni-output-temp/objc/DBRecordWithNestedDerivings.mm
 djinni-output-temp/objc/DBSetRecord.h
 djinni-output-temp/objc/DBSetRecord.mm
+djinni-output-temp/objc/DBPropertiesTestHelper.h
 djinni-output-temp/objc/DBTestDuration+Private.h
 djinni-output-temp/objc/DBTestDuration+Private.mm
 djinni-output-temp/objc/DBRecordWithDurationAndDerivings+Private.h
@@ -332,4 +337,6 @@ djinni-output-temp/objc/DBRecordWithNestedDerivings+Private.h
 djinni-output-temp/objc/DBRecordWithNestedDerivings+Private.mm
 djinni-output-temp/objc/DBSetRecord+Private.h
 djinni-output-temp/objc/DBSetRecord+Private.mm
+djinni-output-temp/objc/DBPropertiesTestHelper+Private.h
+djinni-output-temp/objc/DBPropertiesTestHelper+Private.mm
 djinni-output-temp/yaml/yaml-test.yaml

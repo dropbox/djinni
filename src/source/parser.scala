@@ -18,12 +18,14 @@ package djinni
 
 import java.io.{File, FileNotFoundException, InputStreamReader, FileInputStream, Writer}
 
-import djinni.ast.Interface.Method
+import djinni.ast.Interface.{Method, Property}
 import djinni.ast.Record.DerivingType.DerivingType
 import djinni.syntax._
 import djinni.ast._
 import java.util.{Map => JMap}
+
 import org.yaml.snakeyaml.Yaml
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.util.control.Breaks._
@@ -150,11 +152,12 @@ private object IdlParser extends RegexParsers {
   }
 
   def interfaceHeader = "interface" ~> extInterface
-  def interface: Parser[Interface] = interfaceHeader ~ bracesList(method | const) ^^ {
+  def interface: Parser[Interface] = interfaceHeader ~ bracesList(method | const | property) ^^ {
     case ext~items => {
       val methods = items collect {case m: Method => m}
       val consts = items collect {case c: Const => c}
-      Interface(ext, methods, consts)
+      val properties = items collect {case p: Property => p}
+      Interface(ext, methods, consts, properties)
     }
   }
 
@@ -162,7 +165,7 @@ private object IdlParser extends RegexParsers {
   def externEnum: Parser[Enum] = enumHeader ^^ { case _ => Enum(List(), false) }
   def externFlags: Parser[Enum] = flagsHeader ^^ { case _ => Enum(List(), true) }
   def externRecord: Parser[Record] = recordHeader ~ opt(deriving) ^^ { case ext~deriving => Record(ext, List(), List(), deriving.getOrElse(Set[DerivingType]())) }
-  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List()) }
+  def externInterface: Parser[Interface] = interfaceHeader ^^ { case ext => Interface(ext, List(), List(), List()) }
 
   def staticLabel: Parser[Boolean] = ("static ".r | "".r) ^^ {
     case "static " => true
@@ -170,6 +173,10 @@ private object IdlParser extends RegexParsers {
   }
   def constLabel: Parser[Boolean] = ("const ".r | "".r) ^^ {
     case "const " => true
+    case "" => false
+  }
+  def readOnlyLabel: Parser[Boolean] = ("readonly ".r | "".r) ^^ {
+    case "readonly " => true
     case "" => false
   }
   def method: Parser[Interface.Method] = doc ~ staticLabel ~ constLabel ~ ident ~ parens(repsepend(field, ",")) ~ opt(ret) ^^ {
@@ -194,6 +201,10 @@ private object IdlParser extends RegexParsers {
 
   def const: Parser[Const] = doc ~ "const" ~ ident ~ ":" ~ typeRef ~ "=" ~ value ^^ {
     case doc~_~ident~_~typeRef~_~value => Const(ident, typeRef, value, doc)
+  }
+
+  def property: Parser[Interface.Property] = doc ~ readOnlyLabel ~ ident ~ ret ^^ {
+    case doc~readOnlyLabel~ident~ret => Interface.Property(ident, ret, doc, readOnlyLabel)
   }
 
   def typeRef: Parser[TypeRef] = typeExpr ^^ TypeRef

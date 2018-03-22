@@ -1,3 +1,4 @@
+@import "properties.djinni"
 @import "set.djinni"
 @import "derivings.djinni"
 @import "nested_collection.djinni"
@@ -15,3 +16,4 @@
 @import "extended_record.djinni"
 @import "varnames.djinni"
 @import "relative_paths.djinni"
+
