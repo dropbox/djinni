@@ -2,8 +2,10 @@ properties_test_helper = interface +c {
 
     item: i32;
     test_string: string;
+    other_method(argument: string) : string;
     test_list: list<i32>;
     readonly read_only_bool: bool;
 
     static create_new(): properties_test_helper;
 }
+

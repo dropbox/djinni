@@ -14,18 +14,30 @@ class PropertiesTestHelper {
 public:
     virtual ~PropertiesTestHelper() {}
 
+    virtual std::string other_method(const std::string & argument) = 0;
+
     static std::shared_ptr<PropertiesTestHelper> create_new();
 
-    virtual int32_t get_item() = 0;
+    /**getter for item */
+    virtual int32_t get_item() const = 0;
+
+    /**setter for item */
     virtual void set_item(int32_t new_item) = 0;
 
-    virtual std::string get_test_string() = 0;
-    virtual void set_test_string(std::string new_test_string) = 0;
+    /**getter for test_string */
+    virtual std::string get_test_string() const = 0;
 
-    virtual std::vector<int32_t> get_test_list() = 0;
-    virtual void set_test_list(std::vector<int32_t> new_test_list) = 0;
+    /**setter for test_string */
+    virtual void set_test_string(const std::string & new_test_string) = 0;
 
-    virtual bool get_read_only_bool() = 0;
+    /**getter for test_list */
+    virtual std::vector<int32_t> get_test_list() const = 0;
+
+    /**setter for test_list */
+    virtual void set_test_list(const std::vector<int32_t> & new_test_list) = 0;
+
+    /**getter for read_only_bool */
+    virtual bool get_read_only_bool() const = 0;
 };
 
 }  // namespace testsuite

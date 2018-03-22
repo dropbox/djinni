@@ -149,7 +149,16 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         generateJavaConstants(w, i.consts)
 
         val throwException = spec.javaCppException.fold("")(" throws " + _)
-        for (m <- i.methods if !m.static) {
+        var localMethods = i.methods
+        for (p <- i.properties) {
+            var argSeq = Option(p.ty)
+            localMethods = localMethods :+ Interface.Method(Ident(s"get_${p.ident.name}", ident.file, ident.loc), Seq.empty, argSeq, Doc(Seq(s"getter for ${p.ident.name}")), false, false)
+            if (!p.readOnly) {
+              localMethods = localMethods :+ Interface.Method(Ident(s"set_${p.ident.name}", ident.file, ident.loc), Seq(Field(Ident(s"new_${p.ident.name}", p.ident.file, p.ident.loc), p.ty, Doc(Seq(p.ident)))), None, Doc(Seq(s"setter for ${p.ident.name}")), false, false)
+            }
+        }
+
+        for (m <- localMethods if !m.static) {
           skipFirst { w.wl }
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
@@ -160,7 +169,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
-        for (m <- i.methods if m.static) {
+        for (m <- localMethods if m.static) {
           skipFirst { w.wl }
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
@@ -170,16 +179,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
           })
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
           w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
-        }
-        for (p <- i.properties) {
-          skipFirst { w.wl }
-          writeDoc(w, p.doc)
-          val ret = marshal.fqTypename(p.ty)
-          val meth = idJava.method(p.ident).capitalize;
-          w.wl("public abstract " + ret + " get" + meth + "();")
-          if(!p.readOnly) {
-            w.wl("public abstract void set" + meth + "(" + ret + " new" + meth + ");")
-          }
         }
 
         if (i.ext.cpp) {
@@ -203,7 +202,8 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
+
+            for (m <- localMethods if !m.static) { // Static methods not in CppProxy
               val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
@@ -216,28 +216,6 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
               }
               w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
-            }
-
-            for (p <- i.properties) {
-              val ret = marshal.fieldType(p.ty)
-              var meth = idJava.method(p.ident).capitalize
-              w.wl
-              w.wl(s"@Override")
-              w.wl(s"public $ret get$meth()$throwException").braced {
-                w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
-                w.wl(s"return native_get$meth(this.nativeRef);")
-              }
-              w.wl(s"private native ${ret} native_get${meth}(long _nativeRef);")
-
-              if(!p.readOnly) {
-                w.wl
-                w.wl(s"@Override")
-                w.wl(s"public void set$meth(${ret} new${meth})$throwException").braced {
-                  w.wl("assert !this.destroyed.get() : \"trying to use a destroyed object\";")
-                  w.wl(s"native_set$meth(this.nativeRef, new${meth});")
-                }
-                w.wl(s"private native void native_set${meth}(long _nativeRef, ${ret} new${meth});")
-              }
             }
           }
         }

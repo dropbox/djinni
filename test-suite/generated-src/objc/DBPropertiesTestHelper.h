@@ -7,6 +7,8 @@
 
 @interface DBPropertiesTestHelper : NSObject
 
+- (nonnull NSString *)otherMethod:(nonnull NSString *)argument;
+
 + (nullable DBPropertiesTestHelper *)createNew;
 
 @property (nonatomic) int32_t item;

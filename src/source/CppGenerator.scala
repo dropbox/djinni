@@ -298,7 +298,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     })
 
     val self = marshal.typename(ident, i)
-    val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
+    var localMethods = i.methods
+    for (p <- i.properties) {
+        var argSeq = Option(p.ty)
+        localMethods = localMethods :+ Interface.Method(Ident(s"get_${p.ident.name}", ident.file, ident.loc), Seq.empty, argSeq, Doc(Seq(s"getter for ${p.ident.name}")), false, true)
+        if (!p.readOnly) {
+          localMethods = localMethods :+ Interface.Method(Ident(s"set_${p.ident.name}", ident.file, ident.loc), Seq(Field(Ident(s"new_${p.ident.name}", p.ident.file, p.ident.loc), p.ty, Doc(Seq(p.ident)))), None, Doc(Seq(s"setter for ${p.ident.name}")), false, false)
+        }
+    }
+    val methodNamesInScope = localMethods.map(m => idCpp.method(m.ident))
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
@@ -310,7 +318,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         // Constants
         generateHppConstants(w, i.consts)
         // Methods
-        for (m <- i.methods) {
+        for (m <- localMethods) {
           w.wl
           writeMethodDoc(w, m, idCpp.local)
           val ret = marshal.returnType(m.ret, methodNamesInScope)
@@ -320,16 +328,6 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           } else {
             val constFlag = if (m.const) " const" else ""
             w.wl(s"virtual $ret ${idCpp.method(m.ident)}${params.mkString("(", ", ", ")")}$constFlag = 0;")
-          }
-        }
-        // Properties
-        for (p <- i.properties) {
-          w.wl
-          writeDoc(w, p.doc)
-          val ret = marshal.fieldType(p.ty)
-          w.wl(s"virtual $ret get_${idCpp.method(p.ident)}() = 0;")
-          if(!p.readOnly) {
-            w.wl(s"virtual void set_${idCpp.method(p.ident)}($ret new_${idCpp.method(p.ident)}) = 0;")
           }
         }
       }

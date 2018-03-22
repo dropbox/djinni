@@ -19,6 +19,16 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_PropertiesTestHelper_00024C
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_PropertiesTestHelper_00024CppProxy_native_1otherMethod(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_argument)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::testsuite::PropertiesTestHelper>(nativeRef);
+        auto r = ref->other_method(::djinni::String::toCpp(jniEnv, j_argument));
+        return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_PropertiesTestHelper_createNew(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {

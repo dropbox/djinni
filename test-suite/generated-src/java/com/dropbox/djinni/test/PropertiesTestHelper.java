@@ -9,19 +9,34 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 public abstract class PropertiesTestHelper {
-    @CheckForNull
-    public static native PropertiesTestHelper createNew();
+    @Nonnull
+    public abstract String otherMethod(@Nonnull String argument);
 
+    /**getter for item */
     public abstract int getItem();
+
+    /**setter for item */
     public abstract void setItem(int newItem);
 
+    /**getter for test_string */
+    @Nonnull
     public abstract String getTestString();
-    public abstract void setTestString(String newTestString);
 
+    /**setter for test_string */
+    public abstract void setTestString(@Nonnull String newTestString);
+
+    /**getter for test_list */
+    @Nonnull
     public abstract ArrayList<Integer> getTestList();
-    public abstract void setTestList(ArrayList<Integer> newTestList);
 
+    /**setter for test_list */
+    public abstract void setTestList(@Nonnull ArrayList<Integer> newTestList);
+
+    /**getter for read_only_bool */
     public abstract boolean getReadOnlyBool();
+
+    @CheckForNull
+    public static native PropertiesTestHelper createNew();
 
     private static final class CppProxy extends PropertiesTestHelper
     {
@@ -45,6 +60,14 @@ public abstract class PropertiesTestHelper {
             destroy();
             super.finalize();
         }
+
+        @Override
+        public String otherMethod(String argument)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_otherMethod(this.nativeRef, argument);
+        }
+        private native String native_otherMethod(long _nativeRef, String argument);
 
         @Override
         public int getItem()

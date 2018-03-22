@@ -25,17 +25,18 @@ private:
     bool m_read_only_bool = true;
     
 public:
-    
-    int32_t get_item();
-    void set_item(int32_t new_item);
-    
-    std::string get_test_string();
-    void set_test_string(std::string new_test_string);
-    
-    std::vector<int32_t> get_test_list();
-    void set_test_list(std::vector<int32_t> new_test_list);
+    std::string other_method(const std::string & argument) override;
 
-    bool get_read_only_bool();
+    int32_t get_item() const override;
+    void set_item(int32_t new_item) override;
+    
+    std::string get_test_string() const override;
+    void set_test_string(const std::string & new_test_string) override;
+    
+    std::vector<int32_t> get_test_list() const override;
+    void set_test_list(const std::vector<int32_t> & new_test_list) override;
+
+    bool get_read_only_bool() const override;
 };
     
 }
