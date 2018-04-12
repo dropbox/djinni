@@ -31,7 +31,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_native
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_createWithListener(JNIEnv* jniEnv, jobject /*this*/, jobject j_listener)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_createWithListener(JNIEnv* jniEnv, jobject /*this*/, jobject j_listener)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -40,7 +40,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_createWithListene
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_runSort(JNIEnv* jniEnv, jobject /*this*/, jobject j_items)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_textsort_SortItems_00024CppProxy_runSort(JNIEnv* jniEnv, jobject /*this*/, jobject j_items)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
