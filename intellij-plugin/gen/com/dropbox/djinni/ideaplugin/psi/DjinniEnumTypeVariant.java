@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface DjinniEnumTypeVariant extends PsiElement {
 
+  @NotNull
+  PsiElement getEnum();
+
 }
