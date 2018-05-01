@@ -29,6 +29,9 @@ public abstract class ConstantsInterface {
 
     public static final double F64_CONSTANT = 5.0;
 
+    @Nonnull
+    public static final ConstantEnum CONST_ENUM = ConstantEnum.SOME_VALUE;
+
     @CheckForNull
     public static final Boolean OPT_BOOL_CONSTANT = true;
 
