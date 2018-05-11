@@ -31,14 +31,14 @@ public abstract class VarnameInterface {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void __destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            __destroy();
             super.finalize();
         }
 
