@@ -33,14 +33,14 @@ public abstract class ListenerCaller {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void _djinni_destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            _djinni_destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 
