@@ -20,14 +20,14 @@ public abstract class ExternInterface1 {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void __destroy()
+        public void _djinni_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            __destroy();
+            _djinni_destroy();
             super.finalize();
         }
 
