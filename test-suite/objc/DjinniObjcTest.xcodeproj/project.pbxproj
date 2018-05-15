@@ -438,6 +438,9 @@
 		CFFD58B01B041BD9001E10B6 /* DBConstantsInterface+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBConstantsInterface+Private.mm"; sourceTree = "<group>"; };
 		CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = constants_interface.cpp; sourceTree = "<group>"; };
 		CFFD58B61B041BFD001E10B6 /* constants_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = constants_interface.hpp; sourceTree = "<group>"; };
+		FAB1E3382024112400B8E3CC /* constant_enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = constant_enum.hpp; sourceTree = "<group>"; };
+		FAB1E3392024115900B8E3CC /* DBConstantEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBConstantEnum.h; sourceTree = "<group>"; };
+		FAB1E33A2024115900B8E3CC /* DBConstantEnum+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBConstantEnum+Private.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -593,6 +596,8 @@
 				B5F06A711D4973BD005BE736 /* DBConflictUser.h */,
 				B5F06A721D4973BD005BE736 /* DBConflictUser+Private.h */,
 				B5F06A731D4973BD005BE736 /* DBConflictUser+Private.mm */,
+				FAB1E3392024115900B8E3CC /* DBConstantEnum.h */,
+				FAB1E33A2024115900B8E3CC /* DBConstantEnum+Private.h */,
 				B5D8FC321C23E2F40045ADCF /* DBConstantRecord.h */,
 				B5D8FC331C23E2F40045ADCF /* DBConstantRecord.mm */,
 				B5D8FC341C23E2F40045ADCF /* DBConstantRecord+Private.h */,
@@ -748,31 +753,18 @@
 		A242495D1AF192FC003BF8F0 /* generated-cpp */ = {
 			isa = PBXGroup;
 			children = (
-				B58B16B21D5AD55B00EF92B5 /* record_using_extended_record.cpp */,
-				B58B16B31D5AD55B00EF92B5 /* interface_using_extended_record.cpp */,
-				B58B16A61D5AC9AD00EF92B5 /* record_using_extended_record.hpp */,
-				B58B16A71D5AC9AD00EF92B5 /* interface_using_extended_record.hpp */,
-				B51911471D555EDC00772DFE /* _varname_record_.hpp */,
 				B51911481D555EDC00772DFE /* _varname_interface_.hpp */,
-				B51911191D542AEC00772DFE /* wchar_test_helpers.hpp */,
-				B5153F871D54282C00012654 /* wchar_test_rec.hpp */,
-				B5F06A9B1D4987C7005BE736 /* enum_usage_interface.hpp */,
-				B5F06A9C1D4987C7005BE736 /* enum_usage_record.hpp */,
-				B5F06A651D497396005BE736 /* conflict_user.hpp */,
-				B5F06A661D497396005BE736 /* Conflict.hpp */,
-				B5F06A681D497396005BE736 /* extended_record_base.cpp */,
-				B5F06A691D497396005BE736 /* extended_record_base.hpp */,
-				B5F06A6A1D497396005BE736 /* java_only_listener.hpp */,
-				B5F06A6B1D497396005BE736 /* objc_only_listener.hpp */,
-				B5F06A6C1D497396005BE736 /* uses_single_language_listeners.hpp */,
+				B51911471D555EDC00772DFE /* _varname_record_.hpp */,
 				CFBBB8ED1B6E3A72002EF52F /* access_flags.hpp */,
-				B5D8FC381C23E30D0045ADCF /* constant_record.hpp */,
-				B5E9C93C1C1F9DCA0073C123 /* reverse_client_interface.hpp */,
 				B52DA56C1B103FBE005CE75F /* assorted_primitives.cpp */,
 				B52DA56D1B103FBE005CE75F /* assorted_primitives.hpp */,
 				A24249601AF192FC003BF8F0 /* client_interface.hpp */,
 				A24249611AF192FC003BF8F0 /* client_returned_record.hpp */,
 				A24249621AF192FC003BF8F0 /* color.hpp */,
+				B5F06A651D497396005BE736 /* conflict_user.hpp */,
+				B5F06A661D497396005BE736 /* Conflict.hpp */,
+				FAB1E3382024112400B8E3CC /* constant_enum.hpp */,
+				B5D8FC381C23E30D0045ADCF /* constant_record.hpp */,
 				CFFD58B51B041BFD001E10B6 /* constants_interface.cpp */,
 				CFFD58B61B041BFD001E10B6 /* constants_interface.hpp */,
 				A24249631AF192FC003BF8F0 /* constants.cpp */,
@@ -782,18 +774,28 @@
 				A24249661AF192FC003BF8F0 /* date_record.hpp */,
 				CFBBB8E71B6E3747002EF52F /* empty_flags.hpp */,
 				CFAED8771B54292600E3B8A3 /* empty_record.hpp */,
+				B5F06A9B1D4987C7005BE736 /* enum_usage_interface.hpp */,
+				B5F06A9C1D4987C7005BE736 /* enum_usage_record.hpp */,
+				B5F06A681D497396005BE736 /* extended_record_base.cpp */,
+				B5F06A691D497396005BE736 /* extended_record_base.hpp */,
 				CFC5D9E01B1513D800BF2DF8 /* extern_interface_1.hpp */,
 				CFC5D9E11B1513D800BF2DF8 /* extern_interface_2.hpp */,
 				CFC5D9CE1B15105100BF2DF8 /* extern_record_with_derivings.cpp */,
 				CFC5D9CF1B15105100BF2DF8 /* extern_record_with_derivings.hpp */,
 				6551683A1C404B58003682A4 /* first_listener.hpp */,
 				CFBBB8F41B6EF0A0002EF52F /* flag_roundtrip.hpp */,
+				B58B16B31D5AD55B00EF92B5 /* interface_using_extended_record.cpp */,
+				B58B16A71D5AC9AD00EF92B5 /* interface_using_extended_record.hpp */,
+				B5F06A6A1D497396005BE736 /* java_only_listener.hpp */,
 				650CA04E1C2AB460007ADDDB /* listener_caller.hpp */,
 				A24249671AF192FC003BF8F0 /* map_date_record.hpp */,
 				A24249681AF192FC003BF8F0 /* map_list_record.hpp */,
 				A24249691AF192FC003BF8F0 /* map_record.hpp */,
 				A242496A1AF192FC003BF8F0 /* nested_collection.hpp */,
+				B5F06A6B1D497396005BE736 /* objc_only_listener.hpp */,
 				A242496B1AF192FC003BF8F0 /* primitive_list.hpp */,
+				B58B16B21D5AD55B00EF92B5 /* record_using_extended_record.cpp */,
+				B58B16A61D5AC9AD00EF92B5 /* record_using_extended_record.hpp */,
 				A242496C1AF192FC003BF8F0 /* record_with_derivings.cpp */,
 				A242496D1AF192FC003BF8F0 /* record_with_derivings.hpp */,
 				CFC5DA0C1B15330000BF2DF8 /* record_with_duration_and_derivings.cpp */,
@@ -803,11 +805,15 @@
 				A242496F1AF192FC003BF8F0 /* record_with_nested_derivings.hpp */,
 				655168441C40508A003682A4 /* return_one.hpp */,
 				655168451C40508A003682A4 /* return_two.hpp */,
+				B5E9C93C1C1F9DCA0073C123 /* reverse_client_interface.hpp */,
 				6551683B1C404B58003682A4 /* second_listener.hpp */,
 				A24249701AF192FC003BF8F0 /* set_record.hpp */,
 				CFC5DA031B15319600BF2DF8 /* test_duration.hpp */,
 				A24249711AF192FC003BF8F0 /* test_helpers.hpp */,
 				A24249721AF192FC003BF8F0 /* user_token.hpp */,
+				B5F06A6C1D497396005BE736 /* uses_single_language_listeners.hpp */,
+				B51911191D542AEC00772DFE /* wchar_test_helpers.hpp */,
+				B5153F871D54282C00012654 /* wchar_test_rec.hpp */,
 			);
 			name = "generated-cpp";
 			path = "../generated-src/cpp";
