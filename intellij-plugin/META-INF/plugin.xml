@@ -16,7 +16,7 @@
 <idea-plugin>
   <id>com.dropbox.djinni.ideaplugin</id>
   <name>Djinni IDL file support</name>
-  <version>0.8</version>
+  <version>0.8.1</version>
   <vendor url="https://github.com/dropbox/djinni">Dropbox Djinni Github Project</vendor>
 
   <description><![CDATA[
