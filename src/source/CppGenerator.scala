@@ -233,7 +233,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
 
         // Constructor.
-        if(r.fields.nonEmpty && !r.derivingTypes.contains(DerivingType.NoInit)) {
+        if(r.derivingTypes.contains(DerivingType.DefaultInit)) {
+          w.wl
+          // TODO: Set default values in constructor?
+          w.wl(actualSelf + "() = default;")
+        }
+        if(r.fields.nonEmpty) {
           w.wl
           writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
           w.wl
