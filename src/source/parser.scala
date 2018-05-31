@@ -124,6 +124,7 @@ private object IdlParser extends RegexParsers {
       case "eq" => Record.DerivingType.Eq
       case "ord" => Record.DerivingType.Ord
       case "parcelable" => Record.DerivingType.AndroidParcelable
+      case "noinit" => Record.DerivingType.NoInit
       case _ => return err( s"""Unrecognized deriving type "${ident.name}"""")
     }).toSet
   }

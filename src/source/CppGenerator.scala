@@ -233,15 +233,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
 
         // Constructor.
-        // if(r.fields.nonEmpty) {
-        //   w.wl
-        //   writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
-        //   w.wl
-        //   val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "_))"
-        //   w.wl(": " + init(r.fields.head))
-        //   r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
-        //   w.wl("{}")
-        // }
+        if(r.fields.nonEmpty && !r.derivingTypes.contains(DerivingType.NoInit)) {
+          w.wl
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
+          w.wl
+          val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "_))"
+          w.wl(": " + init(r.fields.head))
+          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
+          w.wl("{}")
+        }
 
         if (r.ext.cpp) {
           w.wl
