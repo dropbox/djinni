@@ -28,6 +28,18 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
+static pthread_key_t threadKey;
+
+void onThreadExit(void*)
+{
+    g_cachedJVM->DetachCurrentThread();
+}
+
+void createThreadDetachCallbackKey()
+{
+    pthread_key_create(&threadKey, onThreadExit);
+}
+
 /*static*/
 JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
     static JniClassInitializer::registration_vec m;
@@ -53,6 +65,7 @@ JniClassInitializer::JniClassInitializer(std::function<void()> init) {
 
 void jniInit(JavaVM * jvm) {
     g_cachedJVM = jvm;
+    createThreadDetachCallbackKey();
 
     try {
         for (const auto & initializer : JniClassInitializer::get_all()) {
@@ -72,8 +85,14 @@ void jniShutdown() {
 JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
-    const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    if (get_res != 0 || !env) {
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+        pthread_setspecific(threadKey, env);
+    }
+
+    if (get_res != JNI_OK || !env) {
         // :(
         std::abort();
     }
