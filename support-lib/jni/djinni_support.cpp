@@ -28,7 +28,7 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
-static pthread_key_t threadKey;
+static pthread_key_t threadExitCallbackKey;
 
 void onThreadExit(void*)
 {
@@ -37,7 +37,7 @@ void onThreadExit(void*)
 
 void createThreadDetachCallbackKey()
 {
-    pthread_key_create(&threadKey, onThreadExit);
+    pthread_key_create(&threadExitCallbackKey, onThreadExit);
 }
 
 /*static*/
@@ -89,7 +89,7 @@ JNIEnv * jniGetThreadEnv() {
 
     if (get_res == JNI_EDETACHED) {
         get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
-        pthread_setspecific(threadKey, env);
+        pthread_setspecific(threadExitCallbackKey, env);
     }
 
     if (get_res != JNI_OK || !env) {
