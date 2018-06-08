@@ -199,6 +199,10 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.cpp.add("#include "+q(spec.cppExtendedRecordIncludePrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
     }
 
+    if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
+      refs.hpp.add("#include \"json.hpp\"")
+    }
+
     // C++ Header
     def writeCppPrototype(w: IndentWriter) {
       if (r.ext.cpp) {
@@ -261,6 +265,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"$actualSelf& operator=($actualSelf&&) = default;")
         }
       }
+
+      w.wl
+      w.wl("using nlohmann::json;")
+      w.wl
+      w.wl(s"void to_json(json& j, const $actualSelf& m);")
+      w.wl(s"void from_json(const json& j, $actualSelf& m);")
     }
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
