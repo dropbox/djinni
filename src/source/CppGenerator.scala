@@ -275,7 +275,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
-    if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord)) {
+    if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord) || r.derivingTypes.contains(DerivingType.JsonHpp)) {
       writeCppFile(cppName, origin, refs.cpp, w => {
         generateCppConstants(w, r.consts, actualSelf)
 
@@ -320,6 +320,25 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl
           w.w(s"bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
             w.wl("return !(lhs < rhs);")
+          }
+        }
+        if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
+          w.wl
+          w.w(s"void to_json(json& j, const $actualSelf& m)").braced {
+            w.w("j = json").braced {
+              for (f <- r.fields) {
+                val tr = f.ty.resolved
+                val value = tr.base match {
+                  case x : MPrimitive => idCpp.field(f.ident)
+                  case x => "TODO"
+                }
+                w.wl(s"$value")
+              }
+            }
+          }
+          w.wl
+          w.w(s"void from_json(const json& j, $actualSelf& m)").braced {
+            w.wl("// TODO")
           }
         }
       })
