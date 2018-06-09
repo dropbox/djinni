@@ -325,20 +325,27 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
           w.wl
           w.w(s"void to_json(json& j, const $actualSelf& m)").braced {
-            w.w("j = json").braced {
+            w.w("j = json").bracedSemi {
               for (f <- r.fields) {
                 val tr = f.ty.resolved
                 val value = tr.base match {
                   case x : MPrimitive => idCpp.field(f.ident)
                   case x => "TODO"
                 }
-                w.wl(s"$value")
+                w.wl(s"""{ "$value" = m.$value },""")
               }
             }
           }
           w.wl
           w.w(s"void from_json(const json& j, $actualSelf& m)").braced {
-            w.wl("// TODO")
+            for (f <- r.fields) {
+              val tr = f.ty.resolved
+              val value = tr.base match {
+                case x : MPrimitive => idCpp.field(f.ident)
+                case x => "TODO"
+              }
+              w.wl(s"""m.$value = j["$value"];""")
+            }
           }
         }
       })
