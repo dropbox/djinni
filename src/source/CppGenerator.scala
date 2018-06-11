@@ -27,10 +27,13 @@ import scala.collection.mutable
 class CppGenerator(spec: Spec) extends Generator(spec) {
 
   val marshal = new CppMarshal(spec)
+  var jsonConversionsCheck = true
 
   val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
   def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
     writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
+  def writeHppUtilityFile(name: String, namespace: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
+    writeHppFileGeneric(spec.cppHeaderOutFolder.get, namespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
   class CppRefs(name: String) {
     var hpp = mutable.TreeSet[String]()
@@ -201,6 +204,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
       refs.hpp.add("#include \"json.hpp\"")
+      refs.cpp.add("#include \"conversions.hpp\"")
       refs.cpp.add("using nlohmann::json;")
     }
 
@@ -349,7 +353,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
                 case x : MDef if x.defType == DRecord => (idCpp.field(f. ident), marshal.fieldType(f.ty), marshal.fieldType(f.ty) + "()")
               }
               val conversion = ty match {
-                case "int64" => s"""m.$name = std::stoi(j.value<std::string>("$name", "$value"));raw_date = j.value<std::string>($name, "");"""
+                case "int64_t" => s"""m.$name = std::stoi(j.value<std::string>("$name", "$value"));"""
                 case x => s"""m.$name = j.value<$x>("$name", $value);"""
               }
               w.wl(s"""$conversion""")
@@ -357,6 +361,31 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           }
         }
       })
+    }
+
+    if (r.derivingTypes.contains(DerivingType.JsonHpp) && jsonConversionsCheck) {
+      val refs = new CppRefs("conversions")
+      refs.hpp.add("#include \"json.hpp\"")
+      refs.hpp.add("#include <iomanip>")
+      refs.hpp.add("#include <locale>")
+      refs.hpp.add("#include <chrono>")
+
+      writeHppUtilityFile("conversions", "nlohmann", origin, refs.hpp, refs.hppFwds, w => {
+        w.wl
+        w.wl("template<>")
+        w.w("struct adl_serializer<std::chrono::system_clock::time_point>").bracedSemi {
+          w.w("static void from_json(const json& j, std::chrono::system_clock::time_point& d)").braced {
+            w.wl("std::string raw_date = j.get<std::string>();")
+            w.wl("std::stringstream date_stream (raw_date);")
+            w.wl("std::tm t;")
+            w.wl("""date_stream >> std::get_time(&t, "%Y-%m-%dT%T");""")
+            w.wl("""d = std::chrono::system_clock::from_time_t(std::mktime(&t));""")
+          }
+          w.wl
+        }
+        w.wl
+      })
+      jsonConversionsCheck = false
     }
 
   }
