@@ -201,6 +201,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
       refs.hpp.add("#include \"json.hpp\"")
+      refs.cpp.add("using nlohmann::json;")
     }
 
     // C++ Header
@@ -266,17 +267,20 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
       }
 
-      w.wl
-      w.wl("using nlohmann::json;")
-      w.wl
-      w.wl(s"void to_json(json& j, const $actualSelf& m);")
-      w.wl(s"void from_json(const json& j, $actualSelf& m);")
+      if (r.derivingTypes.contains(DerivingType.JsonHpp)) {
+        w.wl
+        w.wl("using nlohmann::json;")
+        w.wl
+        w.wl(s"void to_json(json& j, const $actualSelf& m);")
+        w.wl(s"void from_json(const json& j, $actualSelf& m);")
+      }
     }
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
     if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord) || r.derivingTypes.contains(DerivingType.JsonHpp)) {
       writeCppFile(cppName, origin, refs.cpp, w => {
+
         generateCppConstants(w, r.consts, actualSelf)
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {
@@ -327,24 +331,28 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.w(s"void to_json(json& j, const $actualSelf& m)").braced {
             w.w("j = json").bracedSemi {
               for (f <- r.fields) {
-                val tr = f.ty.resolved
-                val value = tr.base match {
-                  case x : MPrimitive => idCpp.field(f.ident)
-                  case x => "TODO"
-                }
-                w.wl(s"""{ "$value" = m.$value },""")
+                val value = idCpp.field(f.ident)
+                w.wl(s"""{ "$value", m.$value },""")
               }
             }
           }
           w.wl
           w.w(s"void from_json(const json& j, $actualSelf& m)").braced {
             for (f <- r.fields) {
-              val tr = f.ty.resolved
-              val value = tr.base match {
-                case x : MPrimitive => idCpp.field(f.ident)
-                case x => "TODO"
+              val (name, ty, value) = f.ty.resolved.base match {
+                case x : MPrimitive if x._idlName == "bool" => (idCpp.field(f.ident), marshal.fieldType(f.ty), "false")
+                case x : MPrimitive if x._idlName == "f64" | x._idlName == "f32" => (idCpp.field(f.ident), marshal.fieldType(f.ty), "0.0")
+                case x : MPrimitive => (idCpp.field(f.ident), marshal.fieldType(f.ty), "0")
+                case MString => (idCpp.field(f. ident), marshal.fieldType(f.ty), """""""")
+                case MList => (idCpp.field(f. ident), marshal.fieldType(f.ty), marshal.fieldType(f.ty) + "()")
+                case MDate => (idCpp.field(f. ident), marshal.fieldType(f.ty), marshal.fieldType(f.ty) + "()")
+                case x : MDef if x.defType == DRecord => (idCpp.field(f. ident), marshal.fieldType(f.ty), marshal.fieldType(f.ty) + "()")
               }
-              w.wl(s"""m.$value = j["$value"];""")
+              val conversion = ty match {
+                case "int64" => s"""m.$name = std::stoi(j.value<std::string>("$name", "$value"));raw_date = j.value<std::string>($name, "");"""
+                case x => s"""m.$name = j.value<$x>("$name", $value);"""
+              }
+              w.wl(s"""$conversion""")
             }
           }
         }
