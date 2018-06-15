@@ -369,6 +369,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <iomanip>")
       refs.hpp.add("#include <locale>")
       refs.hpp.add("#include <chrono>")
+      refs.hpp.add("#ifdef _MSC_VER\n#define timegm _mkgmtime\n#endif")
 
       writeHppUtilityFile("conversions", "nlohmann", origin, refs.hpp, refs.hppFwds, w => {
         w.wl
@@ -379,7 +380,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
             w.wl("std::stringstream date_stream (raw_date);")
             w.wl("std::tm t;")
             w.wl("""date_stream >> std::get_time(&t, "%Y-%m-%dT%T");""")
-            w.wl("""d = std::chrono::system_clock::from_time_t(std::mktime(&t));""")
+            w.wl("auto utc_time = timegm(&t);")
+            w.wl("""d = std::chrono::system_clock::from_time_t(utc_time);""")
           }
           w.wl
         }
