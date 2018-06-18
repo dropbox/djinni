@@ -585,7 +585,7 @@ void jniSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept {
     jniDefaultSetPendingFromCurrent(env, ctx);
 }
 
-void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
+void jniDefaultSetPendingFromCurrentClangCompatibility(JNIEnv * env) {
     assert(env);
     try {
         throw;
@@ -595,9 +595,14 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcep
     } catch (const std::exception & e) {
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), e.what());
     }
+}
 
-    // noexcept will call terminate() for anything not caught above (i.e.
-    // exceptions which aren't std::exception subclasses).
+void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
+	jniDefaultSetPendingFromCurrentClangCompatibility(env);
+
+    /* noexcept will call terminate() for anything not caught in 
+	   jniDefaultSetPendingFromCurrent (i.e. exceptions which aren't
+	   std::exception subclasses). */
 }
 
 template class ProxyCache<JavaProxyCacheTraits>;
