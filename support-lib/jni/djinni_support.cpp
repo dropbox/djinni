@@ -601,8 +601,8 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcep
 	jniDefaultSetPendingFromCurrentClangCompatibility(env);
 
     /* noexcept will call terminate() for anything not caught in 
-	   jniDefaultSetPendingFromCurrent (i.e. exceptions which aren't
-	   std::exception subclasses). */
+	   jniDefaultSetPendingFromCurrentClangCompatibility (i.e. 
+	   exceptions which aren't std::exception subclasses). */
 }
 
 template class ProxyCache<JavaProxyCacheTraits>;
