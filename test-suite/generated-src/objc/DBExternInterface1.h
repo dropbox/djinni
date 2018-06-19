@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 
 
+// This file tests YAML dumped by Djinni can be parsed back in
 @interface DBExternInterface1 : NSObject
 
 - (nonnull DBClientReturnedRecord *)foo:(nullable id<DBClientInterface>)i;

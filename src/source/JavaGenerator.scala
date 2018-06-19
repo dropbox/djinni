@@ -94,6 +94,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     }
 
     for (c <- consts) {
+      writeComment(w, c.comment)
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
       marshal.nullityAnnotation(c.ty).foreach(w.wl)
@@ -104,14 +105,16 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
     val refs = new JavaRefs()
 
     writeJavaFile(ident, origin, refs.java, w => {
+      writeComment(w, comment)
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
       w.w(s"${javaClassAccessModifierString}enum ${marshal.typename(ident, e)}").braced {
         for (o <- normalEnumOptions(e)) {
+          writeComment(w, o.comment)
           writeDoc(w, o.doc)
           w.wl(idJava.enum(o.ident) + ",")
         }
@@ -120,7 +123,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new JavaRefs()
 
     i.methods.map(m => {
@@ -137,6 +140,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     writeJavaFile(ident, origin, refs.java, w => {
       val javaClass = marshal.typename(ident, i)
       val typeParamList = javaTypeParams(typeParams)
+      writeComment(w, comment)
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
@@ -147,6 +151,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         val throwException = spec.javaCppException.fold("")(" throws " + _)
         for (m <- i.methods if !m.static) {
           skipFirst { w.wl }
+          writeComment(w, m.comment)
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
           val params = m.params.map(p => {
@@ -158,6 +163,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
+          writeComment(w, m.comment)
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
           val params = m.params.map(p => {
@@ -208,7 +214,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
     val refs = new JavaRefs()
     r.fields.foreach(f => refs.find(f.ty))
 
@@ -216,6 +222,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
 
     writeJavaFile(javaName, origin, refs.java, w => {
+      writeComment(w, comment)
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)
       val self = marshal.typename(javaName, r)
@@ -256,6 +263,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         // Accessors
         for (f <- r.fields) {
           w.wl
+          writeComment(w, f.comment)
           writeDoc(w, f.doc)
           marshal.nullityAnnotation(f.ty).foreach(w.wl)
           w.w("public " + marshal.returnType(Some(f.ty)) + " " + idJava.method("get_" + f.ident.name) + "()").braced {

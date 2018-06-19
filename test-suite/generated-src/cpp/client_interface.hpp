@@ -13,11 +13,12 @@ namespace testsuite {
 
 struct ClientReturnedRecord;
 
-/** Client interface */
+// Client interface
 class ClientInterface {
 public:
     virtual ~ClientInterface() {}
 
+    // Testing code comments before documentation comments
     /** Returns record of given string */
     virtual ClientReturnedRecord get_record(int64_t record_id, const std::string & utf8string, const std::experimental::optional<std::string> & misc) = 0;
 
@@ -25,6 +26,7 @@ public:
 
     virtual std::string return_str() = 0;
 
+    // This method takes an interface
     virtual std::string meth_taking_interface(const std::shared_ptr<ClientInterface> & i) = 0;
 
     virtual std::string meth_taking_optional_interface(const std::shared_ptr<ClientInterface> & i) = 0;

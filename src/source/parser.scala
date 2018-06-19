@@ -73,8 +73,8 @@ private object IdlParser extends RegexParsers {
   def importDirective = "import".r
   def externDirective = "extern".r
 
-  def typeDecl(origin: String): Parser[TypeDecl] = doc ~ ident ~ typeList(ident ^^ TypeParam) ~ "=" ~ typeDef ^^ {
-    case doc~ident~typeParams~_~body => InternTypeDecl(ident, typeParams, body, doc, origin)
+  def typeDecl(origin: String): Parser[TypeDecl] = comment ~ doc ~ ident ~ typeList(ident ^^ TypeParam) ~ "=" ~ typeDef ^^ {
+    case comment~doc~ident~typeParams~_~body => InternTypeDecl(ident, typeParams, body, doc, comment, origin)
   }
 
   def ext(default: Ext) = (rep1("+" ~> ident) >> checkExts) | success(default)
@@ -116,8 +116,8 @@ private object IdlParser extends RegexParsers {
       Record(ext, fields, consts, derivingTypes)
     }
   }
-  def field: Parser[Field] = doc ~ ident ~ ":" ~ typeRef ^^ {
-    case doc~ident~_~typeRef => Field(ident, typeRef, doc)
+  def field: Parser[Field] = comment ~ doc ~ ident ~ ":" ~ typeRef ^^ {
+    case comment~doc~ident~_~typeRef => Field(ident, typeRef, doc, comment)
   }
   def deriving: Parser[Set[DerivingType]] = "deriving" ~> parens(rep1sepend(ident, ",")) ^^ {
     _.map(ident => ident.name match {
@@ -140,13 +140,13 @@ private object IdlParser extends RegexParsers {
     case items => Enum(items, true)
   }
 
-  def enumOption: Parser[Enum.Option] = doc ~ ident ^^ {
-    case doc~ident => Enum.Option(ident, doc, None)
+  def enumOption: Parser[Enum.Option] = comment ~ doc ~ ident ^^ {
+    case comment~doc~ident => Enum.Option(ident, doc, comment, None)
   }
-  def flagsOption: Parser[Enum.Option] = doc ~ ident ~ opt("=" ~> (flagsAll | flagsNone)) ^^ {
-    case doc~ident~None => Enum.Option(ident, doc, None)
-    case doc~ident~Some("all") => Enum.Option(ident, doc, Some(Enum.SpecialFlag.AllFlags))
-    case doc~ident~Some("none") => Enum.Option(ident, doc, Some(Enum.SpecialFlag.NoFlags))
+  def flagsOption: Parser[Enum.Option] = comment ~ doc ~ ident ~ opt("=" ~> (flagsAll | flagsNone)) ^^ {
+    case comment~doc~ident~None => Enum.Option(ident, doc, comment, None)
+    case comment~doc~ident~Some("all") => Enum.Option(ident, doc, comment, Some(Enum.SpecialFlag.AllFlags))
+    case comment~doc~ident~Some("none") => Enum.Option(ident, doc, comment, Some(Enum.SpecialFlag.NoFlags))
   }
 
   def interfaceHeader = "interface" ~> extInterface
@@ -172,8 +172,8 @@ private object IdlParser extends RegexParsers {
     case "const " => true
     case "" => false
   }
-  def method: Parser[Interface.Method] = doc ~ staticLabel ~ constLabel ~ ident ~ parens(repsepend(field, ",")) ~ opt(ret) ^^ {
-    case doc~staticLabel~constLabel~ ident~params~ret => Interface.Method(ident, params, ret, doc, staticLabel, constLabel)
+  def method: Parser[Interface.Method] = comment ~ doc ~ staticLabel ~ constLabel ~ ident ~ parens(repsepend(field, ",")) ~ opt(ret) ^^ {
+    case comment~doc~staticLabel~constLabel~ ident~params~ret => Interface.Method(ident, params, ret, doc, comment, staticLabel, constLabel)
   }
   def ret: Parser[TypeRef] = ":" ~> typeRef
 
@@ -192,8 +192,8 @@ private object IdlParser extends RegexParsers {
   // Integer before float for compatibility; ident for enum option
   def value = floatValue | intValue | boolValue | stringValue | enumValue | constRef | compositeValue
 
-  def const: Parser[Const] = doc ~ "const" ~ ident ~ ":" ~ typeRef ~ "=" ~ value ^^ {
-    case doc~_~ident~_~typeRef~_~value => Const(ident, typeRef, value, doc)
+  def const: Parser[Const] = comment ~ doc ~ "const" ~ ident ~ ":" ~ typeRef ~ "=" ~ value ^^ {
+    case comment~doc~_~ident~_~typeRef~_~value => Const(ident, typeRef, value, doc, comment)
   }
 
   def typeRef: Parser[TypeRef] = typeExpr ^^ TypeRef
@@ -206,6 +206,7 @@ private object IdlParser extends RegexParsers {
   }
 
   def doc: Parser[Doc] = rep(regex("""#[^\n\r]*""".r) ^^ (_.substring(1))) ^^ Doc
+  def comment: Parser[Comment] = rep(regex("""\/\/[^\n\r]*""".r) ^^ (_.substring(2))) ^^ Comment
 
   def parens[T](inner: Parser[T]): Parser[T] = surround("(", ")", inner)
   def typeList[T](inner: Parser[T]): Parser[Seq[T]] = surround("<", ">", rep1sepend(inner, ",")) | success(Seq.empty)

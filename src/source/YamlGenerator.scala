@@ -171,15 +171,15 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
     // unused
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
     // unused
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
     // unused
   }
 }

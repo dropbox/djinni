@@ -48,7 +48,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
   private def arcAssert(w: IndentWriter) = w.wl("static_assert(__has_feature(objc_arc), " + q("Djinni requires ARC to be enabled for this file") + ");")
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
     var imports = mutable.TreeSet[String]()
     imports.add("#import " + q(spec.objcBaseLibIncludePrefix + "DJIMarshal+Private.h"))
     imports.add("!#include " + q(spec.objcppIncludeCppPrefix + spec.cppFileIdentStyle(ident) + "." + spec.cppHeaderExt))
@@ -61,7 +61,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
   def nnCheck(expr: String): String = spec.cppNnCheckExpression.fold(expr)(check => s"$check($expr)")
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
@@ -309,7 +309,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     })
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
     val refs = new ObjcRefs()
     for (c <- r.consts)
       refs.find(c.ty)

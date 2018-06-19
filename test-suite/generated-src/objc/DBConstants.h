@@ -29,10 +29,14 @@
 
 /** bool_constant has documentation. */
 extern BOOL const DBConstantsBoolConstant;
+// i8_constant has a comment
 extern int8_t const DBConstantsI8Constant;
 extern int16_t const DBConstantsI16Constant;
 extern int32_t const DBConstantsI32Constant;
 extern int64_t const DBConstantsI64Constant;
+// f64_constant has a long comment.
+// (Second line of multi-line comment.
+//   Indented third line of multi-line comment.)
 extern float const DBConstantsF32Constant;
 /**
  * f64_constant has long documentation.
@@ -42,9 +46,7 @@ extern float const DBConstantsF32Constant;
 extern double const DBConstantsF64Constant;
 extern NSString * __nonnull const DBConstantsStringConstant;
 extern NSString * __nullable const DBConstantsOptStringConstant;
-/**
- * No support for null optional constants
- * No support for optional constant records
- * No support for constant binary, list, set, map
- */
+// No support for null optional constants
+// No support for optional constant records
+// No support for constant binary, list, set, map
 extern BOOL const DBConstantsDummy;

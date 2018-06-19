@@ -36,6 +36,7 @@ class EnumValue(val ty: Ident, ident: Ident) extends Ident(ident.name, ident.fil
 case class TypeParam(ident: Ident)
 
 case class Doc(lines: Seq[String])
+case class Comment(lines: Seq[String])
 
 sealed abstract class TypeDecl {
   val ident: Ident
@@ -43,7 +44,7 @@ sealed abstract class TypeDecl {
   val body: TypeDef
   val origin: String
 }
-case class InternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, doc: Doc, override val origin: String) extends TypeDecl
+case class InternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, doc: Doc, comment: Comment, override val origin: String) extends TypeDecl
 case class ExternTypeDecl(override val ident: Ident, override val params: Seq[TypeParam], override val body: TypeDef, properties: Map[String, Any], override val origin: String) extends TypeDecl
 
 case class Ext(java: Boolean, cpp: Boolean, objc: Boolean) {
@@ -59,7 +60,7 @@ case class TypeExpr(ident: Ident, args: Seq[TypeExpr])
 
 sealed abstract class TypeDef
 
-case class Const(ident: Ident, ty: TypeRef, value: Any, doc: Doc)
+case class Const(ident: Ident, ty: TypeRef, value: Any, doc: Doc, comment: Comment)
 
 case class Enum(options: Seq[Enum.Option], flags: Boolean) extends TypeDef
 object Enum {
@@ -68,7 +69,7 @@ object Enum {
     val NoFlags, AllFlags = Value
   }
   import SpecialFlag._
-  case class Option(ident: Ident, doc: Doc, specialFlag: scala.Option[SpecialFlag])
+  case class Option(ident: Ident, doc: Doc, comment: Comment, specialFlag: scala.Option[SpecialFlag])
 }
 
 case class Record(ext: Ext, fields: Seq[Field], consts: Seq[Const], derivingTypes: Set[DerivingType]) extends TypeDef
@@ -81,7 +82,7 @@ object Record {
 
 case class Interface(ext: Ext, methods: Seq[Interface.Method], consts: Seq[Const]) extends TypeDef
 object Interface {
-  case class Method(ident: Ident, params: Seq[Field], ret: Option[TypeRef], doc: Doc, static: Boolean, const: Boolean)
+  case class Method(ident: Ident, params: Seq[Field], ret: Option[TypeRef], doc: Doc, comment: Comment, static: Boolean, const: Boolean)
 }
 
-case class Field(ident: Ident, ty: TypeRef, doc: Doc)
+case class Field(ident: Ident, ty: TypeRef, doc: Doc, comment: Comment)

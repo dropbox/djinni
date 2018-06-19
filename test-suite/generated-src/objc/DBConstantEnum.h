@@ -3,7 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** enum for use in constants */
+// enum for use in constants
 typedef NS_ENUM(NSInteger, DBConstantEnum)
 {
     DBConstantEnumSomeValue,

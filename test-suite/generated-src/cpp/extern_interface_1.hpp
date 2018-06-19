@@ -7,6 +7,7 @@
 #include "client_returned_record.hpp"
 #include <memory>
 
+// This file tests YAML dumped by Djinni can be parsed back in
 class ExternInterface1 {
 public:
     virtual ~ExternInterface1() {}

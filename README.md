@@ -55,6 +55,10 @@ Djinni's input is an interface description file. Here's an example:
         store: set<string>;
         hash: map<string, i32>;
 
+        // You can generate two types of comments
+        // - Code comments by using "// comment" in djinni files which will generate "// comment" 
+        // - Code documentation by using "# comment" in djinni files which will generate "/** comment */" 
+        // Both of those types support single and multi line comments 
         values: list<another_record>;
 
         # Comments can also be put here

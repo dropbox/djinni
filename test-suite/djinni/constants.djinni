@@ -1,4 +1,4 @@
-# enum for use in constants
+// enum for use in constants
 constant_enum = enum {
     some_value;
     some_other_value;
@@ -14,10 +14,14 @@ constant_record = record {
 constants = record {
     # bool_constant has documentation.
     const bool_constant: bool = true;
+    // i8_constant has a comment
     const i8_constant: i8 = 1;
     const i16_constant: i16 = 2;
     const i32_constant: i32 = 3;
     const i64_constant: i64 = 4;
+    // f64_constant has a long comment.
+    // (Second line of multi-line comment.
+    //   Indented third line of multi-line comment.)
     const f32_constant: f32 = 5.0;
     # f64_constant has long documentation.
     # (Second line of multi-line documentation.
@@ -46,9 +50,9 @@ constants = record {
         some_string = string_constant
     };
 
-    # No support for null optional constants
-    # No support for optional constant records
-    # No support for constant binary, list, set, map
+    // No support for null optional constants
+    // No support for optional constant records
+    // No support for constant binary, list, set, map
 
     const dummy: bool = false;
 }
@@ -89,7 +93,7 @@ constants_interface = interface +c {
         some_string = string_constant
     };
 
-    # No support for null optional constants
+    // No support for null optional constants
     # No support for optional constant records
     # No support for constant binary, list, set, map
 
