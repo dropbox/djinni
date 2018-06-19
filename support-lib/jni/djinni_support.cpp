@@ -585,7 +585,7 @@ void jniSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept {
     jniDefaultSetPendingFromCurrent(env, ctx);
 }
 
-void jniDefaultSetPendingFromCurrentClangCompatibility(JNIEnv * env) {
+void jniDefaultSetPendingFromCurrentImpl(JNIEnv * env) {
     assert(env);
     try {
         throw;
@@ -598,11 +598,14 @@ void jniDefaultSetPendingFromCurrentClangCompatibility(JNIEnv * env) {
 }
 
 void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * /*ctx*/) noexcept {
-	jniDefaultSetPendingFromCurrentClangCompatibility(env);
-
-    /* noexcept will call terminate() for anything not caught in 
-	   jniDefaultSetPendingFromCurrentClangCompatibility (i.e. 
-	   exceptions which aren't std::exception subclasses). */
+ 
+ /* It is necessary to go through a layer of indirection here because this
+   function is marked noexcept, but the implementation may still throw. 
+   Any exceptions which are not caught (i.e. exceptions which aren't 
+   std::exception subclasses) will result in a call to terminate() since this
+   function is marked noexcept */
+	
+	jniDefaultSetPendingFromCurrentImpl(env);
 }
 
 template class ProxyCache<JavaProxyCacheTraits>;
