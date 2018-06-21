@@ -244,35 +244,6 @@ object Main {
     objcIdentStyle = objcIdentStyle.copy(ty = IdentStyle.prefix(objcTypePrefix,objcIdentStyle.ty))
     objcFileIdentStyle = IdentStyle.prefix(objcTypePrefix, objcFileIdentStyle)
 
-    // Check for duplicates
-    var outputPaths = Map[String, String]()
-    for (path <- cppOutFolder) outputPaths += (
-      "cpp source" -> s"$path/${cppFileIdentStyle("FooBar")}.$cppExt",
-      "cpp header" -> s"${cppHeaderOutFolder.get}/${cppFileIdentStyle("FooBar")}.$cppHeaderExt"
-    )
-    for (path <- jniOutFolder) outputPaths += (
-      "jni source" -> s"$path/${jniFileIdentStyle("FooBar")}.$cppExt",
-      "jni header" -> s"${jniHeaderOutFolder.get}/${jniFileIdentStyle("FooBar")}.$cppHeaderExt"
-    )
-    for (path <- objcOutFolder) outputPaths += (
-      "objc source" -> s"$path/${objcFileIdentStyle("FooBar")}.m", 
-      "objc header" -> s"$path/${objcFileIdentStyle("FooBar")}.$objcHeaderExt"
-    )
-    for (path <- objcppOutFolder) outputPaths += (
-      "objcpp source" -> s"$path/${objcFileIdentStyle("FooBar")}.$objcppExt"
-    )
-
-    for ((type1, path1) <- outputPaths) {
-      for ((type2, path2) <- outputPaths) {
-        if (type1 != type2 && path1 == path2) {
-          System.err.println(
-            s"$type1 and $type2 files conflict (both output to $path1).\n" +
-            "Please adjust the options you're passing to djinni (see --help)")
-          System.exit(1); return
-        }
-      }
-    }
-
     if (cppTypeEnumIdentStyle != null) {
       cppIdentStyle = cppIdentStyle.copy(enumType = cppTypeEnumIdentStyle)
     }
