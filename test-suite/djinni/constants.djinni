@@ -50,9 +50,9 @@ constants = record {
         some_string = string_constant
     };
 
-    // No support for null optional constants
+    # No support for null optional constants
     // No support for optional constant records
-    // No support for constant binary, list, set, map
+    # No support for constant binary, list, set, map
 
     const dummy: bool = false;
 }
@@ -95,7 +95,7 @@ constants_interface = interface +c {
 
     // No support for null optional constants
     # No support for optional constant records
-    # No support for constant binary, list, set, map
+    // No support for constant binary, list, set, map
 
     dummy();
 }

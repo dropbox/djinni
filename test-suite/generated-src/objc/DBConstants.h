@@ -46,7 +46,7 @@ extern float const DBConstantsF32Constant;
 extern double const DBConstantsF64Constant;
 extern NSString * __nonnull const DBConstantsStringConstant;
 extern NSString * __nullable const DBConstantsOptStringConstant;
-// No support for null optional constants
+/** No support for null optional constants */
 // No support for optional constant records
-// No support for constant binary, list, set, map
+/** No support for constant binary, list, set, map */
 extern BOOL const DBConstantsDummy;

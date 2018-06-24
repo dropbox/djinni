@@ -66,10 +66,8 @@ public:
     static ConstantRecord const OBJECT_CONSTANT;
 
     // No support for null optional constants
-    /**
-     * No support for optional constant records
-     * No support for constant binary, list, set, map
-     */
+    /** No support for optional constant records */
+    // No support for constant binary, list, set, map
     virtual void dummy() = 0;
 };
 

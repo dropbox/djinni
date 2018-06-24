@@ -71,10 +71,8 @@ public abstract class ConstantsInterface {
         STRING_CONSTANT /* mSomeString */ );
 
     // No support for null optional constants
-    /**
-     * No support for optional constant records
-     * No support for constant binary, list, set, map
-     */
+    /** No support for optional constant records */
+    // No support for constant binary, list, set, map
     public abstract void dummy();
 
     private static final class CppProxy extends ConstantsInterface

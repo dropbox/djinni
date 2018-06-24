@@ -74,9 +74,9 @@ public class Constants {
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 
-    // No support for null optional constants
+    /** No support for null optional constants */
     // No support for optional constant records
-    // No support for constant binary, list, set, map
+    /** No support for constant binary, list, set, map */
     public static final boolean DUMMY = false;
 
 
