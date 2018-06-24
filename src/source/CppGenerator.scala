@@ -55,7 +55,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new CppRefs(ident.name)
     val self = marshal.typename(ident, e)
 
@@ -139,7 +139,6 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
       // Write code to the header file
       w.wl
-      writeComment(w, c.comment)
       writeDoc(w, c.doc)
       w.wl(s"static ${constFieldType} ${idCpp.const(c.ident)}${constValue}")
     }
@@ -185,7 +184,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new CppRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
@@ -207,14 +206,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         w.wl
         w.wl
       }
-      writeComment(w, comment)
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
       w.w("struct " + actualSelf + cppFinal).bracedSemi {
         generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
-          writeComment(w, f.comment)
           writeDoc(w, f.doc)
           w.wl(marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + ";")
         }
@@ -315,7 +312,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new CppRefs(ident.name)
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty, true))
@@ -329,7 +326,6 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
-      writeComment(w, comment)
       writeDoc(w, doc)
       writeCppTypeParams(w, typeParams)
       w.w(s"class $self").bracedSemi {
@@ -341,7 +337,6 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         // Methods
         for (m <- i.methods) {
           w.wl
-          writeComment(w, m.comment)
           writeMethodDoc(w, m, idCpp.local)
           val ret = marshal.returnType(m.ret, methodNamesInScope)
           val params = m.params.map(p => marshal.paramType(p.ty, methodNamesInScope) + " " + idCpp.local(p.ident))

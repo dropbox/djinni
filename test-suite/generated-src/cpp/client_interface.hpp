@@ -26,6 +26,7 @@ public:
 
     virtual std::string return_str() = 0;
 
+    /** Testing documentation comments before code comments */
     // This method takes an interface
     virtual std::string meth_taking_interface(const std::shared_ptr<ClientInterface> & i) = 0;
 

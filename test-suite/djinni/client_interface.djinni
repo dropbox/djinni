@@ -13,6 +13,7 @@ client_interface = interface +j +o {
 	identifier_check(data: binary, r: i32, jret: i64): f64;
     return_str(): string;
 
+    # Testing documentation comments before code comments
     // This method takes an interface
     meth_taking_interface(i: client_interface): string;
     meth_taking_optional_interface(i: optional<client_interface>): string;
@@ -21,7 +22,20 @@ client_interface = interface +j +o {
 reverse_client_interface = interface +c {
     const return_str(): string;
 
+    // Testing code comments before documentation comments
+    // with multiple lines
+    // and another line
+    # Testing documentation comments after code comments
+    # with multiple lines
+    # and another line
     meth_taking_interface(i: reverse_client_interface): string;
+
+    # Testing documentation comments before code comments
+    # with multiple lines
+    # and another line
+    // Testing code comments after documentation comments
+    // with multiple lines
+    // and another line
     meth_taking_optional_interface(i: optional<reverse_client_interface>): string;
 
     static create(): reverse_client_interface;

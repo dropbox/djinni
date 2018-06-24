@@ -18,6 +18,7 @@ public abstract class ClientInterface {
     @Nonnull
     public abstract String returnStr();
 
+    /** Testing documentation comments before code comments */
     // This method takes an interface
     @Nonnull
     public abstract String methTakingInterface(@CheckForNull ClientInterface i);

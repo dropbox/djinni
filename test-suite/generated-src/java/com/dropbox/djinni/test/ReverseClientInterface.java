@@ -11,9 +11,25 @@ public abstract class ReverseClientInterface {
     @Nonnull
     public abstract String returnStr();
 
+    // Testing code comments before documentation comments
+    // with multiple lines
+    // and another line
+    /**
+     * Testing documentation comments after code comments
+     * with multiple lines
+     * and another line
+     */
     @Nonnull
     public abstract String methTakingInterface(@CheckForNull ReverseClientInterface i);
 
+    /**
+     * Testing documentation comments before code comments
+     * with multiple lines
+     * and another line
+     */
+    // Testing code comments after documentation comments
+    // with multiple lines
+    // and another line
     @Nonnull
     public abstract String methTakingOptionalInterface(@CheckForNull ReverseClientInterface i);
 

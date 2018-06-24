@@ -21,6 +21,7 @@
 
 - (nonnull NSString *)returnStr;
 
+/** Testing documentation comments before code comments */
 // This method takes an interface
 - (nonnull NSString *)methTakingInterface:(nullable id<DBClientInterface>)i;
 

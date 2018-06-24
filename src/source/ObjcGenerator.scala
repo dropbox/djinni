@@ -43,14 +43,13 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     }
   }
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     val refs = new ObjcRefs()
 
     refs.header.add("#import <Foundation/Foundation.h>")
 
     val self = marshal.typename(ident, e)
     writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
-      writeComment(w, comment)
       writeDoc(w, doc)
       w.wl(if(e.flags) s"typedef NS_OPTIONS(NSUInteger, $self)" else s"typedef NS_ENUM(NSInteger, $self)")
       w.bracedSemi {
@@ -74,7 +73,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
   /**
     * Generate Interface
     */
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     val refs = new ObjcRefs()
     i.methods.map(m => {
       m.params.map(p => refs.find(p.ty))
@@ -98,26 +97,22 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     // Generate the header file for Interface
     writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
       for (c <- i.consts if marshal.canBeConstVariable(c)) {
-        writeComment(w, c.comment)
         writeDoc(w, c.doc)
         w.w(s"extern ")
         writeObjcConstVariableDecl(w, c, self)
         w.wl(s";")
       }
       w.wl
-      writeComment(w, comment)
       writeDoc(w, doc)
       if (i.ext.objc) w.wl(s"@protocol $self") else w.wl(s"@interface $self : NSObject")
       for (m <- i.methods) {
         w.wl
-        writeComment(w, m.comment)
         writeMethodDoc(w, m, idObjc.local)
         writeObjcFuncDecl(m, w)
         w.wl(";")
       }
       for (c <- i.consts if !marshal.canBeConstVariable(c)) {
         w.wl
-        writeComment(w, c.comment)
         writeDoc(w, c.doc)
         writeObjcConstMethDecl(c, w)
       }
@@ -136,7 +131,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     }
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     val refs = new ObjcRefs()
     for (c <- r.consts)
       refs.find(c.ty)
@@ -168,7 +163,6 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
     // Generate the header file for record
     writeObjcFile(marshal.headerName(objcName), origin, refs.header, w => {
-      writeComment(w, comment)
       writeDoc(w, doc)
       w.wl(s"@interface $self : NSObject")
 
@@ -183,14 +177,12 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
       for (c <- r.consts if !marshal.canBeConstVariable(c)) {
         w.wl
-        writeComment(w, c.comment)
         writeDoc(w, c.doc)
         writeObjcConstMethDecl(c, w)
       }
 
       for (f <- r.fields) {
         w.wl
-        writeComment(w, f.comment)
         writeDoc(w, f.doc)
         val nullability = marshal.nullability(f.ty.resolved).fold("")(", " + _)
         w.wl(s"@property (nonatomic, readonly${nullability}) ${marshal.fqFieldType(f.ty)} ${idObjc.field(f.ident)};")
@@ -205,7 +197,6 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
       if (r.consts.nonEmpty) {
         w.wl
         for (c <- r.consts if marshal.canBeConstVariable(c)) {
-          writeComment(w, c.comment)
           writeDoc(w, c.doc)
           w.w(s"extern ")
           writeObjcConstVariableDecl(w, c, noBaseSelf);

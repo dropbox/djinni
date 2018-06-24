@@ -24,15 +24,15 @@ import djinni.generatorTools._
 class SwiftBridgingHeaderGenerator(spec: Spec) extends Generator(spec) {
   val marshal = new ObjcMarshal(spec)
 
-  override def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum) {
+  override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
     spec.objcSwiftBridgingHeaderWriter.get.write("#import \"" + marshal.headerName(ident) + "\"\n")
   }
 
-  override def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface) {
+  override def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface) {
     spec.objcSwiftBridgingHeaderWriter.get.write("#import \"" + marshal.headerName(ident) + "\"\n")
   }
 
-  override def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record) {
+  override def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record) {
     spec.objcSwiftBridgingHeaderWriter.get.write("#import \"" + marshal.headerName(ident) + "\"\n")
   }
 }

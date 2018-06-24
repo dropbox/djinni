@@ -18,12 +18,15 @@ package djinni
 
 import djinni.ast._
 import java.io._
+
 import djinni.generatorTools._
 import djinni.meta._
 import djinni.syntax.Error
 import djinni.writer.IndentWriter
+
 import scala.language.implicitConversions
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.util.matching.Regex
 
 package object generatorTools {
@@ -345,15 +348,15 @@ abstract class Generator(spec: Spec)
     for (td <- idl.collect { case itd: InternTypeDecl => itd }) td.body match {
       case e: Enum =>
         assert(td.params.isEmpty)
-        generateEnum(td.origin, td.ident, td.doc, td.comment, e)
-      case r: Record => generateRecord(td.origin, td.ident, td.doc, td.comment, td.params, r)
-      case i: Interface => generateInterface(td.origin, td.ident, td.doc, td.comment, td.params, i)
+        generateEnum(td.origin, td.ident, td.doc, e)
+      case r: Record => generateRecord(td.origin, td.ident, td.doc, td.params, r)
+      case i: Interface => generateInterface(td.origin, td.ident, td.doc, td.params, i)
     }
   }
 
-  def generateEnum(origin: String, ident: Ident, doc: Doc, comment: Comment, e: Enum)
-  def generateRecord(origin: String, ident: Ident, doc: Doc, comment: Comment, params: Seq[TypeParam], r: Record)
-  def generateInterface(origin: String, ident: Ident, doc: Doc, comment: Comment, typeParams: Seq[TypeParam], i: Interface)
+  def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum)
+  def generateRecord(origin: String, ident: Ident, doc: Doc, params: Seq[TypeParam], r: Record)
+  def generateInterface(origin: String, ident: Ident, doc: Doc, typeParams: Seq[TypeParam], i: Interface)
 
   // --------------------------------------------------------------------------
   // Render type expression
@@ -394,7 +397,6 @@ abstract class Generator(spec: Spec)
 
   def writeEnumOptionNone(w: IndentWriter, e: Enum, ident: IdentConverter) {
     for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.NoFlags))) {
-      writeComment(w, o.comment)
       writeDoc(w, o.doc)
       w.wl(ident(o.ident.name) + " = 0,")
     }
@@ -403,7 +405,6 @@ abstract class Generator(spec: Spec)
   def writeEnumOptions(w: IndentWriter, e: Enum, ident: IdentConverter) {
     var shift = 0
     for (o <- normalEnumOptions(e)) {
-      writeComment(w, o.comment)
       writeDoc(w, o.doc)
       w.wl(ident(o.ident.name) + (if(e.flags) s" = 1 << $shift" else "") + ",")
       shift += 1
@@ -412,7 +413,6 @@ abstract class Generator(spec: Spec)
 
   def writeEnumOptionAll(w: IndentWriter, e: Enum, ident: IdentConverter) {
     for (o <- e.options.find(_.specialFlag == Some(Enum.SpecialFlag.AllFlags))) {
-      writeComment(w, o.comment)
       writeDoc(w, o.doc)
       w.w(ident(o.ident.name) + " = ")
       w.w(normalEnumOptions(e).map(o => ident(o.ident.name)).fold("0")((acc, o) => acc + " | " + o))
@@ -424,28 +424,44 @@ abstract class Generator(spec: Spec)
 
   def writeMethodDoc(w: IndentWriter, method: Interface.Method, ident: IdentConverter) {
     val paramReplacements = method.params.map(p => (s"\\b${Regex.quote(p.ident.name)}\\b", s"${ident(p.ident.name)}"))
-    val newDoc = Doc(method.doc.lines.map(l => {
-      paramReplacements.foldLeft(l)((line, rep) =>
-        line.replaceAll(rep._1, rep._2))
-    }))
+
+    val comments = ArrayBuffer[Comment]()
+
+    method.doc.comments.foreach({
+      case DocComment(lines) =>
+
+        val newDocComment = DocComment(lines.map(l => {
+          paramReplacements.foldLeft(l)((line, rep) =>
+            line.replaceAll(rep._1, rep._2))
+        }))
+
+        comments += newDocComment
+
+      case CodeComment(lines) =>
+        comments += CodeComment(lines)
+    })
+
+    val newDoc = Doc(comments)
+
     writeDoc(w, newDoc)
   }
 
   def writeDoc(w: IndentWriter, doc: Doc) {
-    doc.lines.length match {
-      case 0 =>
-      case 1 =>
-        w.wl(s"/**${doc.lines.head} */")
-      case _ =>
-        w.wl("/**")
-        doc.lines.foreach (l => w.wl(s" *$l"))
-        w.wl(" */")
-    }
+    doc.comments.foreach({
+      case DocComment(lines) =>
+        lines.length match {
+          case 0 =>
+          case 1 =>
+            w.wl(s"/**${lines.head} */")
+          case _ =>
+            w.wl("/**")
+            lines.foreach (l => w.wl(s" *$l"))
+            w.wl(" */")
+        }
+
+      case CodeComment(lines) =>
+        lines.foreach (l => w.wl(s"//$l"))
+    })
   }
 
-  // --------------------------------------------------------------------------
-
-  def writeComment(w: IndentWriter, comment: Comment) {
-    comment.lines.foreach (l => w.wl(s"//$l"))
-  }
 }
