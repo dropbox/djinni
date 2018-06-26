@@ -369,6 +369,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <iomanip>")
       refs.hpp.add("#include <locale>")
       refs.hpp.add("#include <chrono>")
+      refs.hpp.add("#include <sstream>")
       refs.hpp.add("#ifdef _MSC_VER\n#define timegm _mkgmtime\n#endif")
 
       writeHppUtilityFile("conversions", "nlohmann", origin, refs.hpp, refs.hppFwds, w => {
