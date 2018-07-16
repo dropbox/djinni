@@ -1,0 +1,15 @@
+# enum for use in constants
+constant_enum = enum {
+    some_value;
+    some_other_value;
+}
+
+# Record containing enum constant
+constant_with_enum = record {
+    const const_enum: constant_enum = constant_enum::some_value;
+}
+
+# Interface containing enum constant
+constant_interface_with_enum = interface +c {
+    const const_enum: constant_enum = constant_enum::some_value;
+}
