@@ -4,6 +4,11 @@ djinni-output-temp/cpp/record_with_duration_and_derivings.cpp
 djinni-output-temp/cpp/date_record.hpp
 djinni-output-temp/cpp/date_record.cpp
 djinni-output-temp/cpp/map_date_record.hpp
+djinni-output-temp/cpp/constant_enum.hpp
+djinni-output-temp/cpp/constant_with_enum.hpp
+djinni-output-temp/cpp/constant_with_enum.cpp
+djinni-output-temp/cpp/constant_interface_with_enum.hpp
+djinni-output-temp/cpp/constant_interface_with_enum.cpp
 djinni-output-temp/cpp/access_flags.hpp
 djinni-output-temp/cpp/empty_flags.hpp
 djinni-output-temp/cpp/flag_roundtrip.hpp
@@ -24,7 +29,6 @@ djinni-output-temp/cpp/second_listener.hpp
 djinni-output-temp/cpp/listener_caller.hpp
 djinni-output-temp/cpp/return_one.hpp
 djinni-output-temp/cpp/return_two.hpp
-djinni-output-temp/cpp/constant_enum.hpp
 djinni-output-temp/cpp/constant_record.hpp
 djinni-output-temp/cpp/constants.hpp
 djinni-output-temp/cpp/constants.cpp
@@ -57,6 +61,9 @@ djinni-output-temp/java/TestDuration.java
 djinni-output-temp/java/RecordWithDurationAndDerivings.java
 djinni-output-temp/java/DateRecord.java
 djinni-output-temp/java/MapDateRecord.java
+djinni-output-temp/java/ConstantEnum.java
+djinni-output-temp/java/ConstantWithEnum.java
+djinni-output-temp/java/ConstantInterfaceWithEnum.java
 djinni-output-temp/java/AccessFlags.java
 djinni-output-temp/java/EmptyFlags.java
 djinni-output-temp/java/FlagRoundtrip.java
@@ -74,7 +81,6 @@ djinni-output-temp/java/SecondListener.java
 djinni-output-temp/java/ListenerCaller.java
 djinni-output-temp/java/ReturnOne.java
 djinni-output-temp/java/ReturnTwo.java
-djinni-output-temp/java/ConstantEnum.java
 djinni-output-temp/java/ConstantRecord.java
 djinni-output-temp/java/Constants.java
 djinni-output-temp/java/ConstantsInterface.java
@@ -106,6 +112,11 @@ djinni-output-temp/jni/NativeDateRecord.hpp
 djinni-output-temp/jni/NativeDateRecord.cpp
 djinni-output-temp/jni/NativeMapDateRecord.hpp
 djinni-output-temp/jni/NativeMapDateRecord.cpp
+djinni-output-temp/jni/NativeConstantEnum.hpp
+djinni-output-temp/jni/NativeConstantWithEnum.hpp
+djinni-output-temp/jni/NativeConstantWithEnum.cpp
+djinni-output-temp/jni/NativeConstantInterfaceWithEnum.hpp
+djinni-output-temp/jni/NativeConstantInterfaceWithEnum.cpp
 djinni-output-temp/jni/NativeAccessFlags.hpp
 djinni-output-temp/jni/NativeEmptyFlags.hpp
 djinni-output-temp/jni/NativeFlagRoundtrip.hpp
@@ -138,7 +149,6 @@ djinni-output-temp/jni/NativeReturnOne.hpp
 djinni-output-temp/jni/NativeReturnOne.cpp
 djinni-output-temp/jni/NativeReturnTwo.hpp
 djinni-output-temp/jni/NativeReturnTwo.cpp
-djinni-output-temp/jni/NativeConstantEnum.hpp
 djinni-output-temp/jni/NativeConstantRecord.hpp
 djinni-output-temp/jni/NativeConstantRecord.cpp
 djinni-output-temp/jni/NativeConstants.hpp
@@ -191,6 +201,11 @@ djinni-output-temp/objc/DBDateRecord.h
 djinni-output-temp/objc/DBDateRecord.mm
 djinni-output-temp/objc/DBMapDateRecord.h
 djinni-output-temp/objc/DBMapDateRecord.mm
+djinni-output-temp/objc/DBConstantEnum.h
+djinni-output-temp/objc/DBConstantWithEnum.h
+djinni-output-temp/objc/DBConstantWithEnum.mm
+djinni-output-temp/objc/DBConstantInterfaceWithEnum.h
+djinni-output-temp/objc/DBConstantInterfaceWithEnum.mm
 djinni-output-temp/objc/DBAccessFlags.h
 djinni-output-temp/objc/DBEmptyFlags.h
 djinni-output-temp/objc/DBFlagRoundtrip.h
@@ -213,7 +228,6 @@ djinni-output-temp/objc/DBSecondListener.h
 djinni-output-temp/objc/DBListenerCaller.h
 djinni-output-temp/objc/DBReturnOne.h
 djinni-output-temp/objc/DBReturnTwo.h
-djinni-output-temp/objc/DBConstantEnum.h
 djinni-output-temp/objc/DBConstantRecord.h
 djinni-output-temp/objc/DBConstantRecord.mm
 djinni-output-temp/objc/DBConstants.h
@@ -259,6 +273,11 @@ djinni-output-temp/objc/DBDateRecord+Private.h
 djinni-output-temp/objc/DBDateRecord+Private.mm
 djinni-output-temp/objc/DBMapDateRecord+Private.h
 djinni-output-temp/objc/DBMapDateRecord+Private.mm
+djinni-output-temp/objc/DBConstantEnum+Private.h
+djinni-output-temp/objc/DBConstantWithEnum+Private.h
+djinni-output-temp/objc/DBConstantWithEnum+Private.mm
+djinni-output-temp/objc/DBConstantInterfaceWithEnum+Private.h
+djinni-output-temp/objc/DBConstantInterfaceWithEnum+Private.mm
 djinni-output-temp/objc/DBAccessFlags+Private.h
 djinni-output-temp/objc/DBEmptyFlags+Private.h
 djinni-output-temp/objc/DBFlagRoundtrip+Private.h
@@ -291,7 +310,6 @@ djinni-output-temp/objc/DBReturnOne+Private.h
 djinni-output-temp/objc/DBReturnOne+Private.mm
 djinni-output-temp/objc/DBReturnTwo+Private.h
 djinni-output-temp/objc/DBReturnTwo+Private.mm
-djinni-output-temp/objc/DBConstantEnum+Private.h
 djinni-output-temp/objc/DBConstantRecord+Private.h
 djinni-output-temp/objc/DBConstantRecord+Private.mm
 djinni-output-temp/objc/DBConstants+Private.h

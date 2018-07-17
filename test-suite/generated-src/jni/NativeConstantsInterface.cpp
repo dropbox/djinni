@@ -3,7 +3,6 @@
 
 #include "NativeConstantsInterface.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeConstantEnum.hpp"
 #include "NativeConstantRecord.hpp"
 
 namespace djinni_generated {

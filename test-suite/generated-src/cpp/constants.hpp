@@ -4,7 +4,6 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
-#include "constant_enum.hpp"
 #include "constant_record.hpp"
 #include <cstdint>
 #include <string>
@@ -34,8 +33,6 @@ struct Constants final {
      *   Indented third line of multi-line documentation.)
      */
     static constexpr double F64_CONSTANT = 5.0;
-
-    static constant_enum const CONST_ENUM;
 
     static std::experimental::optional<bool> const OPT_BOOL_CONSTANT;
 

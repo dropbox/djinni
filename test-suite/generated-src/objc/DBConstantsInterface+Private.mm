@@ -3,7 +3,6 @@
 
 #import "DBConstantsInterface+Private.h"
 #import "DBConstantsInterface.h"
-#import "DBConstantEnum+Private.h"
 #import "DBConstantRecord+Private.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
@@ -36,12 +35,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         _cppRefHandle.get()->dummy();
     } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
-+ (DBConstantEnum)constEnum
-{
-    static DBConstantEnum const s_constEnum = DBConstantEnumSomeValue;
-    return s_constEnum;
 }
 
 + (NSNumber * __nullable)optBoolConstant
