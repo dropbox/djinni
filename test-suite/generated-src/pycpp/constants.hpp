@@ -15,24 +15,24 @@ namespace testsuite {
 struct Constants final {
 
     /** bool_constant has documentation. */
-    static bool const BOOL_CONSTANT;
+    static constexpr bool BOOL_CONSTANT = true;
 
-    static int8_t const I8_CONSTANT;
+    static constexpr int8_t I8_CONSTANT = 1;
 
-    static int16_t const I16_CONSTANT;
+    static constexpr int16_t I16_CONSTANT = 2;
 
-    static int32_t const I32_CONSTANT;
+    static constexpr int32_t I32_CONSTANT = 3;
 
-    static int64_t const I64_CONSTANT;
+    static constexpr int64_t I64_CONSTANT = 4;
 
-    static float const F32_CONSTANT;
+    static constexpr float F32_CONSTANT = 5.0f;
 
     /**
      * f64_constant has long documentation.
      * (Second line of multi-line documentation.
      *   Indented third line of multi-line documentation.)
      */
-    static double const F64_CONSTANT;
+    static constexpr double F64_CONSTANT = 5.0;
 
     static std::experimental::optional<bool> const OPT_BOOL_CONSTANT;
 
@@ -65,7 +65,7 @@ struct Constants final {
      * No support for optional constant records
      * No support for constant binary, list, set, map
      */
-    static bool const DUMMY;
+    static constexpr bool DUMMY = false;
 };
 
 }  // namespace testsuite

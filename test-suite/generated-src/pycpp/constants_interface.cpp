@@ -6,19 +6,19 @@
 
 namespace testsuite {
 
-bool const ConstantsInterface::BOOL_CONSTANT = true;
+bool const ConstantsInterface::BOOL_CONSTANT;
 
-int8_t const ConstantsInterface::I8_CONSTANT = 1;
+int8_t const ConstantsInterface::I8_CONSTANT;
 
-int16_t const ConstantsInterface::I16_CONSTANT = 2;
+int16_t const ConstantsInterface::I16_CONSTANT;
 
-int32_t const ConstantsInterface::I32_CONSTANT = 3;
+int32_t const ConstantsInterface::I32_CONSTANT;
 
-int64_t const ConstantsInterface::I64_CONSTANT = 4;
+int64_t const ConstantsInterface::I64_CONSTANT;
 
-float const ConstantsInterface::F32_CONSTANT = 5.0f;
+float const ConstantsInterface::F32_CONSTANT;
 
-double const ConstantsInterface::F64_CONSTANT = 5.0;
+double const ConstantsInterface::F64_CONSTANT;
 
 std::experimental::optional<bool> const ConstantsInterface::OPT_BOOL_CONSTANT = true;
 

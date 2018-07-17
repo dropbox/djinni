@@ -57,7 +57,7 @@ abstract class BaseObjcGenerator(spec: Spec) extends Generator(spec) {
       case d: Double => w.w(boxedPrimitive(ty) + d.toString)
       case b: Boolean => w.w(boxedPrimitive(ty) + (if (b) "YES" else "NO"))
       case s: String => w.w("@" + s)
-      case e: EnumValue => w.w(idObjc.enum(e.ty + "_" + e.name))
+      case e: EnumValue => w.w(marshal.typename(ty) + idObjc.enum(e.name))
       case v: ConstRef => w.w(selfName + idObjc.const (v.name))
       case z: Map[_, _] => { // Value is record
       val recordMdef = ty.resolved.base.asInstanceOf[MDef]
