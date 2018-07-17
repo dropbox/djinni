@@ -68,6 +68,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val underlyingType = if(e.flags) flagsType else enumType
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
+      writeDoc(w, doc)
       w.w(s"enum class $self : $underlyingType").bracedSemi {
         writeEnumOptionNone(w, e, idCpp.enum)
         writeEnumOptions(w, e, idCpp.enum)
