@@ -180,12 +180,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             }
             w.wl
             w.wl("private native void nativeDestroy(long nativeRef);")
-            w.wl("public void destroy()").braced {
+            w.wl("public void _djinni_private_destroy()").braced {
               w.wl("boolean destroyed = this.destroyed.getAndSet(true);")
               w.wl("if (!destroyed) nativeDestroy(this.nativeRef);")
             }
             w.wl("protected void finalize() throws java.lang.Throwable").braced {
-              w.wl("destroy();")
+              w.wl("_djinni_private_destroy();")
               w.wl("super.finalize();")
             }
             for (m <- i.methods if !m.static) { // Static methods not in CppProxy
