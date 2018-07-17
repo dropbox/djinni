@@ -29,7 +29,7 @@ CJNIEXPORT jint JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_CppException_get(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_CppException_00024CppProxy_get(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

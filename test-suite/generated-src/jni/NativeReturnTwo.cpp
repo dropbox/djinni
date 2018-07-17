@@ -19,7 +19,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_ReturnTwo_00024CppProxy_nat
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_ReturnTwo_getInstance(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_ReturnTwo_00024CppProxy_getInstance(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

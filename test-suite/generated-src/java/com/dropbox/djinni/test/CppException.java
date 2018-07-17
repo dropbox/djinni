@@ -7,13 +7,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class CppException {
-    public abstract int throwAnException();
+public interface CppException {
+    public int throwAnException();
 
     @CheckForNull
-    public static native CppException get();
+    public static CppException get()
+    {
+        return CppProxy.get();
+    }
 
-    private static final class CppProxy extends CppException
+    static final class CppProxy implements CppException
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -43,5 +46,8 @@ public abstract class CppException {
             return native_throwAnException(this.nativeRef);
         }
         private native int native_throwAnException(long _nativeRef);
+
+        @CheckForNull
+        public static native CppException get();
     }
 }

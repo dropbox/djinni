@@ -4,7 +4,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-public class TextboxListenerImpl extends TextboxListener {
+public class TextboxListenerImpl implements TextboxListener {
 
     private EditText mTextArea;
 
