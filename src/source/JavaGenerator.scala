@@ -357,7 +357,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               val name = idJava.field(r.fields(i).ident)
               val comma = if (i > 0) """"," + """ else ""
               r.fields(i).ty.expr.ident.name match {
-                case "binary" => w.wl(s"""${comma}"${name}=" + Arrays.toString(${name}) +""")
+                case "binary" => w.wl(s"""${comma}"${name}=" + java.util.Arrays.toString(${name}) +""")
                 case _ => w.wl(s"""${comma}"${name}=" + ${name} +""")
               }
             }
