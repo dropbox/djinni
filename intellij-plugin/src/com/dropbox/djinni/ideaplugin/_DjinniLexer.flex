@@ -63,6 +63,12 @@ TEXT=[a-zA-Z_0-9]+
   "set"                 { return SET; }
   "optional"            { return OPTIONAL; }
   "map"                 { return MAP; }
+  "enum"                { return ENUM; }
+  "record"              { return RECORD; }
+  "eq"                  { return EQ_KEYWORD; }
+  "ord"                 { return ORD; }
+  "interface"           { return INTERFACE; }
+  "static"              { return STATIC; }
 
   {SPACE}               { return SPACE; }
   {COMMENT}             { return COMMENT; }

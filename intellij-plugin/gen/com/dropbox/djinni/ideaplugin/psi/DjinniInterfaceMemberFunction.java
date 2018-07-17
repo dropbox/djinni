@@ -28,4 +28,7 @@ public interface DjinniInterfaceMemberFunction extends PsiElement {
   @NotNull
   PsiElement getIdentifier();
 
+  @Nullable
+  PsiElement getStatic();
+
 }

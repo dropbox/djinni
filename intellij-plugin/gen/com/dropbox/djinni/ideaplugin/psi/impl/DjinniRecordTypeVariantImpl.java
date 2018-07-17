@@ -17,8 +17,12 @@ public class DjinniRecordTypeVariantImpl extends ASTWrapperPsiElement implements
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitRecordTypeVariant(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitRecordTypeVariant(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -26,6 +30,12 @@ public class DjinniRecordTypeVariantImpl extends ASTWrapperPsiElement implements
   @NotNull
   public List<DjinniGenerator> getGeneratorList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, DjinniGenerator.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRecord() {
+    return findNotNullChildByType(RECORD);
   }
 
 }

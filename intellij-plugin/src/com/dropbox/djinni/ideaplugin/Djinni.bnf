@@ -46,6 +46,15 @@
 
     space="regexp:\s+"
     comment="regexp:#.*"
+    enum="enum"
+    record="record"
+    eq_keyword="eq"
+    ord="ord"
+    interface="interface"
+    static="static"
+    const="const"
+    extern="extern"
+    import="import"
     string_literal="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\\'|\\)*\")"
     number_literal="regexp:-?(\d+(\.\d*)?)|(\.\d+)"
     identifier="regexp:\p{Alpha}\w*"
@@ -72,7 +81,7 @@ generator ::= (PLUS 'c') | (PLUS 'j') | (PLUS 'o')
 
 private enumDescription ::= enumTypeVariant LEFT_BLOCK_BRACE enumMember* RIGHT_BLOCK_BRACE
 
-enumTypeVariant ::= 'enum'
+enumTypeVariant ::= enum
 
 enumMember ::= enumValue SEMICOLON
 
@@ -86,11 +95,11 @@ enumValue ::= identifier {
 
 private recordDescription ::= recordTypeVariant LEFT_BLOCK_BRACE recordMember* RIGHT_BLOCK_BRACE ['deriving' LEFT_PARAM_BRACE derivingParamList RIGHT_PARAM_BRACE]
 
-recordTypeVariant ::= 'record' generator*
+recordTypeVariant ::= record generator*
 
 derivingParamList ::= (derivingParam ',' derivingParamList) | derivingParam
 
-derivingParam ::= 'eq' | 'ord'
+derivingParam ::= eq_keyword | ord
 
 recordMember ::= constMember | recordMemberVariable
 
@@ -100,11 +109,11 @@ recordMemberVariable ::= identifier COLON typeReference SEMICOLON
 
 private interfaceDescription ::= interfaceTypeVariant LEFT_BLOCK_BRACE interfaceMember* RIGHT_BLOCK_BRACE
 
-interfaceTypeVariant ::= 'interface' generator*
+interfaceTypeVariant ::= interface generator*
 
 interfaceMember ::= constMember | interfaceMemberFunction
 
-interfaceMemberFunction ::= ['static'] identifier LEFT_PARAM_BRACE interfaceFunctionParamList? RIGHT_PARAM_BRACE [COLON typeReference] SEMICOLON
+interfaceMemberFunction ::= [static] identifier LEFT_PARAM_BRACE interfaceFunctionParamList? RIGHT_PARAM_BRACE [COLON typeReference] SEMICOLON
 
 interfaceFunctionParamList ::=  (interfaceFunctionParam ',' interfaceFunctionParamList) | interfaceFunctionParam
 
@@ -134,7 +143,7 @@ genericBasicTypeDualParameter ::= map LEFT_GENERICS_BRACE typeReference LIST_SEP
 //
 // const definitions
 //
-constMember ::= 'const' constNamedValue COLON typeReference EQ constValue SEMICOLON
+constMember ::= const constNamedValue COLON typeReference EQ constValue SEMICOLON
 
 constNamedValue ::= identifier {
   mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniReferenceImpl"
@@ -159,7 +168,7 @@ constRecordMemberElement ::= identifier EQ constValue
 //
 // import
 //
-importStatement ::= AT'import' string_literal {
+importStatement ::= AT import string_literal {
   mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniImportStatementBaseImpl"
   implements="com.intellij.psi.PsiNamedElement"
   methods=[getName setName getRangeOfPath getPath]
@@ -168,7 +177,7 @@ importStatement ::= AT'import' string_literal {
 //
 // extern
 //
-externStatement ::= AT'extern' string_literal {
+externStatement ::= AT extern string_literal {
   mixin="com.dropbox.djinni.ideaplugin.psi.impl.DjinniImportStatementBaseImpl"
   implements="com.intellij.psi.PsiNamedElement"
   methods=[getName setName getRangeOfPath getPath]

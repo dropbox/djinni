@@ -17,8 +17,12 @@ public class DjinniConstMemberImpl extends ASTWrapperPsiElement implements Djinn
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitConstMember(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitConstMember(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -56,6 +60,12 @@ public class DjinniConstMemberImpl extends ASTWrapperPsiElement implements Djinn
   @NotNull
   public PsiElement getSemicolon() {
     return findNotNullChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getConst() {
+    return findNotNullChildByType(CONST);
   }
 
 }

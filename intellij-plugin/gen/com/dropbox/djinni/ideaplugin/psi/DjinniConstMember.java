@@ -25,4 +25,7 @@ public interface DjinniConstMember extends PsiElement {
   @NotNull
   PsiElement getSemicolon();
 
+  @NotNull
+  PsiElement getConst();
+
 }
