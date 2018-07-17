@@ -20,7 +20,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_00024CppPr
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_getRecord(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_00024CppProxy_getRecord(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -29,7 +29,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_getReco
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_getString(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_00024CppProxy_getString(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -38,7 +38,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_getStri
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_checkString(JNIEnv* jniEnv, jobject /*this*/, jstring j_str)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_00024CppProxy_checkString(JNIEnv* jniEnv, jobject /*this*/, jstring j_str)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -47,7 +47,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_checkS
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_checkRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_rec)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_WcharTestHelpers_00024CppProxy_checkRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_rec)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

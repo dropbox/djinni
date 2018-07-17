@@ -8,13 +8,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class ConflictUser {
+public interface ConflictUser {
     @CheckForNull
-    public abstract Conflict Conflict();
+    public Conflict Conflict();
 
-    public abstract boolean conflictArg(@Nonnull HashSet<Conflict> cs);
+    public boolean conflictArg(@Nonnull HashSet<Conflict> cs);
 
-    private static final class CppProxy extends ConflictUser
+    static final class CppProxy implements ConflictUser
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

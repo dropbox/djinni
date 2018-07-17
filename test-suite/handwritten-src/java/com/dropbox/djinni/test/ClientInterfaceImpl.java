@@ -2,7 +2,7 @@ package com.dropbox.djinni.test;
 
 import javax.annotation.CheckForNull;
 
-public class ClientInterfaceImpl extends ClientInterface {
+public class ClientInterfaceImpl implements ClientInterface {
     @Override
     public ClientReturnedRecord getRecord(long id, String utf8string, String misc) {
         if (!utf8string.equals("Non-ASCII /\0 非 ASCII 字符") && !utf8string.equals("Hello World!")) {

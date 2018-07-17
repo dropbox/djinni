@@ -13,6 +13,9 @@ public interface DjinniExternStatement extends PsiNamedElement {
   PsiElement getAt();
 
   @NotNull
+  PsiElement getExtern();
+
+  @NotNull
   PsiElement getStringLiteral();
 
   @NotNull

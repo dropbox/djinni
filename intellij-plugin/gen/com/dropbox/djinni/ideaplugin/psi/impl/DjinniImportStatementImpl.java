@@ -17,8 +17,12 @@ public class DjinniImportStatementImpl extends DjinniImportStatementBaseImpl imp
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitImportStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitImportStatement(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -26,6 +30,12 @@ public class DjinniImportStatementImpl extends DjinniImportStatementBaseImpl imp
   @NotNull
   public PsiElement getAt() {
     return findNotNullChildByType(AT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getImport() {
+    return findNotNullChildByType(IMPORT);
   }
 
   @Override

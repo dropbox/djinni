@@ -40,8 +40,14 @@ public interface DjinniTypes {
   IElementType AT = new DjinniTokenType("@");
   IElementType COLON = new DjinniTokenType(":");
   IElementType COMMENT = new DjinniTokenType("comment");
+  IElementType CONST = new DjinniTokenType("const");
+  IElementType ENUM = new DjinniTokenType("enum");
   IElementType EQ = new DjinniTokenType("=");
+  IElementType EQ_KEYWORD = new DjinniTokenType("eq");
+  IElementType EXTERN = new DjinniTokenType("extern");
   IElementType IDENTIFIER = new DjinniTokenType("identifier");
+  IElementType IMPORT = new DjinniTokenType("import");
+  IElementType INTERFACE = new DjinniTokenType("interface");
   IElementType LEFT_BLOCK_BRACE = new DjinniTokenType("{");
   IElementType LEFT_GENERICS_BRACE = new DjinniTokenType("<");
   IElementType LEFT_PARAM_BRACE = new DjinniTokenType("(");
@@ -50,13 +56,16 @@ public interface DjinniTypes {
   IElementType MAP = new DjinniTokenType("map");
   IElementType NUMBER_LITERAL = new DjinniTokenType("number_literal");
   IElementType OPTIONAL = new DjinniTokenType("optional");
+  IElementType ORD = new DjinniTokenType("ord");
   IElementType PLUS = new DjinniTokenType("+");
+  IElementType RECORD = new DjinniTokenType("record");
   IElementType RIGHT_BLOCK_BRACE = new DjinniTokenType("}");
   IElementType RIGHT_GENERICS_BRACE = new DjinniTokenType(">");
   IElementType RIGHT_PARAM_BRACE = new DjinniTokenType(")");
   IElementType SEMICOLON = new DjinniTokenType(";");
   IElementType SET = new DjinniTokenType("set");
   IElementType SPACE = new DjinniTokenType("space");
+  IElementType STATIC = new DjinniTokenType("static");
   IElementType STRING_LITERAL = new DjinniTokenType("string_literal");
   IElementType TEXT = new DjinniTokenType("text");
 

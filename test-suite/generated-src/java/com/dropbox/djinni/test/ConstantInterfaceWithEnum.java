@@ -8,12 +8,12 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Interface containing enum constant */
-public abstract class ConstantInterfaceWithEnum {
+public interface ConstantInterfaceWithEnum {
     @Nonnull
-    public static final ConstantEnum CONST_ENUM = ConstantEnum.SOME_VALUE;
+    ConstantEnum CONST_ENUM = ConstantEnum.SOME_VALUE;
 
 
-    private static final class CppProxy extends ConstantInterfaceWithEnum
+    static final class CppProxy implements ConstantInterfaceWithEnum
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

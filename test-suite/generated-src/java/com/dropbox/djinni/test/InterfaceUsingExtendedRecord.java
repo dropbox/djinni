@@ -7,16 +7,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class InterfaceUsingExtendedRecord {
+public interface InterfaceUsingExtendedRecord {
     @Nonnull
-    public static final RecordUsingExtendedRecord CR = new RecordUsingExtendedRecord(
+    RecordUsingExtendedRecord CR = new RecordUsingExtendedRecord(
         new ExtendedRecord(
             false /* mFoo */ ) /* mEr */ );
 
     @Nonnull
-    public abstract ExtendedRecord meth(@Nonnull ExtendedRecord er);
+    public ExtendedRecord meth(@Nonnull ExtendedRecord er);
 
-    private static final class CppProxy extends InterfaceUsingExtendedRecord
+    static final class CppProxy implements InterfaceUsingExtendedRecord
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);

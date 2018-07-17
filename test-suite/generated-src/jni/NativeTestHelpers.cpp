@@ -27,7 +27,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_n
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getSetRecord(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getSetRecord(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -36,7 +36,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getSetRecord
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkSetRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_rec)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkSetRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_rec)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -45,7 +45,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkSetRec
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getPrimitiveList(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getPrimitiveList(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -54,7 +54,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getPrimitive
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkPrimitiveList(JNIEnv* jniEnv, jobject /*this*/, jobject j_pl)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkPrimitiveList(JNIEnv* jniEnv, jobject /*this*/, jobject j_pl)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -63,7 +63,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkPrimit
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getNestedCollection(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getNestedCollection(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -72,7 +72,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getNestedCol
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkNestedCollection(JNIEnv* jniEnv, jobject /*this*/, jobject j_nc)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkNestedCollection(JNIEnv* jniEnv, jobject /*this*/, jobject j_nc)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -81,7 +81,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkNested
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMap(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getMap(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -90,7 +90,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMap(JNIEn
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -99,7 +99,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMap(JN
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getEmptyMap(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getEmptyMap(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -108,7 +108,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getEmptyMap(
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEmptyMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkEmptyMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -117,7 +117,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEmptyM
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMapListRecord(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_getMapListRecord(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -126,7 +126,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_getMapListRe
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMapListRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
+CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkMapListRecord(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -135,7 +135,7 @@ CJNIEXPORT jboolean JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkMapLis
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInterfaceAscii(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkClientInterfaceAscii(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -143,7 +143,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInterfaceNonascii(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkClientInterfaceNonascii(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -151,7 +151,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInterfaceArgs(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkClientInterfaceArgs(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -159,7 +159,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkClientInte
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkEnumMap(JNIEnv* jniEnv, jobject /*this*/, jobject j_m)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -167,7 +167,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnumMap(JN
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnum(JNIEnv* jniEnv, jobject /*this*/, jobject j_c)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkEnum(JNIEnv* jniEnv, jobject /*this*/, jobject j_c)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -175,7 +175,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkEnum(JNIEn
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_tokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -184,7 +184,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_tokenId(JNIE
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppToken(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_createCppToken(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -193,7 +193,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_createCppTok
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkCppToken(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkCppToken(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -201,7 +201,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkCppToken(J
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
+CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_cppTokenId(JNIEnv* jniEnv, jobject /*this*/, jobject j_t)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -210,7 +210,7 @@ CJNIEXPORT jlong JNICALL Java_com_dropbox_djinni_test_TestHelpers_cppTokenId(JNI
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkTokenType(JNIEnv* jniEnv, jobject /*this*/, jobject j_t, jstring j_type)
+CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_checkTokenType(JNIEnv* jniEnv, jobject /*this*/, jobject j_t, jstring j_type)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -219,7 +219,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_TestHelpers_checkTokenType(
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_returnNone(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -228,7 +228,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_returnNone(J
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedPrimitivesId(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_assortedPrimitivesId(JNIEnv* jniEnv, jobject /*this*/, jobject j_i)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -237,7 +237,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_TestHelpers_assortedPrim
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jbyteArray JNICALL Java_com_dropbox_djinni_test_TestHelpers_idBinary(JNIEnv* jniEnv, jobject /*this*/, jbyteArray j_b)
+CJNIEXPORT jbyteArray JNICALL Java_com_dropbox_djinni_test_TestHelpers_00024CppProxy_idBinary(JNIEnv* jniEnv, jobject /*this*/, jbyteArray j_b)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

@@ -23,6 +23,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
@@ -31,14 +32,25 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
  * Created by jaetzold on 7/23/15.
  */
 public class DjinniSyntaxHighlighter extends SyntaxHighlighterBase {
+  public static TokenSet KEYWORD_TOKENS = TokenSet.create(DjinniTypes.EQ_KEYWORD,
+      DjinniTypes.ENUM,
+      DjinniTypes.INTERFACE,
+      DjinniTypes.CONST,
+      DjinniTypes.EXTERN,
+      DjinniTypes.IMPORT,
+      DjinniTypes.ORD,
+      DjinniTypes.RECORD,
+      DjinniTypes.STATIC);
 
   public static final TextAttributesKey STRING_LITERAL = createTextAttributesKey("DJINNI_STRING_LITERAL", DefaultLanguageHighlighterColors.STRING);
+  public static final TextAttributesKey KEYWORDS = createTextAttributesKey("DJINNI_KEYWORDS", DefaultLanguageHighlighterColors.KEYWORD);
   public static final TextAttributesKey NUMBER_LITERAL = createTextAttributesKey("DJINNI_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER);
   public static final TextAttributesKey IDENTIFIER = createTextAttributesKey("DJINNI_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
   public static final TextAttributesKey COMMENT = createTextAttributesKey("DJINNI_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
   public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("DJINNI_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
   private static final TextAttributesKey[] STRING_LITERAL_KEYS = new TextAttributesKey[]{STRING_LITERAL};
+  private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORDS};
   private static final TextAttributesKey[] NUMBER_LITERAL_KEYS = new TextAttributesKey[]{NUMBER_LITERAL};
   private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{IDENTIFIER};
   private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
@@ -64,6 +76,8 @@ public class DjinniSyntaxHighlighter extends SyntaxHighlighterBase {
       return COMMENT_KEYS;
     } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
       return BAD_CHAR_KEYS;
+    } else if (KEYWORD_TOKENS.contains(tokenType)) {
+      return KEYWORD_KEYS;
     } else {
       return EMPTY_KEYS;
     }

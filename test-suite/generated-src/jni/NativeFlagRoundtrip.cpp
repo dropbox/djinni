@@ -21,7 +21,7 @@ CJNIEXPORT void JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_00024CppProxy
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripAccess(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_00024CppProxy_roundtripAccess(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -30,7 +30,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripA
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripEmpty(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_00024CppProxy_roundtripEmpty(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -39,7 +39,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripE
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripAccessBoxed(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_00024CppProxy_roundtripAccessBoxed(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
@@ -48,7 +48,7 @@ CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripA
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_roundtripEmptyBoxed(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_FlagRoundtrip_00024CppProxy_roundtripEmptyBoxed(JNIEnv* jniEnv, jobject /*this*/, jobject j_flag)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);

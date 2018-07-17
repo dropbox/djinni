@@ -17,9 +17,25 @@ public class DjinniDerivingParamImpl extends ASTWrapperPsiElement implements Dji
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitDerivingParam(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitDerivingParam(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEqKeyword() {
+    return findChildByType(EQ_KEYWORD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getOrd() {
+    return findChildByType(ORD);
   }
 
 }

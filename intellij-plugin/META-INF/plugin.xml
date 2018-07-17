@@ -13,10 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<idea-plugin version="2">
+<idea-plugin>
   <id>com.dropbox.djinni.ideaplugin</id>
   <name>Djinni IDL file support</name>
-  <version>0.8</version>
+  <version>0.8.1</version>
   <vendor url="https://github.com/dropbox/djinni">Dropbox Djinni Github Project</vendor>
 
   <description><![CDATA[
@@ -70,6 +70,7 @@
     <lang.psiStructureViewFactory language="Djinni" implementationClass="com.dropbox.djinni.ideaplugin.DjinniStructureViewFactory"/>
     <lang.formatter language="Djinni" implementationClass="com.dropbox.djinni.ideaplugin.DjinniFormattingModelBuilder"/>
     <lang.commenter language="Djinni" implementationClass="com.dropbox.djinni.ideaplugin.DjinniCommenter"/>
+    <lang.braceMatcher language="Djinni" implementationClass="com.dropbox.djinni.ideaplugin.DjinniBraceMatcher"/>
   </extensions>
 
   <application-components>

@@ -348,8 +348,8 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
               python.add("from " + spec.pyImportPrefix + marshal.dh + fileName + " import " + idPython.className(fileName) + "Proxy")
             }
           } else {
-            if (!writtenFiles.contains((idlName + ".py").toLowerCase())) {
-              writtenFiles.put(fileName.toLowerCase(), fileName)
+            if (!Generator.writtenFiles.contains((idlName + ".py").toLowerCase())) {
+              Generator.writtenFiles.put(fileName.toLowerCase(), fileName)
               generateContainer(tm, isOpt, fileName, idlName, ident, origin, marshal.referencesForContainer(tm, idlName))
             }
           }

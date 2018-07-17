@@ -64,7 +64,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     })
   }
 
-  def generateJavaConstants(w: IndentWriter, consts: Seq[Const]) = {
+  def generateJavaConstants(w: IndentWriter, consts: Seq[Const], forJavaInterface: Boolean) = {
 
     def writeJavaConst(w: IndentWriter, ty: TypeRef, v: Any): Unit = v match {
       case l: Long if marshal.fieldType(ty).equalsIgnoreCase("long") => w.w(l.toString + "l")
@@ -97,7 +97,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, c.doc)
       javaAnnotationHeader.foreach(w.wl)
       marshal.nullityAnnotation(c.ty).foreach(w.wl)
-      w.w(s"public static final ${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
+
+      // If the constants are part of a Java interface, omit the "public," "static,"
+      // and "final" specifiers.
+      val publicStaticFinalString = if (forJavaInterface) "" else "public static final "
+      w.w(s"${publicStaticFinalString}${marshal.fieldType(c.ty)} ${idJava.const(c.ident)} = ")
       writeJavaConst(w, c.ty, c.value)
       w.wl(";")
       w.wl
@@ -140,9 +144,16 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       writeDoc(w, doc)
 
       javaAnnotationHeader.foreach(w.wl)
-      w.w(s"${javaClassAccessModifierString}abstract class $javaClass$typeParamList").braced {
+
+      // Generate an interface or an abstract class depending on whether the use
+      // of Java interfaces was requested.
+      val classPrefix = if (spec.javaGenerateInterfaces) "interface" else "abstract class"
+      val methodPrefix = if (spec.javaGenerateInterfaces) "" else "abstract "
+      val extendsKeyword = if (spec.javaGenerateInterfaces) "implements" else "extends"
+      val innerClassAccessibility = if (spec.javaGenerateInterfaces) "" else "private "
+      w.w(s"${javaClassAccessModifierString}$classPrefix $javaClass$typeParamList").braced {
         val skipFirst = SkipFirst()
-        generateJavaConstants(w, i.consts)
+        generateJavaConstants(w, i.consts, spec.javaGenerateInterfaces)
 
         val throwException = spec.javaCppException.fold("")(" throws " + _)
         for (m <- i.methods if !m.static) {
@@ -154,23 +165,32 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
           })
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
-          w.wl("public abstract " + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
+          w.wl(s"public $methodPrefix" + ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + throwException + ";")
         }
+
+        // Implement the interface's static methods as calls to CppProxy's corresponding methods.
         for (m <- i.methods if m.static) {
           skipFirst { w.wl }
           writeMethodDoc(w, m, idJava.local)
           val ret = marshal.returnType(m.ret)
+          val returnPrefix = if (ret == "void") "" else "return "
           val params = m.params.map(p => {
             val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
             nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
           })
+
+          val meth = idJava.method(m.ident)
           marshal.nullityAnnotation(m.ret).foreach(w.wl)
-          w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
+          w.wl("public static "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")")).braced {
+            writeAlignedCall(w, s"${returnPrefix}CppProxy.${meth}(", m.params, ");", p => idJava.local(p.ident))
+            w.wl
+          }
         }
+        
         if (i.ext.cpp) {
           w.wl
           javaAnnotationHeader.foreach(w.wl)
-          w.wl(s"private static final class CppProxy$typeParamList extends $javaClass$typeParamList").braced {
+          w.wl(s"${innerClassAccessibility}static final class CppProxy$typeParamList $extendsKeyword $javaClass$typeParamList").braced {
             w.wl("private final long nativeRef;")
             w.wl("private final AtomicBoolean destroyed = new AtomicBoolean(false);")
             w.wl
@@ -188,7 +208,9 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
               w.wl("_djinni_private_destroy();")
               w.wl("super.finalize();")
             }
-            for (m <- i.methods if !m.static) { // Static methods not in CppProxy
+
+            // Implement the interface's non-static methods.
+            for (m <- i.methods if !m.static) {
               val ret = marshal.returnType(m.ret)
               val returnStmt = m.ret.fold("")(_ => "return ")
               val params = m.params.map(p => marshal.paramType(p.ty) + " " + idJava.local(p.ident)).mkString(", ")
@@ -201,6 +223,18 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
                 w.wl(s"${returnStmt}native_$meth(this.nativeRef${preComma(args)});")
               }
               w.wl(s"private native $ret native_$meth(long _nativeRef${preComma(params)});")
+            }
+
+            // Declare a native method for each of the interface's static methods.
+            for (m <- i.methods if m.static) {
+              skipFirst { w.wl }
+              val ret = marshal.returnType(m.ret)
+              val params = m.params.map(p => {
+                val nullityAnnotation = marshal.nullityAnnotation(p.ty).map(_ + " ").getOrElse("")
+                nullityAnnotation + marshal.paramType(p.ty) + " " + idJava.local(p.ident)
+              })
+              marshal.nullityAnnotation(m.ret).foreach(w.wl)
+              w.wl("public static native "+ ret + " " + idJava.method(m.ident) + params.mkString("(", ", ", ")") + ";")
             }
           }
         }
@@ -228,7 +262,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       val implementsSection = if (interfaces.isEmpty) "" else " implements " + interfaces.mkString(", ")
       w.w(s"${javaClassAccessModifierString}${javaFinal}class ${self + javaTypeParams(params)}$implementsSection").braced {
         w.wl
-        generateJavaConstants(w, r.consts)
+        generateJavaConstants(w, r.consts, false)
         // Field definitions.
         for (f <- r.fields) {
           w.wl
