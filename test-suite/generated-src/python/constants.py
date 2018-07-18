@@ -16,11 +16,13 @@ class Constants:
      Record containing constants
     Constants
         BOOL_CONSTANT: bool_constant has documentation.
-        I8_CONSTANT
+        I8_CONSTANT: i8_constant has a comment
         I16_CONSTANT
         I32_CONSTANT
         I64_CONSTANT
-        F32_CONSTANT
+        F32_CONSTANT: f64_constant has a long comment.
+             (Second line of multi-line comment.
+               Indented third line of multi-line comment.)
         F64_CONSTANT: f64_constant has long documentation.
              (Second line of multi-line documentation.
                Indented third line of multi-line documentation.)

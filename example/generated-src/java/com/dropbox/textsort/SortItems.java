@@ -8,7 +8,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /*package*/ interface SortItems {
-    /** For the iOS / Android demo */
+    // For the iOS / Android demo
     public void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
     @CheckForNull

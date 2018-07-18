@@ -5,6 +5,7 @@ package com.dropbox.djinni.test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// This file tests YAML dumped by Djinni can be parsed back in
 public interface ExternInterface1 {
     public com.dropbox.djinni.test.ClientReturnedRecord foo(com.dropbox.djinni.test.ClientInterface i);
 

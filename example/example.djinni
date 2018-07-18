@@ -9,7 +9,7 @@ sort_order = enum {
 }
 
 sort_items = interface +c {
-    # For the iOS / Android demo
+    // For the iOS / Android demo
     sort(order: sort_order, items: item_list);
     static create_with_listener(listener: textbox_listener): sort_items;
 

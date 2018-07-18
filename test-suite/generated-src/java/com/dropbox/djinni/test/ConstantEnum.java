@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/** enum for use in constants */
+// enum for use in constants
 public enum ConstantEnum {
     SOME_VALUE,
     SOME_OTHER_VALUE,

@@ -18,10 +18,26 @@ class ReverseClientInterface(with_metaclass(ABCMeta)):
 
     @abstractmethod
     def meth_taking_interface(self, i):
+        """
+         Testing code comments before documentation comments
+         with multiple lines
+         and another line
+         Testing documentation comments after code comments
+         with multiple lines
+         and another line
+        """
         raise NotImplementedError
 
     @abstractmethod
     def meth_taking_optional_interface(self, i):
+        """
+         Testing documentation comments before code comments
+         with multiple lines
+         and another line
+         Testing code comments after documentation comments
+         with multiple lines
+         and another line
+        """
         raise NotImplementedError
 
     @staticmethod

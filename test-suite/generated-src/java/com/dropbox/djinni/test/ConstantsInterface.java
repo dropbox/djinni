@@ -67,11 +67,9 @@ public interface ConstantsInterface {
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 
-    /**
-     * No support for null optional constants
-     * No support for optional constant records
-     * No support for constant binary, list, set, map
-     */
+    // No support for null optional constants
+    /** No support for optional constant records */
+    // No support for constant binary, list, set, map
     public void dummy();
 
     static final class CppProxy implements ConstantsInterface

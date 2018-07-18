@@ -6,8 +6,9 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/** Client interface */
+// Client interface
 public interface ClientInterface {
+    // Testing code comments before documentation comments
     /** Returns record of given string */
     @Nonnull
     public ClientReturnedRecord getRecord(long recordId, @Nonnull String utf8string, @CheckForNull String misc);
@@ -17,6 +18,8 @@ public interface ClientInterface {
     @Nonnull
     public String returnStr();
 
+    /** Testing documentation comments before code comments */
+    // This method takes an interface
     @Nonnull
     public String methTakingInterface(@CheckForNull ClientInterface i);
 
