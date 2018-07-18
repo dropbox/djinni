@@ -35,7 +35,13 @@ class EnumValue(val ty: Ident, ident: Ident) extends Ident(ident.name, ident.fil
 
 case class TypeParam(ident: Ident)
 
-case class Doc(lines: Seq[String])
+case class Doc(comments: Seq[Comment])
+
+abstract sealed class Comment {
+  val lines: Seq[String]
+}
+case class CodeComment(override val lines: Seq[String]) extends Comment
+case class DocComment(override val lines: Seq[String]) extends Comment
 
 sealed abstract class TypeDecl {
   val ident: Ident

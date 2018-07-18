@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/** Used for ObjC multiple inheritance tests */
+// Used for ObjC multiple inheritance tests
 public interface SecondListener {
     public void second();
 }
