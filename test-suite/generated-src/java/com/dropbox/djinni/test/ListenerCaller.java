@@ -13,15 +13,19 @@ import javax.annotation.Nonnull;
  * languages, due to the details of multiple inheritance and object
  * comparison.
  */
-public abstract class ListenerCaller {
-    public abstract void callFirst();
+public interface ListenerCaller {
+    public void callFirst();
 
-    public abstract void callSecond();
+    public void callSecond();
 
     @CheckForNull
-    public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
+    public static ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL)
+    {
+        return CppProxy.init(firstL,
+                             secondL);
+    }
 
-    private static final class CppProxy extends ListenerCaller
+    static final class CppProxy implements ListenerCaller
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -33,14 +37,14 @@ public abstract class ListenerCaller {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 
@@ -59,5 +63,8 @@ public abstract class ListenerCaller {
             native_callSecond(this.nativeRef);
         }
         private native void native_callSecond(long _nativeRef);
+
+        @CheckForNull
+        public static native ListenerCaller init(@CheckForNull FirstListener firstL, @CheckForNull SecondListener secondL);
     }
 }

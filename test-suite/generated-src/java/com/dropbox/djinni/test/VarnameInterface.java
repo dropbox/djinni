@@ -7,19 +7,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class VarnameInterface {
+public interface VarnameInterface {
     /**
      * We should also rewrite parameter names in docstrings.
      * RArg should be rewritten.
      * _i_arg_ should not.
      */
     @Nonnull
-    public abstract VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
+    public VarnameRecord Rmethod(@Nonnull VarnameRecord RArg);
 
     @CheckForNull
-    public abstract VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
+    public VarnameInterface Imethod(@CheckForNull VarnameInterface IArg);
 
-    private static final class CppProxy extends VarnameInterface
+    static final class CppProxy implements VarnameInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -31,14 +31,14 @@ public abstract class VarnameInterface {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 

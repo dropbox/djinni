@@ -17,8 +17,12 @@ public class DjinniGenericBasicTypeDualParameterImpl extends ASTWrapperPsiElemen
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitGenericBasicTypeDualParameter(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitGenericBasicTypeDualParameter(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
   }
 

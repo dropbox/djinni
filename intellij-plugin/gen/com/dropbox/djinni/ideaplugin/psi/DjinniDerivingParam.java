@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface DjinniDerivingParam extends PsiElement {
 
+  @Nullable
+  PsiElement getEqKeyword();
+
+  @Nullable
+  PsiElement getOrd();
+
 }

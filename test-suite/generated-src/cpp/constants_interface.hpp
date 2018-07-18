@@ -9,7 +9,6 @@
 
 namespace testsuite {
 
-enum class constant_enum;
 struct ConstantRecord;
 
 /** Interface containing constants */
@@ -36,8 +35,6 @@ public:
     static constexpr float F32_CONSTANT = 5.0f;
 
     static constexpr double F64_CONSTANT = 5.0;
-
-    static constant_enum const CONST_ENUM;
 
     static std::experimental::optional<bool> const OPT_BOOL_CONSTANT;
 

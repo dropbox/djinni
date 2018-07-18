@@ -11,18 +11,18 @@ import javax.annotation.Nonnull;
  * Generating and compiling this makes sure other languages don't break
  * on references to interfaces they don't need.
  */
-public abstract class UsesSingleLanguageListeners {
-    public abstract void callForObjC(@CheckForNull ObjcOnlyListener l);
+public interface UsesSingleLanguageListeners {
+    public void callForObjC(@CheckForNull ObjcOnlyListener l);
 
     @CheckForNull
-    public abstract ObjcOnlyListener returnForObjC();
+    public ObjcOnlyListener returnForObjC();
 
-    public abstract void callForJava(@CheckForNull JavaOnlyListener l);
+    public void callForJava(@CheckForNull JavaOnlyListener l);
 
     @CheckForNull
-    public abstract JavaOnlyListener returnForJava();
+    public JavaOnlyListener returnForJava();
 
-    private static final class CppProxy extends UsesSingleLanguageListeners
+    static final class CppProxy implements UsesSingleLanguageListeners
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -34,14 +34,14 @@ public abstract class UsesSingleLanguageListeners {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 

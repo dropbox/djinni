@@ -17,11 +17,9 @@ package com.dropbox.djinni.ideaplugin;
 
 import com.dropbox.djinni.ideaplugin.psi.*;
 import com.dropbox.djinni.ideaplugin.psi.impl.DjinniPsiImplUtil;
-import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -30,8 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by jaetzold on 7/27/15.
@@ -123,7 +119,7 @@ public class DjinniUtil {
   }
 
   @NotNull
-  public static List<PsiElement> findAllExternalTypes(Project project, PsiElement visibilityContext) {
+  public static List<PsiElement> findAllExternalTypes(Project project, @Nullable PsiElement visibilityContext) {
     List<PsiElement> result = new ArrayList<PsiElement>();
 
     List<PsiFile> allExternalFiles = findAllExternalFiles(project, visibilityContext);
@@ -273,7 +269,7 @@ public class DjinniUtil {
   }
 
   @NotNull
-  public static List<DjinniFile> findAllDjinniFiles(Project project, PsiElement visibilityContext) {
+  public static List<DjinniFile> findAllDjinniFiles(Project project, @Nullable PsiElement visibilityContext) {
     List<DjinniFile> result = new ArrayList<DjinniFile>();
 
     if (visibilityContext == null) {
@@ -315,7 +311,7 @@ public class DjinniUtil {
   }
 
   @NotNull
-  public static List<PsiFile> findAllExternalFiles(Project project, @NotNull PsiElement visibilityContext) {
+  public static List<PsiFile> findAllExternalFiles(Project project, @Nullable PsiElement visibilityContext) {
     List<PsiFile> result = new ArrayList<PsiFile>();
 
     List<DjinniFile> visibleDjinniFiles = findAllDjinniFiles(project, visibilityContext);

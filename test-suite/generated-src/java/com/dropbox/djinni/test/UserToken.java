@@ -7,11 +7,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class UserToken {
+public interface UserToken {
     @Nonnull
-    public abstract String whoami();
+    public String whoami();
 
-    private static final class CppProxy extends UserToken
+    static final class CppProxy implements UserToken
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -23,14 +23,14 @@ public abstract class UserToken {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 

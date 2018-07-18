@@ -7,18 +7,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class WcharTestHelpers {
+public interface WcharTestHelpers {
     @Nonnull
-    public static native WcharTestRec getRecord();
+    public static WcharTestRec getRecord()
+    {
+        return CppProxy.getRecord();
+    }
 
     @Nonnull
-    public static native String getString();
+    public static String getString()
+    {
+        return CppProxy.getString();
+    }
 
-    public static native boolean checkString(@Nonnull String str);
+    public static boolean checkString(@Nonnull String str)
+    {
+        return CppProxy.checkString(str);
+    }
 
-    public static native boolean checkRecord(@Nonnull WcharTestRec rec);
+    public static boolean checkRecord(@Nonnull WcharTestRec rec)
+    {
+        return CppProxy.checkRecord(rec);
+    }
 
-    private static final class CppProxy extends WcharTestHelpers
+    static final class CppProxy implements WcharTestHelpers
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -30,15 +42,25 @@ public abstract class WcharTestHelpers {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
+
+        @Nonnull
+        public static native WcharTestRec getRecord();
+
+        @Nonnull
+        public static native String getString();
+
+        public static native boolean checkString(@Nonnull String str);
+
+        public static native boolean checkRecord(@Nonnull WcharTestRec rec);
     }
 }

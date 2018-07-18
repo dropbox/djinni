@@ -1,6 +1,6 @@
 import com.typesafe.sbt.SbtStartScript
 
-scalaVersion := "2.11.0"
+scalaVersion := "2.11.12"
 
 libraryDependencies ++= Seq(
 	"org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1",

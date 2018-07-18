@@ -33,6 +33,7 @@ public class DjinniColorSettingsPage implements ColorSettingsPage {
   private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[] {
     new AttributesDescriptor("Comment", DjinniSyntaxHighlighter.COMMENT),
     new AttributesDescriptor("Identifier", DjinniSyntaxHighlighter.IDENTIFIER),
+    new AttributesDescriptor("Keywords", DjinniSyntaxHighlighter.KEYWORDS),
     new AttributesDescriptor("String literal", DjinniSyntaxHighlighter.STRING_LITERAL),
     new AttributesDescriptor("Number literal", DjinniSyntaxHighlighter.NUMBER_LITERAL),
   };

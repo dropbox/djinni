@@ -10,23 +10,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public abstract class EnumUsageInterface {
+public interface EnumUsageInterface {
     @Nonnull
-    public abstract Color e(@Nonnull Color e);
+    public Color e(@Nonnull Color e);
 
     @CheckForNull
-    public abstract Color o(@CheckForNull Color o);
+    public Color o(@CheckForNull Color o);
 
     @Nonnull
-    public abstract ArrayList<Color> l(@Nonnull ArrayList<Color> l);
+    public ArrayList<Color> l(@Nonnull ArrayList<Color> l);
 
     @Nonnull
-    public abstract HashSet<Color> s(@Nonnull HashSet<Color> s);
+    public HashSet<Color> s(@Nonnull HashSet<Color> s);
 
     @Nonnull
-    public abstract HashMap<Color, Color> m(@Nonnull HashMap<Color, Color> m);
+    public HashMap<Color, Color> m(@Nonnull HashMap<Color, Color> m);
 
-    private static final class CppProxy extends EnumUsageInterface
+    static final class CppProxy implements EnumUsageInterface
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -38,14 +38,14 @@ public abstract class EnumUsageInterface {
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 

@@ -7,18 +7,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-/*package*/ abstract class SortItems {
+/*package*/ interface SortItems {
     // For the iOS / Android demo
-    public abstract void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
+    public void sort(@Nonnull SortOrder order, @Nonnull ItemList items);
 
     @CheckForNull
-    public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
+    public static SortItems createWithListener(@CheckForNull TextboxListener listener)
+    {
+        return CppProxy.createWithListener(listener);
+    }
 
     /** For the localhost / command-line demo */
     @Nonnull
-    public static native ItemList runSort(@Nonnull ItemList items);
+    public static ItemList runSort(@Nonnull ItemList items)
+    {
+        return CppProxy.runSort(items);
+    }
 
-    private static final class CppProxy extends SortItems
+    static final class CppProxy implements SortItems
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -30,14 +36,14 @@ import javax.annotation.Nonnull;
         }
 
         private native void nativeDestroy(long nativeRef);
-        public void destroy()
+        public void _djinni_private_destroy()
         {
             boolean destroyed = this.destroyed.getAndSet(true);
             if (!destroyed) nativeDestroy(this.nativeRef);
         }
         protected void finalize() throws java.lang.Throwable
         {
-            destroy();
+            _djinni_private_destroy();
             super.finalize();
         }
 
@@ -48,5 +54,11 @@ import javax.annotation.Nonnull;
             native_sort(this.nativeRef, order, items);
         }
         private native void native_sort(long _nativeRef, SortOrder order, ItemList items);
+
+        @CheckForNull
+        public static native SortItems createWithListener(@CheckForNull TextboxListener listener);
+
+        @Nonnull
+        public static native ItemList runSort(@Nonnull ItemList items);
     }
 }

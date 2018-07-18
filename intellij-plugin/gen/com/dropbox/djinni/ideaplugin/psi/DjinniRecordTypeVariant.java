@@ -10,4 +10,7 @@ public interface DjinniRecordTypeVariant extends PsiElement {
   @NotNull
   List<DjinniGenerator> getGeneratorList();
 
+  @NotNull
+  PsiElement getRecord();
+
 }

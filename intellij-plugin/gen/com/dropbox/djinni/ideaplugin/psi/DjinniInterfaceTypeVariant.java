@@ -10,4 +10,7 @@ public interface DjinniInterfaceTypeVariant extends PsiElement {
   @NotNull
   List<DjinniGenerator> getGeneratorList();
 
+  @NotNull
+  PsiElement getInterface();
+
 }

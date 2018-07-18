@@ -17,8 +17,12 @@ public class DjinniRecordMemberVariableImpl extends ASTWrapperPsiElement impleme
     super(node);
   }
 
+  public void accept(@NotNull DjinniVisitor visitor) {
+    visitor.visitRecordMemberVariable(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DjinniVisitor) ((DjinniVisitor)visitor).visitRecordMemberVariable(this);
+    if (visitor instanceof DjinniVisitor) accept((DjinniVisitor)visitor);
     else super.accept(visitor);
   }
 

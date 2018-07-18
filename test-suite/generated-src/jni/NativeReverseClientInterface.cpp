@@ -49,7 +49,7 @@ CJNIEXPORT jstring JNICALL Java_com_dropbox_djinni_test_ReverseClientInterface_0
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_ReverseClientInterface_create(JNIEnv* jniEnv, jobject /*this*/)
+CJNIEXPORT jobject JNICALL Java_com_dropbox_djinni_test_ReverseClientInterface_00024CppProxy_create(JNIEnv* jniEnv, jobject /*this*/)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
