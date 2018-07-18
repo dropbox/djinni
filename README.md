@@ -54,6 +54,10 @@ Djinni's input is an interface description file. Here's an example:
         store: set<string>;
         hash: map<string, i32>;
 
+        // You can generate two types of comments
+        // - Code comments by using "// comment" in djinni files which will generate "// comment" 
+        // - Code documentation by using "# comment" in djinni files which will generate "/** comment */" 
+        // Both of those types support single and multi line comments 
         values: list<another_record>;
 
         # Comments can also be put here
@@ -505,6 +509,14 @@ There is basically two variables you would like to modify:
 For more informations, take a look at https://github.com/leetal/ios-cmake.
 
 - `ENABLE_BITCODE`: enable/disable the bitcode generation.
+
+## Android Parcelable records
+
+Djinni supports generating records that implements `android.os.parcelable`.
+
+In order to do that, there are two steps needed:
+- deriving the records that should be parcelable with the keyword parcelable: `deriving(parcelable)`
+- run Djinni with the following flag `--java-implement-android-os-parcelable true`
 
 ## Community Links
 

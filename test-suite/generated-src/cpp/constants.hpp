@@ -17,6 +17,7 @@ struct Constants final {
     /** bool_constant has documentation. */
     static constexpr bool BOOL_CONSTANT = true;
 
+    // i8_constant has a comment
     static constexpr int8_t I8_CONSTANT = 1;
 
     static constexpr int16_t I16_CONSTANT = 2;
@@ -25,6 +26,9 @@ struct Constants final {
 
     static constexpr int64_t I64_CONSTANT = 4;
 
+    // f64_constant has a long comment.
+    // (Second line of multi-line comment.
+    //   Indented third line of multi-line comment.)
     static constexpr float F32_CONSTANT = 5.0f;
 
     /**
@@ -60,11 +64,9 @@ struct Constants final {
 
     static ConstantRecord const OBJECT_CONSTANT;
 
-    /**
-     * No support for null optional constants
-     * No support for optional constant records
-     * No support for constant binary, list, set, map
-     */
+    /** No support for null optional constants */
+    // No support for optional constant records
+    /** No support for constant binary, list, set, map */
     static constexpr bool DUMMY = false;
 };
 

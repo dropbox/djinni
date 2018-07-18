@@ -6,9 +6,10 @@
 @protocol DBClientInterface;
 
 
-/** Client interface */
+// Client interface
 @protocol DBClientInterface
 
+// Testing code comments before documentation comments
 /** Returns record of given string */
 - (nonnull DBClientReturnedRecord *)getRecord:(int64_t)recordId
                                    utf8string:(nonnull NSString *)utf8string
@@ -20,6 +21,8 @@
 
 - (nonnull NSString *)returnStr;
 
+/** Testing documentation comments before code comments */
+// This method takes an interface
 - (nonnull NSString *)methTakingInterface:(nullable id<DBClientInterface>)i;
 
 - (nonnull NSString *)methTakingOptionalInterface:(nullable id<DBClientInterface>)i;

@@ -3,7 +3,7 @@ first_listener = interface +o +p {
     first();
 }
 
-# Used for non-C++ multiple inheritance tests
+// Used for non-C++ multiple inheritance tests
 second_listener = interface +o +p {
     second();
 }
@@ -24,7 +24,7 @@ return_one = interface +c {
     return_one(): i8;
 }
 
-# Used for C++ multiple inheritance tests
+// Used for C++ multiple inheritance tests
 return_two = interface +c {
     static get_instance(): return_two;
     return_two(): i8;

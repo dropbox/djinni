@@ -5,7 +5,7 @@
 @class DBReturnTwo;
 
 
-/** Used for C++ multiple inheritance tests */
+// Used for C++ multiple inheritance tests
 @interface DBReturnTwo : NSObject
 
 + (nullable DBReturnTwo *)getInstance;

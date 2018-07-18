@@ -8,6 +8,8 @@ extern_record_with_derivings = record
 	e: test_color;
 } deriving(eq, ord)
 
+// This file tests YAML dumped by Djinni can be parsed back in
+
 extern_interface_1 = interface +c
 {
 	foo(i: test_client_interface): test_client_returned_record;

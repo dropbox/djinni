@@ -16,16 +16,19 @@
 
 package djinni
 
-import java.io.{File, FileNotFoundException, InputStreamReader, FileInputStream, Writer}
+import java.io.{File, FileInputStream, FileNotFoundException, InputStreamReader, Writer}
 
 import djinni.ast.Interface.Method
 import djinni.ast.Record.DerivingType.DerivingType
 import djinni.syntax._
 import djinni.ast._
 import java.util.{Map => JMap}
+
 import org.yaml.snakeyaml.Yaml
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
 import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.{Position, Positional}
@@ -210,7 +213,57 @@ private object IdlParser extends RegexParsers {
     case (s, p) => Ident(s, fileStack.top, p)
   }
 
-  def doc: Parser[Doc] = rep(regex("""#[^\n\r]*""".r) ^^ (_.substring(1))) ^^ Doc
+  def doc: Parser[Doc] = rep(regex("""#[^\n\r]*""".r) | regex("""\/\/[^\n\r]*""".r)) ^^ { commentLines =>
+
+    val docCommentPrefix = "#"
+    val codeCommentPrefix = "//"
+
+    val comments = ArrayBuffer[Comment]()
+
+    commentLines.foreach( commentLine => {
+
+      if (commentLine.startsWith(docCommentPrefix)) { // DocComment
+
+        val commentText = commentLine.substring(docCommentPrefix.length)
+
+        if (comments.isEmpty) {
+          comments += DocComment(Seq(commentText))
+        } else {
+          comments.last match {
+            case DocComment(lines) =>
+              val newLines = lines :+ commentText
+              comments.remove(comments.length-1)
+              comments += DocComment(newLines)
+            case CodeComment(_) =>
+              comments += DocComment(Seq(commentText))
+          }
+        }
+
+      } else if (commentLine.startsWith(codeCommentPrefix)) { // CodeComment
+
+        val commentText = commentLine.substring(codeCommentPrefix.length)
+
+        if (comments.isEmpty) {
+          comments += CodeComment(Seq(commentText))
+        } else {
+          val commentText = commentLine.substring(codeCommentPrefix.length)
+          comments.last match {
+            case DocComment(_) =>
+              comments += CodeComment(Seq(commentText))
+            case CodeComment(lines) =>
+              val newLines = lines :+ commentText
+              comments.remove(comments.length-1)
+              comments += CodeComment(newLines)
+          }
+        }
+
+      }
+
+    })
+
+    Doc(comments)
+
+  }
 
   def parens[T](inner: Parser[T]): Parser[T] = surround("(", ")", inner)
   def typeList[T](inner: Parser[T]): Parser[Seq[T]] = surround("<", ">", rep1sepend(inner, ",")) | success(Seq.empty)
