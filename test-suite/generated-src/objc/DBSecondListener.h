@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 
-/** Used for non-C++ multiple inheritance tests */
+// Used for non-C++ multiple inheritance tests
 @protocol DBSecondListener
 
 - (void)second;

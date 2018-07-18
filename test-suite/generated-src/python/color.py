@@ -13,6 +13,11 @@ class Color(IntEnum):
     Red = 0
     Orange = 1
     Yellow = 2
+    """
+     "It is customary to list indigo as a color lying between blue and violet, but it has
+     never seemed to me that indigo is worth the dignity of being considered a separate
+     color. To my eyes it seems merely deep blue." --Isaac Asimov
+    """
     Green = 3
     Blue = 4
     """

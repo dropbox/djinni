@@ -41,19 +41,19 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
 
   // Override since Python doesn't share the C-style comment syntax.
   override def writeDoc(w: IndentWriter, doc: Doc) {
-    doc.lines.foreach(l => w.wl(s"#$l"))
+    doc.comments.foreach(comment => comment.lines.foreach(l => w.wl(s"#$l")) )
   }
 
   // Use docstrings rather than comments when available.
   def writeDocString(w: IndentWriter, doc: Doc, docLists: Seq[IndentWriter => Unit] = Seq()): Boolean = {
-    if (doc.lines.isEmpty && docLists.isEmpty) {
+    if (doc.comments.isEmpty && docLists.isEmpty) {
       return false
     }
-    if (doc.lines.length == 1 && docLists.isEmpty) {
-      w.wl(s"""\"\"\"${doc.lines.head} \"\"\"""")
+    if (doc.comments.length == 1 && doc.comments.head.lines.length == 1 && docLists.isEmpty) {
+      w.wl(s"""\"\"\"${doc.comments.head.lines.head} \"\"\"""")
     } else {
       w.wl("\"\"\"")
-      doc.lines.foreach (l => w.wl(s"$l"))
+      doc.comments.foreach(comment => comment.lines.foreach(l => w.wl(s"$l")))
       docLists.foreach (docList => docList(w))
       w.wl("\"\"\"")
     }
@@ -67,34 +67,33 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
     }
   }
 
-  def writeDocListItem(w: IndentWriter, name: String, lines: Seq[String]): Unit = {
-    if (lines.isEmpty) {
+  def writeDocListItem(w: IndentWriter, name: String, comments: Seq[Comment]): Unit = {
+    if (comments.isEmpty) {
       w.wl(s"${name}")
     } else {
-      w.wl(s"${name}: ${lines.head.trim}")
+      w.wl(s"${name}: ${comments.head.lines.head.trim}")
       w.nested {
-        lines.tail.foreach (l => {
-          w.wl(l)
-        })
+        comments.head.lines.tail.foreach (l => w.wl(l))
+        comments.tail.foreach (comment => comment.lines.foreach (l => w.wl(l)) )
       }
     }
   }
 
   def writeDocConstantsList(w: IndentWriter, consts: Seq[Const]): Unit = {
     writeDocList(w, "Constants", { w => consts.foreach (c => {
-      writeDocListItem(w, idPython.const(c.ident), c.doc.lines)
+      writeDocListItem(w, idPython.const(c.ident), c.doc.comments)
     })})
   }
 
   def writeDocFieldsList(w: IndentWriter, fields: Seq[Field]): Unit = {
     writeDocList(w, "Fields", { w => fields.foreach (f => {
-      writeDocListItem(w, idPython.field(f.ident), f.doc.lines)
+      writeDocListItem(w, idPython.field(f.ident), f.doc.comments)
     })})
   }
 
   def writeDocEnumOptionsList(w: IndentWriter, options: Seq[Enum.Option]): Unit = {
     writeDocList(w, "Members", { w => options.foreach (o => {
-      writeDocListItem(w, idPython.enum(o.ident), o.doc.lines)
+      writeDocListItem(w, idPython.enum(o.ident), o.doc.comments)
     })})
   }
 
@@ -800,7 +799,7 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
     writePythonFile(ident, origin, refs.python, true, w => {
       // Asbtract Class Definition
       w.wl("class " + pythonClass + "(with_metaclass(ABCMeta)):").nested {
-        val docConsts = if (!i.consts.exists(!_.doc.lines.isEmpty)) Seq() else Seq({
+        val docConsts = if (!i.consts.exists(!_.doc.comments.isEmpty)) Seq() else Seq({
           w: IndentWriter => writeDocConstantsList(w, i.consts)
         })
         if (writeDocString(w, doc, docConsts)) { w.wl }
@@ -993,8 +992,8 @@ class PythonGenerator(spec: Spec) extends Generator(spec) {
       // Record Definition
       w.wl("class " + recordClassName + (if(r.ext.py) "Base" else "") + ":").nested {
         var docLists = mutable.ArrayBuffer[IndentWriter => Unit]()
-        if (r.fields.exists(!_.doc.lines.isEmpty)) docLists += { w: IndentWriter => writeDocFieldsList(w, r.fields)}
-        if (r.consts.exists(!_.doc.lines.isEmpty)) docLists += { w: IndentWriter => writeDocConstantsList(w, r.consts)}
+        if (r.fields.exists(!_.doc.comments.isEmpty)) docLists += { w: IndentWriter => writeDocFieldsList(w, r.fields)}
+        if (r.consts.exists(!_.doc.comments.isEmpty)) docLists += { w: IndentWriter => writeDocConstantsList(w, r.consts)}
         if (writeDocString(w, doc, docLists)) { w.wl }
 
 

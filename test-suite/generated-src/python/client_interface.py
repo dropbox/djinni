@@ -18,7 +18,10 @@ class ClientInterface(with_metaclass(ABCMeta)):
 
     @abstractmethod
     def get_record(self, record_id, utf8string, misc):
-        """ Returns record of given string """
+        """
+         Testing code comments before documentation comments
+         Returns record of given string
+        """
         raise NotImplementedError
 
     @abstractmethod
@@ -31,6 +34,10 @@ class ClientInterface(with_metaclass(ABCMeta)):
 
     @abstractmethod
     def meth_taking_interface(self, i):
+        """
+         Testing documentation comments before code comments
+         This method takes an interface
+        """
         raise NotImplementedError
 
     @abstractmethod

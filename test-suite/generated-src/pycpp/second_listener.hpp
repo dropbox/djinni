@@ -5,7 +5,7 @@
 
 namespace testsuite {
 
-/** Used for non-C++ multiple inheritance tests */
+// Used for non-C++ multiple inheritance tests
 class SecondListener {
 public:
     virtual ~SecondListener() {}
