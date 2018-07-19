@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 
 
-// Used for ObjC multiple inheritance tests
+/** Used for ObjC multiple inheritance tests */
 @protocol DBSecondListener
 
 - (void)second;

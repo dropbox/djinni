@@ -10,7 +10,7 @@
 
 namespace testsuite {
 
-// Record returned by a client
+/** Record returned by a client */
 struct ClientReturnedRecord final {
     int64_t record_id;
     std::string content;

@@ -15,24 +15,8 @@ public:
 
     virtual std::string return_str() const = 0;
 
-    // Testing code comments before documentation comments
-    // with multiple lines
-    // and another line
-    /**
-     * Testing documentation comments after code comments
-     * with multiple lines
-     * and another line
-     */
     virtual std::string meth_taking_interface(const std::shared_ptr<ReverseClientInterface> & i) = 0;
 
-    /**
-     * Testing documentation comments before code comments
-     * with multiple lines
-     * and another line
-     */
-    // Testing code comments after documentation comments
-    // with multiple lines
-    // and another line
     virtual std::string meth_taking_optional_interface(const std::shared_ptr<ReverseClientInterface> & i) = 0;
 
     static std::shared_ptr<ReverseClientInterface> create();

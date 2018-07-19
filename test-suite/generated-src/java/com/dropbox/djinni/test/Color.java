@@ -10,9 +10,6 @@ public enum Color {
     RED,
     ORANGE,
     YELLOW,
-    // "It is customary to list indigo as a color lying between blue and violet, but it has
-    // never seemed to me that indigo is worth the dignity of being considered a separate
-    // color. To my eyes it seems merely deep blue." --Isaac Asimov
     GREEN,
     BLUE,
     /**

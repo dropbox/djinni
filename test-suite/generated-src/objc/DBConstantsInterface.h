@@ -23,9 +23,11 @@ extern NSString * __nullable const DBConstantsInterfaceOptStringConstant;
 /** Interface containing constants */
 @interface DBConstantsInterface : NSObject
 
-// No support for null optional constants
-/** No support for optional constant records */
-// No support for constant binary, list, set, map
+/**
+ * No support for null optional constants
+ * No support for optional constant records
+ * No support for constant binary, list, set, map
+ */
 - (void)dummy;
 
 + (NSNumber * __nullable)optBoolConstant;

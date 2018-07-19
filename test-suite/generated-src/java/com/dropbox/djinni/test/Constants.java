@@ -12,7 +12,6 @@ public class Constants {
     /** bool_constant has documentation. */
     public static final boolean BOOL_CONSTANT = true;
 
-    // i8_constant has a comment
     public static final byte I8_CONSTANT = 1;
 
     public static final short I16_CONSTANT = 2;
@@ -21,9 +20,6 @@ public class Constants {
 
     public static final long I64_CONSTANT = 4l;
 
-    // f64_constant has a long comment.
-    // (Second line of multi-line comment.
-    //   Indented third line of multi-line comment.)
     public static final float F32_CONSTANT = 5.0f;
 
     /**
@@ -71,9 +67,11 @@ public class Constants {
         I32_CONSTANT /* mSomeInteger */ ,
         STRING_CONSTANT /* mSomeString */ );
 
-    /** No support for null optional constants */
-    // No support for optional constant records
-    /** No support for constant binary, list, set, map */
+    /**
+     * No support for null optional constants
+     * No support for optional constant records
+     * No support for constant binary, list, set, map
+     */
     public static final boolean DUMMY = false;
 
 

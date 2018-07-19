@@ -10,7 +10,7 @@
 
 @interface TXSSortItems : NSObject
 
-// For the iOS / Android demo
+/** For the iOS / Android demo */
 - (void)sort:(TXSSortOrder)order
        items:(nonnull TXSItemList *)items;
 

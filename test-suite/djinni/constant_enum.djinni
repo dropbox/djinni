@@ -1,4 +1,4 @@
-// enum for use in constants
+# enum for use in constants
 constant_enum = enum {
     some_value;
     some_other_value;

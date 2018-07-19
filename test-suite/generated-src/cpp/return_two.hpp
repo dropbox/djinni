@@ -8,7 +8,7 @@
 
 namespace testsuite {
 
-// Used for C++ multiple inheritance tests
+/** Used for C++ multiple inheritance tests */
 class ReturnTwo {
 public:
     virtual ~ReturnTwo() {}

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-// Used for C++ multiple inheritance tests
+/** Used for C++ multiple inheritance tests */
 public interface ReturnTwo {
     public byte returnTwo();
 

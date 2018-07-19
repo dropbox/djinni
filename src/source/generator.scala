@@ -18,15 +18,12 @@ package djinni
 
 import djinni.ast._
 import java.io._
-
 import djinni.generatorTools._
 import djinni.meta._
 import djinni.syntax.Error
 import djinni.writer.IndentWriter
-
 import scala.language.implicitConversions
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 import scala.util.matching.Regex
 
 package object generatorTools {
@@ -428,44 +425,22 @@ abstract class Generator(spec: Spec)
 
   def writeMethodDoc(w: IndentWriter, method: Interface.Method, ident: IdentConverter) {
     val paramReplacements = method.params.map(p => (s"\\b${Regex.quote(p.ident.name)}\\b", s"${ident(p.ident.name)}"))
-
-    val comments = ArrayBuffer[Comment]()
-
-    method.doc.comments.foreach({
-      case DocComment(lines) =>
-
-        val newDocComment = DocComment(lines.map(l => {
-          paramReplacements.foldLeft(l)((line, rep) =>
-            line.replaceAll(rep._1, rep._2))
-        }))
-
-        comments += newDocComment
-
-      case CodeComment(lines) =>
-        comments += CodeComment(lines)
-    })
-
-    val newDoc = Doc(comments)
-
+    val newDoc = Doc(method.doc.lines.map(l => {
+      paramReplacements.foldLeft(l)((line, rep) =>
+        line.replaceAll(rep._1, rep._2))
+    }))
     writeDoc(w, newDoc)
   }
 
   def writeDoc(w: IndentWriter, doc: Doc) {
-    doc.comments.foreach({
-      case DocComment(lines) =>
-        lines.length match {
-          case 0 =>
-          case 1 =>
-            w.wl(s"/**${lines.head} */")
-          case _ =>
-            w.wl("/**")
-            lines.foreach (l => w.wl(s" *$l"))
-            w.wl(" */")
-        }
-
-      case CodeComment(lines) =>
-        lines.foreach (l => w.wl(s"//$l"))
-    })
+    doc.lines.length match {
+      case 0 =>
+      case 1 =>
+        w.wl(s"/**${doc.lines.head} */")
+      case _ =>
+        w.wl("/**")
+        doc.lines.foreach (l => w.wl(s" *$l"))
+        w.wl(" */")
+    }
   }
-
 }

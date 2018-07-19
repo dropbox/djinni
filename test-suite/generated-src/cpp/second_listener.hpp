@@ -5,7 +5,7 @@
 
 namespace testsuite {
 
-// Used for ObjC multiple inheritance tests
+/** Used for ObjC multiple inheritance tests */
 class SecondListener {
 public:
     virtual ~SecondListener() {}
