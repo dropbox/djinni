@@ -101,6 +101,8 @@ class YamlGenerator(spec: Spec) extends Generator(spec) {
           case Record.DerivingType.Eq => "eq"
           case Record.DerivingType.Ord => "ord"
           case Record.DerivingType.AndroidParcelable => "parcelable"
+          case Record.DerivingType.DefaultInit => "defaultinit"
+          case Record.DerivingType.JsonHpp => "jsonhpp"
         }.mkString(" deriving(", ", ", ")")
       }
     }
