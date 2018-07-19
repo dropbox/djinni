@@ -506,6 +506,14 @@ For more informations, take a look at https://github.com/leetal/ios-cmake.
 
 - `ENABLE_BITCODE`: enable/disable the bitcode generation.
 
+## Android Parcelable records
+
+Djinni supports generating records that implements `android.os.parcelable`.
+
+In order to do that, there are two steps needed:
+- deriving the records that should be parcelable with the keyword parcelable: `deriving(parcelable)`
+- run Djinni with the following flag `--java-implement-android-os-parcelable true`
+
 ## Community Links
 
 * Join the discussion with other developers at the [Mobile C++ Slack Community](https://mobilecpp.herokuapp.com/)

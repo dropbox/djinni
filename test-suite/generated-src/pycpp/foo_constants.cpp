@@ -5,19 +5,19 @@
 
 namespace testsuite {
 
-bool const FooConstants::BOOL_CONSTANT;
+bool constexpr FooConstants::BOOL_CONSTANT;
 
-int8_t const FooConstants::I8_CONSTANT;
+int8_t constexpr FooConstants::I8_CONSTANT;
 
-int16_t const FooConstants::I16_CONSTANT;
+int16_t constexpr FooConstants::I16_CONSTANT;
 
-int32_t const FooConstants::I32_CONSTANT;
+int32_t constexpr FooConstants::I32_CONSTANT;
 
-int64_t const FooConstants::I64_CONSTANT;
+int64_t constexpr FooConstants::I64_CONSTANT;
 
-float const FooConstants::F32_CONSTANT;
+float constexpr FooConstants::F32_CONSTANT;
 
-double const FooConstants::F64_CONSTANT;
+double constexpr FooConstants::F64_CONSTANT;
 
 std::string const FooConstants::STRING_CONSTANT = {"string-constant"};
 
