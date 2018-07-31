@@ -378,6 +378,11 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
 
         w.wl
+        w.wl("/**")
+        w.wl(" * Returns a string representation of this object.")
+        w.wl(" *")
+        w.wl(" * @return a string representation of this object.")
+        w.wl(" */")
         w.wl("@Override")
         w.w("public String toString()").braced {
           w.w(s"return ").nestedN(2) {
@@ -385,7 +390,10 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
             for (i <- 0 to r.fields.length-1) {
               val name = idJava.field(r.fields(i).ident)
               val comma = if (i > 0) """"," + """ else ""
-              w.wl(s"""${comma}"${name}=" + ${name} +""")
+              r.fields(i).ty.expr.ident.name match {
+                case "binary" => w.wl(s"""${comma}"${name}=" + java.util.Arrays.toString(${name}) +""")
+                case _ => w.wl(s"""${comma}"${name}=" + ${name} +""")
+              }
             }
           }
           w.wl(s""""}";""")
