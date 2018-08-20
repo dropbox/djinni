@@ -673,7 +673,7 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept;
  * it can safely be 0 for any function with a non-void return value.)
  */
 #define JNI_TRANSLATE_EXCEPTIONS_RETURN(env, ret) \
-    catch (const std::exception &e) { \
+    catch (const std::exception &) { \
         ::djinni::jniSetPendingFromCurrent(env, __func__); \
         return ret; \
     }
