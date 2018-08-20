@@ -47,6 +47,48 @@ void jniShutdown();
  */
 JNIEnv * jniGetThreadEnv();
 
+JavaVM * getCachedJVM();
+/*
+ * Runs the given function on a Java thread and subsequently detaches it if it was not
+ * previously attached.
+ */
+template<typename Func>
+typename std::result_of<Func()>::type runOnJvmThreadWithReturn(Func f) {
+    auto g_cachedJVM = getCachedJVM();
+    assert(g_cachedJVM);
+    bool attached = false;
+    JNIEnv * env = nullptr;
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+        attached = true;
+    }
+    if (get_res != 0 || !env) {
+        std::abort();
+    }
+    auto result = f();
+    if (attached) g_cachedJVM->DetachCurrentThread();
+    return result;
+}
+
+template<typename Func>
+void runOnJvmThread(Func f) {
+    auto g_cachedJVM = getCachedJVM();
+    assert(g_cachedJVM);
+    bool attached = false;
+    JNIEnv * env = nullptr;
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+        attached = true;
+    }
+    if (get_res != 0 || !env) {
+        std::abort();
+    }
+    f();
+    if (attached) g_cachedJVM->DetachCurrentThread();
+}
+
 /*
  * Global and local reference guard objects.
  *
@@ -631,7 +673,7 @@ void jniDefaultSetPendingFromCurrent(JNIEnv * env, const char * ctx) noexcept;
  * it can safely be 0 for any function with a non-void return value.)
  */
 #define JNI_TRANSLATE_EXCEPTIONS_RETURN(env, ret) \
-    catch (const std::exception &) { \
+    catch (const std::exception &e) { \
         ::djinni::jniSetPendingFromCurrent(env, __func__); \
         return ret; \
     }

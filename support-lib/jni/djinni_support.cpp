@@ -28,6 +28,10 @@ namespace djinni {
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
 
+JavaVM * getCachedJVM() {
+  return g_cachedJVM;
+}
+
 /*static*/
 JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
     static JniClassInitializer::registration_vec m;
