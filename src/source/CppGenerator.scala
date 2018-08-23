@@ -260,7 +260,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
 
-    if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord)) {
+    if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord) || r.derivingTypes.contains(DerivingType.Show)) {
       writeCppFile(cppName, origin, refs.cpp, w => {
         generateCppConstants(w, r.consts, actualSelf)
 
@@ -306,6 +306,16 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.w(s"bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
             w.wl("return !(lhs < rhs);")
           }
+        }
+        if (r.derivingTypes.contains(DerivingType.Show)) {
+            w.wl
+            w.w(s"::std::ostream& operator<<(::std::ostream& os, const $actualSelf& self)").braced {
+                w.wl("os << \"" ++ self ++ "{\";")
+                for(f <- r.fields) {
+                    w.wl("os << \" " ++ idCpp.field(f.ident) ++ ":\" << self." ++ idCpp.field(f.ident) ++ ";")
+                }
+                w.wl("return os << \"}\";")
+            }
         }
       })
     }
