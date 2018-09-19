@@ -70,9 +70,9 @@ class JNIMarshal(spec: Spec) extends Marshal(spec) {
         case MOptional => throw new AssertionError("nested optional?")
         case m => javaTypeSignature(tm.args.head)
       }
-      case MList => "Ljava/util/ArrayList;"
-      case MSet => "Ljava/util/HashSet;"
-      case MMap => "Ljava/util/HashMap;"
+      case MList => "Ljava/util/List;"
+      case MSet => "Ljava/util/Set;"
+      case MMap => "Ljava/util/Map;"
     }
     case e: MExtern => e.jni.typeSignature
     case MParam(_) => "Ljava/lang/Object;"
