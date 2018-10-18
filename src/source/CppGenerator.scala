@@ -80,7 +80,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.w(s"constexpr $self operator$op($self lhs, $self rhs) noexcept").braced {
             w.wl(s"return static_cast<$self>(static_cast<$flagsType>(lhs) $op static_cast<$flagsType>(rhs));")
           }
-          w.w(s"inline $self& operator$op=($self& lhs, const $self rhs) noexcept").braced {
+          w.w(s"inline $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
             w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
           }
         }
