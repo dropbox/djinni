@@ -19,8 +19,8 @@
 + (nonnull instancetype)externRecordWithDerivingsWithMember:(nonnull DBRecordWithDerivings *)member
                                                           e:(DBColor)e
 {
-    return [[self alloc] initWithMember:member
-                                      e:e];
+    return [(DBExternRecordWithDerivings*)[self alloc] initWithMember:member
+                                                                    e:e];
 }
 
 - (BOOL)isEqual:(id)other

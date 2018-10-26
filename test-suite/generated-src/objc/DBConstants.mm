@@ -35,7 +35,7 @@ BOOL const DBConstantsDummy = NO;
 
 + (nonnull instancetype)constants
 {
-    return [[self alloc] init];
+    return [(DBConstants*)[self alloc] init];
 }
 
 + (NSNumber * __nullable)optBoolConstant

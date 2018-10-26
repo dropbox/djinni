@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)recordUsingExtendedRecordWithEr:(nonnull DBExtendedRecord *)er
 {
-    return [[self alloc] initWithEr:er];
+    return [(DBRecordUsingExtendedRecord*)[self alloc] initWithEr:er];
 }
 
 + (DBRecordUsingExtendedRecord * __nonnull)cr

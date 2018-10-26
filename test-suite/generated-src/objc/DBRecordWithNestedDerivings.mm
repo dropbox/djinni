@@ -19,8 +19,8 @@
 + (nonnull instancetype)recordWithNestedDerivingsWithKey:(int32_t)key
                                                      rec:(nonnull DBRecordWithDerivings *)rec
 {
-    return [[self alloc] initWithKey:key
-                                 rec:rec];
+    return [(DBRecordWithNestedDerivings*)[self alloc] initWithKey:key
+                                                               rec:rec];
 }
 
 - (BOOL)isEqual:(id)other
