@@ -31,3 +31,30 @@
     #define DJINNI_NORETURN_DEFINITION __attribute__((noreturn))
     #define DJINNI_SNPRINTF snprintf
 #endif
+
+#ifndef PROJECT_EXPORT
+#    if defined _WIN32 || defined __CYGWIN__
+#        ifdef BUILDING_DLL
+#            ifdef __GNUC__
+#                define PROJECT_EXPORT __attribute__((dllexport))
+#            else
+#                define PROJECT_EXPORT __declspec(dllexport)
+#            endif
+#        else
+#            ifdef __GNUC__
+#                define PROJECT_EXPORT __attribute__((dllimport))
+#            else
+#                define PROJECT_EXPORT __declspec(dllimport)
+#            endif
+#        endif
+#        define PROJECT_LOCAL
+#    else
+#        if __GNUC__ >= 4
+#            define PROJECT_EXPORT __attribute__((visibility("default")))
+#            define PROJECT_LOCAL__attribute__ ((visibility("hidden")))
+#        else
+#            define PROJECT_EXPORT
+#            define PROJECT_LOCAL
+#        endif
+#    endif
+#endif

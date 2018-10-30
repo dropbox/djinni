@@ -59,6 +59,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     val self = marshal.typename(ident, e)
 
+    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
     if (spec.cppEnumHashWorkaround) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
@@ -101,7 +102,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         wrapNamespace(w, "std",
           (w: IndentWriter) => {
             w.wl("template <>")
-            w.w(s"struct hash<$fqSelf>").bracedSemi {
+            w.w(s"struct PROJECT_EXPORT hash<$fqSelf>").bracedSemi {
               w.w(s"size_t operator()($fqSelf type) const").braced {
                 w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
               }
@@ -177,7 +178,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       if (shouldConstexpr(c)){
         w.w(s"${marshal.fieldType(c.ty)} constexpr $selfName::${idCpp.const(c.ident)}")
       } else {
-        w.w(s"${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
+        w.w(s"PROJECT_EXPORT ${marshal.fieldType(c.ty)} const $selfName::${idCpp.const(c.ident)} = ")
         writeCppConst(w, c.ty, c.value)
       }
       w.wl(";")
@@ -188,6 +189,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
+    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
     refs.hpp.add("#include <utility>") // Add for std::move
 
     val self = marshal.typename(ident, r)
@@ -202,13 +204,13 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     // C++ Header
     def writeCppPrototype(w: IndentWriter) {
       if (r.ext.cpp) {
-        w.w(s"struct $self; // Requiring extended class")
+        w.w(s"struct PROJECT_EXPORT $self; // Requiring extended class")
         w.wl
         w.wl
       }
       writeDoc(w, doc)
       writeCppTypeParams(w, params)
-      w.w("struct " + actualSelf + cppFinal).bracedSemi {
+      w.w("struct PROJECT_EXPORT " + actualSelf + cppFinal).bracedSemi {
         generateHppConstants(w, r.consts)
         // Field definitions.
         for (f <- r.fields) {
@@ -218,18 +220,18 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         if (r.derivingTypes.contains(DerivingType.Eq)) {
           w.wl
-          w.wl(s"friend bool operator==(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator==(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.wl(s"friend bool operator<(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator>(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator<(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator>(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
         if (r.derivingTypes.contains(DerivingType.Eq) && r.derivingTypes.contains(DerivingType.Ord)) {
           w.wl
-          w.wl(s"friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
-          w.wl(s"friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
+          w.wl(s"PROJECT_EXPORT friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
 
         // Constructor.
@@ -322,13 +324,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty, true)
     })
 
+    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
+
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
       writeCppTypeParams(w, typeParams)
-      w.w(s"class $self").bracedSemi {
+      w.w(s"class PROJECT_EXPORT $self").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
         w.wl(s"virtual ~$self() {}")
