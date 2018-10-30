@@ -43,6 +43,13 @@ void jniInit(JavaVM * jvm);
 void jniShutdown();
 
 /*
+ * Get the JavaVM which was registered in the onload for e.g. forwarding to other libraries
+ * 
+ */
+
+JavaVM * jniGetVM();
+
+/*
  * Get the JNIEnv for the invoking thread. Should only be called on Java-created threads.
  */
 JNIEnv * jniGetThreadEnv();

@@ -69,6 +69,10 @@ void jniShutdown() {
     g_cachedJVM = nullptr;
 }
 
+JavaVM * jniGetVM() {
+    return g_cachedJVM;
+}
+
 JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
@@ -594,6 +598,8 @@ void jniDefaultSetPendingFromCurrentImpl(JNIEnv * env) {
         return;
     } catch (const std::exception & e) {
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), e.what());
+    } catch(...) {
+        std::terminate();
     }
 }
 
