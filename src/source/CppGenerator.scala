@@ -204,6 +204,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
     refs.hpp.add("#include <utility>") // Add for std::move
+    if (r.derivingTypes.contains(DerivingType.Show)) {
+      refs.hpp.add("#include <ostream>") // Add for overloading operator<<
+    }
 
     val self = marshal.typename(ident, r)
     val (cppName, cppFinal) = if (r.ext.cpp) (ident.name + "_base", "") else (ident.name, " final")
@@ -246,6 +249,10 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"friend bool operator<=(const $actualSelf& lhs, const $actualSelf& rhs);")
           w.wl(s"friend bool operator>=(const $actualSelf& lhs, const $actualSelf& rhs);")
         }
+        if (r.derivingTypes.contains(DerivingType.Show)) {
+          w.wl
+          w.wl(s"friend ::std::ostream& operator<<(::std::ostream& os, const $actualSelf& self);")
+        }
 
         // Constructor.
         if(r.fields.nonEmpty) {
@@ -270,6 +277,11 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"$actualSelf& operator=(const $actualSelf&) = default;")
           w.wl(s"$actualSelf& operator=($actualSelf&&) = default;")
         }
+      }
+
+      if (r.derivingTypes.contains(DerivingType.Show)) {
+        w.wl
+        w.wl(s"::std::ostream& operator<<(::std::ostream& os, const $actualSelf& self);")
       }
     }
 
@@ -323,14 +335,44 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           }
         }
         if (r.derivingTypes.contains(DerivingType.Show)) {
-            w.wl
-            w.w(s"::std::ostream& operator<<(::std::ostream& os, const $actualSelf& self)").braced {
-                w.wl("os << \"" ++ self ++ "{\";")
-                for(f <- r.fields) {
-                    w.wl("os << \" " ++ idCpp.field(f.ident) ++ ":\" << self." ++ idCpp.field(f.ident) ++ ";")
+          def generateCollectionFormatterIfNeeded(parameters: Array[String], collection: String, open: String, close: String) {
+            // overload operator<< for collections that are actually used
+            if (refs.hpp.contains(s"#include <$collection>")) {
+              def chain(a: String, b: String): String = {
+                a ++ ", " ++ b
+              }
+
+              val parameterDecl = parameters.map(p => "typename " ++ p).reduceLeft(chain)
+              w.wl(s"template<$parameterDecl>")
+
+              val parameterDef = parameters.reduceLeft(chain)
+              val collectionDecl = s"::std::$collection<$parameterDef>"
+              w.w(s"::std::ostream& operator<<(::std::ostream& os, const $collectionDecl& c)").braced {
+                w.wl("auto first = true;")
+                w.wl("os << \"" ++ open ++ "\";")
+                w.w("for (auto&& element : c)").braced {
+                  w.wl("if (first) first = false; else os << \",\" << ::std::endl;")
+                  parameters.length match {
+                    case 1 => w.wl("os << element;")
+                    case 2 => w.wl("os << element.first << \": \" << element.second;")
+                  }
                 }
-                w.wl("return os << \"}\";")
+                w.wl("return os << \"" ++ close ++ "\";")
+              }
             }
+          }
+          generateCollectionFormatterIfNeeded(Array("T"), "vector", "[", "]")
+          generateCollectionFormatterIfNeeded(Array("T"), "unordered_set", "{", "}")
+          generateCollectionFormatterIfNeeded(Array("K","V"), "unordered_map", "[", "]")
+
+          w.wl
+          w.w(s"::std::ostream& operator<<(::std::ostream& os, const $actualSelf& self)").braced {
+            w.wl("os << \"" ++ self ++ "{\";")
+            for(f <- r.fields) {
+              w.wl("os << \" " ++ idCpp.field(f.ident) ++ ":\" << self." ++ idCpp.field(f.ident) ++ ";")
+            }
+            w.wl("return os << \"}\";")
+          }
         }
       })
     }
