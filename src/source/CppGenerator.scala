@@ -62,6 +62,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     if (spec.cppEnumHashWorkaround) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
+    if (!e.flags) {
+      refs.hpp.add("#include <ostream>") // needed for printing to stream
+    }
 
     val flagsType = "unsigned"
     val enumType = "int"
@@ -90,6 +93,18 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         w.w(s"constexpr $self operator~($self x) noexcept").braced {
           w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
+        }
+      } else {
+        w.wl
+        w.w(s"static inline ::std::ostream& operator<<(::std::ostream& os, $self v)").braced {
+          w.wl("os << \"" ++ self ++ "::\";")
+          w.w("switch (v)").braced {
+            for (o <- normalEnumOptions(e)) {
+              val name = idCpp.enum(o.ident.name)
+              w.wl("case " ++ self ++ "::" ++ name ++ ": return os << \"" ++ name ++ "\";")
+            }
+            w.wl("default: return os << \"<Unsupported Value \" << static_cast<" ++ underlyingType ++ ">(v) << \">\";")
+          }
         }
       }
     },
