@@ -14,12 +14,16 @@
                   "cpp",
                 ],
             },
+            "xcode_settings": {
+              "SKIP_INSTALL": "YES",
+            },
         },
         {
             "target_name": "thread_objc",
             "type": "static_library",
             "xcode_settings": {
               "CLANG_ENABLE_OBJC_ARC": "YES",
+              "SKIP_INSTALL": "YES",
             },
             "sources": [
               "objc/DJIThreadFactoryImpl.h",

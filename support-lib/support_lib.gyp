@@ -17,6 +17,9 @@
           "jni",
         ],
       },
+      "xcode_settings": {
+        "SKIP_INSTALL": "YES",
+      },
     },
     {
       "target_name": "djinni_jni_main",
@@ -29,12 +32,16 @@
           "LOCAL_WHOLE_STATIC_LIBRARIES": [ 'djinni_jni_main' ], # Ensure JNI symbols are exposed
         },
       },
+      "xcode_settings": {
+        "SKIP_INSTALL": "YES",
+      },
     },
     {
       "target_name": "djinni_objc",
       "type": "static_library",
       "xcode_settings": {
         "CLANG_ENABLE_OBJC_ARC": "YES",
+        "SKIP_INSTALL": "YES",
       },
       "sources": [
         "objc/DJICppWrapperCache+Private.h",
