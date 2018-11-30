@@ -4,13 +4,14 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <chrono>
 #include <cstdint>
 #include <string>
 
 namespace testsuite {
 
-class TestDuration {
+class PROJECT_EXPORT TestDuration {
 public:
     virtual ~TestDuration() {}
 

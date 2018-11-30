@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include "test_helpers.hpp"
 #include <memory>
 
 struct ExternRecordWithDerivings;
 
-class ExternInterface2 {
+class PROJECT_EXPORT ExternInterface2 {
 public:
     virtual ~ExternInterface2() {}
 

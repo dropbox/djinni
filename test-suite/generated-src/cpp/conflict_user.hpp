@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <memory>
 #include <unordered_set>
 
@@ -10,7 +11,7 @@ namespace testsuite {
 
 class Conflict;
 
-class ConflictUser {
+class PROJECT_EXPORT ConflictUser {
 public:
     virtual ~ConflictUser() {}
 

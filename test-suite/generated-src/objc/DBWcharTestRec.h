@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBWcharTestRec : NSObject
 - (nonnull instancetype)initWithS:(nonnull NSString *)s;
 + (nonnull instancetype)wcharTestRecWithS:(nonnull NSString *)s;

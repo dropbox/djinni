@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <string>
 #include <utility>
 
 namespace testsuite {
 
-struct WcharTestRec final {
+struct PROJECT_EXPORT WcharTestRec final {
     std::wstring s;
 
     WcharTestRec(std::wstring s_)

@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <memory>
 
 namespace testsuite {
 
 /** Used for C++ multiple inheritance tests */
-class ReturnTwo {
+class PROJECT_EXPORT ReturnTwo {
 public:
     virtual ~ReturnTwo() {}
 

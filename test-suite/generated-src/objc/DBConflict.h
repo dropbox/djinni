@@ -8,6 +8,7 @@
  * Test for conflict of method name with an interface name.
  * See the comments about scopeSymbols in CppMarshal.scala for more info.
  */
+__attribute__((visibility ("default")))
 @interface DBConflict : NSObject
 
 @end

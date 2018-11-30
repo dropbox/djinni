@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @interface DBWcharTestHelpers : NSObject
 
 + (nonnull DBWcharTestRec *)getRecord;

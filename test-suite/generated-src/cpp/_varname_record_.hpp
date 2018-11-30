@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <utility>
 
@@ -13,7 +14,7 @@ namespace testsuite {
  * anticipate it to be used as a prefix/suffix.  Some name styles behave
  * badly when it is.  However this test case ensures we at least don't crash.
  */
-struct VarnameRecord final {
+struct PROJECT_EXPORT VarnameRecord final {
     int8_t _field_;
 
     VarnameRecord(int8_t _field__)

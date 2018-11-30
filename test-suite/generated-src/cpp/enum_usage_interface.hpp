@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -12,7 +13,7 @@ namespace testsuite {
 
 enum class color;
 
-class EnumUsageInterface {
+class PROJECT_EXPORT EnumUsageInterface {
 public:
     virtual ~EnumUsageInterface() {}
 

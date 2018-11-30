@@ -4,11 +4,12 @@
 #pragma once
 
 #include "access_flags.hpp"
+#include "project_export.hpp"
 #include <utility>
 
 namespace testsuite {
 
-struct RecordWithFlags final {
+struct PROJECT_EXPORT RecordWithFlags final {
     access_flags access;
 
     RecordWithFlags(access_flags access_)

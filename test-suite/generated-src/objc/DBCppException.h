@@ -5,6 +5,7 @@
 @class DBCppException;
 
 
+__attribute__((visibility ("default")))
 @interface DBCppException : NSObject
 
 - (int32_t)throwAnException;

@@ -5,6 +5,7 @@
 @class DBConflict;
 
 
+__attribute__((visibility ("default")))
 @interface DBConflictUser : NSObject
 
 - (nullable DBConflict *)Conflict;

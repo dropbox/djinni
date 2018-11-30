@@ -3,9 +3,11 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
-class ObjcOnlyListener {
+class PROJECT_EXPORT ObjcOnlyListener {
 public:
     virtual ~ObjcOnlyListener() {}
 };

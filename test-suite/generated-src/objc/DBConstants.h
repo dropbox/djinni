@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 /** Record containing constants */
+__attribute__((visibility ("default")))
 @interface DBConstants : NSObject
 - (nonnull instancetype)init;
 + (nonnull instancetype)constants;
@@ -26,23 +27,33 @@
 @end
 
 /** bool_constant has documentation. */
+__attribute__((visibility ("default")))
 extern BOOL const DBConstantsBoolConstant;
+__attribute__((visibility ("default")))
 extern int8_t const DBConstantsI8Constant;
+__attribute__((visibility ("default")))
 extern int16_t const DBConstantsI16Constant;
+__attribute__((visibility ("default")))
 extern int32_t const DBConstantsI32Constant;
+__attribute__((visibility ("default")))
 extern int64_t const DBConstantsI64Constant;
+__attribute__((visibility ("default")))
 extern float const DBConstantsF32Constant;
 /**
  * f64_constant has long documentation.
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
+__attribute__((visibility ("default")))
 extern double const DBConstantsF64Constant;
+__attribute__((visibility ("default")))
 extern NSString * __nonnull const DBConstantsStringConstant;
+__attribute__((visibility ("default")))
 extern NSString * __nullable const DBConstantsOptStringConstant;
 /**
  * No support for null optional constants
  * No support for optional constant records
  * No support for constant binary, list, set, map
  */
+__attribute__((visibility ("default")))
 extern BOOL const DBConstantsDummy;

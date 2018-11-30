@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBPrimitiveList : NSObject
 - (nonnull instancetype)initWithList:(nonnull NSArray<NSNumber *> *)list;
 + (nonnull instancetype)primitiveListWithList:(nonnull NSArray<NSNumber *> *)list;

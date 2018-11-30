@@ -5,9 +5,10 @@
 
 #include "client_interface.hpp"
 #include "client_returned_record.hpp"
+#include "project_export.hpp"
 #include <memory>
 
-class ExternInterface1 {
+class PROJECT_EXPORT ExternInterface1 {
 public:
     virtual ~ExternInterface1() {}
 

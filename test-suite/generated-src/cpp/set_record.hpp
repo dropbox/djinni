@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_set>
@@ -10,7 +11,7 @@
 
 namespace testsuite {
 
-struct SetRecord final {
+struct PROJECT_EXPORT SetRecord final {
     std::unordered_set<std::string> set;
     std::unordered_set<int32_t> iset;
 

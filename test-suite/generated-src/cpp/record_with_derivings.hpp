@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <chrono>
 #include <cstdint>
 #include <string>
@@ -10,7 +11,7 @@
 
 namespace testsuite {
 
-struct RecordWithDerivings final {
+struct PROJECT_EXPORT RecordWithDerivings final {
     int8_t eight;
     int16_t sixteen;
     int32_t thirtytwo;
@@ -20,14 +21,14 @@ struct RecordWithDerivings final {
     std::chrono::system_clock::time_point d;
     std::string s;
 
-    friend bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
-    friend bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator==(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator!=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
 
-    friend bool operator<(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
-    friend bool operator>(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
 
-    friend bool operator<=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
-    friend bool operator>=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>=(const RecordWithDerivings& lhs, const RecordWithDerivings& rhs);
 
     RecordWithDerivings(int8_t eight_,
                         int16_t sixteen_,

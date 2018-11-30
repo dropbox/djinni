@@ -4,12 +4,13 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <memory>
 #include <string>
 
 namespace testsuite {
 
-class ReverseClientInterface {
+class PROJECT_EXPORT ReverseClientInterface {
 public:
     virtual ~ReverseClientInterface() {}
 

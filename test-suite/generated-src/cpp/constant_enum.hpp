@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <functional>
 
 namespace testsuite {
@@ -17,7 +18,7 @@ enum class constant_enum : int {
 namespace std {
 
 template <>
-struct hash<::testsuite::constant_enum> {
+struct PROJECT_EXPORT hash<::testsuite::constant_enum> {
     size_t operator()(::testsuite::constant_enum type) const {
         return std::hash<int>()(static_cast<int>(type));
     }

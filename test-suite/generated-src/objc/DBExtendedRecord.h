@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 /** Extended record */
+__attribute__((visibility ("default")))
 @interface DBExtendedRecord : NSObject
 - (nonnull instancetype)initWithFoo:(BOOL)foo;
 + (nonnull instancetype)extendedRecordWithFoo:(BOOL)foo;

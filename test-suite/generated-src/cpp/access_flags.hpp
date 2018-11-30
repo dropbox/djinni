@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <functional>
 
 namespace testsuite {
@@ -47,7 +48,7 @@ constexpr access_flags operator~(access_flags x) noexcept {
 namespace std {
 
 template <>
-struct hash<::testsuite::access_flags> {
+struct PROJECT_EXPORT hash<::testsuite::access_flags> {
     size_t operator()(::testsuite::access_flags type) const {
         return std::hash<unsigned>()(static_cast<unsigned>(type));
     }

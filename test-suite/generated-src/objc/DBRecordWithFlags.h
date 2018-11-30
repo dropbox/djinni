@@ -4,6 +4,7 @@
 #import "DBAccessFlags.h"
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBRecordWithFlags : NSObject
 - (nonnull instancetype)initWithAccess:(DBAccessFlags)access;
 + (nonnull instancetype)recordWithFlagsWithAccess:(DBAccessFlags)access;

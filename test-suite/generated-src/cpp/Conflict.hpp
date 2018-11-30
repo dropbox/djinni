@@ -3,13 +3,15 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
 /**
  * Test for conflict of method name with an interface name.
  * See the comments about scopeSymbols in CppMarshal.scala for more info.
  */
-class Conflict {
+class PROJECT_EXPORT Conflict {
 public:
     virtual ~Conflict() {}
 };

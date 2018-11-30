@@ -5,6 +5,7 @@
 @class DBReverseClientInterface;
 
 
+__attribute__((visibility ("default")))
 @interface DBReverseClientInterface : NSObject
 
 - (nonnull NSString *)returnStr;

@@ -4,6 +4,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @interface DBTestDuration : NSObject
 
 + (nonnull NSString *)hoursString:(NSTimeInterval)dt;

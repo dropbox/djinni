@@ -24,12 +24,13 @@ endif()
 ## Test Suite Shared Library
 ##
 
-set(support_dir ../../support-lib/jni)
+set(support_lib_dir ../../support-lib)
+set(support_lib_jni_dir ../../support-lib/jni)
 set(test_include_dirs ../generated-src/jni/ ../generated-src/cpp/ ../handwritten-src/cpp/)
 
 file(
   GLOB_RECURSE support_srcs
-  ${support_dir}/*.cpp)
+  ${support_lib_jni_dir}/*.cpp)
 
 file(
   GLOB_RECURSE test_suite_srcs
@@ -50,7 +51,8 @@ add_library(DjinniTestNative SHARED ${test_lib_srcs})
 include_directories(
   DjinniTestNative
   ${test_include_dirs}
-  ${support_dir}
+  ${support_lib_dir}
+  ${support_lib_jni_dir}
   ${JNI_INCLUDE_DIRS})
 target_link_libraries(DjinniTestNative ${JNI_LIBRARIES})
 install(

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <functional>
 
 namespace testsuite {
@@ -27,7 +28,7 @@ enum class color : int {
 namespace std {
 
 template <>
-struct hash<::testsuite::color> {
+struct PROJECT_EXPORT hash<::testsuite::color> {
     size_t operator()(::testsuite::color type) const {
         return std::hash<int>()(static_cast<int>(type));
     }

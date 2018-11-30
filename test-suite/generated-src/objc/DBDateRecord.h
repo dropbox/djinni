@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBDateRecord : NSObject
 - (nonnull instancetype)initWithCreatedAt:(nonnull NSDate *)createdAt;
 + (nonnull instancetype)dateRecordWithCreatedAt:(nonnull NSDate *)createdAt;

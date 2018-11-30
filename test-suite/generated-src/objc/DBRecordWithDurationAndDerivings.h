@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBRecordWithDurationAndDerivings : NSObject
 - (nonnull instancetype)initWithDt:(NSTimeInterval)dt;
 + (nonnull instancetype)recordWithDurationAndDerivingsWithDt:(NSTimeInterval)dt;

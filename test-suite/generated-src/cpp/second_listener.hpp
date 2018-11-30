@@ -3,10 +3,12 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
 /** Used for ObjC multiple inheritance tests */
-class SecondListener {
+class PROJECT_EXPORT SecondListener {
 public:
     virtual ~SecondListener() {}
 

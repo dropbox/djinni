@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBAssortedPrimitives : NSObject
 - (nonnull instancetype)initWithB:(BOOL)b
                             eight:(int8_t)eight

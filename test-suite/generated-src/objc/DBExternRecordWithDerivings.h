@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 
 /** This file tests YAML dumped by Djinni can be parsed back in */
+__attribute__((visibility ("default")))
 @interface DBExternRecordWithDerivings : NSObject
 - (nonnull instancetype)initWithMember:(nonnull DBRecordWithDerivings *)member
                                      e:(DBColor)e;

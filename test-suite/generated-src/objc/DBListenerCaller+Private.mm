@@ -13,6 +13,7 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
+__attribute__((visibility ("default")))
 @interface DBListenerCaller ()
 
 - (id)initWithCpp:(const std::shared_ptr<::testsuite::ListenerCaller>&)cppRef;

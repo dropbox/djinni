@@ -13,6 +13,7 @@
  * languages, due to the details of multiple inheritance and object
  * comparison.
  */
+__attribute__((visibility ("default")))
 @interface DBListenerCaller : NSObject
 
 + (nullable DBListenerCaller *)init:(nullable id<DBFirstListener>)firstL

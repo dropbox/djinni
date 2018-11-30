@@ -59,7 +59,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     val self = marshal.typename(ident, e)
 
-    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
+    refs.hpp.add("#include \"project_export.hpp\"")
     if (spec.cppEnumHashWorkaround) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
@@ -189,7 +189,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
-    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
+    refs.hpp.add("#include \"project_export.hpp\"")
     refs.hpp.add("#include <utility>") // Add for std::move
 
     val self = marshal.typename(ident, r)
@@ -324,7 +324,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.find(c.ty, true)
     })
 
-    refs.hpp.add("#include \"djinni_common.hpp\"  // needed for PROJECT_EXPORT")
+    refs.hpp.add("#include \"project_export.hpp\"")
 
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))

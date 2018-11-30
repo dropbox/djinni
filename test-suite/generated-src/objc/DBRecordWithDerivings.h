@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBRecordWithDerivings : NSObject
 - (nonnull instancetype)initWithEight:(int8_t)eight
                               sixteen:(int16_t)sixteen

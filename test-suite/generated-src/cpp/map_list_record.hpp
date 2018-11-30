@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -11,7 +12,7 @@
 
 namespace testsuite {
 
-struct MapListRecord final {
+struct PROJECT_EXPORT MapListRecord final {
     std::vector<std::unordered_map<std::string, int64_t>> map_list;
 
     MapListRecord(std::vector<std::unordered_map<std::string, int64_t>> map_list_)

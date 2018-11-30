@@ -5,6 +5,7 @@
 
 #include "../../handwritten-src/cpp/optional.hpp"
 #include "constant_record.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -12,7 +13,7 @@
 namespace testsuite {
 
 /** Record containing constants */
-struct Constants final {
+struct PROJECT_EXPORT Constants final {
 
     /** bool_constant has documentation. */
     static constexpr bool BOOL_CONSTANT = true;

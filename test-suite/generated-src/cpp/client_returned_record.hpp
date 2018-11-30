@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -11,7 +12,7 @@
 namespace testsuite {
 
 /** Record returned by a client */
-struct ClientReturnedRecord final {
+struct PROJECT_EXPORT ClientReturnedRecord final {
     int64_t record_id;
     std::string content;
     std::experimental::optional<std::string> misc;

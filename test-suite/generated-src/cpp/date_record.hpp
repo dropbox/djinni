@@ -3,22 +3,23 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <chrono>
 #include <utility>
 
 namespace testsuite {
 
-struct DateRecord final {
+struct PROJECT_EXPORT DateRecord final {
     std::chrono::system_clock::time_point created_at;
 
-    friend bool operator==(const DateRecord& lhs, const DateRecord& rhs);
-    friend bool operator!=(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator==(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator!=(const DateRecord& lhs, const DateRecord& rhs);
 
-    friend bool operator<(const DateRecord& lhs, const DateRecord& rhs);
-    friend bool operator>(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator<(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator>(const DateRecord& lhs, const DateRecord& rhs);
 
-    friend bool operator<=(const DateRecord& lhs, const DateRecord& rhs);
-    friend bool operator>=(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator<=(const DateRecord& lhs, const DateRecord& rhs);
+    PROJECT_EXPORT friend bool operator>=(const DateRecord& lhs, const DateRecord& rhs);
 
     DateRecord(std::chrono::system_clock::time_point created_at_)
     : created_at(std::move(created_at_))

@@ -3,12 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
 struct ExtendedRecord;
 struct RecordUsingExtendedRecord;
 
-class InterfaceUsingExtendedRecord {
+class PROJECT_EXPORT InterfaceUsingExtendedRecord {
 public:
     virtual ~InterfaceUsingExtendedRecord() {}
 

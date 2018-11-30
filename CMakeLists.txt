@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 
 set(SRC_SHARED
   "support-lib/djinni_common.hpp"
+  "support-lib/project_export.hpp"
   "support-lib/proxy_cache_interface.hpp"
   "support-lib/proxy_cache_impl.hpp"
 )

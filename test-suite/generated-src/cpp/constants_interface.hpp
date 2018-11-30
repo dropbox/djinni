@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 
@@ -12,7 +13,7 @@ namespace testsuite {
 struct ConstantRecord;
 
 /** Interface containing constants */
-class ConstantsInterface {
+class PROJECT_EXPORT ConstantsInterface {
 public:
     virtual ~ConstantsInterface() {}
 

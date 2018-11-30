@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <utility>
 #include <vector>
 
 namespace testsuite {
 
-struct PrimitiveList final {
+struct PROJECT_EXPORT PrimitiveList final {
     std::vector<int64_t> list;
 
     PrimitiveList(std::vector<int64_t> list_)

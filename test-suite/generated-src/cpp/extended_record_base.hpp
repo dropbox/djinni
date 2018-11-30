@@ -3,14 +3,15 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <utility>
 
 namespace testsuite {
 
-struct ExtendedRecord; // Requiring extended class
+struct PROJECT_EXPORT ExtendedRecord; // Requiring extended class
 
 /** Extended record */
-struct ExtendedRecordBase {
+struct PROJECT_EXPORT ExtendedRecordBase {
 
     static ExtendedRecord const EXTENDED_RECORD_CONST;
     bool foo;

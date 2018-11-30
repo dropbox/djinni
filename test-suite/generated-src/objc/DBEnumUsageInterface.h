@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @protocol DBEnumUsageInterface
 
 - (DBColor)e:(DBColor)e;
