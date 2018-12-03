@@ -104,6 +104,7 @@ val defaults: Map[String,MOpaque] = immutable.HashMap(
 def isInterface(ty: MExpr): Boolean = {
   ty.base match {
     case d: MDef => d.defType == DInterface
+    case e: MExtern => e.defType == DInterface
     case _ => false
   }
 }
