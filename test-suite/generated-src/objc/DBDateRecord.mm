@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)dateRecordWithCreatedAt:(nonnull NSDate *)createdAt
 {
-    return [[self alloc] initWithCreatedAt:createdAt];
+    return [(DBDateRecord*)[self alloc] initWithCreatedAt:createdAt];
 }
 
 - (BOOL)isEqual:(id)other

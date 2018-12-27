@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)wcharTestRecWithS:(nonnull NSString *)s
 {
-    return [[self alloc] initWithS:s];
+    return [(DBWcharTestRec*)[self alloc] initWithS:s];
 }
 
 - (NSString *)description

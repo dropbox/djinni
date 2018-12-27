@@ -19,8 +19,8 @@
 + (nonnull instancetype)setRecordWithSet:(nonnull NSSet<NSString *> *)set
                                     iset:(nonnull NSSet<NSNumber *> *)iset
 {
-    return [[self alloc] initWithSet:set
-                                iset:iset];
+    return [(DBSetRecord*)[self alloc] initWithSet:set
+                                              iset:iset];
 }
 
 - (NSString *)description

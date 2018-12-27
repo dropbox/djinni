@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)recordWithDurationAndDerivingsWithDt:(NSTimeInterval)dt
 {
-    return [[self alloc] initWithDt:dt];
+    return [(DBRecordWithDurationAndDerivings*)[self alloc] initWithDt:dt];
 }
 
 - (BOOL)isEqual:(id)other

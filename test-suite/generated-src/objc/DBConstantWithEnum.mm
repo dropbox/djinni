@@ -15,7 +15,7 @@
 
 + (nonnull instancetype)constantWithEnum
 {
-    return [[self alloc] init];
+    return [(DBConstantWithEnum*)[self alloc] init];
 }
 
 + (DBConstantEnum)constEnum
