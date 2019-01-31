@@ -283,7 +283,7 @@ JniFlags::JniFlags(const std::string & name)
 
 unsigned JniFlags::flags(JNIEnv * env, jobject obj) const {
     DJINNI_ASSERT(obj && env->IsInstanceOf(obj, m_clazz.get()), env);
-    auto size = env->CallIntMethod(obj, m_methSize);
+    const auto size = env->CallIntMethod(obj, m_methSize);
     jniExceptionCheck(env);
     unsigned flags = 0;
     auto it = LocalRef<jobject>(env, env->CallObjectMethod(obj, m_methIterator));
