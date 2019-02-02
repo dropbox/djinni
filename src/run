@@ -19,7 +19,7 @@ base_dir=$(cd "`dirname "$loc"`" > /dev/null && pwd)
 # Determine os version and choose correspondent .sh or .bat file accordingly.
 os_version="`uname -a`"
 
-if [[ $os_version == *"MINGW"* ]]; then  
+if [[ $os_version == *"MINGW"* ]] || [[ $os_version == *"MSYS_NT"* ]]; then  
   cmd //C "$base_dir/target/start.bat" "$@"
 else  
   exec "$base_dir/target/start" "$@"

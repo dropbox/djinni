@@ -235,7 +235,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
         writeAlignedObjcCall(w, decl, r.fields, "", f => (idObjc.field(f.ident), s"(${marshal.paramType(f.ty)})${idObjc.local(f.ident)}"))
         w.wl
         w.braced {
-          val call = s"return [[self alloc] init$firstInitializerArg"
+          val call = s"return [($self*)[self alloc] init$firstInitializerArg"
           writeAlignedObjcCall(w, call, r.fields, "", f => (idObjc.field(f.ident), s"${idObjc.local(f.ident)}"))
           w.wl("];")
         }
