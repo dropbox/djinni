@@ -264,7 +264,7 @@ class QmlGenerator(spec: Spec) extends Generator(spec) {
             f.ty.resolved.base match {
               case MString => name + " = QString::fromStdString(" + name + "_);"
               case MOptional => "if (" + name +"_) " + name + " = QVariant::fromValue(" + name + "_.value());"
-              case MList => name + " = " + marshal.fieldType(f.ty.resolved) + "::fromStdVector(" + name + "_);"
+              case MList => s"for (auto& a: $name" + "_) " + name + " << QVariant::fromValue(a);"
               case _ => idCpp.field(f.ident) + " = std::move(" + idCpp.local(f.ident) + "_);"
             }
           }

@@ -71,7 +71,7 @@ class QmlMarshal(spec: Spec) extends Marshal(spec) {
     case MDate => List(ImportRef("<QDate>"))
     case MBinary => List(ImportRef("<QVector>"))
     case MOptional => List(ImportRef("<QVariant>"), ImportRef(spec.cppOptionalHeader))
-    case MList => List(ImportRef("<QVector>"))
+    case MList => List(ImportRef("<QVariantList>"))
     case MSet => List(ImportRef("<QSet>"))
     case MMap => List(ImportRef("<QMap>"))
     case d: MDef => d.body match {
@@ -169,14 +169,14 @@ class QmlMarshal(spec: Spec) extends Marshal(spec) {
           case "i8" => "qint8"
           case "i16" => "qint16"
           case "i32" => "qint32"
-          case "i64" => "qint64"
+          case "i64" => "qlonglong"
           case _ => p.cName
         }
       case MString => "QString"
       case MDate => "QDate"
-      case MBinary => "QVector<quint8>"
+      case MBinary => "QVariantList"
       case MOptional => "QVariant"
-      case MList => "QVector"
+      case MList => "QVariantList"
       case MSet => "QSet"
       case MMap => "QMap"
       case d: MDef =>
@@ -224,6 +224,7 @@ class QmlMarshal(spec: Spec) extends Marshal(spec) {
             val args = if (tm.args.isEmpty) "" else tm.args.map(expr).mkString("<", ", ", ">")
             tm.base match {
               case MOptional => base(tm.base)
+              case MList => base(tm.base)
               case _ => base(tm.base) + args
             }
           }

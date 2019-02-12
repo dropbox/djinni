@@ -233,6 +233,10 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
 
         // Constructor.
+        w.wl
+        w.wl(s"$actualSelf() {")
+        w.wl("}")
+
         if(r.fields.nonEmpty) {
           w.wl
           writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
