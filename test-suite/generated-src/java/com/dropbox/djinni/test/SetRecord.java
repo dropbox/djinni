@@ -3,11 +3,12 @@
 
 package com.dropbox.djinni.test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class SetRecord {
+public class SetRecord implements android.os.Parcelable {
 
 
     /*package*/ final HashSet<String> mSet;
@@ -37,6 +38,40 @@ public class SetRecord {
                 "mSet=" + mSet +
                 "," + "mIset=" + mIset +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<SetRecord> CREATOR
+        = new android.os.Parcelable.Creator<SetRecord>() {
+        @Override
+        public SetRecord createFromParcel(android.os.Parcel in) {
+            return new SetRecord(in);
+        }
+
+        @Override
+        public SetRecord[] newArray(int size) {
+            return new SetRecord[size];
+        }
+    };
+
+    public SetRecord(android.os.Parcel in) {
+        ArrayList<String> mSetTemp = new ArrayList<String>();
+        in.readList(mSetTemp, getClass().getClassLoader());
+        this.mSet = new HashSet<String>(mSetTemp);
+        ArrayList<Integer> mIsetTemp = new ArrayList<Integer>();
+        in.readList(mIsetTemp, getClass().getClassLoader());
+        this.mIset = new HashSet<Integer>(mIsetTemp);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeList(new ArrayList<String>(this.mSet));
+        out.writeList(new ArrayList<Integer>(this.mIset));
     }
 
 }
