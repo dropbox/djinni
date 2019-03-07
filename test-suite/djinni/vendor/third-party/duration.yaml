@@ -4,7 +4,7 @@
 # duration<f64, min> maps to std::chrono::duration<double, std::ratio<60>>
 ---
 name: duration
-typedef: 'record deriving(eq, ord)'
+typedef: 'record deriving(eq, ord, parcelable)'
 params: [rep, period]
 prefix: ''
 cpp:

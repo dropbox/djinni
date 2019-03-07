@@ -1,6 +1,6 @@
 item_list = record {
     items: list<string>;
-}
+} deriving(parcelable)
 
 sort_order = enum {
     ascending;

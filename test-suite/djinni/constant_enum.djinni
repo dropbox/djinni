@@ -7,7 +7,7 @@ constant_enum = enum {
 # Record containing enum constant
 constant_with_enum = record {
     const const_enum: constant_enum = constant_enum::some_value;
-}
+} deriving (parcelable)
 
 # Interface containing enum constant
 constant_interface_with_enum = interface +c {

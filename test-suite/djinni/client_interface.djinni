@@ -3,7 +3,7 @@ client_returned_record = record {
     record_id: i64;
     content: string;
     misc: optional<string>;
-}
+} deriving (parcelable)
 
 # Client interface
 client_interface = interface +j +o {
