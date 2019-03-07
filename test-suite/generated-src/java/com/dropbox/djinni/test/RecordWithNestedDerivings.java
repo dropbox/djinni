@@ -6,7 +6,7 @@ package com.dropbox.djinni.test;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class RecordWithNestedDerivings implements Comparable<RecordWithNestedDerivings> {
+public class RecordWithNestedDerivings implements Comparable<RecordWithNestedDerivings>, android.os.Parcelable {
 
 
     /*package*/ final int mKey;
@@ -54,6 +54,36 @@ public class RecordWithNestedDerivings implements Comparable<RecordWithNestedDer
                 "mKey=" + mKey +
                 "," + "mRec=" + mRec +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<RecordWithNestedDerivings> CREATOR
+        = new android.os.Parcelable.Creator<RecordWithNestedDerivings>() {
+        @Override
+        public RecordWithNestedDerivings createFromParcel(android.os.Parcel in) {
+            return new RecordWithNestedDerivings(in);
+        }
+
+        @Override
+        public RecordWithNestedDerivings[] newArray(int size) {
+            return new RecordWithNestedDerivings[size];
+        }
+    };
+
+    public RecordWithNestedDerivings(android.os.Parcel in) {
+        this.mKey = in.readInt();
+        this.mRec = new RecordWithDerivings(in);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeInt(this.mKey);
+        this.mRec.writeToParcel(out, flags);
     }
 
 

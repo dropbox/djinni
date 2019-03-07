@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class RecordWithDerivings implements Comparable<RecordWithDerivings> {
+public class RecordWithDerivings implements Comparable<RecordWithDerivings>, android.os.Parcelable {
 
 
     /*package*/ final byte mEight;
@@ -122,6 +122,48 @@ public class RecordWithDerivings implements Comparable<RecordWithDerivings> {
                 "," + "mD=" + mD +
                 "," + "mS=" + mS +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<RecordWithDerivings> CREATOR
+        = new android.os.Parcelable.Creator<RecordWithDerivings>() {
+        @Override
+        public RecordWithDerivings createFromParcel(android.os.Parcel in) {
+            return new RecordWithDerivings(in);
+        }
+
+        @Override
+        public RecordWithDerivings[] newArray(int size) {
+            return new RecordWithDerivings[size];
+        }
+    };
+
+    public RecordWithDerivings(android.os.Parcel in) {
+        this.mEight = in.readByte();
+        this.mSixteen = (short)in.readInt();
+        this.mThirtytwo = in.readInt();
+        this.mSixtyfour = in.readLong();
+        this.mFthirtytwo = in.readFloat();
+        this.mFsixtyfour = in.readDouble();
+        this.mD = new Date(in.readLong());
+        this.mS = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeByte(this.mEight);
+        out.writeInt(this.mSixteen);
+        out.writeInt(this.mThirtytwo);
+        out.writeLong(this.mSixtyfour);
+        out.writeFloat(this.mFthirtytwo);
+        out.writeDouble(this.mFsixtyfour);
+        out.writeLong(this.mD.getTime());
+        out.writeString(this.mS);
     }
 
 

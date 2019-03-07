@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Record returned by a client */
-public class ClientReturnedRecord {
+public class ClientReturnedRecord implements android.os.Parcelable {
 
 
     /*package*/ final long mRecordId;
@@ -46,6 +46,47 @@ public class ClientReturnedRecord {
                 "," + "mContent=" + mContent +
                 "," + "mMisc=" + mMisc +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<ClientReturnedRecord> CREATOR
+        = new android.os.Parcelable.Creator<ClientReturnedRecord>() {
+        @Override
+        public ClientReturnedRecord createFromParcel(android.os.Parcel in) {
+            return new ClientReturnedRecord(in);
+        }
+
+        @Override
+        public ClientReturnedRecord[] newArray(int size) {
+            return new ClientReturnedRecord[size];
+        }
+    };
+
+    public ClientReturnedRecord(android.os.Parcel in) {
+        this.mRecordId = in.readLong();
+        this.mContent = in.readString();
+        if (in.readByte() == 0) {
+            this.mMisc = null;
+        } else {
+            this.mMisc = in.readString();
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeLong(this.mRecordId);
+        out.writeString(this.mContent);
+        if (this.mMisc != null) {
+            out.writeByte((byte)1);
+            out.writeString(this.mMisc);
+        } else {
+            out.writeByte((byte)0);
+        }
     }
 
 }
