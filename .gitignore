@@ -34,3 +34,5 @@ intellij-plugin/djinni.jar
 
 # profiling output
 callgrind.out.*
+.project
+example/android/.settings
