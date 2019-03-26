@@ -52,7 +52,7 @@ class ObjcGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
     writeObjcFile(marshal.headerName(ident), origin, refs.header, w => {
       writeDoc(w, doc)
       w.wl(if(e.flags) s"typedef NS_OPTIONS(NSUInteger, $self)" else s"typedef NS_ENUM(NSInteger, $self)")
-      w.bracedSemi {
+      w.bracedEnd(if(e.flags) ";" else " __attribute__((enum_extensibility(closed)));") {
         writeEnumOptionNone(w, e, self + idObjc.enum(_))
         writeEnumOptions(w, e, self + idObjc.enum(_))
         writeEnumOptionAll(w, e, self + idObjc.enum(_))

@@ -8,4 +8,4 @@ typedef NS_ENUM(NSInteger, TXSSortOrder)
     TXSSortOrderAscending,
     TXSSortOrderDescending,
     TXSSortOrderRandom,
-};
+}__attribute__((enum_extensibility(closed)));

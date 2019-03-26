@@ -8,4 +8,4 @@ typedef NS_ENUM(NSInteger, DBConstantEnum)
 {
     DBConstantEnumSomeValue,
     DBConstantEnumSomeOtherValue,
-};
+} __attribute__((enum_extensibility(closed)));
