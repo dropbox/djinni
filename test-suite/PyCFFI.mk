@@ -2,7 +2,7 @@
 # get all object files needed for the library
 
 .PHONY: all $(lib) clean
-FLAGS=-arch i386 -arch x86_64 -fPIC -std=c++14
+FLAGS=-arch x86_64 -fPIC -std=c++14
 
 # could pass this as argument to script
 support_lib=$(base_dir)/../support-lib/cwrapper
