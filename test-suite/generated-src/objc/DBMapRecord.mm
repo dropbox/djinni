@@ -19,8 +19,8 @@
 + (nonnull instancetype)mapRecordWithMap:(nonnull NSDictionary<NSString *, NSNumber *> *)map
                                     imap:(nonnull NSDictionary<NSNumber *, NSNumber *> *)imap
 {
-    return [[self alloc] initWithMap:map
-                                imap:imap];
+    return [(DBMapRecord*)[self alloc] initWithMap:map
+                                              imap:imap];
 }
 
 - (NSString *)description

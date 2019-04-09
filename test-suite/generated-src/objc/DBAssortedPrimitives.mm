@@ -55,20 +55,20 @@
                                     oFthirtytwo:(nullable NSNumber *)oFthirtytwo
                                     oFsixtyfour:(nullable NSNumber *)oFsixtyfour
 {
-    return [[self alloc] initWithB:b
-                             eight:eight
-                           sixteen:sixteen
-                         thirtytwo:thirtytwo
-                         sixtyfour:sixtyfour
-                        fthirtytwo:fthirtytwo
-                        fsixtyfour:fsixtyfour
-                                oB:oB
-                            oEight:oEight
-                          oSixteen:oSixteen
-                        oThirtytwo:oThirtytwo
-                        oSixtyfour:oSixtyfour
-                       oFthirtytwo:oFthirtytwo
-                       oFsixtyfour:oFsixtyfour];
+    return [(DBAssortedPrimitives*)[self alloc] initWithB:b
+                                                    eight:eight
+                                                  sixteen:sixteen
+                                                thirtytwo:thirtytwo
+                                                sixtyfour:sixtyfour
+                                               fthirtytwo:fthirtytwo
+                                               fsixtyfour:fsixtyfour
+                                                       oB:oB
+                                                   oEight:oEight
+                                                 oSixteen:oSixteen
+                                               oThirtytwo:oThirtytwo
+                                               oSixtyfour:oSixtyfour
+                                              oFthirtytwo:oFthirtytwo
+                                              oFsixtyfour:oFsixtyfour];
 }
 
 - (BOOL)isEqual:(id)other

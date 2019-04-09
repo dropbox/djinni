@@ -37,14 +37,14 @@
                                                    d:(nonnull NSDate *)d
                                                    s:(nonnull NSString *)s
 {
-    return [[self alloc] initWithEight:eight
-                               sixteen:sixteen
-                             thirtytwo:thirtytwo
-                             sixtyfour:sixtyfour
-                            fthirtytwo:fthirtytwo
-                            fsixtyfour:fsixtyfour
-                                     d:d
-                                     s:s];
+    return [(DBRecordWithDerivings*)[self alloc] initWithEight:eight
+                                                       sixteen:sixteen
+                                                     thirtytwo:thirtytwo
+                                                     sixtyfour:sixtyfour
+                                                    fthirtytwo:fthirtytwo
+                                                    fsixtyfour:fsixtyfour
+                                                             d:d
+                                                             s:s];
 }
 
 - (BOOL)isEqual:(id)other

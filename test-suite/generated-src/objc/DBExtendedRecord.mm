@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)extendedRecordWithFoo:(BOOL)foo
 {
-    return [[self alloc] initWithFoo:foo];
+    return [(DBExtendedRecord*)[self alloc] initWithFoo:foo];
 }
 
 + (DBExtendedRecord * __nonnull)extendedRecordConst

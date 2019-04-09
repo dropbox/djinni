@@ -72,7 +72,17 @@ void jniShutdown() {
 JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
-    const jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    #ifdef EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH
+    if (get_res == JNI_EDETACHED) {
+        get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+        thread_local struct DetachOnExit {
+            ~DetachOnExit() {
+                g_cachedJVM->DetachCurrentThread();
+            }
+        } detachOnExit;
+    }
+    #endif
     if (get_res != 0 || !env) {
         // :(
         std::abort();
@@ -273,7 +283,7 @@ JniFlags::JniFlags(const std::string & name)
 
 unsigned JniFlags::flags(JNIEnv * env, jobject obj) const {
     DJINNI_ASSERT(obj && env->IsInstanceOf(obj, m_clazz.get()), env);
-    auto size = env->CallIntMethod(obj, m_methSize);
+    const auto size = env->CallIntMethod(obj, m_methSize);
     jniExceptionCheck(env);
     unsigned flags = 0;
     auto it = LocalRef<jobject>(env, env->CallObjectMethod(obj, m_methIterator));

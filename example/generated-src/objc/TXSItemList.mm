@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)itemListWithItems:(nonnull NSArray<NSString *> *)items
 {
-    return [[self alloc] initWithItems:items];
+    return [(TXSItemList*)[self alloc] initWithItems:items];
 }
 
 - (NSString *)description

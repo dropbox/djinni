@@ -16,7 +16,7 @@
 
 + (nonnull instancetype)recordWithFlagsWithAccess:(DBAccessFlags)access
 {
-    return [[self alloc] initWithAccess:access];
+    return [(DBRecordWithFlags*)[self alloc] initWithAccess:access];
 }
 
 - (NSString *)description
