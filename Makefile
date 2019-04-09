@@ -16,7 +16,7 @@ OUTPUT_JAR=src/target/scala-$(SCALA_VERSION)/djinni-assembly-$(DJINNI_VERSION).j
 
 all: djinni example_ios example_android example_localhost test
 
-clean: djinni_jar_clean
+clean: djinni_jar_clean test_clean
 	-ndk-build -C example/android/app/ clean
 	-xcodebuild -workspace example/objc/TextSort.xcworkspace -scheme TextSort -configuration 'Debug' -sdk iphonesimulator clean
 	-rm -rf libs/
@@ -70,4 +70,7 @@ example_localhost: ./deps/java
 test: ./deps/java
 	make -C test-suite
 
-.PHONY: example_android example_ios example_localhost test djinni clean all dinni_jar
+test_clean:
+	make -C test-suite clean
+
+.PHONY: example_android example_ios example_localhost test test_clean djinni clean all dinni_jar
