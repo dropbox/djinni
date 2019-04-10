@@ -58,3 +58,8 @@ conflict_user = interface +c {
     Conflict(): Conflict;
     conflict_arg(cs: set<Conflict>): bool;
 }
+
+# we need to test optional interface
+# this one will be used
+sample_interface = interface +c {
+}

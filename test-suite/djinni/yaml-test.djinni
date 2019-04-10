@@ -17,3 +17,8 @@ extern_interface_2 = interface +j +o
 {
 	foo(i: test_test_helpers): extern_record_with_derivings;
 }
+
+test_optional_extern_interface_record = record
+{
+	sample_interface: optional<test_sample_interface>;
+}

@@ -23,19 +23,19 @@ enum class access_flags : unsigned {
 constexpr access_flags operator|(access_flags lhs, access_flags rhs) noexcept {
     return static_cast<access_flags>(static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
 }
-constexpr access_flags& operator|=(access_flags& lhs, access_flags rhs) noexcept {
+inline access_flags& operator|=(access_flags& lhs, access_flags rhs) noexcept {
     return lhs = lhs | rhs;
 }
 constexpr access_flags operator&(access_flags lhs, access_flags rhs) noexcept {
     return static_cast<access_flags>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 }
-constexpr access_flags& operator&=(access_flags& lhs, access_flags rhs) noexcept {
+inline access_flags& operator&=(access_flags& lhs, access_flags rhs) noexcept {
     return lhs = lhs & rhs;
 }
 constexpr access_flags operator^(access_flags lhs, access_flags rhs) noexcept {
     return static_cast<access_flags>(static_cast<unsigned>(lhs) ^ static_cast<unsigned>(rhs));
 }
-constexpr access_flags& operator^=(access_flags& lhs, access_flags rhs) noexcept {
+inline access_flags& operator^=(access_flags& lhs, access_flags rhs) noexcept {
     return lhs = lhs ^ rhs;
 }
 constexpr access_flags operator~(access_flags x) noexcept {
