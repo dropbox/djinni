@@ -14,19 +14,19 @@ enum class empty_flags : unsigned {
 constexpr empty_flags operator|(empty_flags lhs, empty_flags rhs) noexcept {
     return static_cast<empty_flags>(static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
 }
-constexpr empty_flags& operator|=(empty_flags& lhs, empty_flags rhs) noexcept {
+inline empty_flags& operator|=(empty_flags& lhs, empty_flags rhs) noexcept {
     return lhs = lhs | rhs;
 }
 constexpr empty_flags operator&(empty_flags lhs, empty_flags rhs) noexcept {
     return static_cast<empty_flags>(static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 }
-constexpr empty_flags& operator&=(empty_flags& lhs, empty_flags rhs) noexcept {
+inline empty_flags& operator&=(empty_flags& lhs, empty_flags rhs) noexcept {
     return lhs = lhs & rhs;
 }
 constexpr empty_flags operator^(empty_flags lhs, empty_flags rhs) noexcept {
     return static_cast<empty_flags>(static_cast<unsigned>(lhs) ^ static_cast<unsigned>(rhs));
 }
-constexpr empty_flags& operator^=(empty_flags& lhs, empty_flags rhs) noexcept {
+inline empty_flags& operator^=(empty_flags& lhs, empty_flags rhs) noexcept {
     return lhs = lhs ^ rhs;
 }
 constexpr empty_flags operator~(empty_flags x) noexcept {
