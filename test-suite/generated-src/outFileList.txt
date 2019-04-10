@@ -40,6 +40,7 @@ djinni-output-temp/cpp/test_helpers.hpp
 djinni-output-temp/cpp/empty_record.hpp
 djinni-output-temp/cpp/Conflict.hpp
 djinni-output-temp/cpp/conflict_user.hpp
+djinni-output-temp/cpp/sample_interface.hpp
 djinni-output-temp/cpp/user_token.hpp
 djinni-output-temp/cpp/color.hpp
 djinni-output-temp/cpp/enum_usage_record.hpp
@@ -89,6 +90,7 @@ djinni-output-temp/java/TestHelpers.java
 djinni-output-temp/java/EmptyRecord.java
 djinni-output-temp/java/Conflict.java
 djinni-output-temp/java/ConflictUser.java
+djinni-output-temp/java/SampleInterface.java
 djinni-output-temp/java/UserToken.java
 djinni-output-temp/java/Color.java
 djinni-output-temp/java/EnumUsageRecord.java
@@ -165,6 +167,8 @@ djinni-output-temp/jni/NativeConflict.hpp
 djinni-output-temp/jni/NativeConflict.cpp
 djinni-output-temp/jni/NativeConflictUser.hpp
 djinni-output-temp/jni/NativeConflictUser.cpp
+djinni-output-temp/jni/NativeSampleInterface.hpp
+djinni-output-temp/jni/NativeSampleInterface.cpp
 djinni-output-temp/jni/NativeUserToken.hpp
 djinni-output-temp/jni/NativeUserToken.cpp
 djinni-output-temp/jni/NativeColor.hpp
@@ -241,6 +245,7 @@ djinni-output-temp/objc/DBEmptyRecord.h
 djinni-output-temp/objc/DBEmptyRecord.mm
 djinni-output-temp/objc/DBConflict.h
 djinni-output-temp/objc/DBConflictUser.h
+djinni-output-temp/objc/DBSampleInterface.h
 djinni-output-temp/objc/DBUserToken.h
 djinni-output-temp/objc/DBColor.h
 djinni-output-temp/objc/DBEnumUsageRecord.h
@@ -326,6 +331,8 @@ djinni-output-temp/objc/DBConflict+Private.h
 djinni-output-temp/objc/DBConflict+Private.mm
 djinni-output-temp/objc/DBConflictUser+Private.h
 djinni-output-temp/objc/DBConflictUser+Private.mm
+djinni-output-temp/objc/DBSampleInterface+Private.h
+djinni-output-temp/objc/DBSampleInterface+Private.mm
 djinni-output-temp/objc/DBUserToken+Private.h
 djinni-output-temp/objc/DBUserToken+Private.mm
 djinni-output-temp/objc/DBColor+Private.h
