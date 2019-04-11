@@ -482,12 +482,24 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         case df: MDef => df.defType match {
           case DRecord => w.wl(s"this.${idJava.field(f.ident)} = new ${marshal.typename(f.ty)}(in);")
-          case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+          case DEnum => {
+            if(marshal.isEnumFlags(m)) {
+              w.wl(s"this.${idJava.field(f.ident)} = (EnumSet<${marshal.typename(f.ty)}>) in.readSerializable();")
+            } else {
+              w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+            }
+          }
           case _ => throw new AssertionError("Unreachable")
         }
         case e: MExtern => e.defType match {
           case DRecord => w.wl(s"this.${idJava.field(f.ident)} = ${e.java.readFromParcel.format(marshal.typename(f.ty))};")
-          case DEnum => w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+          case DEnum => {
+            if(marshal.isEnumFlags(m)) {
+              w.wl(s"this.${idJava.field(f.ident)} = (EnumSet<${marshal.typename(f.ty)}>) in.readSerializable();")
+            } else {
+              w.wl(s"this.${idJava.field(f.ident)} = ${marshal.typename(f.ty)}.values()[in.readInt()];")
+            }
+          }
           case _ => throw new AssertionError("Unreachable")
         }
         case MList => {
@@ -550,12 +562,24 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
         }
         case df: MDef => df.defType match {
           case DRecord => w.wl(s"this.${idJava.field(f.ident)}.writeToParcel(out, flags);")
-          case DEnum => w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.ordinal());")
+          case DEnum => {
+            if(marshal.isEnumFlags(m)) {
+              w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+            } else {
+              w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.ordinal());")
+            }
+          }
           case _ => throw new AssertionError("Unreachable")
         }
         case e: MExtern => e.defType match {
           case DRecord => w.wl(e.java.writeToParcel.format(idJava.field(f.ident)) + ";")
-          case DEnum => w.wl(s"out.writeInt((int)this.${idJava.field(f.ident)});")
+          case DEnum => {
+            if(marshal.isEnumFlags(m)) {
+              w.wl(s"out.writeSerializable(this.${idJava.field(f.ident)});")
+            } else {
+              w.wl(s"out.writeInt(this.${idJava.field(f.ident)}.ordinal());")
+            }
+          }
           case _ => throw new AssertionError("Unreachable")
         }
         case MList => {

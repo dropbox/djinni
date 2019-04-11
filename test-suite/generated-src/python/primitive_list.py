@@ -18,6 +18,12 @@ class PrimitiveList:
         assert len(PrimitiveList.c_data_set) == 0
         ListInt64THelper.check_c_data_set_empty()
 
+    # Record deriving types
+    def __hash__(self):
+        # Pick an arbitrary non-zero starting value
+        hash_code = 17
+        hash_code = hash_code * 31 + self.list.__hash__()
+        return hash_code
 
     def __init__(self, list):
         self.list = list

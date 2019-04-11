@@ -1,8 +1,8 @@
 map_record = record {
     map: map<string, i64>;
 	imap: map<i32, i32>;
-}
+} deriving (parcelable)
 
 map_list_record = record {
     map_list: list<map<string, i64>>;
-}
+} deriving (parcelable)

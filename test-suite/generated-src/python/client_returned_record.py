@@ -17,6 +17,14 @@ class ClientReturnedRecord:
     def check_c_data_set_empty():
         assert len(ClientReturnedRecord.c_data_set) == 0
 
+    # Record deriving types
+    def __hash__(self):
+        # Pick an arbitrary non-zero starting value
+        hash_code = 17
+        hash_code = hash_code * 31 + self.record_id.__hash__()
+        hash_code = hash_code * 31 + self.content.__hash__()
+        hash_code = hash_code * 31 + self.misc.__hash__()
+        return hash_code
 
     def __init__(self, record_id, content, misc):
         self.record_id = record_id

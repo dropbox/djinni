@@ -22,6 +22,13 @@ class MapRecord:
         MapStringInt64THelper.check_c_data_set_empty()
         MapInt32TInt32THelper.check_c_data_set_empty()
 
+    # Record deriving types
+    def __hash__(self):
+        # Pick an arbitrary non-zero starting value
+        hash_code = 17
+        hash_code = hash_code * 31 + self.map.__hash__()
+        hash_code = hash_code * 31 + self.imap.__hash__()
+        return hash_code
 
     def __init__(self, map, imap):
         self.map = map

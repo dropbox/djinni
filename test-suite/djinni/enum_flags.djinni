@@ -26,4 +26,4 @@ flag_roundtrip = interface +c {
 
 record_with_flags = record {
   access: access_flags;
-}
+} deriving (parcelable)

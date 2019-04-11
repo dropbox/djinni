@@ -79,6 +79,7 @@ package object generatorTools {
                    objcBaseLibIncludePrefix: String,
                    objcSwiftBridgingHeaderWriter: Option[Writer],
                    objcSwiftBridgingHeaderName: Option[String],
+                   objcClosedEnums: Boolean,
                    outFileListWriter: Option[Writer],
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
