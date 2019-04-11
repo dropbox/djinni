@@ -4,11 +4,11 @@
     # enable android short names (not full paths) for linking libraries
     "android_unmangled_name": 1,
     'cflags':    [ '-gdwarf-2', '-Werror', '-Wall', '-Wextra', '-Wno-missing-field-initializers' ],
-    'cflags_cc': [ '-std=c++1y', '-frtti', '-fexceptions' ],
+    'cflags_cc': [ '-std=c++11', '-frtti', '-fexceptions' ],
     'xcode_settings': {
       'OTHER_CFLAGS' : ['-Wall'],
       'OTHER_CPLUSPLUSFLAGS' : ['-Wall'],
-      'CLANG_CXX_LANGUAGE_STANDARD': 'c++1y',
+      'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
       'CLANG_CXX_LIBRARY': 'libc++',
       'DEAD_CODE_STRIPPING': 'YES',
       'SKIP_INSTALL': 'YES',

@@ -37,7 +37,7 @@ file(
   ../generated-src/cpp/*.cpp
   ../handwritten-src/cpp/*.cpp)
 
-set(textsort_common_flags "-Wall -Werror -std=c++1y")
+set(textsort_common_flags "-Wall -Werror -std=c++11")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${textsort_common_flags}")
 if(UNIX OR APPLE)

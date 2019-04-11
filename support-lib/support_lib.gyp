@@ -74,6 +74,11 @@
           "cwrapper",
         ],
       },
+      # Use C++1y for Python libraries, which depend on it.
+      'cflags_cc': [ '-std=c++1y', '-frtti', '-fexceptions' ],
+      'xcode_settings': {
+        'CLANG_CXX_LANGUAGE_STANDARD': 'c++1y',
+      },
     },
   ],
 }
