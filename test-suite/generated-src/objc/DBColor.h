@@ -17,4 +17,4 @@ typedef NS_ENUM(NSInteger, DBColor)
      */
     DBColorIndigo,
     DBColorViolet,
-} __attribute__((enum_extensibility(closed)));
+};
