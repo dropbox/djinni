@@ -67,6 +67,7 @@ fi
     --java-out "$temp_out_relative/java" \
     --java-package $java_package \
     --java-generate-interfaces true \
+    --java-implement-android-os-parcelable true \
     --java-nullable-annotation "javax.annotation.CheckForNull" \
     --java-nonnull-annotation "javax.annotation.Nonnull" \
     --java-use-final-for-record false \

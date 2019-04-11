@@ -7,9 +7,9 @@ record_with_derivings = record {
     fsixtyfour: f64;
     d: date;
     s: string;
-} deriving (eq, ord)
+} deriving (eq, ord, parcelable)
 
 record_with_nested_derivings = record {
     key: i32;
     rec: record_with_derivings;
-} deriving (eq, ord)
+} deriving (eq, ord, parcelable)

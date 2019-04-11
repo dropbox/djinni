@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class RecordWithFlags {
+public class RecordWithFlags implements android.os.Parcelable {
 
 
     /*package*/ final EnumSet<AccessFlags> mAccess;
@@ -27,6 +27,34 @@ public class RecordWithFlags {
         return "RecordWithFlags{" +
                 "mAccess=" + mAccess +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<RecordWithFlags> CREATOR
+        = new android.os.Parcelable.Creator<RecordWithFlags>() {
+        @Override
+        public RecordWithFlags createFromParcel(android.os.Parcel in) {
+            return new RecordWithFlags(in);
+        }
+
+        @Override
+        public RecordWithFlags[] newArray(int size) {
+            return new RecordWithFlags[size];
+        }
+    };
+
+    public RecordWithFlags(android.os.Parcel in) {
+        this.mAccess = (EnumSet<AccessFlags>) in.readSerializable();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
+        out.writeSerializable(this.mAccess);
     }
 
 }

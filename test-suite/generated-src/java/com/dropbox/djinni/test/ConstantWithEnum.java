@@ -7,7 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /** Record containing enum constant */
-public class ConstantWithEnum {
+public class ConstantWithEnum implements android.os.Parcelable {
 
     @Nonnull
     public static final ConstantEnum CONST_ENUM = ConstantEnum.SOME_VALUE;
@@ -21,6 +21,32 @@ public class ConstantWithEnum {
     public String toString() {
         return "ConstantWithEnum{" +
         "}";
+    }
+
+
+    public static final android.os.Parcelable.Creator<ConstantWithEnum> CREATOR
+        = new android.os.Parcelable.Creator<ConstantWithEnum>() {
+        @Override
+        public ConstantWithEnum createFromParcel(android.os.Parcel in) {
+            return new ConstantWithEnum(in);
+        }
+
+        @Override
+        public ConstantWithEnum[] newArray(int size) {
+            return new ConstantWithEnum[size];
+        }
+    };
+
+    public ConstantWithEnum(android.os.Parcel in) {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel out, int flags) {
     }
 
 }
