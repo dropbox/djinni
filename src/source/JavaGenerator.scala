@@ -249,20 +249,30 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
     val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
 
-    def checkIfRecordContainsSets(r: Record): Boolean = {
+    def recordContainsSets(r: Record): Boolean = {
       for (f <- r.fields) {
         f.ty.resolved.base match {
           case MSet => return true
+          case MOptional =>
+            f.ty.resolved.args.head.base match {
+              case MSet => return true
+              case _ =>
+            }
           case _ =>
         }
       }
       return false
     }
 
-    def checkIfRecordContainsLists(r: Record): Boolean = {
+    def recordContainsLists(r: Record): Boolean = {
       for (f <- r.fields) {
         f.ty.resolved.base match {
           case MList => return true
+          case MOptional =>
+            f.ty.resolved.args.head.base match {
+              case MList => return true
+              case _ =>
+            }
           case _ =>
         }
       }
@@ -270,7 +280,7 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     }
 
     if (spec.javaImplementAndroidOsParcelable && r.derivingTypes.contains(DerivingType.AndroidParcelable)
-      && checkIfRecordContainsSets(r) && !checkIfRecordContainsLists(r)) {
+      && recordContainsSets(r) && !recordContainsLists(r)) {
       // If the record is parcelable, doesn't contain any List but it contains a Set,
       // we need to manually import 'java.util.ArrayList'
       // because it's used by the parcelable
