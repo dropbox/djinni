@@ -1,11 +1,18 @@
 # Djinni
 
-Djinni is a tool for generating cross-language type declarations and interface bindings. It's designed to connect C++ with Java, Objective-C, or Python.  Python support is experimental.  For more information see `README.Python.md`.
+Djinni is a tool for generating cross-language type declarations and interface bindings. It's
+designed to connect C++ with either Java or Objective-C. Python support is experimental.  For more
+information see `README.Python.md`.
 
-We at Dropbox use Djinni to interface cross-platform C++ library code with platform-specific
-Java and Objective-C on Android and iOS.
+Djinni can be used to interface cross-platform C++ library code with platform-specific Java and
+Objective-C on Android and iOS.  We announced Djinni at CppCon 2014. You can see the
+[slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo).  For more info about
+Djinni and how others are using it, check out the community links at the end of this document.
 
-We announced Djinni at CppCon 2014. You can see the [slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo).  For more info about Djinni and how others are using it, check out the community links at the end of this document.
+__Maintenance note:__ This repo is stable but no longer actively maintained.  No further development
+is planned, and no new feature PRs will be merged.  Bug fixes may be merged on a volunteer basis.
+If you have questions or want to talk to other users of Djinni, you can join the Slack community
+via the link at the end of this document.
 
 ## Main Features
 - Generates parallel C++, Java and Objective-C type definitions from a single interface
@@ -534,6 +541,5 @@ In order to do that, there are two steps needed:
 - Andrew Twyman
 
 ## Contacts
-- Xianwen Chen - `xianwen@dropbox.com`
 - Andrew Twyman - `atwyman@dropbox.com`
 - Jacob Potter - `djinni@j4cbo.com`
