@@ -4,29 +4,29 @@
 #pragma once
 
 #include "djinni_support.hpp"
-#include "optional_set.hpp"
+#include "parcelable_set.hpp"
 
 namespace djinni_generated {
 
-class NativeOptionalSet final {
+class NativeParcelableSet final {
 public:
-    using CppType = ::testsuite::OptionalSet;
+    using CppType = ::testsuite::ParcelableSet;
     using JniType = jobject;
 
-    using Boxed = NativeOptionalSet;
+    using Boxed = NativeParcelableSet;
 
-    ~NativeOptionalSet();
+    ~NativeParcelableSet();
 
     static CppType toCpp(JNIEnv* jniEnv, JniType j);
     static ::djinni::LocalRef<JniType> fromCpp(JNIEnv* jniEnv, const CppType& c);
 
 private:
-    NativeOptionalSet();
-    friend ::djinni::JniClass<NativeOptionalSet>;
+    NativeParcelableSet();
+    friend ::djinni::JniClass<NativeParcelableSet>;
 
-    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/OptionalSet") };
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("com/dropbox/djinni/test/ParcelableSet") };
     const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/util/HashSet;)V") };
-    const jfieldID field_mOptionalSet { ::djinni::jniGetFieldID(clazz.get(), "mOptionalSet", "Ljava/util/HashSet;") };
+    const jfieldID field_mSet { ::djinni::jniGetFieldID(clazz.get(), "mSet", "Ljava/util/HashSet;") };
 };
 
 }  // namespace djinni_generated

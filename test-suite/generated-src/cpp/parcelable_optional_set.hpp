@@ -10,10 +10,10 @@
 
 namespace testsuite {
 
-struct OptionalSet final {
+struct ParcelableOptionalSet final {
     std::experimental::optional<std::unordered_set<std::string>> optional_set;
 
-    OptionalSet(std::experimental::optional<std::unordered_set<std::string>> optional_set_)
+    ParcelableOptionalSet(std::experimental::optional<std::unordered_set<std::string>> optional_set_)
     : optional_set(std::move(optional_set_))
     {}
 };

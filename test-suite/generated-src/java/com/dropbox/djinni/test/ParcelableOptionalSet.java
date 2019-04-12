@@ -8,12 +8,12 @@ import java.util.HashSet;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public class OptionalSet implements android.os.Parcelable {
+public class ParcelableOptionalSet implements android.os.Parcelable {
 
 
     /*package*/ final HashSet<String> mOptionalSet;
 
-    public OptionalSet(
+    public ParcelableOptionalSet(
             @CheckForNull HashSet<String> optionalSet) {
         this.mOptionalSet = optionalSet;
     }
@@ -25,26 +25,26 @@ public class OptionalSet implements android.os.Parcelable {
 
     @Override
     public String toString() {
-        return "OptionalSet{" +
+        return "ParcelableOptionalSet{" +
                 "mOptionalSet=" + mOptionalSet +
         "}";
     }
 
 
-    public static final android.os.Parcelable.Creator<OptionalSet> CREATOR
-        = new android.os.Parcelable.Creator<OptionalSet>() {
+    public static final android.os.Parcelable.Creator<ParcelableOptionalSet> CREATOR
+        = new android.os.Parcelable.Creator<ParcelableOptionalSet>() {
         @Override
-        public OptionalSet createFromParcel(android.os.Parcel in) {
-            return new OptionalSet(in);
+        public ParcelableOptionalSet createFromParcel(android.os.Parcel in) {
+            return new ParcelableOptionalSet(in);
         }
 
         @Override
-        public OptionalSet[] newArray(int size) {
-            return new OptionalSet[size];
+        public ParcelableOptionalSet[] newArray(int size) {
+            return new ParcelableOptionalSet[size];
         }
     };
 
-    public OptionalSet(android.os.Parcel in) {
+    public ParcelableOptionalSet(android.os.Parcel in) {
         if (in.readByte() == 0) {
             this.mOptionalSet = null;
         } else {

@@ -3,9 +3,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DBOptionalSet : NSObject
+@interface DBParcelableOptionalSet : NSObject
 - (nonnull instancetype)initWithOptionalSet:(nullable NSSet<NSString *> *)optionalSet;
-+ (nonnull instancetype)optionalSetWithOptionalSet:(nullable NSSet<NSString *> *)optionalSet;
++ (nonnull instancetype)parcelableOptionalSetWithOptionalSet:(nullable NSSet<NSString *> *)optionalSet;
 
 @property (nonatomic, readonly, nullable) NSSet<NSString *> * optionalSet;
 
