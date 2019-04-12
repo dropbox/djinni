@@ -1,4 +1,4 @@
 set_record = record {
     set: set<string>;
 	iset: set<i32>;
-}
+} deriving (parcelable)

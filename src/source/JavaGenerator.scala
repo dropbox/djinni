@@ -249,6 +249,45 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
     val javaName = if (r.ext.java) (ident.name + "_base") else ident.name
     val javaFinal = if (!r.ext.java && spec.javaUseFinalForRecord) "final " else ""
 
+    def recordContainsSets(r: Record): Boolean = {
+      for (f <- r.fields) {
+        f.ty.resolved.base match {
+          case MSet => return true
+          case MOptional =>
+            f.ty.resolved.args.head.base match {
+              case MSet => return true
+              case _ =>
+            }
+          case _ =>
+        }
+      }
+      return false
+    }
+
+    def recordContainsLists(r: Record): Boolean = {
+      for (f <- r.fields) {
+        f.ty.resolved.base match {
+          case MList => return true
+          case MOptional =>
+            f.ty.resolved.args.head.base match {
+              case MList => return true
+              case _ =>
+            }
+          case _ =>
+        }
+      }
+      return false
+    }
+
+    if (spec.javaImplementAndroidOsParcelable && r.derivingTypes.contains(DerivingType.AndroidParcelable)
+      && recordContainsSets(r) && !recordContainsLists(r)) {
+      // If the record is parcelable, doesn't contain any List but it contains a Set,
+      // we need to manually import 'java.util.ArrayList'
+      // because it's used by the parcelable
+      // check https://github.com/dropbox/djinni/issues/408 for more info
+      refs.java += "java.util.ArrayList"
+    }
+
     writeJavaFile(javaName, origin, refs.java, w => {
       writeDoc(w, doc)
       javaAnnotationHeader.foreach(w.wl)

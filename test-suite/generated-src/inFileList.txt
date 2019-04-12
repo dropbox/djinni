@@ -17,6 +17,7 @@ djinni/single_language_interfaces.djinni
 djinni/extended_record.djinni
 djinni/varnames.djinni
 djinni/relative_paths.djinni
+djinni/parcelable.djinni
 djinni/enum_flags.djinni
 djinni/constant_enum.djinni
 djinni/vendor/third-party/date.djinni

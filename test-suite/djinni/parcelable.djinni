@@ -1,0 +1,61 @@
+parcelable_primitives = record {
+    b: bool;
+    eight: i8;
+    sixteen: i16;
+    thirtytwo: i32;
+    sixtyfour: i64;
+    fthirtytwo: f32;
+    fsixtyfour: f64;
+    s: string;
+    d: date;
+
+    o_b: optional<bool>;
+    o_eight: optional<i8>;
+    o_sixteen: optional<i16>;
+    o_thirtytwo: optional<i32>;
+    o_sixtyfour: optional<i64>;
+    o_fthirtytwo: optional<f32>;
+    o_fsixtyfour: optional<f64>;
+    o_s: optional<string>;
+    o_d: optional<date>;
+} deriving (parcelable)
+
+parcelable_optional_set = record {
+    optional_set : optional<set<string>>;
+} deriving(parcelable)
+
+parcelable_optional_list = record {
+    optional_set : optional<list<string>>;
+} deriving(parcelable)
+
+parcelable_optional_map = record {
+    optional_set : optional<map<string, set<string>>>;
+} deriving(parcelable)
+
+parcelable_map = record {
+    m : map<string, string>;
+} deriving(parcelable)
+
+parcelable_map_set = record {
+    map_set : map<string, set<string>>;
+} deriving(parcelable)
+
+parcelable_map_list = record {
+    map_set : map<string, list<string>>;
+} deriving(parcelable)
+
+parcelable_list = record {
+    l : list<string>;
+} deriving(parcelable)
+
+parcelable_list_set = record {
+    list_set : list<set<string>>;
+} deriving(parcelable)
+
+parcelable_list_map_set = record {
+    list_map_set : list<map<string, set<string>>>;
+} deriving(parcelable)
+
+parcelable_set = record {
+    set : set<string>;
+} deriving(parcelable)
