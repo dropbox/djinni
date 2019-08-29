@@ -54,6 +54,8 @@ package object generatorTools {
                    cppNnType: Option[String],
                    cppNnCheckExpression: Option[String],
                    cppUseWideStrings: Boolean,
+                   cppExportDefine: Option[String],
+                   cppExportDefineHeader: Option[String],
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,
