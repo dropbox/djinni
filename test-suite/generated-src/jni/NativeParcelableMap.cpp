@@ -22,7 +22,7 @@ auto NativeParcelableMap::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeParcelableMap>::get();
-    return {::djinni::Map<::djinni::String, ::djinni::String>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mM))};
+    return {::djinni::Map<::djinni::String, ::djinni::String>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mM)))};
 }
 
 }  // namespace djinni_generated

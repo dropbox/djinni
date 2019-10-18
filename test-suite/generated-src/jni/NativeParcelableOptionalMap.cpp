@@ -22,7 +22,7 @@ auto NativeParcelableOptionalMap::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeParcelableOptionalMap>::get();
-    return {::djinni::Optional<std::experimental::optional, ::djinni::Map<::djinni::String, ::djinni::Set<::djinni::String>>>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOptionalSet))};
+    return {::djinni::Optional<std::experimental::optional, ::djinni::Map<::djinni::String, ::djinni::Set<::djinni::String>>>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOptionalSet)))};
 }
 
 }  // namespace djinni_generated

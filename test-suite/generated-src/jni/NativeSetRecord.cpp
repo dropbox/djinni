@@ -23,8 +23,8 @@ auto NativeSetRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 3);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeSetRecord>::get();
-    return {::djinni::Set<::djinni::String>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mSet)),
-            ::djinni::Set<::djinni::I32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mIset))};
+    return {::djinni::Set<::djinni::String>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mSet))),
+            ::djinni::Set<::djinni::I32>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mIset)))};
 }
 
 }  // namespace djinni_generated

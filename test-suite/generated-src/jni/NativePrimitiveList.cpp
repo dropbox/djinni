@@ -22,7 +22,7 @@ auto NativePrimitiveList::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativePrimitiveList>::get();
-    return {::djinni::List<::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mList))};
+    return {::djinni::List<::djinni::I64>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mList)))};
 }
 
 }  // namespace djinni_generated

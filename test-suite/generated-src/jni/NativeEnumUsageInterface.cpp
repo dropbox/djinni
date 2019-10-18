@@ -19,8 +19,8 @@ NativeEnumUsageInterface::JavaProxy::~JavaProxy() = default;
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeEnumUsageInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_e,
-                                         ::djinni::get(::djinni_generated::NativeColor::fromCpp(jniEnv, c_e)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_e,
+                                          ::djinni::get(::djinni_generated::NativeColor::fromCpp(jniEnv, c_e))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeColor::toCpp(jniEnv, jret);
 }
@@ -28,8 +28,8 @@ std::experimental::optional<::testsuite::color> NativeEnumUsageInterface::JavaPr
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeEnumUsageInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_o,
-                                         ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeColor>::fromCpp(jniEnv, c_o)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_o,
+                                          ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeColor>::fromCpp(jniEnv, c_o))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeColor>::toCpp(jniEnv, jret);
 }
@@ -37,8 +37,8 @@ std::vector<::testsuite::color> NativeEnumUsageInterface::JavaProxy::l(const std
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeEnumUsageInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_l,
-                                         ::djinni::get(::djinni::List<::djinni_generated::NativeColor>::fromCpp(jniEnv, c_l)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_l,
+                                          ::djinni::get(::djinni::List<::djinni_generated::NativeColor>::fromCpp(jniEnv, c_l))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::List<::djinni_generated::NativeColor>::toCpp(jniEnv, jret);
 }
@@ -46,8 +46,8 @@ std::unordered_set<::testsuite::color> NativeEnumUsageInterface::JavaProxy::s(co
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeEnumUsageInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_s,
-                                         ::djinni::get(::djinni::Set<::djinni_generated::NativeColor>::fromCpp(jniEnv, c_s)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_s,
+                                          ::djinni::get(::djinni::Set<::djinni_generated::NativeColor>::fromCpp(jniEnv, c_s))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::Set<::djinni_generated::NativeColor>::toCpp(jniEnv, jret);
 }
@@ -55,8 +55,8 @@ std::unordered_map<::testsuite::color, ::testsuite::color> NativeEnumUsageInterf
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeEnumUsageInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_m,
-                                         ::djinni::get(::djinni::Map<::djinni_generated::NativeColor, ::djinni_generated::NativeColor>::fromCpp(jniEnv, c_m)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_m,
+                                          ::djinni::get(::djinni::Map<::djinni_generated::NativeColor, ::djinni_generated::NativeColor>::fromCpp(jniEnv, c_m))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::Map<::djinni_generated::NativeColor, ::djinni_generated::NativeColor>::toCpp(jniEnv, jret);
 }

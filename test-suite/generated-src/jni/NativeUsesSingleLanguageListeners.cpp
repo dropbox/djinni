@@ -27,7 +27,7 @@ std::shared_ptr<::testsuite::ObjcOnlyListener> NativeUsesSingleLanguageListeners
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeUsesSingleLanguageListeners>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnForObjC);
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnForObjC));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeObjcOnlyListener::toCpp(jniEnv, jret);
 }
@@ -43,7 +43,7 @@ std::shared_ptr<::testsuite::JavaOnlyListener> NativeUsesSingleLanguageListeners
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeUsesSingleLanguageListeners>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnForJava);
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnForJava));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeJavaOnlyListener::toCpp(jniEnv, jret);
 }

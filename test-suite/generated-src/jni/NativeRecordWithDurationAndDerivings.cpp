@@ -23,7 +23,7 @@ auto NativeRecordWithDurationAndDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> C
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeRecordWithDurationAndDerivings>::get();
-    return {::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mDt))};
+    return {::djinni::Duration<::djinni::F64, ::djinni::Duration_ns>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mDt)))};
 }
 
 }  // namespace djinni_generated

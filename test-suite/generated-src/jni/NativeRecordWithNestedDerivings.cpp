@@ -24,8 +24,8 @@ auto NativeRecordWithNestedDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> CppTyp
     ::djinni::JniLocalScope jscope(jniEnv, 3);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeRecordWithNestedDerivings>::get();
-    return {::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mKey)),
-            ::djinni_generated::NativeRecordWithDerivings::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mRec))};
+    return {::djinni::I32::toCpp(jniEnv, (jniEnv->GetIntField(j, data.field_mKey))),
+            ::djinni_generated::NativeRecordWithDerivings::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mRec)))};
 }
 
 }  // namespace djinni_generated

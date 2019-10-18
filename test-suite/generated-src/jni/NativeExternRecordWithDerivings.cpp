@@ -24,8 +24,8 @@ auto NativeExternRecordWithDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> CppTyp
     ::djinni::JniLocalScope jscope(jniEnv, 3);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeExternRecordWithDerivings>::get();
-    return {::djinni_generated::NativeRecordWithDerivings::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mMember)),
-            ::djinni_generated::NativeColor::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mE))};
+    return {::djinni_generated::NativeRecordWithDerivings::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mMember))),
+            ::djinni_generated::NativeColor::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mE)))};
 }
 
 }  // namespace djinni_generated

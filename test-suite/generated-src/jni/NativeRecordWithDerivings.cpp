@@ -29,14 +29,14 @@ auto NativeRecordWithDerivings::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 9);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeRecordWithDerivings>::get();
-    return {::djinni::I8::toCpp(jniEnv, jniEnv->GetByteField(j, data.field_mEight)),
-            ::djinni::I16::toCpp(jniEnv, jniEnv->GetShortField(j, data.field_mSixteen)),
-            ::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mThirtytwo)),
-            ::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mSixtyfour)),
-            ::djinni::F32::toCpp(jniEnv, jniEnv->GetFloatField(j, data.field_mFthirtytwo)),
-            ::djinni::F64::toCpp(jniEnv, jniEnv->GetDoubleField(j, data.field_mFsixtyfour)),
-            ::djinni::Date::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mD)),
-            ::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mS))};
+    return {::djinni::I8::toCpp(jniEnv, (jniEnv->GetByteField(j, data.field_mEight))),
+            ::djinni::I16::toCpp(jniEnv, (jniEnv->GetShortField(j, data.field_mSixteen))),
+            ::djinni::I32::toCpp(jniEnv, (jniEnv->GetIntField(j, data.field_mThirtytwo))),
+            ::djinni::I64::toCpp(jniEnv, (jniEnv->GetLongField(j, data.field_mSixtyfour))),
+            ::djinni::F32::toCpp(jniEnv, (jniEnv->GetFloatField(j, data.field_mFthirtytwo))),
+            ::djinni::F64::toCpp(jniEnv, (jniEnv->GetDoubleField(j, data.field_mFsixtyfour))),
+            ::djinni::Date::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mD))),
+            ::djinni::String::toCpp(jniEnv, reinterpret_cast<jstring>(jniEnv->GetObjectField(j, data.field_mS)))};
 }
 
 }  // namespace djinni_generated

@@ -165,7 +165,7 @@ struct WString {
         assert(string);
         NSStringEncoding encoding = getWCharEncoding<sizeof(wchar_t)>();
         NSData* data = [string dataUsingEncoding:encoding];
-        return std::wstring((wchar_t*)[data bytes], [data length] / sizeof (wchar_t));
+        return std::wstring(reinterpret_cast<const wchar_t*>([data bytes]), [data length] / sizeof (wchar_t));
     }
 
     static ObjcType fromCpp(const CppType& string) {

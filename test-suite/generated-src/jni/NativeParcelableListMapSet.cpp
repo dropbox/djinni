@@ -22,7 +22,7 @@ auto NativeParcelableListMapSet::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeParcelableListMapSet>::get();
-    return {::djinni::List<::djinni::Map<::djinni::String, ::djinni::Set<::djinni::String>>>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mListMapSet))};
+    return {::djinni::List<::djinni::Map<::djinni::String, ::djinni::Set<::djinni::String>>>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mListMapSet)))};
 }
 
 }  // namespace djinni_generated
