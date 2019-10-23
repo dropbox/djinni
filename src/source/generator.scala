@@ -64,6 +64,7 @@ package object generatorTools {
                    jniBaseLibIncludePrefix: String,
                    cppExt: String,
                    cppHeaderExt: String,
+                   cppEnumSerializers: Boolean,
                    objcOutFolder: Option[File],
                    objcppOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,

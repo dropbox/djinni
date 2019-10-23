@@ -110,6 +110,7 @@ fi
     --cpp-optional-template "std::experimental::optional" \
     --cpp-optional-header "\"../../handwritten-src/cpp/optional.hpp\"" \
     --cpp-extended-record-include-prefix "../../handwritten-src/cpp/" \
+    --cpp-enum-serializers true \
     \
     --jni-out "$temp_out_relative/jni" \
     --ident-jni-class NativeFooBar \
