@@ -21,12 +21,24 @@
 #include <cstdlib>
 #include <cstring>
 
+#ifdef EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH_NO_THREAD_LOCAL
+#include <pthread.h>
+//#include <android/log.h>
+#endif
+
 static_assert(sizeof(jlong) >= sizeof(void*), "must be able to fit a void* into a jlong");
 
 namespace djinni {
 
 // Set only once from JNI_OnLoad before any other JNI calls, so no lock needed.
 static JavaVM * g_cachedJVM;
+
+#ifdef EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH_NO_THREAD_LOCAL
+// pthread key - used to run key destrutor on thread exit, to detach thread from JVM
+// alternative to using C++11's thread_local, which causes problems on some old imlpementations
+// of Android L
+static pthread_key_t g_threadAttachKey;
+#endif
 
 /*static*/
 JniClassInitializer::registration_vec & JniClassInitializer::get_vec() {
@@ -58,6 +70,22 @@ void jniInit(JavaVM * jvm) {
         for (const auto & initializer : JniClassInitializer::get_all()) {
             initializer();
         }
+
+#ifdef EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH_NO_THREAD_LOCAL
+        // Create the one TLS key all threads will use
+        // Value is never used - this is only used to run the key destoructor function
+        // whenever a thread exits (similar to a thread_local variable's destructor)
+        // This is safer on some old Android L implementations - thread_local has incompatible dependencies
+        // on cxa_thread_atexit_impl
+        int rc = pthread_key_create(&g_threadAttachKey, [](void *keyValue) {
+            //__android_log_print(ANDROID_LOG_ERROR, "djinni_jni", "Detaching native thread..."); 
+            g_cachedJVM->DetachCurrentThread();
+        });
+        if (0 != rc) {
+            std::abort();
+        }
+#endif
+
     } catch (const std::exception &) {
         // Default exception handling only, since non-default might not be safe if init
         // is incomplete.
@@ -73,16 +101,26 @@ JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
     jint get_res = g_cachedJVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    #ifdef EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH
+
+#if defined(EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH) || defined(EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH_NO_THREAD_LOCAL)
     if (get_res == JNI_EDETACHED) {
         get_res = g_cachedJVM->AttachCurrentThread(&env, nullptr);
+        //__android_log_print(ANDROID_LOG_ERROR, "djinni_jni", "Attaching native thread..."); 
+    #if defined(EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH)
         thread_local struct DetachOnExit {
             ~DetachOnExit() {
                 g_cachedJVM->DetachCurrentThread();
             }
         } detachOnExit;
+    #elif defined(EXPERIMENTAL_AUTO_CPP_THREAD_ATTACH_NO_THREAD_LOCAL)
+        // Any non-NULL TLS key value value ensures the key's destructor is called (see pthread_key_create above)
+        int rc = pthread_setspecific(g_threadAttachKey, reinterpret_cast<void*>(1));
+        if (0 != rc) {
+            std::abort();
+        }
     }
     #endif
+#endif
     if (get_res != 0 || !env) {
         // :(
         std::abort();
