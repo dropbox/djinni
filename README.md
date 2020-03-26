@@ -9,10 +9,9 @@ Objective-C on Android and iOS.  We announced Djinni at CppCon 2014. You can see
 [slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo).  For more info about
 Djinni and how others are using it, check out the community links at the end of this document.
 
-__Maintenance note:__ This repo is stable but no longer actively maintained.  No further development
-is planned, and no new feature PRs will be merged.  Bug fixes may be merged on a volunteer basis.
-If you have questions or want to talk to other users of Djinni, you can join the Slack community
-via the link at the end of this document.
+__Maintenance note:__ This repo is stable but no longer maintained by Dropbox.  If you have
+questions or want to talk to other users of Djinni, you can join the Slack community via the
+link at the end of this document.
 
 ## Main Features
 - Generates parallel C++, Java and Objective-C type definitions from a single interface
@@ -528,7 +527,7 @@ In order to do that, there are two steps needed:
 * There are a set of [tutorials](http://mobilecpptutorials.com/) for building a cross-platform app using Djinni.
 * [mx3](https://github.com/libmx3/mx3) is an example project demonstrating use of Djinni and other tools.
 * [Slides](https://bit.ly/djinnitalk) and [video](https://bit.ly/djinnivideo) from the CppCon 2014 talk where we introduced Djinni.
-* [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 about Djinni implementation techniques, and the addition of Python.
+* [Slides](https://bit.ly/djinnitalk2) and [video](https://bit.ly/djinnivideo2) from the CppCon 2015 talk about Djinni implementation techniques, and the addition of Python.
 * You can see a [CppCon 2014 talk](https://www.youtube.com/watch?v=5AZMEm3rZ2Y) by app developers at Dropbox about their cross-platform experiences.
 
 ## Authors
@@ -541,5 +540,5 @@ In order to do that, there are two steps needed:
 - Andrew Twyman
 
 ## Contacts
-- Andrew Twyman - `atwyman@dropbox.com`
+- Andrew Twyman - `artwymana+djinni@gmail.com`
 - Jacob Potter - `djinni@j4cbo.com`
