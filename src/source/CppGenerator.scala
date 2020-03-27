@@ -63,9 +63,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       refs.hpp.add("#include <functional>") // needed for std::hash
     }
 
+    val stringExpr = MExpr(MString, Seq.empty[MExpr])
+    refs.find(stringExpr, false)
+
     val flagsType = "unsigned"
     val enumType = "int"
     val underlyingType = if(e.flags) flagsType else enumType
+
+    val stringRetType = marshal.typename(stringExpr)
+    val toStringFunctionName = idCpp.method(s"${self}_to_string")
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       w.w(s"enum class $self : $underlyingType").bracedSemi {
@@ -92,6 +98,9 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"return static_cast<$self>(~static_cast<$flagsType>(x));")
         }
       }
+      if(spec.cppEnumSerializers) {
+        w.wl.wl(s"$stringRetType $toStringFunctionName(${withCppNs(self)} arg);")
+      }
     },
     w => {
       // std::hash specialization has to go *outside* of the wrapNs
@@ -110,6 +119,21 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         )
       }
     })
+    if(spec.cppEnumSerializers) {
+      writeCppFile(ident, origin, refs.cpp, 
+        w => {
+          w.w(s"$stringRetType $toStringFunctionName(${withCppNs(self)} arg)").braced {
+            w.w("switch(arg)").braced {
+              for (o <- normalEnumOptions(e)) {
+                val enumItem = withCppNs(s"$self::${idCpp.enum(o.ident.name)}")
+                w.wl(s"case $enumItem: return ${q(enumItem)};")
+              }
+              val convertValToString = (if (spec.cppUseWideStrings) "std::to_wstring" else "std::to_string") + s"(static_cast<${underlyingType}>(arg))"
+              w.wl(s"default: return $stringRetType(${q(s"$toStringFunctionName: not supported enum value: ")}) + $convertValToString;")
+            }
+          }
+      })
+    }
   }
 
   def shouldConstexpr(c: Const) = {

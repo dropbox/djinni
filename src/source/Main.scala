@@ -59,6 +59,7 @@ object Main {
     var cppHeaderOutFolderOptional: Option[File] = None
     var cppExt: String = "cpp"
     var cppHeaderExt: String = "hpp"
+    var cppEnumSerializers = false
     var javaIdentStyle = IdentStyle.javaDefault
     var cppIdentStyle = IdentStyle.cppDefault
     var cppTypeEnumIdentStyle: IdentConverter = null
@@ -136,6 +137,7 @@ object Main {
         .text("The filename extension for C++ files (default: \"cpp\").")
       opt[String]("hpp-ext").valueName("<ext>").foreach(cppHeaderExt = _)
         .text("The filename extension for C++ header files (default: \"hpp\").")
+      opt[Boolean]("cpp-enum-serializers").valueName("<true/false>").foreach(x => cppEnumSerializers = x)
       opt[String]("cpp-optional-template").valueName("<template>").foreach(x => cppOptionalTemplate = x)
         .text("The template to use for optional values (default: \"std::optional\")")
       opt[String]("cpp-optional-header").valueName("<header>").foreach(x => cppOptionalHeader = x)
@@ -339,6 +341,7 @@ object Main {
       jniBaseLibIncludePrefix,
       cppExt,
       cppHeaderExt,
+      cppEnumSerializers,
       objcOutFolder,
       objcppOutFolder,
       objcIdentStyle,
