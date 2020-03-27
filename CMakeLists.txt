@@ -45,7 +45,7 @@ if(DJINNI_WITH_OBJC)
   target_include_directories(djinni_support_lib PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/support-lib/objc/>")
   target_sources(djinni_support_lib PRIVATE ${SRC_OBJC})
   source_group("objc" FILES ${SRC_OBJC})
-  target_compile_options(djinni_support_lib PUBLIC "-fobjc-arc")
+  target_compile_options(djinni_support_lib PUBLIC "$<$<COMPILE_LANGUAGE:CXX,OBJC,OBJCXX>:-fobjc-arc>")
 endif()
 
 # JNI support
