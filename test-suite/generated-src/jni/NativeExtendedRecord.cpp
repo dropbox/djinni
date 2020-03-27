@@ -22,7 +22,7 @@ auto NativeExtendedRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeExtendedRecord>::get();
-    return {::djinni::Bool::toCpp(jniEnv, jniEnv->GetBooleanField(j, data.field_mFoo))};
+    return {::djinni::Bool::toCpp(jniEnv, (jniEnv->GetBooleanField(j, data.field_mFoo)))};
 }
 
 }  // namespace djinni_generated

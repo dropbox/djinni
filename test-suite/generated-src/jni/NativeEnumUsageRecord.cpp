@@ -27,11 +27,11 @@ auto NativeEnumUsageRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 6);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeEnumUsageRecord>::get();
-    return {::djinni_generated::NativeColor::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mE)),
-            ::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeColor>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mO)),
-            ::djinni::List<::djinni_generated::NativeColor>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mL)),
-            ::djinni::Set<::djinni_generated::NativeColor>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mS)),
-            ::djinni::Map<::djinni_generated::NativeColor, ::djinni_generated::NativeColor>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mM))};
+    return {::djinni_generated::NativeColor::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mE))),
+            ::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeColor>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mO))),
+            ::djinni::List<::djinni_generated::NativeColor>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mL))),
+            ::djinni::Set<::djinni_generated::NativeColor>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mS))),
+            ::djinni::Map<::djinni_generated::NativeColor, ::djinni_generated::NativeColor>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mM)))};
 }
 
 }  // namespace djinni_generated

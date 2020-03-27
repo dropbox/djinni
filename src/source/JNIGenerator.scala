@@ -173,7 +173,7 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
           w.wl(s"const auto& data = ::djinni::JniClass<$jniHelper>::get();")
         writeAlignedCall(w, "return {", r.fields, "}", f => {
           val fieldId = "data.field_" + idJava.field(f.ident)
-          val jniFieldAccess = toJniCall(f.ty, (jt: String) => s"jniEnv->Get${jt}Field(j, $fieldId)")
+          val jniFieldAccess = toJniCall(f.ty, (jt: String) => s"jniEnv->Get${jt}Field(j, $fieldId)") + ")"
           jniMarshal.toCpp(f.ty, jniFieldAccess)
         })
         w.wl(";")
@@ -298,7 +298,9 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
             }
             else
               w.w(")")
-            w.wl(";")
+            if (m.ret.nonEmpty)
+              w.w(")");
+            w.wl(";");
             w.wl(s"::djinni::jniExceptionCheck(jniEnv);")
             m.ret.fold()(ty => {
               (spec.cppNnCheckExpression, isInterface(ty.resolved)) match {
@@ -404,11 +406,11 @@ class JNIGenerator(spec: Spec) extends Generator(spec) {
 
   def toJniCall(ty: TypeRef, f: String => String): String = toJniCall(ty.resolved, f, false)
   def toJniCall(m: MExpr, f: String => String, needRef: Boolean): String = m.base match {
-    case p: MPrimitive => f(if (needRef) "Object" else IdentStyle.camelUpper(p.jName))
-    case MString => "(jstring)" + f("Object")
+    case p: MPrimitive => "(" + f(if (needRef) "Object" else IdentStyle.camelUpper(p.jName))
+    case MString => "reinterpret_cast<jstring>(" + f("Object")
     case MOptional => toJniCall(m.args.head, f, true)
-    case MBinary => "(jbyteArray)" + f("Object")
-    case _ => f("Object")
+    case MBinary => "reinterpret_cast<jbyteArray>(" + f("Object")
+    case _ => "(" + f("Object")
   }
 
   def cppTypeArgs(params: Seq[TypeParam]): String =

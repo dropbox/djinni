@@ -19,10 +19,10 @@ NativeClientInterface::JavaProxy::~JavaProxy() = default;
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
-    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getRecord,
-                                         ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_record_id)),
-                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_utf8string)),
-                                         ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, c_misc)));
+    auto jret = (jniEnv->CallObjectMethod(Handle::get().get(), data.method_getRecord,
+                                          ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_record_id)),
+                                          ::djinni::get(::djinni::String::fromCpp(jniEnv, c_utf8string)),
+                                          ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni::String>::fromCpp(jniEnv, c_misc))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeClientReturnedRecord::toCpp(jniEnv, jret);
 }
@@ -30,10 +30,10 @@ double NativeClientInterface::JavaProxy::identifier_check(const std::vector<uint
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
-    auto jret = jniEnv->CallDoubleMethod(Handle::get().get(), data.method_identifierCheck,
-                                         ::djinni::get(::djinni::Binary::fromCpp(jniEnv, c_data)),
-                                         ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_r)),
-                                         ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_jret)));
+    auto jret = (jniEnv->CallDoubleMethod(Handle::get().get(), data.method_identifierCheck,
+                                          ::djinni::get(::djinni::Binary::fromCpp(jniEnv, c_data)),
+                                          ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_r)),
+                                          ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_jret))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::F64::toCpp(jniEnv, jret);
 }
@@ -41,7 +41,7 @@ std::string NativeClientInterface::JavaProxy::return_str() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnStr);
+    auto jret = reinterpret_cast<jstring>(jniEnv->CallObjectMethod(Handle::get().get(), data.method_returnStr));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }
@@ -49,8 +49,8 @@ std::string NativeClientInterface::JavaProxy::meth_taking_interface(const std::s
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_methTakingInterface,
-                                                  ::djinni::get(::djinni_generated::NativeClientInterface::fromCpp(jniEnv, c_i)));
+    auto jret = reinterpret_cast<jstring>(jniEnv->CallObjectMethod(Handle::get().get(), data.method_methTakingInterface,
+                                                                   ::djinni::get(::djinni_generated::NativeClientInterface::fromCpp(jniEnv, c_i))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }
@@ -58,8 +58,8 @@ std::string NativeClientInterface::JavaProxy::meth_taking_optional_interface(con
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeClientInterface>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_methTakingOptionalInterface,
-                                                  ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeClientInterface>::fromCpp(jniEnv, c_i)));
+    auto jret = reinterpret_cast<jstring>(jniEnv->CallObjectMethod(Handle::get().get(), data.method_methTakingOptionalInterface,
+                                                                   ::djinni::get(::djinni::Optional<std::experimental::optional, ::djinni_generated::NativeClientInterface>::fromCpp(jniEnv, c_i))));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }

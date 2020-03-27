@@ -22,7 +22,7 @@ auto NativeVarnameRecord::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 2);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeVarnameRecord>::get();
-    return {::djinni::I8::toCpp(jniEnv, jniEnv->GetByteField(j, data.field_mField))};
+    return {::djinni::I8::toCpp(jniEnv, (jniEnv->GetByteField(j, data.field_mField)))};
 }
 
 }  // namespace djinni_generated

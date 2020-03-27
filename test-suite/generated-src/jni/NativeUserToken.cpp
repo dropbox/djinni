@@ -18,7 +18,7 @@ std::string NativeUserToken::JavaProxy::whoami() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeUserToken>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_whoami);
+    auto jret = reinterpret_cast<jstring>(jniEnv->CallObjectMethod(Handle::get().get(), data.method_whoami));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }

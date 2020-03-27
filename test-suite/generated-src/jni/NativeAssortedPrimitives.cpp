@@ -35,20 +35,20 @@ auto NativeAssortedPrimitives::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
     ::djinni::JniLocalScope jscope(jniEnv, 15);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeAssortedPrimitives>::get();
-    return {::djinni::Bool::toCpp(jniEnv, jniEnv->GetBooleanField(j, data.field_mB)),
-            ::djinni::I8::toCpp(jniEnv, jniEnv->GetByteField(j, data.field_mEight)),
-            ::djinni::I16::toCpp(jniEnv, jniEnv->GetShortField(j, data.field_mSixteen)),
-            ::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mThirtytwo)),
-            ::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mSixtyfour)),
-            ::djinni::F32::toCpp(jniEnv, jniEnv->GetFloatField(j, data.field_mFthirtytwo)),
-            ::djinni::F64::toCpp(jniEnv, jniEnv->GetDoubleField(j, data.field_mFsixtyfour)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::Bool>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOB)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::I8>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOEight)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::I16>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOSixteen)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::I32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOThirtytwo)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::I64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOSixtyfour)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::F32>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOFthirtytwo)),
-            ::djinni::Optional<std::experimental::optional, ::djinni::F64>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mOFsixtyfour))};
+    return {::djinni::Bool::toCpp(jniEnv, (jniEnv->GetBooleanField(j, data.field_mB))),
+            ::djinni::I8::toCpp(jniEnv, (jniEnv->GetByteField(j, data.field_mEight))),
+            ::djinni::I16::toCpp(jniEnv, (jniEnv->GetShortField(j, data.field_mSixteen))),
+            ::djinni::I32::toCpp(jniEnv, (jniEnv->GetIntField(j, data.field_mThirtytwo))),
+            ::djinni::I64::toCpp(jniEnv, (jniEnv->GetLongField(j, data.field_mSixtyfour))),
+            ::djinni::F32::toCpp(jniEnv, (jniEnv->GetFloatField(j, data.field_mFthirtytwo))),
+            ::djinni::F64::toCpp(jniEnv, (jniEnv->GetDoubleField(j, data.field_mFsixtyfour))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::Bool>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOB))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I8>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOEight))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I16>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOSixteen))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I32>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOThirtytwo))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::I64>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOSixtyfour))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::F32>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOFthirtytwo))),
+            ::djinni::Optional<std::experimental::optional, ::djinni::F64>::toCpp(jniEnv, (jniEnv->GetObjectField(j, data.field_mOFsixtyfour)))};
 }
 
 }  // namespace djinni_generated
