@@ -30,9 +30,9 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
   def references(m: Meta): Seq[SymbolReference] = m match {
     case o: MOpaque =>
       o match {
-        case MList => List(ImportRef("java.util.ArrayList"))
-        case MSet => List(ImportRef("java.util.HashSet"))
-        case MMap => List(ImportRef("java.util.HashMap"))
+        case MList => List(ImportRef("java.util.List"))
+        case MSet => List(ImportRef("java.util.Set"))
+        case MMap => List(ImportRef("java.util.Map"))
         case MDate => List(ImportRef("java.util.Date"))
         case _ => List()
       }
@@ -103,9 +103,9 @@ class JavaMarshal(spec: Spec) extends Marshal(spec) {
             case MDate => "Date"
             case MBinary => "byte[]"
             case MOptional => throw new AssertionError("optional should have been special cased")
-            case MList => "ArrayList"
-            case MSet => "HashSet"
-            case MMap => "HashMap"
+            case MList => "List"
+            case MSet => "Set"
+            case MMap => "Map"
             case d: MDef => withPackage(packageName, idJava.ty(d.name))
             case e: MExtern => throw new AssertionError("unreachable")
             case p: MParam => idJava.typeParam(p.name)
