@@ -37,6 +37,8 @@ object Main {
     var cppNnType: Option[String] = None
     var cppNnCheckExpression: Option[String] = None
     var cppUseWideStrings: Boolean = false
+    var cppExportDefine: Option[String] = None
+    var cppExportDefineHeader: Option[String] = None
     var javaOutFolder: Option[File] = None
     var javaPackage: Option[String] = None
     var javaClassAccessModifier: JavaAccessModifier.Value = JavaAccessModifier.Public
@@ -150,6 +152,10 @@ object Main {
         .text("The expression to use for building non-nullable pointers")
       opt[Boolean]( "cpp-use-wide-strings").valueName("<true/false>").foreach(x => cppUseWideStrings = x)
         .text("Use wide strings in C++ code (default: false)")
+      opt[String]("cpp-export-define").valueName("<header>").foreach(x => cppExportDefine = Some(x))
+        .text("The export define name for interfaces")
+      opt[String]("cpp-export-define-header").valueName("<header>").foreach(x => cppExportDefineHeader = Some(x))
+        .text("The header which defines export define")
       note("")
       opt[File]("jni-out").valueName("<out-folder>").foreach(x => jniOutFolder = Some(x))
         .text("The folder for the JNI C++ output files (Generator disabled if unspecified).")
@@ -329,6 +335,8 @@ object Main {
       cppNnType,
       cppNnCheckExpression,
       cppUseWideStrings,
+      cppExportDefine,
+      cppExportDefineHeader,
       jniOutFolder,
       jniHeaderOutFolder,
       jniIncludePrefix,

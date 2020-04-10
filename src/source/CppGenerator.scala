@@ -324,11 +324,17 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
     val self = marshal.typename(ident, i)
     val methodNamesInScope = i.methods.map(m => idCpp.method(m.ident))
+    val exportDefine = spec.cppExportDefine.getOrElse("")
+
+    spec.cppExportDefineHeader match {
+      case Some(defineHeader) => refs.hpp.add("#include " + defineHeader)
+      case _ =>
+    }
 
     writeHppFile(ident, origin, refs.hpp, refs.hppFwds, w => {
       writeDoc(w, doc)
       writeCppTypeParams(w, typeParams)
-      w.w(s"class $self").bracedSemi {
+      w.w(s"class $exportDefine $self").bracedSemi {
         w.wlOutdent("public:")
         // Destructor
         w.wl(s"virtual ~$self() {}")
