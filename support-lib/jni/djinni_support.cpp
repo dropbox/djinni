@@ -69,6 +69,10 @@ void jniShutdown() {
     g_cachedJVM = nullptr;
 }
 
+JavaVM * jniGetVM() {
+    return g_cachedJVM;
+}
+
 JNIEnv * jniGetThreadEnv() {
     assert(g_cachedJVM);
     JNIEnv * env = nullptr;
