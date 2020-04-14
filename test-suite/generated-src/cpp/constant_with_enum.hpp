@@ -4,12 +4,13 @@
 #pragma once
 
 #include "constant_enum.hpp"
+#include "project_export.hpp"
 #include <utility>
 
 namespace testsuite {
 
 /** Record containing enum constant */
-struct ConstantWithEnum final {
+struct PROJECT_EXPORT ConstantWithEnum final {
 
     static constant_enum const CONST_ENUM;
 };

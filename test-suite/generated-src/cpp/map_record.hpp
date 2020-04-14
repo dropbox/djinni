@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -10,7 +11,7 @@
 
 namespace testsuite {
 
-struct MapRecord final {
+struct PROJECT_EXPORT MapRecord final {
     std::unordered_map<std::string, int64_t> map;
     std::unordered_map<int32_t, int32_t> imap;
 

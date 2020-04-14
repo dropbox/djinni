@@ -7,6 +7,7 @@
 
 
 /** Client interface */
+__attribute__((visibility ("default")))
 @protocol DBClientInterface
 
 /** Returns record of given string */

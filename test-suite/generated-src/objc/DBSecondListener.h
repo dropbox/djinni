@@ -5,6 +5,7 @@
 
 
 /** Used for ObjC multiple inheritance tests */
+__attribute__((visibility ("default")))
 @protocol DBSecondListener
 
 - (void)second;

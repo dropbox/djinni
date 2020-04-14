@@ -3,11 +3,12 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <string>
 
 namespace testsuite {
 
-class UserToken {
+class PROJECT_EXPORT UserToken {
 public:
     virtual ~UserToken() {}
 

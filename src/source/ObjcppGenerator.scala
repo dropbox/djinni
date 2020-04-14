@@ -149,6 +149,7 @@ class ObjcppGenerator(spec: Spec) extends BaseObjcGenerator(spec) {
 
       if (i.ext.cpp) {
         w.wl
+        w.wl("__attribute__((visibility (\"default\")))")
         if (i.ext.objc)
           w.wl(s"@interface $objcSelf : NSObject<$self>")
         else

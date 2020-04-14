@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @interface DBExternInterface1 : NSObject
 
 - (nonnull DBClientReturnedRecord *)foo:(nullable id<DBClientInterface>)i;

@@ -3,12 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
 enum class constant_enum;
 
 /** Interface containing enum constant */
-class ConstantInterfaceWithEnum {
+class PROJECT_EXPORT ConstantInterfaceWithEnum {
 public:
     virtual ~ConstantInterfaceWithEnum() {}
 

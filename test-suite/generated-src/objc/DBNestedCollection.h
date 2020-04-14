@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBNestedCollection : NSObject
 - (nonnull instancetype)initWithSetList:(nonnull NSArray<NSSet<NSString *> *> *)setList;
 + (nonnull instancetype)nestedCollectionWithSetList:(nonnull NSArray<NSSet<NSString *> *> *)setList;

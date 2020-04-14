@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <memory>
 
 namespace testsuite {
@@ -14,7 +15,7 @@ class ObjcOnlyListener;
  * Generating and compiling this makes sure other languages don't break
  * on references to interfaces they don't need.
  */
-class UsesSingleLanguageListeners {
+class PROJECT_EXPORT UsesSingleLanguageListeners {
 public:
     virtual ~UsesSingleLanguageListeners() {}
 

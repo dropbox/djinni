@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <memory>
 
 namespace testsuite {
 
 struct VarnameRecord;
 
-class VarnameInterface {
+class PROJECT_EXPORT VarnameInterface {
 public:
     virtual ~VarnameInterface() {}
 

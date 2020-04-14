@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -14,7 +15,7 @@ namespace testsuite {
 struct ClientReturnedRecord;
 
 /** Client interface */
-class ClientInterface {
+class PROJECT_EXPORT ClientInterface {
 public:
     virtual ~ClientInterface() {}
 

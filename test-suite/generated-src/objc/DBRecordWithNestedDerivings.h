@@ -4,6 +4,7 @@
 #import "DBRecordWithDerivings.h"
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBRecordWithNestedDerivings : NSObject
 - (nonnull instancetype)initWithKey:(int32_t)key
                                 rec:(nonnull DBRecordWithDerivings *)rec;

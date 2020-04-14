@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBMapListRecord : NSObject
 - (nonnull instancetype)initWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList;
 + (nonnull instancetype)mapListRecordWithMapList:(nonnull NSArray<NSDictionary<NSString *, NSNumber *> *> *)mapList;

@@ -4,12 +4,13 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <utility>
 
 namespace testsuite {
 
-struct AssortedPrimitives final {
+struct PROJECT_EXPORT AssortedPrimitives final {
     bool b;
     int8_t eight;
     int16_t sixteen;
@@ -25,8 +26,8 @@ struct AssortedPrimitives final {
     std::experimental::optional<float> o_fthirtytwo;
     std::experimental::optional<double> o_fsixtyfour;
 
-    friend bool operator==(const AssortedPrimitives& lhs, const AssortedPrimitives& rhs);
-    friend bool operator!=(const AssortedPrimitives& lhs, const AssortedPrimitives& rhs);
+    PROJECT_EXPORT friend bool operator==(const AssortedPrimitives& lhs, const AssortedPrimitives& rhs);
+    PROJECT_EXPORT friend bool operator!=(const AssortedPrimitives& lhs, const AssortedPrimitives& rhs);
 
     AssortedPrimitives(bool b_,
                        int8_t eight_,

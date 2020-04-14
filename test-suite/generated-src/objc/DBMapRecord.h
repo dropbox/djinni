@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBMapRecord : NSObject
 - (nonnull instancetype)initWithMap:(nonnull NSDictionary<NSString *, NSNumber *> *)map
                                imap:(nonnull NSDictionary<NSNumber *, NSNumber *> *)imap;

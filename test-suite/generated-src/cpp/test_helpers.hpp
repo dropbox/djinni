@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -26,7 +27,7 @@ struct SetRecord;
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
-class TestHelpers {
+class PROJECT_EXPORT TestHelpers {
 public:
     virtual ~TestHelpers() {}
 

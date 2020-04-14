@@ -6,6 +6,7 @@
 
 
 /** Interface containing enum constant */
+__attribute__((visibility ("default")))
 @interface DBConstantInterfaceWithEnum : NSObject
 
 + (DBConstantEnum)constEnum;

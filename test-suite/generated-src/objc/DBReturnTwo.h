@@ -6,6 +6,7 @@
 
 
 /** Used for C++ multiple inheritance tests */
+__attribute__((visibility ("default")))
 @interface DBReturnTwo : NSObject
 
 + (nullable DBReturnTwo *)getInstance;

@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBMapDateRecord : NSObject
 - (nonnull instancetype)initWithDatesById:(nonnull NSDictionary<NSString *, NSDate *> *)datesById;
 + (nonnull instancetype)mapDateRecordWithDatesById:(nonnull NSDictionary<NSString *, NSDate *> *)datesById;

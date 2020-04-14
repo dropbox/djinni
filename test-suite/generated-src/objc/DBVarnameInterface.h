@@ -6,6 +6,7 @@
 @class DBVarnameInterface;
 
 
+__attribute__((visibility ("default")))
 @interface DBVarnameInterface : NSObject
 
 /**

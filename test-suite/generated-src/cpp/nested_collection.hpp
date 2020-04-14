@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -10,7 +11,7 @@
 
 namespace testsuite {
 
-struct NestedCollection final {
+struct PROJECT_EXPORT NestedCollection final {
     std::vector<std::unordered_set<std::string>> set_list;
 
     NestedCollection(std::vector<std::unordered_set<std::string>> set_list_)

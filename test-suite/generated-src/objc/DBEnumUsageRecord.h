@@ -4,6 +4,7 @@
 #import "DBColor.h"
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBEnumUsageRecord : NSObject
 - (nonnull instancetype)initWithE:(DBColor)e
                                 o:(nullable NSNumber *)o

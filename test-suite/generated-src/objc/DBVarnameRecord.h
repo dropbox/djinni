@@ -8,6 +8,7 @@
  * anticipate it to be used as a prefix/suffix.  Some name styles behave
  * badly when it is.  However this test case ensures we at least don't crash.
  */
+__attribute__((visibility ("default")))
 @interface DBVarnameRecord : NSObject
 - (nonnull instancetype)initWithField:(int8_t)Field;
 + (nonnull instancetype)VarnameRecordWithField:(int8_t)Field;

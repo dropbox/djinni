@@ -5,6 +5,7 @@
       "type": "static_library",
       "sources": [
         "djinni_common.hpp",
+        "project_export.hpp",
         "jni/djinni_support.cpp",
         "jni/djinni_support.hpp",
         "jni/Marshal.hpp",

@@ -4,11 +4,12 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/extended_record.hpp"
+#include "project_export.hpp"
 #include <utility>
 
 namespace testsuite {
 
-struct RecordUsingExtendedRecord final {
+struct PROJECT_EXPORT RecordUsingExtendedRecord final {
 
     static RecordUsingExtendedRecord const CR;
     ExtendedRecord er;

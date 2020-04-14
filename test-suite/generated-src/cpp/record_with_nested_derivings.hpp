@@ -3,24 +3,25 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include "record_with_derivings.hpp"
 #include <cstdint>
 #include <utility>
 
 namespace testsuite {
 
-struct RecordWithNestedDerivings final {
+struct PROJECT_EXPORT RecordWithNestedDerivings final {
     int32_t key;
     RecordWithDerivings rec;
 
-    friend bool operator==(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
-    friend bool operator!=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator==(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator!=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
 
-    friend bool operator<(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
-    friend bool operator>(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
 
-    friend bool operator<=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
-    friend bool operator>=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>=(const RecordWithNestedDerivings& lhs, const RecordWithNestedDerivings& rhs);
 
     RecordWithNestedDerivings(int32_t key_,
                               RecordWithDerivings rec_)

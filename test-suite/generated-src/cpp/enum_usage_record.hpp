@@ -5,6 +5,7 @@
 
 #include "../../handwritten-src/cpp/optional.hpp"
 #include "color.hpp"
+#include "project_export.hpp"
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -12,7 +13,7 @@
 
 namespace testsuite {
 
-struct EnumUsageRecord final {
+struct PROJECT_EXPORT EnumUsageRecord final {
     color e;
     std::experimental::optional<color> o;
     std::vector<color> l;

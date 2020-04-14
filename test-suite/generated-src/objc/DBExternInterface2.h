@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @protocol DBExternInterface2
 
 - (nonnull DBExternRecordWithDerivings *)foo:(nullable DBTestHelpers *)i;

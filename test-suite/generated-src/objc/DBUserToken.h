@@ -4,6 +4,7 @@
 #import <Foundation/Foundation.h>
 
 
+__attribute__((visibility ("default")))
 @protocol DBUserToken
 
 - (nonnull NSString *)whoami;

@@ -4,22 +4,23 @@
 #pragma once
 
 #include "color.hpp"
+#include "project_export.hpp"
 #include "record_with_derivings.hpp"
 #include <utility>
 
 /** This file tests YAML dumped by Djinni can be parsed back in */
-struct ExternRecordWithDerivings final {
+struct PROJECT_EXPORT ExternRecordWithDerivings final {
     ::testsuite::RecordWithDerivings member;
     ::testsuite::color e;
 
-    friend bool operator==(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
-    friend bool operator!=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator==(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator!=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
 
-    friend bool operator<(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
-    friend bool operator>(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
 
-    friend bool operator<=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
-    friend bool operator>=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator<=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
+    PROJECT_EXPORT friend bool operator>=(const ExternRecordWithDerivings& lhs, const ExternRecordWithDerivings& rhs);
 
     ExternRecordWithDerivings(::testsuite::RecordWithDerivings member_,
                               ::testsuite::color e_)

@@ -4,13 +4,14 @@
 #pragma once
 
 #include "../../handwritten-src/cpp/optional.hpp"
+#include "project_export.hpp"
 
 namespace testsuite {
 
 enum class access_flags : unsigned;
 enum class empty_flags : unsigned;
 
-class FlagRoundtrip {
+class PROJECT_EXPORT FlagRoundtrip {
 public:
     virtual ~FlagRoundtrip() {}
 

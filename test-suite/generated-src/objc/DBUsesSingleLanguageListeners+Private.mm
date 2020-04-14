@@ -14,6 +14,7 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
+__attribute__((visibility ("default")))
 @interface DBUsesSingleLanguageListenersCppProxy : NSObject<DBUsesSingleLanguageListeners>
 
 - (id)initWithCpp:(const std::shared_ptr<::testsuite::UsesSingleLanguageListeners>&)cppRef;

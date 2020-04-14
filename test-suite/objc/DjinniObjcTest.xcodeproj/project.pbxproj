@@ -378,6 +378,7 @@
 		B5F06AA21D4987EF005BE736 /* DBEnumUsageRecord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBEnumUsageRecord.mm; sourceTree = "<group>"; };
 		B5F06AA31D4987EF005BE736 /* DBEnumUsageRecord+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBEnumUsageRecord+Private.h"; sourceTree = "<group>"; };
 		B5F06AA41D4987EF005BE736 /* DBEnumUsageRecord+Private.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DBEnumUsageRecord+Private.mm"; sourceTree = "<group>"; };
+		CC1E047621B192E6004457CB /* project_export.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = project_export.hpp; sourceTree = "<group>"; };
 		CF5673881BE05D1E006330E7 /* DBRecordWithFlags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBRecordWithFlags.h; sourceTree = "<group>"; };
 		CF5673891BE05D1E006330E7 /* DBRecordWithFlags.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DBRecordWithFlags.mm; sourceTree = "<group>"; };
 		CF56738A1BE05D1E006330E7 /* DBRecordWithFlags+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBRecordWithFlags+Private.h"; sourceTree = "<group>"; };
@@ -466,18 +467,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6536CD6919A6C82200DD7715 /* objc-support-lib */ = {
+		6536CD6919A6C82200DD7715 /* support-lib */ = {
 			isa = PBXGroup;
 			children = (
-				A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */,
-				A2CB54B319BA6E6000A9E600 /* DJIError.mm */,
-				6536CD6A19A6C82200DD7715 /* DJIError.h */,
-				6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */,
-				6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */,
-				6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */,
+				CC1E047621B192E6004457CB /* project_export.hpp */,
+				CC1E047521B19206004457CB /* objc */,
 			);
-			name = "objc-support-lib";
-			path = "../../support-lib/objc";
+			name = "support-lib";
+			path = "../../support-lib";
 			sourceTree = "<group>";
 		};
 		6536CD7019A6C96C00DD7715 /* handwritten-objc */ = {
@@ -547,7 +544,7 @@
 				6536CD7919A6C99800DD7715 /* Tests */,
 				6536CD7519A6C98800DD7715 /* handwritten-cpp */,
 				6536CD7019A6C96C00DD7715 /* handwritten-objc */,
-				6536CD6919A6C82200DD7715 /* objc-support-lib */,
+				6536CD6919A6C82200DD7715 /* support-lib */,
 				65868B4C1989FE4200D60EEE /* Frameworks */,
 				65868B4B1989FE4200D60EEE /* Products */,
 			);
@@ -817,6 +814,19 @@
 			);
 			name = "generated-cpp";
 			path = "../generated-src/cpp";
+			sourceTree = "<group>";
+		};
+		CC1E047521B19206004457CB /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				A239F3791AF400C600DF27C8 /* DJIMarshal+Private.h */,
+				A2CB54B319BA6E6000A9E600 /* DJIError.mm */,
+				6536CD6A19A6C82200DD7715 /* DJIError.h */,
+				6536CD6C19A6C82200DD7715 /* DJIProxyCaches.mm */,
+				6536CD6D19A6C82200DD7715 /* DJICppWrapperCache+Private.h */,
+				6536CD6E19A6C82200DD7715 /* DJIObjcWrapperCache+Private.h */,
+			);
+			path = objc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

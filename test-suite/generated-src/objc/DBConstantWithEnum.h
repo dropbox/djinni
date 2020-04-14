@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 /** Record containing enum constant */
+__attribute__((visibility ("default")))
 @interface DBConstantWithEnum : NSObject
 - (nonnull instancetype)init;
 + (nonnull instancetype)constantWithEnum;

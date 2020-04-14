@@ -10,6 +10,7 @@
  * Generating and compiling this makes sure other languages don't break
  * on references to interfaces they don't need.
  */
+__attribute__((visibility ("default")))
 @protocol DBUsesSingleLanguageListeners
 
 - (void)callForObjC:(nullable id<DBObjcOnlyListener>)l;

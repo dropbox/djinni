@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -10,7 +11,7 @@
 namespace testsuite {
 
 /** Record for use in constants */
-struct ConstantRecord final {
+struct PROJECT_EXPORT ConstantRecord final {
     int32_t some_integer;
     std::string some_string;
 

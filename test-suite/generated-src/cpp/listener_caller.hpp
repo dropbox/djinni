@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <memory>
 
 namespace testsuite {
@@ -16,7 +17,7 @@ class SecondListener;
  * languages, due to the details of multiple inheritance and object
  * comparison.
  */
-class ListenerCaller {
+class PROJECT_EXPORT ListenerCaller {
 public:
     virtual ~ListenerCaller() {}
 

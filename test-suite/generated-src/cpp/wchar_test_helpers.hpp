@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <string>
 
 namespace testsuite {
 
 struct WcharTestRec;
 
-class WcharTestHelpers {
+class PROJECT_EXPORT WcharTestHelpers {
 public:
     virtual ~WcharTestHelpers() {}
 

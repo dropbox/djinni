@@ -8,6 +8,7 @@
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
+__attribute__((visibility ("default")))
 @interface DBEmptyRecord : NSObject
 - (nonnull instancetype)init;
 + (nonnull instancetype)emptyRecord;

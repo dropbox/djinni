@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <utility>
 
 namespace testsuite {
@@ -12,7 +13,7 @@ namespace testsuite {
  * (Second line of multi-line documentation.
  *   Indented third line of multi-line documentation.)
  */
-struct EmptyRecord final {
+struct PROJECT_EXPORT EmptyRecord final {
 };
 
 }  // namespace testsuite

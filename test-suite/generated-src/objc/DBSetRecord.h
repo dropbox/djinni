@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
+__attribute__((visibility ("default")))
 @interface DBSetRecord : NSObject
 - (nonnull instancetype)initWithSet:(nonnull NSSet<NSString *> *)set
                                iset:(nonnull NSSet<NSNumber *> *)iset;

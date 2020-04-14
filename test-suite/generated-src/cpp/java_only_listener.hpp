@@ -3,9 +3,11 @@
 
 #pragma once
 
+#include "project_export.hpp"
+
 namespace testsuite {
 
-class JavaOnlyListener {
+class PROJECT_EXPORT JavaOnlyListener {
 public:
     virtual ~JavaOnlyListener() {}
 };

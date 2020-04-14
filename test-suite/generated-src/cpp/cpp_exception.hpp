@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "project_export.hpp"
 #include <cstdint>
 #include <memory>
 
 namespace testsuite {
 
-class CppException {
+class PROJECT_EXPORT CppException {
 public:
     virtual ~CppException() {}
 
