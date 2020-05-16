@@ -21,6 +21,9 @@ enum class color : int {
     INDIGO,
     VIOLET,
 };
+constexpr color operator++(color const& r, int increment) noexcept {
+    return color((int)r + increment);
+}
 
 }  // namespace testsuite
 
@@ -31,6 +34,13 @@ struct hash<::testsuite::color> {
     size_t operator()(::testsuite::color type) const {
         return std::hash<int>()(static_cast<int>(type));
     }
+};
+template <>
+class numeric_limits<::testsuite::color> : public numeric_limits<int> {
+    public:
+    static constexpr bool is_specialized = true;
+    static constexpr ::testsuite::color min() noexcept { return ::testsuite::color::RED; }
+    static constexpr ::testsuite::color max() noexcept { return ::testsuite::color::VIOLET; }
 };
 
 }  // namespace std
