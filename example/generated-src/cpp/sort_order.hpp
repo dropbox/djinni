@@ -4,6 +4,7 @@
 #pragma once
 
 #include <functional>
+#include <ostream>
 
 namespace textsort {
 
@@ -12,6 +13,16 @@ enum class sort_order : int {
     DESCENDING,
     RANDOM,
 };
+
+static inline ::std::ostream& operator<<(::std::ostream& os, sort_order v) {
+    os << "sort_order::";
+    switch (v) {
+        case sort_order::ASCENDING: return os << "ASCENDING";
+        case sort_order::DESCENDING: return os << "DESCENDING";
+        case sort_order::RANDOM: return os << "RANDOM";
+        default: return os << "<Unsupported Value " << static_cast<int>(v) << ">";
+    }
+}
 
 }  // namespace textsort
 

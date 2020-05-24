@@ -240,8 +240,7 @@ private def resolveRecord(scope: Scope, r: Record) {
           throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
         case DRecord =>
           val record = df.body.asInstanceOf[Record]
-          if (!r.derivingTypes.subsetOf(record.derivingTypes))
-            throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
+          checkRecordRef(r, f, record)
         case DEnum =>
       }
       case e: MExtern => e.defType match {
@@ -249,8 +248,7 @@ private def resolveRecord(scope: Scope, r: Record) {
           throw new Error(f.ident.loc, "Interface reference cannot live in a record").toException
         case DRecord =>
           val record = e.body.asInstanceOf[Record]
-          if (!r.derivingTypes.subsetOf(record.derivingTypes))
-            throw new Error(f.ident.loc, s"Some deriving required is not implemented in record ${f.ident.name}").toException
+          checkRecordRef(r, f, record)
         case DEnum =>
       }
       case _ => throw new AssertionError("Type cannot be resolved")
@@ -261,6 +259,16 @@ private def resolveRecord(scope: Scope, r: Record) {
     dupeChecker.check(c.ident)
     resolveRef(scope, c.ty)
   }
+}
+
+private def checkRecordRef(container: Record, field: Field, reference: Record) {
+    // Find missing directives so we can provide a useful error message
+    val missingTypes = container.derivingTypes -- reference.derivingTypes
+    if (!missingTypes.isEmpty) {
+        def describeType(t: DerivingType) = { "'" ++ t.toString.map(_.toLower) ++ "'" }
+        val names = missingTypes.tail.foldLeft(describeType(missingTypes.head))((s, t) => s ++ ", " ++ describeType(t))
+        throw new Error(field.ident.loc, s"Record '${field.ty.expr.ident.name}' not deriving required operation(s): ${names}").toException
+    }
 }
 
 private def resolveInterface(scope: Scope, i: Interface) {
