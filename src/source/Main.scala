@@ -84,6 +84,7 @@ object Main {
     var yamlOutFolder: Option[File] = None
     var yamlOutFile: Option[String] = None
     var yamlPrefix: String = ""
+    var qmlOutFolder: Option[File] = None
 
     val argParser = new scopt.OptionParser[Unit]("djinni") {
 
@@ -209,6 +210,8 @@ object Main {
         .text("Optional file in which to write the list of output files produced.")
       opt[Boolean]("skip-generation").valueName("<true/false>").foreach(x => skipGeneration = x)
         .text("Way of specifying if file generation should be skipped (default: false)")
+      opt[File]("qml-out").valueName("<out-folder>").foreach(x => qmlOutFolder = Some(x))
+        .text("The output folder for qml files (Generator disabled if unspecified).")
 
       note("\nIdentifier styles (ex: \"FooBar\", \"fooBar\", \"foo_bar\", \"FOO_BAR\", \"m_fooBar\")\n")
       identStyle("ident-java-enum",      c => { javaIdentStyle = javaIdentStyle.copy(enum = c) })
@@ -359,7 +362,8 @@ object Main {
       skipGeneration,
       yamlOutFolder,
       yamlOutFile,
-      yamlPrefix)
+      yamlPrefix,
+      qmlOutFolder)
 
 
     try {

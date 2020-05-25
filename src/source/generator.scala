@@ -84,7 +84,8 @@ package object generatorTools {
                    skipGeneration: Boolean,
                    yamlOutFolder: Option[File],
                    yamlOutFile: Option[String],
-                   yamlPrefix: String)
+                   yamlPrefix: String,
+                   qmlOutFolder: Option[File])
 
   def preComma(s: String) = {
     if (s.isEmpty) s else ", " + s
@@ -229,6 +230,12 @@ package object generatorTools {
           createFolder("YAML", spec.yamlOutFolder.get)
         }
         new YamlGenerator(spec).generate(idl)
+      }
+      if (spec.qmlOutFolder.isDefined) {
+        if (!spec.skipGeneration) {
+          createFolder("Qml", spec.qmlOutFolder.get)
+        }
+        new QmlGenerator(spec).generate(idl)
       }
       None
     }

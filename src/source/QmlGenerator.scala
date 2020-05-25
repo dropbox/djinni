@@ -16,6 +16,8 @@
 
 package djinni
 
+import java.util.regex.Pattern
+
 import djinni.ast.Record.DerivingType
 import djinni.ast._
 import djinni.generatorTools._
@@ -24,13 +26,13 @@ import djinni.writer.IndentWriter
 
 import scala.collection.mutable
 
-class CppGenerator(spec: Spec) extends Generator(spec) {
+class QmlGenerator(spec: Spec) extends Generator(spec) {
 
-  val marshal = new CppMarshal(spec)
+  val marshal = new QmlMarshal(spec)
 
-  val writeCppFile = writeCppFileGeneric(spec.cppOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
+  val writeCppFile = writeCppFileGeneric(spec.qmlOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle, spec.cppIncludePrefix) _
   def writeHppFile(name: String, origin: String, includes: Iterable[String], fwds: Iterable[String], f: IndentWriter => Unit, f2: IndentWriter => Unit = (w => {})) =
-    writeHppFileGeneric(spec.cppHeaderOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
+    writeHppFileGeneric(spec.qmlOutFolder.get, spec.cppNamespace, spec.cppFileIdentStyle)(name, origin, includes, fwds, f, f2)
 
   class CppRefs(name: String) {
     var hpp = mutable.TreeSet[String]()
@@ -80,7 +82,7 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
           w.w(s"constexpr $self operator$op($self lhs, $self rhs) noexcept").braced {
             w.wl(s"return static_cast<$self>(static_cast<$flagsType>(lhs) $op static_cast<$flagsType>(rhs));")
           }
-          w.w(s"inline $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
+          w.w(s"constexpr $self& operator$op=($self& lhs, $self rhs) noexcept").braced {
             w.wl(s"return lhs = lhs $op rhs;") // Ugly, yes, but complies with C++11 restricted constexpr
           }
         }
@@ -93,23 +95,23 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
         }
       }
     },
-    w => {
-      // std::hash specialization has to go *outside* of the wrapNs
-      if (spec.cppEnumHashWorkaround) {
-        val fqSelf = marshal.fqTypename(ident, e)
-        w.wl
-        wrapNamespace(w, "std",
-          (w: IndentWriter) => {
-            w.wl("template <>")
-            w.w(s"struct hash<$fqSelf>").bracedSemi {
-              w.w(s"size_t operator()($fqSelf type) const").braced {
-                w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
+      w => {
+        // std::hash specialization has to go *outside* of the wrapNs
+        if (spec.cppEnumHashWorkaround) {
+          val fqSelf = marshal.fqTypename(ident, e)
+          w.wl
+          wrapNamespace(w, "std",
+            (w: IndentWriter) => {
+              w.wl("template <>")
+              w.w(s"struct hash<$fqSelf>").bracedSemi {
+                w.w(s"size_t operator()($fqSelf type) const").braced {
+                  w.wl(s"return std::hash<$underlyingType>()(static_cast<$underlyingType>(type));")
+                }
               }
             }
-          }
-        )
-      }
-    })
+          )
+        }
+      })
   }
 
   def shouldConstexpr(c: Const) = {
@@ -128,11 +130,11 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       var constValue = ";"
       if (constexpr) {
         constValue = c.value match {
-        case l: Long => " = " + l.toString + ";"
-        case d: Double if marshal.fieldType(c.ty) == "float" => " = " + d.toString + "f;"
-        case d: Double => " = " + d.toString + ";"
-        case b: Boolean => if (b) " = true;" else " = false;"
-        case _ => ";"
+          case l: Long => " = " + l.toString + ";"
+          case d: Double if marshal.fieldType(c.ty) == "float" => " = " + d.toString + "f;"
+          case d: Double => " = " + d.toString + ";"
+          case b: Boolean => if (b) " = true;" else " = false;"
+          case _ => ";"
         }
       }
       val constFieldType = if (constexpr) s"constexpr ${marshal.fieldType(c.ty)}" else s"${marshal.fieldType(c.ty)} const"
@@ -188,6 +190,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
     val refs = new CppRefs(ident.name)
     r.fields.foreach(f => refs.find(f.ty, false))
     r.consts.foreach(c => refs.find(c.ty, false))
+
+    refs.hpp.add("#include <QObject>") // Add for Q_types
     refs.hpp.add("#include <utility>") // Add for std::move
 
     val self = marshal.typename(ident, r)
@@ -210,6 +214,16 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       writeCppTypeParams(w, params)
       w.w("struct " + actualSelf + cppFinal).bracedSemi {
         generateHppConstants(w, r.consts)
+        // Qt meta types
+        w.wl("Q_GADGET")
+        for (f <- r.fields) {
+          w.wl("Q_PROPERTY(" + marshal.fieldType(f.ty) + " " + idCpp.field(f.ident) + " READ get_" + idCpp.field(f.ident) + ")")
+        }
+
+        // Access modifier
+        w.wl
+        w.wlOutdent("public:")
+
         // Field definitions.
         for (f <- r.fields) {
           writeDoc(w, f.doc)
@@ -239,12 +253,34 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
 
         if(r.fields.nonEmpty) {
           w.wl
-          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.fieldType(f.ty) + " " + idCpp.local(f.ident) + "_")
+          writeAlignedCall(w, actualSelf + "(", r.fields, ")", f => marshal.cppFieldType(f.ty.resolved) + " " + idCpp.local(f.ident) + "_")
           w.wl
-          val init = (f: Field) => idCpp.field(f.ident) + "(std::move(" + idCpp.local(f.ident) + "_))"
-          w.wl(": " + init(r.fields.head))
-          r.fields.tail.map(f => ", " + init(f)).foreach(w.wl)
-          w.wl("{}")
+          w.wl("{")
+
+          val init = (f: Field) =>  {
+            val _type = marshal.fieldType(f.ty)
+            val name = idCpp.local(f.ident)
+
+            f.ty.resolved.base match {
+              case MString => name + " = QString::fromStdString(" + name + "_);"
+              case MOptional => "if (" + name +"_) " + name + " = QVariant::fromValue(" + name + "_.value());"
+              case MList => s"for (auto& a: $name" + "_) " + name + " << QVariant::fromValue(a);"
+              case _ => idCpp.field(f.ident) + " = std::move(" + idCpp.local(f.ident) + "_);"
+            }
+          }
+
+          w.increase()
+          w.wl(init(r.fields.head))
+          r.fields.tail.map(f => init(f)).foreach(w.wl)
+          w.decrease()
+          w.w("}")
+          w.wl
+        }
+
+        // Property getter
+        w.wl
+        for (f <- r.fields) {
+          w.wl(marshal.fieldType(f.ty) + " get_" + idCpp.field(f.ident) + "() { return " + idCpp.field(f.ident) + "; }")
         }
 
         if (r.ext.cpp) {
@@ -262,7 +298,11 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       }
     }
 
-    writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype)
+    writeHppFile(cppName, origin, refs.hpp, refs.hppFwds, writeCppPrototype, w => {
+      // Declare Qt meta type
+      w.wl
+      w.wl("Q_DECLARE_METATYPE(" + spec.cppNamespace + s"::$actualSelf)")
+    })
 
     if (r.consts.nonEmpty || r.derivingTypes.contains(DerivingType.Eq) || r.derivingTypes.contains(DerivingType.Ord)) {
       writeCppFile(cppName, origin, refs.cpp, w => {
@@ -275,8 +315,8 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
               writeAlignedCall(w, "return ", r.fields, " &&", "", f => s"lhs.${idCpp.field(f.ident)} == rhs.${idCpp.field(f.ident)}")
               w.wl(";")
             } else {
-             w.wl("return true;")
-           }
+              w.wl("return true;")
+            }
           }
           w.wl
           w.w(s"bool operator!=(const $actualSelf& lhs, const $actualSelf& rhs)").braced {
