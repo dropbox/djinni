@@ -30,6 +30,6 @@ namespace djinni {
     ::djinni::throwUnimplemented(__PRETTY_FUNCTION__, msg);
 
 #define DJINNI_TRANSLATE_EXCEPTIONS() \
-    catch (const std::exception & e) { \
+    catch (__unused const std::exception & e) { \
         ::djinni::throwNSExceptionFromCurrent(__PRETTY_FUNCTION__); \
     }
